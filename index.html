@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -278,7 +277,7 @@
     .qty-number { font-weight: 700; min-width: 20px; text-align: center; color: #ffffff; }
     .cart-item .item-total { font-size: 0.9rem; color: #a0b5ff; font-weight: 600; }
     .cart-total-display { text-align: left; font-size: 1.4rem; font-weight: 800; border-top: 2px solid var(--blue); padding-top: 12px; margin-top: 10px; color: #ffffff; display: flex; justify-content: space-between; align-items: center; }
-    .cart-total-display .total-price { color: var(--blue-light); text-shadow: 0 0 10px var(--blue-glow); }
+    .cart-total-display .total-price { color: var(--blue-light); text-shadow: 0 0 10px var(--blue-glow); display: flex; align-items: center; gap: 6px; }
     .discount-row { display: flex; gap: 10px; align-items: center; margin: 15px 0; }
     .discount-row input { flex: 1; padding: 10px 16px; border-radius: 60px; border: 1px solid rgba(2,28,164,0.5); background: rgba(0,0,0,0.6); color: white; outline: none; }
     .discount-row input:focus { border-color: var(--blue); box-shadow: 0 0 16px var(--blue-glow); }
@@ -593,10 +592,15 @@
 
   // ==================== PRODUCTS ====================
   const productsArray = [
-    { id:1, name:"تيشيرت الجديد", price:"39.99", image:"https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png", link:"#", category:"ملابس", rating:4.8, features:["قطني ناعم", "مقاس مرن", "تصميم عصري"], cons:["قد يكون مقاسه غير دقيق"], description:"تيشيرت قطني مريح بتصميم عصري يناسب جميع الأوقات.", tags:["سفر","هدية","أسود","صيفي"], usage:"يمكن ارتداؤه مع جينز أو شورت.", warranty:"ضمان 30 يوم ضد عيوب الصناعة", popular:true },
-    { id:2, name:"ستور 10$", price:"39.35", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10", link:"#", category:"بطاقات شحن", rating:4.5, features:["شحن فوري", "صالح للاستخدام العالمي"], cons:["غير قابل للاسترجاع بعد إرسال الكود"], description:"بطاقة شحن بقيمة 10 دولارات.", tags:["رقمي","ألعاب","هدية"], usage:"أدخل الكود في حسابك لشحن الرصيد.", warranty:"ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular:true },
+ 
+   { id:1, name:"تيشيرت الجديد", price:"39.99", image:"https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png", link:"#", category:"ملابس", rating:4.8, features:["قطني ناعم", "مقاس مرن", "تصميم عصري"], cons:["قد يكون مقاسه غير دقيق"], description:"تيشيرت قطني مريح بتصميم عصري يناسب جميع الأوقات.", tags:["سفر","هدية","أسود","صيفي"], usage:"يمكن ارتداؤه مع جينز أو شورت.", warranty:"ضمان 30 يوم ضد عيوب الصناعة", popular:true },
+ 
     { id:3, name:"روبلوكس 20 ريال", price:"19.90", image:"https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp", link:"#", category:"بطاقات شحن", rating:4.6, features:["سعر مناسب", "شحن فوري"], cons:["لا يمكن استخدامه في حسابات غير سعودية"], description:"بطاقة روبلوكس بقيمة 20 ريال.", tags:["ألعاب","هدية","رقمي"], usage:"أدخل الكود في موقع روبلوكس.", warranty:"ضمان الاستبدال في حال عدم صلاحية الكود", popular:false },
-    { id:4, name:"ببجي 5 $", price:"19.90", image:"https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp", link:"#", category:"بطاقات شحن", rating:4.4, features:["شحن فوري", "يدعم ببجي موبايل"], cons:["غير متوفر لجميع المناطق"], description:"بطاقة ببجي بقيمة 5 دولارات.", tags:["ألعاب","هدية","رقمي"], usage:"ادخل الكود في متجر اللعبة.", warranty:"ضمان استبدال الكود في حال العطل", popular:false }
+ 
+   { id:4, name:"ببجي 5 $", price:"19.90", image:"https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp", link:"#", category:"بطاقات شحن", rating:4.4, features:["شحن فوري", "يدعم ببجي موبايل"], cons:["غير متوفر لجميع المناطق"], description:"بطاقة ببجي بقيمة 5 دولارات.", tags:["ألعاب","هدية","رقمي"], usage:"ادخل الكود في متجر اللعبة.", warranty:"ضمان استبدال الكود في حال العطل", popular:false },
+    // منتج جديد: ستور سوني
+
+    { id:5, name:"ستور سوني 10$", price:"39.35", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10", link:"#", category:"بطاقات شحن", rating:4.7, features:["شحن فوري", "متوافق مع PlayStation Network"], cons:["يستخدم في حساب سوني فقط"], description:"بطاقة شحن بقيمة 10$ لحساب سوني (PlayStation).", tags:["سوني","ستور","رقمي","هدية","ألعاب"], usage:"أدخل الكود في متجر PlayStation لإضافة الرصيد.", warranty:"ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular:false }
   ];
 
   const reviewsData = [
@@ -683,11 +687,12 @@
     "أسود": ["أسود","داكن","غامق"],
     "صيفي": ["صيف","صيفي","حر"],
     "رقمي": ["رقمي","الكتروني","كود","بطاقة"],
-    "ألعاب": ["لعبة","ألعاب","جيم","gaming"]
+    "ألعاب": ["لعبة","ألعاب","جيم","gaming"],
+    "سوني": ["سوني","بلايستيشن","playstation","ps"]
   };
   function getSynonyms(word) { word = word.toLowerCase(); for (let key in synonyms) { if (synonyms[key].includes(word)) return synonyms[key]; } return [word]; }
   function getCategoryFromWord(word) {
-    const map = { "ملابس": ["تيشيرت","قميص","بلوزة","جينز","شورت","سروال"], "بطاقات شحن": ["ستور","روبلوكس","ببجي","بطاقة","كود","شحن","كريدت"], "ألعاب": ["لعبة","جيم","gaming","بلاي","ستيشن"], "إلكترونيات": ["جهاز","كمبيوتر","لاب","تلفاز","شاشة","سماعة"] };
+    const map = { "ملابس": ["تيشيرت","قميص","بلوزة","جينز","شورت","سروال"], "بطاقات شحن": ["ستور","روبلوكس","ببجي","بطاقة","كود","شحن","كريدت","سوني"], "ألعاب": ["لعبة","جيم","gaming","بلاي","ستيشن"], "إلكترونيات": ["جهاز","كمبيوتر","لاب","تلفاز","شاشة","سماعة"] };
     for (let cat in map) { if (map[cat].some(s => word.includes(s))) return cat; } return null;
   }
 
@@ -939,9 +944,10 @@
     let finalTotal = total;
     if (discountApplied && discountPercent > 0 && cartItems.length > 0) finalTotal = total - (total * (discountPercent / 100));
     if (totalDisplay) {
+      const currencyImg = `<img src="${SAR_ICON}" class="currency-icon" alt="ر.س" style="height:1.6rem; vertical-align:middle; margin-right:4px;" />`;
       if (discountApplied && discountPercent > 0 && cartItems.length > 0)
-        totalDisplay.innerHTML = `${finalTotal.toFixed(2)} ر.س <span style="font-size:0.9rem; color:#4caf50;">(خصم ${discountPercent}%)</span>`;
-      else totalDisplay.textContent = total.toFixed(2) + ' ر.س';
+        totalDisplay.innerHTML = `${finalTotal.toFixed(2)} ${currencyImg} <span style="font-size:0.9rem; color:#4caf50;">(خصم ${discountPercent}%)</span>`;
+      else totalDisplay.innerHTML = `${total.toFixed(2)} ${currencyImg}`;
     }
     if (!list) return;
     if (cartItems.length === 0) {
@@ -1041,7 +1047,7 @@
         <div class="product-info">
           <div class="product-name">${p.name} ${p.popular ? ' ' : ''}</div>
           <div class="product-price"><span>${p.price}</span><img src="${SAR_ICON}" class="currency-icon" alt="ر.س" /></div>
-          <div style="font-size:0.8rem; color:#aab; margin-bottom:6px;">✦ ${p.rating}/5 • ${p.category}</div>
+          <div style="font-size:0.8rem; color:#aab; margin-bottom:6px;">★ ${p.rating}/5 • ${p.category}</div>
           <div class="product-actions">
             <button class="btn-ai-search" data-id="${p.id}"><i class="fas fa-"></i> بحث Ai</button>
             <button class="btn-cart add-to-cart" data-id="${p.id}"><i class="fas fa-plus-circle"></i> الإضافة</button>
