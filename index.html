@@ -495,7 +495,7 @@
         <h4>تواصل</h4>
         <div class="contact-info">
           <p class="email"><i class="fas fa-envelope"></i> clan.men.ts@gmail.com</p>
-          <p class="phone"><i class="fas fa-phone"></i> 0540367546</p>
+          <p class="phone"><i class="fas fa-phone"></i>0540367546</p>
           <div class="social-icons">
             <a href="https://x.com/men_vi5"><i class="fab fa-x"></i></a>
             <a href="https://youtube.com/@clan_men"><i class="fab fa-youtube"></i></a>
@@ -567,12 +567,26 @@
 
   const usersDB = {
     "U2007": { pass: "0000", fullName: "تجريبي", phone: "0502799166", discord: "8u4", userId: "U2007", points: "77", category: "إداري", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["تقرير إبداعي", "تقرير إحصائي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2028-04-22", customMsg: "<p>مهمتك: ابحث عن أعضاء جدد.</p>" },
+
+
     "U2020": { pass: "12345", fullName: "محمد ثامر العنزي", phone: "0502799166", discord: "8u4", userId: "U2020", points: "52", category: "صانع محتوى", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["تقرير إبداعي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>لا توجد مهام حالياً.</p>" },
+
+
     "U2021": { pass: "123456", fullName: "صالح محمد الزهراني", phone: "0549724238", discord: "sl_z7h._57465", userId: "U2021", points: "46", category: "إداري + رئيس الإدارة العليا", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["لايوجد", "لايوجد", "لايوجد"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>تم ترقيتك إلى مدير عام. المهام: رسم خطة جديدة للعام 2026.</p>" },
+
+
     "U2022": { pass: "Mz102030", fullName: "مازن بن منصور السلمي", phone: "0543431914", discord: "mazen_x", userId: "U2022", points: "73", category: "رئيس مجلس المشروع", avatar: "https://www.socialcreator.com/srv/imgs/ti_imgs/197914_309202.png", activities: ["إدارة المشاريع"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2025-12-30", customMsg: "<p>إنجاز خطة الربع الأول.</p>" },
+
+
     "U2023": { pass: "12345", fullName: "يزيد يوسف النفيعي", phone: "0538322511", discord: "bzgif", userId: "U2023", points: "50", category: "إداري + مسؤول التقديم", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["توظيف", "مقابلات", "تقييم المتقدمين"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2026-04-22", customMsg: "<p>البحث عن 4 إداريين جدد. الإنجاز 0/4.</p>" },
+
+
     "U2026": { pass: "1417", fullName: "مشعل منصور البنوي", phone: "05696069087", discord: "meshal71001", userId: "U2026", points: "38", category: "رئيس مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["لايوجد"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>أنشاء متجر الإلكتروني.</p>" },
+
+
     "U2027": { pass: "123123", fullName: "حسن محمد الشريف", phone: "0562250944", discord: "hss0328", userId: "U2027", points: "48", category: "إداري + مسؤول السيرفر", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["إدارة المشاريع"], monthEarn: "0 ر.س", totalEarn: "14.21 ر.س", followers: "0", dueDate: "2026-12-30", customMsg: "<p>زيادة تفاعل السيرفر وزيادة الحضور اليومي.</p>" },
+
+
     "U2024": { pass: "X2h3054", fullName: "عبدالرحمن سعد الزهراني", phone: "0556655679", discord: "racer702", userId: "U2024", points: "46", category: "نائب رئيس مجلس الإدارة", avatar: "https://e7.pngegg.com/pngimages/813/118/png-clipart-silhouette-icon-blank-person-template-share-icon-black-and-white.png", activities: ["إدارة الفريق"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2025-11-15", customMsg: "<p>البحث عن 3 إداريين جدد.</p>" }
   };
   const meetingsList = [{ title: "اجتماع دليل الإدارة", date: "2026-05-08" }, { title: "اجتماع تحديد المهام", date: "2026-05-06" }];
@@ -603,7 +617,7 @@
   let lastViewedProductId = null;
   let favorites = [];
   let viewedHistory = [];
-  let orderSim = { status: "قيد التجهيز", expected: "غداً", tracking: "TRK-2026-001" };
+  let orderSim = { status: "قيد التجهيز", expected: "لا أعلم", tracking: "TRK-2026-001" };
 
   // ==================== UTILITIES ====================
   function showToast(msg, type = "info") {
@@ -780,7 +794,7 @@
     const { keywords, priceRange } = extractKeywords(userText);
 
     if (lower.includes('مرحب') || lower.includes('سلام') || lower.includes('اهلا') || lower.includes('hi') || lower.includes('hello')) {
-      return `👋 أهلاً وسهلاً! أنا **مساعد MEN الذكي**.\n\nأستطيع مساعدتك في:\n• عرض المنتجات والبحث عنها.\n• مقارنة المنتجات.\n• نصائح الشراء.\n• تتبع الطلبات.\n• العروض والكوبونات.\n• إدارة السلة والمفضلة.\n\n📌 **اكتب ما تريده بالعربية أو الإنجليزية**، وسأفهمك.`;
+      return `👋 أهلاً وسهلاً! أنا **مساعد MEN  **.\n\nأستطيع مساعدتك في:\n• عرض المنتجات والبحث عنها.\n• مقارنة المنتجات.\n• نصائح الشراء.\n• تتبع الطلبات.\n• العروض والكوبونات.\n• إدارة السلة والمفضلة.\n\n📌 **اكتب ما تريده بالعربية أو الإنجليزية**، وسأفهمك.`;
     }
     if (lower.includes('شكر') || lower.includes('thank')) return '🙏 الشكر لك! أنا هنا لخدمتك دائماً. هل تحتاج مساعدة أخرى؟ 😊';
 
@@ -1258,7 +1272,7 @@
       if (detailedTimerInterval) clearInterval(detailedTimerInterval);
       currentUser = null;
       currentUserData = null;
-      document.getElementById('portalRoot').innerHTML = `<div class="card-soft" style="text-align:center;">🔒 تم تسجيل الخروج</div>`;
+      document.getElementById('portalRoot').innerHTML = `<div class="card-soft" style="text-align:center;"> تم تسجيل الخروج</div>`;
       updatePortalMenuLink(false);
       showToast(" تم الخروج", "info");
       switchPage('home');
