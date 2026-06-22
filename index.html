@@ -537,9 +537,7 @@
     <div class="ai-quick-btns">
       <button class="qbtn" data-query="عرض المنتجات">📦 عرض المنتجات</button>
       <button class="qbtn" data-query="ماذا في سلتي؟">🛒 سلتي</button>
-      <button class="qbtn" data-query="قارن بين تيشيرت وستور">⚖️ مقارنة</button>
-      <button class="qbtn" data-query="أين طلبي؟">📦 تتبع</button>
-      <button class="qbtn" data-query="عروض">🎁 عروض</button>
+            <button class="qbtn" data-query="عروض">🎁 عروض</button>
       <button class="qbtn" data-query="مساعدة">❓ مساعدة</button>
     </div>
     <div class="ai-chat-box" id="aiChatBox">
@@ -566,40 +564,21 @@
 
   const usersDB = {
     "U2007": { pass: "0000", fullName: "تجريبي", phone: "0502799166", discord: "8u4", userId: "U2007", points: "77", category: "إداري", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["تقرير إبداعي", "تقرير إحصائي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2028-04-22", customMsg: "<p>مهمتك: ابحث عن أعضاء جدد.</p>" },
-
-
     "U2020": { pass: "12345", fullName: "محمد ثامر العنزي", phone: "0502799166", discord: "8u4", userId: "U2020", points: "52", category: "صانع محتوى", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["تقرير إبداعي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>لا توجد مهام حالياً.</p>" },
-
-
     "U2021": { pass: "123456", fullName: "صالح محمد الزهراني", phone: "0549724238", discord: "sl_z7h._57465", userId: "U2021", points: "46", category: "إداري + رئيس الإدارة العليا", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["لايوجد", "لايوجد", "لايوجد"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>تم ترقيتك إلى مدير عام. المهام: رسم خطة جديدة للعام 2026.</p>" },
-
-
     "U2022": { pass: "Mz102030", fullName: "مازن بن منصور السلمي", phone: "0543431914", discord: "mazen_x", userId: "U2022", points: "73", category: "رئيس مجلس المشروع", avatar: "https://www.socialcreator.com/srv/imgs/ti_imgs/197914_309202.png", activities: ["إدارة المشاريع"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2025-12-30", customMsg: "<p>إنجاز خطة الربع الأول.</p>" },
-
-
     "U2023": { pass: "12345", fullName: "يزيد يوسف النفيعي", phone: "0538322511", discord: "bzgif", userId: "U2023", points: "50", category: "إداري + مسؤول التقديم", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["توظيف", "مقابلات", "تقييم المتقدمين"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2026-04-22", customMsg: "<p>البحث عن 4 إداريين جدد. الإنجاز 0/4.</p>" },
-
-
     "U2026": { pass: "1417", fullName: "مشعل منصور البنوي", phone: "05696069087", discord: "meshal71001", userId: "U2026", points: "38", category: "رئيس مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["لايوجد"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>أنشاء متجر الإلكتروني.</p>" },
-
-
     "U2027": { pass: "123123", fullName: "حسن محمد الشريف", phone: "0562250944", discord: "hss0328", userId: "U2027", points: "48", category: "إداري + مسؤول السيرفر", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["إدارة المشاريع"], monthEarn: "0 ر.س", totalEarn: "14.21 ر.س", followers: "0", dueDate: "2026-12-30", customMsg: "<p>زيادة تفاعل السيرفر وزيادة الحضور اليومي.</p>" },
-
-
     "U2024": { pass: "X2h3054", fullName: "عبدالرحمن سعد الزهراني", phone: "0556655679", discord: "racer702", userId: "U2024", points: "46", category: "نائب رئيس مجلس الإدارة", avatar: "https://e7.pngegg.com/pngimages/813/118/png-clipart-silhouette-icon-blank-person-template-share-icon-black-and-white.png", activities: ["إدارة الفريق"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2025-11-15", customMsg: "<p>البحث عن 3 إداريين جدد.</p>" }
   };
   const meetingsList = [{ title: "اجتماع دليل الإدارة", date: "2026-05-08" }, { title: "اجتماع تحديد المهام", date: "2026-05-06" }];
 
   // ==================== PRODUCTS ====================
   const productsArray = [
- 
-   { id:1, name:"تيشيرت الجديد", price:"39.99", image:"https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png", link:"#", category:"ملابس", rating:4.8, features:["قطني ناعم", "مقاس مرن", "تصميم عصري"], cons:["قد يكون مقاسه غير دقيق"], description:"تيشيرت قطني مريح بتصميم عصري يناسب جميع الأوقات.", tags:["سفر","هدية","أسود","صيفي"], usage:"يمكن ارتداؤه مع جينز أو شورت.", warranty:"ضمان 30 يوم ضد عيوب الصناعة", popular:true },
- 
+    { id:1, name:"تيشيرت الجديد", price:"39.99", image:"https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png", link:"#", category:"ملابس", rating:4.8, features:["قطني ناعم", "مقاس مرن", "تصميم عصري"], cons:["قد يكون مقاسه غير دقيق"], description:"تيشيرت قطني مريح بتصميم عصري يناسب جميع الأوقات.", tags:["سفر","هدية","أسود","صيفي"], usage:"يمكن ارتداؤه مع جينز أو شورت.", warranty:"ضمان 30 يوم ضد عيوب الصناعة", popular:true },
     { id:3, name:"روبلوكس 20 ريال", price:"19.90", image:"https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp", link:"#", category:"بطاقات شحن", rating:4.6, features:["سعر مناسب", "شحن فوري"], cons:["لا يمكن استخدامه في حسابات غير سعودية"], description:"بطاقة روبلوكس بقيمة 20 ريال.", tags:["ألعاب","هدية","رقمي"], usage:"أدخل الكود في موقع روبلوكس.", warranty:"ضمان الاستبدال في حال عدم صلاحية الكود", popular:false },
- 
-   { id:4, name:"ببجي 5 $", price:"19.90", image:"https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp", link:"#", category:"بطاقات شحن", rating:4.4, features:["شحن فوري", "يدعم ببجي موبايل"], cons:["غير متوفر لجميع المناطق"], description:"بطاقة ببجي بقيمة 5 دولارات.", tags:["ألعاب","هدية","رقمي"], usage:"ادخل الكود في متجر اللعبة.", warranty:"ضمان استبدال الكود في حال العطل", popular:false },
-    // منتج جديد: ستور سوني
-
+    { id:4, name:"ببجي 5 $", price:"19.90", image:"https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp", link:"#", category:"بطاقات شحن", rating:4.4, features:["شحن فوري", "يدعم ببجي موبايل"], cons:["غير متوفر لجميع المناطق"], description:"بطاقة ببجي بقيمة 5 دولارات.", tags:["ألعاب","هدية","رقمي"], usage:"ادخل الكود في متجر اللعبة.", warranty:"ضمان استبدال الكود في حال العطل", popular:false },
     { id:5, name:"ستور سوني 10$", price:"39.35", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10", link:"#", category:"بطاقات شحن", rating:4.7, features:["شحن فوري", "متوافق مع PlayStation Network"], cons:["يستخدم في حساب سوني فقط"], description:"بطاقة شحن بقيمة 10$ لحساب سوني (PlayStation).", tags:["سوني","ستور","رقمي","هدية","ألعاب"], usage:"أدخل الكود في متجر PlayStation لإضافة الرصيد.", warranty:"ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular:false }
   ];
 
@@ -1010,21 +989,51 @@
     } catch(e) { showToast(" فشل في الإرسال، حاول مرة أخرى", "error"); }
   }
 
-  // ==================== AI SEND MESSAGE ====================
+  // ==================== AI SEND MESSAGE with typing effect ====================
   function sendAIMessage(text) {
     const chatBox = document.getElementById('aiChatBox');
     if (!chatBox) return;
-    const userMsg = document.createElement('div'); userMsg.className = 'ai-message user'; userMsg.textContent = text; chatBox.appendChild(userMsg); chatBox.scrollTop = chatBox.scrollHeight;
-    const thinkingEl = document.createElement('div'); thinkingEl.className = 'ai-message thinking'; thinkingEl.innerHTML = `<span class="spinner"></span>  جاري البحث...`; chatBox.appendChild(thinkingEl); chatBox.scrollTop = chatBox.scrollHeight;
+    // user message
+    const userMsg = document.createElement('div');
+    userMsg.className = 'ai-message user';
+    userMsg.textContent = text;
+    chatBox.appendChild(userMsg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // thinking indicator
+    const thinkingEl = document.createElement('div');
+    thinkingEl.className = 'ai-message thinking';
+    thinkingEl.innerHTML = `<span class="spinner"></span> جاري البحث...`;
+    chatBox.appendChild(thinkingEl);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
     setTimeout(() => {
       if (thinkingEl.parentNode) thinkingEl.remove();
       const reply = getAIResponse(text);
-      const botMsg = document.createElement('div'); botMsg.className = 'ai-message bot';
-      botMsg.innerHTML = reply.replace(/\n/g, '<br>');
-      chatBox.appendChild(botMsg); chatBox.scrollTop = chatBox.scrollHeight;
-      botMsg.querySelectorAll('.btn-add-from-chat').forEach(btn => {
-        btn.addEventListener('click', function(e) { e.stopPropagation(); const id = parseInt(this.dataset.id); const product = productsArray.find(p => p.id === id); if (product) addToCart(product); });
-      });
+      const botMsg = document.createElement('div');
+      botMsg.className = 'ai-message bot';
+      chatBox.appendChild(botMsg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // typewriter effect (slow)
+      function typeMessage(element, fullText, index = 0) {
+        if (index >= fullText.length) {
+          // after done, attach event listeners to any buttons
+          element.querySelectorAll('.btn-add-from-chat').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+              e.stopPropagation();
+              const id = parseInt(this.dataset.id);
+              const product = productsArray.find(p => p.id === id);
+              if (product) addToCart(product);
+            });
+          });
+          return;
+        }
+        element.innerHTML = fullText.substring(0, index + 1);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        setTimeout(() => typeMessage(element, fullText, index + 1), 50); // 50ms per char = slow
+      }
+      typeMessage(botMsg, reply);
     }, 1000);
   }
 
@@ -1421,7 +1430,6 @@
       if (currentReviewIndex < maxIndex) { currentReviewIndex++; updateCarousel(); }
     });
     window.addEventListener('resize', updateCarousel);
-    // زر تسجيل الدخول في بوابة النخبة
     document.getElementById('headerLoginBtn2')?.addEventListener('click', () => document.getElementById('loginModal').classList.add('active'));
   }
 
