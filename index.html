@@ -565,11 +565,15 @@
   const usersDB = {
     "U2007": { pass: "0000", fullName: "تجريبي", phone: "0502799166", discord: "8u4", userId: "U2007", points: "77", category: "إداري", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["تقرير إبداعي", "تقرير إحصائي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2028-04-22", customMsg: "<p>مهمتك: ابحث عن أعضاء جدد.</p>" },
 
+
     "U2020": { pass: "12345", fullName: "محمد ثامر العنزي", phone: "0502799166", discord: "8u4", userId: "U2020", points: "52", category: "صانع محتوى", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["تقرير إبداعي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>لا توجد مهام حالياً.</p>" },
+
 
     "U2021": { pass: "123456", fullName: "صالح محمد الزهراني", phone: "0549724238", discord: "sl_z7h._57465", userId: "U2021", points: "46", category: "إداري + رئيس الإدارة العليا", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["لايوجد", "لايوجد", "لايوجد"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>تم ترقيتك إلى مدير عام. المهام: رسم خطة جديدة للعام 2026.</p>" },
 
+
     "U2022": { pass: "Mz102030", fullName: "مازن بن منصور السلمي", phone: "0543431914", discord: "mazen_x", userId: "U2022", points: "73", category: "رئيس مجلس المشروع", avatar: "https://www.socialcreator.com/srv/imgs/ti_imgs/197914_309202.png", activities: ["إدارة المشاريع"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2025-12-30", customMsg: "<p>إنجاز خطة الربع الأول.</p>" },
+
 
     "U2023": { pass: "12345", fullName: "يزيد يوسف النفيعي", phone: "0538322511", discord: "bzgif", userId: "U2023", points: "50", category: "إداري + مسؤول التقديم", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["توظيف", "مقابلات", "تقييم المتقدمين"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2026-04-22", customMsg: "<p>البحث عن 4 إداريين جدد. الإنجاز 0/4.</p>" },
 
@@ -579,9 +583,7 @@
 
     "U2027": { pass: "123123", fullName: "حسن محمد الشريف", phone: "0562250944", discord: "hss0328", userId: "U2027", points: "48", category: "إداري + مسؤول السيرفر", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["إدارة المشاريع"], monthEarn: "0 ر.س", totalEarn: "14.21 ر.س", followers: "0", dueDate: "2026-12-30", customMsg: "<p>زيادة تفاعل السيرفر وزيادة الحضور اليومي.</p>" },
 
-
 "U2025": { pass: "12345678", fullName: "جسار وليد السلمي", phone: "0542360558", discord: "غير متوفر", userId: "U2025", points: "0", category: "لاعب", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["لاعب هاوي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2021-12-30", customMsg: "<p>لاعب لـ TEAM MEN.</p>" },
-
 
     "U2024": { pass: "X2h3054", fullName: "عبدالرحمن سعد الزهراني", phone: "0556655679", discord: "racer702", userId: "U2024", points: "46", category: "نائب رئيس مجلس الإدارة", avatar: "https://e7.pngegg.com/pngimages/813/118/png-clipart-silhouette-icon-blank-person-template-share-icon-black-and-white.png", activities: ["إدارة الفريق"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2025-11-15", customMsg: "<p>البحث عن 3 إداريين جدد.</p>" }
   };
@@ -590,17 +592,13 @@
   // ==================== PRODUCTS ====================
   const productsArray = [
     { id:1, name:"تيشيرت الجديد", price:"39.99", image:"https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png", link:"#", category:"ملابس", rating:4.8, features:["قطني ناعم", "مقاس مرن", "تصميم عصري"], cons:["قد يكون مقاسه غير دقيق"], description:"تيشيرت قطني مريح بتصميم عصري يناسب جميع الأوقات.", tags:["سفر","هدية","أسود","صيفي"], usage:"يمكن ارتداؤه مع جينز أو شورت.", warranty:"ضمان 30 يوم ضد عيوب الصناعة", popular:true },
-
-
- { id2, name:"ستور سوني 10$", price:"39.35", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10", link:"#", category:"بطاقات شحن", rating:4.7, features:["شحن فوري", "متوافق مع PlayStation Network"], cons:["يستخدم في حساب سوني فقط"], description:"بطاقة شحن بقيمة 10$ لحساب سوني (PlayStation).", tags:["سوني","ستور","رقمي","هدية","ألعاب"], usage:"أدخل الكود في متجر PlayStation لإضافة الرصيد.", warranty:"ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular:false }
-
-
-   { id:3, name:"روبلوكس 20 ريال", price:"19.90", image:"https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp", link:"#", category:"بطاقات شحن", rating:4.6, features:["سعر مناسب", "شحن فوري"], cons:["لا يمكن استخدامه في حسابات غير سعودية"], description:"بطاقة روبلوكس بقيمة 20 ريال.", tags:["ألعاب","هدية","رقمي"], usage:"أدخل الكود في موقع روبلوكس.", warranty:"ضمان الاستبدال في حال عدم صلاحية الكود", popular:false },
+    { id:3, name:"روبلوكس 20 ريال", price:"19.90", image:"https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp", link:"#", category:"بطاقات شحن", rating:4.6, features:["سعر مناسب", "شحن فوري"], cons:["لا يمكن استخدامه في حسابات غير سعودية"], description:"بطاقة روبلوكس بقيمة 20 ريال.", tags:["ألعاب","هدية","رقمي"], usage:"أدخل الكود في موقع روبلوكس.", warranty:"ضمان الاستبدال في حال عدم صلاحية الكود", popular:false },
 
 
     { id:4, name:"ببجي 5 $", price:"19.90", image:"https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp", link:"#", category:"بطاقات شحن", rating:4.4, features:["شحن فوري", "يدعم ببجي موبايل"], cons:["غير متوفر لجميع المناطق"], description:"بطاقة ببجي بقيمة 5 دولارات.", tags:["ألعاب","هدية","رقمي"], usage:"ادخل الكود في متجر اللعبة.", warranty:"ضمان استبدال الكود في حال العطل", popular:false },
 
-      ];
+    { id:2, name:"ستور سوني 10$", price:"39.35", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10", link:"#", category:"بطاقات شحن", rating:4.7, features:["شحن فوري", "متوافق مع PlayStation Network"], cons:["يستخدم في حساب سوني فقط"], description:"بطاقة شحن بقيمة 10$ لحساب سوني (PlayStation).", tags:["سوني","ستور","رقمي","هدية","ألعاب"], usage:"أدخل الكود في متجر PlayStation لإضافة الرصيد.", warranty:"ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular:false }
+  ];
 
   const reviewsData = [
     { author: "أحمد السالم", stars: 5, text: " المتجر رائع جداً والمنتجات أصلية." },
