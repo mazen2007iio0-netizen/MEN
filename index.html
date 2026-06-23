@@ -358,6 +358,222 @@
     .btn-task-expired { background: linear-gradient(95deg, #8b3a3a, #c25c5c); }
     .toast-notification { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); background: #1f1838; backdrop-filter: blur(16px); border: 1px solid var(--blue); border-radius: 80px; padding: 12px 28px; color: white; z-index: 2200; display: flex; align-items: center; gap: 12px; direction: rtl; }
 
+    /* ===== EMPLOYEE CARD - فخمة جداً ===== */
+    .employee-card-luxury {
+      width: 320px;
+      max-width: 100%;
+      background: rgba(18, 16, 28, 0.85);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(2, 28, 164, 0.7);
+      border-radius: 40px;
+      padding: 28px 22px 22px;
+      margin: 20px auto;
+      box-shadow: 0 0 50px rgba(2, 28, 164, 0.3), inset 0 0 60px rgba(2, 28, 164, 0.05);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .employee-card-luxury::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 20%, rgba(2, 28, 164, 0.15), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .employee-card-luxury:hover {
+      transform: translateY(-6px) scale(1.01);
+      border-color: var(--blue-light);
+      box-shadow: 0 0 70px rgba(2, 28, 164, 0.5), inset 0 0 80px rgba(2, 28, 164, 0.08);
+    }
+    .employee-card-luxury > * { position: relative; z-index: 1; }
+
+    /* الصورة الشخصية */
+    .card-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid var(--blue-light);
+      box-shadow: 0 0 30px rgba(2, 28, 164, 0.5);
+      object-fit: cover;
+      margin-bottom: 10px;
+      transition: 0.3s;
+    }
+    .employee-card-luxury:hover .card-avatar {
+      border-color: #ffffff;
+      box-shadow: 0 0 50px rgba(2, 28, 164, 0.8);
+    }
+
+    .card-name {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+      text-shadow: 0 0 20px rgba(2, 28, 164, 0.3);
+      letter-spacing: 0.5px;
+    }
+
+    .card-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 20px;
+      width: 100%;
+      margin: 10px 0 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 24px;
+      padding: 12px 16px;
+      border: 1px solid rgba(2, 28, 164, 0.15);
+    }
+    .card-details-grid .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: #c4d0ff;
+    }
+    .card-details-grid .detail-item i {
+      color: var(--blue-light);
+      width: 20px;
+      text-align: center;
+    }
+    .card-details-grid .detail-item .value {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* الحالة */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 200, 0, 0.15);
+      border: 1px solid #00cc44;
+      border-radius: 60px;
+      padding: 4px 18px 4px 14px;
+      font-weight: 600;
+      color: #00cc44;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      box-shadow: 0 0 20px rgba(0, 200, 0, 0.15);
+    }
+    .status-badge .dot {
+      width: 10px;
+      height: 10px;
+      background: #00cc44;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse-dot 1.8s ease-in-out infinite;
+      box-shadow: 0 0 12px #00cc44;
+    }
+    @keyframes pulse-dot {
+      0% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.2); }
+      100% { opacity: 0.4; transform: scale(0.9); }
+    }
+
+    /* الباركود */
+    .barcode-wrapper {
+      width: 100%;
+      max-width: 220px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 16px;
+      padding: 8px 12px;
+      border: 1px solid rgba(2, 28, 164, 0.3);
+      margin: 6px 0 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .barcode-wrapper img {
+      width: 100%;
+      display: block;
+      border-radius: 6px;
+    }
+    .barcode-wrapper .scanner-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--blue-light);
+      box-shadow: 0 0 20px var(--blue), 0 0 40px var(--blue-glow);
+      animation: scanMove 2.8s ease-in-out infinite;
+      border-radius: 3px;
+    }
+    @keyframes scanMove {
+      0% { top: 0; opacity: 0.2; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { top: 100%; opacity: 0.2; }
+    }
+
+    /* الانضباط */
+    .discipline-section {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      gap: 10px;
+      margin: 8px 0 4px;
+      padding: 10px 6px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 28px;
+      border: 1px solid rgba(2, 28, 164, 0.1);
+    }
+    .discipline-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .discipline-item .number {
+      font-size: 1.6rem;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+    .discipline-item .label {
+      color: #b0b8d0;
+      font-size: 0.7rem;
+      letter-spacing: 0.3px;
+    }
+    .discipline-item.green .number { color: #00cc44; text-shadow: 0 0 20px rgba(0, 200, 0, 0.3); }
+    .discipline-item.red .number { color: #ff4d4d; text-shadow: 0 0 20px rgba(255, 70, 70, 0.3); }
+    .discipline-item.yellow .number { color: #ffcc00; text-shadow: 0 0 20px rgba(255, 200, 0, 0.3); }
+
+    .card-footer-text {
+      font-size: 0.7rem;
+      color: #6a6e9e;
+      margin-top: 6px;
+      letter-spacing: 1px;
+      border-top: 1px solid rgba(2, 28, 164, 0.15);
+      padding-top: 8px;
+      width: 80%;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .employee-card-luxury { width: 280px; padding: 20px 16px; }
+      .card-name { font-size: 1.3rem; }
+      .card-details-grid { grid-template-columns: 1fr; gap: 4px; }
+      .card-avatar { width: 70px; height: 70px; }
+      .discipline-item .number { font-size: 1.3rem; }
+    }
+    @media (max-width: 480px) {
+      .employee-card-luxury { width: 240px; padding: 16px 12px; }
+      .card-name { font-size: 1.1rem; }
+      .card-details-grid { padding: 8px 12px; }
+      .card-details-grid .detail-item { font-size: 0.75rem; }
+      .status-badge { font-size: 0.75rem; padding: 2px 12px; }
+      .barcode-wrapper { max-width: 160px; }
+      .discipline-item .number { font-size: 1.1rem; }
+      .discipline-item .label { font-size: 0.6rem; }
+    }
+
     @media (max-width: 1200px) { .shop-grid { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 992px) { .shop-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 768px) {
@@ -465,7 +681,7 @@
       </div>
     </section>
 
-    <!-- ========== بوابة  (بوابة الموظفين) ========== -->
+    <!-- ========== بوابة الموظفين ========== -->
     <section id="SS1" class="page">
       <div class="portal-container" id="portalRoot">
         <div class="card-soft" style="text-align:center;">
@@ -537,7 +753,7 @@
     <div class="ai-quick-btns">
       <button class="qbtn" data-query="عرض المنتجات">📦 عرض المنتجات</button>
       <button class="qbtn" data-query="ماذا في سلتي؟">🛒 سلتي</button>
-            <button class="qbtn" data-query="عروض">🎁 عروض</button>
+      <button class="qbtn" data-query="عروض">🎁 عروض</button>
       <button class="qbtn" data-query="مساعدة">❓ مساعدة</button>
     </div>
     <div class="ai-chat-box" id="aiChatBox">
@@ -562,30 +778,32 @@
     cart: "https://discord.com/api/webhooks/1502708241518432399/oYuBXcUAPEskuKUqHLAewfXb5E2Xxxj7EUiqUS7RIPL7NMKXO3ZRla4-Vw8XDWBwDWDj"
   };
 
+  // ===== قاعدة البيانات مع إضافة attendance, absences, leaves =====
   const usersDB = {
-    "U2007": { pass: "0000", fullName: "تجريبي", phone: "0502799166", discord: "8u4", userId: "U2007", points: "77", category: "إداري", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["تقرير إبداعي", "تقرير إحصائي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2028-04-22", customMsg: "<p>مهمتك: ابحث عن أعضاء جدد.</p>" },
+    "U2007": { pass: "0000", fullName: "تجريبي", phone: "0502799166", discord: "8u4", userId: "U2007", points: "77", category: "إداري", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["تقرير إبداعي", "تقرير إحصائي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2028-04-22", customMsg: "<p>مهمتك: ابحث عن أعضاء جدد.</p>", attendance: 20, absences: 2, leaves: 10 },
+    "U2020": { pass: "12345", fullName: "محمد ثامر العنزي", phone: "0502799166", discord: "8u4", userId: "U2020", points: "52", category: "صانع محتوى", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["تقرير إبداعي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>لا توجد مهام حالياً.</p>", attendance: 0, absences: 19, leaves: 0 },
+
+    "U2021": { pass: "123456", fullName: "صالح محمد الزهراني", phone: "0549724238", discord: "sl_z7h._57465", userId: "U2021", points: "46", category: "إداري + رئيس الإدارة العليا", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["لايوجد", "لايوجد", "لايوجد"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>تم ترقيتك إلى مدير عام. المهام: رسم خطة جديدة للعام 2026.</p>", attendance: 2, absences: 14, leaves: 0 },
 
 
-    "U2020": { pass: "12345", fullName: "محمد ثامر العنزي", phone: "0502799166", discord: "8u4", userId: "U2020", points: "52", category: "صانع محتوى", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["تقرير إبداعي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>لا توجد مهام حالياً.</p>" },
+    "U2022": { pass: "Mz102030", fullName: "مازن بن منصور السلمي", phone: "0543431914", discord: "mazen_x", userId: "U2022", points: "73", category: "رئيس مجلس المشروع", avatar: "https://www.socialcreator.com/srv/imgs/ti_imgs/197914_309202.png", activities: ["إدارة المشاريع"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2025-12-30", customMsg: "<p>إنجاز خطة الربع الأول.</p>", attendance: 45, absences: 1, leaves: 3 },
 
 
-    "U2021": { pass: "123456", fullName: "صالح محمد الزهراني", phone: "0549724238", discord: "sl_z7h._57465", userId: "U2021", points: "46", category: "إداري + رئيس الإدارة العليا", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["لايوجد", "لايوجد", "لايوجد"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>تم ترقيتك إلى مدير عام. المهام: رسم خطة جديدة للعام 2026.</p>" },
+    "U2023": { pass: "12345", fullName: "يزيد يوسف النفيعي", phone: "0538322511", discord: "bzgif", userId: "U2023", points: "50", category: "إداري + مسؤول التقديم", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["توظيف", "مقابلات", "تقييم المتقدمين"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2026-04-22", customMsg: "<p>البحث عن 4 إداريين جدد. الإنجاز 0/4.</p>", attendance: 0, absences: 17, leaves: 0 },
 
 
-    "U2022": { pass: "Mz102030", fullName: "مازن بن منصور السلمي", phone: "0543431914", discord: "mazen_x", userId: "U2022", points: "73", category: "رئيس مجلس المشروع", avatar: "https://www.socialcreator.com/srv/imgs/ti_imgs/197914_309202.png", activities: ["إدارة المشاريع"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2025-12-30", customMsg: "<p>إنجاز خطة الربع الأول.</p>" },
+    "U2026": { pass: "1417", fullName: "مشعل منصور البنوي", phone: "05696069087", discord: "meshal71001", userId: "U2026", points: "38", category: "رئيس مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["لايوجد"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>أنشاء متجر الإلكتروني.</p>", attendance: 28, absences: 5, leaves: 2 },
 
 
-    "U2023": { pass: "12345", fullName: "يزيد يوسف النفيعي", phone: "0538322511", discord: "bzgif", userId: "U2023", points: "50", category: "إداري + مسؤول التقديم", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["توظيف", "مقابلات", "تقييم المتقدمين"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2026-04-22", customMsg: "<p>البحث عن 4 إداريين جدد. الإنجاز 0/4.</p>" },
+    "U2027": { pass: "123123", fullName: "حسن محمد الشريف", phone: "0562250944", discord: "hss0328", userId: "U2027", points: "48", category: "إداري + مسؤول السيرفر", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["إدارة المشاريع"], monthEarn: "0 ر.س", totalEarn: "14.21 ر.س", followers: "0", dueDate: "2026-12-30", customMsg: "<p>زيادة تفاعل السيرفر وزيادة الحضور اليومي.
+</p>", attendance: 23, absences: 6, leaves: 0 },
 
 
-    "U2026": { pass: "1417", fullName: "مشعل منصور البنوي", phone: "05696069087", discord: "meshal71001", userId: "U2026", points: "38", category: "رئيس مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["لايوجد"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-", customMsg: "<p>أنشاء متجر الإلكتروني.</p>" },
+    "U2025": { pass: "12345678", fullName: "جسار وليد السلمي", phone: "0542360558", discord: "غير متوفر", userId: "U2025", points: "0", category: "لاعب", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["لاعب هاوي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2021-12-30", customMsg: "<p>لاعب لـ TEAM MEN.</p>", attendance: 0, absences: 0, leaves: 0 },
 
 
-    "U2027": { pass: "123123", fullName: "حسن محمد الشريف", phone: "0562250944", discord: "hss0328", userId: "U2027", points: "48", category: "إداري + مسؤول السيرفر", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["إدارة المشاريع"], monthEarn: "0 ر.س", totalEarn: "14.21 ر.س", followers: "0", dueDate: "2026-12-30", customMsg: "<p>زيادة تفاعل السيرفر وزيادة الحضور اليومي.</p>" },
-
-"U2025": { pass: "12345678", fullName: "جسار وليد السلمي", phone: "0542360558", discord: "غير متوفر", userId: "U2025", points: "0", category: "لاعب", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256", activities: ["لاعب هاوي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2021-12-30", customMsg: "<p>لاعب لـ TEAM MEN.</p>" },
-
-    "U2024": { pass: "X2h3054", fullName: "عبدالرحمن سعد الزهراني", phone: "0556655679", discord: "racer702", userId: "U2024", points: "46", category: "نائب رئيس مجلس الإدارة", avatar: "https://e7.pngegg.com/pngimages/813/118/png-clipart-silhouette-icon-blank-person-template-share-icon-black-and-white.png", activities: ["إدارة الفريق"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2025-11-15", customMsg: "<p>البحث عن 3 إداريين جدد.</p>" }
+    "U2024": { pass: "X2h3054", fullName: "عبدالرحمن سعد الزهراني", phone: "0556655679", discord: "racer702", userId: "U2024", points: "46", category: "نائب رئيس مجلس الإدارة", avatar: "https://e7.pngegg.com/pngimages/813/118/png-clipart-silhouette-icon-blank-person-template-share-icon-black-and-white.png", activities: ["إدارة الفريق"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2025-11-15", customMsg: "<p>البحث عن 3 إداريين جدد.
+</p>", attendance: 3, absences: 13, leaves: 0 }
   };
   const meetingsList = [{ title: "اجتماع دليل الإدارة", date: "2026-05-08" }, { title: "اجتماع تحديد المهام", date: "2026-05-06" }];
 
@@ -593,10 +811,7 @@
   const productsArray = [
     { id:1, name:"تيشيرت الجديد", price:"39.99", image:"https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png", link:"#", category:"ملابس", rating:4.8, features:["قطني ناعم", "مقاس مرن", "تصميم عصري"], cons:["قد يكون مقاسه غير دقيق"], description:"تيشيرت قطني مريح بتصميم عصري يناسب جميع الأوقات.", tags:["سفر","هدية","أسود","صيفي"], usage:"يمكن ارتداؤه مع جينز أو شورت.", warranty:"ضمان 30 يوم ضد عيوب الصناعة", popular:true },
     { id:3, name:"روبلوكس 20 ريال", price:"19.90", image:"https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp", link:"#", category:"بطاقات شحن", rating:4.6, features:["سعر مناسب", "شحن فوري"], cons:["لا يمكن استخدامه في حسابات غير سعودية"], description:"بطاقة روبلوكس بقيمة 20 ريال.", tags:["ألعاب","هدية","رقمي"], usage:"أدخل الكود في موقع روبلوكس.", warranty:"ضمان الاستبدال في حال عدم صلاحية الكود", popular:false },
-
-
     { id:4, name:"ببجي 5 $", price:"19.90", image:"https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp", link:"#", category:"بطاقات شحن", rating:4.4, features:["شحن فوري", "يدعم ببجي موبايل"], cons:["غير متوفر لجميع المناطق"], description:"بطاقة ببجي بقيمة 5 دولارات.", tags:["ألعاب","هدية","رقمي"], usage:"ادخل الكود في متجر اللعبة.", warranty:"ضمان استبدال الكود في حال العطل", popular:false },
-
     { id:2, name:"ستور سوني 10$", price:"39.35", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10", link:"#", category:"بطاقات شحن", rating:4.7, features:["شحن فوري", "متوافق مع PlayStation Network"], cons:["يستخدم في حساب سوني فقط"], description:"بطاقة شحن بقيمة 10$ لحساب سوني (PlayStation).", tags:["سوني","ستور","رقمي","هدية","ألعاب"], usage:"أدخل الكود في متجر PlayStation لإضافة الرصيد.", warranty:"ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular:false }
   ];
 
@@ -1211,6 +1426,68 @@
     detailedTimerInterval = setInterval(updateDetailedTimer, 1000);
     renderMeetings();
     updateTaskUI();
+
+    // ===== إضافة البطاقة الفخمة في تبويب "المزيد" =====
+    const moreTab = document.getElementById('moreTab');
+    if (moreTab) {
+      // نتحقق إذا كانت البطاقة موجودة مسبقاً لتجنب التكرار
+      if (!moreTab.querySelector('.employee-card-luxury')) {
+        const cardHTML = `
+          <div class="employee-card-luxury">
+            <img src="${currentUserData.avatar}" alt="صورة شخصية" class="card-avatar">
+            <div class="card-name">${currentUserData.fullName}</div>
+            <div class="status-badge"><span class="dot"></span> نشطة</div>
+            <div class="card-details-grid">
+              <div class="detail-item"><i class="fas fa-phone"></i> <span class="value">${currentUserData.phone}</span></div>
+              <div class="detail-item"><i class="fas fa-star"></i> <span class="value">${currentUserData.points}</span></div>
+              <div class="detail-item"><i class="fas fa-id-card"></i> <span class="value">${currentUserData.userId}</span></div>
+              <div class="detail-item"><i class="fas fa-bolt"></i> <span class="value" style="color:#00cc44;">نشط</span></div>
+            </div>
+            <div class="barcode-wrapper">
+              <img src="https://barcode.tec-it.com/barcode.ashx?data=${currentUserData.userId}&code=Code128&dpi=80" alt="باركود">
+              <div class="scanner-line"></div>
+            </div>
+            <div class="discipline-section">
+              <div class="discipline-item green">
+                <span class="number">${currentUserData.attendance || 0}</span>
+                <span class="label"><i class="fas fa-check-circle"></i> الحضور</span>
+              </div>
+              <div class="discipline-item red">
+                <span class="number">${currentUserData.absences || 0}</span>
+                <span class="label"><i class="fas fa-times-circle"></i> الغياب</span>
+              </div>
+              <div class="discipline-item yellow">
+                <span class="number">${currentUserData.leaves || 0}</span>
+                <span class="label"><i class="fas fa-umbrella-beach"></i> الإجازات</span>
+              </div>
+            </div>
+            <div class="card-footer-text">MEN • ${new Date().getFullYear()}</div>
+          </div>
+        `;
+        moreTab.insertAdjacentHTML('beforeend', cardHTML);
+      } else {
+        // تحديث البطاقة إذا كانت موجودة (تحديث البيانات)
+        const card = moreTab.querySelector('.employee-card-luxury');
+        if (card) {
+          card.querySelector('.card-avatar').src = currentUserData.avatar;
+          card.querySelector('.card-name').textContent = currentUserData.fullName;
+          const details = card.querySelectorAll('.detail-item .value');
+          if (details.length >= 4) {
+            details[0].textContent = currentUserData.phone;
+            details[1].textContent = currentUserData.points;
+            details[2].textContent = currentUserData.userId;
+          }
+          const barcodeImg = card.querySelector('.barcode-wrapper img');
+          if (barcodeImg) barcodeImg.src = `https://barcode.tec-it.com/barcode.ashx?data=${currentUserData.userId}&code=Code128&dpi=80`;
+          const disciplineNumbers = card.querySelectorAll('.discipline-item .number');
+          if (disciplineNumbers.length >= 3) {
+            disciplineNumbers[0].textContent = currentUserData.attendance || 0;
+            disciplineNumbers[1].textContent = currentUserData.absences || 0;
+            disciplineNumbers[2].textContent = currentUserData.leaves || 0;
+          }
+        }
+      }
+    }
   }
 
   function buildDashboard() {
@@ -1296,6 +1573,7 @@
           <button id="attendancePortalBtn" class="btn-solid" style="margin-bottom:15px; width:100%;"><i class="fas fa-clock"></i> طلب تحضير</button>
           <textarea id="meetingPrepNotesPortal" style="width:100%; padding:12px; border-radius:24px; background:#0c0b18; color:white; border:1px solid var(--blue);" rows="3" placeholder=" ملاحظات تحضير الاجتماع..."></textarea>
           <button id="sendPrepPortalBtn" class="btn-solid" style="margin-top:10px; width:100%;"><i class="fas fa-paper-plane"></i> إرسال التحضير</button>
+          <!-- ستضاف بطاقة الموظف الفخمة هنا عبر جافا سكريبت بعد تحميل البيانات -->
         </div>
       </div>
     `;
@@ -1331,6 +1609,10 @@
         tabs.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         if (tab === 'tasks') updateTaskUI();
+        // عند التبديل إلى "المزيد" نضمن ظهور البطاقة
+        if (tab === 'more' && currentUserData) {
+          loadUserData(currentUserData); // يعيد بناء البطاقة إذا لم تكن موجودة
+        }
       });
     });
     loadUserData(currentUser);
