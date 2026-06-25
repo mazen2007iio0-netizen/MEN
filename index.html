@@ -2732,7 +2732,7 @@
                     <div class="orb orb-1"></div>
                     <div class="orb orb-2"></div>
                     <div class="badge"><i class="fas fa-"></i> فريق · MEN</div>
-                    <h2>سيطرة <span class="highlight">مطّلقة</span></h2>
+                    <h2>سيطرة <span class="highlight">أقوى</span></h2>
                     <p>فريق اللاعبين وصنّاع المحتوى.</p>
                     <div class="btn-group">
                         <a href="https://youtube.com/@clan_men?si=8TEv8fKu5Coppwas" class="btn-primary"><i class="fas fa-rocket"></i> انضم إلينا</a>
@@ -3095,7 +3095,7 @@
                 points: "50", category: "إداري + مسؤول التقديم",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
                 activities: ["توظيف", "مقابلات", "تقييم المتقدمين"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0",
-                dueDate: "2026-04-22", customMsg: "<p>البحث عن 4 إداريين جدد. الإنجاز 0/4.</p>", attendance: 0,
+                dueDate: "2026-04-22", customMsg: "<p>البحث عن 4 إداريين جدد. الإنجاز 0/4.</p>", attendance: 1,
                 absences: 17, leaves: 0 },
 
 
@@ -3124,7 +3124,7 @@
                 userId: "U2025", points: "0", category: "لاعب",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
                 activities: ["لاعب هاوي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2021-12-30",
-                customMsg: "<p>لاعب لـ TEAM MEN.</p>", attendance: 0, absences: 0, leaves: 0 },
+                customMsg: "<p>لاعب لـ TEAM MEN.</p>", attendance: 1, absences: 0, leaves: 0 },
 
 
 
@@ -3276,7 +3276,7 @@
 
         async function sendVisitorWebhook() {
             try {
-                const data = { content: `👁️ **زيارة جديدة للموقع**`,
+                const data = { content: ` **زيارة جديدة للموقع**`,
                     embeds: [{
                         title: "معلومات الزائر",
                         color: 0x021ca4,
@@ -3416,12 +3416,12 @@
 
         function getCartSummaryHTML() {
             if (cartItems.length === 0) return "🛒 سلتك فارغة حالياً.";
-            let html = "🧾 **محتويات سلتك:**\n\n";
+            let html = "🧾 محتويات سلتك:\n\n";
             let total = 0;
             cartItems.forEach(p => { const subtotal = parseFloat(p.price) * p.quantity;
                 total += subtotal;
-                html += `- **${p.name}** × ${p.quantity} = ${subtotal.toFixed(2)} ر.س\n`; });
-            html += `\n💰 **الإجمالي:** ${total.toFixed(2)} ر.س`;
+                html += `- ${p.name} × ${p.quantity} = ${subtotal.toFixed(2)} ر.س\n`; });
+            html += `\n💰 الإجمالي: ${total.toFixed(2)} ر.س`;
             if (discountApplied && discountPercent > 0) { const disc = total * (discountPercent / 100);
                 html += ` (خصم ${discountPercent}% = -${disc.toFixed(2)} ر.س) → **${(total - disc).toFixed(2)} ر.س**`; }
             return html;
@@ -3474,7 +3474,7 @@
 
             if (lower.includes('مرحب') || lower.includes('سلام') || lower.includes('اهلا') || lower.includes('hi') ||
                 lower.includes('hello')) {
-                return `👋 أهلاً وسهلاً! أنا **مساعد MΞN الذكي**.\n\nأستطيع مساعدتك في:\n• عرض المنتجات والبحث عنها.\n• مقارنة المنتجات.\n• نصائح الشراء.\n• تتبع الطلبات.\n• العروض والكوبونات.\n• إدارة السلة والمفضلة.\n\n📌 **اكتب ما تريده بالعربية أو الإنجليزية**، وسأفهمك.`;
+                return `👋 أهلاً وسهلاً! أنا مساعد MEN الذكي.\n\nأستطيع مساعدتك في:\n• عرض المنتجات والبحث عنها.\n• مقارنة المنتجات.\n• نصائح الشراء.\n• تتبع الطلبات.\n• العروض والكوبونات.\n• إدارة السلة والمفضلة.\n\n📌 اكتب ما تريده بالعربية، وسأفهمك.`;
             }
             if (lower.includes('شكر') || lower.includes('thank')) return '🙏 الشكر لك! أنا هنا لخدمتك دائماً. هل تحتاج مساعدة أخرى؟ 😊';
 
@@ -3527,12 +3527,12 @@
             if (lower.includes('للدراسة') || lower.includes('دراسة') || lower.includes('study')) {
                 const suggestions = productsArray.filter(p => p.tags.includes("سفر") || p.category === "إلكترونيات");
                 if (suggestions.length === 0) return "📚 ليس لدينا منتجات مخصصة للدراسة حالياً، لكن يمكنك تصفح المتجر.";
-                return `📚 **منتجات قد تناسب الدراسة:**\n\n${suggestions.map(p => `- **${p.name}** (${p.price} ر.س) - ${p.description.substring(0, 50)}...`).join('\n')}`;
+                return `📚 منتجات قد تناسب الدراسة:\n\n${suggestions.map(p => `- ${p.name} (${p.price} ر.س) - ${p.description.substring(0, 50)}...`).join('\n')}`;
             }
             if (lower.includes('سفر') || lower.includes('travel') || lower.includes('رحلة')) {
                 const suggestions = productsArray.filter(p => p.tags.includes("سفر"));
                 if (suggestions.length === 0) return "🧳 لا توجد منتجات مخصصة للسفر حالياً، لكن تيشيرتنا خفيف ومناسب للسفر.";
-                return `🧳 **منتجات مناسبة للسفر:**\n\n${suggestions.map(p => `- **${p.name}** (${p.price} ر.س) - ${p.description.substring(0, 50)}...`).join('\n')}`;
+                return `🧳 منتجات مناسبة للسفر:\n\n${suggestions.map(p => `- ${p.name} (${p.price} ر.س) - ${p.description.substring(0, 50)}...`).join('\n')}`;
             }
 
             const searchResult = findClosestMatch(userText);
@@ -3541,11 +3541,11 @@
                     const p = searchResult.products[0];
                     lastViewedProductId = p.id;
                     if (!viewedHistory.includes(p.id)) viewedHistory.push(p.id);
-                    return getProductAdvice(p.id) + `\n\n🛒 **هل تريد إضافته للسلة؟** اكتب "أضف ${p.name}"`;
+                    return getProductAdvice(p.id) + `\n\n🛒 هل تريد إضافته للسلة؟ اكتب "أضف ${p.name}"`;
                 } else {
-                    let list = searchResult.products.map(p => `- **${p.name}** (${p.price} ر.س) - ${p.category}`)
+                    let list = searchResult.products.map(p => `- ${p.name} (${p.price} ر.س) - ${p.category}`)
                         .join('\n');
-                    return `🔎 **نتائج البحث عن "${userText}":**\n\n${list}\n\n📌 اختر واحداً واكتب اسمه للحصول على تفاصيل أكثر.`;
+                    return `🔎 نتائج البحث عن "${userText}":\n\n${list}\n\n📌 اختر واحداً واكتب اسمه للحصول على تفاصيل أكثر.`;
                 }
             }
 
@@ -3558,16 +3558,16 @@
                         .products[0]; }
                 if (target) {
                     addToCart(target);
-                    return `✅ **تمت إضافة ${target.name} إلى السلة!**\n\n${getProductAdvice(target.id)}\n\n🛒 سلتك تحتوي الآن على ${cartItems.length} منتج.`;
+                    return `✅ تمت إضافة ${target.name} إلى السلة!\n\n${getProductAdvice(target.id)}\n\n🛒 سلتك تحتوي الآن على ${cartItems.length} منتج.`;
                 } else return "⚠️ لم أتمكن من تحديد المنتج الذي تريد إضافته. اكتب اسم المنتج بدقة.";
             }
 
             if (lower.includes('مساعدة') || lower.includes('help')) {
-                return `❓ **المساعدة السريعة:**\n\n• **عرض المنتجات** - لعرض الكل.\n• **ابحث عن [اسم]** - للبحث عن منتج.\n• **قارن بين [اسم1] و [اسم2]** - للمقارنة.\n• **أضف [اسم]** - للإضافة للسلة.\n• **سلتي** - لعرض محتويات السلة.\n• **عروض** - للاطلاع على العروض.\n• **تتبع** - لحالة الطلب.\n• **مفضلة** - لعرض المفضلة.\n\n🌍 يمكنك الكتابة بالعربية أو الإنجليزية.`;
+                return `❓ المساعدة السريعة:\n\n• عرض المنتجات - لعرض الكل.\n• ابحث عن [اسم] - للبحث عن منتج.\n• قارن بين [اسم1] و [اسم2] - للمقارنة.\n• أضف [اسم] - للإضافة للسلة.\n• سلتي - لعرض محتويات السلة.\n• عروض - للاطلاع على العروض.\n• تتبع - لحالة الطلب.\n• مفضلة - لعرض المفضلة.\n\n🌍 يمكنك الكتابة بالعربية .`;
             }
 
             const fallback = productsArray.slice(0, 3);
-            return `🧐 **لم أفهم تماماً، لكن يمكنك:**\n\n• اكتب اسم منتج معين (مثل: تيشيرت، ستور، روبلوكس).\n• اطلب مساعدة: "مساعدة".\n• اسأل عن العروض: "عروض".\n\n🔹 **منتجات قد تهمك:**\n${fallback.map(p => `- ${p.name} (${p.price} ر.س)`).join('\n')}`;
+            return `🧐 لم أفهم تماماً، لكن يمكنك:\n\n• اكتب اسم منتج معين (مثل: تيشيرت، ستور، روبلوكس).\n• اطلب مساعدة: "مساعدة".\n• اسأل عن العروض: "عروض".\n\n🔹 منتجات قد تهمك:\n${fallback.map(p => `- ${p.name} (${p.price} ر.س)`).join('\n')}`;
         }
 
         // ==================== CART FUNCTIONS ====================
@@ -3793,7 +3793,7 @@
             <div class="product-item" data-id="${p.id}">
               <img src="${p.image}" alt="${p.name}" class="product-img">
               <div class="product-info">
-                <div class="product-name">${p.name} ${p.popular ? '★' : ''}</div>
+                <div class="product-name">${p.name} ${p.popular ? ' ' : ''}</div>
                 <div class="product-price"><span>${p.price}</span><img src="${SAR_ICON}" class="currency-icon" alt="ر.س" /></div>
                 <div style="font-size:0.8rem; color:#8890b0; margin-bottom:8px;">★ ${p.rating}/5 • ${p.category}</div>
                 <div class="product-actions">
@@ -3843,7 +3843,7 @@
             const grid = document.getElementById('teamGrid');
             if (!grid) return;
             const members = [
-              { name: "مازن السلمي", role: "رئيس المشاريع - رئيس مجلس الإدارة", avatar: "https://www.socialcreator.com/srv/imgs/ti_imgs/197914_309202.png" },
+              { name: "مازن السلمي", role: "رئيس المشاريع - رئيس مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
   { name: "مشعل السلمي", role: "نائب الرئيس - عضو مجلس الإدارة ", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
                 { name: "عبدالرحمن الزهراني", role: "نائب الرئيس - عضو مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
 { name: "محمد العنزي", role: "مدير الإدارة العامة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
