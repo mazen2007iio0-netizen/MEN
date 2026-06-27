@@ -830,11 +830,44 @@
             font-size: 1.05rem;
         }
 
+        /* ===== CATEGORY FILTER ===== */
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 18px 0 24px;
+            justify-content: center;
+        }
+        .category-filter .cat-btn {
+            background: rgba(2, 28, 164, 0.04);
+            border: 1px solid rgba(2, 28, 164, 0.06);
+            border-radius: 60px;
+            padding: 8px 24px;
+            color: #b0b8d0;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            backdrop-filter: blur(4px);
+        }
+        .category-filter .cat-btn:hover {
+            background: rgba(2, 28, 164, 0.08);
+            border-color: rgba(2, 28, 164, 0.15);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+        .category-filter .cat-btn.active-cat {
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            border-color: var(--blue-deep);
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.15);
+        }
+
         .search-cart-wrapper {
             display: flex;
             flex-direction: column;
             gap: 16px;
-            margin: 30px 0;
+            margin: 10px 0 0;
         }
         .cart-ai-row {
             display: flex;
@@ -981,7 +1014,7 @@
         .product-price {
             font-size: 2rem;
             font-weight: 900;
-            color: #ffffff; /* تم التعديل إلى الأبيض */
+            color: #ffffff;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -1156,7 +1189,7 @@
         }
         .ai-product-card .info .price {
             font-weight: 700;
-            color: #ffffff; /* تم التعديل إلى الأبيض */
+            color: #ffffff;
             font-size: 0.95rem;
         }
         .ai-product-card .btn-add-from-chat {
@@ -1428,7 +1461,7 @@
         }
         .cart-item .item-total {
             font-size: 0.9rem;
-            color: #ffffff; /* تم التعديل إلى الأبيض */
+            color: #ffffff;
             font-weight: 600;
         }
         .cart-total-display {
@@ -1444,7 +1477,7 @@
             align-items: center;
         }
         .cart-total-display .total-price {
-            color: #ffffff; /* تم التعديل إلى الأبيض */
+            color: #ffffff;
             text-shadow: 0 0 30px rgba(2, 28, 164, 0.04);
             display: flex;
             align-items: center;
@@ -2196,6 +2229,84 @@
             text-align: center;
         }
 
+        /* ===== MEMBER CARDS GRID (للمتابعة) ===== */
+        .member-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+            margin: 20px 0;
+        }
+        .member-card-item {
+            background: rgba(8, 10, 20, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(2, 28, 164, 0.06);
+            border-radius: var(--radius-xl);
+            padding: 20px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .member-card-item:hover {
+            transform: translateY(-6px);
+            border-color: var(--blue-deep);
+            box-shadow: 0 16px 40px rgba(2, 28, 164, 0.04);
+        }
+        .member-card-item .m-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--blue-deep);
+            margin-bottom: 10px;
+        }
+        .member-card-item .m-name {
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 1.1rem;
+        }
+        .member-card-item .m-id {
+            color: #8890b0;
+            font-size: 0.85rem;
+        }
+        .member-card-item .m-role {
+            color: var(--blue-light);
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin: 2px 0 6px;
+        }
+        .member-card-item .m-stats {
+            display: flex;
+            gap: 18px;
+            margin: 8px 0 4px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            border-top: 1px solid rgba(2, 28, 164, 0.04);
+            padding-top: 10px;
+        }
+        .member-card-item .m-stats span {
+            font-size: 0.8rem;
+            color: #b0b8d0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .member-card-item .m-stats i {
+            color: var(--blue-deep);
+            opacity: 0.4;
+        }
+        .member-card-item .m-points {
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            border-radius: 60px;
+            padding: 2px 16px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
         /* ===== MODAL LOGIN ===== */
         .modal-overlay {
             position: fixed;
@@ -2335,8 +2446,8 @@
             gap: 10px;
         }
         .footer-col p i {
-            color: #a0b0d4; /* تم تغيير اللون إلى أفتح */
-            opacity: 0.7;   /* زيادة الشفافية */
+            color: #a0b0d4;
+            opacity: 0.7;
             width: 20px;
         }
         .social-icons {
@@ -2553,6 +2664,9 @@
             .team-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+            .member-cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
         }
         @media (max-width:480px) {
             .login-header-btn {
@@ -2656,6 +2770,13 @@
             .team-grid {
                 grid-template-columns: 1fr;
             }
+            .member-cards-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .category-filter .cat-btn {
+                padding: 6px 14px;
+                font-size: 0.75rem;
+            }
         }
 
         /* ===== TOAST ===== */
@@ -2694,78 +2815,70 @@
                 transform: translateX(-50%) translateY(0) scale(1);
             }
         }
-/* ===== لافتة إعلانية ثابتة مع زر إغلاق ===== */
-.fixed-ad {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    max-width: 180px;
-    z-index: 9999;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-    border: 2px solid rgba(2, 28, 164, 0.15);
-    background: #0a0a14;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.fixed-ad:hover {
-    transform: scale(1.05);
-}
-
-.fixed-ad img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* زر الإغلاق */
-.close-ad-btn {
-    position: absolute;
-    top: 6px;
-    right: 8px;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
-    border: none;
-    color: #fff;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s ease, transform 0.2s ease;
-    z-index: 10;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-
-.close-ad-btn:hover {
-    background: #cc4444;
-    transform: scale(1.15);
-}
-
-.close-ad-btn:active {
-    transform: scale(0.95);
-}
-
-/* للهواتف: تصغير الحجم */
-@media (max-width: 480px) {
-    .fixed-ad {
-        max-width: 120px;
-        bottom: 15px;
-        right: 15px;
-    }
-    .close-ad-btn {
-        width: 22px;
-        height: 22px;
-        font-size: 14px;
-        top: 4px;
-        right: 6px;
-    }
-}
+        /* ===== لافتة إعلانية ثابتة مع زر إغلاق ===== */
+        .fixed-ad {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            max-width: 180px;
+            z-index: 9999;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(2, 28, 164, 0.15);
+            background: #0a0a14;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .fixed-ad:hover {
+            transform: scale(1.05);
+        }
+        .fixed-ad img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .close-ad-btn {
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            border: none;
+            color: #fff;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease, transform 0.2s ease;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .close-ad-btn:hover {
+            background: #cc4444;
+            transform: scale(1.15);
+        }
+        .close-ad-btn:active {
+            transform: scale(0.95);
+        }
+        @media (max-width: 480px) {
+            .fixed-ad {
+                max-width: 120px;
+                bottom: 15px;
+                right: 15px;
+            }
+            .close-ad-btn {
+                width: 22px;
+                height: 22px;
+                font-size: 14px;
+                top: 4px;
+                right: 6px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2777,7 +2890,7 @@
         <div class="container header-content">
             <div class="logo">
                 <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN">
-                
+
             </div>
             <div class="header-actions">
                 <button id="headerLoginBtn" class="login-header-btn"><i class="fas fa-fingerprint"></i> تسجيل دخول </button>
@@ -2801,12 +2914,11 @@
             <!-- ===== HOME ===== -->
             <section id="home" class="page active">
 
-
-<!-- ===== إعلان ثابت مع زر إغلاق ===== -->
-<div class="fixed-ad" id="fixedAd">
-    <button class="close-ad-btn" id="closeAdBtn" aria-label="إغلاق الإعلان">✕</button>
-    <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200764_328971.png" alt="إعلان">
-</div>
+                <!-- ===== إعلان ثابت مع زر إغلاق ===== -->
+                <div class="fixed-ad" id="fixedAd">
+                    <button class="close-ad-btn" id="closeAdBtn" aria-label="إغلاق الإعلان">✕</button>
+                    <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200764_328971.png" alt="إعلان">
+                </div>
 
                 <div class="hero-luxury">
                     <div class="orb orb-1"></div>
@@ -2843,8 +2955,8 @@
                         <div class="tile-img"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUjzc13vNlX6UtyALKsXvpeEQor5f802tBiQ&s" alt="EA FC"></div>
                         <div class="tile-content"><h4>EA FC 26</h4><p>تطويرات ثورية في أسلوب اللعب.</p><a href="#" class="btn-outline-blue">استكشف</a></div>
                     </div>
-                    <div class="tile-sub"> 
-                        <div class="tile-img"><imgsrc="https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/hero/bo7/BO7-REVEAL-ANNOUNCEMENT-TOUT.jpg" alt="COD"></div>
+                    <div class="tile-sub">
+                        <div class="tile-img"><img src="https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/hero/bo7/BO7-REVEAL-ANNOUNCEMENT-TOUT.jpg" alt="COD"></div>
                         <div class="tile-content"><h4>Call of Duty BO7</h4><p>آخر إصدارات السلسلة الأسطورية.</p><a href="#" class="btn-outline-blue">استكشف</a></div>
                     </div>
                 </div>
@@ -2901,7 +3013,7 @@
                         <h2><i class=""></i> مكتبة الألعاب الحصرية</h2>
                         <p>استمتع بألعابنا المصممة خصيصاً لأعضاء MEN</p>
                     </div>
-                    
+
                 </div>
                 <div class="games-grid">
                     <div class="game-card">
@@ -2955,6 +3067,13 @@
                     </div>
                 </div>
 
+                <!-- ===== CATEGORY FILTER ===== -->
+                <div class="category-filter" id="categoryFilter">
+                    <button class="cat-btn active-cat" data-cat="all">الكل</button>
+                    <button class="cat-btn" data-cat="ملابس">ملابس</button>
+                    <button class="cat-btn" data-cat="بطاقات شحن">بطاقات شحن</button>
+                </div>
+
                 <div class="shop-grid" id="storeProductsGrid"></div>
 
                 <div class="reviews-section">
@@ -2999,8 +3118,8 @@
                     <div class="timeline-item"><div class="year">2020</div><div class="desc">انطلاق MEN بأول فريق تنافسي</div></div>
                     <div class="timeline-item"><div class="year">2021</div><div class="desc">أول بطولة رسمية وحصد المركز الأول</div></div>
                     <div class="timeline-item"><div class="year">2022</div><div class="desc">توسع الفريق وضم نخبة من المبدعين</div></div>
-<div class="timeline-item"><div class="year">2023</div><div class="desc"> تطوير البنية التحتية للبيانات </div></div>
-<div class="timeline-item"><div class="year">2024</div><div class="desc">إطلاق هيكل إداري متمكن في التحليل و إتخاذ القرار   </div></div>
+                    <div class="timeline-item"><div class="year">2023</div><div class="desc"> تطوير البنية التحتية للبيانات </div></div>
+                    <div class="timeline-item"><div class="year">2024</div><div class="desc">إطلاق هيكل إداري متمكن في التحليل و إتخاذ القرار   </div></div>
                     <div class="timeline-item"><div class="year">2025</div><div class="desc">إطلاق منصة MEN الرقمية المتكاملة</div></div>
                     <div class="timeline-item"><div class="year">2026</div><div class="desc">الشراكة مع العلامات التجارية</div></div>
                 </div>
@@ -3146,14 +3265,11 @@
                 dueDate: "2028-04-22", customMsg: "<p>مهمتك: ابحث عن أعضاء جدد.</p>", attendance: 20, absences: 2,
                 leaves: 10 },
 
-
             "U2020": { pass: "12345", fullName: "محمد ثامر العنزي", phone: "0502799166", discord: "8u4", userId: "U2020",
                 points: "52", category: "صانع محتوى",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
                 activities: ["تقرير إبداعي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-",
                 customMsg: "<p>لا توجد مهام حالياً.</p>", attendance: 0, absences: 19, leaves: 0 },
-
-
 
             "U2021": { pass: "123456", fullName: "صالح محمد الزهراني", phone: "0549724238", discord: "sl_z7h._57465",
                 userId: "U2021", points: "46", category: "إداري + رئيس الإدارة العليا",
@@ -3162,16 +3278,11 @@
                 dueDate: "-", customMsg: "<p>تم ترقيتك إلى مدير عام. المهام: رسم خطة جديدة للعام 2026.</p>",
                 attendance: 2, absences: 14, leaves: 0 },
 
-
-
             "U2022": { pass: "Mz102030", fullName: "مازن بن منصور السلمي", phone: "0543431914", discord: "mazen_x",
                 userId: "U2022", points: "73", category: "رئيس مجلس المشروع",
                 avatar: "https://www.socialcreator.com/srv/imgs/ti_imgs/197914_309202.png", activities: ["إدارة المشاريع"],
                 monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2025-12-30",
                 customMsg: "<p>إنجاز خطة الربع الأول.</p>", attendance: 45, absences: 1, leaves: 3 },
-
-
-
 
             "U2023": { pass: "12345", fullName: "يزيد يوسف النفيعي", phone: "0538322511", discord: "bzgif", userId: "U2023",
                 points: "50", category: "إداري + مسؤول التقديم",
@@ -3180,17 +3291,11 @@
                 dueDate: "2026-04-22", customMsg: "<p>البحث عن 4 إداريين جدد. الإنجاز 0/4.</p>", attendance: 1,
                 absences: 17, leaves: 0 },
 
-
-
-
             "U2026": { pass: "1417", fullName: "مشعل منصور البنوي", phone: "05696069087", discord: "meshal71001",
                 userId: "U2026", points: "38", category: "رئيس مجلس الإدارة",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
                 activities: ["لايوجد"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-",
                 customMsg: "<p>أنشاء متجر الإلكتروني.</p>", attendance: 28, absences: 5, leaves: 2 },
-
-
-
 
             "U2027": { pass: "123123", fullName: "حسن محمد الشريف", phone: "0562250944", discord: "hss0328",
                 userId: "U2027", points: "48", category: "إداري + مسؤول السيرفر",
@@ -3199,17 +3304,11 @@
                 dueDate: "2026-12-30", customMsg: "<p>زيادة تفاعل السيرفر وزيادة الحضور اليومي.</p>", attendance: 23,
                 absences: 6, leaves: 0 },
 
-
-
-
             "U2025": { pass: "12345678", fullName: "جسار وليد السلمي", phone: "0542360558", discord: "غير متوفر",
                 userId: "U2025", points: "0", category: "لاعب",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
                 activities: ["لاعب هاوي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2021-12-30",
                 customMsg: "<p>لاعب لـ TEAM MEN.</p>", attendance: 1, absences: 0, leaves: 0 },
-
-
-
 
             "U2024": { pass: "X2h3054", fullName: "عبدالرحمن سعد الزهراني", phone: "0556655679", discord: "racer702",
                 userId: "U2024", points: "46", category: "نائب رئيس مجلس الإدارة",
@@ -3221,30 +3320,55 @@
         const meetingsList = [{ title: "اجتماع دليل الإدارة", date: "2026-05-08" }, { title: "اجتماع تحديد المهام",
             date: "2026-05-06" }];
 
-        // ==================== PRODUCTS ====================
+        // ==================== PRODUCTS (محدثة) ====================
         const productsArray = [
-            { id: 1, name: "تيشيرت الجديد", price: "39.99",
+            { id: 1, name: "تيشيرت MEN الجديد", price: "49.99",
                 image: "https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png", link: "#",
                 category: "ملابس", rating: 4.8, features: ["قطني ناعم", "مقاس مرن", "تصميم عصري"],
                 cons: ["قد يكون مقاسه غير دقيق"], description: "تيشيرت قطني مريح بتصميم عصري يناسب جميع الأوقات.",
                 tags: ["سفر", "هدية", "أسود", "صيفي"], usage: "يمكن ارتداؤه مع جينز أو شورت.",
                 warranty: "ضمان 30 يوم ضد عيوب الصناعة", popular: true },
-            { id: 3, name: "روبلوكس 20 ريال", price: "19.90",
+            { id: 2, name: "روبلكس 10 ريال", price: "10.00",
+                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
+                link: "#", category: "بطاقات شحن", rating: 4.5, features: ["سعر مناسب", "شحن فوري"],
+                cons: ["لا يمكن استخدامه في حسابات غير سعودية"], description: "بطاقة روبلكس بقيمة 10 ريال.",
+                tags: ["ألعاب", "هدية", "رقمي"], usage: "أدخل الكود في موقع روبلكس.",
+                warranty: "ضمان الاستبدال في حال عدم صلاحية الكود", popular: false },
+            { id: 3, name: "روبلكس 20 ريال", price: "20.00",
                 image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
                 link: "#", category: "بطاقات شحن", rating: 4.6, features: ["سعر مناسب", "شحن فوري"],
-                cons: ["لا يمكن استخدامه في حسابات غير سعودية"], description: "بطاقة روبلوكس بقيمة 20 ريال.",
-                tags: ["ألعاب", "هدية", "رقمي"], usage: "أدخل الكود في موقع روبلوكس.",
+                cons: ["لا يمكن استخدامه في حسابات غير سعودية"], description: "بطاقة روبلكس بقيمة 20 ريال.",
+                tags: ["ألعاب", "هدية", "رقمي"], usage: "أدخل الكود في موقع روبلكس.",
                 warranty: "ضمان الاستبدال في حال عدم صلاحية الكود", popular: false },
-            { id: 4, name: "ببجي 5 $", price: "19.90",
+            { id: 4, name: "روبلكس 50 ريال", price: "50.00",
+                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
+                link: "#", category: "بطاقات شحن", rating: 4.7, features: ["سعر مناسب", "شحن فوري"],
+                cons: ["لا يمكن استخدامه في حسابات غير سعودية"], description: "بطاقة روبلكس بقيمة 50 ريال.",
+                tags: ["ألعاب", "هدية", "رقمي"], usage: "أدخل الكود في موقع روبلكس.",
+                warranty: "ضمان الاستبدال في حال عدم صلاحية الكود", popular: false },
+            { id: 5, name: "ببجي 5$", price: "19.90",
                 image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp",
                 link: "#", category: "بطاقات شحن", rating: 4.4, features: ["شحن فوري", "يدعم ببجي موبايل"],
                 cons: ["غير متوفر لجميع المناطق"], description: "بطاقة ببجي بقيمة 5 دولارات.",
                 tags: ["ألعاب", "هدية", "رقمي"], usage: "ادخل الكود في متجر اللعبة.",
                 warranty: "ضمان استبدال الكود في حال العطل", popular: false },
-            { id: 2, name: "ستور سوني 10$", price: "39.35",
+            { id: 6, name: "ببجي 10$", price: "37.50",
+                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp",
+                link: "#", category: "بطاقات شحن", rating: 4.6, features: ["شحن فوري", "يدعم ببجي موبايل"],
+                cons: ["غير متوفر لجميع المناطق"], description: "بطاقة ببجي بقيمة 10 دولارات.",
+                tags: ["ألعاب", "هدية", "رقمي"], usage: "ادخل الكود في متجر اللعبة.",
+                warranty: "ضمان استبدال الكود في حال العطل", popular: false },
+            { id: 7, name: "ستور سوني 10$", price: "37.50",
                 image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10",
                 link: "#", category: "بطاقات شحن", rating: 4.7, features: ["شحن فوري", "متوافق مع PlayStation Network"],
-                cons: ["يستخدم في حساب سوني فقط"], description: "بطاقة شحن بقيمة 10$ لحساب سوني (PlayStation).",
+                cons: ["يستخدم في حساب سوني فقط"], description: "بطاقة شحن بقيمة 10$ لحساب سوني.",
+                tags: ["سوني", "ستور", "رقمي", "هدية", "ألعاب"],
+                usage: "أدخل الكود في متجر PlayStation لإضافة الرصيد.",
+                warranty: "ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular: false },
+            { id: 8, name: "ستور سوني 20$", price: "75.00",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10",
+                link: "#", category: "بطاقات شحن", rating: 4.8, features: ["شحن فوري", "متوافق مع PlayStation Network"],
+                cons: ["يستخدم في حساب سوني فقط"], description: "بطاقة شحن بقيمة 20$ لحساب سوني.",
                 tags: ["سوني", "ستور", "رقمي", "هدية", "ألعاب"],
                 usage: "أدخل الكود في متجر PlayStation لإضافة الرصيد.",
                 warranty: "ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular: false }
@@ -3274,6 +3398,7 @@
         let favorites = [];
         let viewedHistory = [];
         let orderSim = { status: "قيد التجهيز", expected: "لا أعلم", tracking: "TRK-2026-001" };
+        let currentCategory = "all";
 
         // ==================== UTILITIES ====================
         function showToast(msg, type = "info") {
@@ -3893,6 +4018,20 @@
                     const product = productsArray.find(p => p.id === id); if (product) addToCart(product); }); });
         }
 
+        function filterStoreByCategory(category) {
+            currentCategory = category;
+            if (category === 'all') {
+                renderStore(productsArray);
+            } else {
+                const filtered = productsArray.filter(p => p.category === category);
+                renderStore(filtered);
+            }
+            // تحديث أزرار التصنيف
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.toggle('active-cat', btn.dataset.cat === category);
+            });
+        }
+
         function renderReviews() {
             const track = document.getElementById('reviewsTrack');
             if (!track) return;
@@ -3925,13 +4064,20 @@
             const grid = document.getElementById('teamGrid');
             if (!grid) return;
             const members = [
-              { name: "مازن السلمي", role: "رئيس المشاريع - رئيس مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-  { name: "مشعل السلمي", role: "نائب الرئيس - عضو مجلس الإدارة ", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "عبدالرحمن الزهراني", role: "نائب الرئيس - عضو مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-{ name: "محمد العنزي", role: "مدير الإدارة العامة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "صالح الزهراني", role: "مدير عام", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                                { name: "يزيد النفيعي", role: "مدير التقديم", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "حسن الشريف", role: "مدير السيرفر", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" }
+                { name: "مازن السلمي", role: "رئيس المشاريع - رئيس مجلس الإدارة",
+                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "مشعل السلمي", role: "نائب الرئيس - عضو مجلس الإدارة ",
+                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "عبدالرحمن الزهراني", role: "نائب الرئيس - عضو مجلس الإدارة",
+                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "محمد العنزي", role: "مدير الإدارة العامة",
+                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "صالح الزهراني", role: "مدير عام",
+                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "يزيد النفيعي", role: "مدير التقديم",
+                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "حسن الشريف", role: "مدير السيرفر",
+                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" }
             ];
             grid.innerHTML = members.map(m => `
             <div class="team-card">
@@ -3943,6 +4089,26 @@
         }
 
         // ==================== PORTAL ====================
+        function renderMemberCards() {
+            const container = document.getElementById('memberCardsContainer');
+            if (!container) return;
+            const members = Object.values(usersDB);
+            container.innerHTML = members.map(m => `
+            <div class="member-card-item">
+              <img src="${m.avatar}" alt="${m.fullName}" class="m-avatar">
+              <div class="m-name">${m.fullName}</div>
+              <div class="m-id"> ${m.userId}</div>
+              <div class="m-role">${m.category}</div>
+              <div class="m-points">★ ${m.points}</div>
+              <div class="m-stats">
+                <span><i class="fas fa-check-circle" style="color:#4caf50;"></i> ${m.attendance || 0}</span>
+                <span><i class="fas fa-times-circle" style="color:#ff6b6b;"></i> ${m.absences || 0}</span>
+                <span><i class="fas fa-umbrella-beach" style="color:#f5b342;"></i> ${m.leaves || 0}</span>
+              </div>
+            </div>
+          `).join('');
+        }
+
         function updateTaskUI() {
             const container = document.getElementById('taskActionButtons');
             if (!container || !currentUserData) return;
@@ -4061,8 +4227,42 @@
             renderMeetings();
             updateTaskUI();
 
+            // زر متابعة الأعضاء (لـ مازن فقط)
             const moreTab = document.getElementById('moreTab');
             if (moreTab) {
+                let existingBtn = document.getElementById('memberTrackingBtn');
+                if (currentUserData.userId === 'U2022') {
+                    if (!existingBtn) {
+                        const btn = document.createElement('button');
+                        btn.id = 'memberTrackingBtn';
+                        btn.className = 'btn-primary';
+                        btn.style.width = '100%';
+                        btn.style.marginBottom = '15px';
+                        btn.innerHTML = '<i class="fas fa-users"></i> متابعة الأعضاء';
+                        const container = moreTab.querySelector('.card-soft') || moreTab;
+                        container.insertBefore(btn, container.firstChild);
+                        btn.addEventListener('click', function() {
+                            const existingGrid = document.getElementById('memberCardsContainer');
+                            if (existingGrid) {
+                                existingGrid.style.display = existingGrid.style.display === 'none' ?
+                                    'flex' : 'none';
+                                if (existingGrid.style.display === 'flex') renderMemberCards();
+                            } else {
+                                const grid = document.createElement('div');
+                                grid.id = 'memberCardsContainer';
+                                grid.className = 'member-cards-grid';
+                                const card = moreTab.querySelector('.card-soft') || moreTab;
+                                card.insertAdjacentElement('afterend', grid);
+                                renderMemberCards();
+                            }
+                        });
+                    }
+                } else {
+                    if (existingBtn) existingBtn.remove();
+                    const grid = document.getElementById('memberCardsContainer');
+                    if (grid) grid.remove();
+                }
+                // البطاقة الشخصية في المزيد
                 if (!moreTab.querySelector('.employee-card-luxury')) {
                     const cardHTML = `
                 <div class="employee-card-luxury">
@@ -4356,18 +4556,34 @@
         }
 
         function initStore() {
-            renderStore(productsArray);
+            // تصفية حسب الفئة
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const cat = this.dataset.cat;
+                    filterStoreByCategory(cat);
+                });
+            });
+            // عرض المنتجات الأولية
+            filterStoreByCategory('all');
             renderReviews();
             renderTeam();
             initCartModal();
             initAIAssistant();
+
             document.getElementById('storeSearchInput')?.addEventListener('input', (e) => {
                 const term = e.target.value.toLowerCase().trim();
-                if (term === '') renderStore(productsArray);
-                else { const filtered = productsArray.filter(p => p.name.toLowerCase().includes(term) || p
+                if (term === '') {
+                    filterStoreByCategory(currentCategory);
+                } else {
+                    const filtered = productsArray.filter(p => p.name.toLowerCase().includes(term) || p
                         .tags.some(t => t.includes(term)));
-                    renderStore(filtered); }
+                    // تطبيق التصنيف الحالي أيضاً
+                    const final = currentCategory === 'all' ? filtered : filtered.filter(p => p
+                    .category === currentCategory);
+                    renderStore(final);
+                }
             });
+
             document.getElementById('prevReviewBtn')?.addEventListener('click', () => { if (currentReviewIndex >
                     0) { currentReviewIndex--;
                         updateCarousel(); } });
@@ -4423,16 +4639,16 @@
             if (window.scrollY > 30) header.classList.add('scrolled');
             else header.classList.remove('scrolled');
         });
-// إخفاء الإعلان الثابت عند الضغط على زر الإغلاق
-document.getElementById('closeAdBtn')?.addEventListener('click', function() {
-    const ad = document.getElementById('fixedAd');
-    ad.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-    ad.style.opacity = '0';
-    ad.style.transform = 'scale(0.8)';
-    setTimeout(() => {
-        ad.style.display = 'none';
-    }, 400);
-});
+        // إخفاء الإعلان الثابت عند الضغط على زر الإغلاق
+        document.getElementById('closeAdBtn')?.addEventListener('click', function() {
+            const ad = document.getElementById('fixedAd');
+            ad.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            ad.style.opacity = '0';
+            ad.style.transform = 'scale(0.8)';
+            setTimeout(() => {
+                ad.style.display = 'none';
+            }, 400);
+        });
         // ==================== START ====================
         initStore();
         initStats();
