@@ -830,44 +830,11 @@
             font-size: 1.05rem;
         }
 
-        /* ===== CATEGORY FILTER ===== */
-        .category-filter {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 18px 0 24px;
-            justify-content: center;
-        }
-        .category-filter .cat-btn {
-            background: rgba(2, 28, 164, 0.04);
-            border: 1px solid rgba(2, 28, 164, 0.06);
-            border-radius: 60px;
-            padding: 8px 24px;
-            color: #b0b8d0;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.9rem;
-            backdrop-filter: blur(4px);
-        }
-        .category-filter .cat-btn:hover {
-            background: rgba(2, 28, 164, 0.08);
-            border-color: rgba(2, 28, 164, 0.15);
-            color: #ffffff;
-            transform: translateY(-2px);
-        }
-        .category-filter .cat-btn.active-cat {
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            border-color: var(--blue-deep);
-            color: #ffffff;
-            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.15);
-        }
-
         .search-cart-wrapper {
             display: flex;
             flex-direction: column;
             gap: 16px;
-            margin: 10px 0 0;
+            margin: 30px 0;
         }
         .cart-ai-row {
             display: flex;
@@ -1735,10 +1702,13 @@
         }
 
         .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
             margin: 30px 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .team-card {
             background: var(--card-bg);
@@ -1748,19 +1718,27 @@
             padding: 24px 20px;
             text-align: center;
             transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
         .team-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-4px);
             border-color: var(--blue-deep);
             box-shadow: 0 12px 32px rgba(2, 28, 164, 0.04);
         }
         .team-card img {
-            width: 90px;
-            height: 90px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--blue-deep);
-            margin-bottom: 12px;
+            margin-bottom: 0;
+        }
+        .team-card .info {
+            flex: 1;
+            text-align: right;
         }
         .team-card h4 {
             color: #ffffff;
@@ -2014,24 +1992,26 @@
             box-shadow: 0 4px 24px rgba(165, 90, 90, 0.15);
         }
 
-        /* ===== EMPLOYEE CARD ===== */
+        /* ===== EMPLOYEE CARD (HORIZONTAL LUXURY) ===== */
         .employee-card-luxury {
             width: 100%;
-            max-width: 400px;
+            max-width: 100%;
             margin: 20px auto;
             background: rgba(8, 10, 20, 0.8);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1.5px solid rgba(2, 28, 164, 0.06);
             border-radius: var(--radius-2xl);
-            padding: 30px 26px 26px;
+            padding: 26px 30px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
             transition: var(--transition);
             position: relative;
             overflow: hidden;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
         }
         .employee-card-luxury::before {
             content: '';
@@ -2045,7 +2025,7 @@
             z-index: 0;
         }
         .employee-card-luxury:hover {
-            transform: translateY(-6px);
+            transform: translateY(-4px);
             border-color: var(--blue-deep);
             box-shadow: 0 30px 80px rgba(2, 28, 164, 0.03);
         }
@@ -2053,28 +2033,32 @@
             position: relative;
             z-index: 1;
         }
-        .card-avatar {
-            width: 90px;
-            height: 90px;
+        .card-avatar-lg {
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             border: 3px solid var(--blue-deep);
-            box-shadow: 0 0 40px rgba(2, 28, 164, 0.04);
+            box-shadow: 0 0 50px rgba(2, 28, 164, 0.06);
             object-fit: cover;
-            margin-bottom: 10px;
+            flex-shrink: 0;
             transition: 0.3s;
         }
-        .employee-card-luxury:hover .card-avatar {
+        .employee-card-luxury:hover .card-avatar-lg {
             border-color: var(--blue-light);
-            box-shadow: 0 0 60px rgba(2, 28, 164, 0.06);
+            box-shadow: 0 0 70px rgba(2, 28, 164, 0.08);
+        }
+        .card-info-center {
+            flex: 1;
+            min-width: 200px;
         }
         .card-name {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: 800;
             color: #ffffff;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             letter-spacing: -0.5px;
         }
-        .status-badge {
+        .status-badge-lg {
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -2085,9 +2069,9 @@
             font-weight: 600;
             color: #4caf50;
             font-size: 0.85rem;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
-        .status-badge .dot {
+        .status-badge-lg .dot {
             width: 8px;
             height: 8px;
             background: #4caf50;
@@ -2110,51 +2094,56 @@
                 transform: scale(0.8);
             }
         }
-        .card-details-grid {
+        .card-details-grid-h {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 6px 20px;
+            gap: 4px 24px;
             width: 100%;
-            margin: 10px 0 12px;
+            margin: 8px 0 10px;
             background: rgba(0, 0, 0, 0.10);
             border-radius: 20px;
-            padding: 12px 16px;
+            padding: 12px 20px;
             border: 1px solid rgba(2, 28, 164, 0.02);
         }
-        .card-details-grid .detail-item {
+        .card-details-grid-h .detail-item {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.9rem;
+            gap: 8px;
+            font-size: 0.95rem;
             color: #b0b8d0;
         }
-        .card-details-grid .detail-item i {
+        .card-details-grid-h .detail-item i {
             color: var(--blue-deep);
             width: 20px;
             text-align: center;
             opacity: 0.4;
         }
-        .card-details-grid .detail-item .value {
+        .card-details-grid-h .detail-item .value {
             color: #ffffff;
             font-weight: 600;
         }
-        .barcode-wrapper {
-            width: 100%;
-            max-width: 220px;
+        .card-right-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .barcode-wrapper-h {
+            width: 180px;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 16px;
-            padding: 8px 12px;
+            padding: 6px 12px;
             border: 1px solid rgba(2, 28, 164, 0.03);
-            margin: 6px 0 12px;
             position: relative;
             overflow: hidden;
         }
-        .barcode-wrapper img {
+        .barcode-wrapper-h img {
             width: 100%;
             display: block;
             border-radius: 6px;
         }
-        .barcode-wrapper .scanner-line {
+        .barcode-wrapper-h .scanner-line {
             position: absolute;
             left: 0;
             right: 0;
@@ -2180,131 +2169,85 @@
                 opacity: 0.1;
             }
         }
-        .discipline-section {
-            width: 100%;
+        .discipline-section-h {
             display: flex;
-            justify-content: space-around;
-            gap: 10px;
-            margin: 8px 0 4px;
-            padding: 10px 6px;
+            gap: 20px;
+            margin: 4px 0 2px;
+            padding: 8px 16px;
             background: rgba(0, 0, 0, 0.06);
             border-radius: 28px;
             border: 1px solid rgba(2, 28, 164, 0.02);
+            flex-wrap: wrap;
+            justify-content: center;
         }
-        .discipline-item {
+        .discipline-item-h {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 2px;
-            font-size: 0.8rem;
+            gap: 6px;
+            font-size: 0.85rem;
             font-weight: 600;
         }
-        .discipline-item .number {
-            font-size: 1.6rem;
+        .discipline-item-h .number {
+            font-size: 1.4rem;
             font-weight: 800;
             line-height: 1.2;
         }
-        .discipline-item .label {
+        .discipline-item-h .label {
             color: #8890b0;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             letter-spacing: 0.3px;
         }
-        .discipline-item.green .number {
+        .discipline-item-h.green .number {
             color: #4caf50;
         }
-        .discipline-item.red .number {
+        .discipline-item-h.red .number {
             color: #ff6b6b;
         }
-        .discipline-item.yellow .number {
+        .discipline-item-h.yellow .number {
             color: #f5b342;
         }
-        .card-footer-text {
+        .card-footer-text-h {
             font-size: 0.7rem;
             color: #4a5070;
-            margin-top: 6px;
+            margin-top: 4px;
             letter-spacing: 1px;
             border-top: 1px solid rgba(2, 28, 164, 0.02);
-            padding-top: 8px;
-            width: 80%;
+            padding-top: 6px;
+            width: 100%;
             text-align: center;
         }
 
-        /* ===== MEMBER CARDS GRID (للمتابعة) ===== */
-        .member-cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 24px;
-            margin: 20px 0;
-        }
-        .member-card-item {
-            background: rgba(8, 10, 20, 0.8);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(2, 28, 164, 0.06);
-            border-radius: var(--radius-xl);
-            padding: 20px 18px;
+        /* متابعة الأعضاء (عمودي) */
+        .following-list {
             display: flex;
             flex-direction: column;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .following-item {
+            display: flex;
             align-items: center;
-            text-align: center;
-            transition: var(--transition);
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            padding: 10px 18px;
+            border: 1px solid rgba(2, 28, 164, 0.04);
+            transition: 0.2s;
         }
-        .member-card-item:hover {
-            transform: translateY(-6px);
-            border-color: var(--blue-deep);
-            box-shadow: 0 16px 40px rgba(2, 28, 164, 0.04);
+        .following-item:hover {
+            border-color: rgba(2, 28, 164, 0.12);
+            background: rgba(0, 0, 0, 0.25);
         }
-        .member-card-item .m-avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--blue-deep);
-            margin-bottom: 10px;
-        }
-        .member-card-item .m-name {
-            font-weight: 700;
-            color: #ffffff;
-            font-size: 1.1rem;
-        }
-        .member-card-item .m-id {
-            color: #8890b0;
-            font-size: 0.85rem;
-        }
-        .member-card-item .m-role {
+        .following-item i {
             color: var(--blue-light);
-            font-weight: 600;
-            font-size: 0.85rem;
-            margin: 2px 0 6px;
+            font-size: 1.2rem;
+            width: 28px;
+            text-align: center;
+            opacity: 0.6;
         }
-        .member-card-item .m-stats {
-            display: flex;
-            gap: 18px;
-            margin: 8px 0 4px;
-            flex-wrap: wrap;
-            justify-content: center;
-            width: 100%;
-            border-top: 1px solid rgba(2, 28, 164, 0.04);
-            padding-top: 10px;
-        }
-        .member-card-item .m-stats span {
-            font-size: 0.8rem;
-            color: #b0b8d0;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .member-card-item .m-stats i {
-            color: var(--blue-deep);
-            opacity: 0.4;
-        }
-        .member-card-item .m-points {
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            border-radius: 60px;
-            padding: 2px 16px;
+        .following-item .fname {
             color: #ffffff;
-            font-weight: 700;
-            font-size: 0.8rem;
-            margin-top: 4px;
+            font-weight: 600;
         }
 
         /* ===== MODAL LOGIN ===== */
@@ -2506,6 +2449,20 @@
             .faq-grid {
                 grid-template-columns: 1fr;
             }
+            .employee-card-luxury {
+                flex-direction: column;
+                text-align: center;
+            }
+            .card-details-grid-h {
+                grid-template-columns: 1fr;
+            }
+            .card-right-col {
+                width: 100%;
+            }
+            .barcode-wrapper-h {
+                width: 100%;
+                max-width: 220px;
+            }
         }
         @media (max-width:768px) {
             .header-content {
@@ -2662,10 +2619,35 @@
                 max-width: 300px;
             }
             .team-grid {
-                grid-template-columns: repeat(2, 1fr);
+                max-width: 100%;
             }
-            .member-cards-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            .team-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            .team-card .info {
+                text-align: center;
+            }
+            .employee-card-luxury {
+                padding: 20px;
+            }
+            .card-name {
+                font-size: 1.4rem;
+            }
+            .card-avatar-lg {
+                width: 80px;
+                height: 80px;
+            }
+            .card-details-grid-h {
+                grid-template-columns: 1fr 1fr;
+                gap: 4px 12px;
+                padding: 10px 14px;
+            }
+            .discipline-section-h {
+                gap: 12px;
+            }
+            .barcode-wrapper-h {
+                width: 100%;
             }
         }
         @media (max-width:480px) {
@@ -2739,14 +2721,27 @@
                 font-size: 1.4rem;
             }
             .employee-card-luxury {
-                padding: 20px 16px;
+                padding: 16px;
+                gap: 16px;
             }
             .card-name {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
             }
-            .card-details-grid {
+            .card-avatar-lg {
+                width: 64px;
+                height: 64px;
+            }
+            .card-details-grid-h {
                 grid-template-columns: 1fr;
-                gap: 4px;
+                padding: 8px 12px;
+            }
+            .discipline-section-h {
+                gap: 8px;
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+            .discipline-item-h .number {
+                font-size: 1.2rem;
             }
             .soft-header .logo h2 {
                 font-size: 1.2rem;
@@ -2768,14 +2763,10 @@
                 font-size: 0.85rem;
             }
             .team-grid {
-                grid-template-columns: 1fr;
+                max-width: 100%;
             }
-            .member-cards-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .category-filter .cat-btn {
-                padding: 6px 14px;
-                font-size: 0.75rem;
+            .barcode-wrapper-h {
+                width: 100%;
             }
         }
 
@@ -2815,7 +2806,8 @@
                 transform: translateX(-50%) translateY(0) scale(1);
             }
         }
-        /* ===== لافتة إعلانية ثابتة مع زر إغلاق ===== */
+
+        /* ===== إعلان ثابت ===== */
         .fixed-ad {
             position: fixed;
             bottom: 30px;
@@ -2890,7 +2882,6 @@
         <div class="container header-content">
             <div class="logo">
                 <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN">
-
             </div>
             <div class="header-actions">
                 <button id="headerLoginBtn" class="login-header-btn"><i class="fas fa-fingerprint"></i> تسجيل دخول </button>
@@ -2914,7 +2905,7 @@
             <!-- ===== HOME ===== -->
             <section id="home" class="page active">
 
-                <!-- ===== إعلان ثابت مع زر إغلاق ===== -->
+                <!-- ===== إعلان ثابت ===== -->
                 <div class="fixed-ad" id="fixedAd">
                     <button class="close-ad-btn" id="closeAdBtn" aria-label="إغلاق الإعلان">✕</button>
                     <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200764_328971.png" alt="إعلان">
@@ -2942,7 +2933,7 @@
                     <div class="tile-main">
                         <div class="tile-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200685_328971.png" alt="Festival"></div>
                         <div class="tile-content">
-                            <h4>فعالية سنوية </h4>
+                            <h4>فعالية سنوية</h4>
                             <p>حدث سنوي يجمع نخبة المبدعين في عالم الألعاب والمحتوى الرقمي.</p>
                             <a href="https://sites.google.com/view/festival-of-creativity/festival-of-creativity" class="btn-outline-blue"><i class="fas fa-calendar-alt"></i> تفاصيل الحدث</a>
                         </div>
@@ -3013,7 +3004,6 @@
                         <h2><i class=""></i> مكتبة الألعاب الحصرية</h2>
                         <p>استمتع بألعابنا المصممة خصيصاً لأعضاء MEN</p>
                     </div>
-
                 </div>
                 <div class="games-grid">
                     <div class="game-card">
@@ -3037,7 +3027,7 @@
                     <div class="game-card">
                         <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200685_328971.png" alt="بطولة MEN"><span class="game-badge">بطولة</span></div>
                         <div class="game-content">
-                            <h4>بطولة </h4>
+                            <h4>بطولة</h4>
                             <div class="game-meta"><span><i class="fas fa-trophy"></i> جائزة للفريق</span><span><i class="fas fa-calendar"></i> 2027</span></div>
                             <p>أكبر بطولة إلكترونية بمشاركة نخبة الفرق.</p>
                             <div class="btn-group"><a href="https://sites.google.com/view/festival-of-creativity/festival-of-creativity" class="btn-outline-blue"><i class="fas fa-ticket-alt"></i> سجل</a></div>
@@ -3065,13 +3055,6 @@
                         <input type="text" id="storeSearchInput" placeholder="ابحث عن منتجك ...">
                         <i class="fas fa-search search-icon"></i>
                     </div>
-                </div>
-
-                <!-- ===== CATEGORY FILTER ===== -->
-                <div class="category-filter" id="categoryFilter">
-                    <button class="cat-btn active-cat" data-cat="all">الكل</button>
-                    <button class="cat-btn" data-cat="ملابس">ملابس</button>
-                    <button class="cat-btn" data-cat="بطاقات شحن">بطاقات شحن</button>
                 </div>
 
                 <div class="shop-grid" id="storeProductsGrid"></div>
@@ -3118,8 +3101,8 @@
                     <div class="timeline-item"><div class="year">2020</div><div class="desc">انطلاق MEN بأول فريق تنافسي</div></div>
                     <div class="timeline-item"><div class="year">2021</div><div class="desc">أول بطولة رسمية وحصد المركز الأول</div></div>
                     <div class="timeline-item"><div class="year">2022</div><div class="desc">توسع الفريق وضم نخبة من المبدعين</div></div>
-                    <div class="timeline-item"><div class="year">2023</div><div class="desc"> تطوير البنية التحتية للبيانات </div></div>
-                    <div class="timeline-item"><div class="year">2024</div><div class="desc">إطلاق هيكل إداري متمكن في التحليل و إتخاذ القرار   </div></div>
+                    <div class="timeline-item"><div class="year">2023</div><div class="desc">تطوير البنية التحتية للبيانات</div></div>
+                    <div class="timeline-item"><div class="year">2024</div><div class="desc">إطلاق هيكل إداري متمكن في التحليل واتخاذ القرار</div></div>
                     <div class="timeline-item"><div class="year">2025</div><div class="desc">إطلاق منصة MEN الرقمية المتكاملة</div></div>
                     <div class="timeline-item"><div class="year">2026</div><div class="desc">الشراكة مع العلامات التجارية</div></div>
                 </div>
@@ -3263,124 +3246,102 @@
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
                 activities: ["تقرير إبداعي", "تقرير إحصائي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0",
                 dueDate: "2028-04-22", customMsg: "<p>مهمتك: ابحث عن أعضاء جدد.</p>", attendance: 20, absences: 2,
-                leaves: 10 },
+                leaves: 10,
+                meetings: [
+                    { type: "اجتماع", title: "اجتماع التخطيط السنوي", date: "2026-01-15", status: "حضر" },
+                    { type: "دورة", title: "دورة القيادة الفعالة", date: "2026-02-10", status: "حضر" },
+                    { type: "جلسة", title: "جلسة مراجعة الأداء", date: "2026-03-05", status: "غاب" }
+                ] },
 
             "U2020": { pass: "12345", fullName: "محمد ثامر العنزي", phone: "0502799166", discord: "8u4", userId: "U2020",
                 points: "52", category: "صانع محتوى",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
                 activities: ["تقرير إبداعي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-",
-                customMsg: "<p>لا توجد مهام حالياً.</p>", attendance: 0, absences: 19, leaves: 0 },
+                customMsg: "<p>لا توجد مهام حالياً.</p>", attendance: 0, absences: 19, leaves: 0,
+                meetings: [
+                    { type: "اجتماع", title: "اجتماع ", date: "2026-06-20", status: "غاب" },
+                    { type: "اجتماع", title: "اجتماع", date: "2026-06-14", status: "غاب" }
+                ] },
 
             "U2021": { pass: "123456", fullName: "صالح محمد الزهراني", phone: "0549724238", discord: "sl_z7h._57465",
                 userId: "U2021", points: "46", category: "إداري + رئيس الإدارة العليا",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
                 activities: ["لايوجد", "لايوجد", "لايوجد"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0",
                 dueDate: "-", customMsg: "<p>تم ترقيتك إلى مدير عام. المهام: رسم خطة جديدة للعام 2026.</p>",
-                attendance: 2, absences: 14, leaves: 0 },
+                attendance: 2, absences: 14, leaves: 0,
+                meetings: [
+                    { type: "اجتماع", title: "اجتماع الإدارة العليا", date: "2026-01-10", status: "حضر" },
+                    { type: "دورة", title: "دورة التخطيط الإستراتيجي", date: "2026-02-20", status: "قادم" }
+                ] },
 
             "U2022": { pass: "Mz102030", fullName: "مازن بن منصور السلمي", phone: "0543431914", discord: "mazen_x",
                 userId: "U2022", points: "73", category: "رئيس مجلس المشروع",
                 avatar: "https://www.socialcreator.com/srv/imgs/ti_imgs/197914_309202.png", activities: ["إدارة المشاريع"],
                 monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2025-12-30",
-                customMsg: "<p>إنجاز خطة الربع الأول.</p>", attendance: 45, absences: 1, leaves: 3 },
+                customMsg: "<p>إنجاز خطة الربع الأول.</p>", attendance: 45, absences: 1, leaves: 3,
+                meetings: [
+                    { type: "اجتماع", title: "اجتماع المشروع", date: "2026-01-05", status: "حضر" },
+                    { type: "دورة", title: "دورة إدارة المشاريع", date: "2026-01-25", status: "حضر" },
+                    { type: "جلسة", title: "اجتماع متابعة السيرفر", date: "2026-07-07", status: "قادم" },
+                    { type: "جلسة", title: "اجتماع مجلس الادارة", date: "2026-07-07", status: "قادم" },
+                      { type: "دورة", title: "دورة التخطيط الإستراتيجي", date: "2026-02-20", status: "قادم" }  
+                ],
+                following: ["يزيد النفيعي", "عبدالرحمن الزهراني", "مشعل السلمي", "صالح الزهراني", "حسن الشريف", "محمد العنزي"] },
 
             "U2023": { pass: "12345", fullName: "يزيد يوسف النفيعي", phone: "0538322511", discord: "bzgif", userId: "U2023",
                 points: "50", category: "إداري + مسؤول التقديم",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
                 activities: ["توظيف", "مقابلات", "تقييم المتقدمين"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0",
                 dueDate: "2026-04-22", customMsg: "<p>البحث عن 4 إداريين جدد. الإنجاز 0/4.</p>", attendance: 1,
-                absences: 17, leaves: 0 },
+                absences: 17, leaves: 0,
+                meetings: [
+                    { type: "اجتماع", title: "اجتماع التوظيف", date: "2026-06-12", status: "حضر" },
+                    { type: "دورة", title: "اجتماع دليل الإدارة", date: "2026-06-05", status: "حضر" }
+                ] },
 
             "U2026": { pass: "1417", fullName: "مشعل منصور البنوي", phone: "05696069087", discord: "meshal71001",
                 userId: "U2026", points: "38", category: "رئيس مجلس الإدارة",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
                 activities: ["لايوجد"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "-",
-                customMsg: "<p>أنشاء متجر الإلكتروني.</p>", attendance: 28, absences: 5, leaves: 2 },
+                customMsg: "<p>أنشاء متجر الإلكتروني.</p>", attendance: 28, absences: 5, leaves: 2,
+                meetings: [
+                    { type: "اجتماع", title: "اجتماع مجلس الإدارة", date: "2026-01-08", status: "حضر" },
+                    { type: "جلسة", title: "اجتماع مجلس الادارة", date: "2026-07-07", status: "قادم" }
+                ] },
 
             "U2027": { pass: "123123", fullName: "حسن محمد الشريف", phone: "0562250944", discord: "hss0328",
                 userId: "U2027", points: "48", category: "إداري + مسؤول السيرفر",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
                 activities: ["إدارة المشاريع"], monthEarn: "0 ر.س", totalEarn: "14.21 ر.س", followers: "0",
                 dueDate: "2026-12-30", customMsg: "<p>زيادة تفاعل السيرفر وزيادة الحضور اليومي.</p>", attendance: 23,
-                absences: 6, leaves: 0 },
+                absences: 6, leaves: 0,
+                meetings: [
+                    { type: "اجتماع", title: "اجتماع السيرفر", date: "2026-06-18", status: "حضر" },
+                    { type: "اجتماع", title: "اجتماع متابعة السيرفر", date: "2026-07-07", status: "قادم" }
+                ] },
+
 
             "U2025": { pass: "12345678", fullName: "جسار وليد السلمي", phone: "0542360558", discord: "غير متوفر",
                 userId: "U2025", points: "0", category: "لاعب",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
                 activities: ["لاعب هاوي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2021-12-30",
-                customMsg: "<p>لاعب لـ TEAM MEN.</p>", attendance: 1, absences: 0, leaves: 0 },
+                customMsg: "<p>لاعب لـ TEAM MEN.</p>", attendance: 1, absences: 0, leaves: 0,
+                meetings: [ 
+{ type: "دورة", title: "تدريب فورت نايت", date: "2026-06-29", status: "قادم" }
+ ] },
+
 
             "U2024": { pass: "X2h3054", fullName: "عبدالرحمن سعد الزهراني", phone: "0556655679", discord: "racer702",
                 userId: "U2024", points: "46", category: "نائب رئيس مجلس الإدارة",
                 avatar: "https://e7.pngegg.com/pngimages/813/118/png-clipart-silhouette-icon-blank-person-template-share-icon-black-and-white.png",
                 activities: ["إدارة الفريق"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0",
                 dueDate: "2025-11-15", customMsg: "<p>البحث عن 3 إداريين جدد.</p>", attendance: 3, absences: 13,
-                leaves: 0 }
+                leaves: 0,
+                meetings: [
+                    { type: "اجتماع", title: "اجتماع الإدارة", date: "2026-01-07", status: "حضر" },
+                    { type: "جلسة", title: "اجتماع مجلس الادارة", date: "2026-07-07", status: "قادم" }
+                ] }
         };
-        const meetingsList = [{ title: "اجتماع دليل الإدارة", date: "2026-05-08" }, { title: "اجتماع تحديد المهام",
-            date: "2026-05-06" }];
-
-        // ==================== PRODUCTS (محدثة) ====================
-        const productsArray = [
-            { id: 1, name: "تيشيرت MEN الجديد", price: "49.99",
-                image: "https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png", link: "#",
-                category: "ملابس", rating: 4.8, features: ["قطني ناعم", "مقاس مرن", "تصميم عصري"],
-                cons: ["قد يكون مقاسه غير دقيق"], description: "تيشيرت قطني مريح بتصميم عصري يناسب جميع الأوقات.",
-                tags: ["سفر", "هدية", "أسود", "صيفي"], usage: "يمكن ارتداؤه مع جينز أو شورت.",
-                warranty: "ضمان 30 يوم ضد عيوب الصناعة", popular: true },
-            { id: 2, name: "روبلكس 10 ريال", price: "10.00",
-                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
-                link: "#", category: "بطاقات شحن", rating: 4.5, features: ["سعر مناسب", "شحن فوري"],
-                cons: ["لا يمكن استخدامه في حسابات غير سعودية"], description: "بطاقة روبلكس بقيمة 10 ريال.",
-                tags: ["ألعاب", "هدية", "رقمي"], usage: "أدخل الكود في موقع روبلكس.",
-                warranty: "ضمان الاستبدال في حال عدم صلاحية الكود", popular: false },
-            { id: 3, name: "روبلكس 20 ريال", price: "20.00",
-                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
-                link: "#", category: "بطاقات شحن", rating: 4.6, features: ["سعر مناسب", "شحن فوري"],
-                cons: ["لا يمكن استخدامه في حسابات غير سعودية"], description: "بطاقة روبلكس بقيمة 20 ريال.",
-                tags: ["ألعاب", "هدية", "رقمي"], usage: "أدخل الكود في موقع روبلكس.",
-                warranty: "ضمان الاستبدال في حال عدم صلاحية الكود", popular: false },
-            { id: 4, name: "روبلكس 50 ريال", price: "50.00",
-                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
-                link: "#", category: "بطاقات شحن", rating: 4.7, features: ["سعر مناسب", "شحن فوري"],
-                cons: ["لا يمكن استخدامه في حسابات غير سعودية"], description: "بطاقة روبلكس بقيمة 50 ريال.",
-                tags: ["ألعاب", "هدية", "رقمي"], usage: "أدخل الكود في موقع روبلكس.",
-                warranty: "ضمان الاستبدال في حال عدم صلاحية الكود", popular: false },
-            { id: 5, name: "ببجي 5$", price: "19.90",
-                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp",
-                link: "#", category: "بطاقات شحن", rating: 4.4, features: ["شحن فوري", "يدعم ببجي موبايل"],
-                cons: ["غير متوفر لجميع المناطق"], description: "بطاقة ببجي بقيمة 5 دولارات.",
-                tags: ["ألعاب", "هدية", "رقمي"], usage: "ادخل الكود في متجر اللعبة.",
-                warranty: "ضمان استبدال الكود في حال العطل", popular: false },
-            { id: 6, name: "ببجي 10$", price: "37.50",
-                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp",
-                link: "#", category: "بطاقات شحن", rating: 4.6, features: ["شحن فوري", "يدعم ببجي موبايل"],
-                cons: ["غير متوفر لجميع المناطق"], description: "بطاقة ببجي بقيمة 10 دولارات.",
-                tags: ["ألعاب", "هدية", "رقمي"], usage: "ادخل الكود في متجر اللعبة.",
-                warranty: "ضمان استبدال الكود في حال العطل", popular: false },
-            { id: 7, name: "ستور سوني 10$", price: "37.50",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10",
-                link: "#", category: "بطاقات شحن", rating: 4.7, features: ["شحن فوري", "متوافق مع PlayStation Network"],
-                cons: ["يستخدم في حساب سوني فقط"], description: "بطاقة شحن بقيمة 10$ لحساب سوني.",
-                tags: ["سوني", "ستور", "رقمي", "هدية", "ألعاب"],
-                usage: "أدخل الكود في متجر PlayStation لإضافة الرصيد.",
-                warranty: "ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular: false },
-            { id: 8, name: "ستور سوني 20$", price: "75.00",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10",
-                link: "#", category: "بطاقات شحن", rating: 4.8, features: ["شحن فوري", "متوافق مع PlayStation Network"],
-                cons: ["يستخدم في حساب سوني فقط"], description: "بطاقة شحن بقيمة 20$ لحساب سوني.",
-                tags: ["سوني", "ستور", "رقمي", "هدية", "ألعاب"],
-                usage: "أدخل الكود في متجر PlayStation لإضافة الرصيد.",
-                warranty: "ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular: false }
-        ];
-
-        const reviewsData = [
-            { author: "أحمد السالم", stars: 5, text: "المتجر رائع جداً والمنتجات أصلية." },
-            { author: "نورة العتيبي", stars: 4, text: "خدمة سريعة ومنتجات جيدة." },
-            { author: "خالد الحربي", stars: 5, text: "أفضل تيشيرتات في السوق." },
-            { author: "سارة الغامدي", stars: 4, text: "الشحن سريع والدعم متعاون." },
-            { author: "فيصل المالكي", stars: 3, text: "منتج جيد لكن السعر مرتفع قليلاً." }
-        ];
 
         const SAR_ICON = "https://www.socialcreator.com/srv/imgs/ti_imgs/200732_328971.png";
 
@@ -3397,8 +3358,43 @@
         let lastViewedProductId = null;
         let favorites = [];
         let viewedHistory = [];
-        let orderSim = { status: "قيد التجهيز", expected: "لا أعلم", tracking: "TRK-2026-001" };
-        let currentCategory = "all";
+
+        // ==================== PRODUCTS ====================
+        const productsArray = [
+            { id: 1, name: "تيشيرت الجديد", price: "39.99",
+                image: "https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png", link: "#",
+                category: "ملابس", rating: 4.8, features: ["قطني ناعم", "مقاس مرن", "تصميم عصري"],
+                cons: ["قد يكون مقاسه غير دقيق"], description: "تيشيرت قطني مريح بتصميم عصري يناسب جميع الأوقات.",
+                tags: ["سفر", "هدية", "أسود", "صيفي"], usage: "يمكن ارتداؤه مع جينز أو شورت.",
+                warranty: "ضمان 30 يوم ضد عيوب الصناعة", popular: true },
+            { id: 3, name: "روبلوكس 20 ريال", price: "19.90",
+                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
+                link: "#", category: "بطاقات شحن", rating: 4.6, features: ["سعر مناسب", "شحن فوري"],
+                cons: ["لا يمكن استخدامه في حسابات غير سعودية"], description: "بطاقة روبلوكس بقيمة 20 ريال.",
+                tags: ["ألعاب", "هدية", "رقمي"], usage: "أدخل الكود في موقع روبلوكس.",
+                warranty: "ضمان الاستبدال في حال عدم صلاحية الكود", popular: false },
+            { id: 4, name: "ببجي 5 $", price: "19.90",
+                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp",
+                link: "#", category: "بطاقات شحن", rating: 4.4, features: ["شحن فوري", "يدعم ببجي موبايل"],
+                cons: ["غير متوفر لجميع المناطق"], description: "بطاقة ببجي بقيمة 5 دولارات.",
+                tags: ["ألعاب", "هدية", "رقمي"], usage: "ادخل الكود في متجر اللعبة.",
+                warranty: "ضمان استبدال الكود في حال العطل", popular: false },
+            { id: 2, name: "ستور سوني 10$", price: "39.35",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10",
+                link: "#", category: "بطاقات شحن", rating: 4.7, features: ["شحن فوري", "متوافق مع PlayStation Network"],
+                cons: ["يستخدم في حساب سوني فقط"], description: "بطاقة شحن بقيمة 10$ لحساب سوني (PlayStation).",
+                tags: ["سوني", "ستور", "رقمي", "هدية", "ألعاب"],
+                usage: "أدخل الكود في متجر PlayStation لإضافة الرصيد.",
+                warranty: "ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular: false }
+        ];
+
+        const reviewsData = [
+            { author: "أحمد السالم", stars: 5, text: "المتجر رائع جداً والمنتجات أصلية." },
+            { author: "نورة العتيبي", stars: 4, text: "خدمة سريعة ومنتجات جيدة." },
+            { author: "خالد الحربي", stars: 5, text: "أفضل تيشيرتات في السوق." },
+            { author: "سارة الغامدي", stars: 4, text: "الشحن سريع والدعم متعاون." },
+            { author: "فيصل المالكي", stars: 3, text: "منتج جيد لكن السعر مرتفع قليلاً." }
+        ];
 
         // ==================== UTILITIES ====================
         function showToast(msg, type = "info") {
@@ -3648,7 +3644,7 @@
         }
 
         function simulateTrackOrder(orderId) {
-            return `📦 **طلب رقم ${orderId}**\n🔄 الحالة: ${orderSim.status}\n📅 موعد الوصول المتوقع: ${orderSim.expected}\n🔢 رقم التتبع: ${orderSim.tracking}\n📞 للاستفسار: clan.men.ts@gmail.com`;
+            return `📦 **طلب رقم ${orderId}**\n🔄 الحالة: قيد التجهيز\n📅 موعد الوصول المتوقع: لا أعلم\n🔢 رقم التتبع: TRK-2026-001\n📞 للاستفسار: clan.men.ts@gmail.com`;
         }
 
         function getPersonalizedOffers(category) {
@@ -4018,20 +4014,6 @@
                     const product = productsArray.find(p => p.id === id); if (product) addToCart(product); }); });
         }
 
-        function filterStoreByCategory(category) {
-            currentCategory = category;
-            if (category === 'all') {
-                renderStore(productsArray);
-            } else {
-                const filtered = productsArray.filter(p => p.category === category);
-                renderStore(filtered);
-            }
-            // تحديث أزرار التصنيف
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.classList.toggle('active-cat', btn.dataset.cat === category);
-            });
-        }
-
         function renderReviews() {
             const track = document.getElementById('reviewsTrack');
             if (!track) return;
@@ -4064,51 +4046,26 @@
             const grid = document.getElementById('teamGrid');
             if (!grid) return;
             const members = [
-                { name: "مازن السلمي", role: "رئيس المشاريع - رئيس مجلس الإدارة",
-                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "مشعل السلمي", role: "نائب الرئيس - عضو مجلس الإدارة ",
-                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "عبدالرحمن الزهراني", role: "نائب الرئيس - عضو مجلس الإدارة",
-                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "محمد العنزي", role: "مدير الإدارة العامة",
-                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "صالح الزهراني", role: "مدير عام",
-                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "يزيد النفيعي", role: "مدير التقديم",
-                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "حسن الشريف", role: "مدير السيرفر",
-                    avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" }
+                { name: "مازن السلمي", role: "رئيس المشاريع - رئيس مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "مشعل السلمي", role: "نائب الرئيس - عضو مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "عبدالرحمن الزهراني", role: "نائب الرئيس - عضو مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "محمد العنزي", role: "مدير الإدارة العامة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "صالح الزهراني", role: "مدير عام", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "يزيد النفيعي", role: "مدير التقديم", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "حسن الشريف", role: "مدير السيرفر", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" }
             ];
             grid.innerHTML = members.map(m => `
             <div class="team-card">
               <img src="${m.avatar}" alt="${m.name}">
-              <h4>${m.name}</h4>
-              <p>${m.role}</p>
-            </div>
-          `).join('');
-        }
-
-        // ==================== PORTAL ====================
-        function renderMemberCards() {
-            const container = document.getElementById('memberCardsContainer');
-            if (!container) return;
-            const members = Object.values(usersDB);
-            container.innerHTML = members.map(m => `
-            <div class="member-card-item">
-              <img src="${m.avatar}" alt="${m.fullName}" class="m-avatar">
-              <div class="m-name">${m.fullName}</div>
-              <div class="m-id"> ${m.userId}</div>
-              <div class="m-role">${m.category}</div>
-              <div class="m-points">★ ${m.points}</div>
-              <div class="m-stats">
-                <span><i class="fas fa-check-circle" style="color:#4caf50;"></i> ${m.attendance || 0}</span>
-                <span><i class="fas fa-times-circle" style="color:#ff6b6b;"></i> ${m.absences || 0}</span>
-                <span><i class="fas fa-umbrella-beach" style="color:#f5b342;"></i> ${m.leaves || 0}</span>
+              <div class="info">
+                <h4>${m.name}</h4>
+                <p>${m.role}</p>
               </div>
             </div>
           `).join('');
         }
 
+        // ==================== PORTAL ====================
         function updateTaskUI() {
             const container = document.getElementById('taskActionButtons');
             if (!container || !currentUserData) return;
@@ -4161,7 +4118,7 @@
             const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
             remSpan.innerText = days;
             if (deadlineSpan) deadlineSpan.innerHTML =
-            ` تاريخ الانتهاء: ${currentUserData.dueDate} • متبقي ${days} يوم`;
+                ` تاريخ الانتهاء: ${currentUserData.dueDate} • متبقي ${days} يوم`;
             let maxDays = 30,
                 percent = (days > maxDays) ? 0 : (1 - (days / maxDays));
             if (percent < 0) percent = 0;
@@ -4188,10 +4145,13 @@
             timerDiv.innerHTML = `${days} يوم ${hours} ساعة ${mins} دقيقة ${secs} ثانية`;
         }
 
-        function renderMeetings() {
+        function renderMeetings(meetings) {
             const tbody = document.getElementById('meetingsTableBody');
-            if (tbody) tbody.innerHTML = meetingsList.map(m =>
-                `<tr><td>${m.title}</td><td>${m.date}</td></tr>`).join('');
+            if (tbody && meetings) {
+                tbody.innerHTML = meetings.map(m =>
+                    `<tr><td>${m.type}</td><td>${m.title}</td><td>${m.date}</td><td><span class="status-badge" style="background:${m.status === 'حضر' ? '#4caf5020' : m.status === 'قادم' ? '#f5b34220' : '#ff6b6b20'}; color:${m.status === 'حضر' ? '#4caf50' : m.status === 'قادم' ? '#f5b342' : '#ff6b6b'}; padding:2px 12px; border-radius:30px; font-size:0.8rem;">${m.status}</span></td></tr>`
+                ).join('');
+            }
         }
 
         function loadUserData(user) {
@@ -4224,100 +4184,62 @@
             countdownInterval = setInterval(updateCountdown, 1000);
             if (detailedTimerInterval) clearInterval(detailedTimerInterval);
             detailedTimerInterval = setInterval(updateDetailedTimer, 1000);
-            renderMeetings();
+            renderMeetings(currentUserData.meetings || []);
             updateTaskUI();
 
-            // زر متابعة الأعضاء (لـ مازن فقط)
+            // بطاقة الموظف الأفقية الفخمة
             const moreTab = document.getElementById('moreTab');
             if (moreTab) {
-                let existingBtn = document.getElementById('memberTrackingBtn');
-                if (currentUserData.userId === 'U2022') {
-                    if (!existingBtn) {
-                        const btn = document.createElement('button');
-                        btn.id = 'memberTrackingBtn';
-                        btn.className = 'btn-primary';
-                        btn.style.width = '100%';
-                        btn.style.marginBottom = '15px';
-                        btn.innerHTML = '<i class="fas fa-users"></i> متابعة الأعضاء';
-                        const container = moreTab.querySelector('.card-soft') || moreTab;
-                        container.insertBefore(btn, container.firstChild);
-                        btn.addEventListener('click', function() {
-                            const existingGrid = document.getElementById('memberCardsContainer');
-                            if (existingGrid) {
-                                existingGrid.style.display = existingGrid.style.display === 'none' ?
-                                    'flex' : 'none';
-                                if (existingGrid.style.display === 'flex') renderMemberCards();
-                            } else {
-                                const grid = document.createElement('div');
-                                grid.id = 'memberCardsContainer';
-                                grid.className = 'member-cards-grid';
-                                const card = moreTab.querySelector('.card-soft') || moreTab;
-                                card.insertAdjacentElement('afterend', grid);
-                                renderMemberCards();
-                            }
-                        });
-                    }
-                } else {
-                    if (existingBtn) existingBtn.remove();
-                    const grid = document.getElementById('memberCardsContainer');
-                    if (grid) grid.remove();
-                }
-                // البطاقة الشخصية في المزيد
-                if (!moreTab.querySelector('.employee-card-luxury')) {
-                    const cardHTML = `
+                const existingCard = moreTab.querySelector('.employee-card-luxury');
+                const existingFollowing = moreTab.querySelector('.following-section');
+                if (existingCard) existingCard.remove();
+                if (existingFollowing) existingFollowing.remove();
+
+                const cardHTML = `
                 <div class="employee-card-luxury">
-                  <img src="${currentUserData.avatar}" alt="صورة شخصية" class="card-avatar">
-                  <div class="card-name">${currentUserData.fullName}</div>
-                  <div class="status-badge"><span class="dot"></span> نشطة</div>
-                  <div class="card-details-grid">
-                    <div class="detail-item"><i class="fas fa-phone"></i> <span class="value">${currentUserData.phone}</span></div>
-                    <div class="detail-item"><i class="fas fa-star"></i> <span class="value">${currentUserData.points}</span></div>
-                    <div class="detail-item"><i class="fas fa-id-card"></i> <span class="value">${currentUserData.userId}</span></div>
-                    <div class="detail-item"><i class="fas fa-bolt"></i> <span class="value" style="color:#4caf50;">نشط</span></div>
-                  </div>
-                  <div class="barcode-wrapper">
-                    <img src="https://barcode.tec-it.com/barcode.ashx?data=${currentUserData.userId}&code=Code128&dpi=80" alt="باركود">
-                    <div class="scanner-line"></div>
-                  </div>
-                  <div class="discipline-section">
-                    <div class="discipline-item green">
-                      <span class="number">${currentUserData.attendance || 0}</span>
-                      <span class="label"><i class="fas fa-check-circle"></i> الحضور</span>
+                  <img src="${currentUserData.avatar}" alt="صورة شخصية" class="card-avatar-lg">
+                  <div class="card-info-center">
+                    <div class="card-name">${currentUserData.fullName}</div>
+                    <div class="status-badge-lg"><span class="dot"></span> نشط</div>
+                    <div class="card-details-grid-h">
+                      <div class="detail-item"><i class="fas fa-phone"></i> <span class="value">${currentUserData.phone}</span></div>
+                      <div class="detail-item"><i class="fas fa-star"></i> <span class="value">${currentUserData.points}</span></div>
+                      <div class="detail-item"><i class="fas fa-id-card"></i> <span class="value">${currentUserData.userId}</span></div>
+                      <div class="detail-item"><i class="fas fa-bolt"></i> <span class="value" style="color:#4caf50;">نشط</span></div>
                     </div>
-                    <div class="discipline-item red">
-                      <span class="number">${currentUserData.absences || 0}</span>
-                      <span class="label"><i class="fas fa-times-circle"></i> الغياب</span>
-                    </div>
-                    <div class="discipline-item yellow">
-                      <span class="number">${currentUserData.leaves || 0}</span>
-                      <span class="label"><i class="fas fa-umbrella-beach"></i> الإجازات</span>
+                    <div class="discipline-section-h">
+                      <div class="discipline-item-h green"><span class="number">${currentUserData.attendance || 0}</span><span class="label"><i class="fas fa-check-circle"></i> الحضور</span></div>
+                      <div class="discipline-item-h red"><span class="number">${currentUserData.absences || 0}</span><span class="label"><i class="fas fa-times-circle"></i> الغياب</span></div>
+                      <div class="discipline-item-h yellow"><span class="number">${currentUserData.leaves || 0}</span><span class="label"><i class="fas fa-umbrella-beach"></i> الإجازات</span></div>
                     </div>
                   </div>
-                  <div class="card-footer-text">MEN • ${new Date().getFullYear()}</div>
+                  <div class="card-right-col">
+                    <div class="barcode-wrapper-h">
+                      <img src="https://barcode.tec-it.com/barcode.ashx?data=${currentUserData.userId}&code=Code128&dpi=80" alt="باركود">
+                      <div class="scanner-line"></div>
+                    </div>
+                    <div class="card-footer-text-h">MEN • ${new Date().getFullYear()}</div>
+                  </div>
                 </div>
               `;
-                    moreTab.insertAdjacentHTML('beforeend', cardHTML);
-                } else {
-                    const card = moreTab.querySelector('.employee-card-luxury');
-                    if (card) {
-                        card.querySelector('.card-avatar').src = currentUserData.avatar;
-                        card.querySelector('.card-name').textContent = currentUserData.fullName;
-                        const details = card.querySelectorAll('.detail-item .value');
-                        if (details.length >= 4) {
-                            details[0].textContent = currentUserData.phone;
-                            details[1].textContent = currentUserData.points;
-                            details[2].textContent = currentUserData.userId;
-                        }
-                        const barcodeImg = card.querySelector('.barcode-wrapper img');
-                        if (barcodeImg) barcodeImg.src =
-                            `https://barcode.tec-it.com/barcode.ashx?data=${currentUserData.userId}&code=Code128&dpi=80`;
-                        const disciplineNumbers = card.querySelectorAll('.discipline-item .number');
-                        if (disciplineNumbers.length >= 3) {
-                            disciplineNumbers[0].textContent = currentUserData.attendance || 0;
-                            disciplineNumbers[1].textContent = currentUserData.absences || 0;
-                            disciplineNumbers[2].textContent = currentUserData.leaves || 0;
-                        }
-                    }
+                moreTab.insertAdjacentHTML('beforeend', cardHTML);
+
+                // عرض المتابعين (لمازن فقط)
+                if (currentUserData.following && currentUserData.following.length > 0) {
+                    const followingHTML = `
+                    <div class="following-section" style="margin-top:20px;">
+                      <h4 style="color:var(--blue-light); margin-bottom:12px;"><i class="fas fa-users"></i> متابعة الأعضاء</h4>
+                      <div class="following-list">
+                        ${currentUserData.following.map(name => `
+                          <div class="following-item">
+                            <i class="fas fa-user-circle"></i>
+                            <span class="fname">${name}</span>
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>
+                  `;
+                    moreTab.insertAdjacentHTML('beforeend', followingHTML);
                 }
             }
         }
@@ -4392,12 +4314,20 @@
                   <div class="deadline-info" id="deadlineText"> تاريخ الانتهاء: --</div>
                   <div id="taskActionButtons" class="btn-group" style="margin-top:16px;"></div>
                 </div>
+                <div class="card-soft" style="margin-top:20px;">
+                  <h4 style="color:var(--blue-light);"> إحصائيات المهام</h4>
+                  <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:12px;">
+                    <div class="stat-card"><h4>المهام المكتملة</h4><div id="completedTasksCount">0</div></div>
+                    <div class="stat-card"><h4>إجمالي المكافآت</h4><div id="totalRewards">0 ر.س</div></div>
+                    <div class="stat-card"><h4>إجمالي الوقت المستغرق</h4><div id="totalTimeSpent">0 ساعة</div></div>
+                  </div>
+                </div>
               </div>
               <div id="moreTab" class="tab-content">
                 <div class="card-soft">
-                  <h4 style="color:var(--blue-light);"> الاجتماعات الشهرية</h4>
+                  <h4 style="color:var(--blue-light);"> جدولي</h4>
                   <table class="table-clean">
-                    <thead><tr><th>العنوان</th><th>التاريخ</th></tr></thead>
+                    <thead><tr><th>النوع</th><th>العنوان</th><th>التاريخ</th><th>الحالة</th></tr></thead>
                     <tbody id="meetingsTableBody"></tbody>
                   </table>
                 </div>
@@ -4407,6 +4337,10 @@
               </div>
             </div>
           `;
+
+            // تحديث إحصائيات المهام
+            updateTaskStats();
+
             document.getElementById('logoutPortalBtn')?.addEventListener('click', async () => {
                 await sendLogoutWebhook();
                 if (countdownInterval) clearInterval(countdownInterval);
@@ -4439,13 +4373,24 @@
                     if (contents[tab]) contents[tab].classList.add('active-content');
                     tabs.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    if (tab === 'tasks') updateTaskUI();
+                    if (tab === 'tasks') { updateTaskUI();
+                        updateTaskStats(); }
                     if (tab === 'more' && currentUserData) {
                         loadUserData(currentUserData);
                     }
                 });
             });
             loadUserData(currentUser);
+        }
+
+        function updateTaskStats() {
+            if (!currentUserData) return;
+            const completed = currentUserData.taskCompleted ? 1 : 0;
+            const rewards = currentUserData.totalEarn || "0 ر.س";
+            const timeSpent = completed ? "5 ساعات" : "0 ساعة";
+            document.getElementById('completedTasksCount').innerText = completed;
+            document.getElementById('totalRewards').innerText = rewards;
+            document.getElementById('totalTimeSpent').innerText = timeSpent;
         }
 
         function updatePortalMenuLink(isLoggedIn) {
@@ -4464,7 +4409,7 @@
             } else if (!isLoggedIn && portalLink) portalLink.remove();
         }
 
-        // ==================== LOGIN / LOGOUT ====================
+        // ==================== LOGIN ====================
         async function login(uid, pwd) {
             const user = usersDB[uid];
             if (user && user.pass === pwd) {
@@ -4556,34 +4501,18 @@
         }
 
         function initStore() {
-            // تصفية حسب الفئة
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const cat = this.dataset.cat;
-                    filterStoreByCategory(cat);
-                });
-            });
-            // عرض المنتجات الأولية
-            filterStoreByCategory('all');
+            renderStore(productsArray);
             renderReviews();
             renderTeam();
             initCartModal();
             initAIAssistant();
-
             document.getElementById('storeSearchInput')?.addEventListener('input', (e) => {
                 const term = e.target.value.toLowerCase().trim();
-                if (term === '') {
-                    filterStoreByCategory(currentCategory);
-                } else {
-                    const filtered = productsArray.filter(p => p.name.toLowerCase().includes(term) || p
+                if (term === '') renderStore(productsArray);
+                else { const filtered = productsArray.filter(p => p.name.toLowerCase().includes(term) || p
                         .tags.some(t => t.includes(term)));
-                    // تطبيق التصنيف الحالي أيضاً
-                    const final = currentCategory === 'all' ? filtered : filtered.filter(p => p
-                    .category === currentCategory);
-                    renderStore(final);
-                }
+                    renderStore(filtered); }
             });
-
             document.getElementById('prevReviewBtn')?.addEventListener('click', () => { if (currentReviewIndex >
                     0) { currentReviewIndex--;
                         updateCarousel(); } });
@@ -4639,7 +4568,8 @@
             if (window.scrollY > 30) header.classList.add('scrolled');
             else header.classList.remove('scrolled');
         });
-        // إخفاء الإعلان الثابت عند الضغط على زر الإغلاق
+
+        // ===== إخفاء الإعلان الثابت =====
         document.getElementById('closeAdBtn')?.addEventListener('click', function() {
             const ad = document.getElementById('fixedAd');
             ad.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
@@ -4649,6 +4579,7 @@
                 ad.style.display = 'none';
             }, 400);
         });
+
         // ==================== START ====================
         initStore();
         initStats();
