@@ -91,24 +91,43 @@
       background-clip: text;
       color: transparent;
     }
+
+    /* ===== زر تفعيل الحساب المحسّن ===== */
     .btn-login-header {
-      background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+      background: linear-gradient(135deg, #0033ff, #1a3a9e);
       border: none;
       border-radius: 60px;
-      padding: 10px 30px;
+      padding: 12px 28px;
       font-weight: 700;
       color: #fff;
-      font-size: 1rem;
+      font-size: 1.05rem;
       cursor: pointer;
-      transition: 0.3s;
-      box-shadow: 0 4px 20px rgba(2, 28, 164, 0.3);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 20px rgba(2, 28, 164, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .btn-login-header i {
+      font-size: 1.1rem;
+      transition: transform 0.3s ease;
     }
     .btn-login-header:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 36px rgba(2, 28, 164, 0.5);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 36px rgba(2, 28, 164, 0.6), 0 0 0 1px rgba(74, 122, 255, 0.3);
+      background: linear-gradient(135deg, #1a4aff, #2a4abe);
+    }
+    .btn-login-header:active {
+      transform: scale(0.97);
+      box-shadow: 0 4px 12px rgba(2, 28, 164, 0.3);
+    }
+    .btn-login-header:hover i {
+      transform: translateX(-4px);
     }
 
-    /* ===== HERO ===== */
+    /* ===== بقية الأنماط (نفسها مع تحسينات بسيطة للتوافق) ===== */
     .hero {
       padding: 60px 20px 40px;
       text-align: center;
@@ -350,7 +369,6 @@
       gap: 30px;
       flex-wrap: wrap;
     }
-    /* Sidebar */
     .dash-sidebar {
       flex: 0 0 220px;
       background: var(--card-bg);
@@ -550,7 +568,7 @@
       letter-spacing: 2px;
     }
 
-    /* ===== MEDIA CARDS (Games, Videos, Streams) ===== */
+    /* ===== MEDIA CARDS ===== */
     .grid-cards {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -695,6 +713,11 @@
       .calendar .days-grid .day { padding: 6px 0; font-size: 0.8rem; }
       .grid-cards { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
       .media-card img { height: 120px; }
+      /* تحسين الزر على الشاشات المتوسطة */
+      .btn-login-header {
+        padding: 10px 22px;
+        font-size: 0.95rem;
+      }
     }
     @media (max-width: 480px) {
       .hero h2 { font-size: 1.8rem; }
@@ -704,6 +727,42 @@
       .media-card img { height: 100px; }
       .media-card .card-body h4 { font-size: 0.9rem; }
       .btn-card-action { font-size: 0.7rem; padding: 8px 12px; }
+      /* تحسين الزر على الهواتف الصغيرة */
+      .btn-login-header {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        gap: 6px;
+        white-space: normal; /* يسمح للزر بالالتفاف إذا لزم الأمر */
+      }
+      .btn-login-header i {
+        font-size: 0.9rem;
+      }
+      .header-content {
+        gap: 10px;
+      }
+      .logo h1 {
+        font-size: 1.6rem;
+      }
+      .logo img {
+        height: 36px;
+      }
+    }
+    /* للشاشات الضيقة جداً (أقل من 360px) */
+    @media (max-width: 360px) {
+      .btn-login-header {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        gap: 4px;
+      }
+      .btn-login-header i {
+        font-size: 0.8rem;
+      }
+      .logo h1 {
+        font-size: 1.3rem;
+      }
+      .logo img {
+        height: 30px;
+      }
     }
   </style>
 </head>
