@@ -1,1 +1,1154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MEN | بوابة الاشتراك</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #060812;
+      color: #f0f4ff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #060812;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #021ca4, #1a3a9e);
+      border-radius: 12px;
+    }
+    .bg-ambient {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(2, 28, 164, 0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 70%, rgba(26, 58, 158, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, #060812 0%, #030510 100%);
+    }
+    .container {
+      width: 92%;
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 18px;
+    }
+    :root {
+      --blue-deep: #021ca4;
+      --blue-mid: #1a3a9e;
+      --blue-light: #4a7aff;
+      --card-bg: rgba(10, 16, 32, 0.72);
+      --card-border: rgba(2, 28, 164, 0.20);
+      --radius-xl: 24px;
+      --radius-2xl: 40px;
+    }
 
+    /* ===== HEADER ===== */
+    header {
+      background: rgba(6, 8, 18, 0.88);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(2, 28, 164, 0.10);
+      padding: 12px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo img {
+      height: 48px;
+      filter: brightness(0) invert(1);
+    }
+    .logo h1 {
+      font-size: 2rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffffff 40%, var(--blue-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .btn-login-header {
+      background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+      border: none;
+      border-radius: 60px;
+      padding: 10px 30px;
+      font-weight: 700;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 20px rgba(2, 28, 164, 0.3);
+    }
+    .btn-login-header:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 36px rgba(2, 28, 164, 0.5);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 60px 20px 40px;
+      text-align: center;
+      border-radius: var(--radius-2xl);
+      margin: 30px 0 40px;
+      background: radial-gradient(ellipse at 50% 30%, rgba(2, 28, 164, 0.08), transparent 70%);
+      border: 1px solid rgba(2, 28, 164, 0.06);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0.2;
+    }
+    .hero .orb-1 {
+      width: 400px;
+      height: 400px;
+      top: -30%;
+      left: -20%;
+      background: radial-gradient(circle, rgba(2, 28, 164, 0.3), transparent 70%);
+      animation: float 22s ease-in-out infinite alternate;
+    }
+    .hero .orb-2 {
+      width: 300px;
+      height: 300px;
+      bottom: -30%;
+      right: -20%;
+      background: radial-gradient(circle, rgba(26, 58, 158, 0.2), transparent 70%);
+      animation: float 26s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes float {
+      0% { transform: translate(0,0) scale(1); }
+      100% { transform: translate(30px, -30px) scale(1.15); }
+    }
+    .hero .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(2, 28, 164, 0.08);
+      padding: 6px 24px;
+      border-radius: 60px;
+      font-size: 0.8rem;
+      color: var(--blue-light);
+      border: 1px solid rgba(2, 28, 164, 0.08);
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+    .hero h2 {
+      font-size: 3.8rem;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 20%, var(--blue-light) 60%, #021ca4 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero h2 .highlight {
+      display: inline-block;
+      border-bottom: 3px solid var(--blue-deep);
+      padding-bottom: 4px;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: #a0b0d4;
+      max-width: 600px;
+      margin: 0 auto 30px;
+      font-weight: 300;
+      line-height: 1.9;
+    }
+    .hero .price-tag {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #fff;
+      background: rgba(2, 28, 164, 0.12);
+      display: inline-block;
+      padding: 8px 40px;
+      border-radius: 60px;
+      border: 1px solid rgba(2, 28, 164, 0.15);
+      margin-bottom: 30px;
+    }
+    .hero .price-tag small {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: #8890b0;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 24px;
+      margin: 30px 0 20px;
+    }
+    .feature-item {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 24px 16px;
+      transition: 0.3s;
+      text-align: center;
+    }
+    .feature-item:hover {
+      transform: translateY(-8px);
+      border-color: var(--blue-deep);
+      box-shadow: 0 20px 40px rgba(2, 28, 164, 0.06);
+    }
+    .feature-item i {
+      font-size: 2.8rem;
+      color: var(--blue-light);
+      margin-bottom: 12px;
+    }
+    .feature-item h4 {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .feature-item p {
+      color: #8890b0;
+      font-size: 0.9rem;
+    }
+
+    /* ===== LOGIN MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(28px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-box {
+      background: rgba(8,10,20,0.96);
+      backdrop-filter: blur(32px);
+      border: 1px solid rgba(2,28,164,0.06);
+      border-radius: var(--radius-2xl);
+      width: 90%;
+      max-width: 400px;
+      padding: 36px 30px;
+      position: relative;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    }
+    .modal-box h3 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+    .modal-box h3 i {
+      color: var(--blue-light);
+      margin-left: 10px;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      left: 22px;
+      font-size: 26px;
+      cursor: pointer;
+      color: #5a607a;
+      transition: 0.3s;
+    }
+    .modal-close:hover {
+      color: #fff;
+      transform: rotate(90deg);
+    }
+    .input-group {
+      position: relative;
+      margin: 24px 0;
+    }
+    .input-group i {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--blue-deep);
+      opacity: 0.4;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 14px 48px 14px 20px;
+      background: rgba(0,0,0,0.2);
+      border: 1.5px solid rgba(2,28,164,0.06);
+      border-radius: 60px;
+      color: #f0f4ff;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s;
+    }
+    .input-group input:focus {
+      border-color: var(--blue-deep);
+      box-shadow: 0 0 30px rgba(2,28,164,0.04);
+    }
+    .btn-submit-modal {
+      background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+      border: none;
+      border-radius: 60px;
+      padding: 14px;
+      font-weight: 700;
+      color: #fff;
+      width: 100%;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 24px rgba(2,28,164,0.15);
+    }
+    .btn-submit-modal:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 40px rgba(2,28,164,0.25);
+    }
+    .error-msg {
+      color: #ff6b6b;
+      text-align: center;
+      margin-top: 14px;
+      font-weight: 500;
+    }
+    .hidden { display: none; }
+
+    /* ===== DASHBOARD ===== */
+    .dashboard {
+      display: none;
+      min-height: 80vh;
+      padding: 30px 0;
+    }
+    .dashboard.active {
+      display: block;
+    }
+    .dash-layout {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    /* Sidebar */
+    .dash-sidebar {
+      flex: 0 0 220px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 24px 16px;
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+    .dash-sidebar .user-avatar {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .dash-sidebar .user-avatar i {
+      font-size: 3.6rem;
+      color: var(--blue-light);
+      background: rgba(2,28,164,0.08);
+      padding: 16px;
+      border-radius: 50%;
+      border: 2px solid rgba(2,28,164,0.15);
+    }
+    .dash-sidebar .user-avatar h4 {
+      margin-top: 10px;
+      color: #fff;
+    }
+    .dash-sidebar .user-avatar span {
+      color: #8890b0;
+      font-size: 0.85rem;
+    }
+    .dash-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .dash-nav button {
+      background: transparent;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 16px;
+      color: #b0b8d0;
+      font-weight: 600;
+      font-size: 1rem;
+      text-align: right;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .dash-nav button i {
+      width: 24px;
+      color: var(--blue-deep);
+      opacity: 0.5;
+    }
+    .dash-nav button:hover {
+      background: rgba(2,28,164,0.04);
+      color: #fff;
+    }
+    .dash-nav button.active {
+      background: rgba(2,28,164,0.08);
+      color: var(--blue-light);
+      border-right: 3px solid var(--blue-deep);
+    }
+    .dash-nav button.active i {
+      opacity: 1;
+    }
+    .dash-content {
+      flex: 1;
+      min-width: 300px;
+    }
+    .dash-page {
+      display: none;
+      animation: fadeUp 0.5s ease;
+    }
+    .dash-page.active {
+      display: block;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .dash-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 28px 30px;
+      margin-bottom: 28px;
+    }
+    .dash-card h2 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    .dash-card h2 i {
+      color: var(--blue-light);
+      margin-left: 12px;
+    }
+    .dash-card p {
+      color: #b0b8d0;
+      font-size: 1.05rem;
+    }
+
+    /* Calendar */
+    .calendar {
+      background: rgba(0,0,0,0.15);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      margin-top: 20px;
+      border: 1px solid rgba(2,28,164,0.04);
+    }
+    .calendar .month-year {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--blue-light);
+      margin-bottom: 16px;
+    }
+    .calendar .month-year .nav-btn {
+      background: rgba(2,28,164,0.06);
+      border: none;
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .calendar .month-year .nav-btn:hover {
+      background: rgba(2,28,164,0.15);
+    }
+    .calendar .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7,1fr);
+      text-align: center;
+      font-weight: 600;
+      color: #8890b0;
+      margin-bottom: 10px;
+    }
+    .calendar .days-grid {
+      display: grid;
+      grid-template-columns: repeat(7,1fr);
+      gap: 4px;
+    }
+    .calendar .days-grid .day {
+      text-align: center;
+      padding: 10px 0;
+      border-radius: 12px;
+      font-weight: 500;
+      transition: 0.2s;
+      color: #c0c8e8;
+    }
+    .calendar .days-grid .day:hover {
+      background: rgba(2,28,164,0.06);
+    }
+    .calendar .days-grid .day.today {
+      background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(2,28,164,0.2);
+    }
+    .calendar .days-grid .day.other-month {
+      color: #4a5070;
+    }
+
+    /* Settings */
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(2,28,164,0.04);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .setting-row .label {
+      color: #8890b0;
+      font-weight: 500;
+    }
+    .setting-row .value {
+      color: #fff;
+      font-weight: 600;
+    }
+    .countdown-timer {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--blue-light);
+      background: rgba(0,0,0,0.2);
+      padding: 8px 24px;
+      border-radius: 60px;
+      display: inline-block;
+      margin-top: 10px;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 2px;
+    }
+
+    /* ===== MEDIA CARDS (Games, Videos, Streams) ===== */
+    .grid-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px;
+      margin-top: 20px;
+    }
+    .media-card {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid rgba(2, 28, 164, 0.06);
+      transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+    }
+    .media-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: var(--blue-deep);
+      box-shadow: 0 24px 48px -12px rgba(2, 28, 164, 0.2);
+    }
+    .media-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-bottom: 2px solid rgba(2, 28, 164, 0.1);
+      transition: 0.5s;
+    }
+    .media-card:hover img {
+      transform: scale(1.04);
+    }
+    .media-card .card-body {
+      padding: 16px 18px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .media-card .card-body h4 {
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .media-card .card-body p {
+      color: #8890b0;
+      font-size: 0.85rem;
+      flex: 1;
+    }
+    .btn-card-action {
+      background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+      border: none;
+      border-radius: 60px;
+      padding: 10px 16px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(2, 28, 164, 0.15);
+    }
+    .btn-card-action:hover {
+      transform: scale(1.04);
+      box-shadow: 0 8px 28px rgba(2, 28, 164, 0.3);
+    }
+    .btn-card-action i {
+      font-size: 0.9rem;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #04060e;
+      border-top: 1px solid rgba(2, 28, 164, 0.03);
+      padding: 50px 0 30px;
+      margin-top: 80px;
+    }
+    .footer-flex {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 40px;
+    }
+    .footer-col h4 {
+      color: var(--blue-light);
+      margin-bottom: 18px;
+      font-size: 1.2rem;
+    }
+    .footer-col p {
+      color: #6a708a;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-col p i {
+      color: #a0b0d4;
+      opacity: 0.7;
+      width: 20px;
+    }
+    .social-icons {
+      display: flex;
+      gap: 14px;
+      margin-top: 12px;
+    }
+    .social-icons a {
+      font-size: 1.4rem;
+      color: #6a708a;
+      transition: 0.3s;
+      display: inline-block;
+    }
+    .social-icons a:hover {
+      color: var(--blue-light);
+      transform: translateY(-3px);
+    }
+    .copyright {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(2, 28, 164, 0.03);
+      color: #4a5070;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+    .copyright span {
+      color: var(--blue-light);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .dash-sidebar {
+        flex: 1 1 100%;
+        position: static;
+      }
+      .hero h2 { font-size: 2.4rem; }
+      .hero .price-tag { font-size: 2rem; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .calendar .days-grid .day { padding: 6px 0; font-size: 0.8rem; }
+      .grid-cards { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+      .media-card img { height: 120px; }
+    }
+    @media (max-width: 480px) {
+      .hero h2 { font-size: 1.8rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .dash-card { padding: 20px; }
+      .grid-cards { grid-template-columns: 1fr 1fr; }
+      .media-card img { height: 100px; }
+      .media-card .card-body h4 { font-size: 0.9rem; }
+      .btn-card-action { font-size: 0.7rem; padding: 8px 12px; }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-ambient"></div>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="container header-content">
+    <div class="logo">
+      <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN">
+      <h1>Pass</h1>
+    </div>
+    <button class="btn-login-header" id="loginBtn"><i class="fas fa-user-check"></i> تفعيل الحساب</button>
+  </div>
+</header>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main>
+  <div class="container">
+
+    <!-- HERO (الصفحة الرئيسية) -->
+    <section id="homePage">
+      <div class="hero">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="badge"><i class="fas fa-crown"></i> عضوية VIP</div>
+        <h2>ارتقِ بتجربتك <span class="highlight">الرقمية</span></h2>
+        <p>اشترك الآن واستمتع بألعاب حصرية فيديوهات بثوث مباشرة ورتبة VIP في سيرفرنا.</p>
+        <div class="price-tag">$1.99 <small>/ شهرياً</small></div>
+        <div class="features-grid">
+          <div class="feature-item"><i class="fas fa-gamepad"></i><h4>ألعاب</h4><p>مكتبة ألعاب متنوعة</p></div>
+          <div class="feature-item"><i class="fas fa-video"></i><h4>فيديوهات</h4><p>محتوى حصري</p></div>
+          <div class="feature-item"><i class="fas fa-broadcast-tower"></i><h4>بثوث</h4><p>بثوث مباشرة للمشتركين</p></div>
+          <div class="feature-item"><i class="fas fa-star"></i><h4>رتبة VIP</h4><p>مميزات خاصة بالسيرفر</p></div>
+        </div>
+        <button class="btn-login-header" style="margin-top:20px;" id="heroLoginBtn"><i class="fas fa-user-plus"></i> ابدأ الآن</button>
+      </div>
+    </section>
+
+    <!-- ===== DASHBOARD ===== -->
+    <section class="dashboard" id="dashboard">
+      <div class="dash-layout">
+        <!-- Sidebar -->
+        <aside class="dash-sidebar">
+          <div class="user-avatar">
+            <i class="fas fa-user-circle"></i>
+            <h4 id="dashUserName">مرحباً</h4>
+            <span id="dashUserId">#P10229</span>
+          </div>
+          <nav class="dash-nav">
+            <button class="active" data-page="dashboard-home"><i class="fas fa-home"></i> الرئيسية</button>
+            <button data-page="games"><i class="fas fa-gamepad"></i> الألعاب</button>
+            <button data-page="videos"><i class="fas fa-video"></i> الفيديوهات</button>
+            <button data-page="streams"><i class="fas fa-broadcast-tower"></i> البثوث</button>
+            <button data-page="settings"><i class="fas fa-cog"></i> الإعدادات</button>
+            <button id="logoutBtn" style="margin-top:20px; color:#ff6b6b;"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</button>
+          </nav>
+        </aside>
+
+        <!-- Content -->
+        <div class="dash-content">
+          <!-- الرئيسية -->
+          <div class="dash-page active" id="page-dashboard-home">
+            <div class="dash-card">
+              <h2><i class="fas fa-hand-wave"></i> مرحباً بك <span id="welcomeName">عضو</span></h2>
+              <p>نرحب بك في بوابة MEN الخاصة. استمتع بكل المميزات المتاحة لك.</p>
+              <div class="calendar" id="calendarContainer">
+                <div class="month-year">
+                  <button class="nav-btn" id="prevMonth"><i class="fas fa-chevron-right"></i></button>
+                  <span id="monthYearDisplay"></span>
+                  <button class="nav-btn" id="nextMonth"><i class="fas fa-chevron-left"></i></button>
+                </div>
+                <div class="weekdays">
+                  <span>أحد</span><span>إثنين</span><span>ثلاثاء</span><span>أربعاء</span><span>خميس</span><span>جمعة</span><span>سبت</span>
+                </div>
+                <div class="days-grid" id="daysGrid"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- الألعاب -->
+          <div class="dash-page" id="page-games">
+            <div class="dash-card">
+              <h2><i class="fas fa-gamepad"></i> الألعاب</h2>
+              <p>اختر لعبتك وابدأ القتال الآن.</p>
+              <div class="grid-cards">
+                <div class="media-card">
+                  <img src="https://picsum.photos/seed/game1/400/250" alt="لعبة العروش">
+                  <div class="card-body">
+                    <h4>لعبة العروش</h4>
+                    <p>استراتيجية وحروب</p>
+                    <button class="btn-card-action"><i class="fas fa-play"></i> العب الان</button>
+                  </div>
+                </div>
+                <div class="media-card">
+                  <img src="https://picsum.photos/seed/game2/400/250" alt="سباق السرعة">
+                  <div class="card-body">
+                    <h4>سباق السرعة</h4>
+                    <p>سباقات مثيرة</p>
+                    <button class="btn-card-action"><i class="fas fa-play"></i> العب الان</button>
+                  </div>
+                </div>
+                <div class="media-card">
+                  <img src="https://picsum.photos/seed/game3/400/250" alt="كرة القدم">
+                  <div class="card-body">
+                    <h4>كرة القدم</h4>
+                    <p>رياضة تنافسية</p>
+                    <button class="btn-card-action"><i class="fas fa-play"></i> العب الان</button>
+                  </div>
+                </div>
+                <div class="media-card">
+                  <img src="https://picsum.photos/seed/game4/400/250" alt="معركة البقاء">
+                  <div class="card-body">
+                    <h4>معركة البقاء</h4>
+                    <p>أكشن وبقاء</p>
+                    <button class="btn-card-action"><i class="fas fa-play"></i> العب الان</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- الفيديوهات -->
+          <div class="dash-page" id="page-videos">
+            <div class="dash-card">
+              <h2><i class="fas fa-video"></i> الفيديوهات</h2>
+              <p>شاهد أحدث المحتويات الحصرية.</p>
+              <div class="grid-cards">
+                <div class="media-card">
+                  <img src="https://picsum.photos/seed/vid1/400/250" alt="مقدمة MEN">
+                  <div class="card-body">
+                    <h4>مقدمة MEN</h4>
+                    <p>تعريف بالمجتمع</p>
+                    <button class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</button>
+                  </div>
+                </div>
+                <div class="media-card">
+                  <img src="https://picsum.photos/seed/vid2/400/250" alt="أفضل لحظات البث">
+                  <div class="card-body">
+                    <h4>أفضل لحظات البث</h4>
+                    <p>مونتاج حصري</p>
+                    <button class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</button>
+                  </div>
+                </div>
+                <div class="media-card">
+                  <img src="https://picsum.photos/seed/vid3/400/250" alt="ورشة عمل">
+                  <div class="card-body">
+                    <h4>ورشة عمل</h4>
+                    <p>تطوير الذات</p>
+                    <button class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- البثوث -->
+          <div class="dash-page" id="page-streams">
+            <div class="dash-card">
+              <h2><i class="fas fa-broadcast-tower"></i> البثوث المباشرة</h2>
+              <p>انضم إلى البثوث القادمة.</p>
+              <div class="grid-cards">
+                <div class="media-card">
+                  <img src="https://picsum.photos/seed/stream1/400/250" alt="بث الأربعاء">
+                  <div class="card-body">
+                    <h4>بث الأربعاء</h4>
+                    <p>8:00 مساءً</p>
+                    <button class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</button>
+                  </div>
+                </div>
+                <div class="media-card">
+                  <img src="https://picsum.photos/seed/stream2/400/250" alt="بث الجمعة">
+                  <div class="card-body">
+                    <h4>بث الجمعة</h4>
+                    <p>10:00 مساءً</p>
+                    <button class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</button>
+                  </div>
+                </div>
+                <div class="media-card">
+                  <img src="https://picsum.photos/seed/stream3/400/250" alt="بث السبت">
+                  <div class="card-body">
+                    <h4>بث السبت</h4>
+                    <p>6:00 مساءً</p>
+                    <button class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- الإعدادات -->
+          <div class="dash-page" id="page-settings">
+            <div class="dash-card">
+              <h2><i class="fas fa-cog"></i> الإعدادات</h2>
+              <div class="setting-row">
+                <span class="label">حساب الديسكورد</span>
+                <span class="value" id="discordAccount">غير محدد</span>
+              </div>
+              <div class="setting-row">
+                <span class="label">رقم الاشتراك</span>
+                <span class="value" id="subIdDisplay">P10229</span>
+              </div>
+              <div class="setting-row" style="border-bottom: none;">
+                <span class="label">متبقي على الاشتراك</span>
+                <span class="value">
+                  <span class="countdown-timer" id="countdownTimer">-- : -- : -- : --</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-flex">
+      <div class="footer-col">
+        <h4><i class="fas fa-compass" style="margin-left:8px; color:var(--blue-deep);"></i>تواصل معنا</h4>
+        <p><i class="fas fa-envelope"></i> clan.men.ts@gmail.com</p>
+        <p><i class="fas fa-phone"></i> 0540367546</p>
+        <div class="social-icons">
+          <a href="https://x.com/men_vi5"><i class="fab fa-x-twitter"></i></a>
+          <a href="https://youtube.com/@clan_men"><i class="fab fa-youtube"></i></a>
+          <a href="https://discord.gg/UJTZfvGew"><i class="fab fa-discord"></i></a>
+          <a href="https://www.tiktok.com/@team_men2020"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+      <div class="copyright">جميع الحقوق محفوظة © 2020 MEN <span></span></div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== LOGIN MODAL ===== -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal-box">
+    <div class="modal-close" id="closeModal"><i class="fas fa-times"></i></div>
+    <h3><i class="fas fa-key"></i> دخول برقم الاشتراك</h3>
+    <div class="input-group">
+      <i class="fas fa-id-card"></i>
+      <input type="text" id="subIdInput" placeholder="أدخل رقم الاشتراك" maxlength="20">
+    </div>
+    <button class="btn-submit-modal" id="submitLogin"><i class="fas fa-arrow-left"></i> دخول</button>
+    <div id="loginError" class="error-msg hidden"></div>
+  </div>
+</div>
+
+<script>
+  // ===== DATABASE =====
+  const SUBSCRIPTIONS = {
+    "P10229": { discord: "#1029", name: "مازن" },
+    "P10230": { discord: "#2030", name: "عبدالرحمن" },
+    "P10231": { discord: "#3031", name: "مشعل" }
+  };
+
+  // ===== STATE =====
+  let currentUser = null;
+  let subId = null;
+  let countdownInterval = null;
+  let calendarDate = new Date();
+
+  // ===== DOM =====
+  const loginModal = document.getElementById('loginModal');
+  const subIdInput = document.getElementById('subIdInput');
+  const submitLogin = document.getElementById('submitLogin');
+  const loginError = document.getElementById('loginError');
+  const closeModal = document.getElementById('closeModal');
+  const loginBtn = document.getElementById('loginBtn');
+  const heroLoginBtn = document.getElementById('heroLoginBtn');
+  const homePage = document.getElementById('homePage');
+  const dashboard = document.getElementById('dashboard');
+  const dashUserName = document.getElementById('dashUserName');
+  const dashUserId = document.getElementById('dashUserId');
+  const welcomeName = document.getElementById('welcomeName');
+  const discordAccount = document.getElementById('discordAccount');
+  const subIdDisplay = document.getElementById('subIdDisplay');
+  const countdownTimer = document.getElementById('countdownTimer');
+
+  // ===== NAVIGATION =====
+  document.querySelectorAll('.dash-nav button[data-page]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.dash-nav button').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const page = this.dataset.page;
+      document.querySelectorAll('.dash-page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + page).classList.add('active');
+    });
+  });
+
+  // ===== CALENDAR =====
+  function renderCalendar(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const monthNames = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+    document.getElementById('monthYearDisplay').textContent = monthNames[month] + ' ' + year;
+
+    const firstDay = new Date(year, month, 1).getDay(); // 0=أحد
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrev = new Date(year, month, 0).getDate();
+
+    const grid = document.getElementById('daysGrid');
+    grid.innerHTML = '';
+
+    // أيام الشهر السابق
+    const startOffset = firstDay; 
+    for (let i = startOffset - 1; i >= 0; i--) {
+      const d = daysInPrev - i;
+      const div = document.createElement('div');
+      div.className = 'day other-month';
+      div.textContent = d;
+      grid.appendChild(div);
+    }
+
+    // أيام الشهر الحالي
+    const today = new Date();
+    for (let d = 1; d <= daysInMonth; d++) {
+      const div = document.createElement('div');
+      div.className = 'day';
+      if (d === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+        div.classList.add('today');
+      }
+      div.textContent = d;
+      grid.appendChild(div);
+    }
+
+    // أيام الشهر القادم
+    const totalCells = startOffset + daysInMonth;
+    const remaining = (7 - (totalCells % 7)) % 7;
+    for (let d = 1; d <= remaining; d++) {
+      const div = document.createElement('div');
+      div.className = 'day other-month';
+      div.textContent = d;
+      grid.appendChild(div);
+    }
+  }
+
+  document.getElementById('prevMonth').addEventListener('click', function() {
+    calendarDate.setMonth(calendarDate.getMonth() - 1);
+    renderCalendar(calendarDate);
+  });
+  document.getElementById('nextMonth').addEventListener('click', function() {
+    calendarDate.setMonth(calendarDate.getMonth() + 1);
+    renderCalendar(calendarDate);
+  });
+
+  // ===== COUNTDOWN =====
+  function startCountdown(expiryDate) {
+    if (countdownInterval) clearInterval(countdownInterval);
+    function update() {
+      const now = new Date();
+      const diff = expiryDate - now;
+      if (diff <= 0) {
+        countdownTimer.textContent = 'انتهى';
+        clearInterval(countdownInterval);
+        return;
+      }
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      const secs = Math.floor((diff % 60000) / 1000);
+      countdownTimer.textContent =
+        `${String(days).padStart(2,'0')} : ${String(hours).padStart(2,'0')} : ${String(mins).padStart(2,'0')} : ${String(secs).padStart(2,'0')}`;
+    }
+    update();
+    countdownInterval = setInterval(update, 1000);
+  }
+
+  // ===== LOGIN =====
+  function login(subIdInput) {
+    const user = SUBSCRIPTIONS[subIdInput];
+    if (user) {
+      currentUser = user;
+      subId = subIdInput;
+      loginModal.classList.remove('active');
+      homePage.style.display = 'none';
+      dashboard.classList.add('active');
+
+      dashUserName.textContent = user.name;
+      dashUserId.textContent = '#' + subIdInput;
+      welcomeName.textContent = user.name;
+      discordAccount.textContent = user.discord;
+      subIdDisplay.textContent = subIdInput;
+
+      const expiry = new Date();
+      expiry.setDate(expiry.getDate() + 30);
+      startCountdown(expiry);
+
+      renderCalendar(calendarDate);
+      return true;
+    }
+    return false;
+  }
+
+  function logout() {
+    if (countdownInterval) clearInterval(countdownInterval);
+    currentUser = null;
+    subId = null;
+    dashboard.classList.remove('active');
+    homePage.style.display = 'block';
+    loginModal.classList.remove('active');
+  }
+
+  // ===== EVENT LISTENERS =====
+  loginBtn.addEventListener('click', () => loginModal.classList.add('active'));
+  heroLoginBtn.addEventListener('click', () => loginModal.classList.add('active'));
+  closeModal.addEventListener('click', () => loginModal.classList.remove('active'));
+  loginModal.addEventListener('click', (e) => {
+    if (e.target === loginModal) loginModal.classList.remove('active');
+  });
+
+  submitLogin.addEventListener('click', function() {
+    const val = subIdInput.value.trim().toUpperCase();
+    if (!val) {
+      loginError.textContent = 'الرجاء إدخال رقم الاشتراك';
+      loginError.classList.remove('hidden');
+      return;
+    }
+    const success = login(val);
+    if (!success) {
+      loginError.textContent = 'رقم الاشتراك غير صحيح';
+      loginError.classList.remove('hidden');
+      setTimeout(() => loginError.classList.add('hidden'), 3000);
+    } else {
+      loginError.classList.add('hidden');
+      subIdInput.value = '';
+    }
+  });
+
+  subIdInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') submitLogin.click();
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', logout);
+
+  // ===== INIT =====
+  renderCalendar(calendarDate);
+  subIdInput.addEventListener('input', () => {
+    loginError.classList.add('hidden');
+  });
+</script>
+
+</body>
+</html>
