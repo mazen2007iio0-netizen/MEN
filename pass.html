@@ -625,7 +625,6 @@
         .calendar .days-grid .day.other-month {
             color: #4a5070;
         }
-        /* ألوان التقويم حسب الاشتراك */
         .calendar .days-grid .day.sub-active {
             background: rgba(0, 200, 80, 0.15);
             color: #8fdf9f;
@@ -712,60 +711,57 @@
             font-size: 0.85rem;
             flex: 1;
         }
+        /* تحسين الأزرار لتظهر في سطر واحد على جميع الأجهزة */
+        .media-card .card-body .btn-group {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .btn-card-action,
+        .btn-outline-blue {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            white-space: nowrap;
+            flex: 1 1 auto;
+            min-width: 0;
+        }
         .btn-card-action {
             background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
             border: none;
-            border-radius: 60px;
-            padding: 10px 16px;
             color: #fff;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.3s;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
             box-shadow: 0 4px 16px rgba(2, 28, 164, 0.15);
-            text-decoration: none;
         }
         .btn-card-action:hover {
             transform: scale(1.04);
             box-shadow: 0 8px 28px rgba(2, 28, 164, 0.3);
         }
         .btn-card-action i {
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         .btn-outline-blue {
             background: transparent;
             border: 1.5px solid var(--blue-deep);
-            border-radius: 60px;
-            padding: 10px 16px;
             color: var(--blue-light);
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.3s;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-decoration: none;
         }
         .btn-outline-blue:hover {
             background: var(--blue-deep);
             color: #fff;
             border-color: var(--blue-deep);
         }
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            margin-top: 4px;
-        }
-        .btn-group .btn-outline-blue {
-            flex: 1;
+        /* عند وجود زر واحد فقط نمنعه من التمدد */
+        .btn-group:not(:has(.btn-group > * + *)) .btn-card-action,
+        .btn-group:not(:has(.btn-group > * + *)) .btn-outline-blue {
+            flex: 0 1 auto;
         }
 
         /* الإعدادات */
@@ -892,6 +888,11 @@
             .media-card img {
                 height: 110px;
             }
+            .btn-card-action,
+            .btn-outline-blue {
+                font-size: 0.75rem;
+                padding: 6px 10px;
+            }
         }
         @media (max-width: 480px) {
             .hero h2 {
@@ -928,13 +929,11 @@
             .media-card .card-body h4 {
                 font-size: 0.9rem;
             }
-            .btn-card-action {
-                font-size: 0.7rem;
-                padding: 8px 12px;
-            }
+            .btn-card-action,
             .btn-outline-blue {
                 font-size: 0.7rem;
-                padding: 8px 12px;
+                padding: 5px 8px;
+                gap: 4px;
             }
             .calendar .days-grid .day {
                 padding: 6px 0;
@@ -969,6 +968,11 @@
                 width: 38px;
                 height: 46px;
                 font-size: 1.2rem;
+            }
+            .btn-card-action,
+            .btn-outline-blue {
+                font-size: 0.6rem;
+                padding: 4px 6px;
             }
         }
     </style>
@@ -1086,7 +1090,9 @@
                                     <div class="card-body">
                                         <h4>كابتن سنوبل</h4>
                                         <p>استراتيجية وحروب</p>
-                                        <a href="https://sites.google.com/view/clan-men/%D9%83%D8%A7%D8%A8%D8%AA%D9%86-%D8%B3%D9%86%D9%88%D8%A8%D9%84" target="_blank" class="btn-outline-blue"><i class="fas fa-play"></i> العب الان</a>
+                                        <div class="btn-group">
+                                            <a href="https://sites.google.com/view/clan-men/%D9%83%D8%A7%D8%A8%D8%AA%D9%86-%D8%B3%D9%86%D9%88%D8%A8%D9%84" target="_blank" class="btn-outline-blue"><i class="fas fa-play"></i> العب الان</a>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="media-card">
@@ -1094,7 +1100,9 @@
                                     <div class="card-body">
                                         <h4>إطلاق النار</h4>
                                         <p>طلقات نار و العيش وحيدا</p>
-                                        <a href="https://sites.google.com/view/clan-men/%D8%B7%D9%84%D9%82%D8%A9-%D9%86%D8%A7%D8%B1" target="_blank" class="btn-outline-blue"><i class="fas fa-play"></i> العب الان</a>
+                                        <div class="btn-group">
+                                            <a href="https://sites.google.com/view/clan-men/%D8%B7%D9%84%D9%82%D8%A9-%D9%86%D8%A7%D8%B1" target="_blank" class="btn-outline-blue"><i class="fas fa-play"></i> العب الان</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1112,7 +1120,9 @@
                                     <div class="card-body">
                                         <h4>مقدمة MEN</h4>
                                         <p>تعريف بالمجتمع</p>
-                                        <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</a>
+                                        <div class="btn-group">
+                                            <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</a>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="media-card">
@@ -1120,7 +1130,9 @@
                                     <div class="card-body">
                                         <h4>أفضل لحظات البث</h4>
                                         <p>مونتاج حصري</p>
-                                        <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</a>
+                                        <div class="btn-group">
+                                            <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</a>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="media-card">
@@ -1128,7 +1140,9 @@
                                     <div class="card-body">
                                         <h4>ورشة عمل</h4>
                                         <p>تطوير الذات</p>
-                                        <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</a>
+                                        <div class="btn-group">
+                                            <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1146,7 +1160,9 @@
                                     <div class="card-body">
                                         <h4>بث الأربعاء</h4>
                                         <p>8:00 مساءً</p>
-                                        <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</a>
+                                        <div class="btn-group">
+                                            <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</a>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="media-card">
@@ -1154,7 +1170,9 @@
                                     <div class="card-body">
                                         <h4>بث الجمعة</h4>
                                         <p>10:00 مساءً</p>
-                                        <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</a>
+                                        <div class="btn-group">
+                                            <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</a>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="media-card">
@@ -1162,7 +1180,9 @@
                                     <div class="card-body">
                                         <h4>بث السبت</h4>
                                         <p>6:00 مساءً</p>
-                                        <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</a>
+                                        <div class="btn-group">
+                                            <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1262,7 +1282,6 @@
         })();
 
         // ===== DATABASE (قاعدة بيانات المستخدمين) =====
-        // يمكنك تعديل تواريخ الانتهاء وكلمات السر لكل حساب هنا
         const SUBSCRIPTIONS = {
             "P10229": { discord: "#1029", name: "مازن", password: "1234", expiry: "2026-08-15" },
             "P10230": { discord: "#2030", name: "عبدالرحمن", password: "5678", expiry: "2026-07-28" },
@@ -1298,6 +1317,28 @@
         const expiryDateDisplay = document.getElementById('expiryDateDisplay');
         const subStatusMessage = document.getElementById('subStatusMessage');
         const statusBadgeContainer = document.getElementById('statusBadgeContainer');
+
+        // ===== إدارة الجلسة (localStorage) =====
+        function saveSession(subId, password) {
+            localStorage.setItem('men_session', JSON.stringify({ subId, password }));
+        }
+
+        function clearSession() {
+            localStorage.removeItem('men_session');
+        }
+
+        function restoreSession() {
+            const data = localStorage.getItem('men_session');
+            if (data) {
+                try {
+                    const { subId, password } = JSON.parse(data);
+                    if (subId && password) {
+                        return { subId, password };
+                    }
+                } catch (_) { /* تجاهل */ }
+            }
+            return null;
+        }
 
         // ===== التنقل بين خانات كلمة السر =====
         passBoxes.forEach((box, idx) => {
@@ -1449,21 +1490,24 @@
                 homePage.style.display = 'none';
                 dashboard.classList.add('active');
 
-                dashUserName.textContent = user.name;
-                dashUserId.textContent = '#' + subIdInput;
+                // تحديث جميع عناصر الاسم
                 welcomeName.textContent = user.name;
                 discordAccount.textContent = user.discord;
                 subIdDisplay.textContent = subIdInput;
-                passwordDisplay.textContent = user.password; // عرض الرقم السري
+                passwordDisplay.textContent = user.password;
                 expiryDateDisplay.textContent = user.expiry;
 
                 startCountdown(expiryDateObj);
                 renderCalendar(calendarDate);
 
+                // تفعيل التبويب الرئيسي
                 document.querySelectorAll('#dashNav button').forEach(b => b.classList.remove('active'));
                 document.querySelector('#dashNav button[data-page="dashboard-home"]').classList.add('active');
                 document.querySelectorAll('.dash-page').forEach(p => p.classList.remove('active'));
                 document.getElementById('page-dashboard-home').classList.add('active');
+
+                // حفظ الجلسة
+                saveSession(subIdInput, password);
 
                 return true;
             }
@@ -1480,8 +1524,25 @@
             loginModal.classList.remove('active');
             passBoxes.forEach(box => box.value = '');
             subIdInput.value = '';
-            // إعادة تعيين عرض الرقم السري
             passwordDisplay.textContent = '****';
+            clearSession();
+        }
+
+        // ===== محاولة استعادة الجلسة تلقائياً =====
+        function tryAutoLogin() {
+            const session = restoreSession();
+            if (session) {
+                const success = login(session.subId, session.password);
+                if (success) {
+                    // إخفاء أزرار تسجيل الدخول في الهيدر والهيرو
+                    // يمكن إبقاؤها ظاهرة للتبديل، لكننا سنبقيها كما هي
+                    return true;
+                } else {
+                    // إذا فشلت الاستعادة (تم تغيير كلمة السر مثلاً) نمسح الجلسة
+                    clearSession();
+                }
+            }
+            return false;
         }
 
         // ===== EVENT LISTENERS =====
@@ -1537,13 +1598,8 @@
             loginError.classList.add('hidden');
         });
 
-        // التأكد من أن جميع الأزرار التي تفتح روابط تعمل بشكل صحيح
-        document.querySelectorAll('.btn-card-action, .btn-outline-blue').forEach(btn => {
-            if (btn.tagName === 'A' && !btn.href) {
-                btn.href = '#';
-                btn.target = '_blank';
-            }
-        });
+        // محاولة الدخول التلقائي عند تحميل الصفحة
+        tryAutoLogin();
     </script>
 
 </body>
