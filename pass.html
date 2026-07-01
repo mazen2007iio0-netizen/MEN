@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEN Pass</title>
+    <title>MEN Pass – لوحة التحكم</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -1283,7 +1283,7 @@
 
         // ===== DATABASE (قاعدة بيانات المستخدمين) =====
         const SUBSCRIPTIONS = {
-            "P10229": { discord: "#1029", name: "مازن", password: "1234", expiry: "2026-08-15" },
+            "P10229": { discord: "#1029", name: "مازن", password: "1234", expiry: "2030-08-15" },
             "P10230": { discord: "#2030", name: "عبدالرحمن", password: "5678", expiry: "2026-07-28" },
             "P10231": { discord: "#3031", name: "مشعل", password: "9012", expiry: "2026-07-20" },
             "P10232": { discord: "#4032", name: "سلمان", password: "3456", expiry: "2026-08-05" }
@@ -1453,7 +1453,7 @@
 
                 if (diff <= 0) {
                     countdownTimer.textContent = 'انتهى';
-                    subStatusMessage.textContent = '⚠️ انتهى اشتراكك، يرجى التجديد للاستمرار في المميزات.';
+                    subStatusMessage.textContent = ' انتهى اشتراكك يرجى التجديد للاستمرار في المميزات.';
                     statusBadgeContainer.innerHTML =
                         `<span class="status-badge expired"><i class="fas fa-exclamation-circle"></i> منتهي</span>`;
                     clearInterval(countdownInterval);
@@ -1468,7 +1468,7 @@
                 countdownTimer.textContent =
                     `${String(days).padStart(2,'0')} : ${String(hours).padStart(2,'0')} : ${String(mins).padStart(2,'0')} : ${String(secs).padStart(2,'0')}`;
 
-                subStatusMessage.textContent = `✅ اشتراكك نشط حتى ${expiryStr}`;
+                subStatusMessage.textContent = ` اشتراكك نشط حتى ${expiryStr}`;
                 statusBadgeContainer.innerHTML =
                     `<span class="status-badge active"><i class="fas fa-check-circle"></i> نشط</span>`;
 
