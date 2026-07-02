@@ -1324,6 +1324,26 @@
         .expired-message p {
             color: #8890b0;
         }
+
+        /* تحميل */
+        .loader {
+            text-align: center;
+            padding: 20px;
+            color: #8890b0;
+        }
+        .loader i {
+            font-size: 2rem;
+            color: var(--blue-light);
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -1458,18 +1478,10 @@
                     <div class="dash-page" id="page-videos">
                         <div class="dash-card">
                             <h2><i class="fas fa-video"></i> الفيديوهات</h2>
-                            <p>شاهد أحدث المحتويات الحصرية بدون إعلانات.</p>
-                            <div class="grid-cards">
-                                <div class="media-card">
-                                    <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200559_328971.png" alt="مقدمة MEN">
-                                    <div class="card-body">
-                                        <h4>مقدمة MEN</h4>
-                                        <p>تعريف بالمجتمع</p>
-                                        <div class="btn-group">
-                                            <a href="https://youtu.be/WmYtsZtl_cI?si=IIQx26sjTd_Ud7no" target="_blank" class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</a>
-                                        </div>
-                                    </div>
-                                </div>
+                            <p>جميع فيديوهات القناة متاحة هنا.</p>
+                            <div id="videosContainer">
+                                <!-- سيتم تعبئتها بواسطة JavaScript -->
+                                <div class="loader"><i class="fas fa-spinner"></i> جاري تحميل الفيديوهات...</div>
                             </div>
                             <div class="expired-message" style="display:none;">
                                 <i class="fas fa-lock"></i>
@@ -1483,9 +1495,7 @@
                         <div class="dash-card">
                             <h2><i class="fas fa-broadcast-tower"></i> البثوث المباشرة</h2>
                             <p>تابع البثوث المباشرة للقناة فور نزولها.</p>
-                            <!-- حاوية البث الديناميكي -->
                             <div id="liveStreamContainer">
-                                <!-- سيتم ملؤها بواسطة JavaScript -->
                                 <div class="no-stream-msg" id="noStreamMsg">
                                     <i class="fas fa-circle"></i>
                                     <p>لا يوجد بث مباشر حالياً، تابعنا لمعرفة المواعيد القادمة.</p>
@@ -1637,6 +1647,7 @@
         const noStreamMsg = document.getElementById('noStreamMsg');
         const checkStreamBtn = document.getElementById('checkStreamBtn');
         const streamStatusText = document.getElementById('streamStatusText');
+        const videosContainer = document.getElementById('videosContainer');
 
         // ===== YouTube API =====
         const API_KEY = 'AIzaSyCQkcw5zUNMVDtSRGg1Gh0rF-B79dNKsUg';
@@ -1694,6 +1705,9 @@
                 document.getElementById('page-' + page).classList.add('active');
                 if (page === 'streams') {
                     checkLiveStream();
+                }
+                if (page === 'videos') {
+                    fetchChannelVideos();
                 }
             });
         });
@@ -1831,6 +1845,58 @@
             countdownInterval = setInterval(update, 1000);
         }
 
+        // ===== جلب فيديوهات القناة =====
+        function fetchChannelVideos() {
+            if (!API_KEY || API_KEY === 'YOUR_API_KEY') {
+                videosContainer.innerHTML = `<div class="no-stream-msg"><i class="fas fa-exclamation-triangle"></i><p>يرجى إدخال مفتاح API صالح.</p></div>`;
+                return;
+            }
+            // عرض محمل
+            videosContainer.innerHTML = `<div class="loader"><i class="fas fa-spinner"></i> جاري تحميل الفيديوهات...</div>`;
+
+            const url =
+                `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHANNEL_ID}&order=date&type=video&maxResults=50&key=${API_KEY}`;
+
+            fetch(url)
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                    return res.json();
+                })
+                .then(data => {
+                    if (data.items && data.items.length > 0) {
+                        let cardsHtml = '<div class="grid-cards">';
+                        data.items.forEach(item => {
+                            const videoId = item.id.videoId;
+                            const title = item.snippet.title;
+                            const thumbnail = item.snippet.thumbnails.high.url || item.snippet.thumbnails.default.url;
+                            const description = item.snippet.description || '';
+                            cardsHtml += `
+                                <div class="media-card">
+                                    <img src="${thumbnail}" alt="${title}">
+                                    <div class="card-body">
+                                        <h4>${title}</h4>
+                                        <p>${description.substring(0, 60)}${description.length > 60 ? '...' : ''}</p>
+                                        <div class="btn-group">
+                                            <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" class="btn-card-action"><i class="fab fa-youtube"></i> مشاهدة</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        cardsHtml += '</div>';
+                        videosContainer.innerHTML = cardsHtml;
+                    } else {
+                        videosContainer.innerHTML =
+                            `<div class="no-stream-msg"><i class="fas fa-video-slash"></i><p>لا توجد فيديوهات في القناة حتى الآن.</p></div>`;
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching videos:', err);
+                    videosContainer.innerHTML =
+                        `<div class="no-stream-msg"><i class="fas fa-exclamation-circle"></i><p>حدث خطأ أثناء تحميل الفيديوهات.</p></div>`;
+                });
+        }
+
         // ===== التحقق من البث المباشر =====
         function checkLiveStream() {
             if (!API_KEY || API_KEY === 'YOUR_API_KEY') {
@@ -1942,6 +2008,7 @@
                 if (checkInterval) clearInterval(checkInterval);
                 checkInterval = setInterval(checkLiveStream, 30000);
                 checkLiveStream();
+                fetchChannelVideos(); // تحميل الفيديوهات فور تسجيل الدخول
 
                 return true;
             }
@@ -1966,6 +2033,7 @@
             clearSession();
             showNoStream();
             streamStatusText.textContent = '';
+            videosContainer.innerHTML = `<div class="loader"><i class="fas fa-spinner"></i> جاري تحميل الفيديوهات...</div>`;
         }
 
         function tryAutoLogin() {
