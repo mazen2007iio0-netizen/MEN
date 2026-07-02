@@ -29,7 +29,6 @@
             background: linear-gradient(180deg, #021ca4, #1a3a9e);
             border-radius: 12px;
         }
-        /* خلفية متحركة خيالية */
         .bg-ambient {
             position: fixed;
             top: 0;
@@ -77,7 +76,6 @@
                 transform: scale(1.4) rotate(180deg);
             }
         }
-        /* جسيمات متحركة إضافية */
         .particle {
             position: fixed;
             border-radius: 50%;
@@ -116,7 +114,6 @@
             --glow-neon: 0 0 30px rgba(74, 122, 255, 0.2);
         }
 
-        /* HEADER */
         header {
             background: rgba(6, 8, 18, 0.88);
             backdrop-filter: blur(24px);
@@ -191,12 +188,10 @@
         .btn-login-header:active {
             transform: scale(0.97);
         }
-        /* إخفاء زر الدخول عند تسجيل الدخول */
         .btn-login-header.hidden-btn {
             display: none !important;
         }
 
-        /* HERO */
         .hero {
             padding: 60px 20px 40px;
             text-align: center;
@@ -542,7 +537,6 @@
             display: block;
         }
 
-        /* القائمة الأفقية (بدون زر الخروج) */
         .dash-nav-horizontal {
             display: flex;
             flex-wrap: wrap;
@@ -610,9 +604,7 @@
             color: var(--blue-light);
             filter: drop-shadow(0 0 10px rgba(74, 122, 255, 0.3));
         }
-        /* لم نعد نستخدم #logoutBtn في القائمة */
 
-        /* المحتوى */
         .dash-page {
             display: none;
             animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
@@ -670,7 +662,6 @@
             font-size: 1.05rem;
         }
 
-        /* الأخبار */
         .news-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -715,7 +706,6 @@
             font-size: 0.9rem;
         }
 
-        /* التقويم */
         .calendar {
             background: rgba(0, 0, 0, 0.2);
             border-radius: var(--radius-xl);
@@ -830,7 +820,6 @@
             box-shadow: 0 0 30px rgba(255, 80, 80, 0.05);
         }
 
-        /* بطاقات الوسائط */
         .grid-cards {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -965,7 +954,6 @@
             transform: scale(1.05);
         }
 
-        /* الإعدادات */
         .setting-row {
             display: flex;
             justify-content: space-between;
@@ -1009,7 +997,6 @@
             }
         }
 
-        /* زر الخروج داخل الإعدادات */
         .logout-btn-settings {
             background: rgba(255, 80, 80, 0.12);
             border: 1px solid rgba(255, 80, 80, 0.2);
@@ -1039,7 +1026,88 @@
             filter: drop-shadow(0 0 10px rgba(255, 80, 80, 0.2));
         }
 
-        /* FOOTER */
+        /* البث المباشر الديناميكي */
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #ff0000;
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+            animation: pulseLive 1.5s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        .live-badge i {
+            font-size: 0.6rem;
+            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+        }
+        @keyframes pulseLive {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.95);
+            }
+        }
+
+        .stream-wrapper {
+            margin-top: 16px;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            border: 2px solid rgba(255, 0, 0, 0.2);
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.1);
+            position: relative;
+        }
+        .stream-wrapper iframe {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: none;
+            background: #000;
+        }
+
+        .no-stream-msg {
+            text-align: center;
+            padding: 30px 20px;
+            color: #8890b0;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: var(--radius-xl);
+            border: 1px dashed rgba(74, 122, 255, 0.1);
+        }
+        .no-stream-msg i {
+            font-size: 2.5rem;
+            color: #4a5070;
+            margin-bottom: 10px;
+        }
+
+        .refresh-btn {
+            background: rgba(74, 122, 255, 0.1);
+            border: 1px solid var(--blue-deep);
+            border-radius: 60px;
+            padding: 8px 20px;
+            color: var(--blue-light);
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .refresh-btn:hover {
+            background: var(--blue-deep);
+            color: #fff;
+            transform: scale(1.05);
+        }
+
         footer {
             background: #04060e;
             border-top: 1px solid rgba(2, 28, 164, 0.03);
@@ -1104,7 +1172,6 @@
             color: var(--blue-light);
         }
 
-        /* RESPONSIVE */
         @media (max-width: 768px) {
             .hero h2 {
                 font-size: 2.4rem;
@@ -1212,6 +1279,9 @@
                 width: 100%;
                 justify-content: center;
             }
+            .stream-wrapper iframe {
+                aspect-ratio: 16 / 9;
+            }
         }
         @media (max-width: 360px) {
             .btn-login-header {
@@ -1237,7 +1307,6 @@
             }
         }
 
-        /* رسالة انتهاء الاشتراك */
         .expired-message {
             text-align: center;
             padding: 30px 0;
@@ -1260,11 +1329,9 @@
 <body>
     <div class="bg-ambient"></div>
     <div class="stars" id="starsContainer"></div>
-    <!-- جسيمات إضافية -->
     <div class="particle" style="width:600px;height:600px;top:-10%;left:-10%;"></div>
     <div class="particle" style="width:400px;height:400px;bottom:-5%;right:-5%;animation-duration:40s;"></div>
 
-    <!-- HEADER -->
     <header>
         <div class="container header-content">
             <div class="logo">
@@ -1278,7 +1345,6 @@
     <main>
         <div class="container">
 
-            <!-- HERO -->
             <section id="homePage">
                 <div class="hero">
                     <div class="orb orb-1"></div>
@@ -1297,7 +1363,6 @@
                 </div>
             </section>
 
-            <!-- DASHBOARD -->
             <section class="dashboard" id="dashboard">
 
                 <nav class="dash-nav-horizontal" id="dashNav">
@@ -1306,12 +1371,10 @@
                     <button data-page="videos"><i class="fas fa-video"></i> الفيديوهات</button>
                     <button data-page="streams"><i class="fas fa-broadcast-tower"></i> البثوث</button>
                     <button data-page="settings"><i class="fas fa-cog"></i> الإعدادات</button>
-                    <!-- تم إزالة زر الخروج من القائمة -->
                 </nav>
 
                 <div class="dash-content">
 
-                    <!-- الرئيسية -->
                     <div class="dash-page active" id="page-dashboard-home">
                         <div class="dash-card">
                             <h2><i class="fas fa-hand-wave"></i> مرحباً بك <span id="welcomeName">عضو</span></h2>
@@ -1358,7 +1421,6 @@
                         </div>
                     </div>
 
-                    <!-- الألعاب -->
                     <div class="dash-page" id="page-games">
                         <div class="dash-card">
                             <h2><i class="fas fa-gamepad"></i> الألعاب</h2>
@@ -1393,7 +1455,6 @@
                         </div>
                     </div>
 
-                    <!-- الفيديوهات -->
                     <div class="dash-page" id="page-videos">
                         <div class="dash-card">
                             <h2><i class="fas fa-video"></i> الفيديوهات</h2>
@@ -1418,22 +1479,21 @@
                         </div>
                     </div>
 
-                    <!-- البثوث -->
                     <div class="dash-page" id="page-streams">
                         <div class="dash-card">
                             <h2><i class="fas fa-broadcast-tower"></i> البثوث المباشرة</h2>
-                            <p>انضم إلى البثوث القادمة وحصريات لك فقط.</p>
-                            <div class="grid-cards">
-                                <div class="media-card">
-                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT81YcUS043Em7sRSVnZu5C98P8zdgsU7vd3alVfTJpaA&s=10" alt="بث">
-                                    <div class="card-body">
-                                        <h4>بث روبلوكس</h4>
-                                        <p>8:00 مساءً</p>
-                                        <div class="btn-group">
-                                            <a href="https://www.youtube.com/watch?v=mUvWxvAj4WE" target="_blank" class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</a>
-                                        </div>
-                                    </div>
+                            <p>تابع البثوث المباشرة للقناة فور نزولها.</p>
+                            <!-- حاوية البث الديناميكي -->
+                            <div id="liveStreamContainer">
+                                <!-- سيتم ملؤها بواسطة JavaScript -->
+                                <div class="no-stream-msg" id="noStreamMsg">
+                                    <i class="fas fa-circle"></i>
+                                    <p>لا يوجد بث مباشر حالياً، تابعنا لمعرفة المواعيد القادمة.</p>
                                 </div>
+                            </div>
+                            <div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;">
+                                <button class="refresh-btn" id="checkStreamBtn"><i class="fas fa-sync-alt"></i> التحقق من البث</button>
+                                <span id="streamStatusText" style="color:#8890b0; font-size:0.9rem; align-self:center;"></span>
                             </div>
                             <div class="expired-message" style="display:none;">
                                 <i class="fas fa-lock"></i>
@@ -1443,7 +1503,6 @@
                         </div>
                     </div>
 
-                    <!-- الإعدادات -->
                     <div class="dash-page" id="page-settings">
                         <div class="dash-card">
                             <h2><i class="fas fa-cog"></i> الإعدادات</h2>
@@ -1469,7 +1528,6 @@
                                 <span class="label">تاريخ الانتهاء</span>
                                 <span class="value" id="expiryDateDisplay">--</span>
                             </div>
-                            <!-- زر الخروج داخل الإعدادات -->
                             <div style="display: flex; justify-content: center; margin-top: 20px;">
                                 <button class="logout-btn-settings" id="logoutBtnSettings"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
                             </div>
@@ -1481,7 +1539,6 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
     <footer>
         <div class="container">
             <div class="footer-flex">
@@ -1501,7 +1558,6 @@
         </div>
     </footer>
 
-    <!-- MODAL -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-box">
             <div class="modal-close" id="closeModal"><i class="fas fa-times"></i></div>
@@ -1522,7 +1578,6 @@
     </div>
 
     <script>
-        // ===== النجوم =====
         (function createStars() {
             const container = document.getElementById('starsContainer');
             for (let i = 0; i < 120; i++) {
@@ -1555,6 +1610,8 @@
         let countdownInterval = null;
         let calendarDate = new Date();
         let isExpired = false;
+        let liveVideoId = null;
+        let checkInterval = null;
 
         // ===== DOM =====
         const loginModal = document.getElementById('loginModal');
@@ -1575,8 +1632,15 @@
         const expiryDateDisplay = document.getElementById('expiryDateDisplay');
         const subStatusMessage = document.getElementById('subStatusMessage');
         const statusBadgeContainer = document.getElementById('statusBadgeContainer');
-        // زر الخروج الجديد في الإعدادات
         const logoutBtnSettings = document.getElementById('logoutBtnSettings');
+        const liveStreamContainer = document.getElementById('liveStreamContainer');
+        const noStreamMsg = document.getElementById('noStreamMsg');
+        const checkStreamBtn = document.getElementById('checkStreamBtn');
+        const streamStatusText = document.getElementById('streamStatusText');
+
+        // ===== YouTube API =====
+        const API_KEY = 'AIzaSyCQkcw5zUNMVDtSRGg1Gh0rF-B79dNKsUg';
+        const CHANNEL_ID = 'UC1yZrOyjkrOfuynHui0k-DQ';
 
         // ===== SESSION =====
         function saveSession(subId, password) {
@@ -1628,6 +1692,9 @@
                 const page = this.dataset.page;
                 document.querySelectorAll('.dash-page').forEach(p => p.classList.remove('active'));
                 document.getElementById('page-' + page).classList.add('active');
+                if (page === 'streams') {
+                    checkLiveStream();
+                }
             });
         });
 
@@ -1764,6 +1831,83 @@
             countdownInterval = setInterval(update, 1000);
         }
 
+        // ===== التحقق من البث المباشر =====
+        function checkLiveStream() {
+            if (!API_KEY || API_KEY === 'YOUR_API_KEY') {
+                streamStatusText.textContent = '⚠️ يرجى إدخال مفتاح API صالح في الكود.';
+                return;
+            }
+            streamStatusText.textContent = '⏳ جاري التحقق...';
+            const url =
+                `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHANNEL_ID}&eventType=live&type=video&key=${API_KEY}`;
+
+            fetch(url)
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                    return res.json();
+                })
+                .then(data => {
+                    if (data.items && data.items.length > 0) {
+                        const video = data.items[0];
+                        liveVideoId = video.id.videoId;
+                        const title = video.snippet.title;
+                        const thumbnail = video.snippet.thumbnails.high.url || video.snippet.thumbnails.default.url;
+                        showLiveStream(liveVideoId, title, thumbnail);
+                        streamStatusText.textContent = '✅ بث مباشر نشط';
+                    } else {
+                        liveVideoId = null;
+                        showNoStream();
+                        streamStatusText.textContent = '❌ لا يوجد بث مباشر حالياً';
+                    }
+                })
+                .catch(err => {
+                    console.error('Error checking live stream:', err);
+                    streamStatusText.textContent = '⚠️ حدث خطأ في التحقق من البث';
+                    showNoStream();
+                });
+        }
+
+        function showLiveStream(videoId, title, thumbnail) {
+            noStreamMsg.style.display = 'none';
+            let wrapper = document.getElementById('streamWrapper');
+            if (!wrapper) {
+                wrapper = document.createElement('div');
+                wrapper.id = 'streamWrapper';
+                wrapper.className = 'stream-wrapper';
+                liveStreamContainer.appendChild(wrapper);
+            }
+            wrapper.innerHTML = `
+                <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
+                        title="بث مباشر" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                </iframe>
+                <div style="padding:12px; background:rgba(0,0,0,0.6); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                    <span style="display:flex; align-items:center; gap:8px;">
+                        <span class="live-badge"><i class="fas fa-circle"></i> مباشر</span>
+                        <span style="color:#fff; font-weight:600;">${title || 'بث مباشر'}</span>
+                    </span>
+                    <button id="closeStreamBtn" style="background:transparent; border:1px solid rgba(255,255,255,0.2); color:#a0b0d4; border-radius:30px; padding:4px 14px; cursor:pointer; transition:0.3s;">
+                        <i class="fas fa-times"></i> إغلاق
+                    </button>
+                </div>
+            `;
+            wrapper.querySelector('#closeStreamBtn').addEventListener('click', function() {
+                wrapper.innerHTML = '';
+                liveVideoId = null;
+                showNoStream();
+                streamStatusText.textContent = '❌ تم إغلاق البث';
+            });
+            streamStatusText.textContent = '✅ بث مباشر نشط';
+        }
+
+        function showNoStream() {
+            const wrapper = document.getElementById('streamWrapper');
+            if (wrapper) wrapper.innerHTML = '';
+            noStreamMsg.style.display = 'block';
+            liveVideoId = null;
+        }
+
         // ===== LOGIN =====
         function login(subIdInput, password) {
             const user = SUBSCRIPTIONS[subIdInput];
@@ -1776,9 +1920,8 @@
                 homePage.style.display = 'none';
                 dashboard.classList.add('active');
 
-                // إخفاء زر "تفعيل الحساب" في الهيدر
                 loginBtn.classList.add('hidden-btn');
-                heroLoginBtn.classList.add('hidden-btn'); // أيضاً زر الـ Hero
+                heroLoginBtn.classList.add('hidden-btn');
 
                 welcomeName.textContent = user.name;
                 discordAccount.textContent = user.discord;
@@ -1796,6 +1939,10 @@
 
                 saveSession(subIdInput, password);
 
+                if (checkInterval) clearInterval(checkInterval);
+                checkInterval = setInterval(checkLiveStream, 30000);
+                checkLiveStream();
+
                 return true;
             }
             return false;
@@ -1803,13 +1950,13 @@
 
         function logout() {
             if (countdownInterval) clearInterval(countdownInterval);
+            if (checkInterval) clearInterval(checkInterval);
             currentUser = null;
             subId = null;
             expiryDateObj = null;
             isExpired = false;
             dashboard.classList.remove('active');
             homePage.style.display = 'block';
-            // إظهار زر "تفعيل الحساب" مرة أخرى
             loginBtn.classList.remove('hidden-btn');
             heroLoginBtn.classList.remove('hidden-btn');
             loginModal.classList.remove('active');
@@ -1817,9 +1964,10 @@
             subIdInput.value = '';
             passwordDisplay.textContent = '****';
             clearSession();
+            showNoStream();
+            streamStatusText.textContent = '';
         }
 
-        // ===== AUTO LOGIN =====
         function tryAutoLogin() {
             const session = restoreSession();
             if (session) {
@@ -1878,8 +2026,8 @@
             }
         });
 
-        // زر الخروج الجديد
         logoutBtnSettings.addEventListener('click', logout);
+        checkStreamBtn.addEventListener('click', checkLiveStream);
 
         // ===== INIT =====
         renderCalendar(calendarDate);
