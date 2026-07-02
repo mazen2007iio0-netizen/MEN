@@ -711,7 +711,6 @@
             font-size: 0.85rem;
             flex: 1;
         }
-        /* تحسين الأزرار لتظهر في سطر واحد على جميع الأجهزة */
         .media-card .card-body .btn-group {
             display: flex;
             flex-wrap: nowrap;
@@ -758,7 +757,6 @@
             color: #fff;
             border-color: var(--blue-deep);
         }
-        /* عند وجود زر واحد فقط نمنعه من التمدد */
         .btn-group:not(:has(.btn-group > * + *)) .btn-card-action,
         .btn-group:not(:has(.btn-group > * + *)) .btn-outline-blue {
             flex: 0 1 auto;
@@ -975,6 +973,24 @@
                 padding: 4px 6px;
             }
         }
+
+        /* رسالة انتهاء الاشتراك */
+        .expired-message {
+            text-align: center;
+            padding: 30px 0;
+        }
+        .expired-message i {
+            font-size: 3rem;
+            color: #ff6b6b;
+        }
+        .expired-message h3 {
+            color: #ff6b6b;
+            margin-top: 10px;
+        }
+        .expired-message p {
+            color: #8890b0;
+        }
+        /* تم حذف زر التجديد */
     </style>
 </head>
 <body>
@@ -1106,6 +1122,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- رسالة انتهاء الاشتراك (بدون زر) -->
+                            <div class="expired-message" style="display:none;">
+                                <i class="fas fa-lock"></i>
+                                <h3>انتهى اشتراكك</h3>
+                                <p>للوصول إلى الألعاب، يرجى تجديد اشتراكك.</p>
+                            </div>
                         </div>
                     </div>
 
@@ -1116,35 +1138,22 @@
                             <p>شاهد أحدث المحتويات الحصرية بدون إعلانات.</p>
                             <div class="grid-cards">
                                 <div class="media-card">
-                                    <img src="https://picsum.photos/seed/vid1/400/250" alt="مقدمة MEN">
+                                    <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200559_328971.png" alt="مقدمة MEN">
                                     <div class="card-body">
                                         <h4>مقدمة MEN</h4>
                                         <p>تعريف بالمجتمع</p>
                                         <div class="btn-group">
-                                            <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</a>
+                                            <a href="https://youtu.be/WmYtsZtl_cI?si=IIQx26sjTd_Ud7no" target="_blank" class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="media-card">
-                                    <img src="https://picsum.photos/seed/vid2/400/250" alt="أفضل لحظات البث">
-                                    <div class="card-body">
-                                        <h4>أفضل لحظات البث</h4>
-                                        <p>مونتاج حصري</p>
-                                        <div class="btn-group">
-                                            <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</a>
-                                        </div>
-                                    </div>
+                                
                                 </div>
-                                <div class="media-card">
-                                    <img src="https://picsum.photos/seed/vid3/400/250" alt="ورشة عمل">
-                                    <div class="card-body">
-                                        <h4>ورشة عمل</h4>
-                                        <p>تطوير الذات</p>
-                                        <div class="btn-group">
-                                            <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-eye"></i> شاهد الان</a>
-                                        </div>
-                                    </div>
-                                </div>
+                            </div>
+                            <div class="expired-message" style="display:none;">
+                                <i class="fas fa-lock"></i>
+                                <h3>انتهى اشتراكك</h3>
+                                <p>للوصول إلى الفيديوهات، يرجى تجديد اشتراكك.</p>
                             </div>
                         </div>
                     </div>
@@ -1156,35 +1165,21 @@
                             <p>انضم إلى البثوث القادمة وحصريات لك فقط.</p>
                             <div class="grid-cards">
                                 <div class="media-card">
-                                    <img src="https://picsum.photos/seed/stream1/400/250" alt="بث الأربعاء">
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT81YcUS043Em7sRSVnZu5C98P8zdgsU7vd3alVfTJpaA&s=10" alt="بث">
                                     <div class="card-body">
-                                        <h4>بث الأربعاء</h4>
+                                        <h4>بث روبلوكس</h4>
                                         <p>8:00 مساءً</p>
                                         <div class="btn-group">
-                                            <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</a>
+                                            <a href="https://www.youtube.com/watch?v=mUvWxvAj4WE" target="_blank" class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="media-card">
-                                    <img src="https://picsum.photos/seed/stream2/400/250" alt="بث الجمعة">
-                                    <div class="card-body">
-                                        <h4>بث الجمعة</h4>
-                                        <p>10:00 مساءً</p>
-                                        <div class="btn-group">
-                                            <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="media-card">
-                                    <img src="https://picsum.photos/seed/stream3/400/250" alt="بث السبت">
-                                    <div class="card-body">
-                                        <h4>بث السبت</h4>
-                                        <p>6:00 مساءً</p>
-                                        <div class="btn-group">
-                                            <a href="#" target="_blank" class="btn-card-action"><i class="fas fa-broadcast-tower"></i> انضم للبث</a>
-                                        </div>
-                                    </div>
-                                </div>
+                               </div>
+                            </div>
+                            <div class="expired-message" style="display:none;">
+                                <i class="fas fa-lock"></i>
+                                <h3>انتهى اشتراكك</h3>
+                                <p>للوصول إلى البثوث، يرجى تجديد اشتراكك.</p>
                             </div>
                         </div>
                     </div>
@@ -1286,6 +1281,7 @@
             "P10229": { discord: "#1029", name: "مازن", password: "1234", expiry: "2030-08-15" },
             "P10230": { discord: "#2030", name: "عبدالرحمن", password: "5678", expiry: "2026-07-28" },
             "P10231": { discord: "#3031", name: "مشعل", password: "9012", expiry: "2026-07-20" },
+            "P10271": { discord: "#1071", name: "جسار", password: "1212", expiry: "2026-08-01" },
             "P10202": { discord: "#4032", name: "سلمان", password: "1234", expiry: "2020-08-05" }
         };
 
@@ -1295,6 +1291,7 @@
         let expiryDateObj = null;
         let countdownInterval = null;
         let calendarDate = new Date();
+        let isExpired = false;
 
         // ===== DOM =====
         const loginModal = document.getElementById('loginModal');
@@ -1307,8 +1304,6 @@
         const heroLoginBtn = document.getElementById('heroLoginBtn');
         const homePage = document.getElementById('homePage');
         const dashboard = document.getElementById('dashboard');
-        const dashUserName = document.getElementById('dashUserName');
-        const dashUserId = document.getElementById('dashUserId');
         const welcomeName = document.getElementById('welcomeName');
         const discordAccount = document.getElementById('discordAccount');
         const subIdDisplay = document.getElementById('subIdDisplay');
@@ -1442,7 +1437,46 @@
             renderCalendar(calendarDate);
         });
 
-        // ===== COUNTDOWN & STATUS =====
+        // ===== تحديث واجهة المستخدم بناءً على حالة الاشتراك =====
+        function updateUI() {
+            // تحديد إذا كان الاشتراك منتهياً
+            const now = new Date();
+            const diff = expiryDateObj ? expiryDateObj - now : -1;
+            isExpired = (diff <= 0);
+
+            // تحديث صفحات المحتوى (الألعاب، الفيديوهات، البثوث)
+            const pages = ['games', 'videos', 'streams'];
+            pages.forEach(pageId => {
+                const page = document.getElementById('page-' + pageId);
+                if (!page) return;
+                const grid = page.querySelector('.grid-cards');
+                const msg = page.querySelector('.expired-message');
+                if (isExpired) {
+                    if (grid) grid.style.display = 'none';
+                    if (msg) msg.style.display = 'block';
+                } else {
+                    if (grid) grid.style.display = 'grid';
+                    if (msg) msg.style.display = 'none';
+                }
+            });
+
+            // تحديث رسالة الحالة في الصفحة الرئيسية
+            if (isExpired) {
+                subStatusMessage.textContent = ' انتهى اشتراكك يرجى التجديد للاستمرار في المميزات.';
+                statusBadgeContainer.innerHTML =
+                    `<span class="status-badge expired"><i class="fas fa-exclamation-circle"></i> منتهي</span>`;
+            } else {
+                const expiryStr = expiryDateObj ? expiryDateObj.toISOString().slice(0, 10) : '--';
+                subStatusMessage.textContent = ` اشتراكك نشط حتى ${expiryStr}`;
+                statusBadgeContainer.innerHTML =
+                    `<span class="status-badge active"><i class="fas fa-check-circle"></i> نشط</span>`;
+            }
+
+            // إعادة رسم التقويم لتحديث الألوان
+            renderCalendar(calendarDate);
+        }
+
+        // ===== COUNTDOWN =====
         function startCountdown(expiryDate) {
             if (countdownInterval) clearInterval(countdownInterval);
 
@@ -1453,11 +1487,8 @@
 
                 if (diff <= 0) {
                     countdownTimer.textContent = 'انتهى';
-                    subStatusMessage.textContent = ' انتهى اشتراكك يرجى التجديد للاستمرار في المميزات.';
-                    statusBadgeContainer.innerHTML =
-                        `<span class="status-badge expired"><i class="fas fa-exclamation-circle"></i> منتهي</span>`;
                     clearInterval(countdownInterval);
-                    renderCalendar(calendarDate);
+                    updateUI();
                     return;
                 }
 
@@ -1468,11 +1499,10 @@
                 countdownTimer.textContent =
                     `${String(days).padStart(2,'0')} : ${String(hours).padStart(2,'0')} : ${String(mins).padStart(2,'0')} : ${String(secs).padStart(2,'0')}`;
 
-                subStatusMessage.textContent = ` اشتراكك نشط حتى ${expiryStr}`;
-                statusBadgeContainer.innerHTML =
-                    `<span class="status-badge active"><i class="fas fa-check-circle"></i> نشط</span>`;
-
-                renderCalendar(calendarDate);
+                // تحديث واجهة المستخدم إذا تغيرت الحالة (غير منتهي)
+                if (!isExpired) {
+                    updateUI();
+                }
             }
             update();
             countdownInterval = setInterval(update, 1000);
@@ -1497,8 +1527,9 @@
                 passwordDisplay.textContent = user.password;
                 expiryDateDisplay.textContent = user.expiry;
 
+                // بدء العد التنازلي وتحديث الواجهة
                 startCountdown(expiryDateObj);
-                renderCalendar(calendarDate);
+                updateUI();
 
                 // تفعيل التبويب الرئيسي
                 document.querySelectorAll('#dashNav button').forEach(b => b.classList.remove('active'));
@@ -1519,6 +1550,7 @@
             currentUser = null;
             subId = null;
             expiryDateObj = null;
+            isExpired = false;
             dashboard.classList.remove('active');
             homePage.style.display = 'block';
             loginModal.classList.remove('active');
@@ -1534,11 +1566,8 @@
             if (session) {
                 const success = login(session.subId, session.password);
                 if (success) {
-                    // إخفاء أزرار تسجيل الدخول في الهيدر والهيرو
-                    // يمكن إبقاؤها ظاهرة للتبديل، لكننا سنبقيها كما هي
                     return true;
                 } else {
-                    // إذا فشلت الاستعادة (تم تغيير كلمة السر مثلاً) نمسح الجلسة
                     clearSession();
                 }
             }
@@ -1601,6 +1630,5 @@
         // محاولة الدخول التلقائي عند تحميل الصفحة
         tryAutoLogin();
     </script>
-
 </body>
 </html>
