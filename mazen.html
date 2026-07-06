@@ -4,9 +4,10 @@
     <link rel="icon" type="image/png" href="logo.png">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-    <title> MEN </title>
+    <title> MEN2 </title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://engage.moc.gov.sa/e/fonts/saudi-font/?lang=ar" />
     <style>
         /* ===== RESET & BASE ===== */
         * {
@@ -17,7 +18,7 @@
         body {
             background: #060812;
             color: #f0f4ff;
-            font-family: 'Cairo', 'Outfit', sans-serif;
+            font-family: 'Cairo', 'Outfit', 'Saudi', sans-serif;
             line-height: 1.8;
             overflow-x: hidden;
             min-height: 100vh;
@@ -79,31 +80,6 @@
             pointer-events: none;
         }
 
-        /* ===== TWINKLING STARS ===== */
-        .stars-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
-        }
-        .star {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle var(--duration) infinite alternate ease-in-out;
-            box-shadow: 0 0 6px rgba(74, 122, 255, 0.4);
-        }
-        @keyframes twinkle {
-            0% { opacity: 0.15; transform: scale(0.6); }
-            100% { opacity: 1; transform: scale(1.2); }
-        }
-
         h1,
         h2,
         h3,
@@ -155,6 +131,9 @@
             align-items: center;
             gap: 8px;
         }
+        .section-label .icon-badge i {
+            font-size: 1rem;
+        }
 
         /* ===== BUTTONS ===== */
         .btn-primary {
@@ -179,6 +158,7 @@
             transform: translateY(-4px) scale(1.02);
             box-shadow: 0 12px 48px rgba(2, 28, 164, 0.5);
         }
+
         .btn-secondary {
             display: inline-flex;
             align-items: center;
@@ -202,6 +182,7 @@
             transform: translateY(-4px);
             box-shadow: 0 8px 32px rgba(2, 28, 164, 0.10);
         }
+
         .btn-outline-blue {
             display: inline-flex;
             align-items: center;
@@ -223,6 +204,7 @@
             box-shadow: 0 0 30px rgba(2, 28, 164, 0.08);
             transform: translateY(-2px);
         }
+
         .btn-cart {
             background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
             border: none;
@@ -244,6 +226,7 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 32px rgba(2, 28, 164, 0.4);
         }
+
         .btn-cart-remove {
             background: rgba(200, 50, 50, 0.10);
             border: 1px solid rgba(200, 50, 50, 0.2);
@@ -259,6 +242,7 @@
             color: white;
             border-color: #cc4444;
         }
+
         .btn-ai-search {
             background: rgba(2, 28, 164, 0.06);
             border: 1px solid rgba(2, 28, 164, 0.15);
@@ -280,29 +264,6 @@
             box-shadow: 0 0 30px rgba(2, 28, 164, 0.06);
             transform: translateY(-2px);
         }
-        .btn-pass {
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            border: none;
-            border-radius: 60px;
-            padding: 12px 28px;
-            color: #ffffff;
-            font-weight: 800;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.95rem;
-            box-shadow: 0 4px 24px rgba(2, 28, 164, 0.3);
-        }
-        .btn-pass:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 12px 48px rgba(2, 28, 164, 0.4);
-        }
-        .btn-pass-sm {
-            padding: 8px 18px;
-            font-size: 0.85rem;
-        }
 
         /* ===== HEADER ===== */
         header {
@@ -320,6 +281,7 @@
             background: rgba(4, 6, 14, 0.96);
             box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
         }
+
         .header-content {
             display: flex;
             justify-content: space-between;
@@ -327,6 +289,7 @@
             flex-wrap: wrap;
             gap: 14px;
         }
+
         .logo {
             display: flex;
             align-items: center;
@@ -349,11 +312,19 @@
             background-clip: text;
             color: transparent;
         }
+        .logo h1 span {
+            color: var(--blue-light);
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            background: none;
+        }
+
         .header-actions {
             display: flex;
             align-items: center;
             gap: 14px;
         }
+
         .login-header-btn {
             background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
             border: none;
@@ -373,6 +344,7 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 36px rgba(2, 28, 164, 0.4);
         }
+
         .menu-toggle-btn {
             background: rgba(2, 28, 164, 0.08);
             border: 1px solid rgba(2, 28, 164, 0.12);
@@ -393,6 +365,7 @@
             transform: rotate(90deg);
             box-shadow: 0 0 30px rgba(2, 28, 164, 0.06);
         }
+
         .dropdown-menu {
             position: absolute;
             top: 80px;
@@ -512,6 +485,7 @@
                 transform: translate(30px, -30px) scale(1.15);
             }
         }
+
         .hero-luxury .badge {
             display: inline-flex;
             align-items: center;
@@ -530,6 +504,7 @@
         .hero-luxury .badge i {
             color: var(--blue-deep);
         }
+
         .hero-luxury h2 {
             font-size: 4.6rem;
             font-weight: 900;
@@ -543,7 +518,7 @@
         }
         .hero-luxury h2 .highlight {
             display: inline-block;
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-light));
+            background: linear-gradient(135deg, #021ca4, #1a3a9e);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -618,10 +593,6 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             letter-spacing: 0.5px;
             text-transform: uppercase;
-        }
-        .game-card .game-badge.premium {
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            color: #ffffff;
         }
         .game-card .game-content {
             padding: 22px 24px 24px;
@@ -790,6 +761,7 @@
             font-size: 1.05rem;
             line-height: 1.8;
         }
+
         .news-luxury-grid .tile-sub {
             background: var(--card-bg);
             backdrop-filter: blur(16px);
@@ -857,6 +829,7 @@
             color: #b0b8d0;
             font-size: 1.05rem;
         }
+
         .search-cart-wrapper {
             display: flex;
             flex-direction: column;
@@ -923,6 +896,7 @@
             transform: scale(1.04) translateY(-2px);
             box-shadow: 0 8px 36px rgba(2, 28, 164, 0.3);
         }
+
         .search-wrapper {
             position: relative;
             flex: 1;
@@ -982,20 +956,6 @@
             border-color: var(--blue-deep);
             box-shadow: 0 24px 56px -16px rgba(2, 28, 164, 0.06);
         }
-        .product-item.pass-item {
-            border-color: var(--blue-deep);
-            background: rgba(2, 28, 164, 0.04);
-        }
-        .product-item.pass-item:hover {
-            border-color: var(--blue-light);
-            box-shadow: 0 24px 56px -16px rgba(2, 28, 164, 0.12);
-        }
-        .product-item.pass-item .product-name {
-            color: var(--blue-light);
-        }
-        .product-item.pass-item .product-price {
-            color: var(--blue-light);
-        }
         .product-img {
             width: 100%;
             height: 220px;
@@ -1047,66 +1007,6 @@
         .product-actions .btn-ai-search {
             flex: 1;
         }
-        .product-actions .btn-pass-sm {
-            flex: 1;
-            justify-content: center;
-        }
-
-        /* ===== PASS BANNER ===== */
-        .pass-banner {
-            background: linear-gradient(135deg, rgba(2, 28, 164, 0.06), rgba(26, 58, 158, 0.10));
-            border: 1.5px solid rgba(2, 28, 164, 0.15);
-            border-radius: var(--radius-2xl);
-            padding: 36px 44px;
-            margin: 20px 0 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 24px;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(8px);
-        }
-        .pass-banner::before {
-            content: '✦';
-            position: absolute;
-            top: -30%;
-            right: -5%;
-            font-size: 14rem;
-            color: rgba(2, 28, 164, 0.03);
-            pointer-events: none;
-        }
-        .pass-banner .pass-text h2 {
-            font-size: 2.2rem;
-            color: var(--blue-light);
-            margin-bottom: 6px;
-        }
-        .pass-banner .pass-text h2 i {
-            margin-left: 12px;
-        }
-        .pass-banner .pass-text p {
-            color: #b0b8d0;
-            font-size: 1.05rem;
-            max-width: 500px;
-        }
-        .pass-banner .pass-features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px 28px;
-            margin-top: 12px;
-        }
-        .pass-banner .pass-features .feat {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
-            color: #d0d8ee;
-        }
-        .pass-banner .pass-features .feat i {
-            color: var(--blue-light);
-            font-size: 1.1rem;
-        }
 
         /* ===== AI CHAT ===== */
         .ai-chat-box {
@@ -1155,10 +1055,6 @@
         .ai-message.bot b {
             color: var(--blue-light);
             font-weight: 700;
-        }
-        .ai-message.bot .pass-highlight {
-            color: var(--blue-light);
-            font-weight: 800;
         }
         .ai-message.bot ul,
         .ai-message.bot ol {
@@ -1310,18 +1206,6 @@
         .ai-quick-btns .qbtn i {
             margin-left: 6px;
             color: var(--blue-deep);
-        }
-        .ai-quick-btns .qbtn.pass-btn {
-            background: rgba(2, 28, 164, 0.06);
-            border-color: rgba(2, 28, 164, 0.10);
-            color: var(--blue-light);
-        }
-        .ai-quick-btns .qbtn.pass-btn:hover {
-            background: rgba(2, 28, 164, 0.12);
-            border-color: rgba(2, 28, 164, 0.20);
-        }
-        .ai-quick-btns .qbtn.pass-btn i {
-            color: var(--blue-light);
         }
 
         .ai-input-row {
@@ -2108,7 +1992,7 @@
             box-shadow: 0 4px 24px rgba(165, 90, 90, 0.15);
         }
 
-        /* ===== EMPLOYEE CARD ===== */
+        /* ===== EMPLOYEE CARD (HORIZONTAL LUXURY) ===== */
         .employee-card-luxury {
             width: 100%;
             max-width: 100%;
@@ -2333,6 +2217,7 @@
             text-align: center;
         }
 
+        /* متابعة الأعضاء (عمودي) */
         .following-list {
             display: flex;
             flex-direction: column;
@@ -2578,13 +2463,6 @@
                 width: 100%;
                 max-width: 220px;
             }
-            .pass-banner {
-                flex-direction: column;
-                text-align: center;
-            }
-            .pass-banner .pass-features {
-                justify-content: center;
-            }
         }
         @media (max-width:768px) {
             .header-content {
@@ -2771,15 +2649,6 @@
             .barcode-wrapper-h {
                 width: 100%;
             }
-            .pass-banner {
-                padding: 24px 20px;
-            }
-            .pass-banner .pass-text h2 {
-                font-size: 1.8rem;
-            }
-            .pass-banner .pass-features .feat {
-                font-size: 0.85rem;
-            }
         }
         @media (max-width:480px) {
             .login-header-btn {
@@ -2899,15 +2768,6 @@
             .barcode-wrapper-h {
                 width: 100%;
             }
-            .pass-banner .pass-text h2 {
-                font-size: 1.4rem;
-            }
-            .pass-banner .pass-features .feat {
-                font-size: 0.8rem;
-            }
-            .pass-banner {
-                padding: 18px 16px;
-            }
         }
 
         /* ===== TOAST ===== */
@@ -2936,9 +2796,6 @@
             color: var(--blue-light);
             font-size: 1.2rem;
         }
-        .toast-notification i.pass-icon {
-            color: var(--blue-light);
-        }
         @keyframes toastSlide {
             from {
                 opacity: 0;
@@ -2950,7 +2807,7 @@
             }
         }
 
-        /* ===== FIXED AD (hidden for subscribers) ===== */
+        /* ===== إعلان ثابت ===== */
         .fixed-ad {
             position: fixed;
             bottom: 30px;
@@ -3000,7 +2857,7 @@
         .close-ad-btn:active {
             transform: scale(0.95);
         }
-        @media (max-width:480px) {
+        @media (max-width: 480px) {
             .fixed-ad {
                 max-width: 120px;
                 bottom: 15px;
@@ -3014,104 +2871,11 @@
                 right: 6px;
             }
         }
-
-        /* ===== PASS POPUP ===== */
-        .pass-popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            z-index: 4000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-        .pass-popup-overlay.active {
-            display: flex;
-        }
-        .pass-popup {
-            background: rgba(8, 10, 20, 0.98);
-            backdrop-filter: blur(32px);
-            border: 1.5px solid rgba(2, 28, 164, 0.12);
-            border-radius: var(--radius-2xl);
-            width: 90%;
-            max-width: 480px;
-            padding: 40px 34px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
-        }
-        .pass-popup .popup-close {
-            position: absolute;
-            top: 16px;
-            left: 22px;
-            font-size: 26px;
-            cursor: pointer;
-            color: #5a607a;
-            transition: var(--transition);
-        }
-        .pass-popup .popup-close:hover {
-            color: #ffffff;
-            transform: rotate(90deg);
-        }
-        .pass-popup .popup-icon {
-            font-size: 4rem;
-            color: var(--blue-light);
-            margin-bottom: 16px;
-        }
-        .pass-popup h2 {
-            font-size: 2.2rem;
-            color: var(--blue-light);
-            margin-bottom: 8px;
-        }
-        .pass-popup p {
-            color: #b0b8d0;
-            font-size: 1.05rem;
-            margin-bottom: 24px;
-        }
-        .pass-popup .popup-features {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 28px;
-            text-align: right;
-            background: rgba(0, 0, 0, 0.15);
-            padding: 18px 24px;
-            border-radius: var(--radius-xl);
-        }
-        .pass-popup .popup-features .feat {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #d0d8ee;
-            font-size: 0.95rem;
-        }
-        .pass-popup .popup-features .feat i {
-            color: var(--blue-light);
-            font-size: 1.1rem;
-        }
-        .pass-popup .btn-pass {
-            width: 100%;
-            justify-content: center;
-            padding: 16px;
-            font-size: 1.1rem;
-        }
-        .pass-popup .btn-secondary {
-            width: 100%;
-            justify-content: center;
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
 
     <div class="bg-ambient"></div>
-    <!-- ===== TWINKLING STARS ===== -->
-    <div class="stars-container" id="starsContainer"></div>
 
     <!-- ===== HEADER ===== -->
     <header id="mainHeader">
@@ -3141,24 +2905,7 @@
             <!-- ===== HOME ===== -->
             <section id="home" class="page active">
 
-                <!-- ===== PASS BANNER ===== -->
-                <div class="pass-banner" id="passBanner">
-                    <div class="pass-text">
-                        <h2><i class="fas fa-plus-circle"></i> MEN Pass</h2>
-                        <p>افتح عالم الألعاب والمحتوى الحصري مع اشتراك MEN Pass. استمتع بتجربة لا مثيل لها.</p>
-                        <div class="pass-features">
-                            <span class="feat"><i class="fas fa-check-circle"></i> ألعاب أكثر</span>
-                            <span class="feat"><i class="fas fa-video"></i> فيديوهات حصرية للمشتركين</span>
-                            <span class="feat"><i class="fas fa-flask"></i> بحوث متقدمة</span>
-                            <span class="feat"><i class="fas fa-ban"></i> بدون إعلانات</span>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="btn-pass" id="passBannerBtn"><i class="fas fa-plus-circle"></i> اشترك الآن</button>
-                    </div>
-                </div>
-
-                <!-- ===== الإعلان الثابت ===== -->
+                <!-- ===== إعلان ثابت ===== -->
                 <div class="fixed-ad" id="fixedAd">
                     <button class="close-ad-btn" id="closeAdBtn" aria-label="إغلاق الإعلان">✕</button>
                     <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200764_328971.png" alt="إعلان">
@@ -3172,10 +2919,9 @@
                     <p>فريق اللاعبين وصنّاع المحتوى.</p>
                     <div class="btn-group">
                         <a href="pass.html" target="_blank" class="btn-primary">
-                            <i class="fas fa-plus"></i> اشترك الان
-                        </a>
+    <i class="fas fa-plus"></i> اشترك الان
+</a>
                         <a href="https://youtube.com/@clan_men?si=8TEv8fKu5Coppwas" class="btn-secondary"><i class="fas fa-play-circle"></i> شاهد الفيديو</a>
-                        <button class="btn-pass" id="heroPassBtn"><i class="fas fa-plus-circle"></i> MEN Pass</button>
                     </div>
                 </div>
 
@@ -3214,7 +2960,7 @@
                     <h3>ألعاب مميزة</h3>
                     <span class="line"></span>
                 </div>
-                <div class="games-grid" id="gamesGrid">
+                <div class="games-grid">
                     <div class="game-card">
                         <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200539_328971.png" alt="كابتن سنوبل"><span class="game-badge">حصرية</span></div>
                         <div class="game-content">
@@ -3242,28 +2988,6 @@
                             <div class="btn-group"><a href="https://sites.google.com/view/festival-of-creativity/festival-of-creativity" class="btn-outline-blue"><i class="fas fa-ticket-alt"></i> سجل</a></div>
                         </div>
                     </div>
-                    <!-- Premium games -->
-                    <div class="game-card premium-game" id="premiumGame1" style="display:none; border-color:var(--blue-deep);">
-                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN Arena"><span class="game-badge premium">عضوية</span></div>
-                        <div class="game-content">
-                            <h4>MEN Arena <i class="fas fa-plus-circle" style="color:var(--blue-light); font-size:0.9rem;"></i></h4>
-                            <div class="game-meta"><span><i class="fas fa-users"></i> 1K+ لاعب</span><span><i class="fas fa-star"></i> 4.9</span></div>
-                            <p>ساحة معارك حصرية لأعضاء MEN Pass. مواجهات تنافسية وجوائز ضخمة.</p>
-                            <div class="btn-group"><button class="btn-pass btn-pass-sm"><i class="fas fa-plus-circle"></i> اشترك للعب</button></div>
-                        </div>
-                    </div>
-                    <div class="game-card premium-game" id="premiumGame2" style="display:none; border-color:var(--blue-deep);">
-                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200685_328971.png" alt="MENA"><span class="game-badge premium">عضوية</span></div>
-                        <div class="game-content">
-                            <h4>MENA Legends <i class="fas fa-plus-circle" style="color:var(--blue-light); font-size:0.9rem;"></i></h4>
-                            <div class="game-meta"><span><i class="fas fa-users"></i> 750+ لاعب</span><span><i class="fas fa-star"></i> 4.7</span></div>
-                            <p>لعبة أساطير الشرق الأوسط حصرياً للمشتركين. قصص ملحمية وشخصيات أسطورية.</p>
-                            <div class="btn-group"><button class="btn-pass btn-pass-sm"><i class="fas fa-plus-circle"></i> اشترك للعب</button></div>
-                        </div>
-                    </div>
-                </div>
-                <div style="text-align:center; margin-top:-20px; margin-bottom:30px;">
-                    <button id="showMoreGamesBtn" class="btn-outline-blue"><i class="fas fa-plus-circle"></i> عرض ألعاب أكثر (للمشتركين)</button>
                 </div>
 
                 <!-- STATS -->
@@ -3283,7 +3007,7 @@
                         <p>استمتع بألعابنا المصممة خصيصاً لأعضاء MEN</p>
                     </div>
                 </div>
-                <div class="games-grid" id="newsGamesGrid">
+                <div class="games-grid">
                     <div class="game-card">
                         <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200539_328971.png" alt="كابتن سنوبل"><span class="game-badge">حصرية</span></div>
                         <div class="game-content">
@@ -3311,27 +3035,6 @@
                             <div class="btn-group"><a href="https://sites.google.com/view/festival-of-creativity/festival-of-creativity" class="btn-outline-blue"><i class="fas fa-ticket-alt"></i> سجل</a></div>
                         </div>
                     </div>
-                    <div class="game-card premium-game" style="display:none; border-color:var(--blue-deep);">
-                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN Arena"><span class="game-badge premium">عضوية</span></div>
-                        <div class="game-content">
-                            <h4>MEN Arena <i class="fas fa-plus-circle" style="color:var(--blue-light); font-size:0.9rem;"></i></h4>
-                            <div class="game-meta"><span><i class="fas fa-users"></i> 1K+ لاعب</span><span><i class="fas fa-star"></i> 4.9</span></div>
-                            <p>ساحة معارك حصرية لأعضاء MEN Pass.</p>
-                            <div class="btn-group"><button class="btn-pass btn-pass-sm"><i class="fas fa-plus-circle"></i> اشترك للعب</button></div>
-                        </div>
-                    </div>
-                    <div class="game-card premium-game" style="display:none; border-color:var(--blue-deep);">
-                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200685_328971.png" alt="MENA"><span class="game-badge premium">عضوية</span></div>
-                        <div class="game-content">
-                            <h4>MENA Legends <i class="fas fa-plus-circle" style="color:var(--blue-light); font-size:0.9rem;"></i></h4>
-                            <div class="game-meta"><span><i class="fas fa-users"></i> 750+ لاعب</span><span><i class="fas fa-star"></i> 4.7</span></div>
-                            <p>لعبة أساطير الشرق الأوسط حصرياً للمشتركين.</p>
-                            <div class="btn-group"><button class="btn-pass btn-pass-sm"><i class="fas fa-plus-circle"></i> اشترك للعب</button></div>
-                        </div>
-                    </div>
-                </div>
-                <div style="text-align:center; margin:10px 0 30px;">
-                    <button id="showMoreGamesBtn2" class="btn-outline-blue"><i class="fas fa-plus-circle"></i> عرض ألعاب أكثر (للمشتركين)</button>
                 </div>
             </section>
 
@@ -3349,7 +3052,6 @@
                     <div class="cart-ai-row">
                         <button class="cart-toggle-btn" id="cartToggleBtn"><i class="fas fa-shopping-cart"></i> <span class="cart-badge" id="cartBadge">0</span></button>
                         <button class="btn-ai-assistant" id="aiAssistantBtn"><i class="fas fa-wand-sparkles"></i> المساعد Ai</button>
-                        <button class="btn-pass" id="storePassBtn" style="padding:10px 24px; font-size:0.95rem;"><i class="fas fa-plus-circle"></i> MEN Pass</button>
                     </div>
                     <div class="search-wrapper">
                         <input type="text" id="storeSearchInput" placeholder="ابحث عن منتجك ...">
@@ -3430,7 +3132,6 @@
                     <div class="faq-item"><div class="q">ما هي متطلبات العضوية؟ <i class="fas fa-chevron-down"></i></div><div class="a">نبحث عن المواهب في الألعاب الإلكترونية، صناعة المحتوى، والإدارة. لكل مجال متطلباته الخاصة.</div></div>
                     <div class="faq-item"><div class="q">هل توجد جوائز مالية؟ <i class="fas fa-chevron-down"></i></div><div class="a">نعم، نوفر جوائز مالية للفائزين في البطولات ولأعضاء الفريق المتميزين.</div></div>
                     <div class="faq-item"><div class="q">كيف يمكنني دعم MEN؟ <i class="fas fa-chevron-down"></i></div><div class="a">يمكنك متابعتنا على وسائل التواصل، المشاركة في الفعاليات.</div></div>
-                    <div class="faq-item"><div class="q">ما هو MEN Pass؟ <i class="fas fa-chevron-down"></i></div><div class="a">MEN Pass هو اشتراك مميز يمنحك ألعاباً حصرية، فيديوهات خاصة، بحوث متقدمة، وتجربة خالية من الإعلانات.</div></div>
                 </div>
             </section>
 
@@ -3509,33 +3210,14 @@
                 <button class="qbtn" data-query="ماذا في سلتي؟">🛒 سلتي</button>
                 <button class="qbtn" data-query="عروض">🎁 عروض</button>
                 <button class="qbtn" data-query="مساعدة">❓ مساعدة</button>
-                <button class="qbtn pass-btn" data-query="ما هو MEN Pass؟"><i class="fas fa-plus-circle"></i> MEN Pass</button>
             </div>
             <div class="ai-chat-box" id="aiChatBox">
-                <div class="ai-message bot">✨ مرحباً! أنا <strong>مساعدك الذكي</strong> والمستشار الشخصي. اسألني عن المنتجات، العروض، أو ساعدني في اختيار ما يناسبك. اكتب سؤالك بالعربية.<br><br>💡 <span class="pass-highlight">جرب السؤال عن MEN Pass</span> لتعرف المزيد عن الاشتراك المميز.</div>
+                <div class="ai-message bot">✨ مرحباً! أنا <strong>مساعدك الذكي</strong> والمستشار الشخصي. اسألني عن المنتجات، العروض، أو ساعدني في اختيار ما يناسبك. اكتب سؤالك بالعربية.</div>
             </div>
             <div class="ai-input-row">
                 <input type="text" id="aiUserInput" placeholder="اسألني عن أي شيء ...">
                 <button id="aiSendBtn"><i class="fas fa-paper-plane"></i></button>
             </div>
-        </div>
-    </div>
-
-    <!-- ===== PASS POPUP ===== -->
-    <div id="passPopup" class="pass-popup-overlay">
-        <div class="pass-popup">
-            <div class="popup-close" id="passPopupClose"><i class="fas fa-times"></i></div>
-            <div class="popup-icon"><i class="fas fa-plus-circle"></i></div>
-            <h2>MEN Pass</h2>
-            <p>اشتراكك المميز يفتح لك عالم الألعاب والمحتوى الحصري</p>
-            <div class="popup-features">
-                <div class="feat"><i class="fas fa-gamepad"></i> <strong>ألعاب أكثر</strong> — محتوى ألعاب حصري ومتنوع</div>
-                <div class="feat"><i class="fas fa-video"></i> <strong>فيديوهات المشتركين</strong> — محتوى فيديو حصري للمشتركين</div>
-                <div class="feat"><i class="fas fa-flask"></i> <strong>بحوث متقدمة</strong> — تحليلات واستراتيجيات احترافية</div>
-                <div class="feat"><i class="fas fa-ban"></i> <strong>بدون إعلانات</strong> — تجربة نظيفة وخالية من الإعلانات</div>
-            </div>
-            <button class="btn-pass" id="passPopupSubscribe"><i class="fas fa-plus-circle"></i> أضف للسلة — 7.50 ر.س</button>
-            <button class="btn-secondary" id="passPopupCloseBtn">تذكر لاحقاً</button>
         </div>
     </div>
 
@@ -3572,6 +3254,7 @@
                     { type: "دورة", title: "دورة القيادة الفعالة", date: "2026-02-10", status: "حضر" },
                     { type: "جلسة", title: "جلسة مراجعة الأداء", date: "2026-03-05", status: "غاب" }
                 ] },
+
             "U2020": { pass: "12345", fullName: "محمد ثامر العنزي", phone: "0502799166", discord: "8u4", userId: "U2020",
                 points: "52", category: "صانع محتوى",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
@@ -3581,6 +3264,7 @@
                     { type: "اجتماع", title: "اجتماع ", date: "2026-06-20", status: "غاب" },
                     { type: "اجتماع", title: "اجتماع", date: "2026-06-14", status: "غاب" }
                 ] },
+
             "U2021": { pass: "123456", fullName: "صالح محمد الزهراني", phone: "0549724238", discord: "sl_z7h._57465",
                 userId: "U2021", points: "46", category: "إداري + رئيس الإدارة العليا",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
@@ -3591,6 +3275,7 @@
                     { type: "اجتماع", title: "اجتماع الإدارة العليا", date: "2026-01-10", status: "حضر" },
                     { type: "دورة", title: "دورة التخطيط الإستراتيجي", date: "2026-02-20", status: "قادم" }
                 ] },
+
             "U2022": { pass: "Mz102030", fullName: "مازن بن منصور السلمي", phone: "0543431914", discord: "mazen_x",
                 userId: "U2022", points: "73", category: "رئيس مجلس المشروع",
                 avatar: "https://www.socialcreator.com/srv/imgs/ti_imgs/197914_309202.png", activities: ["إدارة المشاريع"],
@@ -3601,9 +3286,10 @@
                     { type: "دورة", title: "دورة إدارة المشاريع", date: "2026-01-25", status: "حضر" },
                     { type: "جلسة", title: "اجتماع متابعة السيرفر", date: "2026-07-07", status: "قادم" },
                     { type: "جلسة", title: "اجتماع مجلس الادارة", date: "2026-07-07", status: "قادم" },
-                    { type: "دورة", title: "دورة التخطيط الإستراتيجي", date: "2026-02-20", status: "قادم" }
+                      { type: "دورة", title: "دورة التخطيط الإستراتيجي", date: "2026-02-20", status: "قادم" }  
                 ],
                 following: ["يزيد النفيعي", "عبدالرحمن الزهراني", "مشعل السلمي", "صالح الزهراني", "حسن الشريف", "محمد العنزي"] },
+
             "U2023": { pass: "12345", fullName: "يزيد يوسف النفيعي", phone: "0538322511", discord: "bzgif", userId: "U2023",
                 points: "50", category: "إداري + مسؤول التقديم",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
@@ -3614,6 +3300,7 @@
                     { type: "اجتماع", title: "اجتماع التوظيف", date: "2026-06-12", status: "حضر" },
                     { type: "دورة", title: "اجتماع دليل الإدارة", date: "2026-06-05", status: "حضر" }
                 ] },
+
             "U2026": { pass: "1417", fullName: "مشعل منصور البنوي", phone: "05696069087", discord: "meshal71001",
                 userId: "U2026", points: "38", category: "رئيس مجلس الإدارة",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
@@ -3623,6 +3310,7 @@
                     { type: "اجتماع", title: "اجتماع مجلس الإدارة", date: "2026-01-08", status: "حضر" },
                     { type: "جلسة", title: "اجتماع مجلس الادارة", date: "2026-07-07", status: "قادم" }
                 ] },
+
             "U2027": { pass: "123123", fullName: "حسن محمد الشريف", phone: "0562250944", discord: "hss0328",
                 userId: "U2027", points: "48", category: "إداري + مسؤول السيرفر",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
@@ -3633,15 +3321,19 @@
                     { type: "اجتماع", title: "اجتماع السيرفر", date: "2026-06-18", status: "حضر" },
                     { type: "اجتماع", title: "اجتماع متابعة السيرفر", date: "2026-07-07", status: "قادم" }
                 ] },
+
+
             "U2025": { pass: "12345678", fullName: "جسار وليد السلمي", phone: "0542360558", discord: "غير متوفر",
                 userId: "U2025", points: "0", category: "لاعب",
                 avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
                 activities: ["لاعب هاوي"], monthEarn: "0 ر.س", totalEarn: "0 ر.س", followers: "0", dueDate: "2021-12-30",
                 customMsg: "<p>لاعب لـ TEAM MEN.</p>", attendance: 1, absences: 0, leaves: 0,
-                meetings: [
-                    { type: "دورة", title: "تدريب فورت نايت", date: "2026-07-20", status: "قادم" },
-                    { type: "دورة", title: "تدريب فورت نايت", date: "2026-06-29", status: "حضر" }
-                ] },
+                meetings: [ 
+{ type: "دورة", title: "تدريب فورت نايت", date: "2026-07-20", status: "قادم" },
+{ type: "دورة", title: "تدريب فورت نايت", date: "2026-06-29", status: "حضر" }
+ ] },
+
+
             "U2024": { pass: "X2h3054", fullName: "عبدالرحمن سعد الزهراني", phone: "0556655679", discord: "racer702",
                 userId: "U2024", points: "46", category: "نائب رئيس مجلس الإدارة",
                 avatar: "https://e7.pngegg.com/pngimages/813/118/png-clipart-silhouette-icon-blank-person-template-share-icon-black-and-white.png",
@@ -3669,26 +3361,6 @@
         let lastViewedProductId = null;
         let favorites = [];
         let viewedHistory = [];
-        let isSubscriber = false;
-
-        // ==================== TWINKLING STARS ====================
-        function createStars() {
-            const container = document.getElementById('starsContainer');
-            if (!container) return;
-            const count = 120;
-            for (let i = 0; i < count; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                const size = Math.random() * 3 + 1;
-                star.style.width = size + 'px';
-                star.style.height = size + 'px';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.setProperty('--duration', (Math.random() * 2 + 1.5) + 's');
-                star.style.animationDelay = (Math.random() * 3) + 's';
-                container.appendChild(star);
-            }
-        }
 
         // ==================== PRODUCTS ====================
         const productsArray = [
@@ -3717,15 +3389,17 @@
                 tags: ["سوني", "ستور", "رقمي", "هدية", "ألعاب"],
                 usage: "أدخل الكود في متجر PlayStation لإضافة الرصيد.",
                 warranty: "ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular: false },
-            // MEN Pass product - Price updated to 7.50
-            { id: 999, name: "MEN Pass — اشتراك شهري", price: "7.50",
-                image: "https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png", link: "#",
-                category: "اشتراكات", rating: 5.0, features: ["ألعاب حصرية", "فيديوهات للمشتركين", "بحوث متقدمة",
-                    "بدون إعلانات"
-                ],
-                cons: ["لا يوجد"], description: "اشتراك MEN Pass الشهري يمنحك وصولاً غير محدود إلى محتوى حصري: ألعاب أكثر، فيديوهات خاصة، بحوث استراتيجية، وتجربة خالية من الإعلانات.",
-                tags: ["اشتراك", "مميز", "حصري", "ألعاب", "فيديوهات", "بحوث"], usage: "بعد الشراء، سيتم تفعيل اشتراكك فوراً. استمتع بكل المزايا الحصرية.",
-                warranty: "ضمان استرداد خلال 14 يوماً", popular: true }
+            // MEN Pass المنتج الجديد
+            { id: 5, name: "اشتراك MEN Pass", price: "7.50",
+                image: "https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png",
+                link: "#", category: "اشتراكات", rating: 5.0,
+                features: ["🎮 ألعاب حصرية للمشتركين", "📹 محتوى فيديو حصري", "📚 أبحاث وتقارير شهرية", "🚫 بدون إعلانات", "دعم فني 24/7"],
+                cons: ["الاشتراك شهري قابل للتجديد"], 
+                description: "اشتراك MEN Pass يمنحك وصولاً غير محدود إلى محتوى حصري من ألعاب وفيديوهات وأبحاث، بدون أي إعلانات مزعجة.",
+                tags: ["اشتراك", "عضوية", "حصرية", "ألعاب", "فيديوهات", "أبحاث"],
+                usage: "بعد الشراء، سيتم إرسال تفاصيل الدخول إلى بريدك الإلكتروني خلال 24 ساعة.",
+                warranty: "ضمان استرداد خلال 7 أيام في حال عدم الرضا",
+                popular: true }
         ];
 
         const reviewsData = [
@@ -3733,60 +3407,8 @@
             { author: "نورة العتيبي", stars: 4, text: "خدمة سريعة ومنتجات جيدة." },
             { author: "خالد الحربي", stars: 5, text: "أفضل تيشيرتات في السوق." },
             { author: "سارة الغامدي", stars: 4, text: "الشحن سريع والدعم متعاون." },
-            { author: "فيصل المالكي", stars: 3, text: "منتج جيد لكن السعر مرتفع قليلاً." },
-            { author: "منى السعد", stars: 5, text: "MEN Pass غير تجربتي! ألعاب رائعة ومحتوى مميز." }
+            { author: "فيصل المالكي", stars: 3, text: "منتج جيد لكن السعر مرتفع قليلاً." }
         ];
-
-        // ==================== PASS FUNCTIONS ====================
-        function checkSubscription() {
-            const stored = localStorage.getItem('men_pass_subscriber');
-            isSubscriber = stored === 'true';
-            return isSubscriber;
-        }
-
-        function setSubscription(status) {
-            isSubscriber = status;
-            localStorage.setItem('men_pass_subscriber', status ? 'true' : 'false');
-            updateUIForSubscription();
-        }
-
-        function updateUIForSubscription() {
-            document.querySelectorAll('.premium-game').forEach(el => {
-                el.style.display = isSubscriber ? 'block' : 'none';
-            });
-            const ad = document.getElementById('fixedAd');
-            if (ad) {
-                ad.style.display = isSubscriber ? 'none' : 'block';
-            }
-            // Update pass buttons (but keep them as "add to cart" functionally)
-            const passBtns = document.querySelectorAll('.btn-pass, .btn-pass-sm');
-            passBtns.forEach(btn => {
-                if (isSubscriber) {
-                    btn.innerHTML = '<i class="fas fa-check-circle"></i> مشترك';
-                    btn.style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
-                    btn.style.boxShadow = '0 4px 24px rgba(76,175,80,0.3)';
-                } else {
-                    btn.innerHTML = '<i class="fas fa-plus-circle"></i> اشترك الآن';
-                    btn.style.background = 'linear-gradient(135deg, var(--blue-deep), var(--blue-mid))';
-                    btn.style.boxShadow = '0 4px 24px rgba(2,28,164,0.3)';
-                }
-            });
-            const banner = document.getElementById('passBanner');
-            if (banner) {
-                const textEl = banner.querySelector('.pass-text p');
-                if (isSubscriber) {
-                    textEl.textContent = '🎉 أنت مشترك في MEN Pass! استمتع بكل المزايا الحصرية.';
-                    const btns = banner.querySelectorAll('.btn-pass');
-                    btns.forEach(b => {
-                        b.innerHTML = '<i class="fas fa-check-circle"></i> مفعل';
-                        b.style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
-                        b.style.boxShadow = '0 4px 24px rgba(76,175,80,0.3)';
-                    });
-                } else {
-                    textEl.textContent = 'افتح عالم الألعاب والمحتوى الحصري مع اشتراك MEN Pass. استمتع بتجربة لا مثيل لها.';
-                }
-            }
-        }
 
         // ==================== UTILITIES ====================
         function showToast(msg, type = "info") {
@@ -3796,13 +3418,103 @@
             toast.className = 'toast-notification';
             let icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' : (type === 'error' ?
                 '<i class="fas fa-times-circle"></i>' : '<i class="fas fa-info-circle"></i>');
-            if (msg.includes('MEN Pass')) icon = '<i class="fas fa-plus-circle pass-icon"></i>';
             toast.innerHTML = `${icon} <span>${msg}</span>`;
             document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 5000);
+            setTimeout(() => toast.remove(), 4000);
         }
 
-        // ==================== INTELLIGENT FUNCTIONS (simplified for context) ====================
+        async function sendToWebhook(url, data, successMsg) {
+            try {
+                await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data) });
+                showToast(successMsg || "تم الإرسال", "success");
+            } catch (e) { showToast("فشل الإرسال", "error"); }
+        }
+
+        function buildBaseEmbed(title, color, additional = []) {
+            return {
+                title,
+                color,
+                fields: [
+                    { name: "الاسم الكامل", value: currentUserData.fullName, inline: true },
+                    { name: "الرقم الوظيفي", value: currentUserData.userId, inline: true },
+                    { name: "رقم الجوال", value: currentUserData.phone, inline: true },
+                    ...additional
+                ],
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        async function sendLoginWebhook() { if (!currentUserData) return;
+            const embed = buildBaseEmbed("تسجيل دخول", 0x021ca4, [{ name: "المنصب", value: currentUserData.category,
+                inline: true }]);
+            await sendToWebhook(WEBHOOKS.login, { embeds: [embed], content: `**${currentUserData.fullName}** دخل` },
+            "تم إشعار الدخول"); }
+
+        async function sendLogoutWebhook() { if (!currentUserData) return;
+            const embed = buildBaseEmbed("تسجيل خروج", 0xff4444);
+            await sendToWebhook(WEBHOOKS.login, { embeds: [embed], content: `**${currentUserData.fullName}** خرج` },
+            "تم إشعار الخروج"); }
+
+        async function sendUserReward() { if (!currentUserData) return;
+            const embed = buildBaseEmbed("طلب مكافأة", 0x021ca4, [{ name: "النقاط", value: currentUserData.points,
+                    inline: true }, { name: "المبلغ الحالي", value: currentUserData.totalEarn, inline: true }]);
+            await sendToWebhook(WEBHOOKS.reward, { embeds: [embed] }, "تم طلب المكافأة"); }
+
+        async function sendAttendance() { if (!currentUserData) return;
+            const embed = buildBaseEmbed("طلب تحضير", 0x021ca4);
+            await sendToWebhook(WEBHOOKS.attendance, { embeds: [embed],
+                content: `**${currentUserData.fullName}** سجل دوام` }, "تم تسجيل الدوام"); }
+
+        async function sendMeetingPrep(notes) { if (!currentUserData || !notes.trim()) return showToast(
+                "أدخل ملاحظات", "error");
+            const embed = buildBaseEmbed("تحضير اجتماع", 0x021ca4, [{ name: "ملاحظات", value: notes.substring(0, 900),
+                    inline: false }]);
+            await sendToWebhook(WEBHOOKS.attendance, { embeds: [embed] }, "تم إرسال التحضير"); }
+
+        async function completeTask() { if (!currentUserData?.dueDate || currentUserData.dueDate === '-') return showToast(
+                "لا مهمة نشطة", "error"); if (currentUserData.taskCompleted) return showToast("مكتملة سابقاً",
+            "error");
+            currentUserData.taskCompleted = true;
+            const embed = buildBaseEmbed("إكمال المهمة", 0x4caf50, [{ name: "المهمة", value: currentUserData.customMsg
+                    ?.replace(/<[^>]*>/g, '').substring(0, 200) || "مهمة", inline: false }]);
+            await sendToWebhook(WEBHOOKS.task, { embeds: [embed] }, "تم إنهاء المهمة");
+            updateTaskUI();
+            updateCountdown();
+            updateDetailedTimer(); }
+
+        async function resetTask() { if (!currentUserData) return;
+            currentUserData.taskCompleted = false;
+            await sendToWebhook(WEBHOOKS.task, { embeds: [buildBaseEmbed("طلب إعادة المهمة", 0xffaa00, [{ name: "تاريخ الاستحقاق",
+                        value: currentUserData.dueDate, inline: true }])] }, "تم طلب الإعادة");
+            updateTaskUI();
+            updateCountdown();
+            updateDetailedTimer(); }
+
+        async function sendVisitorWebhook() {
+            try {
+                const data = { content: ` **زيارة جديدة للموقع - اشتراك MEN Pass**`,
+                    embeds: [{
+                        title: "معلومات الزائر",
+                        color: 0x021ca4,
+                        fields: [
+                            { name: "الصفحة", value: window.location.href, inline: false },
+                            { name: "المتصفح", value: navigator.userAgent.substring(0, 80), inline: true },
+                            { name: "اللغة", value: navigator.language, inline: true },
+                            { name: "دقة الشاشة", value: `${window.screen.width}x${window.screen.height}`,
+                                inline: true },
+                            { name: "الوقت", value: new Date().toLocaleString('ar-SA'), inline: true },
+                            { name: "🎫 اشتراك MEN Pass", value: "متاح الآن في المتجر!", inline: false }
+                        ],
+                        timestamp: new Date().toISOString()
+                    }]
+                };
+                await fetch(WEBHOOKS.visitor, { method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data) });
+            } catch (e) { console.log("فشل إرسال إشعار الزيارة"); }
+        }
+
+        // ==================== INTELLIGENT FUNCTIONS ====================
         function similarity(s1, s2) {
             if (!s1 || !s2) return 0;
             const a = s1.toLowerCase().trim(),
@@ -3831,6 +3543,34 @@
             return { keywords, priceRange };
         }
 
+        const synonyms = {
+            "تيشيرت": ["تيشيرت", "قميص", "بلوزة", "تشرت"],
+            "ستور": ["ستور", "بطاقة", "شحن", "كريدت"],
+            "روبلوكس": ["روبلوكس", "روبلكس", "roblox"],
+            "ببجي": ["ببجي", "pubg", "ببج"],
+            "ملابس": ["تيشيرت", "قميص", "بلوزة", "جينز"],
+            "بطاقات": ["ستور", "روبلوكس", "ببجي", "شحن"],
+            "هدية": ["هدية", "تقديم", "مناسبة"],
+            "سفر": ["سفر", "سياحة", "رحلة"],
+            "أسود": ["أسود", "داكن", "غامق"],
+            "صيفي": ["صيف", "صيفي", "حر"],
+            "رقمي": ["رقمي", "الكتروني", "كود", "بطاقة"],
+            "ألعاب": ["لعبة", "ألعاب", "جيم", "gaming"],
+            "سوني": ["سوني", "بلايستيشن", "playstation", "ps"],
+            "pass": ["pass", "باس", "اشتراك", "عضوية", "الاشتراك"],
+            "اشتراك": ["اشتراك", "عضوية", "pass", "باس"]
+        };
+
+        function getCategoryFromWord(word) {
+            const map = { "ملابس": ["تيشيرت", "قميص", "بلوزة", "جينز", "شورت", "سروال"],
+                "بطاقات شحن": ["ستور", "روبلوكس", "ببجي", "بطاقة", "كود", "شحن", "كريدت", "سوني"],
+                "ألعاب": ["لعبة", "جيم", "gaming", "بلاي", "ستيشن"],
+                "إلكترونيات": ["جهاز", "كمبيوتر", "لاب", "تلفاز", "شاشة", "سماعة"],
+                "اشتراكات": ["اشتراك", "عضوية", "pass", "باس"] };
+            for (let cat in map) { if (map[cat].some(s => word.includes(s))) return cat; }
+            return null;
+        }
+
         function findClosestMatch(query) {
             const { keywords, priceRange } = extractKeywords(query);
             if (keywords.length === 0 && !priceRange) return { products: [], exact: false };
@@ -3842,6 +3582,12 @@
                     let sim = similarity(kw, p.name);
                     if (sim > bestSim) bestSim = sim;
                     for (let tag of p.tags) { let s = similarity(kw, tag); if (s > bestSim) bestSim = s; }
+                    let syns = getSynonyms(kw);
+                    for (let syn of syns) {
+                        let s = similarity(syn, p.name);
+                        if (s > bestSim) bestSim = s;
+                        for (let tag of p.tags) { let t = similarity(syn, tag); if (t > bestSim) bestSim = t; }
+                    }
                 }
                 let inRange = true;
                 if (priceRange) { const pPrice = parseFloat(p.price); if (pPrice < priceRange * 0.5 || pPrice >
@@ -3864,45 +3610,211 @@
             const ids = new Set();
             for (let r of result) { if (!ids.has(r.product.id)) { ids.add(r.product.id);
                     unique.push(r); } }
-            return { products: unique.map(r => r.product), exact: unique.length > 0 && unique[0].sim > 0.75 };
+            if (keywords.some(k => ["أرخص", "اقل", "أقل", "رخيص"].includes(k))) unique.sort((a, b) => parseFloat(a.product
+                .price) - parseFloat(b.product.price));
+            if (keywords.some(k => ["أغلى", "اعلى", "أعلى"].includes(k))) unique.sort((a, b) => parseFloat(b.product
+                .price) - parseFloat(a.product.price));
+            return { products: unique.map(r => r.product), exact: unique.length > 0 && unique[0].sim > 0.85 };
         }
 
-        function getAIResponse(userText) {
-            const lower = userText.toLowerCase();
-            const { keywords } = extractKeywords(userText);
+        function getLastInteractedProduct() {
+            if (lastViewedProductId !== null) { const p = productsArray.find(pr => pr.id === lastViewedProductId); if (
+                    p) return p; }
+            return null;
+        }
 
-            if (lower.includes('pass') || lower.includes('اشتراك') || lower.includes('مين باس') ||
-                lower.includes('men pass') || lower.includes('الباس')) {
-                if (isSubscriber) {
-                    return `✅ أنت مشترك بالفعل في <span class="pass-highlight">MEN Pass</span>! 🎉\n\nاستمتع بكل المزايا:\n✅ ألعاب حصرية\n✅ فيديوهات للمشتركين\n✅ بحوث متقدمة\n✅ تجربة بدون إعلانات`;
-                }
-                return `➕ <span class="pass-highlight">MEN Pass</span> — اشتراكك المميز\n\n📦 السعر: <strong>7.50 ر.س</strong> / شهر\n\n🎁 <strong>المزايا:</strong>\n• 🎮 <strong>ألعاب أكثر</strong>\n• 🎬 <strong>فيديوهات المشتركين</strong>\n• 🔬 <strong>بحوث متقدمة</strong>\n• 🚫 <strong>بدون إعلانات</strong>\n\n💡 أضفه للسلة: اكتب "أضف MEN Pass" أو اضغط على زر الإضافة في المتجر.`;
-            }
-            // Fallback to basic
-            return `🔍 كيف يمكنني مساعدتك؟ جرب السؤال عن "MEN Pass" أو "عرض المنتجات".`;
+        function getSimilarProducts(productId) {
+            const target = productsArray.find(p => p.id === productId);
+            if (!target) return [];
+            return productsArray.filter(p => p.id !== productId && p.category === target.category).slice(0, 3);
+        }
+
+        function getGiftSuggestions() { return productsArray.filter(p => p.rating >= 4.5).sort((a, b) => b.rating - a
+                .rating).slice(0, 3); }
+
+        function getCartSummaryHTML() {
+            if (cartItems.length === 0) return "🛒 سلتك فارغة حالياً.";
+            let html = "🧾 محتويات سلتك:\n\n";
+            let total = 0;
+            cartItems.forEach(p => { const subtotal = parseFloat(p.price) * p.quantity;
+                total += subtotal;
+                html += `- ${p.name} × ${p.quantity} = ${subtotal.toFixed(2)} ر.س\n`; });
+            html += `\n💰 الإجمالي: ${total.toFixed(2)} ر.س`;
+            if (discountApplied && discountPercent > 0) { const disc = total * (discountPercent / 100);
+                html += ` (خصم ${discountPercent}% = -${disc.toFixed(2)} ر.س) → **${(total - disc).toFixed(2)} ر.س**`; }
+            return html;
         }
 
         function getProductAdvice(productId) {
             const p = productsArray.find(pr => pr.id === productId);
             if (!p) return "⚠️ المنتج غير موجود.";
-            return `🔍 **${p.name}**\n💰 السعر: ${p.price} ر.س\n⭐ التقييم: ${p.rating}/5\n📝 ${p.description}`;
+            let advice = `🔍 **نصيحة حول ${p.name}**\n\n⭐ التقييم: ${p.rating}/5\n📂 التصنيف: ${p.category}\n💰 السعر: ${p.price} ر.س\n📝 الوصف: ${p.description}\n✨ المميزات:\n`;
+            p.features.forEach(f => advice += `  ✅ ${f}\n`);
+            if (p.cons && p.cons.length) { advice += `⚠️ العيوب:\n`;
+                p.cons.forEach(c => advice += `  ❌ ${c}\n`); }
+            advice += `🛠️ طريقة الاستخدام: ${p.usage}\n🛡️ الضمان: ${p.warranty}\n🏷️ الوسوم: ${p.tags.join('، ')}\n`;
+            if (p.popular) advice += `🔥 **هذا المنتج الأكثر مبيعاً!**\n`;
+            advice += `\n💡 هل تريد إضافته إلى السلة؟ اكتب "أضف ${p.name}"`;
+            return advice;
+        }
+
+        function simulateTrackOrder(orderId) {
+            return `📦 **طلب رقم ${orderId}**\n🔄 الحالة: قيد التجهيز\n📅 موعد الوصول المتوقع: لا أعلم\n🔢 رقم التتبع: TRK-2026-001\n📞 للاستفسار: clan.men.ts@gmail.com`;
+        }
+
+        function getPersonalizedOffers(category) {
+            if (!category) {
+                const all = productsArray.filter(p => p.popular).slice(0, 3);
+                if (all.length === 0) return "🎁 لا توجد عروض حالياً، تابعنا للمزيد.";
+                return `🎁 **عروض خاصة لك:**\n${all.map(p => `- **${p.name}** بسعر ${p.price} ر.س (${p.category})`).join('\n')}\n\n🔖 استخدم كود **MEN1** لخصم إضافي 10% على الإلكترونيات.`;
+            }
+            const filtered = productsArray.filter(p => p.category === category);
+            if (filtered.length === 0) return `🎁 لا توجد منتجات في فئة "${category}"، لكن يمكنك الاطلاع على الكل.`;
+            return `🎁 **عروض مخصصة لفئة ${category}:**\n${filtered.map(p => `- **${p.name}** بسعر ${p.price} ر.س (تقييم ${p.rating})`).join('\n')}\n\n💡 كوبون خصم: **${category.toUpperCase()}10** للحصول على 10% خصم.`;
+        }
+
+        function addToFavorites(productId) {
+            if (!favorites.includes(productId)) { favorites.push(productId);
+                showToast("❤️ تمت إضافة المنتج للمفضلة", "success"); } else showToast("⚠️ المنتج موجود بالفعل في المفضلة",
+                "info");
+        }
+
+        function getFavoritesHTML() {
+            if (favorites.length === 0) return "❤️ لا توجد منتجات في المفضلة.";
+            const items = favorites.map(id => productsArray.find(p => p.id === id)).filter(Boolean);
+            return "❤️ **منتجاتك المفضلة:**\n\n" + items.map(p => `- **${p.name}** (${p.price} ر.س)`).join('\n');
+        }
+
+        // ==================== CORE AI RESPONSE ====================
+        function getAIResponse(userText) {
+            const lower = userText.toLowerCase();
+            const { keywords, priceRange } = extractKeywords(userText);
+
+            // الكشف عن الـ Pass
+            if (lower.includes('pass') || lower.includes('باس') || lower.includes('الاشتراك') || lower.includes('اشتراك') || 
+                lower.includes('العضوية') || lower.includes('الـ pass') || lower.includes('pass')) {
+                const passProduct = productsArray.find(p => p.id === 5);
+                if (passProduct) {
+                    lastViewedProductId = passProduct.id;
+                    return getProductAdvice(passProduct.id) + 
+                        `\n\n🛒 **لشراء اشتراك MEN Pass، يمكنك:**\n1. إضافته مباشرة إلى السلة بالضغط على زر "إضافة" أعلاه.\n2. أو كتابة "أضف اشتراك MEN Pass" وسأقوم بإضافته لك.\n3. أو الذهاب إلى المتجر والبحث عنه.`;
+                }
+            }
+
+            if (lower.includes('مرحب') || lower.includes('سلام') || lower.includes('اهلا') || lower.includes('hi') ||
+                lower.includes('hello')) {
+                return `👋 أهلاً وسهلاً! أنا مساعد MEN الذكي.\n\nأستطيع مساعدتك في:\n• عرض المنتجات والبحث عنها.\n• مقارنة المنتجات.\n• نصائح الشراء.\n• تتبع الطلبات.\n• العروض والكوبونات.\n• إدارة السلة والمفضلة.\n• **🎫 اشتراك MEN Pass** - اسألني عنه!\n\n📌 اكتب ما تريده بالعربية، وسأفهمك.`;
+            }
+            if (lower.includes('شكر') || lower.includes('thank')) return '🙏 الشكر لك! أنا هنا لخدمتك دائماً. هل تحتاج مساعدة أخرى؟ 😊';
+
+            if (lower.includes('سلتي') || lower.includes('ماذا في السلة') || lower.includes('show cart') || lower.includes(
+                    'my cart')) {
+                return getCartSummaryHTML() + '\n\n📌 هل تريد إضافة منتج معين أو إزالة شيء؟';
+            }
+
+            if (lower.includes('مفضلة') || lower.includes('المفضلة') || lower.includes('favorite')) return getFavoritesHTML();
+
+            if (lower.includes('تتبع') || lower.includes('أين طلبي') || lower.includes('track') || lower.includes(
+                'order')) {
+                const orderId = lower.match(/\d+/)?.[0] || "2026-001";
+                return simulateTrackOrder(orderId);
+            }
+
+            if (lower.includes('عرض') || lower.includes('خصم') || lower.includes('كوبون') || lower.includes('offer') ||
+                lower.includes('discount') || lower.includes('coupon')) {
+                let category = null;
+                for (let kw of keywords) { const cat = getCategoryFromWord(kw); if (cat) { category = cat; break; } }
+                return getPersonalizedOffers(category);
+            }
+
+            if (lower.includes('قارن') || lower.includes('compare') || lower.includes('مقارنة')) {
+                let found = [];
+                for (let kw of keywords) {
+                    for (let p of productsArray) {
+                        if (p.name.toLowerCase().includes(kw) || kw.includes(p.name.toLowerCase())) {
+                            if (!found.includes(p.id)) found.push(p.id);
+                        }
+                    }
+                }
+                if (found.length < 2) {
+                    const search = findClosestMatch(userText);
+                    if (search.products.length >= 2) found = search.products.slice(0, 2).map(p => p.id);
+                    else return "⚠️ للمقارنة، اذكر منتجين بالاسم، مثل: 'قارن بين تيشيرت وستور'";
+                }
+                const p1 = productsArray.find(p => p.id === found[0]);
+                const p2 = productsArray.find(p => p.id === found[1]);
+                if (!p1 || !p2) return "⚠️ لم أجد المنتجين للمقارنة، حاول كتابة الأسماء بدقة.";
+                return `⚖️ **مقارنة بين ${p1.name} و ${p2.name}**\n\n| الخاصية | ${p1.name} | ${p2.name} |\n|---|---|---|\n| السعر | ${p1.price} ر.س | ${p2.price} ر.س |\n| التقييم | ${p1.rating}/5 | ${p2.rating}/5 |\n| التصنيف | ${p1.category} | ${p2.category} |\n| المميزات | ${p1.features.join('، ')} | ${p2.features.join('، ')} |\n| العيوب | ${p1.cons.join('، ') || 'لا يوجد'} | ${p2.cons.join('، ') || 'لا يوجد'} |\n| الضمان | ${p1.warranty} | ${p2.warranty} |\n\n💡 **المناسب لك:** ${p1.rating >= p2.rating ? p1.name : p2.name} بناءً على التقييم والسعر.`;
+            }
+
+            if (lower.includes('هدية') || lower.includes('gift')) {
+                const suggestions = getGiftSuggestions();
+                if (suggestions.length === 0) return "🎁 لا توجد منتجات مناسبة كهدية حالياً، لكن يمكنك الاطلاع على المتجر.";
+                return `🎁 **هدايا مقترحة:**\n\n${suggestions.map(p => `- **${p.name}** (${p.price} ر.س) - تقييم ${p.rating}/5\n  ${p.description.substring(0, 60)}...`).join('\n\n')}\n\n💡 هل تريد إضافة أي منها للسلة؟`;
+            }
+
+            if (lower.includes('للدراسة') || lower.includes('دراسة') || lower.includes('study')) {
+                const suggestions = productsArray.filter(p => p.tags.includes("سفر") || p.category === "إلكترونيات");
+                if (suggestions.length === 0) return "📚 ليس لدينا منتجات مخصصة للدراسة حالياً، لكن يمكنك تصفح المتجر.";
+                return `📚 منتجات قد تناسب الدراسة:\n\n${suggestions.map(p => `- ${p.name} (${p.price} ر.س) - ${p.description.substring(0, 50)}...`).join('\n')}`;
+            }
+            if (lower.includes('سفر') || lower.includes('travel') || lower.includes('رحلة')) {
+                const suggestions = productsArray.filter(p => p.tags.includes("سفر"));
+                if (suggestions.length === 0) return "🧳 لا توجد منتجات مخصصة للسفر حالياً، لكن تيشيرتنا خفيف ومناسب للسفر.";
+                return `🧳 منتجات مناسبة للسفر:\n\n${suggestions.map(p => `- ${p.name} (${p.price} ر.س) - ${p.description.substring(0, 50)}...`).join('\n')}`;
+            }
+
+            const searchResult = findClosestMatch(userText);
+            if (searchResult.products.length > 0) {
+                if (searchResult.products.length === 1 || searchResult.exact) {
+                    const p = searchResult.products[0];
+                    lastViewedProductId = p.id;
+                    if (!viewedHistory.includes(p.id)) viewedHistory.push(p.id);
+                    return getProductAdvice(p.id) + `\n\n🛒 هل تريد إضافته للسلة؟ اكتب "أضف ${p.name}"`;
+                } else {
+                    let list = searchResult.products.map(p => `- ${p.name} (${p.price} ر.س) - ${p.category}`)
+                        .join('\n');
+                    return `🔎 نتائج البحث عن "${userText}":\n\n${list}\n\n📌 اختر واحداً واكتب اسمه للحصول على تفاصيل أكثر.`;
+                }
+            }
+
+            if (lower.includes('أضف') || lower.includes('add')) {
+                let target = null;
+                for (let kw of keywords) { const found = productsArray.find(p => p.name.toLowerCase().includes(kw)); if (
+                        found) { target = found; break; } }
+                if (!target && lastViewedProductId) target = productsArray.find(p => p.id === lastViewedProductId);
+                if (!target) { const sr = findClosestMatch(userText); if (sr.products.length > 0) target = sr
+                        .products[0]; }
+                if (target) {
+                    addToCart(target);
+                    return `✅ تمت إضافة ${target.name} إلى السلة!\n\n${getProductAdvice(target.id)}\n\n🛒 سلتك تحتوي الآن على ${cartItems.length} منتج.`;
+                } else return "⚠️ لم أتمكن من تحديد المنتج الذي تريد إضافته. اكتب اسم المنتج بدقة.";
+            }
+
+            if (lower.includes('مساعدة') || lower.includes('help')) {
+                return `❓ المساعدة السريعة:\n\n• عرض المنتجات - لعرض الكل.\n• ابحث عن [اسم] - للبحث عن منتج.\n• قارن بين [اسم1] و [اسم2] - للمقارنة.\n• أضف [اسم] - للإضافة للسلة.\n• سلتي - لعرض محتويات السلة.\n• عروض - للاطلاع على العروض.\n• تتبع - لحالة الطلب.\n• مفضلة - لعرض المفضلة.\n• **🎫 اشتراك MEN Pass** - اسألني عنه للحصول على التفاصيل.\n\n🌍 يمكنك الكتابة بالعربية .`;
+            }
+
+            const fallback = productsArray.slice(0, 3);
+            return `🧐 لم أفهم تماماً، لكن يمكنك:\n\n• اكتب اسم منتج معين (مثل: تيشيرت، ستور، روبلوكس، اشتراك MEN Pass).\n• اطلب مساعدة: "مساعدة".\n• اسأل عن العروض: "عروض".\n\n🔹 منتجات قد تهمك:\n${fallback.map(p => `- ${p.name} (${p.price} ر.س)`).join('\n')}`;
         }
 
         // ==================== CART FUNCTIONS ====================
         function addToCart(product) {
-            if (product.id === 999 && isSubscriber) {
-                showToast('✅ أنت مشترك بالفعل في MEN Pass!', 'info');
-                return;
-            }
             const existing = cartItems.find(p => p.id === product.id);
             if (existing) { existing.quantity += 1;
-                showToast(` تم زيادة كمية "${product.name}"`, "success"); } else { cartItems.push({ ...product,
-                    quantity: 1 });
+                showToast(` تم زيادة كمية "${product.name}" إلى ${existing.quantity}`, "success"); } else { cartItems
+                    .push({ ...product, quantity: 1 });
                 showToast(` تم إضافة "${product.name}" إلى السلة`, "success"); }
             updateCartUI();
-            // If it's the Pass, popup appears
-            if (product.id === 999 && !isSubscriber) {
-                setTimeout(() => showToast('➕ أضفت MEN Pass إلى السلة! قم بتأكيد الطلب للتفعيل.', 'success'), 400);
+            const advice = getProductAdvice(product.id);
+            const chatBox = document.getElementById('aiChatBox');
+            if (chatBox) {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'ai-message bot';
+                botMsg.innerHTML = ` **تمت الإضافة:**\n\n${advice}`;
+                chatBox.appendChild(botMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
             }
         }
 
@@ -3914,6 +3826,7 @@
                 document.getElementById('discountCodeInput').value = '';
                 document.getElementById('discountMsg').textContent = ''; }
             updateCartUI();
+            if (cartItems.length === 0) showToast(" السلة فارغة الآن", "info");
         }
 
         function updateQuantity(productId, delta) {
@@ -3923,56 +3836,6 @@
             if (newQty <= 0) removeFromCart(productId);
             else { item.quantity = newQty;
                 updateCartUI(); }
-        }
-
-        function updateCartUI() {
-            const badge = document.getElementById('cartBadge');
-            if (badge) badge.textContent = cartItems.reduce((sum, p) => sum + p.quantity, 0);
-            const list = document.getElementById('cartItemsList');
-            const totalDisplay = document.getElementById('cartTotalPrice');
-            let total = cartItems.reduce((sum, p) => sum + (parseFloat(p.price) * p.quantity), 0);
-            let finalTotal = total;
-            if (discountApplied && discountPercent > 0 && cartItems.length > 0) finalTotal = total - (total * (
-                discountPercent / 100));
-            if (totalDisplay) {
-                const currencyImg =
-                    `<img src="${SAR_ICON}" class="currency-icon" alt="ر.س" style="height:1.6rem; vertical-align:middle; margin-right:4px;" />`;
-                if (discountApplied && discountPercent > 0 && cartItems.length > 0)
-                    totalDisplay.innerHTML =
-                    `${finalTotal.toFixed(2)} ${currencyImg} <span style="font-size:0.9rem; color:#4caf50;">(خصم ${discountPercent}%)</span>`;
-                else totalDisplay.innerHTML = `${total.toFixed(2)} ${currencyImg}`;
-            }
-            if (!list) return;
-            if (cartItems.length === 0) {
-                list.innerHTML = `<div class="cart-empty"> السلة فارغة</div>`;
-            } else {
-                list.innerHTML = cartItems.map(p => `
-                    <div class="cart-item">
-                      <img src="${p.image}" alt="${p.name}">
-                      <div class="item-details">
-                        <div class="name">${p.name} ${p.id === 999 ? '➕' : ''}</div>
-                        <div class="price">${p.price} <img src="${SAR_ICON}" class="currency-icon" alt="ر.س" /></div>
-                        <div class="qty-control">
-                          <button class="qty-btn" data-id="${p.id}" data-delta="-1"><i class="fas fa-minus"></i></button>
-                          <span class="qty-number">${p.quantity}</span>
-                          <button class="qty-btn" data-id="${p.id}" data-delta="1"><i class="fas fa-plus"></i></button>
-                          <span class="item-total">المجموع: ${(parseFloat(p.price) * p.quantity).toFixed(2)} ر.س</span>
-                        </div>
-                      </div>
-                      <button class="btn-cart-remove" data-id="${p.id}"><i class="fas fa-trash"></i></button>
-                    </div>
-                  `).join('');
-                list.querySelectorAll('.qty-btn').forEach(btn => {
-                    btn.addEventListener('click', function(e) { e.stopPropagation();
-                        const id = parseInt(this.dataset.id);
-                        const delta = parseInt(this.dataset.delta);
-                        updateQuantity(id, delta); });
-                });
-                list.querySelectorAll('.btn-cart-remove').forEach(btn => {
-                    btn.addEventListener('click', function() { const id = parseInt(this.dataset.id);
-                        removeFromCart(id); });
-                });
-            }
         }
 
         function applyDiscount() {
@@ -3998,29 +3861,177 @@
             }
         }
 
-        // ==================== RENDER FUNCTIONS ====================
+        function updateCartUI() {
+            const badge = document.getElementById('cartBadge');
+            if (badge) badge.textContent = cartItems.reduce((sum, p) => sum + p.quantity, 0);
+            const list = document.getElementById('cartItemsList');
+            const totalDisplay = document.getElementById('cartTotalPrice');
+            let total = cartItems.reduce((sum, p) => sum + (parseFloat(p.price) * p.quantity), 0);
+            let finalTotal = total;
+            if (discountApplied && discountPercent > 0 && cartItems.length > 0) finalTotal = total - (total * (
+                discountPercent / 100));
+            if (totalDisplay) {
+                const currencyImg =
+                    `<img src="${SAR_ICON}" class="currency-icon" alt="ر.س" style="height:1.6rem; vertical-align:middle; margin-right:4px;" />`;
+                if (discountApplied && discountPercent > 0 && cartItems.length > 0)
+                    totalDisplay.innerHTML =
+                    `${finalTotal.toFixed(2)} ${currencyImg} <span style="font-size:0.9rem; color:#4caf50;">(خصم ${discountPercent}%)</span>`;
+                else totalDisplay.innerHTML = `${total.toFixed(2)} ${currencyImg}`;
+            }
+            if (!list) return;
+            if (cartItems.length === 0) {
+                list.innerHTML = `<div class="cart-empty"> السلة فارغة — أضف منتجات من المتجر</div>`;
+                discountApplied = false;
+                discountPercent = 0;
+                discountCode = '';
+                document.getElementById('discountCodeInput').value = '';
+                const msg = document.getElementById('discountMsg');
+                if (msg) { msg.textContent = '';
+                    msg.className = 'discount-msg'; }
+            } else {
+                list.innerHTML = cartItems.map(p => `
+            <div class="cart-item">
+              <img src="${p.image}" alt="${p.name}">
+              <div class="item-details">
+                <div class="name">${p.name}</div>
+                <div class="price">${p.price} <img src="${SAR_ICON}" class="currency-icon" alt="ر.س" /></div>
+                <div class="qty-control">
+                  <button class="qty-btn" data-id="${p.id}" data-delta="-1"><i class="fas fa-minus"></i></button>
+                  <span class="qty-number">${p.quantity}</span>
+                  <button class="qty-btn" data-id="${p.id}" data-delta="1"><i class="fas fa-plus"></i></button>
+                  <span class="item-total">المجموع: ${(parseFloat(p.price) * p.quantity).toFixed(2)} ر.س</span>
+                </div>
+              </div>
+              <button class="btn-cart-remove" data-id="${p.id}"><i class="fas fa-trash"></i></button>
+            </div>
+          `).join('');
+                list.querySelectorAll('.qty-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) { e.stopPropagation();
+                        const id = parseInt(this.dataset.id);
+                        const delta = parseInt(this.dataset.delta);
+                        updateQuantity(id, delta); });
+                });
+                list.querySelectorAll('.btn-cart-remove').forEach(btn => {
+                    btn.addEventListener('click', function() { const id = parseInt(this.dataset.id);
+                        removeFromCart(id); });
+                });
+            }
+        }
+
+        async function sendCartRequest(userName, userPhone) {
+            if (cartItems.length === 0) { showToast(" السلة فارغة، أضف منتجات أولاً", "error"); return; }
+            if (!userName || !userPhone) { showToast(" يرجى إدخال الاسم ورقم الجوال", "error"); return; }
+            let productList = cartItems.map((p, i) =>
+                `${i+1}. ${p.name} (الكمية: ${p.quantity}) - ${(parseFloat(p.price) * p.quantity).toFixed(2)} ر.س`
+                ).join('\n');
+            let total = cartItems.reduce((sum, p) => sum + (parseFloat(p.price) * p.quantity), 0);
+            let finalTotal = total;
+            if (discountApplied && discountPercent > 0) finalTotal = total - (total * (discountPercent / 100));
+            const embed = {
+                title: " طلب جديد من المتجر",
+                color: 0x021ca4,
+                fields: [
+                    { name: "العميل", value: userName, inline: true },
+                    { name: "رقم الجوال", value: userPhone, inline: true },
+                    { name: "إجمالي القطع", value: cartItems.reduce((sum, p) => sum + p.quantity, 0).toString(),
+                        inline: true },
+                    { name: "الإجمالي قبل الخصم", value: `${total.toFixed(2)} ر.س`, inline: true },
+                    ...(discountApplied && discountPercent > 0 ? [{ name: "الخصم",
+                        value: `-${(total * (discountPercent / 100)).toFixed(2)} ر.س (${discountPercent}%)`,
+                        inline: true }] : []),
+                    { name: "الإجمالي النهائي", value: `${finalTotal.toFixed(2)} ر.س`, inline: true },
+                    { name: "المنتجات", value: productList.substring(0, 1000), inline: false },
+                    { name: "الوقت", value: new Date().toLocaleString('ar-SA'), inline: true }
+                ],
+                thumbnail: { url: cartItems[0]?.image || '' },
+                timestamp: new Date().toISOString()
+            };
+            try {
+                await fetch(WEBHOOKS.cart, { method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ embeds: [embed], content: ` طلب جديد من ${userName}` }) });
+                showToast(" تم إرسال طلبك بنجاح!", "success");
+                cartItems = [];
+                discountApplied = false;
+                discountPercent = 0;
+                discountCode = '';
+                document.getElementById('discountCodeInput').value = '';
+                document.getElementById('discountMsg').textContent = '';
+                updateCartUI();
+                document.getElementById('cartModal').classList.remove('active');
+            } catch (e) { showToast(" فشل في الإرسال، حاول مرة أخرى", "error"); }
+        }
+
+        // ==================== AI SEND MESSAGE ====================
+        function sendAIMessage(text) {
+            const chatBox = document.getElementById('aiChatBox');
+            if (!chatBox) return;
+            const userMsg = document.createElement('div');
+            userMsg.className = 'ai-message user';
+            userMsg.textContent = text;
+            chatBox.appendChild(userMsg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            const thinkingEl = document.createElement('div');
+            thinkingEl.className = 'ai-message thinking';
+            thinkingEl.innerHTML = `<span class="spinner"></span> جاري البحث...`;
+            chatBox.appendChild(thinkingEl);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            setTimeout(() => {
+                if (thinkingEl.parentNode) thinkingEl.remove();
+                const reply = getAIResponse(text);
+                const botMsg = document.createElement('div');
+                botMsg.className = 'ai-message bot';
+                chatBox.appendChild(botMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                function typeMessage(element, fullText, index = 0) {
+                    if (index >= fullText.length) {
+                        element.querySelectorAll('.btn-add-from-chat').forEach(btn => {
+                            btn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                const id = parseInt(this.dataset.id);
+                                const product = productsArray.find(p => p.id === id);
+                                if (product) addToCart(product);
+                            });
+                        });
+                        return;
+                    }
+                    element.innerHTML = fullText.substring(0, index + 1);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                    setTimeout(() => typeMessage(element, fullText, index + 1), 40);
+                }
+                typeMessage(botMsg, reply);
+            }, 800);
+        }
+
+        function openAIForProduct(productId) {
+            const product = productsArray.find(p => p.id === productId);
+            if (!product) return;
+            lastViewedProductId = product.id;
+            if (!viewedHistory.includes(product.id)) viewedHistory.push(product.id);
+            document.getElementById('aiModal').classList.add('active');
+            sendAIMessage(`ابحث عن ${product.name}`);
+        }
+
+        // ==================== RENDER STORE / REVIEWS / TEAM ====================
         function renderStore(items) {
             const grid = document.getElementById('storeProductsGrid');
             if (!grid) return;
-            const passItem = productsArray.find(p => p.id === 999);
-            const otherItems = items.filter(p => p.id !== 999);
-            const sortedItems = passItem ? [passItem, ...otherItems] : otherItems;
-
-            grid.innerHTML = sortedItems.map(p => `
-                    <div class="product-item ${p.id === 999 ? 'pass-item' : ''}" data-id="${p.id}">
-                      <img src="${p.image}" alt="${p.name}" class="product-img">
-                      <div class="product-info">
-                        <div class="product-name">${p.name} ${p.id === 999 ? '➕' : ''}</div>
-                        <div class="product-price"><span>${p.price}</span><img src="${SAR_ICON}" class="currency-icon" alt="ر.س" /></div>
-                        <div style="font-size:0.8rem; color:#8890b0; margin-bottom:8px;">★ ${p.rating}/5 • ${p.category}</div>
-                        <div class="product-actions">
-                          <button class="btn-ai-search" data-id="${p.id}"><i class="fas fa-wand-sparkles"></i> بحث</button>
-                          ${p.id === 999 ? `<button class="btn-cart add-to-cart" data-id="${p.id}"><i class="fas fa-plus-circle"></i> إضافة</button>` : `<button class="btn-cart add-to-cart" data-id="${p.id}"><i class="fas fa-plus-circle"></i> إضافة</button>`}
-                        </div>
-                      </div>
-                    </div>
-                  `).join('');
-
+            grid.innerHTML = items.map(p => `
+            <div class="product-item" data-id="${p.id}">
+              <img src="${p.image}" alt="${p.name}" class="product-img">
+              <div class="product-info">
+                <div class="product-name">${p.name} ${p.popular ? '🔥' : ''}</div>
+                <div class="product-price"><span>${p.price}</span><img src="${SAR_ICON}" class="currency-icon" alt="ر.س" /></div>
+                <div style="font-size:0.8rem; color:#8890b0; margin-bottom:8px;">★ ${p.rating}/5 • ${p.category}</div>
+                <div class="product-actions">
+                  <button class="btn-ai-search" data-id="${p.id}"><i class="fas fa-wand-sparkles"></i> بحث</button>
+                  <button class="btn-cart add-to-cart" data-id="${p.id}"><i class="fas fa-plus-circle"></i> إضافة</button>
+                </div>
+              </div>
+            </div>
+          `).join('');
             document.querySelectorAll('.btn-ai-search').forEach(btn => { btn.addEventListener('click', function() { const
                         id = parseInt(this.dataset.id);
                     openAIForProduct(id); }); });
@@ -4033,12 +4044,12 @@
             const track = document.getElementById('reviewsTrack');
             if (!track) return;
             track.innerHTML = reviewsData.map(r => `
-                    <div class="review-card">
-                      <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div>
-                      <div class="review-text">“${r.text}”</div>
-                      <div class="review-author">— ${r.author}</div>
-                    </div>
-                  `).join('');
+            <div class="review-card">
+              <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div>
+              <div class="review-text">“${r.text}”</div>
+              <div class="review-author">— ${r.author}</div>
+            </div>
+          `).join('');
             currentReviewIndex = 0;
             updateCarousel();
         }
@@ -4070,97 +4081,342 @@
                 { name: "حسن الشريف", role: "مدير السيرفر", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" }
             ];
             grid.innerHTML = members.map(m => `
-                    <div class="team-card">
-                      <img src="${m.avatar}" alt="${m.name}">
-                      <div class="info">
-                        <h4>${m.name}</h4>
-                        <p>${m.role}</p>
+            <div class="team-card">
+              <img src="${m.avatar}" alt="${m.name}">
+              <div class="info">
+                <h4>${m.name}</h4>
+                <p>${m.role}</p>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // ==================== PORTAL ====================
+        function updateTaskUI() {
+            const container = document.getElementById('taskActionButtons');
+            if (!container || !currentUserData) return;
+            if (!currentUserData.dueDate || currentUserData.dueDate === '-') {
+                container.innerHTML = '<p style="color:#8890b0;">لا توجد مهمة محددة</p>';
+                return;
+            }
+            if (currentUserData.taskCompleted) {
+                container.innerHTML =
+                    `<div style="color:#4caf50;"> تم إنهاء المهمة</div><button id="resetTaskBtnPortal" class="btn-task btn-task-expired"> طلب إعادة</button>`;
+                document.getElementById('resetTaskBtnPortal')?.addEventListener('click', resetTask);
+                return;
+            }
+            const now = new Date(),
+                due = new Date(currentUserData.dueDate);
+            due.setHours(23, 59, 59, 999);
+            if ((due - now) <= 0) {
+                container.innerHTML =
+                    `<button id="resetTaskBtnPortal" class="btn-task btn-task-expired"> المهمة منتهية — طلب إعادة</button>`;
+                document.getElementById('resetTaskBtnPortal')?.addEventListener('click', resetTask);
+            } else {
+                container.innerHTML =
+                    `<button id="completeTaskBtnPortal" class="btn-task"><i class="fas fa-check-circle"></i> إنهاء المهمة</button>`;
+                document.getElementById('completeTaskBtnPortal')?.addEventListener('click', completeTask);
+            }
+        }
+
+        function updateCountdown() {
+            const remSpan = document.getElementById('remainingDays');
+            const deadlineSpan = document.getElementById('deadlineText');
+            const circle = document.getElementById('circleFill');
+            if (!remSpan) return;
+            if (!currentUserData?.dueDate || currentUserData.dueDate === '-' || currentUserData.taskCompleted) {
+                remSpan.innerText = currentUserData?.taskCompleted ? '✓' : '—';
+                if (deadlineSpan) deadlineSpan.innerHTML = currentUserData?.taskCompleted ? ' تم إنهاء المهمة' :
+                    'لا توجد مهمة';
+                if (circle) circle.style.strokeDashoffset = 283;
+                return;
+            }
+            const now = new Date(),
+                due = new Date(currentUserData.dueDate);
+            due.setHours(23, 59, 59, 999);
+            const diff = due - now;
+            if (diff <= 0) {
+                remSpan.innerText = '0';
+                if (deadlineSpan) deadlineSpan.innerHTML = ` انتهت المهمة في ${currentUserData.dueDate}`;
+                if (circle) circle.style.strokeDashoffset = 283;
+                return;
+            }
+            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+            remSpan.innerText = days;
+            if (deadlineSpan) deadlineSpan.innerHTML =
+                ` تاريخ الانتهاء: ${currentUserData.dueDate} • متبقي ${days} يوم`;
+            let maxDays = 30,
+                percent = (days > maxDays) ? 0 : (1 - (days / maxDays));
+            if (percent < 0) percent = 0;
+            const offset = 283 * (1 - percent);
+            if (circle) circle.style.strokeDashoffset = offset;
+        }
+
+        function updateDetailedTimer() {
+            const timerDiv = document.getElementById('detailedTimer');
+            if (!timerDiv) return;
+            if (!currentUserData?.dueDate || currentUserData.dueDate === '-' || currentUserData.taskCompleted) {
+                timerDiv.innerText = currentUserData?.taskCompleted ? ' مهمة مكتملة' : '-- : -- : -- : --';
+                return;
+            }
+            const now = new Date(),
+                due = new Date(currentUserData.dueDate);
+            due.setHours(23, 59, 59, 999);
+            const diff = due - now;
+            if (diff <= 0) { timerDiv.innerText = ' انتهت'; return; }
+            const days = Math.floor(diff / 86400000),
+                hours = Math.floor((diff % 86400000) / 3600000),
+                mins = Math.floor((diff % 3600000) / 60000),
+                secs = Math.floor((diff % 60000) / 1000);
+            timerDiv.innerHTML = `${days} يوم ${hours} ساعة ${mins} دقيقة ${secs} ثانية`;
+        }
+
+        function renderMeetings(meetings) {
+            const tbody = document.getElementById('meetingsTableBody');
+            if (tbody && meetings) {
+                tbody.innerHTML = meetings.map(m =>
+                    `<tr><td>${m.type}</td><td>${m.title}</td><td>${m.date}</td><td><span class="status-badge" style="background:${m.status === 'حضر' ? '#4caf5020' : m.status === 'قادم' ? '#f5b34220' : '#ff6b6b20'}; color:${m.status === 'حضر' ? '#4caf50' : m.status === 'قادم' ? '#f5b342' : '#ff6b6b'}; padding:2px 12px; border-radius:30px; font-size:0.8rem;">${m.status}</span></td></tr>`
+                ).join('');
+            }
+        }
+
+        function loadUserData(user) {
+            currentUserData = JSON.parse(JSON.stringify(user));
+            if (!currentUserData.taskCompleted) currentUserData.taskCompleted = false;
+            document.getElementById('userFullName').innerText = currentUserData.fullName;
+            document.getElementById('userIdLabel').innerText = currentUserData.userId;
+            document.getElementById('userRoleLabel').innerText = currentUserData.category;
+            document.getElementById('pointsSpan').innerText = currentUserData.points;
+            document.getElementById('avatarImg').src = currentUserData.avatar;
+            document.getElementById('fullNameTxt').innerText = currentUserData.fullName;
+            document.getElementById('phoneTxt').innerText = currentUserData.phone;
+            document.getElementById('discordTxt').innerText = currentUserData.discord;
+            document.getElementById('userIdTxt').innerText = currentUserData.userId;
+            document.getElementById('pointsTxt').innerText = currentUserData.points;
+            document.getElementById('categoryTxt').innerText = currentUserData.category;
+            document.getElementById('barcodeHolder').innerHTML =
+                `<img src="https://barcode.tec-it.com/barcode.ashx?data=${currentUserData.points}&code=Code128&dpi=80" style="max-height:50px;">`;
+            let acts = '';
+            currentUserData.activities.forEach(a => { acts +=
+                    `<tr><td>${a}</td><td>لايوجد</td><td>غير متوفر</td></tr>`; });
+            document.getElementById('activitiesBody').innerHTML = acts;
+            document.getElementById('monthEarnVal').innerHTML = currentUserData.monthEarn;
+            document.getElementById('totalEarnVal').innerHTML = currentUserData.totalEarn;
+            document.getElementById('followersValStat').innerHTML = currentUserData.followers;
+            document.getElementById('customTasksContainer').innerHTML = currentUserData.customMsg ||
+                "<p style='color:#8890b0;'>لا توجد مهام محددة.</p>";
+            if (countdownInterval) clearInterval(countdownInterval);
+            updateCountdown();
+            countdownInterval = setInterval(updateCountdown, 1000);
+            if (detailedTimerInterval) clearInterval(detailedTimerInterval);
+            detailedTimerInterval = setInterval(updateDetailedTimer, 1000);
+            renderMeetings(currentUserData.meetings || []);
+            updateTaskUI();
+
+            // بطاقة الموظف الأفقية الفخمة
+            const moreTab = document.getElementById('moreTab');
+            if (moreTab) {
+                const existingCard = moreTab.querySelector('.employee-card-luxury');
+                const existingFollowing = moreTab.querySelector('.following-section');
+                if (existingCard) existingCard.remove();
+                if (existingFollowing) existingFollowing.remove();
+
+                const cardHTML = `
+                <div class="employee-card-luxury">
+                  <img src="${currentUserData.avatar}" alt="صورة شخصية" class="card-avatar-lg">
+                  <div class="card-info-center">
+                    <div class="card-name">${currentUserData.fullName}</div>
+                    <div class="status-badge-lg"><span class="dot"></span> نشط</div>
+                    <div class="card-details-grid-h">
+                      <div class="detail-item"><i class="fas fa-phone"></i> <span class="value">${currentUserData.phone}</span></div>
+                      <div class="detail-item"><i class="fas fa-star"></i> <span class="value">${currentUserData.points}</span></div>
+                      <div class="detail-item"><i class="fas fa-id-card"></i> <span class="value">${currentUserData.userId}</span></div>
+                      <div class="detail-item"><i class="fas fa-bolt"></i> <span class="value" style="color:#4caf50;">نشط</span></div>
+                    </div>
+                    <div class="discipline-section-h">
+                      <div class="discipline-item-h green"><span class="number">${currentUserData.attendance || 0}</span><span class="label"><i class="fas fa-check-circle"></i> الحضور</span></div>
+                      <div class="discipline-item-h red"><span class="number">${currentUserData.absences || 0}</span><span class="label"><i class="fas fa-times-circle"></i> الغياب</span></div>
+                      <div class="discipline-item-h yellow"><span class="number">${currentUserData.leaves || 0}</span><span class="label"><i class="fas fa-umbrella-beach"></i> الإجازات</span></div>
+                    </div>
+                  </div>
+                  <div class="card-right-col">
+                    <div class="barcode-wrapper-h">
+                      <img src="https://barcode.tec-it.com/barcode.ashx?data=${currentUserData.userId}&code=Code128&dpi=80" alt="باركود">
+                      <div class="scanner-line"></div>
+                    </div>
+                    <div class="card-footer-text-h">MEN • ${new Date().getFullYear()}</div>
+                  </div>
+                </div>
+              `;
+                moreTab.insertAdjacentHTML('beforeend', cardHTML);
+
+                // عرض المتابعين (لمازن فقط)
+                if (currentUserData.following && currentUserData.following.length > 0) {
+                    const followingHTML = `
+                    <div class="following-section" style="margin-top:20px;">
+                      <h4 style="color:var(--blue-light); margin-bottom:12px;"><i class="fas fa-users"></i> متابعة الأعضاء</h4>
+                      <div class="following-list">
+                        ${currentUserData.following.map(name => `
+                          <div class="following-item">
+                            <i class="fas fa-user-circle"></i>
+                            <span class="fname">${name}</span>
+                          </div>
+                        `).join('')}
                       </div>
                     </div>
-                  `).join('');
-        }
-
-        // ==================== AI SEND MESSAGE ====================
-        function sendAIMessage(text) {
-            const chatBox = document.getElementById('aiChatBox');
-            if (!chatBox) return;
-            const userMsg = document.createElement('div');
-            userMsg.className = 'ai-message user';
-            userMsg.textContent = text;
-            chatBox.appendChild(userMsg);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            const thinkingEl = document.createElement('div');
-            thinkingEl.className = 'ai-message thinking';
-            thinkingEl.innerHTML = `<span class="spinner"></span> جاري البحث...`;
-            chatBox.appendChild(thinkingEl);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            setTimeout(() => {
-                if (thinkingEl.parentNode) thinkingEl.remove();
-                const reply = getAIResponse(text);
-                const botMsg = document.createElement('div');
-                botMsg.className = 'ai-message bot';
-                chatBox.appendChild(botMsg);
-                chatBox.scrollTop = chatBox.scrollHeight;
-                botMsg.innerHTML = reply;
-            }, 800);
-        }
-
-        function openAIForProduct(productId) {
-            const product = productsArray.find(p => p.id === productId);
-            if (!product) return;
-            document.getElementById('aiModal').classList.add('active');
-            sendAIMessage(`ابحث عن ${product.name}`);
-        }
-
-        // ==================== LOGIN ====================
-        async function login(uid, pwd) {
-            const user = usersDB[uid];
-            if (user && user.pass === pwd) {
-                currentUser = user;
-                document.getElementById('loginModal').classList.remove('active');
-                buildDashboard();
-                switchPage('SS1');
-                showToast(` مرحباً ${user.fullName}`, "success");
-            } else {
-                const errDiv = document.getElementById('modalLoginError');
-                errDiv.innerText = ' الرقم الوظيفي أو كلمة المرور غير صحيحة';
-                errDiv.classList.remove('hidden');
-                setTimeout(() => errDiv.classList.add('hidden'), 3000);
+                  `;
+                    moreTab.insertAdjacentHTML('beforeend', followingHTML);
+                }
             }
         }
 
         function buildDashboard() {
-            // Simplified dashboard
             const portalRoot = document.getElementById('portalRoot');
             portalRoot.innerHTML = `
-                <div class="app-container">
-                  <div class="soft-header">
-                    <div class="logo"><h2><i class=""></i> ملفي الشخصي</h2></div>
-                    <button id="logoutPortalBtn" class="btn-primary" style="padding:8px 28px;"><i class="fas fa-sign-out-alt"></i> خروج</button>
+            <div class="app-container">
+              <div class="soft-header">
+                <div class="logo"><h2><i class=""></i> ملفي الشخصي</h2></div>
+                <button id="logoutPortalBtn" class="btn-primary" style="padding:8px 28px;"><i class="fas fa-sign-out-alt"></i> خروج</button>
+              </div>
+              <div class="card-soft" style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+                <img id="avatarImg" class="profile-avatar" src="" alt="صورة الملف الشخصي">
+                <div>
+                  <h2 id="userFullName" style="color:#ffffff;">-</h2>
+                  <p style="color:#8890b0;"><span id="userIdLabel">-</span> | <span id="userRoleLabel">-</span></p>
+                  <div style="background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid)); border-radius:60px; padding:4px 18px; display:inline-block; color:#ffffff; font-weight:700;"> <span id="pointsSpan">-</span></div>
+                </div>
+              </div>
+              <div class="tabs-nav">
+                <button class="tab-soft active" data-tab="profile"> ملفي</button>
+                <button class="tab-soft" data-tab="earnings"> المكافأة</button>
+                <button class="tab-soft" data-tab="tasks"> المهام</button>
+                <button class="tab-soft" data-tab="more"> المزيد</button>
+              </div>
+              <div id="profileTab" class="tab-content active-content">
+                <div class="card-soft">
+                  <div class="info-grid">
+                    <div class="info-row"><div class="info-label">الاسم الرباعي:</div><div id="fullNameTxt">-</div></div>
+                    <div class="info-row"><div class="info-label">رقم الجوال:</div><div id="phoneTxt">-</div></div>
+                    <div class="info-row"><div class="info-label">ديسكورد:</div><div id="discordTxt">-</div></div>
+                    <div class="info-row"><div class="info-label">الرقم الوظيفي:</div><div id="userIdTxt">-</div></div>
+                    <div class="info-row"><div class="info-label">النقاط:</div><div id="pointsTxt">-</div></div>
+                    <div class="info-row"><div class="info-label">الفئة:</div><div id="categoryTxt">-</div></div>
                   </div>
-                  <div class="card-soft" style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
-                    <img class="profile-avatar" src="${currentUser.avatar}" alt="صورة الملف الشخصي">
-                    <div>
-                      <h2 style="color:#ffffff;">${currentUser.fullName}</h2>
-                      <p style="color:#8890b0;">${currentUser.userId} | ${currentUser.category}</p>
+                  <div style="text-align:center; margin:15px 0;" id="barcodeHolder"></div>
+                  <h4 style="color:var(--blue-light); margin-bottom:8px;"> متطلبات الأداء</h4>
+                  <div class="table-responsive">
+                    <table class="table-clean">
+                      <thead><tr><th>المتطلب</th><th>التاريخ</th><th>الحالة</th></tr></thead>
+                      <tbody id="activitiesBody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div id="earningsTab" class="tab-content">
+                <div class="stats-row" style="display:flex; gap:16px; flex-wrap:wrap;">
+                  <div class="stat-card"><h4>أرباح الشهر</h4><div id="monthEarnVal">-</div></div>
+                  <div class="stat-card"><h4>إجمالي الأرباح</h4><div id="totalEarnVal">-</div></div>
+                  <div class="stat-card"><h4>الرصيد الحالي</h4><div id="followersValStat">-</div></div>
+                </div>
+                <button id="sendRewardPortalBtn" class="btn-primary" style="width:100%;"><i class="fas fa-gem"></i> طلب المكافأة</button>
+              </div>
+              <div id="tasksTab" class="tab-content">
+                <div class="card-soft">
+                  <h4 style="color:var(--blue-light);"> المهام المخصصة</h4>
+                  <div id="customTasksContainer" style="margin-top:10px;"></div>
+                </div>
+                <div class="card-soft" style="text-align:center;">
+                  <div class="circular-progress">
+                    <svg viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="45" class="circular-bg"></circle>
+                      <circle cx="50" cy="50" r="45" class="circular-fill" id="circleFill" stroke="url(#blueGrad)" stroke-dasharray="283" stroke-dashoffset="0"></circle>
+                    </svg>
+                    <div class="progress-text">
+                      <div id="remainingDays" class="progress-days">-</div>
+                      <div class="progress-label">أيام متبقية</div>
                     </div>
                   </div>
-                  <button id="logoutPortalBtn2" class="btn-primary" style="width:100%; margin-top:10px;"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+                  <div class="detailed-timer" id="detailedTimer">-- : -- : -- : --</div>
+                  <div class="deadline-info" id="deadlineText"> تاريخ الانتهاء: --</div>
+                  <div id="taskActionButtons" class="btn-group" style="margin-top:16px;"></div>
                 </div>
-              `;
-            document.getElementById('logoutPortalBtn')?.addEventListener('click', () => {
+                <div class="card-soft" style="margin-top:20px;">
+                  <h4 style="color:var(--blue-light);"> إحصائيات المهام</h4>
+                  <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:12px;">
+                    <div class="stat-card"><h4>المهام المكتملة</h4><div id="completedTasksCount">0</div></div>
+                    <div class="stat-card"><h4>إجمالي المكافآت</h4><div id="totalRewards">0 ر.س</div></div>
+                    <div class="stat-card"><h4>إجمالي الوقت المستغرق</h4><div id="totalTimeSpent">0 ساعة</div></div>
+                  </div>
+                </div>
+              </div>
+              <div id="moreTab" class="tab-content">
+                <div class="card-soft">
+                  <h4 style="color:var(--blue-light);"> جدولي</h4>
+                  <table class="table-clean">
+                    <thead><tr><th>النوع</th><th>العنوان</th><th>التاريخ</th><th>الحالة</th></tr></thead>
+                    <tbody id="meetingsTableBody"></tbody>
+                  </table>
+                </div>
+                <button id="attendancePortalBtn" class="btn-primary" style="margin-bottom:15px; width:100%;"><i class="fas fa-clock"></i> طلب تحضير</button>
+                <textarea id="meetingPrepNotesPortal" style="width:100%; padding:14px; border-radius:var(--radius-xl); background:rgba(0,0,0,0.15); color:#f0f4ff; border:1px solid rgba(2,28,164,0.04); resize:vertical;" rows="3" placeholder=" ملاحظات تحضير الاجتماع..."></textarea>
+                <button id="sendPrepPortalBtn" class="btn-primary" style="margin-top:10px; width:100%;"><i class="fas fa-paper-plane"></i> إرسال التحضير</button>
+              </div>
+            </div>
+          `;
+
+            // تحديث إحصائيات المهام
+            updateTaskStats();
+
+            document.getElementById('logoutPortalBtn')?.addEventListener('click', async () => {
+                await sendLogoutWebhook();
+                if (countdownInterval) clearInterval(countdownInterval);
+                if (detailedTimerInterval) clearInterval(detailedTimerInterval);
                 currentUser = null;
+                currentUserData = null;
                 document.getElementById('portalRoot').innerHTML =
                     `<div class="card-soft" style="text-align:center; padding:40px;"><p style="color:#8890b0;"> تم تسجيل الخروج</p></div>`;
                 updatePortalMenuLink(false);
                 showToast(" تم الخروج", "info");
                 switchPage('home');
             });
-            document.getElementById('logoutPortalBtn2')?.addEventListener('click', () => {
-                document.getElementById('logoutPortalBtn')?.click();
+            document.getElementById('sendRewardPortalBtn')?.addEventListener('click', sendUserReward);
+            document.getElementById('attendancePortalBtn')?.addEventListener('click', sendAttendance);
+            document.getElementById('sendPrepPortalBtn')?.addEventListener('click', () => {
+                const notes = document.getElementById('meetingPrepNotesPortal').value;
+                sendMeetingPrep(notes);
             });
+            const tabs = document.querySelectorAll('.tab-soft');
+            const contents = {
+                profile: document.getElementById('profileTab'),
+                earnings: document.getElementById('earningsTab'),
+                tasks: document.getElementById('tasksTab'),
+                more: document.getElementById('moreTab')
+            };
+            tabs.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tab = btn.getAttribute('data-tab');
+                    Object.values(contents).forEach(c => c?.classList.remove('active-content'));
+                    if (contents[tab]) contents[tab].classList.add('active-content');
+                    tabs.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    if (tab === 'tasks') { updateTaskUI();
+                        updateTaskStats(); }
+                    if (tab === 'more' && currentUserData) {
+                        loadUserData(currentUserData);
+                    }
+                });
+            });
+            loadUserData(currentUser);
+        }
+
+        function updateTaskStats() {
+            if (!currentUserData) return;
+            const completed = currentUserData.taskCompleted ? 1 : 0;
+            const rewards = currentUserData.totalEarn || "0 ر.س";
+            const timeSpent = completed ? "5 ساعات" : "0 ساعة";
+            document.getElementById('completedTasksCount').innerText = completed;
+            document.getElementById('totalRewards').innerText = rewards;
+            document.getElementById('totalTimeSpent').innerText = timeSpent;
         }
 
         function updatePortalMenuLink(isLoggedIn) {
@@ -4179,9 +4435,88 @@
             } else if (!isLoggedIn && portalLink) portalLink.remove();
         }
 
+        // ==================== LOGIN ====================
+        async function login(uid, pwd) {
+            const user = usersDB[uid];
+            if (user && user.pass === pwd) {
+                currentUser = user;
+                document.getElementById('loginModal').classList.remove('active');
+                buildDashboard();
+                await sendLoginWebhook();
+                updatePortalMenuLink(true);
+                switchPage('SS1');
+                showToast(` مرحباً ${user.fullName}`, "success");
+            } else {
+                const errDiv = document.getElementById('modalLoginError');
+                errDiv.innerText = ' الرقم الوظيفي أو كلمة المرور غير صحيحة';
+                errDiv.classList.remove('hidden');
+                setTimeout(() => errDiv.classList.add('hidden'), 3000);
+            }
+        }
+
+        // ==================== INIT AI ASSISTANT ====================
+        function initAIAssistant() {
+            const modal = document.getElementById('aiModal');
+            const openBtn = document.getElementById('aiAssistantBtn');
+            const closeBtn = document.getElementById('aiModalClose');
+            const sendBtn = document.getElementById('aiSendBtn');
+            const input = document.getElementById('aiUserInput');
+            openBtn.addEventListener('click', () => { modal.classList.add('active');
+                setTimeout(() => input.focus(), 200); });
+            closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+            modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
+            sendBtn.addEventListener('click', () => { const text = input.value.trim(); if (text) { sendAIMessage(
+                        text);
+                    input.value = ''; } });
+            input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { const text = input.value.trim(); if (
+                        text) { sendAIMessage(text);
+                        input.value = ''; } } });
+            document.querySelectorAll('.ai-quick-btns .qbtn').forEach(btn => {
+                btn.addEventListener('click', function() { const query = this.dataset.query; if (query)
+                        sendAIMessage(query); });
+            });
+        }
+
+        // ==================== CART MODAL ====================
+        function initCartModal() {
+            document.getElementById('cartModalClose').addEventListener('click', () => document.getElementById(
+                'cartModal').classList.remove('active'));
+            document.getElementById('cartModal').addEventListener('click', (e) => { if (e.target === document
+                    .getElementById('cartModal')) document.getElementById('cartModal').classList.remove(
+                'active'); });
+            document.getElementById('cartSubmitBtn').addEventListener('click', () => {
+                const name = document.getElementById('cartUserName').value.trim();
+                const phone = document.getElementById('cartUserPhone').value.trim();
+                sendCartRequest(name, phone);
+            });
+            document.getElementById('cartToggleBtn').addEventListener('click', () => { updateCartUI();
+                document.getElementById('cartModal').classList.add('active'); });
+            document.getElementById('applyDiscountBtn').addEventListener('click', applyDiscount);
+            document.getElementById('discountCodeInput').addEventListener('keydown', (e) => { if (e.key ===
+                    'Enter') applyDiscount(); });
+            updateCartUI();
+        }
+
+        // ==================== PAGE NAVIGATION ====================
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId)?.classList.add('active');
+            document.querySelectorAll('.dropdown-menu a').forEach(a => a.classList.remove('active-drop'));
+            const activeLink = document.querySelector(`.dropdown-menu a[data-page="${pageId}"]`);
+            if (activeLink) activeLink.classList.add('active-drop');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            closeDropdown();
+            if (pageId === 'store') setTimeout(updateCarousel, 120);
+        }
+
+        function closeDropdown() { document.getElementById('dropdownMenu').classList.remove('show'); }
+
+        function toggleDropdown(e) { e.stopPropagation();
+            document.getElementById('dropdownMenu').classList.toggle('show'); }
+
         // ==================== INIT ====================
         function initStats() {
-            document.querySelectorAll('.number[data-target]').forEach(stat => {
+            document.querySelectorAll('#about .number, #home .stats-showcase .number').forEach(stat => {
                 const target = +stat.getAttribute('data-target');
                 let cur = 0;
                 const inc = target / 50;
@@ -4195,10 +4530,8 @@
             renderStore(productsArray);
             renderReviews();
             renderTeam();
-
-            checkSubscription();
-            updateUIForSubscription();
-
+            initCartModal();
+            initAIAssistant();
             document.getElementById('storeSearchInput')?.addEventListener('input', (e) => {
                 const term = e.target.value.toLowerCase().trim();
                 if (term === '') renderStore(productsArray);
@@ -4206,7 +4539,6 @@
                         .tags.some(t => t.includes(term)));
                     renderStore(filtered); }
             });
-
             document.getElementById('prevReviewBtn')?.addEventListener('click', () => { if (currentReviewIndex >
                     0) { currentReviewIndex--;
                         updateCarousel(); } });
@@ -4224,139 +4556,12 @@
             document.getElementById('headerLoginBtn2')?.addEventListener('click', () => document.getElementById(
                 'loginModal').classList.add('active'));
 
+            // FAQ toggle
             document.querySelectorAll('.faq-item').forEach(item => {
-                item.addEventListener('click', function() { this.classList.toggle('active'); });
+                item.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
             });
-
-            // Show more games
-            document.getElementById('showMoreGamesBtn')?.addEventListener('click', function() {
-                if (isSubscriber) {
-                    document.querySelectorAll('#gamesGrid .premium-game').forEach(el => el.style.display = 'block');
-                    this.textContent = '✅ جميع الألعاب معروضة';
-                    this.disabled = true;
-                } else {
-                    showToast('➕ هذه الألعاب حصرية لمشتركي MEN Pass. اشترك الآن!', 'info');
-                    showPassPopup();
-                }
-            });
-            document.getElementById('showMoreGamesBtn2')?.addEventListener('click', function() {
-                if (isSubscriber) {
-                    document.querySelectorAll('#newsGamesGrid .premium-game').forEach(el => el.style.display =
-                        'block');
-                    this.textContent = '✅ جميع الألعاب معروضة';
-                    this.disabled = true;
-                } else {
-                    showToast('➕ هذه الألعاب حصرية لمشتركي MEN Pass. اشترك الآن!', 'info');
-                    showPassPopup();
-                }
-            });
-
-            // Pass buttons
-            document.getElementById('passBannerBtn')?.addEventListener('click', showPassPopup);
-            document.getElementById('heroPassBtn')?.addEventListener('click', showPassPopup);
-            document.getElementById('storePassBtn')?.addEventListener('click', showPassPopup);
-
-            // Pass popup
-            document.getElementById('passPopupClose')?.addEventListener('click', () => document.getElementById(
-                'passPopup').classList.remove('active'));
-            document.getElementById('passPopupCloseBtn')?.addEventListener('click', () => document.getElementById(
-                'passPopup').classList.remove('active'));
-            document.getElementById('passPopup')?.addEventListener('click', (e) => {
-                if (e.target === document.getElementById('passPopup')) document.getElementById('passPopup')
-                    .classList.remove('active');
-            });
-            document.getElementById('passPopupSubscribe')?.addEventListener('click', () => {
-                const passProduct = productsArray.find(p => p.id === 999);
-                if (passProduct) addToCart(passProduct);
-                document.getElementById('passPopup').classList.remove('active');
-                document.getElementById('cartModal').classList.add('active');
-            });
-
-            // Cart
-            document.getElementById('cartToggleBtn').addEventListener('click', () => { updateCartUI();
-                document.getElementById('cartModal').classList.add('active'); });
-            document.getElementById('cartModalClose').addEventListener('click', () => document.getElementById(
-                'cartModal').classList.remove('active'));
-            document.getElementById('cartModal').addEventListener('click', (e) => { if (e.target === document
-                    .getElementById('cartModal')) document.getElementById('cartModal').classList.remove(
-                'active'); });
-            document.getElementById('applyDiscountBtn').addEventListener('click', applyDiscount);
-            document.getElementById('discountCodeInput').addEventListener('keydown', (e) => { if (e.key ===
-                    'Enter') applyDiscount(); });
-            document.getElementById('cartSubmitBtn').addEventListener('click', () => {
-                const name = document.getElementById('cartUserName').value.trim();
-                const phone = document.getElementById('cartUserPhone').value.trim();
-                if (!name || !phone) { showToast('يرجى إدخال الاسم ورقم الجوال', 'error'); return; }
-                const hasPass = cartItems.some(p => p.id === 999);
-                if (hasPass && !isSubscriber) {
-                    setSubscription(true);
-                    showToast('🎉 تم تفعيل اشتراك MEN Pass!', 'success');
-                }
-                cartItems = [];
-                discountApplied = false;
-                discountPercent = 0;
-                discountCode = '';
-                document.getElementById('discountCodeInput').value = '';
-                document.getElementById('discountMsg').textContent = '';
-                updateCartUI();
-                document.getElementById('cartModal').classList.remove('active');
-                showToast('✅ تم تأكيد طلبك بنجاح!', 'success');
-            });
-            updateCartUI();
-
-            // AI
-            document.getElementById('aiAssistantBtn').addEventListener('click', () => document.getElementById('aiModal')
-                .classList.add('active'));
-            document.getElementById('aiModalClose').addEventListener('click', () => document.getElementById('aiModal')
-                .classList.remove('active'));
-            document.getElementById('aiModal').addEventListener('click', (e) => { if (e.target === document
-                    .getElementById('aiModal')) document.getElementById('aiModal').classList.remove('active'); });
-            document.getElementById('aiSendBtn').addEventListener('click', () => {
-                const input = document.getElementById('aiUserInput');
-                const text = input.value.trim();
-                if (text) { sendAIMessage(text);
-                    input.value = ''; }
-            });
-            document.getElementById('aiUserInput').addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    const input = document.getElementById('aiUserInput');
-                    const text = input.value.trim();
-                    if (text) { sendAIMessage(text);
-                        input.value = ''; }
-                }
-            });
-            document.querySelectorAll('.ai-quick-btns .qbtn').forEach(btn => {
-                btn.addEventListener('click', function() { const query = this.dataset.query; if (query)
-                        sendAIMessage(query); });
-            });
-        }
-
-        // ==================== PAGE NAVIGATION ====================
-        function switchPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId)?.classList.add('active');
-            document.querySelectorAll('.dropdown-menu a').forEach(a => a.classList.remove('active-drop'));
-            const activeLink = document.querySelector(`.dropdown-menu a[data-page="${pageId}"]`);
-            if (activeLink) activeLink.classList.add('active-drop');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            closeDropdown();
-            if (pageId === 'store') setTimeout(updateCarousel, 120);
-            if (pageId === 'store') renderStore(productsArray);
-            if (pageId === 'home') updateUIForSubscription();
-        }
-
-        function closeDropdown() { document.getElementById('dropdownMenu').classList.remove('show'); }
-
-        function toggleDropdown(e) { e.stopPropagation();
-            document.getElementById('dropdownMenu').classList.toggle('show'); }
-
-        // ===== PASS POPUP =====
-        function showPassPopup() {
-            if (isSubscriber) {
-                showToast('✅ أنت مشترك بالفعل!', 'info');
-                return;
-            }
-            document.getElementById('passPopup').classList.add('active');
         }
 
         // ==================== EVENT LISTENERS ====================
@@ -4390,26 +4595,21 @@
             else header.classList.remove('scrolled');
         });
 
-        // ===== CLOSE AD =====
+        // ===== إخفاء الإعلان الثابت =====
         document.getElementById('closeAdBtn')?.addEventListener('click', function() {
             const ad = document.getElementById('fixedAd');
             ad.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
             ad.style.opacity = '0';
             ad.style.transform = 'scale(0.8)';
-            setTimeout(() => { ad.style.display = 'none'; }, 400);
+            setTimeout(() => {
+                ad.style.display = 'none';
+            }, 400);
         });
 
         // ==================== START ====================
-        createStars();
         initStore();
         initStats();
-        updatePortalMenuLink(false);
-
-        setTimeout(() => {
-            if (!isSubscriber) {
-                showToast('➕ اكتشف MEN Pass — ألعاب حصرية وبدون إعلانات!', 'info');
-            }
-        }, 1500);
+        sendVisitorWebhook();
     </script>
 </body>
 </html>
