@@ -3071,14 +3071,8 @@
                     <h2>سيطرة <span class="highlight">أقوى</span></h2>
                     <p>فريق اللاعبين وصنّاع المحتوى.</p>
                     <div class="btn-group">
-                        <a href="pass.html" target="_blank" class="btn-primary">
-    <i class="fas fa-plus"></i> اشترك الان
-</a>
-                        <a href="https://youtube.com/@clan_men?si=8TEv8fKu5Coppwas" class="btn-secondary"><i class="fas fa-play-circle"></i> شاهد الفيديو</a>
-                    </div>
-                </div>
-
-                <!-- ===== MEN PASS PREMIUM ===== -->
+                       
+<!-- ===== MEN PASS PREMIUM ===== -->
 <style>
 .men-pass{
 position:relative;
@@ -3087,6 +3081,7 @@ padding:35px;
 border-radius:28px;
 background:rgba(8,18,40,.45);
 backdrop-filter:blur(20px);
+-webkit-backdrop-filter:blur(20px);
 border:1px solid rgba(255,255,255,.08);
 box-shadow:0 0 40px rgba(0,110,255,.35);
 text-align:center;
@@ -3101,28 +3096,42 @@ position:absolute;
 inset:0;
 background:
 radial-gradient(circle,#fff 1px,transparent 1.5px),
-radial-gradient(circle,#fff 1px,transparent 1.5px);
-background-size:120px 120px,180px 180px;
-background-position:0 0,60px 60px;
-opacity:.7;
-animation:stars 18s linear infinite;
+radial-gradient(circle,#fff 1px,transparent 1.5px),
+radial-gradient(circle,#fff 2px,transparent 2.5px);
+background-size:120px 120px,180px 180px,250px 250px;
+opacity:.8;
+animation:stars 20s linear infinite;
 pointer-events:none;
 }
 
 @keyframes stars{
-from{transform:translateY(0);}
-to{transform:translateY(120px);}
+0%{transform:translateY(0);}
+100%{transform:translateY(120px);}
 }
 
 .badge{
-display:inline-block;
-padding:8px 20px;
+display:inline-flex;
+justify-content:center;
+align-items:center;
+padding:12px 25px;
 border-radius:50px;
-background:rgba(255,255,255,.12);
-border:1px solid rgba(255,255,255,.2);
-backdrop-filter:blur(10px);
-font-weight:bold;
-margin-bottom:15px;
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.18);
+backdrop-filter:blur(15px);
+margin-bottom:18px;
+}
+
+.pass-logo{
+height:48px;
+width:auto;
+display:block;
+filter:drop-shadow(0 0 10px #fff) drop-shadow(0 0 25px #008cff);
+transition:.35s;
+}
+
+.badge:hover .pass-logo{
+transform:scale(1.08);
+filter:drop-shadow(0 0 15px #fff) drop-shadow(0 0 35px #1e90ff);
 }
 
 .men-pass h2{
@@ -3156,7 +3165,7 @@ transform:translateY(-6px);
 box-shadow:0 0 20px rgba(0,140,255,.45);
 }
 
-.btn-pass{
+.btn-primary{
 display:inline-block;
 padding:14px 34px;
 border-radius:50px;
@@ -3168,7 +3177,7 @@ box-shadow:0 0 25px rgba(0,119,255,.6);
 transition:.3s;
 }
 
-.btn-pass:hover{
+.btn-primary:hover{
 transform:scale(1.05);
 box-shadow:0 0 35px rgba(0,119,255,.9);
 }
@@ -3176,7 +3185,9 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
 
 <div class="men-pass">
 
-<div class="badge"> MEN PASS</div>
+<div class="badge">
+<img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200909_328971.png" alt="MEN PASS" class="pass-logo">
+</div>
 
 <h2>ارتقِ بتجربتك</h2>
 
@@ -3189,12 +3200,12 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
 <div class="feature"> تفعيل فوري</div>
 </div>
 
-                        <a href="pass.html" target="_blank" class="btn-primary">
+ <a href="pass.html" target="_blank" class="btn-primary">
     <i class="fas fa-plus"></i> اشترك الان
 </a>
-    
-</div>
 
+</div>
+             
                 <!-- NEWS -->
                 <div class="section-label">
                     <span class="icon-badge"><i class="fas fa-newspaper"></i> أخبار</span>
@@ -3661,14 +3672,14 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
                 warranty: "ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular: false },
             // MEN Pass المنتج الجديد
             { id: 5, name: "اشتراك MEN Pass", price: "7.50",
-                image: "https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png",
+                image: "https://www.socialcreator.com/srv/imgs/ti_imgs/200908_328971.png",
                 link: "#", category: "اشتراكات", rating: 5.0,
-                features: ["🎮 ألعاب حصرية للمشتركين", "📹 محتوى فيديو حصري", "📚 أبحاث وتقارير شهرية", "🚫 بدون إعلانات", "دعم فني 24/7"],
+                features: ["🎮 ألعاب حصرية للمشتركين", "📹 محتوى فيديو حصري", "📚 بثوث للمشتركين ", "🚫 بدون إعلانات", "دعم فني 24/7"],
                 cons: ["الاشتراك شهري قابل للتجديد"], 
-                description: "اشتراك MEN Pass يمنحك وصولاً غير محدود إلى محتوى حصري من ألعاب وفيديوهات وأبحاث، بدون أي إعلانات مزعجة.",
-                tags: ["اشتراك", "عضوية", "حصرية", "ألعاب", "فيديوهات", "أبحاث"],
+                description: "اشتراك MEN Pass يمنحك وصولاً غير محدود إلى محتوى حصري من ألعاب وفيديوهات وبثوث، بدون أي إعلانات مزعجة.",
+                tags: ["اشتراك", "عضوية", "حصرية", "ألعاب", "فيديوهات", "بثوث"],
                 usage: "بعد الشراء، سيتم إرسال تفاصيل الدخول إلى بريدك الإلكتروني خلال 24 ساعة.",
-                warranty: "ضمان استرداد خلال 7 أيام في حال عدم الرضا",
+                warranty: "ضمان استرداد خلال 3 أيام في حال عدم الرضا",
                 popular: true }
         ];
 
@@ -4292,7 +4303,7 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
             <div class="product-item" data-id="${p.id}">
               <img src="${p.image}" alt="${p.name}" class="product-img">
               <div class="product-info">
-                <div class="product-name">${p.name} ${p.popular ? '🔥' : ''}</div>
+                <div class="product-name">${p.name} ${p.popular ? '' : ''}</div>
                 <div class="product-price"><span>${p.price}</span><img src="${SAR_ICON}" class="currency-icon" alt="ر.س" /></div>
                 <div style="font-size:0.8rem; color:#8890b0; margin-bottom:8px;">★ ${p.rating}/5 • ${p.category}</div>
                 <div class="product-actions">
