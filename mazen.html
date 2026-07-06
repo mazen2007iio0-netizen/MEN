@@ -541,6 +541,103 @@
             justify-content: center;
         }
 
+        /* ===== MEN PASS AD ===== */
+        .men-pass-ad {
+            max-width: 700px;
+            margin: -20px auto 50px;
+            padding: 35px 40px;
+            background: linear-gradient(135deg, #0a2a66, #0066ff);
+            border-radius: 22px;
+            text-align: center;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            box-shadow: 0 0 35px rgba(0, 102, 255, 0.45);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .men-pass-ad:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 50px rgba(0, 102, 255, 0.6);
+        }
+        .men-pass-ad::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.05), transparent 70%);
+            pointer-events: none;
+        }
+        .men-pass-ad>* {
+            position: relative;
+            z-index: 1;
+        }
+        .men-pass-ad .badge {
+            display: inline-block;
+            background: #fff;
+            color: #0066ff;
+            padding: 8px 22px;
+            border-radius: 50px;
+            font-weight: 800;
+            margin-bottom: 18px;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        .men-pass-ad h2 {
+            font-size: 2.2rem;
+            margin: 10px 0 8px;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        .men-pass-ad p {
+            font-size: 1.05rem;
+            color: #eef5ff;
+            line-height: 1.8;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .men-pass-ad .features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 28px 0 30px;
+        }
+        .men-pass-ad .features div {
+            background: rgba(255, 255, 255, 0.12);
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 1rem;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: var(--transition);
+        }
+        .men-pass-ad .features div:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.03);
+        }
+        .men-pass-ad .btn-pass {
+            display: inline-block;
+            background: #fff;
+            color: #0066ff;
+            text-decoration: none;
+            padding: 16px 42px;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.5px;
+        }
+        .men-pass-ad .btn-pass:hover {
+            transform: scale(1.06);
+            background: #eaf2ff;
+            box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15);
+        }
+
         /* ===== GAMES GRID ===== */
         .games-grid {
             display: grid;
@@ -2463,6 +2560,13 @@
                 width: 100%;
                 max-width: 220px;
             }
+            .men-pass-ad {
+                padding: 30px 25px;
+                margin: -10px auto 40px;
+            }
+            .men-pass-ad h2 {
+                font-size: 1.8rem;
+            }
         }
         @media (max-width:768px) {
             .header-content {
@@ -2649,6 +2753,26 @@
             .barcode-wrapper-h {
                 width: 100%;
             }
+            .men-pass-ad {
+                padding: 25px 20px;
+                margin: -5px auto 35px;
+                border-radius: 18px;
+            }
+            .men-pass-ad h2 {
+                font-size: 1.5rem;
+            }
+            .men-pass-ad .features {
+                gap: 8px;
+                margin: 20px 0 22px;
+            }
+            .men-pass-ad .features div {
+                padding: 10px 14px;
+                font-size: 0.9rem;
+            }
+            .men-pass-ad .btn-pass {
+                padding: 14px 32px;
+                font-size: 1rem;
+            }
         }
         @media (max-width:480px) {
             .login-header-btn {
@@ -2767,6 +2891,35 @@
             }
             .barcode-wrapper-h {
                 width: 100%;
+            }
+            .men-pass-ad {
+                padding: 20px 16px;
+                margin: 0 auto 30px;
+                border-radius: 16px;
+            }
+            .men-pass-ad .badge {
+                font-size: 0.75rem;
+                padding: 6px 16px;
+            }
+            .men-pass-ad h2 {
+                font-size: 1.3rem;
+            }
+            .men-pass-ad p {
+                font-size: 0.9rem;
+            }
+            .men-pass-ad .features {
+                grid-template-columns: 1fr;
+                gap: 6px;
+                margin: 16px 0 18px;
+            }
+            .men-pass-ad .features div {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+            .men-pass-ad .btn-pass {
+                padding: 12px 28px;
+                font-size: 0.95rem;
+                border-radius: 12px;
             }
         }
 
@@ -2918,177 +3071,29 @@
                     <h2>سيطرة <span class="highlight">أقوى</span></h2>
                     <p>فريق اللاعبين وصنّاع المحتوى.</p>
                     <div class="btn-group">
-
-    <!-- الزخارف -->
-    <span class="star s1">✦</span>
-    <span class="star s2">✧</span>
-    <span class="star s3">✦</span>
-    <span class="star s4">✧</span>
-
-    <div class="line line-top"></div>
-    <div class="line line-bottom"></div>
-
-    <div class="pass-badge">
-        ✦ MEN PASS ✦
-    </div>
-
-    <h2>ارتقِ بتجربتك الآن</h2>
-
-    <p>
-        استمتع بتجربة فاخرة داخل <b>MEN Pass </b> مع أسرع أداء
-        إزالة الإعلانات ومزايا حصرية للأعضاء.
-    </p>
-
-   
-<a href="pass.html" target="_blank" class="btn-primary">
+                        <a href="pass.html" target="_blank" class="btn-primary">
     <i class="fas fa-plus"></i> اشترك الان
 </a>
-   
-</div>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
-
-*{
-    font-family:'Cairo',sans-serif;
-    box-sizing:border-box;
-}
-
-.men-pass-banner{
-    position:relative;
-    max-width:900px;
-    margin:50px auto;
-    padding:55px 35px;
-    overflow:hidden;
-    text-align:center;
-    color:#fff;
-
-    background:
-    radial-gradient(circle at top,#5ab4ff 0%,transparent 40%),
-    linear-gradient(145deg,#02142d,#003d99,#0077ff);
-
-    border-radius:28px;
-
-    border:1px solid rgba(255,255,255,.15);
-
-    box-shadow:
-    0 0 25px rgba(0,119,255,.5),
-    inset 0 0 80px rgba(255,255,255,.05);
-}
-
-/* خطوط زخرفية */
-.line{
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
-    width:88%;
-    height:1px;
-    background:linear-gradient(90deg,
-    transparent,#9bd2ff,#fff,#9bd2ff,transparent);
-}
-
-.line-top{top:24px;}
-.line-bottom{bottom:24px;}
-
-/* النجوم */
-.star{
-    position:absolute;
-    color:#fff;
-    opacity:.7;
-    animation:twinkle 3s infinite;
-    text-shadow:0 0 15px #fff;
-}
-
-.s1{top:25px;left:35px;font-size:28px;}
-.s2{top:40px;right:60px;font-size:20px;}
-.s3{bottom:35px;left:70px;font-size:18px;}
-.s4{bottom:30px;right:40px;font-size:26px;}
-
-@keyframes twinkle{
-0%,100%{
-opacity:.4;
-transform:scale(1);
-}
-50%{
-opacity:1;
-transform:scale(1.3);
-}
-}
-
-.pass-badge{
-display:inline-block;
-padding:10px 24px;
-margin-bottom:25px;
-border-radius:50px;
-background:rgba(255,255,255,.12);
-border:1px solid rgba(255,255,255,.35);
-backdrop-filter:blur(10px);
-font-weight:800;
-letter-spacing:2px;
-}
-
-.men-pass-banner h1{
-font-size:42px;
-margin:0;
-font-weight:900;
-text-shadow:0 0 20px rgba(255,255,255,.4);
-}
-
-.men-pass-banner p{
-margin:18px auto 30px;
-max-width:650px;
-font-size:19px;
-line-height:1.9;
-color:#eef6ff;
-}
-
-.features{
-display:flex;
-justify-content:center;
-gap:15px;
-flex-wrap:wrap;
-margin-bottom:35px;
-}
-
-.features span{
-padding:12px 18px;
-border-radius:14px;
-background:rgba(255,255,255,.08);
-border:1px solid rgba(255,255,255,.12);
-backdrop-filter:blur(8px);
-transition:.35s;
-}
-
-.features span:hover{
-transform:translateY(-5px);
-background:rgba(255,255,255,.15);
-}
-
-.join-btn{
-display:inline-block;
-padding:16px 40px;
-border-radius:60px;
-text-decoration:none;
-font-weight:900;
-font-size:18px;
-
-background:linear-gradient(180deg,#ffffff,#dceeff);
-color:#005cff;
-
-box-shadow:
-0 0 25px rgba(255,255,255,.35);
-
-transition:.35s;
-}
-
-.join-btn:hover{
-transform:scale(1.06);
-box-shadow:
-0 0 45px rgba(255,255,255,.7);
-}
-</style>
-
+                        <a href="https://youtube.com/@clan_men?si=8TEv8fKu5Coppwas" class="btn-secondary"><i class="fas fa-play-circle"></i> شاهد الفيديو</a>
+                    </div>
                 </div>
+
+                <!-- ===== MEN PASS AD ===== -->
+                <div class="men-pass-ad">
+                    <span class="badge">💎 MEN PASS</span>
+                    <h2>ارتقِ بتجربتك الآن</h2>
+                    <p>
+                        اشترك في <strong>MEN Pass</strong> واستمتع بتجربة أسرع وأكثر احترافية مع مزايا حصرية.
+                    </p>
+                    <div class="features">
+                        <div>🚫 إزالة الإعلانات</div>
+                        <div>⚡ أداء أسرع</div>
+                        <div>⭐ مميزات حصرية</div>
+                        <div>🔑 تفعيل فوري</div>
+                    </div>
+                    <a href="pass.html" class="btn-pass">
+                        اشترك الآن
+                    </a>
                 </div>
 
                 <!-- NEWS -->
