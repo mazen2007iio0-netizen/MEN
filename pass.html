@@ -1607,10 +1607,10 @@
 
         // ===== DATABASE =====
         const SUBSCRIPTIONS = {
-            "P10229": { discord: "#1029", name: "مازن", password: "1234", expiry: "2030-08-15" },
-            "P10230": { discord: "#2030", name: "عبدالرحمن", password: "5678", expiry: "2026-07-28" },
-            "P10231": { discord: "#3031", name: "مشعل", password: "9012", expiry: "2026-07-20" },
-            "P10271": { discord: "#1071", name: "جسار", password: "1212", expiry: "2026-08-01" },
+            "P10229": { discord: "#1029", name: "مازن", password: "1234", expiry: "2030-01-01" },
+            "P10230": { discord: "#2030", name: "عبدالرحمن", password: "1212", expiry: "2030-01-01" },
+            "P10231": { discord: "#3031", name: "مشعل", password: "1211", expiry: "2030-01-01" },
+            "P10271": { discord: "#1071", name: "جسار", password: "1122", expiry: "2026-08-01" },
             "P10202": { discord: "#4032", name: "سلمان", password: "1234", expiry: "2020-08-05" }
         };
 
@@ -1901,10 +1901,10 @@
         // ===== التحقق من البث المباشر =====
         function checkLiveStream() {
             if (!API_KEY || API_KEY === 'YOUR_API_KEY') {
-                streamStatusText.textContent = '⚠️ يرجى إدخال مفتاح API صالح في الكود.';
+                streamStatusText.textContent = ' عذرآ نواجه مشكله .';
                 return;
             }
-            streamStatusText.textContent = '⏳ جاري التحقق...';
+            streamStatusText.textContent = ' جاري التحقق...';
             const url =
                 `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHANNEL_ID}&eventType=live&type=video&key=${API_KEY}`;
 
@@ -1920,16 +1920,16 @@
                         const title = video.snippet.title;
                         const thumbnail = video.snippet.thumbnails.high.url || video.snippet.thumbnails.default.url;
                         showLiveStream(liveVideoId, title, thumbnail);
-                        streamStatusText.textContent = '✅ بث مباشر نشط';
+                        streamStatusText.textContent = ' بث مباشر نشط';
                     } else {
                         liveVideoId = null;
                         showNoStream();
-                        streamStatusText.textContent = '❌ لا يوجد بث مباشر حالياً';
+                        streamStatusText.textContent = ' لا يوجد بث مباشر حالياً';
                     }
                 })
                 .catch(err => {
                     console.error('Error checking live stream:', err);
-                    streamStatusText.textContent = '⚠️ حدث خطأ في التحقق من البث';
+                    streamStatusText.textContent = ' حدث خطأ في التحقق من البث';
                     showNoStream();
                 });
         }
@@ -1963,9 +1963,9 @@
                 wrapper.innerHTML = '';
                 liveVideoId = null;
                 showNoStream();
-                streamStatusText.textContent = '❌ تم إغلاق البث';
+                streamStatusText.textContent = ' تم إغلاق البث';
             });
-            streamStatusText.textContent = '✅ بث مباشر نشط';
+            streamStatusText.textContent = ' بث مباشر نشط';
         }
 
         function showNoStream() {
