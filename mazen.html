@@ -3078,23 +3078,122 @@
                     </div>
                 </div>
 
-                <!-- ===== MEN PASS AD ===== -->
-                <div class="men-pass-ad">
-                    <span class="badge">💎 MEN PASS</span>
-                    <h2>ارتقِ بتجربتك الآن</h2>
-                    <p>
-                        اشترك في <strong>MEN Pass</strong> واستمتع بتجربة أسرع وأكثر احترافية مع مزايا حصرية.
-                    </p>
-                    <div class="features">
-                        <div>🚫 إزالة الإعلانات</div>
-                        <div>⚡ أداء أسرع</div>
-                        <div>⭐ مميزات حصرية</div>
-                        <div>🔑 تفعيل فوري</div>
-                    </div>
-                    <a href="pass.html" class="btn-pass">
-                        اشترك الآن
-                    </a>
-                </div>
+                <!-- ===== MEN PASS PREMIUM ===== -->
+<style>
+.men-pass{
+position:relative;
+overflow:hidden;
+padding:35px;
+border-radius:28px;
+background:rgba(8,18,40,.45);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.08);
+box-shadow:0 0 40px rgba(0,110,255,.35);
+text-align:center;
+color:#fff;
+font-family:Cairo,sans-serif;
+}
+
+/* نجوم متحركة */
+.men-pass::before{
+content:"";
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle,#fff 1px,transparent 1.5px),
+radial-gradient(circle,#fff 1px,transparent 1.5px);
+background-size:120px 120px,180px 180px;
+background-position:0 0,60px 60px;
+opacity:.7;
+animation:stars 18s linear infinite;
+pointer-events:none;
+}
+
+@keyframes stars{
+from{transform:translateY(0);}
+to{transform:translateY(120px);}
+}
+
+.badge{
+display:inline-block;
+padding:8px 20px;
+border-radius:50px;
+background:rgba(255,255,255,.12);
+border:1px solid rgba(255,255,255,.2);
+backdrop-filter:blur(10px);
+font-weight:bold;
+margin-bottom:15px;
+}
+
+.men-pass h2{
+margin:10px 0;
+font-size:34px;
+text-shadow:0 0 18px #4ea6ff;
+}
+
+.men-pass p{
+color:#dbe9ff;
+margin-bottom:25px;
+}
+
+.features{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+margin-bottom:25px;
+}
+
+.feature{
+padding:18px;
+border-radius:18px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.08);
+transition:.3s;
+}
+
+.feature:hover{
+transform:translateY(-6px);
+box-shadow:0 0 20px rgba(0,140,255,.45);
+}
+
+.btn-pass{
+display:inline-block;
+padding:14px 34px;
+border-radius:50px;
+text-decoration:none;
+font-weight:bold;
+color:#fff;
+background:linear-gradient(90deg,#0077ff,#45b0ff);
+box-shadow:0 0 25px rgba(0,119,255,.6);
+transition:.3s;
+}
+
+.btn-pass:hover{
+transform:scale(1.05);
+box-shadow:0 0 35px rgba(0,119,255,.9);
+}
+</style>
+
+<div class="men-pass">
+
+<div class="badge"> MEN PASS</div>
+
+<h2>ارتقِ بتجربتك</h2>
+
+<p>احصل على أفضل تجربة مع مزايا حصرية.</p>
+
+<div class="features">
+<div class="feature"> إزالة الإعلانات</div>
+<div class="feature"> سرعة أعلى</div>
+<div class="feature"> مزايا حصرية</div>
+<div class="feature"> تفعيل فوري</div>
+</div>
+
+                        <a href="pass.html" target="_blank" class="btn-primary">
+    <i class="fas fa-plus"></i> اشترك الان
+</a>
+    
+</div>
 
                 <!-- NEWS -->
                 <div class="section-label">
