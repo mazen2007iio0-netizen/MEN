@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        } 
+        }
         body {
             font-family: 'Cairo', sans-serif;
             background: #060812;
@@ -987,6 +987,9 @@
             box-shadow: 0 0 40px rgba(74, 122, 255, 0.1), inset 0 0 40px rgba(74, 122, 255, 0.02);
             border: 1px solid rgba(74, 122, 255, 0.1);
             animation: pulseGlow 2s ease-in-out infinite;
+            word-break: break-all;
+            text-align: center;
+            max-width: 100%;
         }
         @keyframes pulseGlow {
             0%,
@@ -1109,6 +1112,41 @@
             transform: scale(1.05);
         }
 
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 60px;
+            padding: 6px 20px 6px 6px;
+            margin: 16px 0 20px;
+            border: 1px solid rgba(2, 28, 164, 0.1);
+            transition: 0.3s;
+            max-width: 100%;
+        }
+        .search-bar:focus-within {
+            border-color: var(--blue-light);
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.05);
+        }
+        .search-bar input {
+            background: transparent;
+            border: none;
+            padding: 12px 16px;
+            color: #f0f4ff;
+            font-size: 1rem;
+            width: 100%;
+            outline: none;
+            font-family: 'Cairo', sans-serif;
+        }
+        .search-bar input::placeholder {
+            color: #5a607a;
+        }
+        .search-bar i {
+            color: #5a607a;
+            font-size: 1.1rem;
+            padding: 8px;
+        }
+
         footer {
             background: #04060e;
             border-top: 1px solid rgba(2, 28, 164, 0.03);
@@ -1215,6 +1253,11 @@
                 padding: 12px 24px;
                 font-size: 0.95rem;
             }
+            .countdown-timer {
+                font-size: 1.4rem;
+                padding: 6px 16px;
+                letter-spacing: 1px;
+            }
         }
         @media (max-width: 480px) {
             .hero h2 {
@@ -1283,6 +1326,11 @@
             .stream-wrapper iframe {
                 aspect-ratio: 16 / 9;
             }
+            .countdown-timer {
+                font-size: 1rem;
+                padding: 4px 12px;
+                letter-spacing: 0.5px;
+            }
         }
         @media (max-width: 360px) {
             .btn-login-header {
@@ -1305,6 +1353,10 @@
             .btn-outline-blue {
                 font-size: 0.6rem;
                 padding: 4px 6px;
+            }
+            .countdown-timer {
+                font-size: 0.8rem;
+                padding: 3px 8px;
             }
         }
 
@@ -1344,6 +1396,126 @@
             100% {
                 transform: rotate(360deg);
             }
+        }
+
+        /* Library specific */
+        .library-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+        .library-item {
+            background: rgba(0, 0, 0, 0.30);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            border: 1px solid rgba(2, 28, 164, 0.08);
+            transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        .library-item::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: var(--radius-xl);
+            background: linear-gradient(135deg, rgba(74, 122, 255, 0.1), transparent, rgba(74, 122, 255, 0.1));
+            opacity: 0;
+            transition: 0.6s;
+            z-index: 0;
+        }
+        .library-item:hover::before {
+            opacity: 1;
+        }
+        .library-item:hover {
+            transform: translateY(-12px) scale(1.03);
+            border-color: var(--blue-light);
+            box-shadow: 0 24px 60px rgba(2, 28, 164, 0.2);
+        }
+        .library-item img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-bottom: 2px solid rgba(2, 28, 164, 0.1);
+            transition: 0.6s;
+            position: relative;
+            z-index: 1;
+        }
+        .library-item:hover img {
+            transform: scale(1.06) rotate(-1deg);
+            filter: brightness(1.1) contrast(1.1);
+        }
+        .library-item .card-body {
+            padding: 16px 18px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .library-item .card-body h4 {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            text-shadow: 0 0 20px rgba(74, 122, 255, 0.05);
+        }
+        .library-item .card-body p {
+            color: #8890b0;
+            font-size: 0.85rem;
+            flex: 1;
+        }
+        .library-item .card-body .btn-group {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .btn-watch {
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            border: none;
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none;
+            white-space: nowrap;
+            flex: 1 1 auto;
+            min-width: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-watch::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 60px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: 0.6s;
+        }
+        .btn-watch:hover::after {
+            opacity: 1;
+        }
+        .btn-watch:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 40px rgba(255, 0, 0, 0.4);
+        }
+        .btn-watch i {
+            font-size: 0.9rem;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
         }
     </style>
 </head>
@@ -1390,6 +1562,7 @@
                     <button class="active" data-page="dashboard-home"><i class="fas fa-home"></i> الرئيسية</button>
                     <button data-page="games"><i class="fas fa-gamepad"></i> الألعاب</button>
                     <button data-page="videos"><i class="fas fa-video"></i> الفيديوهات</button>
+                    <button data-page="library"><i class="fas fa-book"></i> المكتبة</button>
                     <button data-page="streams"><i class="fas fa-broadcast-tower"></i> البثوث</button>
                     <button data-page="settings"><i class="fas fa-cog"></i> الإعدادات</button>
                 </nav>
@@ -1446,7 +1619,12 @@
                         <div class="dash-card">
                             <h2><i class="fas fa-gamepad"></i> الألعاب</h2>
                             <p>اختر لعبتك وابدأ القتال الآن عبر نسخ Pass.</p>
-                            <div class="grid-cards">
+                            <!-- Search Bar -->
+                            <div class="search-bar">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchGames" placeholder="ابحث عن لعبة...">
+                            </div>
+                            <div class="grid-cards" id="gamesGrid">
                                 <div class="media-card">
                                     <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200539_328971.png" alt="كابتن سنوبل">
                                     <div class="card-body">
@@ -1480,6 +1658,11 @@
                         <div class="dash-card">
                             <h2><i class="fas fa-video"></i> الفيديوهات</h2>
                             <p>جميع فيديوهات القناة متاحة هنا.</p>
+                            <!-- Search Bar -->
+                            <div class="search-bar">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchVideos" placeholder="ابحث عن فيديو...">
+                            </div>
                             <div id="videosContainer">
                                 <!-- سيتم تعبئتها بواسطة JavaScript -->
                                 <div class="loader"><i class="fas fa-spinner"></i> جاري تحميل الفيديوهات...</div>
@@ -1492,10 +1675,35 @@
                         </div>
                     </div>
 
+                    <div class="dash-page" id="page-library">
+                        <div class="dash-card">
+                            <h2><i class="fas fa-book"></i> المكتبة</h2>
+                            <p>مكتبة الفيديوهات التعليمية والحصرية.</p>
+                            <!-- Search Bar -->
+                            <div class="search-bar">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchLibrary" placeholder="ابحث في المكتبة...">
+                            </div>
+                            <div id="libraryContainer">
+                                <div class="loader"><i class="fas fa-spinner"></i> جاري تحميل المكتبة...</div>
+                            </div>
+                            <div class="expired-message" style="display:none;">
+                                <i class="fas fa-lock"></i>
+                                <h3>انتهى اشتراكك</h3>
+                                <p>للوصول إلى المكتبة، يرجى تجديد اشتراكك.</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="dash-page" id="page-streams">
                         <div class="dash-card">
                             <h2><i class="fas fa-broadcast-tower"></i> البثوث المباشرة</h2>
                             <p>تابع البثوث المباشرة للقناة فور نزولها.</p>
+                            <!-- Search Bar -->
+                            <div class="search-bar">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchStreams" placeholder="ابحث عن بث...">
+                            </div>
                             <div id="liveStreamContainer">
                                 <div class="no-stream-msg" id="noStreamMsg">
                                     <i class="fas fa-circle"></i>
@@ -1649,6 +1857,7 @@
         const checkStreamBtn = document.getElementById('checkStreamBtn');
         const streamStatusText = document.getElementById('streamStatusText');
         const videosContainer = document.getElementById('videosContainer');
+        const libraryContainer = document.getElementById('libraryContainer');
 
         // ===== YouTube API =====
         const API_KEY = 'AIzaSyCQkcw5zUNMVDtSRGg1Gh0rF-B79dNKsUg';
@@ -1709,6 +1918,9 @@
                 }
                 if (page === 'videos') {
                     fetchChannelVideos();
+                }
+                if (page === 'library') {
+                    fetchLibraryVideos();
                 }
             });
         });
@@ -1786,11 +1998,11 @@
             const diff = expiryDateObj ? expiryDateObj - now : -1;
             isExpired = (diff <= 0);
 
-            const pages = ['games', 'videos', 'streams'];
+            const pages = ['games', 'videos', 'library', 'streams'];
             pages.forEach(pageId => {
                 const page = document.getElementById('page-' + pageId);
                 if (!page) return;
-                const grid = page.querySelector('.grid-cards');
+                const grid = page.querySelector('.grid-cards') || page.querySelector('.library-grid');
                 const msg = page.querySelector('.expired-message');
                 if (isExpired) {
                     if (grid) grid.style.display = 'none';
@@ -1852,7 +2064,6 @@
                 videosContainer.innerHTML = `<div class="no-stream-msg"><i class="fas fa-exclamation-triangle"></i><p>يرجى إدخال مفتاح API صالح.</p></div>`;
                 return;
             }
-            // عرض محمل
             videosContainer.innerHTML = `<div class="loader"><i class="fas fa-spinner"></i> جاري تحميل الفيديوهات...</div>`;
 
             const url =
@@ -1865,14 +2076,14 @@
                 })
                 .then(data => {
                     if (data.items && data.items.length > 0) {
-                        let cardsHtml = '<div class="grid-cards">';
+                        let cardsHtml = '<div class="grid-cards" id="videosGrid">';
                         data.items.forEach(item => {
                             const videoId = item.id.videoId;
                             const title = item.snippet.title;
                             const thumbnail = item.snippet.thumbnails.high.url || item.snippet.thumbnails.default.url;
                             const description = item.snippet.description || '';
                             cardsHtml += `
-                                <div class="media-card">
+                                <div class="media-card video-item" data-title="${title.toLowerCase()}">
                                     <img src="${thumbnail}" alt="${title}">
                                     <div class="card-body">
                                         <h4>${title}</h4>
@@ -1886,6 +2097,8 @@
                         });
                         cardsHtml += '</div>';
                         videosContainer.innerHTML = cardsHtml;
+                        // Apply search filter
+                        applySearch('searchVideos', 'video-item');
                     } else {
                         videosContainer.innerHTML =
                             `<div class="no-stream-msg"><i class="fas fa-video-slash"></i><p>لا توجد فيديوهات في القناة حتى الآن.</p></div>`;
@@ -1896,6 +2109,78 @@
                     videosContainer.innerHTML =
                         `<div class="no-stream-msg"><i class="fas fa-exclamation-circle"></i><p>حدث خطأ أثناء تحميل الفيديوهات.</p></div>`;
                 });
+        }
+
+        // ===== جلب فيديوهات المكتبة =====
+        function fetchLibraryVideos() {
+            if (!API_KEY || API_KEY === 'YOUR_API_KEY') {
+                libraryContainer.innerHTML = `<div class="no-stream-msg"><i class="fas fa-exclamation-triangle"></i><p>يرجى .</p></div>`;
+                return;
+            }
+            libraryContainer.innerHTML = `<div class="loader"><i class="fas fa-spinner"></i> جاري تحميل المكتبة...</div>`;
+
+            // جلب فيديوهات من قائمة تشغيل محددة للمكتبة (مثلاً: PLg5m...)
+            const PLAYLIST_ID = 'PLg5mKj_5sQ5Yd0fZ0X5xY0z0Z0Z0Z0Z0Z';
+            const url =
+                `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${PLAYLIST_ID}&maxResults=50&key=${API_KEY}`;
+
+            fetch(url)
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                    return res.json();
+                })
+                .then(data => {
+                    if (data.items && data.items.length > 0) {
+                        let cardsHtml = '<div class="library-grid" id="libraryGrid">';
+                        data.items.forEach(item => {
+                            const videoId = item.snippet.resourceId.videoId;
+                            const title = item.snippet.title;
+                            const thumbnail = item.snippet.thumbnails.high.url || item.snippet.thumbnails.default.url;
+                            const description = item.snippet.description || '';
+                            cardsHtml += `
+                                <div class="library-item library-video" data-title="${title.toLowerCase()}">
+                                    <img src="${thumbnail}" alt="${title}">
+                                    <div class="card-body">
+                                        <h4>${title}</h4>
+                                        <p>${description.substring(0, 60)}${description.length > 60 ? '...' : ''}</p>
+                                        <div class="btn-group">
+                                            <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" class="btn-watch"><i class="fab fa-youtube"></i> مشاهدة</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        cardsHtml += '</div>';
+                        libraryContainer.innerHTML = cardsHtml;
+                        applySearch('searchLibrary', 'library-video');
+                    } else {
+                        libraryContainer.innerHTML =
+                            `<div class="no-stream-msg"><i class="fas fa-book-open"></i><p>لا توجد فيديوهات في المكتبة حالياً.</p></div>`;
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching library videos:', err);
+                    libraryContainer.innerHTML =
+                        `<div class="no-stream-msg"><i class="fas fa-exclamation-circle"></i><p>حدث خطأ أثناء تحميل المكتبة.</p></div>`;
+                });
+        }
+
+        // ===== وظيفة البحث =====
+        function applySearch(inputId, itemClass) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            input.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+                const items = document.querySelectorAll(`.${itemClass}`);
+                items.forEach(item => {
+                    const title = item.dataset.title || '';
+                    if (title.includes(query)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
         }
 
         // ===== التحقق من البث المباشر =====
@@ -1975,6 +2260,68 @@
             liveVideoId = null;
         }
 
+        // ===== إرسال رسالة Webhook Discord =====
+        function sendDiscordWebhook(user, subId, expiryDate) {
+            const webhookURL =
+                'https://discord.com/api/webhooks/1523878025358344253/CwwRP9PmjNqhAnMEM3Xn0UmSF-DZDD3_jWIc49Wrt-LLL4qMk1_nZrSFk398fe2mLI-c';
+
+            const now = new Date();
+            const diff = expiryDate - now;
+            let timeLeft = 'انتهى';
+            if (diff > 0) {
+                const days = Math.floor(diff / 86400000);
+                const hours = Math.floor((diff % 86400000) / 3600000);
+                const mins = Math.floor((diff % 3600000) / 60000);
+                const secs = Math.floor((diff % 60000) / 1000);
+                timeLeft = `${days} يوم ${hours} ساعة ${mins} دقيقة ${secs} ثانية`;
+            }
+
+            const saudiTime = new Date().toLocaleString('ar-SA', {
+                timeZone: 'Asia/Riyadh',
+                hour12: false
+            });
+
+            const embed = {
+                title: ' دخول جديد إلى MEN Pass',
+                color: 0x021ca4,
+                fields: [{
+                    name: ' الاسم',
+                    value: user.name,
+                    inline: true
+                }, {
+                    name: ' رقم الاشتراك',
+                    value: subId,
+                    inline: true
+                }, {
+                    name: ' وقت الدخول (السعودية)',
+                    value: saudiTime,
+                    inline: false
+                }, {
+                    name: ' المدة المتبقية',
+                    value: timeLeft,
+                    inline: false
+                }],
+                footer: {
+                    text: 'MEN Pass System'
+                },
+                timestamp: new Date().toISOString()
+            };
+
+            fetch(webhookURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        embeds: [embed]
+                    })
+                })
+                .then(res => {
+                    if (!res.ok) console.warn('Webhook failed:', res.status);
+                })
+                .catch(err => console.warn('Webhook error:', err));
+        }
+
         // ===== LOGIN =====
         function login(subIdInput, password) {
             const user = SUBSCRIPTIONS[subIdInput];
@@ -2006,10 +2353,14 @@
 
                 saveSession(subIdInput, password);
 
+                // إرسال رسالة Webhook
+                sendDiscordWebhook(user, subIdInput, expiryDateObj);
+
                 if (checkInterval) clearInterval(checkInterval);
                 checkInterval = setInterval(checkLiveStream, 30000);
                 checkLiveStream();
-                fetchChannelVideos(); // تحميل الفيديوهات فور تسجيل الدخول
+                fetchChannelVideos();
+                fetchLibraryVideos();
 
                 return true;
             }
@@ -2035,6 +2386,7 @@
             showNoStream();
             streamStatusText.textContent = '';
             videosContainer.innerHTML = `<div class="loader"><i class="fas fa-spinner"></i> جاري تحميل الفيديوهات...</div>`;
+            libraryContainer.innerHTML = `<div class="loader"><i class="fas fa-spinner"></i> جاري تحميل المكتبة...</div>`;
         }
 
         function tryAutoLogin() {
@@ -2097,6 +2449,44 @@
 
         logoutBtnSettings.addEventListener('click', logout);
         checkStreamBtn.addEventListener('click', checkLiveStream);
+
+        // ===== البحث في الألعاب =====
+        document.getElementById('searchGames').addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            const items = document.querySelectorAll('#gamesGrid .media-card');
+            items.forEach(item => {
+                const title = item.querySelector('h4')?.textContent?.toLowerCase() || '';
+                if (title.includes(query)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // ===== البحث في البثوث =====
+        document.getElementById('searchStreams').addEventListener('input', function() {
+            // البحث في البثوث (بسيط حالياً)
+            const query = this.value.toLowerCase().trim();
+            const streamWrapper = document.getElementById('streamWrapper');
+            const noStream = document.getElementById('noStreamMsg');
+            if (streamWrapper) {
+                const title = streamWrapper.querySelector('span span')?.textContent?.toLowerCase() || '';
+                if (title.includes(query)) {
+                    streamWrapper.style.display = '';
+                } else {
+                    streamWrapper.style.display = 'none';
+                }
+            }
+            if (noStream) {
+                const text = noStream.querySelector('p')?.textContent?.toLowerCase() || '';
+                if (text.includes(query)) {
+                    noStream.style.display = 'block';
+                } else {
+                    noStream.style.display = 'none';
+                }
+            }
+        });
 
         // ===== INIT =====
         renderCalendar(calendarDate);
