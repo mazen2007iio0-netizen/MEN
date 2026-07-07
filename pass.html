@@ -1517,6 +1517,24 @@
             font-size: 0.9rem;
             filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
         }
+
+        .expired-banner {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+            color: #ff6b6b;
+        }
+
+        /* أخفاء المحتوى عند انتهاء الاشتراك */
+        .expired-hidden {
+            display: none !important;
+        }
+        .expired-visible {
+            display: block !important;
+        }
     </style>
 </head>
 <body>
@@ -1560,9 +1578,9 @@
 
                 <nav class="dash-nav-horizontal" id="dashNav">
                     <button class="active" data-page="dashboard-home"><i class="fas fa-home"></i> الرئيسية</button>
-                    <button data-page="games"><i class="fas fa-gamepad"></i> الألعاب</button>
+                    <button data-page="games" id="navGames"><i class="fas fa-gamepad"></i> الألعاب</button>
                     <button data-page="videos"><i class="fas fa-video"></i> الفيديوهات</button>
-                    <button data-page="library"><i class="fas fa-book"></i> المكتبة</button>
+                    <button data-page="library" id="navLibrary"><i class="fas fa-book"></i> المكتبة</button>
                     <button data-page="streams"><i class="fas fa-broadcast-tower"></i> البثوث</button>
                     <button data-page="settings"><i class="fas fa-cog"></i> الإعدادات</button>
                 </nav>
@@ -1858,6 +1876,9 @@
         const streamStatusText = document.getElementById('streamStatusText');
         const videosContainer = document.getElementById('videosContainer');
         const libraryContainer = document.getElementById('libraryContainer');
+        const gamesGrid = document.getElementById('gamesGrid');
+        const navGames = document.getElementById('navGames');
+        const navLibrary = document.getElementById('navLibrary');
 
         // ===== YouTube API =====
         const API_KEY = 'AIzaSyCQkcw5zUNMVDtSRGg1Gh0rF-B79dNKsUg';
@@ -1921,6 +1942,10 @@
                 }
                 if (page === 'library') {
                     fetchLibraryVideos();
+                }
+                // عند الانتقال إلى الألعاب أو المكتبة، نطبق حالة الاشتراك
+                if (page === 'games' || page === 'library') {
+                    applySubscriptionVisibility();
                 }
             });
         });
@@ -1992,13 +2017,48 @@
             renderCalendar(calendarDate);
         });
 
+        // ===== تطبيق حالة الاشتراك على الألعاب والمكتبة =====
+        function applySubscriptionVisibility() {
+            // الألعاب
+            const gamesPage = document.getElementById('page-games');
+            const gamesGridEl = gamesPage.querySelector('.grid-cards');
+            const gamesExpiredMsg = gamesPage.querySelector('.expired-message');
+            
+            // المكتبة
+            const libraryPage = document.getElementById('page-library');
+            const libraryContainerEl = libraryPage.querySelector('#libraryContainer');
+            const libraryExpiredMsg = libraryPage.querySelector('.expired-message');
+
+            if (isExpired) {
+                // أخفاء الألعاب
+                if (gamesGridEl) gamesGridEl.style.display = 'none';
+                if (gamesExpiredMsg) gamesExpiredMsg.style.display = 'block';
+                
+                // أخفاء المكتبة
+                if (libraryContainerEl) libraryContainerEl.style.display = 'none';
+                if (libraryExpiredMsg) libraryExpiredMsg.style.display = 'block';
+            } else {
+                // إظهار الألعاب
+                if (gamesGridEl) gamesGridEl.style.display = 'grid';
+                if (gamesExpiredMsg) gamesExpiredMsg.style.display = 'none';
+                
+                // إظهار المكتبة
+                if (libraryContainerEl) libraryContainerEl.style.display = 'block';
+                if (libraryExpiredMsg) libraryExpiredMsg.style.display = 'none';
+            }
+        }
+
         // ===== UPDATE UI =====
         function updateUI() {
             const now = new Date();
             const diff = expiryDateObj ? expiryDateObj - now : -1;
             isExpired = (diff <= 0);
 
-            const pages = ['games', 'videos', 'library', 'streams'];
+            // تحديث حالة الألعاب والمكتبة
+            applySubscriptionVisibility();
+
+            // تحديث باقي الصفحات
+            const pages = ['videos', 'streams'];
             pages.forEach(pageId => {
                 const page = document.getElementById('page-' + pageId);
                 if (!page) return;
@@ -2097,7 +2157,6 @@
                         });
                         cardsHtml += '</div>';
                         videosContainer.innerHTML = cardsHtml;
-                        // Apply search filter
                         applySearch('searchVideos', 'video-item');
                     } else {
                         videosContainer.innerHTML =
@@ -2119,7 +2178,7 @@
             }
             libraryContainer.innerHTML = `<div class="loader"><i class="fas fa-spinner"></i> جاري تحميل المكتبة...</div>`;
 
-            // جلب فيديوهات من قائمة تشغيل محددة للمكتبة (مثلاً: PLg5m...)
+            // جلب فيديوهات من قائمة تشغيل محددة للمكتبة
             const PLAYLIST_ID = 'PLg5mKj_5sQ5Yd0fZ0X5xY0z0Z0Z0Z0Z0Z';
             const url =
                 `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${PLAYLIST_ID}&maxResults=50&key=${API_KEY}`;
@@ -2353,7 +2412,6 @@
 
                 saveSession(subIdInput, password);
 
-                // إرسال رسالة Webhook
                 sendDiscordWebhook(user, subIdInput, expiryDateObj);
 
                 if (checkInterval) clearInterval(checkInterval);
@@ -2387,6 +2445,15 @@
             streamStatusText.textContent = '';
             videosContainer.innerHTML = `<div class="loader"><i class="fas fa-spinner"></i> جاري تحميل الفيديوهات...</div>`;
             libraryContainer.innerHTML = `<div class="loader"><i class="fas fa-spinner"></i> جاري تحميل المكتبة...</div>`;
+            // إعادة تعيين حالة الألعاب والمكتبة
+            const gamesGridEl = document.getElementById('gamesGrid');
+            const gamesExpiredMsg = document.querySelector('#page-games .expired-message');
+            const libraryContainerEl = document.getElementById('libraryContainer');
+            const libraryExpiredMsg = document.querySelector('#page-library .expired-message');
+            if (gamesGridEl) gamesGridEl.style.display = 'grid';
+            if (gamesExpiredMsg) gamesExpiredMsg.style.display = 'none';
+            if (libraryContainerEl) libraryContainerEl.style.display = 'block';
+            if (libraryExpiredMsg) libraryExpiredMsg.style.display = 'none';
         }
 
         function tryAutoLogin() {
@@ -2466,7 +2533,6 @@
 
         // ===== البحث في البثوث =====
         document.getElementById('searchStreams').addEventListener('input', function() {
-            // البحث في البثوث (بسيط حالياً)
             const query = this.value.toLowerCase().trim();
             const streamWrapper = document.getElementById('streamWrapper');
             const noStream = document.getElementById('noStreamMsg');
