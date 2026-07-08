@@ -3796,7 +3796,7 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
     #aiSendBtn {
         width: 48px;
         height: 48px;
-        border-radius: 12px; /* البداية مربع */
+        border-radius: 12px !important; /* البداية مربع */
         background: linear-gradient(135deg, #021ca4, #1a3a9e);
         color: white;
         border: none;
@@ -3820,16 +3820,16 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
     }
 
     /* عند وجود نص - دائري وسهم للأعلى */
-    #aiSendBtn.has-text {
-        border-radius: 50%;
+    #aiSendBtn.circle {
+        border-radius: 50% !important;
     }
 
-    #aiSendBtn.has-text i {
+    #aiSendBtn.circle i {
         transform: rotate(0deg);
     }
 
     /* عند عدم وجود نص - مربع وسهم للخلف */
-    #aiSendBtn:not(.has-text) i {
+    #aiSendBtn:not(.circle) i {
         transform: rotate(180deg);
     }
 
@@ -4013,7 +4013,6 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
         color: #aaa;
     }
 
-    /* ===== تنسيقات إضافية للجوال ===== */
     @media (max-width: 500px) {
         .ai-modal {
             padding: 16px;
@@ -4039,93 +4038,85 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // ===== عناصر البحث =====
-        const sendBtn = document.getElementById('aiSendBtn');
-        const userInput = document.getElementById('aiUserInput');
-        const icon = sendBtn.querySelector('i');
+document.addEventListener('DOMContentLoaded', function() {
+    const sendBtn = document.getElementById('aiSendBtn');
+    const userInput = document.getElementById('aiUserInput');
 
-        // ===== دالة تحديث شكل الزر =====
-        function updateButtonStyle() {
-            const hasText = userInput.value.trim().length > 0;
-
-            if (hasText) {
-                // يوجد نص → دائري + سهم للأعلى
-                sendBtn.classList.add('has-text');
-            } else {
-                // لا يوجد نص → مربع + سهم للخلف
-                sendBtn.classList.remove('has-text');
-            }
+    function updateButton() {
+        const hasText = userInput.value.trim().length > 0;
+        
+        if (hasText) {
+            sendBtn.classList.add('circle');
+        } else {
+            sendBtn.classList.remove('circle');
         }
+    }
 
-        // ===== عند الكتابة في المدخل =====
-        userInput.addEventListener('input', updateButtonStyle);
+    // عند الكتابة
+    userInput.addEventListener('input', updateButton);
 
-        // ===== عند الضغط على زر الإرسال =====
-        sendBtn.addEventListener('click', function() {
-            const message = userInput.value.trim();
-            if (message === '') return;
+    // عند الإرسال
+    sendBtn.addEventListener('click', function() {
+        const msg = userInput.value.trim();
+        if (msg === '') return;
 
-            // إضافة رسالة المستخدم
-            const chatBox = document.getElementById('aiChatBox');
-            const userMsg = document.createElement('div');
-            userMsg.className = 'ai-message user';
-            userMsg.textContent = message;
-            chatBox.appendChild(userMsg);
+        const chatBox = document.getElementById('aiChatBox');
+        
+        // رسالة المستخدم
+        const userMsg = document.createElement('div');
+        userMsg.className = 'ai-message user';
+        userMsg.textContent = msg;
+        chatBox.appendChild(userMsg);
 
-            // مسح المدخل وتحديث الزر
-            userInput.value = '';
-            updateButtonStyle();
+        // مسح الحقل
+        userInput.value = '';
+        updateButton();
+        chatBox.scrollTop = chatBox.scrollHeight;
 
-            // تمرير للأسفل
+        // رد البوت
+        setTimeout(() => {
+            const botMsg = document.createElement('div');
+            botMsg.className = 'ai-message bot';
+            botMsg.textContent = '✅ تم استلام رسالتك! سأقوم بالرد عليك قريباً.';
+            chatBox.appendChild(botMsg);
             chatBox.scrollTop = chatBox.scrollHeight;
+        }, 500);
+    });
 
-            // محاكاة رد البوت (اختياري)
-            setTimeout(() => {
-                const botMsg = document.createElement('div');
-                botMsg.className = 'ai-message bot';
-                botMsg.textContent = ' تم استلام رسالتك! سأقوم بالرد عليك قريباً.';
-                chatBox.appendChild(botMsg);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 600);
-        });
+    // Enter
+    userInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendBtn.click();
+        }
+    });
 
-        // ===== إرسال بالضغط على Enter =====
-        userInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendBtn.click();
-            }
-        });
-
-        // ===== تشغيل الدالة عند التحميل =====
-        updateButtonStyle();
-
-        // ===== أزرار الاختصار =====
-        document.querySelectorAll('.qbtn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const query = this.getAttribute('data-query');
-                userInput.value = query;
-                updateButtonStyle();
-                sendBtn.click();
-            });
-        });
-
-        // ===== إغلاق المودال =====
-        document.getElementById('aiModalClose').addEventListener('click', function() {
-            document.getElementById('aiModal').classList.remove('active');
-        });
-
-        document.getElementById('aiModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('active');
-            }
+    // أزرار الاختصار
+    document.querySelectorAll('.qbtn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            userInput.value = this.getAttribute('data-query');
+            updateButton();
+            sendBtn.click();
         });
     });
 
-    // ===== فتح المودال (استدعاء من أي مكان) =====
-    function openAiModal() {
-        document.getElementById('aiModal').classList.add('active');
-    }
+    // إغلاق المودال
+    document.getElementById('aiModalClose').addEventListener('click', function() {
+        document.getElementById('aiModal').classList.remove('active');
+    });
+
+    document.getElementById('aiModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('active');
+        }
+    });
+
+    // التشغيل الأولي
+    updateButton();
+});
+
+function openAiModal() {
+    document.getElementById('aiModal').classList.add('active');
+}
 </script>
         // ==================== WEBHOOKS & DATABASE ====================
         const WEBHOOKS = {
