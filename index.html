@@ -1309,6 +1309,7 @@
             display: flex;
             gap: 12px;
             margin-top: 4px;
+            align-items: center;
         }
         .ai-input-row input {
             flex: 1;
@@ -1320,6 +1321,7 @@
             outline: none;
             font-size: 0.95rem;
             transition: all 0.3s ease;
+            min-width: 0;
         }
         .ai-input-row input:focus {
             border-color: var(--blue-deep);
@@ -1332,21 +1334,32 @@
         .ai-input-row button {
             background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
             border: none;
-            border-radius: 60px;
-            padding: 0 28px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
             color: #ffffff;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1rem;
+            font-size: 1.4rem;
             display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.08);
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
+            flex-shrink: 0;
+            position: relative;
         }
         .ai-input-row button:hover {
-            transform: scale(1.04);
-            box-shadow: 0 8px 32px rgba(2, 28, 164, 0.15);
+            transform: scale(1.06) translateY(-2px);
+            box-shadow: 0 8px 32px rgba(2, 28, 164, 0.3);
+        }
+        .ai-input-row button:active {
+            transform: scale(0.95);
+        }
+        .ai-input-row button i {
+            font-size: 1.4rem;
+            line-height: 1;
         }
 
         .ai-modal {
@@ -2773,6 +2786,15 @@
                 padding: 14px 32px;
                 font-size: 1rem;
             }
+            .ai-input-row button {
+                width: 44px;
+                height: 44px;
+                min-width: 44px;
+                font-size: 1.2rem;
+            }
+            .ai-input-row button i {
+                font-size: 1.2rem;
+            }
         }
         @media (max-width:480px) {
             .login-header-btn {
@@ -2921,6 +2943,15 @@
                 font-size: 0.95rem;
                 border-radius: 12px;
             }
+            .ai-input-row button {
+                width: 38px;
+                height: 38px;
+                min-width: 38px;
+                font-size: 1rem;
+            }
+            .ai-input-row button i {
+                font-size: 1rem;
+            }
         }
 
         /* ===== TOAST ===== */
@@ -3023,6 +3054,258 @@
                 top: 4px;
                 right: 6px;
             }
+        }
+
+        /* ===== PORTAL CALENDAR ===== */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin: 16px 0;
+        }
+        .calendar-day {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            padding: 10px 4px;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            border: 1px solid rgba(2, 28, 164, 0.03);
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.85rem;
+        }
+        .calendar-day .day-number {
+            font-weight: 700;
+            color: #a0a8c0;
+            font-size: 0.9rem;
+        }
+        .calendar-day .event-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 4px;
+            display: inline-block;
+        }
+        .calendar-day .event-dot.orange {
+            background: #f5b342;
+            box-shadow: 0 0 12px rgba(245, 179, 66, 0.4);
+        }
+        .calendar-day .event-dot.green {
+            background: #4caf50;
+            box-shadow: 0 0 12px rgba(76, 175, 80, 0.4);
+        }
+        .calendar-day .event-dot.red {
+            background: #ff6b6b;
+            box-shadow: 0 0 12px rgba(255, 107, 107, 0.4);
+        }
+        .calendar-day .event-title {
+            font-size: 0.55rem;
+            color: #b0b8d0;
+            margin-top: 2px;
+            line-height: 1.2;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .calendar-day.has-event {
+            border-color: rgba(2, 28, 164, 0.10);
+            background: rgba(2, 28, 164, 0.03);
+        }
+        .calendar-day.today {
+            border-color: var(--blue-deep);
+            background: rgba(2, 28, 164, 0.06);
+        }
+        .calendar-day.today .day-number {
+            color: var(--blue-light);
+        }
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .calendar-header span {
+            text-align: center;
+            font-weight: 700;
+            color: var(--blue-light);
+            font-size: 0.8rem;
+        }
+        .calendar-month {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .calendar-nav button {
+            background: rgba(2, 28, 164, 0.06);
+            border: 1px solid rgba(2, 28, 164, 0.08);
+            color: var(--blue-light);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .calendar-nav button:hover {
+            background: rgba(2, 28, 164, 0.12);
+            border-color: var(--blue-deep);
+        }
+        .calendar-legend {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .calendar-legend .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: #8890b0;
+        }
+        .calendar-legend .legend-item .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .calendar-legend .legend-item .dot.orange {
+            background: #f5b342;
+        }
+        .calendar-legend .legend-item .dot.green {
+            background: #4caf50;
+        }
+        .calendar-legend .legend-item .dot.red {
+            background: #ff6b6b;
+        }
+
+        /* ===== SUPPORT FORM ===== */
+        .support-form {
+            background: rgba(0, 0, 0, 0.10);
+            border-radius: var(--radius-xl);
+            padding: 20px 24px;
+            margin-top: 16px;
+            border: 1px solid rgba(2, 28, 164, 0.03);
+        }
+        .support-form .form-group {
+            margin-bottom: 16px;
+        }
+        .support-form .form-group label {
+            display: block;
+            color: #b0b8d0;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+        .support-form .form-group label .required {
+            color: #ff6b6b;
+            margin-right: 4px;
+        }
+        .support-form .form-group select,
+        .support-form .form-group input,
+        .support-form .form-group textarea {
+            width: 100%;
+            padding: 12px 18px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(2, 28, 164, 0.04);
+            border-radius: 16px;
+            color: #f0f4ff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .support-form .form-group select option {
+            background: #0a0a14;
+            color: #f0f4ff;
+        }
+        .support-form .form-group select:focus,
+        .support-form .form-group input:focus,
+        .support-form .form-group textarea:focus {
+            border-color: var(--blue-deep);
+            box-shadow: 0 0 30px rgba(2, 28, 164, 0.02);
+            background: rgba(0, 0, 0, 0.35);
+        }
+        .support-form .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .support-form .form-group .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        .support-form .form-group .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .support-form .form-group .file-input-wrapper .file-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 18px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px dashed rgba(2, 28, 164, 0.08);
+            border-radius: 16px;
+            color: #8890b0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .support-form .form-group .file-input-wrapper .file-label:hover {
+            border-color: var(--blue-deep);
+            background: rgba(2, 28, 164, 0.03);
+        }
+        .support-form .form-group .file-input-wrapper .file-label i {
+            color: var(--blue-light);
+            font-size: 1.2rem;
+        }
+        .support-form .btn-submit-support {
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            border: none;
+            border-radius: 60px;
+            padding: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            width: 100%;
+            cursor: pointer;
+            font-size: 1.05rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 24px rgba(2, 28, 164, 0.08);
+        }
+        .support-form .btn-submit-support:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 40px rgba(2, 28, 164, 0.15);
+        }
+        .support-form .file-name {
+            font-size: 0.8rem;
+            color: #4caf50;
+            margin-top: 4px;
+            display: none;
+        }
+        .support-form .file-name.show {
+            display: block;
         }
     </style>
 </head>
@@ -3478,6 +3761,7 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
     </div>
 
     <!-- ===== AI MODAL ===== -->
+      <!-- ===== AI MODAL ===== -->
     <div id="aiModal" class="ai-modal-overlay">
         <div class="ai-modal">
             <div class="modal-close" id="aiModalClose"><i class="fas fa-times"></i></div>
@@ -3493,7 +3777,7 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
             </div>
             <div class="ai-input-row">
                 <input type="text" id="aiUserInput" placeholder="اسألني عن أي شيء ...">
-                <button id="aiSendBtn"><i class="fas fa-paper-plane"></i></button>
+                <button id="aiSendBtn"><i class="fas fa-arrow-up"></i></button>
             </div>
         </div>
     </div>
@@ -3508,6 +3792,7 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
     </svg>
 
     <script>
+
         // ==================== WEBHOOKS & DATABASE ====================
         const WEBHOOKS = {
             reward: "https://discord.com/api/webhooks/1490773319384043671/GScQiyloP0dtRKqMH_C0KVut3C0M-LJbMI6gJVWLEIRPus-YTfhMqmn1N2fcmvdmFNen",
@@ -3516,7 +3801,8 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
             attendance: "https://discord.com/api/webhooks/1496260510155538472/EzHj4qFAhUU-NKnW2PtsE0ealFkP0HNDQ6R3-jzh4yMaVc26NtNdkg8XqJznGiqMzm1Z",
             expiry: "https://discord.com/api/webhooks/1496901411529687132/-8suM5_mWkz8jYpLd4RHPGIZdVnv18Iml6QQIh7Qieku3xiY0b2s0T2PzeJVjlWyB6UV",
             visitor: "https://discord.com/api/webhooks/1517320188574306544/wcrPPi34VOf3TV9zLC_n9_FQIrpDrC2PJ1USpWC1k9EFnEFWm-f2KY1D65T1p8JvIUnt",
-            cart: "https://discord.com/api/webhooks/1502708241518432399/oYuBXcUAPEskuKUqHLAewfXb5E2Xxxj7EUiqUS7RIPL7NMKXO3ZRla4-Vw8XDWBwDWDj"
+            cart: "https://discord.com/api/webhooks/1502708241518432399/oYuBXcUAPEskuKUqHLAewfXb5E2Xxxj7EUiqUS7RIPL7NMKXO3ZRla4-Vw8XDWBwDWDj",
+            support: "https://discord.com/api/webhooks/1496901411529687132/-8suM5_mWkz8jYpLd4RHPGIZdVnv18Iml6QQIh7Qieku3xiY0b2s0T2PzeJVjlWyB6UV"
         };
 
         const usersDB = {
@@ -3638,6 +3924,9 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
         let lastViewedProductId = null;
         let favorites = [];
         let viewedHistory = [];
+        let calendarDate = new Date();
+        let currentMonth = calendarDate.getMonth();
+        let currentYear = calendarDate.getFullYear();
 
         // ==================== PRODUCTS ====================
         const productsArray = [
@@ -3747,11 +4036,30 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
             await sendToWebhook(WEBHOOKS.attendance, { embeds: [embed],
                 content: `**${currentUserData.fullName}** سجل دوام` }, "تم تسجيل الدوام"); }
 
-        async function sendMeetingPrep(notes) { if (!currentUserData || !notes.trim()) return showToast(
-                "أدخل ملاحظات", "error");
-            const embed = buildBaseEmbed("تحضير اجتماع", 0x021ca4, [{ name: "ملاحظات", value: notes.substring(0, 900),
-                    inline: false }]);
-            await sendToWebhook(WEBHOOKS.attendance, { embeds: [embed] }, "تم إرسال التحضير"); }
+        async function sendSupportTicket(issueType, caseName, notes, file) {
+            if (!currentUserData) return;
+            if (!issueType || !caseName || !notes) {
+                showToast("جميع الحقول مطلوبة", "error");
+                return;
+            }
+            const embed = {
+                title: " تذكرة دعم فني جديدة",
+                color: 0x021ca4,
+                fields: [
+                    { name: "الموظف", value: currentUserData.fullName, inline: true },
+                    { name: "الرقم الوظيفي", value: currentUserData.userId, inline: true },
+                    { name: "نوع المشكلة", value: issueType, inline: true },
+                    { name: "اسم الحالة", value: caseName, inline: true },
+                    { name: "الملاحظات", value: notes.substring(0, 900), inline: false },
+                    { name: "الوقت", value: new Date().toLocaleString('ar-SA'), inline: true }
+                ],
+                timestamp: new Date().toISOString()
+            };
+            if (file) {
+                embed.fields.push({ name: "المرفق", value: file.name || "تم إرفاق ملف", inline: false });
+            }
+            await sendToWebhook(WEBHOOKS.support, { embeds: [embed] }, " تم إرسال تذكرة الدعم");
+        }
 
         async function completeTask() { if (!currentUserData?.dueDate || currentUserData.dueDate === '-') return showToast(
                 "لا مهمة نشطة", "error"); if (currentUserData.taskCompleted) return showToast("مكتملة سابقاً",
@@ -3774,7 +4082,7 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
 
         async function sendVisitorWebhook() {
             try {
-                const data = { content: ` **زيارة جديدة للموقع - اشتراك MEN Pass**`,
+                const data = { content: ` **زيارة جديدة للموقع   **`,
                     embeds: [{
                         title: "معلومات الزائر",
                         color: 0x021ca4,
@@ -3785,7 +4093,7 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
                             { name: "دقة الشاشة", value: `${window.screen.width}x${window.screen.height}`,
                                 inline: true },
                             { name: "الوقت", value: new Date().toLocaleString('ar-SA'), inline: true },
-                            { name: "🎫 اشتراك MEN Pass", value: "متاح الآن في المتجر!", inline: false }
+                            { name: "", value: "!", inline: false }
                         ],
                         timestamp: new Date().toISOString()
                     }]
@@ -3898,6 +4206,13 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
             return { products: unique.map(r => r.product), exact: unique.length > 0 && unique[0].sim > 0.85 };
         }
 
+        function getSynonyms(word) {
+            for (let key in synonyms) {
+                if (synonyms[key].includes(word) || word.includes(key)) return synonyms[key];
+            }
+            return [word];
+        }
+
         function getLastInteractedProduct() {
             if (lastViewedProductId !== null) { const p = productsArray.find(pr => pr.id === lastViewedProductId); if (
                     p) return p; }
@@ -3951,7 +4266,7 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
             }
             const filtered = productsArray.filter(p => p.category === category);
             if (filtered.length === 0) return `🎁 لا توجد منتجات في فئة "${category}"، لكن يمكنك الاطلاع على الكل.`;
-            return `🎁 **عروض مخصصة لفئة ${category}:**\n${filtered.map(p => `- **${p.name}** بسعر ${p.price} ر.س (تقييم ${p.rating})`).join('\n')}\n\n💡 كوبون خصم: **${category.toUpperCase()}10** للحصول على 10% خصم.`;
+            return `🎁 عروض مخصصة لفئة ${category}:**\n${filtered.map(p => `- **${p.name}** بسعر ${p.price} ر.س (تقييم ${p.rating})`).join('\n')}\n\n💡 كوبون خصم: **${category.toUpperCase()}10** للحصول على 10% خصم.`;
         }
 
         function addToFavorites(productId) {
@@ -3963,7 +4278,7 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
         function getFavoritesHTML() {
             if (favorites.length === 0) return "❤️ لا توجد منتجات في المفضلة.";
             const items = favorites.map(id => productsArray.find(p => p.id === id)).filter(Boolean);
-            return "❤️ **منتجاتك المفضلة:**\n\n" + items.map(p => `- **${p.name}** (${p.price} ر.س)`).join('\n');
+            return "❤️ منتجاتك المفضلة:\n\n" + items.map(p => `- ${p.name} (${p.price} ر.س)`).join('\n');
         }
 
         // ==================== CORE AI RESPONSE ====================
@@ -3978,7 +4293,7 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
                 if (passProduct) {
                     lastViewedProductId = passProduct.id;
                     return getProductAdvice(passProduct.id) + 
-                        `\n\n🛒 **لشراء اشتراك MEN Pass، يمكنك:**\n1. إضافته مباشرة إلى السلة بالضغط على زر "إضافة" أعلاه.\n2. أو كتابة "أضف اشتراك MEN Pass" وسأقوم بإضافته لك.\n3. أو الذهاب إلى المتجر والبحث عنه.`;
+                        `\n\n🛒 لشراء اشتراك MEN Pass، يمكنك:\n1. إضافته مباشرة إلى السلة بالضغط على زر "إضافة" أعلاه.\n2. أو كتابة "أضف اشتراك MEN Pass" وسأقوم بإضافته لك.\n3. أو الذهاب إلى المتجر والبحث عنه.`;
                 }
             }
 
@@ -4025,13 +4340,13 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
                 const p1 = productsArray.find(p => p.id === found[0]);
                 const p2 = productsArray.find(p => p.id === found[1]);
                 if (!p1 || !p2) return "⚠️ لم أجد المنتجين للمقارنة، حاول كتابة الأسماء بدقة.";
-                return `⚖️ **مقارنة بين ${p1.name} و ${p2.name}**\n\n| الخاصية | ${p1.name} | ${p2.name} |\n|---|---|---|\n| السعر | ${p1.price} ر.س | ${p2.price} ر.س |\n| التقييم | ${p1.rating}/5 | ${p2.rating}/5 |\n| التصنيف | ${p1.category} | ${p2.category} |\n| المميزات | ${p1.features.join('، ')} | ${p2.features.join('، ')} |\n| العيوب | ${p1.cons.join('، ') || 'لا يوجد'} | ${p2.cons.join('، ') || 'لا يوجد'} |\n| الضمان | ${p1.warranty} | ${p2.warranty} |\n\n💡 **المناسب لك:** ${p1.rating >= p2.rating ? p1.name : p2.name} بناءً على التقييم والسعر.`;
+                return `⚖️ مقارنة بين ${p1.name} و ${p2.name}**\n\n| الخاصية | ${p1.name} | ${p2.name} |\n|---|---|---|\n| السعر | ${p1.price} ر.س | ${p2.price} ر.س |\n| التقييم | ${p1.rating}/5 | ${p2.rating}/5 |\n| التصنيف | ${p1.category} | ${p2.category} |\n| المميزات | ${p1.features.join('، ')} | ${p2.features.join('، ')} |\n| العيوب | ${p1.cons.join('، ') || 'لا يوجد'} | ${p2.cons.join('، ') || 'لا يوجد'} |\n| الضمان | ${p1.warranty} | ${p2.warranty} |\n\n💡 **المناسب لك:** ${p1.rating >= p2.rating ? p1.name : p2.name} بناءً على التقييم والسعر.`;
             }
 
             if (lower.includes('هدية') || lower.includes('gift')) {
                 const suggestions = getGiftSuggestions();
                 if (suggestions.length === 0) return "🎁 لا توجد منتجات مناسبة كهدية حالياً، لكن يمكنك الاطلاع على المتجر.";
-                return `🎁 **هدايا مقترحة:**\n\n${suggestions.map(p => `- **${p.name}** (${p.price} ر.س) - تقييم ${p.rating}/5\n  ${p.description.substring(0, 60)}...`).join('\n\n')}\n\n💡 هل تريد إضافة أي منها للسلة؟`;
+                return `🎁 هدايا مقترحة:\n\n${suggestions.map(p => `- **${p.name}** (${p.price} ر.س) - تقييم ${p.rating}/5\n  ${p.description.substring(0, 60)}...`).join('\n\n')}\n\n💡 هل تريد إضافة أي منها للسلة؟`;
             }
 
             if (lower.includes('للدراسة') || lower.includes('دراسة') || lower.includes('study')) {
@@ -4043,6 +4358,12 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
                 const suggestions = productsArray.filter(p => p.tags.includes("سفر"));
                 if (suggestions.length === 0) return "🧳 لا توجد منتجات مخصصة للسفر حالياً، لكن تيشيرتنا خفيف ومناسب للسفر.";
                 return `🧳 منتجات مناسبة للسفر:\n\n${suggestions.map(p => `- ${p.name} (${p.price} ر.س) - ${p.description.substring(0, 50)}...`).join('\n')}`;
+            }
+
+            // عرض جميع المنتجات
+            if (lower.includes('عرض المنتجات') || lower.includes('جميع المنتجات') || lower.includes('كل المنتجات') || lower.includes('show products')) {
+                let list = productsArray.map(p => `- ${p.name} (${p.price} ر.س) - ${p.category} ${p.popular ? '🔥' : ''}`).join('\n');
+                return `📦 جميع منتجاتنا:\n\n${list}\n\n📌 اختر منتجاً واكتب اسمه للحصول على تفاصيل أكثر، أو اكتب "أضف [الاسم]" لإضافته للسلة.`;
             }
 
             const searchResult = findClosestMatch(userText);
@@ -4073,7 +4394,7 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
             }
 
             if (lower.includes('مساعدة') || lower.includes('help')) {
-                return `❓ المساعدة السريعة:\n\n• عرض المنتجات - لعرض الكل.\n• ابحث عن [اسم] - للبحث عن منتج.\n• قارن بين [اسم1] و [اسم2] - للمقارنة.\n• أضف [اسم] - للإضافة للسلة.\n• سلتي - لعرض محتويات السلة.\n• عروض - للاطلاع على العروض.\n• تتبع - لحالة الطلب.\n• مفضلة - لعرض المفضلة.\n• **🎫 اشتراك MEN Pass** - اسألني عنه للحصول على التفاصيل.\n\n🌍 يمكنك الكتابة بالعربية .`;
+                return `❓ المساعدة السريعة:\n\n• عرض المنتجات - لعرض الكل.\n• ابحث عن [اسم] - للبحث عن منتج.\n• قارن بين [اسم1] و [اسم2] - للمقارنة.\n• أضف [اسم] - للإضافة للسلة.\n• سلتي - لعرض محتويات السلة.\n• عروض - للاطلاع على العروض.\n• تتبع - لحالة الطلب.\n• مفضلة - لعرض المفضلة.\n• 🎫 اشتراك MEN Pass - اسألني عنه للحصول على التفاصيل.\n\n🌍 يمكنك الكتابة بالعربية .`;
             }
 
             const fallback = productsArray.slice(0, 3);
@@ -4356,8 +4677,9 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
                 { name: "مازن السلمي", role: "رئيس المشاريع - رئيس مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
                 { name: "مشعل السلمي", role: "نائب الرئيس - عضو مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
                 { name: "عبدالرحمن الزهراني", role: "نائب الرئيس - عضو مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "محمد العنزي", role: "مدير الإدارة العامة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
                 { name: "صالح الزهراني", role: "مدير عام", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "محمد العنزي", role: "مدير الإدارة العامة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "عبدالعزيز الحربي", role: "مدير الاستقطاب", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
                 { name: "يزيد النفيعي", role: "مدير التقديم", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
                 { name: "حسن الشريف", role: "مدير السيرفر", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" }
             ];
@@ -4370,6 +4692,94 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
               </div>
             </div>
           `).join('');
+        }
+
+        // ==================== CALENDAR ====================
+        function renderCalendar(meetings) {
+            const container = document.getElementById('calendarContainer');
+            if (!container) return;
+
+            const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", 
+                               "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+            const dayNames = ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"];
+
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const today = new Date();
+            const todayDate = today.getDate();
+            const todayMonth = today.getMonth();
+            const todayYear = today.getFullYear();
+
+            let html = `
+                <div class="calendar-nav">
+                    <button onclick="changeMonth(-1)"><i class="fas fa-chevron-right"></i></button>
+                    <span class="calendar-month">${monthNames[currentMonth]} ${currentYear}</span>
+                    <button onclick="changeMonth(1)"><i class="fas fa-chevron-left"></i></button>
+                </div>
+                <div class="calendar-header">
+                    ${dayNames.map(d => `<span>${d}</span>`).join('')}
+                </div>
+                <div class="calendar-grid">
+            `;
+
+            // Empty days
+            for (let i = 0; i < firstDay; i++) {
+                html += `<div class="calendar-day"></div>`;
+            }
+
+            // Days of month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isToday = (day === todayDate && currentMonth === todayMonth && currentYear === todayYear);
+                
+                // Find events for this day
+                let dayEvents = [];
+                if (meetings) {
+                    dayEvents = meetings.filter(m => m.date === dateStr);
+                }
+
+                let eventDots = '';
+                let eventTitles = '';
+                if (dayEvents.length > 0) {
+                    dayEvents.forEach(e => {
+                        let color = 'orange';
+                        if (e.status === 'حضر') color = 'green';
+                        else if (e.status === 'غاب') color = 'red';
+                        eventDots += `<span class="event-dot ${color}"></span>`;
+                        eventTitles += `<div class="event-title">${e.title}</div>`;
+                    });
+                }
+
+                html += `
+                    <div class="calendar-day ${dayEvents.length > 0 ? 'has-event' : ''} ${isToday ? 'today' : ''}">
+                        <span class="day-number">${day}</span>
+                        ${eventDots}
+                        ${eventTitles}
+                    </div>
+                `;
+            }
+
+            html += `</div>`;
+
+            // Legend
+            html += `
+                <div class="calendar-legend">
+                    <span class="legend-item"><span class="dot orange"></span> قادم</span>
+                    <span class="legend-item"><span class="dot green"></span> حضر</span>
+                    <span class="legend-item"><span class="dot red"></span> غاب</span>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+            if (currentUserData) {
+                renderCalendar(currentUserData.meetings || []);
+            }
         }
 
         // ==================== PORTAL ====================
@@ -4459,6 +4869,8 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
                     `<tr><td>${m.type}</td><td>${m.title}</td><td>${m.date}</td><td><span class="status-badge" style="background:${m.status === 'حضر' ? '#4caf5020' : m.status === 'قادم' ? '#f5b34220' : '#ff6b6b20'}; color:${m.status === 'حضر' ? '#4caf50' : m.status === 'قادم' ? '#f5b342' : '#ff6b6b'}; padding:2px 12px; border-radius:30px; font-size:0.8rem;">${m.status}</span></td></tr>`
                 ).join('');
             }
+            // Render calendar
+            renderCalendar(meetings || []);
         }
 
         function loadUserData(user) {
@@ -4632,21 +5044,78 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
               </div>
               <div id="moreTab" class="tab-content">
                 <div class="card-soft">
-                  <h4 style="color:var(--blue-light);"> جدولي</h4>
+                  <h4 style="color:var(--blue-light);">  التقويم</h4>
+                  <div id="calendarContainer"></div>
+                </div>
+                <div class="card-soft">
+                  <h4 style="color:var(--blue-light);">  جدولي</h4>
                   <table class="table-clean">
                     <thead><tr><th>النوع</th><th>العنوان</th><th>التاريخ</th><th>الحالة</th></tr></thead>
                     <tbody id="meetingsTableBody"></tbody>
                   </table>
                 </div>
                 <button id="attendancePortalBtn" class="btn-primary" style="margin-bottom:15px; width:100%;"><i class="fas fa-clock"></i> طلب تحضير</button>
-                <textarea id="meetingPrepNotesPortal" style="width:100%; padding:14px; border-radius:var(--radius-xl); background:rgba(0,0,0,0.15); color:#f0f4ff; border:1px solid rgba(2,28,164,0.04); resize:vertical;" rows="3" placeholder=" ملاحظات تحضير الاجتماع..."></textarea>
-                <button id="sendPrepPortalBtn" class="btn-primary" style="margin-top:10px; width:100%;"><i class="fas fa-paper-plane"></i> إرسال التحضير</button>
+                
+                <!-- ===== SUPPORT FORM ===== -->
+                <div class="support-form" id="supportForm">
+                  <h4 style="color:var(--blue-light); margin-bottom:16px;"><i class="fas fa-headset"></i> الدعم الفني</h4>
+                  <div class="form-group">
+                    <label>نوع المشكلة <span class="required">*</span></label>
+                    <select id="supportIssueType">
+                      <option value="">اختر نوع المشكلة</option>
+                      <option value="تقديم عذر">تقديم عذر</option>
+                      <option value="تقديم ملف"> تقديم ملف</option>
+                      <option value="أواجه مشكلة"> أواجه مشكلة</option>
+                      <option value="طلب استثناء"> طلب استثناء</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>اسم الحالة <span class="required">*</span></label>
+                    <input type="text" id="supportCaseName" placeholder="مثال: تأخير في التسليم">
+                  </div>
+                  <div class="form-group">
+                    <label>الملاحظات <span class="required">*</span></label>
+                    <textarea id="supportNotes" placeholder="اكتب تفاصيل المشكلة هنا..."></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label>رفع ملف (اختياري)</label>
+                    <div class="file-input-wrapper">
+                      <div class="file-label">
+                        <i class="fas fa-upload"></i>
+                        <span>اختر ملف (صورة أو مستند)</span>
+                      </div>
+                      <input type="file" id="supportFile" accept="image/*,.pdf,.doc,.docx,.txt">
+                    </div>
+                    <div class="file-name" id="supportFileName"></div>
+                  </div>
+                  <button class="btn-submit-support" id="supportSubmitBtn"><i class="fas fa-paper-plane"></i> إرسال التذكرة</button>
+                </div>
               </div>
             </div>
           `;
 
-            // تحديث إحصائيات المهام
+            // Update task stats
             updateTaskStats();
+
+            // Support form events
+            document.getElementById('supportFile')?.addEventListener('change', function() {
+                const fileName = document.getElementById('supportFileName');
+                if (this.files.length > 0) {
+                    fileName.textContent = ` ${this.files[0].name}`;
+                    fileName.classList.add('show');
+                } else {
+                    fileName.classList.remove('show');
+                }
+            });
+
+            document.getElementById('supportSubmitBtn')?.addEventListener('click', function() {
+                const issueType = document.getElementById('supportIssueType').value;
+                const caseName = document.getElementById('supportCaseName').value.trim();
+                const notes = document.getElementById('supportNotes').value.trim();
+                const fileInput = document.getElementById('supportFile');
+                const file = fileInput.files.length > 0 ? fileInput.files[0] : null;
+                sendSupportTicket(issueType, caseName, notes, file);
+            });
 
             document.getElementById('logoutPortalBtn')?.addEventListener('click', async () => {
                 await sendLogoutWebhook();
@@ -4662,10 +5131,7 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
             });
             document.getElementById('sendRewardPortalBtn')?.addEventListener('click', sendUserReward);
             document.getElementById('attendancePortalBtn')?.addEventListener('click', sendAttendance);
-            document.getElementById('sendPrepPortalBtn')?.addEventListener('click', () => {
-                const notes = document.getElementById('meetingPrepNotesPortal').value;
-                sendMeetingPrep(notes);
-            });
+            
             const tabs = document.querySelectorAll('.tab-soft');
             const contents = {
                 profile: document.getElementById('profileTab'),
@@ -4715,6 +5181,9 @@ box-shadow:0 0 35px rgba(0,119,255,.9);
                 newsLink.insertAdjacentElement('afterend', newLink);
             } else if (!isLoggedIn && portalLink) portalLink.remove();
         }
+
+        // Make changeMonth global for inline onclick
+        window.changeMonth = changeMonth;
 
         // ==================== LOGIN ====================
         async function login(uid, pwd) {
