@@ -3316,19 +3316,19 @@
 <div class="ai-menu">
 
     <!-- الخيارات -->
-    <a href="chat.html" class="menu-item item1" title="شات">
+    <a href="ai.html" class="menu-item item1" title="شات">
         <i class="fas fa-comments"></i>
     </a>
 
-    <a href="code.html" class="menu-item item2" title="كود">
+    <a href="ai.html" class="menu-item item2" title="كود">
         <i class="fas fa-code"></i>
     </a>
 
-    <a href="design.html" class="menu-item item3" title="تصميم">
+    <a href="ai.html" class="menu-item item3" title="تصميم">
         <i class="fas fa-palette"></i>
     </a>
 
-    <a href="analysis.html" class="menu-item item4" title="تحليل">
+    <a href="ai.html" class="menu-item item4" title="تحليل">
         <i class="fas fa-chart-line"></i>
     </a>
 
@@ -3340,7 +3340,6 @@
 </div>
 
 <style>
-
 .ai-menu{
     position:fixed;
     left:20px;
@@ -3353,16 +3352,18 @@
     height:60px;
     border:none;
     border-radius:50%;
-    background:#4F6EF7;
+    background:rgba(2,28,164,0.85);
     color:#fff;
     font-size:26px;
     cursor:pointer;
-    box-shadow:0 0 20px rgba(79,110,247,.45);
+    box-shadow:0 0 20px rgba(2,28,164,.45);
     transition:.3s;
 }
 
 .ai-button:hover{
     transform:scale(1.08);
+    background:rgba(2,28,164,1);
+    box-shadow:0 0 30px rgba(2,28,164,.7);
 }
 
 .menu-item{
@@ -3372,7 +3373,7 @@
     width:45px;
     height:45px;
     border-radius:50%;
-    background:#4F6EF7;
+    background:rgba(2,28,164,0.85);
     color:#fff;
     display:flex;
     justify-content:center;
@@ -3382,7 +3383,7 @@
     opacity:0;
     pointer-events:none;
     transition:.35s;
-    box-shadow:0 0 15px rgba(79,110,247,.4);
+    box-shadow:0 0 15px rgba(2,28,164,.4);
 }
 
 .ai-menu.active .item1{
@@ -3411,21 +3412,20 @@
 
 .menu-item:hover{
     transform:scale(1.1);
-    background:#5D7BFF;
+    background:rgba(2,28,164,1);
+    box-shadow:0 0 30px rgba(2,28,164,.7);
 }
-
 </style>
 
 <script>
+const aiMenu = document.querySelector(".ai-menu");
+const toggle = document.getElementById("toggleAI");
 
-const aiMenu=document.querySelector(".ai-menu");
-const toggle=document.getElementById("toggleAI");
-
-toggle.onclick=()=>{
+toggle.onclick = () => {
     aiMenu.classList.toggle("active");
 };
-
 </script>
+
     
     <div class="bg-ambient"></div>
 
