@@ -4,7 +4,7 @@
     <link rel="icon" type="image/png" href="logo.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEN Chat - بوت ذكي</title>
+    <title>MEN Ai</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -87,7 +87,36 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
+        }
+        .btn-back {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(2, 28, 164, 0.15);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            color: #a0b0d4;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-back:hover {
+            background: rgba(74, 122, 255, 0.1);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.1);
+        }
+        .btn-back:active {
+            transform: scale(0.92);
         }
         .logo img {
             height: 48px;
@@ -460,13 +489,19 @@
                 gap: 10px;
             }
             .logo h1 {
-                font-size: 1.6rem;
+                font-size: 1.4rem;
             }
             .logo h1 i {
-                font-size: 1.2rem;
+                font-size: 1rem;
             }
             .logo img {
                 height: 36px;
+            }
+            .btn-back {
+                width: 38px;
+                height: 38px;
+                min-width: 38px;
+                font-size: 1rem;
             }
         }
         @media (max-width: 480px) {
@@ -498,6 +533,46 @@
                 width: 96%;
                 padding: 0 10px;
             }
+            .logo h1 {
+                font-size: 1.1rem;
+            }
+            .logo h1 i {
+                font-size: 0.9rem;
+            }
+            .logo img {
+                height: 30px;
+            }
+            .btn-back {
+                width: 34px;
+                height: 34px;
+                min-width: 34px;
+                font-size: 0.9rem;
+            }
+        }
+        @media (max-width: 360px) {
+            .logo h1 {
+                font-size: 0.9rem;
+            }
+            .logo h1 i {
+                font-size: 0.8rem;
+            }
+            .logo img {
+                height: 26px;
+            }
+            .btn-back {
+                width: 30px;
+                height: 30px;
+                min-width: 30px;
+                font-size: 0.8rem;
+            }
+            .chat-header .bot-name {
+                font-size: 0.9rem;
+            }
+            .chat-header .bot-avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -507,7 +582,11 @@
     <header>
         <div class="container header-content">
             <div class="logo">
+                <a href="#" class="btn-back" id="backBtn" title="رجوع">
+                    <i class="fas fa-arrow-right"></i>
+                </a>
                 <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN">
+                <h1>Chat <i class="fas fa-wand-sparkles"></i></h1>
             </div>
         </div>
     </header>
@@ -520,7 +599,7 @@
                     <div class="bot-info">
                         <div class="bot-avatar"><i class="fas fa-wand-sparkles"></i></div>
                         <div>
-                            <div class="bot-name">MEN Ai <i class="fas fa-" style="color:var(--blue-light);font-size:0.9rem;margin-right:6px;"></i></div>
+                            <div class="bot-name">MEN Ai</div>
                         </div>
                     </div>
                 </div>
@@ -584,6 +663,18 @@
         const sendBtn = document.getElementById('sendBtn');
         const charCount = document.getElementById('charCount');
         const typingIndicator = document.getElementById('typingIndicator');
+        const backBtn = document.getElementById('backBtn');
+
+        // ===== زر الرجوع =====
+        backBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            // العودة للصفحة السابقة أو الصفحة الرئيسية
+            if (document.referrer) {
+                window.history.back();
+            } else {
+                window.location.href = '/';
+            }
+        });
 
         // ===== حالة =====
         let isProcessing = false;
