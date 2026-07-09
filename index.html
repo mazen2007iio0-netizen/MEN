@@ -3313,23 +3313,25 @@
     <!-- ===== MEN Ai ===== -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-<div class="ai-menu">
+<div class="ai-menu" id="aiMenu">
 
-    <!-- الخيارات -->
-    <a href="ai.html" class="menu-item item1" title="شات">
+    <!-- شات -->
+    <a href="ai.html" class="menu-item item-chat">
         <i class="fas fa-comments"></i>
+        <span>شات</span>
     </a>
 
-    <a href="ai.html" class="menu-item item2" title="كود">
-        <i class="fas fa-code"></i>
-    </a>
-
-    <a href="ai.html" class="menu-item item3" title="تصميم">
+    <!-- تصميم -->
+    <a href="ai.html" class="menu-item item-design">
         <i class="fas fa-palette"></i>
+        <span>تصميم</span>
     </a>
 
-    <a href="ai.html" class="menu-item item4" title="تحليل">
-        <i class="fas fa-chart-line"></i>
+    <!-- المتجر -->
+    <a href="#" class="menu-item item-store"
+       onclick="document.querySelector('[data-page=&quot;store&quot;]').click(); return false;">
+        <i class="fas fa-store"></i>
+        <span>المتجر</span>
     </a>
 
     <!-- الزر الرئيسي -->
@@ -3340,40 +3342,40 @@
 </div>
 
 <style>
+
 .ai-menu{
     position:fixed;
-    left:20px;
-    bottom:20px;
+    left:25px;
+    bottom:25px;
     z-index:99999;
 }
 
 .ai-button{
-    width:60px;
-    height:60px;
+    width:65px;
+    height:65px;
     border:none;
     border-radius:50%;
-    background:rgba(2,28,164,0.85);
+    background:rgba(2,28,164,.85);
     color:#fff;
-    font-size:26px;
+    font-size:28px;
     cursor:pointer;
-    box-shadow:0 0 20px rgba(2,28,164,.45);
-    transition:.3s;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    box-shadow:0 0 25px rgba(2,28,164,.45);
+    transition:.35s;
 }
 
-.ai-button:hover{
-    transform:scale(1.08);
-    background:rgba(2,28,164,1);
-    box-shadow:0 0 30px rgba(2,28,164,.7);
+.ai-menu.active .ai-button{
+    transform:rotate(45deg);
 }
 
 .menu-item{
     position:absolute;
-    left:8px;
-    bottom:8px;
-    width:45px;
-    height:45px;
+    width:52px;
+    height:52px;
     border-radius:50%;
-    background:rgba(2,28,164,0.85);
+    background:rgba(2,28,164,.85);
     color:#fff;
     display:flex;
     justify-content:center;
@@ -3383,47 +3385,68 @@
     opacity:0;
     pointer-events:none;
     transition:.35s;
-    box-shadow:0 0 15px rgba(2,28,164,.4);
-}
-
-.ai-menu.active .item1{
-    transform:translateY(-70px);
-    opacity:1;
-    pointer-events:auto;
-}
-
-.ai-menu.active .item2{
-    transform:translateY(-130px);
-    opacity:1;
-    pointer-events:auto;
-}
-
-.ai-menu.active .item3{
-    transform:translateY(-190px);
-    opacity:1;
-    pointer-events:auto;
-}
-
-.ai-menu.active .item4{
-    transform:translateY(-250px);
-    opacity:1;
-    pointer-events:auto;
+    box-shadow:0 0 20px rgba(2,28,164,.4);
 }
 
 .menu-item:hover{
-    transform:scale(1.1);
-    background:rgba(2,28,164,1);
+    transform:scale(1.12);
     box-shadow:0 0 30px rgba(2,28,164,.7);
 }
+
+.menu-item span{
+    position:absolute;
+    left:65px;
+    background:#111827;
+    color:#fff;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:13px;
+    white-space:nowrap;
+    opacity:0;
+    transition:.3s;
+}
+
+.menu-item:hover span{
+    opacity:1;
+}
+
+/* أماكن الأزرار */
+
+.ai-menu.active .item-chat{
+    transform:translate(-5px,-85px);
+    opacity:1;
+    pointer-events:auto;
+}
+
+.ai-menu.active .item-design{
+    transform:translate(60px,-55px);
+    opacity:1;
+    pointer-events:auto;
+}
+
+.ai-menu.active .item-store{
+    transform:translate(75px,15px);
+    opacity:1;
+    pointer-events:auto;
+}
+
 </style>
 
 <script>
-const aiMenu = document.querySelector(".ai-menu");
-const toggle = document.getElementById("toggleAI");
 
-toggle.onclick = () => {
-    aiMenu.classList.toggle("active");
+const menu = document.getElementById("aiMenu");
+const btn = document.getElementById("toggleAI");
+
+btn.onclick = () => {
+    menu.classList.toggle("active");
 };
+
+document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target)) {
+        menu.classList.remove("active");
+    }
+});
+
 </script>
 
     
