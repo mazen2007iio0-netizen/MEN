@@ -3310,38 +3310,122 @@
     </style>
 </head>
 <body>
+    <!-- ===== MEN Ai ===== -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-<a href="ai.html" class="ai-button">
-    <i class="fas fa-wand-sparkles"></i>
-</a>
+<div class="ai-menu">
+
+    <!-- الخيارات -->
+    <a href="chat.html" class="menu-item item1" title="شات">
+        <i class="fas fa-comments"></i>
+    </a>
+
+    <a href="code.html" class="menu-item item2" title="كود">
+        <i class="fas fa-code"></i>
+    </a>
+
+    <a href="design.html" class="menu-item item3" title="تصميم">
+        <i class="fas fa-palette"></i>
+    </a>
+
+    <a href="analysis.html" class="menu-item item4" title="تحليل">
+        <i class="fas fa-chart-line"></i>
+    </a>
+
+    <!-- الزر الرئيسي -->
+    <button class="ai-button" id="toggleAI">
+        <i class="fas fa-wand-sparkles"></i>
+    </button>
+
+</div>
 
 <style>
+
+.ai-menu{
+    position:fixed;
+    left:20px;
+    bottom:20px;
+    z-index:99999;
+}
+
 .ai-button{
-    position: fixed;
-    left: 20px;
-    bottom: 20px;
-    width: 60px;
-    height: 60px;
-    background: #021CA4;
-    color: #fff;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    font-size: 28px;
-    box-shadow: 0 0 20px rgba(2,28,164,.45);
-    transition: .3s;
-    z-index: 99999;
+    width:60px;
+    height:60px;
+    border:none;
+    border-radius:50%;
+    background:#4F6EF7;
+    color:#fff;
+    font-size:26px;
+    cursor:pointer;
+    box-shadow:0 0 20px rgba(79,110,247,.45);
+    transition:.3s;
 }
 
 .ai-button:hover{
-    transform: scale(1.08);
-    background: #0432E5;
-    box-shadow: 0 0 30px rgba(2,28,164,.7);
+    transform:scale(1.08);
 }
+
+.menu-item{
+    position:absolute;
+    left:8px;
+    bottom:8px;
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#4F6EF7;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-decoration:none;
+    font-size:20px;
+    opacity:0;
+    pointer-events:none;
+    transition:.35s;
+    box-shadow:0 0 15px rgba(79,110,247,.4);
+}
+
+.ai-menu.active .item1{
+    transform:translateY(-70px);
+    opacity:1;
+    pointer-events:auto;
+}
+
+.ai-menu.active .item2{
+    transform:translateY(-130px);
+    opacity:1;
+    pointer-events:auto;
+}
+
+.ai-menu.active .item3{
+    transform:translateY(-190px);
+    opacity:1;
+    pointer-events:auto;
+}
+
+.ai-menu.active .item4{
+    transform:translateY(-250px);
+    opacity:1;
+    pointer-events:auto;
+}
+
+.menu-item:hover{
+    transform:scale(1.1);
+    background:#5D7BFF;
+}
+
 </style>
+
+<script>
+
+const aiMenu=document.querySelector(".ai-menu");
+const toggle=document.getElementById("toggleAI");
+
+toggle.onclick=()=>{
+    aiMenu.classList.toggle("active");
+};
+
+</script>
     
     <div class="bg-ambient"></div>
 
