@@ -1677,7 +1677,7 @@
                 document.getElementById('discountMsg').textContent = '';
             }
             updateCartUI();
-            if (cartItems.length === 0) showToast("🛒 السلة فارغة الآن", "info");
+            if (cartItems.length === 0) showToast(" السلة فارغة الآن", "info");
         }
 
         function updateQuantity(productId, delta) {
@@ -1748,7 +1748,7 @@
 
             if (!list) return;
             if (cartItems.length === 0) {
-                list.innerHTML = `<div class="cart-empty">🛒 السلة فارغة — أضف منتجات من المتجر</div>`;
+                list.innerHTML = `<div class="cart-empty"> السلة فارغة — أضف منتجات من المتجر</div>`;
                 discountApplied = false;
                 discountPercent = 0;
                 discountCode = '';
