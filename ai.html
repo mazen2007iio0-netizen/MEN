@@ -94,7 +94,6 @@
             gap: 12px;
         }
 
-        /* ===== زر العودة المحسن ===== */
         .btn-back {
             display: flex;
             align-items: center;
@@ -372,7 +371,6 @@
             direction: ltr;
         }
 
-        /* ===== زر الإرسال المحسن (بدون دوران، سهم لأعلى) ===== */
         .input-area .btn-send {
             width: 52px;
             height: 52px;
@@ -481,7 +479,6 @@
             color: var(--blue-light);
         }
 
-        /* ===== تحسينات للشاشات الصغيرة ===== */
         @media (max-width: 768px) {
             .chat-wrapper {
                 height: calc(100vh - 160px);
@@ -633,7 +630,6 @@
     <header>
         <div class="container header-content">
             <div class="logo">
-                <!-- زر العودة مع نص "رجوع" -->
                 <a href="#" class="btn-back" id="backBtn" title="رجوع">
                     <i class="fas fa-arrow-right"></i>
                     <span class="back-text">رجوع</span>
@@ -673,7 +669,6 @@
                         <textarea id="messageInput" rows="1" placeholder="اسألني عن أي شيء..."></textarea>
                         <span class="char-count" id="charCount">0</span>
                     </div>
-                    <!-- زر الإرسال مع سهم لأعلى (بدون دوران) -->
                     <button class="btn-send" id="sendBtn" title="إرسال">
                         <i class="fas fa-arrow-up"></i>
                     </button>
@@ -707,7 +702,34 @@
         // ============================================================
 
         let responses = {};
-        let keywordsMap = {}; // سيتم بناؤها من الملف
+        let keywordsMap = {};
+
+        // ============================================================
+        //  📐  مسافة ليفنشتاين (Levenshtein Distance)
+        // ============================================================
+        function levenshteinDistance(a, b) {
+            const matrix = [];
+            for (let i = 0; i <= b.length; i++) {
+                matrix[i] = [i];
+            }
+            for (let j = 0; j <= a.length; j++) {
+                matrix[0][j] = j;
+            }
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    if (b[i - 1] === a[j - 1]) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
+                    } else {
+                        matrix[i][j] = Math.min(
+                            matrix[i - 1][j - 1] + 1,
+                            matrix[i][j - 1] + 1,
+                            matrix[i - 1][j] + 1
+                        );
+                    }
+                }
+            }
+            return matrix[b.length][a.length];
+        }
 
         function getReply(category) {
             const list = responses[category]?.responses;
@@ -727,16 +749,34 @@
             return map;
         }
 
+        // ============================================================
+        //  🔍  البحث عن أقرب فئة (بدلاً من المطابقة التامة)
+        // ============================================================
         function getCategoryForText(text) {
-            const lower = text.trim().toLowerCase();
+            const words = text.trim().toLowerCase().split(/\s+/).filter(w => w.length >= 3);
+            if (words.length === 0) return 'default';
+
+            let bestCategory = 'default';
+            let bestScore = Infinity;
+
             for (const [cat, patterns] of Object.entries(keywordsMap)) {
-                if (patterns.some(p => lower.includes(p))) {
-                    return cat;
+                for (const pattern of patterns) {
+                    for (const word of words) {
+                        const dist = levenshteinDistance(word, pattern);
+                        if (dist < bestScore) {
+                            bestScore = dist;
+                            bestCategory = cat;
+                        }
+                    }
                 }
             }
-            // إذا لم يجد تطابقاً، يختار general أو default
-            if (responses['general']) return 'general';
-            return 'default';
+
+            // عتبة التشابه: إذا كانت المسافة أكبر من 2، نعتبر أنه لا يوجد تطابق قوي
+            if (bestScore > 2) {
+                return responses['general'] ? 'general' : 'default';
+            }
+
+            return bestCategory;
         }
 
         function evaluateMath(text) {
@@ -773,13 +813,11 @@
         function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
 
-            // التحقق من العمليات الحسابية
             const mathResult = evaluateMath(text);
             if (mathResult !== null) {
                 return `🧮 النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟`;
             }
 
-            // التحقق من الوقت (نستخدم نفس المفتاح 'time' من الملف)
             if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
                 const now = new Date();
                 const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
@@ -790,7 +828,6 @@
 
             let category = getCategoryForText(text);
 
-            // سياق المحادثة (اختياري)
             if (conversationHistory.length >= 2) {
                 const lastUserMsg = conversationHistory.filter(m => m.role === 'user').pop();
                 if (lastUserMsg && lastUserMsg.content !== text && text.split(' ').length <= 3) {
@@ -939,14 +976,13 @@
                 sendBtn.disabled = false;
             } catch (error) {
                 console.error(' خطأ في تحميل الردود:', error);
-                // ردود احتياطية في حال تعذر التحميل
                 responses = {
                     default: { responses: ['عذراً، حدث خطأ في تحميل الردود. تأكد من وجود ملف responses.json.'] }
                 };
                 keywordsMap = {};
                 const botMsg = document.createElement('div');
                 botMsg.className = 'message bot';
-                botMsg.innerHTML = ' عذراً، حدث خطأ في تحميل الردود. تأكد من وجود ملف <strong>responses.json</strong> في نفس المجلد.';
+                botMsg.innerHTML = ' عذراً، حدث خطأ  <strong></strong>   .';
                 messagesArea.appendChild(botMsg);
                 scrollToBottom();
             }
@@ -956,7 +992,7 @@
         sendBtn.disabled = true;
         loadResponses();
 
-        console.log('');
+        console.log('🚀 MEN Ai جاهز للعمل مع البحث عن أقرب تطابق!');
     </script>
 </body>
 </html>
