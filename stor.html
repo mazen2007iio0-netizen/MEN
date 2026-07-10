@@ -310,11 +310,13 @@
             align-items: center;
             gap: 14px;
         }
-        .login-header-btn {
+
+        /* ===== HEADER CART BUTTON ===== */
+        .header-cart-btn {
             background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
             border: none;
             border-radius: 60px;
-            padding: 10px 28px;
+            padding: 10px 24px;
             font-weight: 700;
             color: #ffffff;
             cursor: pointer;
@@ -324,87 +326,22 @@
             transition: var(--transition);
             font-size: 0.95rem;
             box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
+            position: relative;
         }
-        .login-header-btn:hover {
+        .header-cart-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 36px rgba(2, 28, 164, 0.4);
         }
-        .menu-toggle-btn {
-            background: rgba(2, 28, 164, 0.08);
-            border: 1px solid rgba(2, 28, 164, 0.12);
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            color: var(--blue-light);
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .menu-toggle-btn:hover {
-            background: rgba(2, 28, 164, 0.15);
-            border-color: var(--blue-deep);
-            transform: rotate(90deg);
-            box-shadow: 0 0 30px rgba(2, 28, 164, 0.06);
-        }
-        .dropdown-menu {
-            position: absolute;
-            top: 80px;
-            left: auto;
-            right: 20px;
-            background: rgba(8, 10, 22, 0.96);
-            backdrop-filter: blur(32px);
-            -webkit-backdrop-filter: blur(32px);
-            border-radius: 24px;
-            border: 1px solid rgba(2, 28, 164, 0.10);
-            min-width: 220px;
-            padding: 10px 0;
-            z-index: 1100;
-            transform: scale(0.92) translateY(-8px);
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 32px 64px rgba(0, 0, 0, 0.5);
-        }
-        .dropdown-menu.show {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-            visibility: visible;
-        }
-        .dropdown-menu a {
-            display: block;
-            padding: 12px 26px;
-            color: #c0c8e8;
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.25s;
-            border-right: 3px solid transparent;
-            font-size: 0.95rem;
-            cursor: pointer;
-            letter-spacing: 0.2px;
-        }
-        .dropdown-menu a i {
-            margin-left: 14px;
-            width: 24px;
+        .header-cart-btn .cart-badge {
+            background: #ffffff;
             color: var(--blue-deep);
-            opacity: 0.5;
-            font-size: 1.1rem;
-        }
-        .dropdown-menu a:hover {
-            background: rgba(2, 28, 164, 0.06);
-            border-right-color: var(--blue-deep);
-            padding-right: 32px;
-            color: #ffffff;
-        }
-        .dropdown-menu a.active-drop {
-            background: rgba(2, 28, 164, 0.08);
-            border-right-color: var(--blue-deep);
-            color: var(--blue-light);
-        }
-        .dropdown-menu a.active-drop i {
-            opacity: 1;
+            border-radius: 50%;
+            padding: 1px 8px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            min-width: 22px;
+            text-align: center;
+            line-height: 1.7;
         }
 
         /* ===== STORE BANNER ===== */
@@ -447,39 +384,6 @@
             align-items: center;
             gap: 14px;
             flex-wrap: wrap;
-        }
-        .cart-toggle-btn {
-            background: rgba(2, 28, 164, 0.06);
-            border: 1.5px solid rgba(2, 28, 164, 0.12);
-            border-radius: 60px;
-            padding: 10px 24px;
-            color: var(--blue-light);
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            white-space: nowrap;
-            flex-shrink: 0;
-            font-weight: 600;
-        }
-        .cart-toggle-btn:hover {
-            background: rgba(2, 28, 164, 0.10);
-            border-color: var(--blue-deep);
-            transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(2, 28, 164, 0.03);
-        }
-        .cart-badge {
-            background: var(--blue-deep);
-            color: #ffffff;
-            border-radius: 50%;
-            padding: 1px 8px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            min-width: 22px;
-            text-align: center;
-            line-height: 1.7;
         }
         .btn-ai-assistant {
             background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
@@ -1288,14 +1192,14 @@
             color: var(--blue-light);
         }
 
-        /* ===== MEN AI FAB ===== */
-        .ai-menu {
+        /* ===== FAB ===== */
+        .ai-fab {
             position: fixed;
             left: 25px;
             bottom: 25px;
             z-index: 99999;
         }
-        .ai-button {
+        .ai-fab .fab-btn {
             width: 65px;
             height: 65px;
             border: none;
@@ -1310,54 +1214,31 @@
             box-shadow: 0 0 25px rgba(2, 28, 164, .45);
             transition: .35s;
         }
-        .ai-menu.active .ai-button {
-            transform: rotate(45deg);
+        .ai-fab .fab-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 40px rgba(2, 28, 164, .6);
         }
-        .menu-item {
+        .ai-fab .fab-btn i {
+            font-size: 30px;
+        }
+        .ai-fab .fab-label {
             position: absolute;
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: rgba(2, 28, 164, .85);
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-decoration: none;
-            font-size: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: .35s;
-            box-shadow: 0 0 20px rgba(2, 28, 164, .4);
-        }
-        .menu-item:hover {
-            transform: scale(1.12);
-            box-shadow: 0 0 30px rgba(2, 28, 164, .7);
-        }
-        .menu-item span {
-            position: absolute;
-            left: 65px;
+            left: 75px;
+            top: 50%;
+            transform: translateY(-50%);
             background: #111827;
             color: #fff;
-            padding: 6px 12px;
+            padding: 6px 16px;
             border-radius: 20px;
             font-size: 13px;
             white-space: nowrap;
             opacity: 0;
+            pointer-events: none;
             transition: .3s;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
         }
-        .menu-item:hover span {
+        .ai-fab:hover .fab-label {
             opacity: 1;
-        }
-        .ai-menu.active .item-chat {
-            transform: translate(-5px, -85px);
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .ai-menu.active .item-store {
-            transform: translate(75px, 15px);
-            opacity: 1;
-            pointer-events: auto;
         }
 
         /* ===== TOAST ===== */
@@ -1423,18 +1304,15 @@
             .logo h1 {
                 font-size: 1.4rem;
             }
-            .login-header-btn {
-                padding: 8px 18px;
+            .header-cart-btn {
+                padding: 8px 16px;
                 font-size: 0.85rem;
                 gap: 6px;
             }
-            .menu-toggle-btn {
-                width: 42px;
-                height: 42px;
-                font-size: 1.2rem;
-            }
-            .header-actions {
-                gap: 10px;
+            .header-cart-btn .cart-badge {
+                font-size: 0.7rem;
+                min-width: 18px;
+                padding: 0 6px;
             }
             .shop-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -1460,7 +1338,6 @@
             .cart-ai-row {
                 flex-wrap: wrap;
             }
-            .cart-toggle-btn,
             .btn-ai-assistant {
                 flex: 1;
                 justify-content: center;
@@ -1479,30 +1356,29 @@
             .cart-modal h3 {
                 font-size: 1.4rem;
             }
-            .dropdown-menu {
-                min-width: 190px;
-                right: 10px;
-                top: 70px;
-            }
-            .dropdown-menu a {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
             .footer-flex {
                 flex-direction: column;
                 gap: 24px;
             }
+            .ai-fab .fab-btn {
+                width: 56px;
+                height: 56px;
+                font-size: 22px;
+            }
+            .ai-fab .fab-btn i {
+                font-size: 24px;
+            }
         }
         @media (max-width:480px) {
-            .login-header-btn {
-                padding: 6px 14px;
-                font-size: 0.8rem;
+            .header-cart-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
                 gap: 4px;
             }
-            .menu-toggle-btn {
-                width: 38px;
-                height: 38px;
-                font-size: 1rem;
+            .header-cart-btn .cart-badge {
+                font-size: 0.6rem;
+                min-width: 16px;
+                padding: 0 5px;
             }
             .shop-grid {
                 grid-template-columns: 1fr 1fr;
@@ -1544,6 +1420,17 @@
             .ai-input-row button i {
                 font-size: 1rem;
             }
+            .ai-fab .fab-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 18px;
+            }
+            .ai-fab .fab-btn i {
+                font-size: 20px;
+            }
+            .ai-fab .fab-label {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -1557,18 +1444,10 @@
                 <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN">
             </div>
             <div class="header-actions">
-                <button id="headerLoginBtn" class="login-header-btn"><i class="fas fa-fingerprint"></i> تسجيل دخول</button>
-                <button id="menuToggleBtn" class="menu-toggle-btn"><i class="fas fa-ellipsis-vertical"></i></button>
-            </div>
-            <div id="dropdownMenu" class="dropdown-menu">
-                <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
-                <a href="news.html"><i class="fas fa-gamepad"></i> الألعاب</a>
-                <a href="store.html" class="active-drop"><i class="fas fa-store"></i> المتجر</a>
-                <a href="about.html"><i class="fas fa-users"></i> من نحن</a>
-                <a href="timeline.html"><i class="fas fa-timeline"></i> رحلتنا</a>
-                <a href="team.html"><i class="fas fa-user-tie"></i> الفريق</a>
-                <a href="faq.html"><i class="fas fa-question-circle"></i> الأسئلة</a>
-                <a href="portal.html"><i class="fas fa-id-card"></i> بوابتي</a>
+                <button class="header-cart-btn" id="headerCartBtn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="headerCartBadge">0</span>
+                </button>
             </div>
         </div>
     </header>
@@ -1585,10 +1464,9 @@
                 <a href="#" class="btn-primary" onclick="applyDiscountCode('MEN1')"><i class="fas fa-tags"></i> MEN1</a>
             </div>
 
-            <!-- ===== SEARCH & CART ===== -->
+            <!-- ===== SEARCH & AI ===== -->
             <div class="search-cart-wrapper">
                 <div class="cart-ai-row">
-                    <button class="cart-toggle-btn" id="cartToggleBtn"><i class="fas fa-shopping-cart"></i> <span class="cart-badge" id="cartBadge">0</span></button>
                     <button class="btn-ai-assistant" id="aiAssistantBtn"><i class="fas fa-wand-sparkles"></i> MEN Ai</button>
                 </div>
                 <div class="search-wrapper">
@@ -1687,11 +1565,10 @@
         </div>
     </div>
 
-    <!-- ===== MEN AI FAB ===== -->
-    <div class="ai-menu" id="aiMenu">
-        <a href="ai.html" class="menu-item item-chat"><i class="fas fa-comments"></i><span>شات</span></a>
-        <a href="store.html" class="menu-item item-store"><i class="fas fa-store"></i><span>المتجر</span></a>
-        <button class="ai-button" id="toggleAI"><i class="fas fa-wand-sparkles"></i></button>
+    <!-- ===== FAB ===== -->
+    <div class="ai-fab" id="aiFab">
+        <button class="fab-btn" id="fabOpenChat"><i class="fas fa-wand-sparkles"></i></button>
+        <span class="fab-label">MEN Ai</span>
     </div>
 
     <script>
@@ -1782,10 +1659,10 @@
             const existing = cartItems.find(p => p.id === product.id);
             if (existing) {
                 existing.quantity += 1;
-                showToast(`🔄 تم زيادة كمية "${product.name}" إلى ${existing.quantity}`, "success");
+                showToast(` تم زيادة كمية "${product.name}" إلى ${existing.quantity}`, "success");
             } else {
                 cartItems.push({ ...product, quantity: 1 });
-                showToast(`✅ تم إضافة "${product.name}" إلى السلة`, "success");
+                showToast(` تم إضافة "${product.name}" إلى السلة`, "success");
             }
             updateCartUI();
         }
@@ -1817,7 +1694,7 @@
             const msg = document.getElementById('discountMsg');
             const code = input.value.trim();
             if (!code) {
-                msg.textContent = '⚠️ الرجاء إدخال كود الخصم';
+                msg.textContent = ' الرجاء إدخال كود الخصم';
                 msg.className = 'discount-msg error';
                 return;
             }
@@ -1825,12 +1702,12 @@
                 discountApplied = true;
                 discountPercent = 10;
                 discountCode = code;
-                msg.textContent = '✅ تم تطبيق خصم 10% بنجاح!';
+                msg.textContent = ' تم تطبيق خصم 10% بنجاح!';
                 msg.className = 'discount-msg';
                 updateCartUI();
-                showToast('🎉 تم تطبيق الخصم 10%', 'success');
+                showToast(' تم تطبيق الخصم 10%', 'success');
             } else {
-                msg.textContent = '❌ كود الخصم غير صحيح';
+                msg.textContent = ' كود الخصم غير صحيح';
                 msg.className = 'discount-msg error';
                 discountApplied = false;
                 discountPercent = 0;
@@ -1845,8 +1722,9 @@
         }
 
         function updateCartUI() {
-            const badge = document.getElementById('cartBadge');
-            if (badge) badge.textContent = cartItems.reduce((sum, p) => sum + p.quantity, 0);
+            const totalItems = cartItems.reduce((sum, p) => sum + p.quantity, 0);
+            const headerBadge = document.getElementById('headerCartBadge');
+            if (headerBadge) headerBadge.textContent = totalItems;
 
             const list = document.getElementById('cartItemsList');
             const totalDisplay = document.getElementById('cartTotalPrice');
@@ -1919,7 +1797,7 @@
                 return;
             }
             if (!userName || !userPhone) {
-                showToast("⚠️ يرجى إدخال الاسم ورقم الجوال", "error");
+                showToast(" يرجى إدخال الاسم ورقم الجوال", "error");
                 return;
             }
             let productList = cartItems.map((p, i) =>
@@ -1956,7 +1834,7 @@
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ embeds: [embed], content: `🛒 طلب جديد من ${userName}` })
                     });
-                showToast("✅ تم إرسال طلبك بنجاح!", "success");
+                showToast(" تم إرسال طلبك بنجاح!", "success");
                 cartItems = [];
                 discountApplied = false;
                 discountPercent = 0;
@@ -1966,7 +1844,7 @@
                 updateCartUI();
                 document.getElementById('cartModal').classList.remove('active');
             } catch (e) {
-                showToast("❌ فشل في الإرسال، حاول مرة أخرى", "error");
+                showToast(" فشل في الإرسال، حاول مرة أخرى", "error");
             }
         }
 
@@ -2170,6 +2048,11 @@
             sendAIMessage(`ابحث عن ${product.name}`);
         }
 
+        function openAIChat() {
+            document.getElementById('aiModal').classList.add('active');
+            setTimeout(() => document.getElementById('aiUserInput').focus(), 300);
+        }
+
         // ============================================================
         // RENDER STORE
         // ============================================================
@@ -2182,7 +2065,7 @@
               <div class="product-info">
                 <div class="product-name">
                   ${p.name}
-                  ${p.popular ? '<span class="product-popular-badge">🔥 الأكثر مبيعاً</span>' : ''}
+                  ${p.popular ? '<span class="product-popular-badge"> الأكثر مبيعاً</span>' : ''}
                 </div>
                 <div class="product-price">
                   <span>${p.price}</span>
@@ -2265,11 +2148,13 @@
                 }
             });
 
-            // Cart Modal
-            document.getElementById('cartToggleBtn').addEventListener('click', () => {
+            // Header Cart Button
+            document.getElementById('headerCartBtn').addEventListener('click', () => {
                 updateCartUI();
                 document.getElementById('cartModal').classList.add('active');
             });
+
+            // Cart Modal
             document.getElementById('cartModalClose').addEventListener('click', () => {
                 document.getElementById('cartModal').classList.remove('active');
             });
@@ -2290,10 +2175,7 @@
 
             // AI Modal
             const aiModal = document.getElementById('aiModal');
-            document.getElementById('aiAssistantBtn').addEventListener('click', () => {
-                aiModal.classList.add('active');
-                setTimeout(() => document.getElementById('aiUserInput').focus(), 200);
-            });
+            document.getElementById('aiAssistantBtn').addEventListener('click', openAIChat);
             document.getElementById('aiModalClose').addEventListener('click', () => aiModal.classList.remove('active'));
             aiModal.addEventListener('click', (e) => { if (e.target === aiModal) aiModal.classList.remove('active'); });
             document.getElementById('aiSendBtn').addEventListener('click', () => {
@@ -2317,6 +2199,9 @@
                 });
             });
 
+            // FAB - opens AI chat directly
+            document.getElementById('fabOpenChat').addEventListener('click', openAIChat);
+
             // Carousel
             document.getElementById('prevReviewBtn').addEventListener('click', () => {
                 if (currentReviewIndex > 0) { currentReviewIndex--;
@@ -2339,32 +2224,6 @@
                 const header = document.getElementById('mainHeader');
                 if (window.scrollY > 30) header.classList.add('scrolled');
                 else header.classList.remove('scrolled');
-            });
-
-            // Dropdown
-            document.getElementById('menuToggleBtn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                document.getElementById('dropdownMenu').classList.toggle('show');
-            });
-            document.addEventListener('click', (e) => {
-                const menu = document.getElementById('dropdownMenu');
-                if (!menu.contains(e.target) && e.target !== document.getElementById('menuToggleBtn')) {
-                    menu.classList.remove('show');
-                }
-            });
-
-            // AI FAB
-            const fabMenu = document.getElementById('aiMenu');
-            document.getElementById('toggleAI').addEventListener('click', () => {
-                fabMenu.classList.toggle('active');
-            });
-            document.addEventListener('click', (e) => {
-                if (!fabMenu.contains(e.target)) fabMenu.classList.remove('active');
-            });
-
-            // Login stub
-            document.getElementById('headerLoginBtn').addEventListener('click', () => {
-                showToast('🚪 بوابة الموظفين متاحة عبر صفحة "بوابتي"', 'info');
             });
         }
 
