@@ -390,7 +390,6 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
-            /* إزالة أي دوران */
             transform: none;
         }
         .input-area .btn-send::after {
@@ -704,66 +703,39 @@
 
     <script>
         // ============================================================
-        //  🔍  الكلمات المفتاحية (نفسها)
-        // ============================================================
-        const KEYWORDS = {
-            greeting: ['مرحبا', 'السلام', 'هلا', 'اهلا', 'أهلا', 'سلام', 'يعطيك العافية', 'صباح', 'مساء', 'يا هلا', 'نورت', 'أهلاً', 'مرحباً', 'آهلا', 'هلا بك', 'نورنا'],
-            howAreYou: ['كيف حال', 'كيفك', 'اخبارك', 'شلونك', 'ازيك', 'شخبارك', 'كيف الأحوال', 'كيف الحال', 'كيف انت', 'كيفك انت', 'كيف حالك'],
-            thanks: ['شكر', 'مشكور', 'تسلم', 'يعطيك العافيه', 'الله يعطيك', 'يعطيك العافية', 'شكراً', 'شكرا', 'جزاك الله خير', 'بارك الله فيك'],
-            aboutBot: ['من انت', 'من أنت', 'وش اسمك', 'اسمك', 'تعرف نفسك', 'من صنعك', 'مين انت', 'منو انت', 'ما أنت', 'من انت انت'],
-            goodbye: ['وداع', 'باي', 'سلام', 'مع السلامة', 'الى اللقاء', 'إلى اللقاء', 'باااي', 'ودي', 'نشوفك', 'في أمان الله'],
-            help: ['مساعدة', 'ساعد', 'عاون', 'النجدة', 'نجدة', 'help', 'المساعدة', 'مساعد', 'كيف اساعدك', 'دعم'],
-            name: ['اسم', 'سمي', 'وش اسمك', 'إسمك', 'اسمك ايه', 'ما اسمك', 'تعريف'],
-            age: ['عمر', 'سن', 'كم عمرك', 'عمرك', 'قديش عمرك', 'كم سنة', 'عمرك كم', 'من أي جيل'],
-            location: ['اين', 'مكان', 'موقع', 'فين', 'وين', 'أين', 'المقر', 'مكانك', 'من أي بلد', 'دولتك'],
-            hobbies: ['هواية', 'هوايات', 'تحب', 'تستمتع', 'شغف', 'ما تحب', 'اهتمامات', 'هوايتك', 'تشغل وقتك'],
-            food: ['أكل', 'طعام', 'طبخ', 'مطبخ', 'وجبة', 'أكلة', 'أكلات', 'ما تاكل', 'الأكل المفضل', 'مأكولات'],
-            sports: ['رياضة', 'كرة', 'جري', 'سباحة', 'تمرين', 'لياقة', 'كرة قدم', 'سلة', 'تنس', 'رياضات', 'نشاط رياضي'],
-            movies: ['فيلم', 'أفلام', 'سينما', 'مسلسل', 'دراما', 'أكشن', 'كوميديا', 'فيلم حرب', 'فيلم خيال', 'مشاهدة'],
-            music: ['موسيقى', 'غناء', 'أغاني', 'طرب', 'أغنية', 'موسيقى', 'نغم', 'لحن', 'استماع', 'موسيقار'],
-            gaming: ['لعبة', 'ألعاب', 'جيم', 'قيمنق', 'بلاي', 'غيمر', 'جيمر', 'العاب', 'ألعاب فيديو', 'بلايستيشن'],
-            tech: ['تقنية', 'تكنولوجيا', 'برمجة', 'حواسيب', 'ذكاء اصطناعي', 'انترنت', 'تطبيقات', 'هاتف', 'الكمبيوتر', 'شبكات'],
-            education: ['تعلم', 'دراسة', 'مدرسة', 'جامعة', 'علم', 'ثقافة', 'معرفة', 'تعليم', 'طلاب', 'مناهج'],
-            health: ['صحة', 'علاج', 'دواء', 'مرض', 'حمية', 'ريجيم', 'صحي', 'طبيب', 'مستشفى', 'غذاء'],
-            travel: ['سفر', 'سياحة', 'رحلة', 'ترحال', 'استكشاف', 'فندق', 'طائرة', 'بحر', 'جواز', 'وجهة'],
-            love: ['حب', 'عشق', 'غرام', 'قلب', 'رومانسية', 'حبيبي', 'حبيبتي', 'كلمة حب', 'مشاعر', 'الحب'],
-            funny: ['نكتة', 'ضحك', 'مزاح', 'ظريف', 'فكاهة', 'مضحك', 'كوميدي', 'هزار', 'تسلية', 'طرفة'],
-            islamic: ['دين', 'إسلام', 'مسلم', 'قرآن', 'صلاة', 'زكاة', 'حج', 'صوم', 'نبي', 'إيمان', 'توحيد'],
-            programming: ['برمجة', 'كود', 'برنامج', 'مطور', 'مبرمج', 'برمجة', 'بايثون', 'جافا', 'سي', 'جافا سكريبت', 'خوارزميات'],
-            business: ['عمل', 'مشروع', 'ريادة', 'استثمار', 'شركة', 'تجارة', 'ربح', 'بيع', 'تسويق', 'إدارة'],
-            art: ['فن', 'رسم', 'لوحة', 'تشكيلي', 'فنان', 'تصوير', 'فنون', 'إبداع', 'خط', 'نحت'],
-            science: ['علم', 'فيزياء', 'كيمياء', 'أحياء', 'فلك', 'بحث', 'مختبر', 'علوم', 'نظرية', 'تجربة'],
-            history: ['تاريخ', 'حضارة', 'قديم', 'ماضي', 'أثر', 'آثار', 'معركة', 'ملك', 'حضارات', 'تراث'],
-            philosophy: ['فلسفة', 'فكر', 'منطق', 'وجود', 'حقيقة', 'وعي', 'فلسفي', 'تفلسف', 'تأمل', 'عقل'],
-            poetry: ['شعر', 'قصيدة', 'شاعر', 'أبيات', 'نظم', 'قافية', 'رثاء', 'مدح', 'غزل', 'شعراء'],
-            weather: ['طقس', 'الجو', 'الحرارة', 'مطر', 'شمس', 'ريح', 'غيوم', 'درجة الحرارة', 'مناخ', 'أحوال جوية'],
-            time: ['الوقت', 'الساعة', 'تاريخ', 'كم الساعة', 'اليوم', 'التاريخ', 'وقت', 'زمن', 'ساعة', 'دقيقة']
-        };
-
-        // ============================================================
-        //  🧠  محرك الردود (تحميل من JSON)
+        //  🧠  محرك الردود (تحميل من JSON مع الكلمات المفتاحية)
         // ============================================================
 
         let responses = {};
+        let keywordsMap = {}; // سيتم بناؤها من الملف
 
         function getReply(category) {
-            const list = responses[category];
+            const list = responses[category]?.responses;
             if (!list || list.length === 0) {
                 return getReply('default');
             }
             return list[Math.floor(Math.random() * list.length)];
         }
 
+        function buildKeywordsMap(data) {
+            const map = {};
+            for (const [cat, obj] of Object.entries(data)) {
+                if (obj.keywords && Array.isArray(obj.keywords)) {
+                    map[cat] = obj.keywords.map(k => k.toLowerCase());
+                }
+            }
+            return map;
+        }
+
         function getCategoryForText(text) {
             const lower = text.trim().toLowerCase();
-            for (const [cat, patterns] of Object.entries(KEYWORDS)) {
+            for (const [cat, patterns] of Object.entries(keywordsMap)) {
                 if (patterns.some(p => lower.includes(p))) {
                     return cat;
                 }
             }
-            if (lower.includes('ما') || lower.includes('لماذا') || lower.includes('كيف') || lower.includes('هل')) {
-                return 'general';
-            }
+            // إذا لم يجد تطابقاً، يختار general أو default
+            if (responses['general']) return 'general';
             return 'default';
         }
 
@@ -801,12 +773,14 @@
         function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
 
+            // التحقق من العمليات الحسابية
             const mathResult = evaluateMath(text);
             if (mathResult !== null) {
                 return `🧮 النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟`;
             }
 
-            if (KEYWORDS.time.some(p => lower.includes(p))) {
+            // التحقق من الوقت (نستخدم نفس المفتاح 'time' من الملف)
+            if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
                 const now = new Date();
                 const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
                 const dateStr = now.toLocaleDateString('ar-SA', { timeZone: 'Asia/Riyadh' });
@@ -816,6 +790,7 @@
 
             let category = getCategoryForText(text);
 
+            // سياق المحادثة (اختياري)
             if (conversationHistory.length >= 2) {
                 const lastUserMsg = conversationHistory.filter(m => m.role === 'user').pop();
                 if (lastUserMsg && lastUserMsg.content !== text && text.split(' ').length <= 3) {
@@ -825,7 +800,7 @@
                 }
             }
 
-            if (category !== 'default') {
+            if (category !== 'default' && responses[category]) {
                 return getReply(category);
             }
 
@@ -948,26 +923,27 @@
         sendBtn.addEventListener('click', sendMessage);
 
         // ============================================================
-        //  📥  تحميل الردود
+        //  📥  تحميل الردود وبناء الكلمات المفتاحية
         // ============================================================
 
         async function loadResponses() {
             try {
                 const response = await fetch('responses.json');
                 if (!response.ok) throw new Error('تعذر تحميل ملف الردود');
-                responses = await response.json();
-                console.log(' تم تحميل الردود بنجاح');
+                const data = await response.json();
+                responses = data;
+                keywordsMap = buildKeywordsMap(data);
+                console.log(' تم تحميل الردود والكلمات المفتاحية بنجاح');
                 messageInput.disabled = false;
                 messageInput.focus();
                 sendBtn.disabled = false;
             } catch (error) {
                 console.error(' خطأ في تحميل الردود:', error);
+                // ردود احتياطية في حال تعذر التحميل
                 responses = {
-                    default: [
-                        ' عذراً، حدث خطأ في تحميل الردود. تأكد من وجود ملف responses.json.',
-                        ' يرجى التحقق من الاتصال أو تحديث الصفحة.'
-                    ]
+                    default: { responses: ['عذراً، حدث خطأ في تحميل الردود. تأكد من وجود ملف responses.json.'] }
                 };
+                keywordsMap = {};
                 const botMsg = document.createElement('div');
                 botMsg.className = 'message bot';
                 botMsg.innerHTML = ' عذراً، حدث خطأ في تحميل الردود. تأكد من وجود ملف <strong>responses.json</strong> في نفس المجلد.';
@@ -980,7 +956,7 @@
         sendBtn.disabled = true;
         loadResponses();
 
-        console.log('🚀 MEN Ai جاهز مع تحميل الردود من JSON.');
+        console.log('');
     </script>
 </body>
 </html>
