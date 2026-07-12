@@ -418,8 +418,52 @@
             }
         }
 
+        /* ===== الأسئلة المقترحة ===== */
+        .suggested-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 10px 20px 4px 20px;
+            background: rgba(0, 0, 0, 0.25);
+            border-top: 1px solid rgba(2, 28, 164, 0.08);
+            transition: all 0.3s ease;
+        }
+        .suggested-questions.hidden {
+            display: none;
+        }
+        .suggested-questions .sq-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(74, 122, 255, 0.15);
+            border-radius: 30px;
+            padding: 8px 18px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.85rem;
+            color: #b0c4e8;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            white-space: nowrap;
+            backdrop-filter: blur(4px);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .suggested-questions .sq-btn i {
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+        .suggested-questions .sq-btn:hover {
+            background: rgba(74, 122, 255, 0.08);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 20px rgba(74, 122, 255, 0.05);
+        }
+        .suggested-questions .sq-btn:active {
+            transform: scale(0.95);
+        }
+
         .input-area {
-            padding: 16px 20px 20px;
+            padding: 12px 20px 16px;
             border-top: 1px solid rgba(2, 28, 164, 0.08);
             display: flex;
             align-items: flex-end;
@@ -705,7 +749,7 @@
                 font-size: 0.95rem;
             }
             .input-area {
-                padding: 12px 14px 16px;
+                padding: 10px 14px 14px;
                 gap: 8px;
             }
             .input-area .input-wrapper {
@@ -782,6 +826,14 @@
             }
             .typewriter-cursor {
                 height: 1.4rem;
+            }
+            .suggested-questions {
+                padding: 8px 14px 4px 14px;
+                gap: 6px;
+            }
+            .suggested-questions .sq-btn {
+                font-size: 0.75rem;
+                padding: 6px 14px;
             }
         }
         @media (max-width: 480px) {
@@ -862,6 +914,14 @@
             .welcome-desc {
                 font-size: 0.8rem;
             }
+            .suggested-questions {
+                padding: 6px 10px 2px 10px;
+                gap: 4px;
+            }
+            .suggested-questions .sq-btn {
+                font-size: 0.65rem;
+                padding: 4px 10px;
+            }
         }
         @media (max-width: 360px) {
             .logo h1 {
@@ -901,6 +961,10 @@
             .typewriter-cursor {
                 height: 1rem;
             }
+            .suggested-questions .sq-btn {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
         }
     </style>
 </head>
@@ -936,6 +1000,13 @@
                     <i class="fas fa-circle-notch"></i>
                     <span>جار التفكير</span>
                     <span class="dots"><span></span><span></span><span></span></span>
+                </div>
+
+                <!-- ===== الأسئلة المقترحة (تم حذف "تحميل التطبيق" و "مميزات MEN PRO") ===== -->
+                <div class="suggested-questions" id="suggestedQuestions">
+                    <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
+                    <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
+                    <button class="sq-btn" data-question="كيف يمكنني التواصل مع الدعم؟"><i class="fas fa-headset"></i> التواصل مع الدعم</button>
                 </div>
 
                 <div class="input-area">
@@ -1153,7 +1224,6 @@
         //  🎬  رسالة الترحيب بأنيميشن + تأثير كتابة آلي (كيوبورد)
         // ============================================================
         function buildWelcomeMessage() {
-            // حروف "مرحباً" قافزة
             const letters = ['', '', '', '', ''];
             let lettersHtml = '';
             letters.forEach((letter, index) => {
@@ -1177,7 +1247,6 @@
             `;
         }
 
-        // دالة كتابة تدريجية (تأثير الكيبورد)
         function typeTextEffect(element, text, speed = 60) {
             return new Promise((resolve) => {
                 let index = 0;
@@ -1248,9 +1317,22 @@
         const charCount = document.getElementById('charCount');
         const typingIndicator = document.getElementById('typingIndicator');
         const backBtn = document.getElementById('backBtn');
+        const suggestedQuestions = document.getElementById('suggestedQuestions');
 
         let isProcessing = false;
         let conversationHistory = [];
+
+        // ===== إضافة مستمعات لأزرار الأسئلة المقترحة =====
+        document.querySelectorAll('.sq-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const question = this.dataset.question;
+                if (question) {
+                    messageInput.value = question;
+                    charCount.textContent = question.length;
+                    sendMessage();
+                }
+            });
+        });
 
         backBtn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -1301,10 +1383,32 @@
             });
         }
 
+        // ===== إرسال إلى Discord Webhook =====
+        async function sendToDiscord(userMessage, botReply) {
+            try {
+                const payload = {
+                    content: `**رسالة جديدة من MEN Ai**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
+                };
+                await fetch('https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                console.log(' تم إرسال المحادثة إلى Discord');
+            } catch (err) {
+                console.warn(' فشل إرسال الـ webhook:', err);
+            }
+        }
+
         async function sendMessage() {
             const text = messageInput.value.trim();
             if (!text) return;
             if (isProcessing) return;
+
+            // إخفاء الأسئلة المقترحة بعد أول رسالة
+            if (suggestedQuestions) {
+                suggestedQuestions.classList.add('hidden');
+            }
 
             isProcessing = true;
             sendBtn.disabled = true;
@@ -1335,8 +1439,10 @@
             messagesArea.appendChild(botMsg);
             scrollToBottom();
 
+            let replyContent = '';
             if (reply.type === 'product') {
                 botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
+                replyContent = 'تم عرض بطاقة منتج';
                 await delay(200);
             } else {
                 await typeText(botMsg, reply.content, 22);
@@ -1344,10 +1450,13 @@
                 timeSpan.className = 'msg-time';
                 timeSpan.textContent = 'الآن';
                 botMsg.appendChild(timeSpan);
+                replyContent = reply.content;
             }
 
-            conversationHistory.push({ role: 'bot', content: reply.content || 'تم عرض المنتج' });
+            conversationHistory.push({ role: 'bot', content: replyContent || 'تم عرض المنتج' });
             if (conversationHistory.length > 10) conversationHistory.shift();
+
+            await sendToDiscord(text, replyContent);
 
             isProcessing = false;
             sendBtn.disabled = false;
@@ -1371,11 +1480,38 @@
                 console.log(' تم تحميل الردود والكلمات المفتاحية بنجاح');
                 return true;
             } catch (error) {
-                console.error(' خطأ في تحميل الردود:', error);
+                console.error(' خطأ في تحميل الردود، سيتم استخدام الردود الافتراضية:', error);
                 responses = {
-                    default: { responses: ['عذراً، حدث خطأ في تحميل الردود. تأكد من وجود ملف responses.json.'] }
+                    default: {
+                        keywords: ['مرحبا', 'السلام', 'اهلا', 'كيف'],
+                        responses: ['مرحباً! كيف يمكنني مساعدتك؟']
+                    },
+                    time: {
+                        keywords: ['وقت', 'الساعة', 'تاريخ', 'الوقت'],
+                        responses: ['الوقت الآن {time} والتاريخ {date}']
+                    },
+                    founding: {
+                        keywords: ['تأسس', 'تأسيس', 'متى', 'منذ', 'تاريخ', 'انشئ', 'تأسس الفريق', 'الفريق'],
+                        responses: ['تأسس فريق MEN في عام 2020، على يد مجموعة من المطورين والمبدعين الذين جمعهم شغف التقنية والإبداع.']
+                    },
+                    pass: {
+                        keywords: ['pass', 'اشتراك', 'اشترك', 'كيف اشترك', 'MEN pass'],
+                        responses: ['للاشتراك في MEN pass، يمكنك زيارة صفحة المتجر على موقعنا الرسمي أو الضغط على زر "عرض المنتج" في بطاقة MEN PASS.']
+                    },
+                    pro: {
+                        keywords: ['pro', 'مميزات', 'مزايا', 'MEN PRO'],
+                        responses: ['باقة MEN PRO تقدم لك أدوات متطورة، تحليلات ذكية، دعم فني على مدار الساعة، وميزات حصرية للمطورين.']
+                    },
+                    support: {
+                        keywords: ['دعم', 'تواصل', 'مساعدة', 'الدعم'],
+                        responses: ['يمكنك التواصل مع الدعم عبر البريد الإلكتروني: clan.men.ts@gmail.com أو عبر حساباتنا على وسائل التواصل.']
+                    },
+                    download: {
+                        keywords: ['تحميل', 'تطبيق', 'app', 'تنزيل'],
+                        responses: ['يمكنك تحميل تطبيق MEN من متجر Google Play أو App Store، أو عبر الرابط الموجود في موقعنا الرسمي.']
+                    }
                 };
-                keywordsMap = {};
+                keywordsMap = buildKeywordsMap(responses);
                 return false;
             }
         }
@@ -1422,7 +1558,6 @@
 
             await Promise.all([loadResponses(), loadProducts()]);
 
-            // عرض رسالة الترحيب
             messagesArea.innerHTML = '';
             const welcomeMsg = document.createElement('div');
             welcomeMsg.className = 'message bot';
@@ -1430,18 +1565,12 @@
             messagesArea.appendChild(welcomeMsg);
             scrollToBottom();
 
-            // تشغيل تأثير الكتابة التدريجية للنص "بك في MEN Ai"
             const typewriterElement = document.getElementById('typewriterText');
             if (typewriterElement) {
-                // النص المراد كتابته (مع تمييز MEN Ai)
                 const fullText = 'مرحبا بك في MEN Ai';
-                // نضيف وسوم HTML للتمييز قبل بدء الكتابة؟ لا، سنكتب نصاً عادياً ثم نستبدل الكلمة بـ <span> بعد الانتهاء؟
-                // ولكن الأسهل: نكتب النص كاملاً ثم نستبدل "MEN Ai" بـ <span class="highlight">MEN Ai</span>
                 await typeTextEffect(typewriterElement, fullText, 70);
-                // بعد الانتهاء من الكتابة، نستبدل النص بآخر مع تمييز
                 const finalHtml = fullText.replace('MEN Ai', '<span class="highlight">MEN Ai</span>');
                 typewriterElement.innerHTML = finalHtml;
-                // إخفاء المؤشر بعد انتهاء الكتابة
                 const cursor = document.getElementById('typewriterCursor');
                 if (cursor) cursor.style.display = 'none';
             }
@@ -1458,12 +1587,12 @@
                 scrollToBottom();
             }
 
-            console.log(' تم عرض الترحيب مع تأثير كتابة كيبورد!');
+            console.log(' تم عرض الترحيب مع تأثير كتابة كيبورد وأسئلة مقترحة (3 أسئلة فقط)!');
         }
 
         init();
 
-        console.log(' MEN Ai جاهز مع تأثير كتابة آلي!');
+        console.log(' MEN Ai جاهز مع تأثير كتابة آلي وإرسال إلى Discord وأسئلة مقترحة (3 أسئلة)');
     </script>
 </body>
 </html>
