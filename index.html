@@ -2591,6 +2591,212 @@
                     <h2>سيطرة <span class="highlight">أقوى</span></h2>
                     <p>فريق اللاعبين وصنّاع المحتوى.</p>
                     <div class="btn-group">
+                        <!-- ===== شريط بحث MEN صغير جداً ===== -->
+<style>
+    /* حاوية لتوسيط الشريط */
+    .men-search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 8px 0;
+        font-family: 'Cairo', sans-serif;
+    }
+
+    /* الشريط الصغير جداً */
+    .men-search-wrapper {
+        display: flex;
+        align-items: center;
+        direction: ltr;
+        /*强制从左到右排列，使按钮在左 */
+        gap: 4px;
+        max-width: 210px;
+        width: 100%;
+        height: 32px;
+        background: rgba(10, 16, 32, 0.88);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(2, 28, 164, 0.3);
+        border-radius: 18px;
+        padding: 0 2px 0 8px;
+        box-shadow: 0 0 20px rgba(74, 122, 255, 0.10);
+        transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .men-search-wrapper:focus-within {
+        border-color: #4a7aff;
+        box-shadow: 0 0 30px rgba(74, 122, 255, 0.18);
+        transform: scale(1.03);
+    }
+
+    /* زر الإرسال في اليسار */
+    .men-search-wrapper .men-btn-send {
+        width: 26px;
+        height: 26px;
+        min-width: 26px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(135deg, #021ca4, #1a3a9e);
+        color: #fff;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 2px 16px rgba(2, 28, 164, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .men-search-wrapper .men-btn-send::after {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(74, 122, 255, 0.35), transparent);
+        opacity: 0;
+        transition: 0.5s;
+    }
+
+    .men-search-wrapper .men-btn-send:hover::after {
+        opacity: 1;
+    }
+
+    .men-search-wrapper .men-btn-send:hover {
+        transform: scale(1.10);
+        box-shadow: 0 4px 24px rgba(2, 28, 164, 0.40);
+    }
+
+    .men-search-wrapper .men-btn-send:active {
+        transform: scale(0.88);
+    }
+
+    .men-search-wrapper .men-btn-send i {
+        font-size: 0.7rem;
+        line-height: 1;
+    }
+
+    /* حقل الإدخال */
+    .men-search-wrapper input {
+        flex: 1;
+        min-width: 0;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: #f0f4ff;
+        font-size: 0.7rem;
+        font-family: 'Cairo', sans-serif;
+        padding: 4px 2px;
+        height: 100%;
+        line-height: 1.4;
+        direction: rtl;
+        /* نص عربي من اليمين */;
+    }
+
+    .men-search-wrapper input::placeholder {
+        color: #5a607a;
+        font-weight: 400;
+        font-size: 0.65rem;
+    }
+
+    /* استجابة للشاشات الصغيرة جداً */
+    @media (max-width: 480px) {
+        .men-search-wrapper {
+            max-width: 170px;
+            height: 28px;
+            padding: 0 2px 0 6px;
+            border-radius: 14px;
+        }
+
+        .men-search-wrapper .men-btn-send {
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            font-size: 0.6rem;
+        }
+
+        .men-search-wrapper .men-btn-send i {
+            font-size: 0.6rem;
+        }
+
+        .men-search-wrapper input {
+            font-size: 0.6rem;
+            padding: 2px 2px;
+        }
+
+        .men-search-wrapper input::placeholder {
+            font-size: 0.55rem;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .men-search-wrapper {
+            max-width: 140px;
+            height: 24px;
+            padding: 0 1px 0 4px;
+            border-radius: 12px;
+        }
+
+        .men-search-wrapper .men-btn-send {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            font-size: 0.5rem;
+        }
+
+        .men-search-wrapper .men-btn-send i {
+            font-size: 0.5rem;
+        }
+
+        .men-search-wrapper input {
+            font-size: 0.5rem;
+            padding: 1px 2px;
+        }
+
+        .men-search-wrapper input::placeholder {
+            font-size: 0.45rem;
+        }
+    }
+</style>
+
+<!-- هيكل الشريط مع حاوية للتوسيط -->
+<div class="men-search-container">
+    <div class="men-search-wrapper">
+        <button class="men-btn-send" id="menSendBtn" title="إرسال">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        <input type="text" id="menSearchInput" placeholder="اسألني عن أي شي..." dir="rtl">
+    </div>
+</div>
+
+<!-- أيقونات Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script>
+    (function() {
+        var searchInput = document.getElementById('menSearchInput');
+        var sendBtn = document.getElementById('menSendBtn');
+
+        function goToAi() {
+            window.location.href = 'ai.html'; // غيِّر المسار حسب موقع ملفك
+        }
+
+        sendBtn.addEventListener('click', goToAi);
+
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                goToAi();
+            }
+        });
+
+        // تركيز تلقائي اختياري
+        // searchInput.focus();
+    })();
+</script>
+<!-- ===== نهاية الشريط ===== -->
                         <!-- MEN PASS PREMIUM -->
                         <div class="men-pass" style="position:relative; overflow:hidden; padding:35px; border-radius:28px; background:rgba(8,18,40,.45); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.08); box-shadow:0 0 40px rgba(0,110,255,.35); text-align:center; color:#fff; font-family:Cairo,sans-serif; width:100%;">
                             <h1 style="margin:0; font-size:2.5rem;">Pass</h1>
