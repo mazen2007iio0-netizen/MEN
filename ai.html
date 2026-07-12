@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* ===== جميع الأنماط مع تحسينات الأزرار ===== */
+        /* ===== جميع الأنماط (نفس الكود السابق) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -479,84 +479,121 @@
             color: var(--blue-light);
         }
 
-        /* ===== أنماط بطاقة المنتج داخل الشات ===== */
+        /* ===== بطاقة المنتج الفخمة والمتناسقة مع MEN Ai ===== */
         .men-product-card {
             width: 100%;
-            max-width: 360px;
-            background: #111827;
-            border: 1px solid rgba(0, 140, 255, 0.25);
-            border-radius: 22px;
+            max-width: 380px;
+            background: rgba(10, 16, 32, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(2, 28, 164, 0.3);
+            border-radius: 28px;
             overflow: hidden;
-            color: white;
-            font-family: Arial, sans-serif;
-            box-shadow: 0 0 30px rgba(0, 119, 255, 0.15);
-            animation: show 0.4s ease;
-            margin: 4px 0;
+            font-family: 'Cairo', sans-serif;
+            color: #f0f4ff;
+            box-shadow: 0 0 40px rgba(2, 28, 164, 0.15), inset 0 1px 0 rgba(74, 122, 255, 0.1);
+            animation: show 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: 0.4s;
+            margin: 6px 0;
+        }
+        .men-product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 60px rgba(74, 122, 255, 0.2), inset 0 1px 0 rgba(74, 122, 255, 0.2);
+            border-color: rgba(74, 122, 255, 0.4);
         }
         .men-product-card .product-image {
             width: 100%;
-            height: 210px;
+            height: 220px;
             object-fit: cover;
-            display: block;
+            border-bottom: 1px solid rgba(2, 28, 164, 0.15);
+            transition: 0.4s;
+        }
+        .men-product-card:hover .product-image {
+            transform: scale(1.02);
         }
         .men-product-card .product-content {
-            padding: 20px;
+            padding: 24px 22px 22px;
         }
         .men-product-card .badge {
             display: inline-block;
-            background: rgba(0, 132, 255, 0.18);
-            color: #55b8ff;
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 13px;
-            margin-bottom: 15px;
+            background: rgba(74, 122, 255, 0.12);
+            color: var(--blue-light);
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            border: 1px solid rgba(74, 122, 255, 0.08);
+            backdrop-filter: blur(4px);
         }
         .men-product-card .product-content h2 {
-            margin: 0;
-            font-size: 26px;
+            margin: 14px 0 8px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 30%, var(--blue-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
         .men-product-card .product-content p {
-            color: #b9c5d8;
-            line-height: 1.7;
-            margin: 15px 0 20px;
+            color: #a0b0d4;
+            line-height: 1.8;
+            margin: 8px 0 20px;
+            font-size: 0.95rem;
         }
         .men-product-card .bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
         .men-product-card .price {
-            font-size: 30px;
-            color: #3aa8ff;
-            font-weight: bold;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--blue-light);
+            text-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
         }
         .men-product-card .price small {
-            font-size: 15px;
-            color: #8fb7ff;
+            font-size: 1rem;
+            color: #6a8ab0;
+            font-weight: 600;
+            margin-right: 4px;
         }
-        .men-product-card button {
-            background: linear-gradient(90deg, #0077ff, #00b7ff);
-            color: white;
+        .men-product-card .btn-product {
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            color: #fff;
             border: none;
-            padding: 12px 26px;
-            border-radius: 12px;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
             cursor: pointer;
-            font-size: 15px;
-            font-weight: bold;
-            transition: 0.25s;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 30px rgba(2, 28, 164, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-        .men-product-card button:hover {
+        .men-product-card .btn-product i {
+            font-size: 1.1rem;
+        }
+        .men-product-card .btn-product:hover {
             transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 0 20px rgba(0, 140, 255, 0.5);
+            box-shadow: 0 8px 40px rgba(74, 122, 255, 0.3);
+            background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+        }
+        .men-product-card .btn-product:active {
+            transform: scale(0.95);
         }
         @keyframes show {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(24px) scale(0.96);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
@@ -627,7 +664,20 @@
                 max-width: 100%;
             }
             .men-product-card .product-image {
-                height: 160px;
+                height: 170px;
+            }
+            .men-product-card .product-content {
+                padding: 18px 16px 16px;
+            }
+            .men-product-card .product-content h2 {
+                font-size: 1.5rem;
+            }
+            .men-product-card .price {
+                font-size: 1.6rem;
+            }
+            .men-product-card .btn-product {
+                padding: 10px 20px;
+                font-size: 0.85rem;
             }
         }
         @media (max-width: 480px) {
@@ -683,17 +733,17 @@
                 height: 140px;
             }
             .men-product-card .product-content {
-                padding: 16px;
+                padding: 14px 12px 12px;
             }
             .men-product-card .product-content h2 {
-                font-size: 22px;
+                font-size: 1.3rem;
             }
             .men-product-card .price {
-                font-size: 24px;
+                font-size: 1.4rem;
             }
-            .men-product-card button {
-                padding: 10px 18px;
-                font-size: 13px;
+            .men-product-card .btn-product {
+                padding: 8px 16px;
+                font-size: 0.8rem;
             }
         }
         @media (max-width: 360px) {
@@ -919,8 +969,7 @@
         // ============================================================
         function findProduct(text) {
             const lower = text.trim().toLowerCase();
-            // نبحث عن كلمات مفتاحية تدل على طلب منتج
-            const productTriggers = ['عرض', 'اشتري', 'شراء', 'منتج', 'pass', 'اشتراك', 'تفاصيل', 'سعر'];
+            const productTriggers = ['عرض', 'اشتري', 'شراء', 'منتج', 'pass', 'pro', 'اشتراك', 'تفاصيل', 'سعر', 'باقة'];
             const words = lower.split(/\s+/);
             let hasTrigger = false;
             for (const w of words) {
@@ -931,11 +980,9 @@
             }
             if (!hasTrigger) return null;
 
-            // نبحث في قائمة المنتجات عن تطابق في الاسم أو الوصف
             for (const product of products) {
                 const name = product.name.toLowerCase();
                 const desc = (product.description || '').toLowerCase();
-                // نتحقق من وجود أي كلمة من النص في اسم المنتج أو وصفه
                 for (const word of words) {
                     if (word.length >= 2) {
                         if (name.includes(word) || desc.includes(word)) {
@@ -943,7 +990,6 @@
                         }
                     }
                 }
-                // أيضاً نبحث عن تطابق جزئي في الاسم بالكامل
                 if (name.includes(lower) || lower.includes(name)) {
                     return product;
                 }
@@ -952,7 +998,7 @@
         }
 
         // ============================================================
-        //  🧩  إنشاء بطاقة المنتج كـ HTML
+        //  🧩  إنشاء بطاقة المنتج (بنمط فخم)
         // ============================================================
         function buildProductCard(product) {
             const image = product.image || 'images/default.png';
@@ -974,7 +1020,9 @@
                             <div class="price">
                                 ${price} <small>${currency}</small>
                             </div>
-                            <button onclick="window.location.href='${link}'">عرض المنتج</button>
+                            <button class="btn-product" onclick="window.location.href='${link}'">
+                                <i class="fas fa-arrow-left"></i> عرض المنتج
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1013,7 +1061,6 @@
             // 4. الردود النصية العادية (باستخدام الفئات)
             let category = getCategoryForText(text);
 
-            // تحسين: إذا كان هناك تاريخ محادثة، يمكن إضافة ردود متابعة
             if (conversationHistory.length >= 2) {
                 const lastUserMsg = conversationHistory.filter(m => m.role === 'user').pop();
                 if (lastUserMsg && lastUserMsg.content !== text && text.split(' ').length <= 3) {
@@ -1076,7 +1123,6 @@
             messagesArea.scrollTop = messagesArea.scrollHeight;
         }
 
-        // دالة لكتابة النص بشكل تدريجي (تستخدم للنصوص فقط)
         function typeText(element, text, speed = 20) {
             return new Promise((resolve) => {
                 let index = 0;
@@ -1102,7 +1148,6 @@
             isProcessing = true;
             sendBtn.disabled = true;
 
-            // عرض رسالة المستخدم
             const userMsg = document.createElement('div');
             userMsg.className = 'message user';
             userMsg.innerHTML = escapeHtml(text) + `<span class="msg-time">الآن</span>`;
@@ -1115,7 +1160,6 @@
             charCount.textContent = '0';
             scrollToBottom();
 
-            // إظهار مؤشر الكتابة
             typingIndicator.style.display = 'flex';
             scrollToBottom();
 
@@ -1123,22 +1167,17 @@
 
             typingIndicator.style.display = 'none';
 
-            // توليد الرد
             const reply = generateSmartReply(text);
 
-            // إنشاء رسالة البوت
             const botMsg = document.createElement('div');
             botMsg.className = 'message bot';
             messagesArea.appendChild(botMsg);
             scrollToBottom();
 
             if (reply.type === 'product') {
-                // عرض بطاقة المنتج مباشرة (بدون تأثير كتابة)
                 botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
-                // نضيف تأخير بسيط لتحسين التجربة
                 await delay(200);
             } else {
-                // عرض النص مع تأثير الكتابة
                 await typeText(botMsg, reply.content, 22);
                 const timeSpan = document.createElement('span');
                 timeSpan.className = 'msg-time';
@@ -1189,25 +1228,44 @@
                 console.log('✅ تم تحميل المنتجات بنجاح، عددها:', products.length);
                 return true;
             } catch (error) {
-                console.error('❌ خطأ في تحميل المنتجات:', error);
-                products = [];
-                return false;
+                console.error('❌ خطأ في تحميل المنتجات، سيتم استخدام البيانات الافتراضية:', error);
+                // بيانات افتراضية (منتجين) في حال عدم وجود الملف
+                products = [
+                    {
+                        "id": "men-pass",
+                        "name": "MEN PASS",
+                        "description": "اشترك في MEN PASS واحصل على جميع المميزات الحصرية، ودعم أسرع، وتجربة احترافية داخل المنصة.",
+                        "price": "49",
+                        "currency": "ر.س",
+                        "image": "images/pass.png",
+                        "badge": "✨ منتج مميز",
+                        "link": "store.html"
+                    },
+                    {
+                        "id": "men-pro",
+                        "name": "MEN PRO",
+                        "description": "باقة احترافية للمطورين، تتضمن أدوات متقدمة وتحليلات ذكية ودعم فني على مدار الساعة.",
+                        "price": "99",
+                        "currency": "ر.س",
+                        "image": "images/pro.png",
+                        "badge": "🔥 باقة احترافية",
+                        "link": "pro.html"
+                    }
+                ];
+                return true;
             }
         }
 
         async function init() {
-            // تعطيل المدخلات حتى تحميل البيانات
             messageInput.disabled = true;
             sendBtn.disabled = true;
 
             await Promise.all([loadResponses(), loadProducts()]);
 
-            // تفعيل المدخلات
             messageInput.disabled = false;
             messageInput.focus();
             sendBtn.disabled = false;
 
-            // إذا لم توجد منتجات، نعرض رسالة في الشات
             if (products.length === 0) {
                 const botMsg = document.createElement('div');
                 botMsg.className = 'message bot';
@@ -1219,7 +1277,7 @@
 
         init();
 
-        console.log('🚀 MEN Ai جاهز للعمل مع البحث عن المنتجات!');
+        console.log('🚀 MEN Ai جاهز للعمل مع عرض المنتجات الفخم!');
     </script>
 </body>
 </html>
