@@ -941,3 +941,16 @@
     ]
   }
 }
+
+[
+  {
+    "id": "men-pass",
+    "name": "MEN PASS",
+    "description": "اشترك في MEN PASS واحصل على جميع المميزات الحصرية، ودعم أسرع، وتجربة احترافية داخل المنصة.",
+    "price": "49",
+    "currency": "ر.س",
+    "image": "images/pass.png",
+    "badge": "✨ منتج مميز",
+    "link": "store.html"
+  }
+]
