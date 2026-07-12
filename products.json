@@ -1,4 +1,5 @@
 
+
 [
   {
     "id": "men-pass",
@@ -9,5 +10,15 @@
     "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/200908_328971.png",
     "badge": "✨ منتج مميز",
     "link": "stor.html"
+  },
+  {
+    "id": "men-shirt",
+    "name": "تيشيرت MEN",
+    "description": "تيشيرت MEN الرسمي بتصميم عصري وجودة عالية، مناسب للاستخدام اليومي ولعشاق MEN.",
+    "price": "89.00",
+    "currency": "ر.س",
+    "image": "https://via.placeholder.com/600x600.png?text=MEN+T-Shirt",
+    "badge": "👕 جديد",
+    "link": "shirt.html"
   }
 ]
