@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* ===== جميع الأنماط (نفس الكود السابق) ===== */
+        /* ===== جميع الأنماط الأساسية ===== */
         * {
             margin: 0;
             padding: 0;
@@ -266,6 +266,101 @@
             text-align: right;
         }
 
+        /* ===== أنيميشن الترحيب الجديد ===== */
+        .welcome-animation {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            width: 100%;
+        }
+        .welcome-main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            font-size: 2.4rem;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+        .welcome-main .letter {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffffff 20%, var(--blue-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: bounceGlow 1.8s ease-in-out infinite alternate;
+            text-shadow: 0 0 20px rgba(74, 122, 255, 0.2);
+            transform-origin: center bottom;
+        }
+        @keyframes bounceGlow {
+            0% {
+                transform: translateY(0px) scale(1);
+                filter: drop-shadow(0 0 5px rgba(74, 122, 255, 0.1));
+            }
+            100% {
+                transform: translateY(-12px) scale(1.08);
+                filter: drop-shadow(0 0 25px rgba(74, 122, 255, 0.6));
+            }
+        }
+
+        /* تأثير الكتابة الآلية (keyboard style) */
+        .typewriter-container {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            min-height: 2.8rem;
+            direction: rtl;
+        }
+        .typewriter-text {
+            display: inline;
+            color: #c0ccf0;
+        }
+        .typewriter-text .highlight {
+            background: linear-gradient(135deg, var(--blue-light), #a0c0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 900;
+        }
+        .typewriter-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.8rem;
+            background: var(--blue-light);
+            margin-right: 4px;
+            animation: blinkCursor 0.7s step-end infinite;
+            vertical-align: middle;
+        }
+        @keyframes blinkCursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .welcome-desc {
+            font-size: 0.95rem;
+            color: #8a9abb;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.8s forwards;
+        }
+        .welcome-desc i {
+            color: var(--blue-light);
+            animation: spinSlow 4s linear infinite;
+        }
+        @keyframes spinSlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .typing-indicator {
             align-self: flex-start;
             display: none;
@@ -479,7 +574,7 @@
             color: var(--blue-light);
         }
 
-        /* ===== بطاقة المنتج الفخمة والمتناسقة مع MEN Ai ===== */
+        /* ===== بطاقة المنتج الفخمة ===== */
         .men-product-card {
             width: 100%;
             max-width: 380px;
@@ -679,6 +774,15 @@
                 padding: 10px 20px;
                 font-size: 0.85rem;
             }
+            .welcome-main {
+                font-size: 2rem;
+            }
+            .typewriter-container {
+                font-size: 1.2rem;
+            }
+            .typewriter-cursor {
+                height: 1.4rem;
+            }
         }
         @media (max-width: 480px) {
             .message {
@@ -745,6 +849,19 @@
                 padding: 8px 16px;
                 font-size: 0.8rem;
             }
+            .welcome-main {
+                font-size: 1.6rem;
+                gap: 2px;
+            }
+            .typewriter-container {
+                font-size: 1rem;
+            }
+            .typewriter-cursor {
+                height: 1.2rem;
+            }
+            .welcome-desc {
+                font-size: 0.8rem;
+            }
         }
         @media (max-width: 360px) {
             .logo h1 {
@@ -775,6 +892,15 @@
                 height: 30px;
                 font-size: 1rem;
             }
+            .welcome-main {
+                font-size: 1.2rem;
+            }
+            .typewriter-container {
+                font-size: 0.8rem;
+            }
+            .typewriter-cursor {
+                height: 1rem;
+            }
         }
     </style>
 </head>
@@ -804,13 +930,7 @@
                     </div>
                 </div>
 
-                <div class="messages-area" id="messagesArea">
-                    <div class="message bot">
-                        <i class="fas fa-wand-sparkles" style="color:var(--blue-light);margin-left:8px;"></i>
-                        مرحباً بك في MEN Ai! أنا نموذج ذكي، اسألني عن أي شيء وسأحاول مساعدتك.
-                        <span class="msg-time">الآن</span>
-                    </div>
-                </div>
+                <div class="messages-area" id="messagesArea"></div>
 
                 <div class="typing-indicator" id="typingIndicator">
                     <i class="fas fa-circle-notch"></i>
@@ -860,7 +980,7 @@
         let products = [];
 
         // ============================================================
-        //  📐  مسافة ليفنشتاين (Levenshtein Distance)
+        //  📐  مسافة ليفنشتاين
         // ============================================================
         function levenshteinDistance(a, b) {
             const matrix = [];
@@ -905,7 +1025,7 @@
         }
 
         // ============================================================
-        //  🔍  البحث عن أقرب فئة (بدلاً من المطابقة التامة)
+        //  🔍  البحث عن أقرب فئة
         // ============================================================
         function getCategoryForText(text) {
             const words = text.trim().toLowerCase().split(/\s+/).filter(w => w.length >= 3);
@@ -965,7 +1085,7 @@
         }
 
         // ============================================================
-        //  🛒  البحث عن منتج في قائمة المنتجات
+        //  🛒  البحث عن منتج
         // ============================================================
         function findProduct(text) {
             const lower = text.trim().toLowerCase();
@@ -998,7 +1118,7 @@
         }
 
         // ============================================================
-        //  🧩  إنشاء بطاقة المنتج (بنمط فخم)
+        //  🧩  بطاقة المنتج
         // ============================================================
         function buildProductCard(product) {
             const image = product.image || 'images/default.png';
@@ -1030,18 +1150,61 @@
         }
 
         // ============================================================
-        //  🤖  توليد الرد الذكي (يدعم المنتجات)
+        //  🎬  رسالة الترحيب بأنيميشن + تأثير كتابة آلي (كيوبورد)
+        // ============================================================
+        function buildWelcomeMessage() {
+            // حروف "مرحباً" قافزة
+            const letters = ['', '', '', '', ''];
+            let lettersHtml = '';
+            letters.forEach((letter, index) => {
+                const delay = (index * 0.12).toFixed(2);
+                lettersHtml += `<span class="letter" style="animation-delay: ${delay}s;">${letter}</span>`;
+            });
+
+            return `
+                <div class="welcome-animation">
+                    <div class="welcome-main">
+                        ${lettersHtml}
+                    </div>
+                    <div class="typewriter-container">
+                        <span class="typewriter-text" id="typewriterText"></span>
+                        <span class="typewriter-cursor" id="typewriterCursor"></span>
+                    </div>
+                    <div class="welcome-desc">
+                        <i class="fas fa-circle-notch"></i> أنا هنا لمساعدتك، اسألني عن أي شيء!
+                    </div>
+                </div>
+            `;
+        }
+
+        // دالة كتابة تدريجية (تأثير الكيبورد)
+        function typeTextEffect(element, text, speed = 60) {
+            return new Promise((resolve) => {
+                let index = 0;
+                element.textContent = '';
+                const interval = setInterval(() => {
+                    if (index < text.length) {
+                        element.textContent += text.charAt(index);
+                        index++;
+                    } else {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                }, speed);
+            });
+        }
+
+        // ============================================================
+        //  🤖  توليد الرد الذكي
         // ============================================================
         function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
 
-            // 1. التحقق من الرياضيات
             const mathResult = evaluateMath(text);
             if (mathResult !== null) {
-                return { type: 'text', content: `🧮 النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
+                return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
             }
 
-            // 2. التحقق من الوقت
             if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
                 const now = new Date();
                 const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
@@ -1051,14 +1214,12 @@
                 return { type: 'text', content: reply };
             }
 
-            // 3. البحث عن منتج
             const product = findProduct(text);
             if (product) {
                 const cardHtml = buildProductCard(product);
                 return { type: 'product', content: cardHtml };
             }
 
-            // 4. الردود النصية العادية (باستخدام الفئات)
             let category = getCategoryForText(text);
 
             if (conversationHistory.length >= 2) {
@@ -1197,7 +1358,7 @@
         sendBtn.addEventListener('click', sendMessage);
 
         // ============================================================
-        //  📥  تحميل الردود والمنتجات
+        //  📥  تحميل الردود والمنتجات + عرض الترحيب المتحرك
         // ============================================================
 
         async function loadResponses() {
@@ -1207,10 +1368,10 @@
                 const data = await response.json();
                 responses = data;
                 keywordsMap = buildKeywordsMap(data);
-                console.log('✅ تم تحميل الردود والكلمات المفتاحية بنجاح');
+                console.log(' تم تحميل الردود والكلمات المفتاحية بنجاح');
                 return true;
             } catch (error) {
-                console.error('❌ خطأ في تحميل الردود:', error);
+                console.error(' خطأ في تحميل الردود:', error);
                 responses = {
                     default: { responses: ['عذراً، حدث خطأ في تحميل الردود. تأكد من وجود ملف responses.json.'] }
                 };
@@ -1225,11 +1386,10 @@
                 if (!response.ok) throw new Error('تعذر تحميل ملف المنتجات');
                 const data = await response.json();
                 products = data;
-                console.log('✅ تم تحميل المنتجات بنجاح، عددها:', products.length);
+                console.log(' تم تحميل المنتجات بنجاح، عددها:', products.length);
                 return true;
             } catch (error) {
-                console.error('❌ خطأ في تحميل المنتجات، سيتم استخدام البيانات الافتراضية:', error);
-                // بيانات افتراضية (منتجين) في حال عدم وجود الملف
+                console.error(' خطأ في تحميل المنتجات، سيتم استخدام البيانات الافتراضية:', error);
                 products = [
                     {
                         "id": "men-pass",
@@ -1262,22 +1422,48 @@
 
             await Promise.all([loadResponses(), loadProducts()]);
 
+            // عرض رسالة الترحيب
+            messagesArea.innerHTML = '';
+            const welcomeMsg = document.createElement('div');
+            welcomeMsg.className = 'message bot';
+            welcomeMsg.innerHTML = buildWelcomeMessage() + `<span class="msg-time">الآن</span>`;
+            messagesArea.appendChild(welcomeMsg);
+            scrollToBottom();
+
+            // تشغيل تأثير الكتابة التدريجية للنص "بك في MEN Ai"
+            const typewriterElement = document.getElementById('typewriterText');
+            if (typewriterElement) {
+                // النص المراد كتابته (مع تمييز MEN Ai)
+                const fullText = 'مرحبا بك في MEN Ai';
+                // نضيف وسوم HTML للتمييز قبل بدء الكتابة؟ لا، سنكتب نصاً عادياً ثم نستبدل الكلمة بـ <span> بعد الانتهاء؟
+                // ولكن الأسهل: نكتب النص كاملاً ثم نستبدل "MEN Ai" بـ <span class="highlight">MEN Ai</span>
+                await typeTextEffect(typewriterElement, fullText, 70);
+                // بعد الانتهاء من الكتابة، نستبدل النص بآخر مع تمييز
+                const finalHtml = fullText.replace('MEN Ai', '<span class="highlight">MEN Ai</span>');
+                typewriterElement.innerHTML = finalHtml;
+                // إخفاء المؤشر بعد انتهاء الكتابة
+                const cursor = document.getElementById('typewriterCursor');
+                if (cursor) cursor.style.display = 'none';
+            }
+
             messageInput.disabled = false;
             messageInput.focus();
             sendBtn.disabled = false;
 
             if (products.length === 0) {
-                const botMsg = document.createElement('div');
-                botMsg.className = 'message bot';
-                botMsg.innerHTML = '⚠️ لم يتم تحميل أي منتج. تأكد من وجود ملف products.json مع البيانات.';
-                messagesArea.appendChild(botMsg);
+                const warnMsg = document.createElement('div');
+                warnMsg.className = 'message bot';
+                warnMsg.innerHTML = ' لم يتم تحميل أي منتج. تأكد من وجود ملف products.json مع البيانات.';
+                messagesArea.appendChild(warnMsg);
                 scrollToBottom();
             }
+
+            console.log(' تم عرض الترحيب مع تأثير كتابة كيبورد!');
         }
 
         init();
 
-        console.log('🚀 MEN Ai جاهز للعمل مع عرض المنتجات الفخم!');
+        console.log(' MEN Ai جاهز مع تأثير كتابة آلي!');
     </script>
 </body>
 </html>
