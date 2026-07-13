@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* ===== جميع الأنماط الأساسية (نفس الكود السابق) ===== */
+        /* جميع الأنماط الأساسية كما هي (لم تتغير) */
         * {
             margin: 0;
             padding: 0;
@@ -266,7 +266,6 @@
             text-align: right;
         }
 
-        /* ===== أنيميشن الترحيب الجديد ===== */
         .welcome-animation {
             display: flex;
             flex-direction: column;
@@ -303,7 +302,6 @@
             }
         }
 
-        /* تأثير الكتابة الآلية (keyboard style) */
         .typewriter-container {
             font-size: 1.4rem;
             font-weight: 700;
@@ -418,7 +416,6 @@
             }
         }
 
-        /* ===== الأسئلة المقترحة ===== */
         .suggested-questions {
             display: flex;
             flex-wrap: wrap;
@@ -618,7 +615,6 @@
             color: var(--blue-light);
         }
 
-        /* ===== بطاقة المنتج الفخمة ===== */
         .men-product-card {
             width: 100%;
             max-width: 380px;
@@ -736,7 +732,6 @@
             }
         }
 
-        /* ===== استجابة ===== */
         @media (max-width: 768px) {
             .chat-wrapper {
                 height: calc(100vh - 160px);
@@ -1043,28 +1038,45 @@
 
     <script>
         // ============================================================
-        //  🧠  محرك الردود (مع اختيار عشوائي من القائمة)
+        //  🧠  محرك الردود الذكي مع السياق
         // ============================================================
 
         let responses = {};
         let keywordsMap = {};
         let products = [];
 
+        // متغيرات لتتبع السياق
+        let lastUserCategory = null;          // آخر فئة تم استنتاجها من رسالة المستخدم
+        let lastReplyForCategory = {};        // لتخزين آخر رد تم إرساله لكل فئة (لتجنب التكرار)
+        let conversationHistory = [];
+
         // ============================================================
-        //  📐  دالة getReply معدلة لاختيار رد عشوائي
+        //  📐  دوال اختيار الردود مع تجنب التكرار
         // ============================================================
+
+        function getRandomReply(category, avoid = null) {
+            const list = responses[category]?.responses;
+            if (!list || list.length === 0) return getReply('default');
+            // ننسخ القائمة ونفلترها لتجنب الرد المحدد
+            let available = list.filter(r => r !== avoid);
+            if (available.length === 0) available = list; // إذا كانت كل الردود مكررة، نعيد القائمة كاملة
+            const randomIndex = Math.floor(Math.random() * available.length);
+            return available[randomIndex];
+        }
 
         function getReply(category) {
             const list = responses[category]?.responses;
             if (!list || list.length === 0) {
                 return getReply('default');
             }
-            // اختيار عشوائي من القائمة
             const randomIndex = Math.floor(Math.random() * list.length);
             return list[randomIndex];
         }
 
-        // نبني خريطة الكلمات المفتاحية
+        // ============================================================
+        //  🗺️  بناء خريطة الكلمات المفتاحية
+        // ============================================================
+
         function buildKeywordsMap(data) {
             const map = {};
             for (const [cat, obj] of Object.entries(data)) {
@@ -1076,12 +1088,11 @@
         }
 
         // ============================================================
-        //  🔍  البحث عن تطابق للكلمات المفتاحية (مطابقة تامة/جزئية)
+        //  🔍  تحديد فئة النص
         // ============================================================
+
         function getCategoryForText(text) {
             const lower = text.trim().toLowerCase();
-
-            // نمر على كل فئة ونبحث عن أي كلمة مفتاحية موجودة في النص
             for (const [cat, patterns] of Object.entries(keywordsMap)) {
                 for (const pattern of patterns) {
                     if (lower.includes(pattern)) {
@@ -1089,13 +1100,13 @@
                     }
                 }
             }
-            // إذا لم نجد تطابقاً، نرجع الفئة الافتراضية
             return 'default';
         }
 
         // ============================================================
-        //  🧮  حل العمليات الحسابية (نفس الكود السابق)
+        //  🧮  العمليات الحسابية
         // ============================================================
+
         function evaluateMath(text) {
             const mathRegex = /(\d+)\s*([+\-*/])\s*(\d+)/;
             const match = text.match(mathRegex);
@@ -1128,8 +1139,9 @@
         }
 
         // ============================================================
-        //  🛒  البحث عن منتج (نفس الكود السابق)
+        //  🛒  البحث عن منتج
         // ============================================================
+
         function findProduct(text) {
             const lower = text.trim().toLowerCase();
             const productTriggers = ['عرض', 'اشتري', 'شراء', 'منتج', 'pass', 'pro', 'اشتراك', 'تفاصيل', 'سعر', 'باقة'];
@@ -1161,8 +1173,9 @@
         }
 
         // ============================================================
-        //  🧩  بطاقة المنتج (نفس الكود السابق)
+        //  🧩  بطاقة المنتج
         // ============================================================
+
         function buildProductCard(product) {
             const image = product.image || 'images/default.png';
             const name = product.name || 'منتج';
@@ -1193,8 +1206,9 @@
         }
 
         // ============================================================
-        //  🎬  رسالة الترحيب (نفس الكود السابق)
+        //  🎬  رسالة الترحيب
         // ============================================================
+
         function buildWelcomeMessage() {
             const letters = ['', '', '', '', ''];
             let lettersHtml = '';
@@ -1236,8 +1250,9 @@
         }
 
         // ============================================================
-        //  🤖  توليد الرد الذكي (مع عشوائية في اختيار الرد)
+        //  🤖  توليد الرد الذكي مع مراعاة السياق
         // ============================================================
+
         function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
 
@@ -1252,8 +1267,22 @@
                 const now = new Date();
                 const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
                 const dateStr = now.toLocaleDateString('ar-SA', { timeZone: 'Asia/Riyadh' });
-                const template = getReply('time');
-                const reply = template.replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr);
+                // نختار رداً مع مراعاة السياق (إذا تكرر نعطي رداً مختلفاً)
+                const category = 'time';
+                let reply;
+                if (lastUserCategory === category && lastReplyForCategory[category]) {
+                    reply = getRandomReply(category, lastReplyForCategory[category]);
+                } else {
+                    reply = getReply(category);
+                }
+                lastReplyForCategory[category] = reply;
+                lastUserCategory = category;
+                // استبدال المتغيرات
+                reply = reply.replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr);
+                // إضافة مقدمة إذا كان تكراراً
+                if (lastUserCategory === category && conversationHistory.length > 1) {
+                    reply = '⏳ مرة أخرى: ' + reply;
+                }
                 return { type: 'text', content: reply };
             }
 
@@ -1261,13 +1290,15 @@
             const product = findProduct(text);
             if (product) {
                 const cardHtml = buildProductCard(product);
+                // تحديث السياق: نضع الفئة 'product' لكننا لا نكررها كرد نصي
+                lastUserCategory = 'product';
                 return { type: 'product', content: cardHtml };
             }
 
-            // 4. البحث عن الفئة حسب الكلمات المفتاحية (المفتح)
+            // 4. البحث عن الفئة حسب الكلمات المفتاحية
             let category = getCategoryForText(text);
 
-            // في حال كان السؤال قصيراً جداً، يمكننا محاولة فهم السياق من آخر سؤال للمستخدم
+            // إذا كان السؤال قصيراً جداً، نحاول فهم السياق من آخر محادثة
             if (conversationHistory.length >= 2) {
                 const lastUserMsg = conversationHistory.filter(m => m.role === 'user').pop();
                 if (lastUserMsg && lastUserMsg.content !== text && text.split(' ').length <= 3) {
@@ -1277,17 +1308,36 @@
                 }
             }
 
-            // إذا وجدنا فئة محددة، نستخدم رداً عشوائياً منها
-            if (category !== 'default' && responses[category]) {
-                return { type: 'text', content: getReply(category) };
+            // إذا كانت الفئة موجودة، نختار رداً مع تجنب التكرار
+            let reply;
+            if (responses[category]) {
+                if (lastUserCategory === category && lastReplyForCategory[category]) {
+                    reply = getRandomReply(category, lastReplyForCategory[category]);
+                } else {
+                    reply = getReply(category);
+                }
+                // حفظ الرد المستخدم لهذه الفئة
+                lastReplyForCategory[category] = reply;
+                lastUserCategory = category;
+
+                // إذا تكررت الفئة، نضيف مقدمة
+                if (conversationHistory.length > 1 && lastUserCategory === category) {
+                    // نتحقق إذا كان آخر سؤال للمستخدم من نفس الفئة (من خلال lastUserCategory)
+                    // لكننا نضيف مقدمة بسيطة
+                    reply = '🔄 مرة أخرى: ' + reply;
+                }
+                return { type: 'text', content: reply };
             }
 
-            // وإلا نرجع الرد الافتراضي (عشوائي أيضاً)
-            return { type: 'text', content: getReply('default') };
+            // إذا لم نجد فئة، نستخدم الافتراضي
+            const defaultReply = getReply('default');
+            lastUserCategory = 'default';
+            lastReplyForCategory['default'] = defaultReply;
+            return { type: 'text', content: defaultReply };
         }
 
         // ============================================================
-        //  🧩  منطق التشغيل (نفس الكود السابق)
+        //  🧩  منطق التشغيل (نفس الكود مع تعديلات بسيطة)
         // ============================================================
 
         const messagesArea = document.getElementById('messagesArea');
@@ -1299,7 +1349,6 @@
         const suggestedQuestions = document.getElementById('suggestedQuestions');
 
         let isProcessing = false;
-        let conversationHistory = [];
 
         // مستمعات لأزرار الأسئلة المقترحة
         document.querySelectorAll('.sq-btn').forEach(btn => {
@@ -1362,7 +1411,7 @@
             });
         }
 
-        // ===== إرسال إلى Discord Webhook (نفس الكود) =====
+        // ===== إرسال إلى Discord Webhook =====
         async function sendToDiscord(userMessage, botReply) {
             try {
                 const payload = {
@@ -1460,7 +1509,7 @@
                 return true;
             } catch (error) {
                 console.error(' خطأ في تحميل الردود، سيتم استخدام الردود الافتراضية:', error);
-                // ردود افتراضية (مع مفتاح واحد لكل فئة)
+                // ردود افتراضية موسعة (بما فيها النكات)
                 responses = {
                     default: {
                         keywords: ['مرحبا', 'السلام', 'اهلا', 'كيف'],
@@ -1489,6 +1538,19 @@
                     download: {
                         keywords: ['تحميل', 'تطبيق', 'app', 'تنزيل'],
                         responses: ['يمكنك تحميل تطبيق MEN من متجر Google Play أو App Store.', 'احصل على تطبيق MEN من خلال الروابط المتوفرة في موقعنا.', 'تطبيق MEN متاح للتحميل على جميع المنصات الرئيسية.']
+                    },
+                    joke: {
+                        keywords: ['نكتة', 'مزحة', 'ضحك', 'funny', 'joke', 'طرفة'],
+                        responses: [
+                            'لماذا لا يستطيع الساحر إنجاب أطفال؟ لأنه يمارس السحر الأسود!',
+                            'ما هو الشيء الذي كلما زاد نقص؟ العمر.',
+                            'قالت البقرة للدجاجة: أنتِ تبيضين وأنا أحلب، ماذا يفعل الخروف؟ قال: أنا أعطي الصوف، وكلنا نضحك!',
+                            'سألوا الفلاح: لماذا تربي الحمار؟ قال: لأنه صبور ومخلص، قالوا: وهل تتزوج منه؟ قال: لا، أنا متزوج من امرأة!',
+                            'عالم فضاء قال: الأرض تدور، فقال له رجل: أنا لا أشعر بذلك!',
+                            'ما هو الشيء الذي يكتب ولا يقرأ؟ القلم.',
+                            'لماذا الفرعون مات؟ لأنه ما شربش مياه معدنية!',
+                            'مرة واحد نملة سألته: ليش أنت صغير؟ قال: لأني نملة!'
+                        ]
                     }
                 };
                 keywordsMap = buildKeywordsMap(responses);
@@ -1568,12 +1630,13 @@
             }
 
             console.log(' تم عرض الترحيب مع تأثير كتابة كيبورد وأسئلة مقترحة (3 أسئلة فقط)!');
+            console.log(' البوت الآن يتذكر سياق المحادثة ويقدم ردوداً مختلفة عند تكرار السؤال.');
         }
 
         init();
 
         console.log(' MEN Ai جاهز مع تأثير كتابة آلي وإرسال إلى Discord وأسئلة مقترحة (3 أسئلة)');
-        console.log(' الردود تعتمد على المفتاح (المطابقة التامة/الجزئية) مع اختيار عشوائي من القائمة.');
+        console.log(' الردود تعتمد على السياق وتجنب تكرار نفس الرد.');
     </script>
 </body>
 </html>
