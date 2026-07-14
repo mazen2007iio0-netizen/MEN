@@ -1583,7 +1583,7 @@
                 category: "ملابس", rating: 4.8, features: ["قطني ناعم", "مقاس مرن", "تصميم عصري"],
                 cons: ["قد يكون مقاسه غير دقيق"], description: "تيشيرت قطني مريح بتصميم عصري يناسب جميع الأوقات.",
                 tags: ["سفر", "هدية", "أسود", "صيفي"], usage: "يمكن ارتداؤه مع جينز أو شورت.",
-                warranty: "ضمان 30 يوم ضد عيوب الصناعة", popular: true },
+                warranty: "ضمان 30 يوم ضد عيوب الصناعة", popular: false },
 
             { id: 3, name: "روبلوكس 20 ريال", price: "19.90",
                 image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
@@ -1832,7 +1832,7 @@
                     "https://discord.com/api/webhooks/1502708241518432399/oYuBXcUAPEskuKUqHLAewfXb5E2Xxxj7EUiqUS7RIPL7NMKXO3ZRla4-Vw8XDWBwDWDj", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ embeds: [embed], content: `🛒 طلب جديد من ${userName}` })
+                        body: JSON.stringify({ embeds: [embed], content: ` طلب جديد من ${userName}` })
                     });
                 showToast(" تم إرسال طلبك بنجاح!", "success");
                 cartItems = [];
