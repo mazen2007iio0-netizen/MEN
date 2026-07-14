@@ -4,222 +4,929 @@
     <link rel="icon" type="image/png" href="logo.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEN Ai - مكالمة صوتية</title>
+    <title>MEN Ai</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* === جميع الأنماط الأساسية (مختصرة) === */
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Cairo',sans-serif; background:#000; color:#f0f4ff; min-height:100vh; overflow-x:hidden; }
-        ::-webkit-scrollbar { width:6px; }
-        ::-webkit-scrollbar-track { background:#000; }
-        ::-webkit-scrollbar-thumb { background:linear-gradient(180deg,#021ca4,#1a3a9e); border-radius:12px; }
-        .bg-ambient { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; background:radial-gradient(ellipse at 20% 30%,rgba(2,28,164,0.15) 0%,transparent 55%),radial-gradient(ellipse at 80% 70%,rgba(26,58,158,0.10) 0%,transparent 50%),radial-gradient(ellipse at 50% 50%,#000 0%,#000 100%); animation:ambientFloat 20s ease-in-out infinite alternate; }
-        @keyframes ambientFloat { 0% { transform:scale(1) rotate(0deg); } 100% { transform:scale(1.05) rotate(2deg); } }
-        .container { width:92%; max-width:1100px; margin:0 auto; padding:0 18px; }
-        :root { --blue-deep:#021ca4; --blue-mid:#1a3a9e; --blue-light:#4a7aff; --card-bg:rgba(10,16,32,0.85); --card-border:rgba(2,28,164,0.25); --radius-xl:24px; --radius-2xl:40px; --glow-neon:0 0 30px rgba(74,122,255,0.15); }
-        /* header */
-        header { background:rgba(0,0,0,0.92); backdrop-filter:blur(24px); border-bottom:1px solid rgba(2,28,164,0.10); padding:12px 0; position:sticky; top:0; z-index:1000; box-shadow:0 4px 30px rgba(0,0,0,0.8); }
-        .header-content { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
-        .logo { display:flex; align-items:center; gap:12px; }
-        .btn-back { display:flex; align-items:center; justify-content:center; gap:8px; background:rgba(255,255,255,0.06); border:1px solid rgba(2,28,164,0.15); border-radius:40px; padding:0 18px; height:44px; color:#a0b0d4; font-size:1rem; cursor:pointer; transition:0.3s cubic-bezier(0.16,1,0.3,1); text-decoration:none; font-family:'Cairo',sans-serif; }
-        .btn-back i { font-size:1.2rem; }
-        .btn-back .back-text { font-weight:600; font-size:0.95rem; white-space:nowrap; }
-        .btn-back:hover { background:rgba(74,122,255,0.1); border-color:var(--blue-light); color:#fff; transform:scale(1.03); box-shadow:0 0 30px rgba(74,122,255,0.1); }
-        .btn-back:active { transform:scale(0.95); }
-        .logo img { height:48px; filter:brightness(0) invert(1) drop-shadow(0 0 10px rgba(74,122,255,0.3)); }
-        .logo h1 { font-size:2rem; font-weight:900; background:linear-gradient(135deg,#ffffff 40%,var(--blue-light)); -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow:0 0 40px rgba(74,122,255,0.2); }
-        .logo h1 i { color:var(--blue-light); margin-left:8px; font-size:1.6rem; filter:drop-shadow(0 0 20px rgba(74,122,255,0.3)); animation:sparkle 2s ease-in-out infinite alternate; }
-        @keyframes sparkle { 0% { filter:drop-shadow(0 0 10px rgba(74,122,255,0.2)); transform:scale(1) rotate(0deg); } 100% { filter:drop-shadow(0 0 30px rgba(74,122,255,0.6)); transform:scale(1.1) rotate(10deg); } }
-        /* chat-wrapper */
-        .chat-wrapper { margin:30px 0 20px; background:var(--card-bg); backdrop-filter:blur(24px); border:1px solid var(--card-border); border-radius:var(--radius-2xl); overflow:hidden; box-shadow:var(--glow-neon); display:flex; flex-direction:column; height:calc(100vh - 200px); min-height:500px; position:relative; }
-        .chat-header { padding:18px 24px; border-bottom:1px solid rgba(2,28,164,0.1); display:flex; align-items:center; gap:16px; flex-wrap:wrap; background:rgba(0,0,0,0.4); }
-        .chat-header .bot-info { display:flex; align-items:center; gap:14px; }
-        .chat-header .bot-avatar { width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,var(--blue-deep),var(--blue-light)); display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:#fff; box-shadow:0 0 30px rgba(74,122,255,0.2); }
-        .chat-header .bot-name { font-weight:700; font-size:1.2rem; color:#fff; }
-        /* messages-area */
-        .messages-area { flex:1; padding:20px 24px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; background:rgba(0,0,0,0.3); position:relative; }
-        .messages-area::-webkit-scrollbar { width:4px; }
-        .messages-area::-webkit-scrollbar-thumb { background:var(--blue-deep); border-radius:12px; }
-        /* الرسائل */
-        .message { max-width:85%; padding:14px 20px; border-radius:var(--radius-xl); animation:fadeUp 0.4s cubic-bezier(0.16,1,0.3,1); word-wrap:break-word; line-height:1.7; }
-        @keyframes fadeUp { from { opacity:0; transform:translateY(20px) scale(0.96); } to { opacity:1; transform:translateY(0) scale(1); } }
-        .message.user { align-self:flex-end; background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid)); border-bottom-left-radius:6px; box-shadow:0 4px 20px rgba(2,28,164,0.2); }
-        .message.bot { align-self:flex-start; background:rgba(255,255,255,0.05); border:1px solid rgba(2,28,164,0.08); border-bottom-right-radius:6px; box-shadow:0 4px 20px rgba(0,0,0,0.3); }
-        .message .msg-time { font-size:0.65rem; color:#6a708a; margin-top:6px; display:block; text-align:left; }
-        .message.user .msg-time { text-align:right; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #000000;
+            color: #f0f4ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #021ca4, #1a3a9e);
+            border-radius: 12px;
+        }
 
-        /* ===== دائرة التردد الصوتي (في منتصف الشاشة) ===== */
-        .voice-overlay {
-            position: absolute;
+        .bg-ambient {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            display: none;
+            z-index: -2;
+            background:
+                radial-gradient(ellipse at 20% 30%, rgba(2, 28, 164, 0.15) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 70%, rgba(26, 58, 158, 0.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, #000000 0%, #000000 100%);
+            animation: ambientFloat 20s ease-in-out infinite alternate;
+        }
+        @keyframes ambientFloat {
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+            100% {
+                transform: scale(1.05) rotate(2deg);
+            }
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 18px;
+        }
+        :root {
+            --blue-deep: #021ca4;
+            --blue-mid: #1a3a9e;
+            --blue-light: #4a7aff;
+            --card-bg: rgba(10, 16, 32, 0.85);
+            --card-border: rgba(2, 28, 164, 0.25);
+            --radius-xl: 24px;
+            --radius-2xl: 40px;
+            --glow-neon: 0 0 30px rgba(74, 122, 255, 0.15);
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(2, 28, 164, 0.10);
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-back {
+            display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(2px);
-            z-index: 10;
-            pointer-events: none; /* لتسمح بالمرور خلفها */
-        }
-        .voice-overlay.active {
-            display: flex;
-        }
-        .voice-circle-container {
-            position: relative;
-            width: 220px;
-            height: 220px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-        }
-        .voice-circle {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: radial-gradient(circle at center, rgba(74, 122, 255, 0.25) 0%, rgba(74, 122, 255, 0.05) 70%, transparent 100%);
-            border: 2px solid rgba(74, 122, 255, 0.4);
-            box-shadow: 0 0 60px rgba(74, 122, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: pulseCircle 2s ease-in-out infinite;
-            transition: box-shadow 0.1s;
-        }
-        .voice-circle .inner-dot {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: radial-gradient(circle at center, #ffffff, rgba(74, 122, 255, 0.8));
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.6);
-            transition: transform 0.05s, box-shadow 0.05s;
-        }
-        .voice-circle .wave-ring {
-            position: absolute;
-            border-radius: 50%;
-            border: 2px solid rgba(74, 122, 255, 0.2);
-            animation: waveExpand 1.8s ease-out infinite;
-            pointer-events: none;
-        }
-        .voice-circle .wave-ring:nth-child(2) { animation-delay: 0.6s; }
-        .voice-circle .wave-ring:nth-child(3) { animation-delay: 1.2s; }
-        @keyframes waveExpand {
-            0% { width: 40px; height: 40px; opacity: 0.8; }
-            100% { width: 180px; height: 180px; opacity: 0; }
-        }
-        @keyframes pulseCircle {
-            0% { transform: scale(1); box-shadow: 0 0 40px rgba(74, 122, 255, 0.2); }
-            50% { transform: scale(1.03); box-shadow: 0 0 80px rgba(74, 122, 255, 0.4); }
-            100% { transform: scale(1); box-shadow: 0 0 40px rgba(74, 122, 255, 0.2); }
-        }
-        .voice-status {
-            position: absolute;
-            bottom: -50px;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(2, 28, 164, 0.15);
+            border-radius: 40px;
+            padding: 0 18px;
+            height: 44px;
             color: #a0b0d4;
             font-size: 1rem;
-            font-weight: 600;
-            background: rgba(0,0,0,0.6);
-            padding: 6px 20px;
-            border-radius: 30px;
-            backdrop-filter: blur(4px);
-            white-space: nowrap;
-            pointer-events: none;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none;
+            font-family: 'Cairo', sans-serif;
         }
-        /* باقي الأنماط */
-        .typing-indicator { align-self:flex-start; display:none; padding:10px 20px; background:rgba(255,255,255,0.05); border-radius:var(--radius-xl); border-bottom-right-radius:6px; border:1px solid rgba(2,28,164,0.08); gap:10px; align-items:center; color:#a0b0d4; font-size:0.95rem; }
-        .typing-indicator .dots { display:flex; gap:5px; }
-        .typing-indicator .dots span { width:8px; height:8px; border-radius:50%; background:var(--blue-light); display:inline-block; animation:typingBounce 1.4s ease-in-out infinite; }
-        .typing-indicator .dots span:nth-child(2) { animation-delay:0.2s; }
-        .typing-indicator .dots span:nth-child(3) { animation-delay:0.4s; }
-        @keyframes typingBounce { 0%,60%,100% { transform:translateY(0); opacity:0.4; } 30% { transform:translateY(-10px); opacity:1; } }
-        .typing-indicator i { color:var(--blue-light); animation:spin 1s linear infinite; font-size:1.1rem; }
-        @keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
-        .suggested-questions { display:flex; flex-wrap:wrap; gap:8px; padding:10px 20px 4px 20px; background:rgba(0,0,0,0.25); border-top:1px solid rgba(2,28,164,0.08); transition:all 0.3s ease; }
-        .suggested-questions.hidden { display:none; }
-        .suggested-questions .sq-btn { background:rgba(255,255,255,0.04); border:1px solid rgba(74,122,255,0.15); border-radius:30px; padding:8px 18px; font-family:'Cairo',sans-serif; font-size:0.85rem; color:#b0c4e8; cursor:pointer; transition:0.3s cubic-bezier(0.16,1,0.3,1); white-space:nowrap; backdrop-filter:blur(4px); display:inline-flex; align-items:center; gap:6px; }
-        .suggested-questions .sq-btn i { font-size:0.8rem; opacity:0.6; }
-        .suggested-questions .sq-btn:hover { background:rgba(74,122,255,0.08); border-color:var(--blue-light); color:#fff; transform:translateY(-2px) scale(1.02); box-shadow:0 4px 20px rgba(74,122,255,0.05); }
-        .suggested-questions .sq-btn:active { transform:scale(0.95); }
-        .input-area { padding:12px 20px 16px; border-top:1px solid rgba(2,28,164,0.08); display:flex; align-items:flex-end; gap:12px; background:rgba(0,0,0,0.4); }
-        .input-area .input-wrapper { flex:1; display:flex; align-items:flex-end; background:rgba(255,255,255,0.03); border-radius:var(--radius-xl); border:1.5px solid rgba(2,28,164,0.1); transition:0.3s; padding:4px 16px 4px 8px; min-height:52px; }
-        .input-area .input-wrapper:focus-within { border-color:var(--blue-light); box-shadow:0 0 30px rgba(74,122,255,0.05); }
-        .input-area .input-wrapper textarea { flex:1; background:transparent; border:none; outline:none; color:#f0f4ff; font-size:1rem; font-family:'Cairo',sans-serif; resize:none; padding:12px 4px; min-height:44px; max-height:150px; line-height:1.6; }
-        .input-area .input-wrapper textarea::placeholder { color:#5a607a; }
-        .input-area .input-wrapper .char-count { font-size:0.7rem; color:#4a5070; padding:8px 4px; white-space:nowrap; direction:ltr; }
-        .input-area .btn-send { width:52px; height:52px; min-width:52px; border-radius:50%; border:none; background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid)); color:#fff; font-size:1.4rem; cursor:pointer; transition:0.4s cubic-bezier(0.16,1,0.3,1); box-shadow:0 4px 30px rgba(2,28,164,0.2); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; transform:none; }
-        .input-area .btn-send::after { content:''; position:absolute; inset:-2px; border-radius:50%; background:linear-gradient(135deg,rgba(74,122,255,0.4),transparent); opacity:0; transition:0.6s; }
-        .input-area .btn-send:hover::after { opacity:1; }
-        .input-area .btn-send:hover { transform:scale(1.08); box-shadow:0 8px 40px rgba(2,28,164,0.4); }
-        .input-area .btn-send:active { transform:scale(0.92); }
-        .input-area .btn-send:disabled { opacity:0.4; cursor:not-allowed; transform:scale(1); }
-        /* زر الميكروفون */
-        .input-area .btn-voice { width:52px; height:52px; min-width:52px; border-radius:50%; border:none; background:rgba(255,255,255,0.06); border:1px solid rgba(2,28,164,0.2); color:#a0b0d4; font-size:1.4rem; cursor:pointer; transition:0.4s cubic-bezier(0.16,1,0.3,1); display:flex; align-items:center; justify-content:center; position:relative; }
-        .input-area .btn-voice:hover { background:rgba(74,122,255,0.08); border-color:var(--blue-light); color:#fff; transform:scale(1.05); }
-        .input-area .btn-voice:active { transform:scale(0.92); }
-        .input-area .btn-voice.recording { background:rgba(255,50,50,0.2); border-color:#ff4444; color:#ff4444; animation:pulseMic 1s ease-in-out infinite; position:relative; z-index:1; }
-        .input-area .btn-voice.recording::before, .input-area .btn-voice.recording::after { content:''; position:absolute; top:-4px; left:-4px; right:-4px; bottom:-4px; border-radius:50%; border:2px solid rgba(255,68,68,0.4); animation:ripple 1.5s ease-out infinite; pointer-events:none; z-index:-1; }
-        .input-area .btn-voice.recording::after { animation-delay:0.75s; }
-        @keyframes ripple { 0% { transform:scale(1); opacity:1; } 100% { transform:scale(1.8); opacity:0; } }
-        @keyframes pulseMic { 0%,100% { transform:scale(1); box-shadow:0 0 10px rgba(255,68,68,0.2); } 50% { transform:scale(1.12); box-shadow:0 0 30px rgba(255,68,68,0.5); } }
-        .input-area .btn-voice:disabled { opacity:0.3; cursor:not-allowed; }
-        /* زر الهاتف */
-        .input-area .btn-phone { width:52px; height:52px; min-width:52px; border-radius:50%; border:none; background:rgba(255,255,255,0.06); border:1px solid rgba(2,28,164,0.2); color:#a0b0d4; font-size:1.4rem; cursor:pointer; transition:0.4s cubic-bezier(0.16,1,0.3,1); display:flex; align-items:center; justify-content:center; position:relative; }
-        .input-area .btn-phone:hover { background:rgba(74,122,255,0.08); border-color:var(--blue-light); color:#fff; transform:scale(1.05); }
-        .input-area .btn-phone:active { transform:scale(0.92); }
-        .input-area .btn-phone.active { background:rgba(74,122,255,0.15); border-color:var(--blue-light); color:#fff; animation:pulsePhone 1s ease-in-out infinite; }
-        @keyframes pulsePhone { 0%,100% { box-shadow:0 0 10px rgba(74,122,255,0.2); } 50% { box-shadow:0 0 30px rgba(74,122,255,0.5); } }
-        .input-area .btn-phone:disabled { opacity:0.3; cursor:not-allowed; }
-        /* footer */
-        footer { background:#000; border-top:1px solid rgba(2,28,164,0.03); padding:50px 0 30px; margin-top:30px; }
-        .footer-flex { display:flex; flex-wrap:wrap; justify-content:space-between; gap:40px; }
-        .footer-col h4 { color:var(--blue-light); margin-bottom:18px; font-size:1.2rem; text-shadow:0 0 20px rgba(74,122,255,0.1); }
-        .footer-col p { color:#6a708a; margin:10px 0; display:flex; align-items:center; gap:10px; }
-        .footer-col p i { color:#a0b0d4; opacity:0.7; width:20px; transition:0.3s; }
-        .footer-col p:hover i { color:var(--blue-light); transform:scale(1.2); }
-        .social-icons { display:flex; gap:14px; margin-top:12px; }
-        .social-icons a { font-size:1.4rem; color:#6a708a; transition:0.4s cubic-bezier(0.16,1,0.3,1); display:inline-block; }
-        .social-icons a:hover { color:var(--blue-light); transform:translateY(-6px) scale(1.2); filter:drop-shadow(0 0 20px rgba(74,122,255,0.2)); }
-        .copyright { text-align:center; margin-top:40px; padding-top:20px; border-top:1px solid rgba(2,28,164,0.03); color:#4a5070; font-size:0.9rem; width:100%; }
-        .copyright span { color:var(--blue-light); }
-        /* Product card */
-        .men-product-card { width:100%; max-width:380px; background:rgba(10,16,32,0.95); backdrop-filter:blur(16px); border:1px solid rgba(2,28,164,0.3); border-radius:28px; overflow:hidden; font-family:'Cairo',sans-serif; color:#f0f4ff; box-shadow:0 0 40px rgba(2,28,164,0.15), inset 0 1px 0 rgba(74,122,255,0.1); animation:show 0.6s cubic-bezier(0.16,1,0.3,1); transition:0.4s; margin:6px 0; }
-        .men-product-card:hover { transform:translateY(-4px); box-shadow:0 0 60px rgba(74,122,255,0.2), inset 0 1px 0 rgba(74,122,255,0.2); border-color:rgba(74,122,255,0.4); }
-        .men-product-card .product-image { width:100%; height:220px; object-fit:cover; border-bottom:1px solid rgba(2,28,164,0.15); transition:0.4s; }
-        .men-product-card:hover .product-image { transform:scale(1.02); }
-        .men-product-card .product-content { padding:24px 22px 22px; }
-        .men-product-card .badge { display:inline-block; background:rgba(74,122,255,0.12); color:var(--blue-light); padding:6px 16px; border-radius:40px; font-size:0.8rem; font-weight:600; letter-spacing:0.3px; border:1px solid rgba(74,122,255,0.08); backdrop-filter:blur(4px); }
-        .men-product-card .product-content h2 { margin:14px 0 8px; font-size:1.8rem; font-weight:800; background:linear-gradient(135deg,#ffffff 30%,var(--blue-light)); -webkit-background-clip:text; background-clip:text; color:transparent; }
-        .men-product-card .product-content p { color:#a0b0d4; line-height:1.8; margin:8px 0 20px; font-size:0.95rem; }
-        .men-product-card .bottom { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
-        .men-product-card .price { font-size:2rem; font-weight:900; color:var(--blue-light); text-shadow:0 0 30px rgba(74,122,255,0.2); }
-        .men-product-card .price small { font-size:1rem; color:#6a8ab0; font-weight:600; margin-right:4px; }
-        .men-product-card .btn-product { background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid)); color:#fff; border:none; padding:12px 28px; border-radius:40px; font-family:'Cairo',sans-serif; font-size:0.95rem; font-weight:700; cursor:pointer; transition:0.4s cubic-bezier(0.16,1,0.3,1); box-shadow:0 4px 30px rgba(2,28,164,0.2); display:inline-flex; align-items:center; gap:8px; }
-        .men-product-card .btn-product i { font-size:1.1rem; }
-        .men-product-card .btn-product:hover { transform:translateY(-2px) scale(1.03); box-shadow:0 8px 40px rgba(74,122,255,0.3); background:linear-gradient(135deg,var(--blue-mid),var(--blue-light)); }
-        .men-product-card .btn-product:active { transform:scale(0.95); }
-        @keyframes show { from { opacity:0; transform:translateY(24px) scale(0.96); } to { opacity:1; transform:translateY(0) scale(1); } }
-        /* الترحيب */
-        .welcome-animation { display:flex; flex-direction:column; align-items:flex-start; gap:6px; width:100%; }
-        .welcome-main { display:flex; flex-wrap:wrap; gap:4px; font-size:2.4rem; font-weight:900; margin-bottom:4px; }
-        .welcome-main .letter { display:inline-block; background:linear-gradient(135deg,#ffffff 20%,var(--blue-light)); -webkit-background-clip:text; background-clip:text; color:transparent; animation:bounceGlow 1.8s ease-in-out infinite alternate; text-shadow:0 0 20px rgba(74,122,255,0.2); transform-origin:center bottom; }
-        @keyframes bounceGlow { 0% { transform:translateY(0px) scale(1); filter:drop-shadow(0 0 5px rgba(74,122,255,0.1)); } 100% { transform:translateY(-12px) scale(1.08); filter:drop-shadow(0 0 25px rgba(74,122,255,0.6)); } }
-        .typewriter-container { font-size:1.4rem; font-weight:700; display:flex; align-items:center; gap:2px; min-height:2.8rem; direction:rtl; }
-        .typewriter-text { display:inline; color:#c0ccf0; }
-        .typewriter-text .highlight { background:linear-gradient(135deg,var(--blue-light),#a0c0ff); -webkit-background-clip:text; background-clip:text; color:transparent; font-weight:900; }
-        .typewriter-cursor { display:inline-block; width:3px; height:1.8rem; background:var(--blue-light); margin-right:4px; animation:blinkCursor 0.7s step-end infinite; vertical-align:middle; }
-        @keyframes blinkCursor { 0%,100% { opacity:1; } 50% { opacity:0; } }
-        .welcome-desc { font-size:0.95rem; color:#8a9abb; margin-top:6px; display:flex; align-items:center; gap:8px; opacity:0; animation:fadeInUp 1s ease-out 1.8s forwards; }
-        .welcome-desc i { color:var(--blue-light); animation:spinSlow 4s linear infinite; }
-        @keyframes spinSlow { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
-        @keyframes fadeInUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-        /* استجابة */
-        @media (max-width:768px) { .chat-wrapper { height:calc(100vh - 160px); min-height:400px; border-radius:var(--radius-xl); } .message { max-width:90%; padding:12px 16px; font-size:0.95rem; } .input-area { padding:10px 14px 14px; gap:8px; } .input-area .input-wrapper { padding:2px 12px 2px 6px; min-height:44px; } .input-area .input-wrapper textarea { padding:8px 2px; font-size:0.95rem; min-height:36px; } .input-area .btn-send, .input-area .btn-voice, .input-area .btn-phone { width:44px; height:44px; min-width:44px; font-size:1.2rem; } .chat-header { padding:12px 16px; } .chat-header .bot-avatar { width:36px; height:36px; font-size:1.2rem; } .messages-area { padding:14px 16px; gap:10px; } .logo h1 { font-size:1.4rem; } .logo h1 i { font-size:1rem; } .logo img { height:36px; } .btn-back { height:38px; padding:0 14px; font-size:0.9rem; } .btn-back i { font-size:1rem; } .btn-back .back-text { font-size:0.85rem; } .men-product-card { max-width:100%; } .men-product-card .product-image { height:170px; } .men-product-card .product-content { padding:18px 16px 16px; } .men-product-card .product-content h2 { font-size:1.5rem; } .men-product-card .price { font-size:1.6rem; } .men-product-card .btn-product { padding:10px 20px; font-size:0.85rem; } .welcome-main { font-size:2rem; } .typewriter-container { font-size:1.2rem; } .typewriter-cursor { height:1.4rem; } .suggested-questions { padding:8px 14px 4px 14px; gap:6px; } .suggested-questions .sq-btn { font-size:0.75rem; padding:6px 14px; } .voice-circle-container { width:160px; height:160px; } .voice-circle { width:140px; height:140px; } .voice-circle .inner-dot { width:24px; height:24px; } }
-        @media (max-width:480px) { .message { max-width:95%; padding:10px 14px; font-size:0.9rem; } .input-area .input-wrapper textarea { font-size:0.85rem; min-height:32px; } .input-area .btn-send, .input-area .btn-voice, .input-area .btn-phone { width:38px; height:38px; min-width:38px; font-size:1rem; } .chat-wrapper { height:calc(100vh - 140px); min-height:350px; border-radius:18px; } .messages-area { padding:10px 12px; gap:8px; } .container { width:96%; padding:0 10px; } .logo h1 { font-size:1.1rem; } .logo h1 i { font-size:0.9rem; } .logo img { height:30px; } .btn-back { height:34px; padding:0 10px; font-size:0.8rem; } .btn-back i { font-size:0.9rem; } .btn-back .back-text { font-size:0.75rem; } .men-product-card .product-image { height:140px; } .men-product-card .product-content { padding:14px 12px 12px; } .men-product-card .product-content h2 { font-size:1.3rem; } .men-product-card .price { font-size:1.4rem; } .men-product-card .btn-product { padding:8px 16px; font-size:0.8rem; } .welcome-main { font-size:1.6rem; gap:2px; } .typewriter-container { font-size:1rem; } .typewriter-cursor { height:1.2rem; } .welcome-desc { font-size:0.8rem; } .suggested-questions { padding:6px 10px 2px 10px; gap:4px; } .suggested-questions .sq-btn { font-size:0.65rem; padding:4px 10px; } .voice-circle-container { width:120px; height:120px; } .voice-circle { width:100px; height:100px; } .voice-circle .inner-dot { width:18px; height:18px; } .voice-status { font-size:0.8rem; bottom:-40px; } }
-        @media (max-width:360px) { .logo h1 { font-size:0.9rem; } .logo h1 i { font-size:0.8rem; } .logo img { height:26px; } .btn-back { height:30px; padding:0 8px; font-size:0.7rem; } .btn-back i { font-size:0.8rem; } .btn-back .back-text { font-size:0.7rem; } .chat-header .bot-name { font-size:0.9rem; } .chat-header .bot-avatar { width:30px; height:30px; font-size:1rem; } .welcome-main { font-size:1.2rem; } .typewriter-container { font-size:0.8rem; } .typewriter-cursor { height:1rem; } .suggested-questions .sq-btn { font-size:0.6rem; padding:3px 8px; } .input-area .btn-send, .input-area .btn-voice, .input-area .btn-phone { width:32px; height:32px; min-width:32px; font-size:0.8rem; } }
+        .btn-back i {
+            font-size: 1.2rem;
+        }
+        .btn-back .back-text {
+            font-weight: 600;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+        .btn-back:hover {
+            background: rgba(74, 122, 255, 0.1);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: scale(1.03);
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.1);
+        }
+        .btn-back:active {
+            transform: scale(0.95);
+        }
+
+        .logo img {
+            height: 48px;
+            filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(74, 122, 255, 0.3));
+        }
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 40%, var(--blue-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 40px rgba(74, 122, 255, 0.2);
+        }
+        .logo h1 i {
+            color: var(--blue-light);
+            margin-left: 8px;
+            font-size: 1.6rem;
+            filter: drop-shadow(0 0 20px rgba(74, 122, 255, 0.3));
+            animation: sparkle 2s ease-in-out infinite alternate;
+        }
+        @keyframes sparkle {
+            0% {
+                filter: drop-shadow(0 0 10px rgba(74, 122, 255, 0.2));
+                transform: scale(1) rotate(0deg);
+            }
+            100% {
+                filter: drop-shadow(0 0 30px rgba(74, 122, 255, 0.6));
+                transform: scale(1.1) rotate(10deg);
+            }
+        }
+
+        .chat-wrapper {
+            margin: 30px 0 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-2xl);
+            overflow: hidden;
+            box-shadow: var(--glow-neon);
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 200px);
+            min-height: 500px;
+        }
+
+        .chat-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid rgba(2, 28, 164, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .chat-header .bot-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .chat-header .bot-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
+        }
+        .chat-header .bot-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .messages-area {
+            flex: 1;
+            padding: 20px 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .messages-area::-webkit-scrollbar {
+            width: 4px;
+        }
+        .messages-area::-webkit-scrollbar-thumb {
+            background: var(--blue-deep);
+            border-radius: 12px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 14px 20px;
+            border-radius: var(--radius-xl);
+            animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            word-wrap: break-word;
+            line-height: 1.7;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .message.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            border-bottom-left-radius: 6px;
+            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
+        }
+        .message.bot {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(2, 28, 164, 0.08);
+            border-bottom-right-radius: 6px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .message .msg-time {
+            font-size: 0.65rem;
+            color: #6a708a;
+            margin-top: 6px;
+            display: block;
+            text-align: left;
+        }
+        .message.user .msg-time {
+            text-align: right;
+        }
+
+        /* صورة الرسم مع الأنيميشن */
+        .drawing-image-wrapper {
+            margin-top: 12px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            max-width: 100%;
+        }
+        .drawing-image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: filter 1.5s ease, opacity 1.5s ease;
+            filter: blur(20px);
+            opacity: 0.3;
+        }
+        .drawing-image-wrapper img.revealed {
+            filter: blur(0px);
+            opacity: 1;
+        }
+        .drawing-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .drawing-actions button {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(74, 122, 255, 0.2);
+            color: #a0b0d4;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .drawing-actions button:hover {
+            background: rgba(74, 122, 255, 0.1);
+            border-color: var(--blue-light);
+            color: #fff;
+        }
+        .drawing-actions button:active {
+            transform: scale(0.95);
+        }
+
+        .welcome-animation {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            width: 100%;
+        }
+        .welcome-main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            font-size: 2.4rem;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+        .welcome-main .letter {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffffff 20%, var(--blue-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: bounceGlow 1.8s ease-in-out infinite alternate;
+            text-shadow: 0 0 20px rgba(74, 122, 255, 0.2);
+            transform-origin: center bottom;
+        }
+        @keyframes bounceGlow {
+            0% {
+                transform: translateY(0px) scale(1);
+                filter: drop-shadow(0 0 5px rgba(74, 122, 255, 0.1));
+            }
+            100% {
+                transform: translateY(-12px) scale(1.08);
+                filter: drop-shadow(0 0 25px rgba(74, 122, 255, 0.6));
+            }
+        }
+
+        .typewriter-container {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            min-height: 2.8rem;
+            direction: rtl;
+        }
+        .typewriter-text {
+            display: inline;
+            color: #c0ccf0;
+        }
+        .typewriter-text .highlight {
+            background: linear-gradient(135deg, var(--blue-light), #a0c0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 900;
+        }
+        .typewriter-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.8rem;
+            background: var(--blue-light);
+            margin-right: 4px;
+            animation: blinkCursor 0.7s step-end infinite;
+            vertical-align: middle;
+        }
+        @keyframes blinkCursor {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .welcome-desc {
+            font-size: 0.95rem;
+            color: #8a9abb;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.8s forwards;
+        }
+        .welcome-desc i {
+            color: var(--blue-light);
+            animation: spinSlow 4s linear infinite;
+        }
+        @keyframes spinSlow {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .typing-indicator {
+            align-self: flex-start;
+            display: none;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-xl);
+            border-bottom-right-radius: 6px;
+            border: 1px solid rgba(2, 28, 164, 0.08);
+            gap: 10px;
+            align-items: center;
+            color: #a0b0d4;
+            font-size: 0.95rem;
+        }
+        .typing-indicator .dots {
+            display: flex;
+            gap: 5px;
+        }
+        .typing-indicator .dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--blue-light);
+            display: inline-block;
+            animation: typingBounce 1.4s ease-in-out infinite;
+        }
+        .typing-indicator .dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator .dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typingBounce {
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+        .typing-indicator i {
+            color: var(--blue-light);
+            animation: spin 1s linear infinite;
+            font-size: 1.1rem;
+        }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .suggested-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 10px 20px 4px 20px;
+            background: rgba(0, 0, 0, 0.25);
+            border-top: 1px solid rgba(2, 28, 164, 0.08);
+            transition: all 0.3s ease;
+        }
+        .suggested-questions.hidden {
+            display: none;
+        }
+        .suggested-questions .sq-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(74, 122, 255, 0.15);
+            border-radius: 30px;
+            padding: 8px 18px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.85rem;
+            color: #b0c4e8;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            white-space: nowrap;
+            backdrop-filter: blur(4px);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .suggested-questions .sq-btn i {
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+        .suggested-questions .sq-btn:hover {
+            background: rgba(74, 122, 255, 0.08);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 20px rgba(74, 122, 255, 0.05);
+        }
+        .suggested-questions .sq-btn:active {
+            transform: scale(0.95);
+        }
+
+        .input-area {
+            padding: 12px 20px 16px;
+            border-top: 1px solid rgba(2, 28, 164, 0.08);
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .input-area .input-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-xl);
+            border: 1.5px solid rgba(2, 28, 164, 0.1);
+            transition: 0.3s;
+            padding: 4px 16px 4px 8px;
+            min-height: 52px;
+        }
+        .input-area .input-wrapper:focus-within {
+            border-color: var(--blue-light);
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.05);
+        }
+        .input-area .input-wrapper textarea {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #f0f4ff;
+            font-size: 1rem;
+            font-family: 'Cairo', sans-serif;
+            resize: none;
+            padding: 12px 4px;
+            min-height: 44px;
+            max-height: 150px;
+            line-height: 1.6;
+        }
+        .input-area .input-wrapper textarea::placeholder {
+            color: #5a607a;
+        }
+        .input-area .input-wrapper .char-count {
+            font-size: 0.7rem;
+            color: #4a5070;
+            padding: 8px 4px;
+            white-space: nowrap;
+            direction: ltr;
+        }
+
+        .input-area .btn-send {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            color: #fff;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 30px rgba(2, 28, 164, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            transform: none;
+        }
+        .input-area .btn-send::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(74, 122, 255, 0.4), transparent);
+            opacity: 0;
+            transition: 0.6s;
+        }
+        .input-area .btn-send:hover::after {
+            opacity: 1;
+        }
+        .input-area .btn-send:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 40px rgba(2, 28, 164, 0.4);
+        }
+        .input-area .btn-send:active {
+            transform: scale(0.92);
+        }
+        .input-area .btn-send:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .input-area .btn-voice {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(2, 28, 164, 0.2);
+            color: #a0b0d4;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .input-area .btn-voice:hover {
+            background: rgba(74, 122, 255, 0.08);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: scale(1.05);
+        }
+        .input-area .btn-voice:active {
+            transform: scale(0.92);
+        }
+        .input-area .btn-voice.recording {
+            background: rgba(255, 50, 50, 0.15);
+            border-color: #ff4444;
+            color: #ff4444;
+            animation: pulseMic 1s ease-in-out infinite;
+        }
+        @keyframes pulseMic {
+            0%,
+            100% {
+                box-shadow: 0 0 10px rgba(255, 68, 68, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
+            }
+        }
+        .input-area .btn-voice:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        footer {
+            background: #000000;
+            border-top: 1px solid rgba(2, 28, 164, 0.03);
+            padding: 50px 0 30px;
+            margin-top: 30px;
+        }
+        .footer-flex {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;
+        }
+        .footer-col h4 {
+            color: var(--blue-light);
+            margin-bottom: 18px;
+            font-size: 1.2rem;
+            text-shadow: 0 0 20px rgba(74, 122, 255, 0.1);
+        }
+        .footer-col p {
+            color: #6a708a;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .footer-col p i {
+            color: #a0b0d4;
+            opacity: 0.7;
+            width: 20px;
+            transition: 0.3s;
+        }
+        .footer-col p:hover i {
+            color: var(--blue-light);
+            transform: scale(1.2);
+        }
+        .social-icons {
+            display: flex;
+            gap: 14px;
+            margin-top: 12px;
+        }
+        .social-icons a {
+            font-size: 1.4rem;
+            color: #6a708a;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-block;
+        }
+        .social-icons a:hover {
+            color: var(--blue-light);
+            transform: translateY(-6px) scale(1.2);
+            filter: drop-shadow(0 0 20px rgba(74, 122, 255, 0.2));
+        }
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(2, 28, 164, 0.03);
+            color: #4a5070;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+        .copyright span {
+            color: var(--blue-light);
+        }
+
+        @media (max-width: 768px) {
+            .chat-wrapper {
+                height: calc(100vh - 160px);
+                min-height: 400px;
+                border-radius: var(--radius-xl);
+            }
+            .message {
+                max-width: 90%;
+                padding: 12px 16px;
+                font-size: 0.95rem;
+            }
+            .input-area {
+                padding: 10px 14px 14px;
+                gap: 8px;
+            }
+            .input-area .input-wrapper {
+                padding: 2px 12px 2px 6px;
+                min-height: 44px;
+            }
+            .input-area .input-wrapper textarea {
+                padding: 8px 2px;
+                font-size: 0.95rem;
+                min-height: 36px;
+            }
+            .input-area .btn-send,
+            .input-area .btn-voice {
+                width: 44px;
+                height: 44px;
+                min-width: 44px;
+                font-size: 1.2rem;
+            }
+            .chat-header {
+                padding: 12px 16px;
+            }
+            .chat-header .bot-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 1.2rem;
+            }
+            .messages-area {
+                padding: 14px 16px;
+                gap: 10px;
+            }
+            .logo h1 {
+                font-size: 1.4rem;
+            }
+            .logo h1 i {
+                font-size: 1rem;
+            }
+            .logo img {
+                height: 36px;
+            }
+            .btn-back {
+                height: 38px;
+                padding: 0 14px;
+                font-size: 0.9rem;
+            }
+            .btn-back i {
+                font-size: 1rem;
+            }
+            .btn-back .back-text {
+                font-size: 0.85rem;
+            }
+            .welcome-main {
+                font-size: 2rem;
+            }
+            .typewriter-container {
+                font-size: 1.2rem;
+            }
+            .typewriter-cursor {
+                height: 1.4rem;
+            }
+            .suggested-questions {
+                padding: 8px 14px 4px 14px;
+                gap: 6px;
+            }
+            .suggested-questions .sq-btn {
+                font-size: 0.75rem;
+                padding: 6px 14px;
+            }
+        }
+        @media (max-width: 480px) {
+            .message {
+                max-width: 95%;
+                padding: 10px 14px;
+                font-size: 0.9rem;
+            }
+            .input-area .input-wrapper textarea {
+                font-size: 0.85rem;
+                min-height: 32px;
+            }
+            .input-area .btn-send,
+            .input-area .btn-voice {
+                width: 38px;
+                height: 38px;
+                min-width: 38px;
+                font-size: 1rem;
+            }
+            .chat-wrapper {
+                height: calc(100vh - 140px);
+                min-height: 350px;
+                border-radius: 18px;
+            }
+            .messages-area {
+                padding: 10px 12px;
+                gap: 8px;
+            }
+            .container {
+                width: 96%;
+                padding: 0 10px;
+            }
+            .logo h1 {
+                font-size: 1.1rem;
+            }
+            .logo h1 i {
+                font-size: 0.9rem;
+            }
+            .logo img {
+                height: 30px;
+            }
+            .btn-back {
+                height: 34px;
+                padding: 0 10px;
+                font-size: 0.8rem;
+            }
+            .btn-back i {
+                font-size: 0.9rem;
+            }
+            .btn-back .back-text {
+                font-size: 0.75rem;
+            }
+            .welcome-main {
+                font-size: 1.6rem;
+                gap: 2px;
+            }
+            .typewriter-container {
+                font-size: 1rem;
+            }
+            .typewriter-cursor {
+                height: 1.2rem;
+            }
+            .welcome-desc {
+                font-size: 0.8rem;
+            }
+            .suggested-questions {
+                padding: 6px 10px 2px 10px;
+                gap: 4px;
+            }
+            .suggested-questions .sq-btn {
+                font-size: 0.65rem;
+                padding: 4px 10px;
+            }
+        }
+        @media (max-width: 360px) {
+            .logo h1 {
+                font-size: 0.9rem;
+            }
+            .logo h1 i {
+                font-size: 0.8rem;
+            }
+            .logo img {
+                height: 26px;
+            }
+            .btn-back {
+                height: 30px;
+                padding: 0 8px;
+                font-size: 0.7rem;
+            }
+            .btn-back i {
+                font-size: 0.8rem;
+            }
+            .btn-back .back-text {
+                font-size: 0.7rem;
+            }
+            .chat-header .bot-name {
+                font-size: 0.9rem;
+            }
+            .chat-header .bot-avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+            .welcome-main {
+                font-size: 1.2rem;
+            }
+            .typewriter-container {
+                font-size: 0.8rem;
+            }
+            .typewriter-cursor {
+                height: 1rem;
+            }
+            .suggested-questions .sq-btn {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
+            .input-area .btn-send,
+            .input-area .btn-voice {
+                width: 32px;
+                height: 32px;
+                min-width: 32px;
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -248,21 +955,7 @@
                     </div>
                 </div>
 
-                <!-- منطقة الرسائل مع overlay للدائرة -->
-                <div class="messages-area" id="messagesArea">
-                    <!-- overlay الدائرة الصوتية -->
-                    <div class="voice-overlay" id="voiceOverlay">
-                        <div class="voice-circle-container">
-                            <div class="voice-circle" id="voiceCircle">
-                                <div class="wave-ring"></div>
-                                <div class="wave-ring"></div>
-                                <div class="wave-ring"></div>
-                                <div class="inner-dot" id="innerDot"></div>
-                                <div class="voice-status" id="voiceStatus">جاري الاستماع...</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="messages-area" id="messagesArea"></div>
 
                 <div class="typing-indicator" id="typingIndicator">
                     <i class="fas fa-circle-notch"></i>
@@ -271,9 +964,9 @@
                 </div>
 
                 <div class="suggested-questions" id="suggestedQuestions">
-                    <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
+                    <button class="sq-btn" data-question="ارسم لي صورة"><i class="fas fa-paint-brush"></i> ارسم لي صورة</button>
                     <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
-                    <button class="sq-btn" data-question="كيف يمكنني التواصل مع الدعم؟"><i class="fas fa-headset"></i> التواصل مع الدعم</button>
+                    <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
                 </div>
 
                 <div class="input-area">
@@ -281,15 +974,9 @@
                         <textarea id="messageInput" rows="1" placeholder="اسألني عن أي شيء..."></textarea>
                         <span class="char-count" id="charCount">0</span>
                     </div>
-                    <!-- زر الهاتف (مكالمة صوتية) -->
-                    <button class="btn-phone" id="phoneBtn" title="مكالمة صوتية">
-                        <i class="fas fa-phone"></i>
-                    </button>
-                    <!-- زر الميكروفون (تحويل الصوت إلى نص) -->
                     <button class="btn-voice" id="voiceBtn" title="تسجيل صوتي">
-                        <i class="fas fa-microphone"></i>
+                        <i class="fas fa-solid fa-microphone"></i>
                     </button>
-                    <!-- زر الإرسال -->
                     <button class="btn-send" id="sendBtn" title="إرسال">
                         <i class="fas fa-arrow-up"></i>
                     </button>
@@ -318,50 +1005,73 @@
     </footer>
 
     <script>
-        // ===== المتغيرات العامة =====
-        let responses = {};          // الردود العادية من responses.json
+        // ===================== البيانات الأساسية =====================
+        let corData = {}; // سيتم تحميلها من cor.json
         let keywordsMap = {};
-        let responsesVoice = {};     // الردود الصوتية من responses2f.json
-        let keywordsMapVoice = {};
         let products = [];
 
-        let isProcessing = false;
-        let conversationHistory = [];
+        // ===================== دوال التوقيت النسبي =====================
+        function formatTimeAgo(timestamp) {
+            const now = Date.now();
+            const diff = now - timestamp;
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
 
-        // عناصر DOM
-        const messagesArea = document.getElementById('messagesArea');
-        const messageInput = document.getElementById('messageInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const charCount = document.getElementById('charCount');
-        const typingIndicator = document.getElementById('typingIndicator');
-        const backBtn = document.getElementById('backBtn');
-        const suggestedQuestions = document.getElementById('suggestedQuestions');
-        const voiceBtn = document.getElementById('voiceBtn');
-        const phoneBtn = document.getElementById('phoneBtn');
-        const voiceOverlay = document.getElementById('voiceOverlay');
-        const voiceCircle = document.getElementById('voiceCircle');
-        const innerDot = document.getElementById('innerDot');
-        const voiceStatus = document.getElementById('voiceStatus');
+            if (days > 0) return `قبل ${days} يوم${days > 1 ? 'ين' : ''}`;
+            if (hours > 0) return `قبل ${hours} ساعة${hours > 1 ? 'ات' : ''}`;
+            if (minutes > 0) return `قبل ${minutes} دقيقة${minutes > 1 ? 'ق' : ''}`;
+            return 'الآن';
+        }
 
-        // ===== متغيرات الصوت والميكروفون =====
-        let recognition = null;
-        let isRecording = false;
-        let isVoiceCall = false;      // true للمكالمة الصوتية (زر الهاتف)
-        let audioContext = null;
-        let analyser = null;
-        let dataArray = null;
-        let animationFrame = null;
-        let mediaStream = null;
+        function updateAllTimes() {
+            document.querySelectorAll('.msg-time[data-time]').forEach(el => {
+                const ts = parseInt(el.getAttribute('data-time'), 10);
+                if (!isNaN(ts)) {
+                    el.textContent = formatTimeAgo(ts);
+                }
+            });
+        }
 
-        // ===== دوال مساعدة (مكررة من النسخة السابقة) =====
-        function getReply(category, isVoice = false) {
-            const data = isVoice ? responsesVoice : responses;
-            const list = data[category]?.responses;
-            if (!list || list.length === 0) {
-                return getReply('default', isVoice);
+        // تحديث الأوقات كل 10 ثوانٍ
+        setInterval(updateAllTimes, 10000);
+
+        // ===================== تحميل cor.json =====================
+        async function loadCorData() {
+            try {
+                const response = await fetch('cor.json');
+                if (!response.ok) throw new Error('تعذر تحميل cor.json');
+                const data = await response.json();
+                corData = data;
+                keywordsMap = buildKeywordsMap(data);
+                console.log('تم تحميل cor.json بنجاح');
+                return true;
+            } catch (error) {
+                console.error('خطأ في تحميل cor.json، سيتم استخدام بيانات افتراضية:', error);
+                // بيانات افتراضية للاختبار
+                corData = {
+                    "default": {
+                        "keywords": [],
+                        "responses": [
+                            { "type": "text", "content": "مرحباً! كيف يمكنني مساعدتك؟" },
+                            { "type": "text", "content": "أهلاً بك! أنا MEN Ai، اسألني أي شيء." }
+                        ]
+                    },
+                    "drawing": {
+                        "keywords": ["ارسم", "رسم", "صورة", "ارسم لي", "رسمة"],
+                        "responses": [{
+                            "type": "image",
+                            "text": "سأرسم لك صورة الآن...",
+                            "image": "images/drawing1.png",
+                            "drawingText": "قاعد ارسم...",
+                            "finishText": "على وشك الانتهاء..."
+                        }]
+                    }
+                };
+                keywordsMap = buildKeywordsMap(corData);
+                return false;
             }
-            const randomIndex = Math.floor(Math.random() * list.length);
-            return list[randomIndex];
         }
 
         function buildKeywordsMap(data) {
@@ -374,10 +1084,9 @@
             return map;
         }
 
-        function getCategoryForText(text, isVoice = false) {
+        function getCategoryForText(text) {
             const lower = text.trim().toLowerCase();
-            const map = isVoice ? keywordsMapVoice : keywordsMap;
-            for (const [cat, patterns] of Object.entries(map)) {
+            for (const [cat, patterns] of Object.entries(keywordsMap)) {
                 for (const pattern of patterns) {
                     if (lower.includes(pattern)) {
                         return cat;
@@ -387,6 +1096,59 @@
             return 'default';
         }
 
+        function getRandomResponse(category) {
+            const obj = corData[category];
+            if (!obj || !obj.responses || obj.responses.length === 0) {
+                return corData['default']?.responses?.[0] || { type: 'text', content: 'عذراً، لم أفهم سؤالك.' };
+            }
+            const list = obj.responses;
+            const randomIndex = Math.floor(Math.random() * list.length);
+            return list[randomIndex];
+        }
+
+        // ===================== دوال المنتجات (للمثال) =====================
+        async function loadProducts() {
+            try {
+                const response = await fetch('products.json');
+                if (!response.ok) throw new Error('تعذر تحميل products.json');
+                const data = await response.json();
+                products = data;
+                console.log('تم تحميل المنتجات بنجاح');
+                return true;
+            } catch (error) {
+                console.warn('لم يتم تحميل المنتجات، سيتم استخدام بيانات افتراضية:', error);
+                products = [
+                    { id: 'men-pass', name: 'MEN PASS', description: 'اشتراك مميز', price: '49', currency: 'ر.س',
+                        image: 'images/pass.png', badge: '🔥 مميز', link: '#', keywords: ['pass', 'اشتراك'] }
+                ];
+                return false;
+            }
+        }
+
+        function findProduct(text) {
+            const lower = text.toLowerCase();
+            for (const p of products) {
+                if (p.keywords && p.keywords.some(k => lower.includes(k.toLowerCase()))) return p;
+                if (p.name && lower.includes(p.name.toLowerCase())) return p;
+            }
+            return null;
+        }
+
+        function buildProductCard(product) {
+            return `
+                <div class="men-product-card" style="margin-top:12px;background:rgba(10,16,32,0.95);border-radius:20px;padding:16px;border:1px solid rgba(74,122,255,0.2);">
+                    <img src="${product.image || 'images/default.png'}" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;" onerror="this.src='images/default.png'">
+                    <h3 style="margin:12px 0 4px;">${product.name}</h3>
+                    <p style="color:#a0b0d4;">${product.description}</p>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
+                        <span style="font-size:1.5rem;font-weight:700;color:var(--blue-light);">${product.price} ${product.currency}</span>
+                        <button onclick="window.location.href='${product.link || '#'}'" style="background:var(--blue-deep);border:none;color:#fff;padding:8px 20px;border-radius:40px;cursor:pointer;">عرض</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ===================== دوال الردود =====================
         function evaluateMath(text) {
             const mathRegex = /(\d+)\s*([+\-*/])\s*(\d+)/;
             const match = text.match(mathRegex);
@@ -397,509 +1159,286 @@
                 if (isNaN(a) || isNaN(b)) return null;
                 let result;
                 switch (op) {
-                    case '+': result = a + b; break;
-                    case '-': result = a - b; break;
-                    case '*': result = a * b; break;
+                    case '+':
+                        result = a + b;
+                        break;
+                    case '-':
+                        result = a - b;
+                        break;
+                    case '*':
+                        result = a * b;
+                        break;
                     case '/':
                         if (b === 0) return 'لا يمكن القسمة على صفر';
                         result = a / b;
                         break;
-                    default: return null;
+                    default:
+                        return null;
                 }
                 return Number.isInteger(result) ? result : result.toFixed(2);
             }
             return null;
         }
 
-        function findProduct(text) {
-            const lower = text.trim().toLowerCase();
-            for (const product of products) {
-                if (product.keywords && Array.isArray(product.keywords)) {
-                    for (const keyword of product.keywords) {
-                        if (lower.includes(keyword.toLowerCase())) {
-                            return product;
-                        }
-                    }
-                }
-                const name = (product.name || '').toLowerCase();
-                const desc = (product.description || '').toLowerCase();
-                if (name.includes(lower) || lower.includes(name) || desc.includes(lower) || lower.includes(desc)) {
-                    return product;
-                }
+        // ===================== معالجة الردود (نصية / صورية) =====================
+        function generateSmartReply(text) {
+            const lower = text.toLowerCase();
+
+            // حساب رياضي
+            const mathResult = evaluateMath(text);
+            if (mathResult !== null) {
+                return { type: 'text', content: `النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
             }
-            return null;
+
+            // التحقق من المنتجات
+            const product = findProduct(text);
+            if (product) {
+                return { type: 'product', content: buildProductCard(product) };
+            }
+
+            // الحصول على الفئة والرد المناسب
+            const category = getCategoryForText(text);
+            const response = getRandomResponse(category);
+
+            if (response.type === 'image') {
+                return {
+                    type: 'image',
+                    text: response.text || 'سأرسم لك...',
+                    image: response.image || 'images/drawing1.png',
+                    drawingText: response.drawingText || 'قاعد ارسم...',
+                    finishText: response.finishText || 'على وشك الانتهاء...',
+                    delay: 120000 // 2 دقيقة افتراضياً
+                };
+            } else {
+                return { type: 'text', content: response.content || 'عذراً، لم أفهم سؤالك.' };
+            }
         }
 
-        function buildProductCard(product) {
-            const image = product.image || 'images/default.png';
-            const name = product.name || 'منتج';
-            const description = product.description || 'لا يوجد وصف';
-            const price = product.price || '0';
-            const currency = product.currency || 'ر.س';
-            const badge = product.badge || ' منتج';
-            const link = product.link || '#';
-            return `
-                <div class="men-product-card">
-                    <img src="${image}" class="product-image" alt="${name}" onerror="this.src='images/default.png'">
-                    <div class="product-content">
-                        <span class="badge">${badge}</span>
-                        <h2>${name}</h2>
-                        <p>${description}</p>
-                        <div class="bottom">
-                            <div class="price">
-                                ${price} <small>${currency}</small>
-                            </div>
-                            <button class="btn-product" onclick="window.location.href='${link}'">
-                                <i class="fas fa-arrow-left"></i> عرض المنتج
-                            </button>
-                        </div>
-                    </div>
+        // ===================== إدارة واجهة المستخدم =====================
+        const messagesArea = document.getElementById('messagesArea');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const charCount = document.getElementById('charCount');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const backBtn = document.getElementById('backBtn');
+        const suggestedQuestions = document.getElementById('suggestedQuestions');
+        const voiceBtn = document.getElementById('voiceBtn');
+
+        let isProcessing = false;
+
+        // ===================== دوال إضافة الرسائل مع التوقيت =====================
+        function addMessage(html, className, timestamp = Date.now()) {
+            const div = document.createElement('div');
+            div.className = `message ${className}`;
+            div.innerHTML = html;
+            // إضافة عنصر الوقت
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'msg-time';
+            timeSpan.setAttribute('data-time', timestamp);
+            timeSpan.textContent = formatTimeAgo(timestamp);
+            div.appendChild(timeSpan);
+            messagesArea.appendChild(div);
+            scrollToBottom();
+            return div;
+        }
+
+        function addUserMessage(text) {
+            const ts = Date.now();
+            const div = document.createElement('div');
+            div.className = 'message user';
+            div.innerHTML = text;
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'msg-time';
+            timeSpan.setAttribute('data-time', ts);
+            timeSpan.textContent = formatTimeAgo(ts);
+            div.appendChild(timeSpan);
+            messagesArea.appendChild(div);
+            scrollToBottom();
+            return div;
+        }
+
+        function addBotMessage(html, timestamp = Date.now()) {
+            const div = document.createElement('div');
+            div.className = 'message bot';
+            div.innerHTML = html;
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'msg-time';
+            timeSpan.setAttribute('data-time', timestamp);
+            timeSpan.textContent = formatTimeAgo(timestamp);
+            div.appendChild(timeSpan);
+            messagesArea.appendChild(div);
+            scrollToBottom();
+            return div;
+        }
+
+        // ===================== معالجة الردود الصورية =====================
+        async function handleImageReply(response, userText) {
+            const ts = Date.now();
+
+            // 1. رسالة "سأرسم لك..."
+            const initialMsg = addBotMessage(response.text || 'سأرسم لك صورة الآن...', ts);
+
+            // 2. إظهار مؤشر الكتابة (اختياري) أو رسالة "قاعد ارسم..."
+            await delay(2000);
+            const drawingMsg = addBotMessage('🖌️ ' + (response.drawingText || 'قاعد ارسم...'), Date.now());
+
+            // 3. الانتظار حتى الانتهاء (دقيقتين)
+            await delay(response.delay || 120000);
+
+            // 4. رسالة "على وشك الانتهاء..."
+            const finishMsg = addBotMessage('⏳ ' + (response.finishText || 'على وشك الانتهاء...'), Date.now());
+
+            // 5. عرض الصورة مع أنيميشن
+            await delay(1000);
+
+            const imageHtml = `
+                <div class="drawing-image-wrapper">
+                    <img src="${response.image}" alt="رسمة" class="drawing-img" onerror="this.src='images/default.png'">
+                </div>
+                <div class="drawing-actions">
+                    <button class="download-btn"><i class="fas fa-download"></i> تحميل</button>
+                    <button class="redraw-btn"><i class="fas fa-sync-alt"></i> إعادة الرسم</button>
                 </div>
             `;
-        }
+            const imgMsg = addBotMessage(imageHtml, Date.now());
 
-        // ===== وظائف تحليل الصوت الحقيقي =====
-        async function initAudioAnalyser(stream) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            analyser = audioContext.createAnalyser();
-            analyser.fftSize = 256;
-            const source = audioContext.createMediaStreamSource(stream);
-            source.connect(analyser);
-            dataArray = new Uint8Array(analyser.frequencyBinCount);
-            // بدء حلقة التحديث
-            updateVolume();
-        }
+            // الحصول على عناصر الصورة والأزرار
+            const imgEl = imgMsg.querySelector('.drawing-img');
+            const downloadBtn = imgMsg.querySelector('.download-btn');
+            const redrawBtn = imgMsg.querySelector('.redraw-btn');
 
-        function updateVolume() {
-            if (!analyser || !voiceOverlay.classList.contains('active')) {
-                if (animationFrame) cancelAnimationFrame(animationFrame);
-                return;
+            // تشغيل أنيميشن الصورة (تظهر مغبشة ثم تصبح واضحة)
+            if (imgEl) {
+                // بداية: مغبشة
+                imgEl.classList.remove('revealed');
+                // ننتظر قليلاً ثم نضيف الكلاس لتظهر واضحة
+                setTimeout(() => {
+                    imgEl.classList.add('revealed');
+                }, 300);
             }
-            analyser.getByteFrequencyData(dataArray);
-            // حساب متوسط مستوى الصوت
-            let sum = 0;
-            for (let i = 0; i < dataArray.length; i++) {
-                sum += dataArray[i];
-            }
-            const avg = sum / dataArray.length;
-            // تحويل إلى مقياس من 0.5 إلى 2 مثلاً
-            const scale = 0.6 + (avg / 128) * 0.8; // avg من 0-255
-            const clampedScale = Math.min(Math.max(scale, 0.5), 2.0);
-            // تطبيق على الدائرة الداخلية
-            if (innerDot) {
-                innerDot.style.transform = `scale(${clampedScale})`;
-                const glow = 20 + avg * 0.4;
-                innerDot.style.boxShadow = `0 0 ${glow}px rgba(74, 122, 255, ${0.3 + avg/255 * 0.6})`;
-            }
-            // تغيير لون الدائرة حسب شدة الصوت
-            if (voiceCircle) {
-                const intensity = avg / 255; // 0-1
-                const r = 74 + intensity * 50;
-                const g = 122 + intensity * 30;
-                const b = 255;
-                voiceCircle.style.borderColor = `rgba(${r}, ${g}, ${b}, ${0.4 + intensity * 0.5})`;
-                voiceCircle.style.boxShadow = `0 0 ${40 + intensity * 60}px rgba(74, 122, 255, ${0.2 + intensity * 0.4})`;
-            }
-            animationFrame = requestAnimationFrame(updateVolume);
-        }
 
-        // ===== دوال التعرف على الصوت =====
-        function initSpeechRecognition() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                voiceBtn.style.display = 'none';
-                phoneBtn.style.display = 'none';
-                console.warn('التعرف على الصوت غير مدعوم');
-                return null;
-            }
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const rec = new SpeechRecognition();
-            rec.lang = 'ar-SA';
-            rec.continuous = true;    // مستمر للمكالمة الصوتية
-            rec.interimResults = true;
-            rec.maxAlternatives = 1;
-
-            rec.onresult = function(event) {
-                let finalText = '';
-                let interimText = '';
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    const transcript = event.results[i][0].transcript;
-                    if (event.results[i].isFinal) {
-                        finalText += transcript;
-                    } else {
-                        interimText += transcript;
+            // زر التحميل
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const imgSrc = response.image;
+                    if (imgSrc) {
+                        // محاولة تحميل الصورة
+                        fetch(imgSrc)
+                            .then(res => res.blob())
+                            .then(blob => {
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = 'drawing.png';
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                URL.revokeObjectURL(url);
+                            })
+                            .catch(() => {
+                                // بديل: فتح الصورة في تبويب جديد
+                                window.open(imgSrc, '_blank');
+                            });
                     }
-                }
-                // في وضع المكالمة الصوتية
-                if (isVoiceCall && finalText.trim()) {
-                    // إيقاف المؤقت لمنع التكرار
-                    if (voiceTimeout) clearTimeout(voiceTimeout);
-                    // إرسال النص النهائي بعد فترة قصيرة من السكون
-                    voiceTimeout = setTimeout(() => {
-                        if (finalText.trim()) {
-                            handleVoiceInput(finalText);
-                        }
-                    }, 500);
-                } else if (!isVoiceCall && finalText.trim()) {
-                    // وضع الميكروفون العادي
-                    messageInput.value = finalText;
-                    charCount.textContent = finalText.length;
-                    if (finalText.trim()) {
-                        sendMessage();
+                });
+            }
+
+            // زر إعادة الرسم
+            if (redrawBtn) {
+                redrawBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    // إعادة تشغيل الأنيميشن
+                    if (imgEl) {
+                        imgEl.classList.remove('revealed');
+                        // إعادة الضبابية
+                        setTimeout(() => {
+                            imgEl.classList.add('revealed');
+                        }, 300);
                     }
-                }
-            };
+                    // إعادة عرض رسائل "قاعد ارسم..." إلخ (يمكن إعادة تشغيل العملية بالكامل)
+                    // لكننا سنكتفي بإعادة الأنيميشن فقط
+                });
+            }
 
-            rec.onerror = function(event) {
-                console.warn('خطأ في التعرف:', event.error);
-                if (event.error === 'not-allowed') {
-                    stopRecording();
-                    if (isVoiceCall) endVoiceCall();
-                } else {
-                    // عرض رسالة خطأ
-                    if (isVoiceCall) {
-                        const msg = document.createElement('div');
-                        msg.className = 'message bot';
-                        msg.innerHTML = 'عذراً، لم أتمكن من التعرف على صوتك. حاول مرة أخرى.' + `<span class="msg-time">الآن</span>`;
-                        messagesArea.appendChild(msg);
-                        scrollToBottom();
-                        endVoiceCall();
-                    }
-                }
-            };
+            // تحديث الأوقات
+            updateAllTimes();
 
-            rec.onend = function() {
-                // إذا انتهى التسجيل ونحن في مكالمة، ننهي المكالمة
-                if (isVoiceCall) {
-                    endVoiceCall();
-                }
-                stopRecording();
-            };
-
-            return rec;
+            // إرسال المحادثة إلى Discord (اختياري)
+            await sendToDiscord(userText, 'تم إرسال صورة');
         }
 
-        let voiceTimeout = null;
-
-        function startRecording(isVoice = false) {
-            if (isRecording) {
-                stopRecording();
-                return;
-            }
-            if (!recognition) {
-                recognition = initSpeechRecognition();
-                if (!recognition) return;
-            }
-            isVoiceCall = isVoice;
-            try {
-                recognition.start();
-                isRecording = true;
-                if (isVoice) {
-                    // تفعيل الوضع الصوتي
-                    startVoiceCall();
-                } else {
-                    voiceBtn.classList.add('recording');
-                    voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
-                }
-            } catch (e) {
-                console.warn('خطأ في بدء التسجيل:', e);
-                if (e.message && e.message.includes('already started')) {
-                    stopRecording();
-                    setTimeout(() => startRecording(isVoice), 300);
-                }
-            }
-        }
-
-        function stopRecording() {
-            if (recognition) {
-                try { recognition.stop(); } catch (e) {}
-            }
-            isRecording = false;
-            voiceBtn.classList.remove('recording');
-            voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-            if (isVoiceCall) {
-                endVoiceCall();
-            }
-        }
-
-        // ===== دوال المكالمة الصوتية =====
-        async function startVoiceCall() {
-            // إظهار الدائرة
-            voiceOverlay.classList.add('active');
-            phoneBtn.classList.add('active');
-            phoneBtn.innerHTML = '<i class="fas fa-phone-slash"></i>';
-            voiceStatus.textContent = 'جاري الاستماع...';
-
-            // بدء تحليل الصوت من الميكروفون
-            try {
-                mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                await initAudioAnalyser(mediaStream);
-            } catch (e) {
-                console.warn('تعذر الوصول إلى الميكروفون:', e);
-                voiceStatus.textContent = '❌ لا يمكن الوصول للميكروفون';
-            }
-
-            // جعل الـ recognition مستمراً
-            if (recognition) {
-                recognition.continuous = true;
-                recognition.interimResults = true;
-            }
-        }
-
-        function endVoiceCall() {
-            voiceOverlay.classList.remove('active');
-            phoneBtn.classList.remove('active');
-            phoneBtn.innerHTML = '<i class="fas fa-phone"></i>';
-            isVoiceCall = false;
-            if (animationFrame) cancelAnimationFrame(animationFrame);
-            if (audioContext) {
-                audioContext.close().catch(()=>{});
-                audioContext = null;
-                analyser = null;
-            }
-            if (mediaStream) {
-                mediaStream.getTracks().forEach(t => t.stop());
-                mediaStream = null;
-            }
-            if (recognition) {
-                recognition.continuous = false;
-                try { recognition.stop(); } catch(e) {}
-            }
-            isRecording = false;
-            if (voiceTimeout) clearTimeout(voiceTimeout);
-        }
-
-        // معالجة النص الصوتي (من المكالمة)
-        async function handleVoiceInput(text) {
-            if (!text.trim() || isProcessing) return;
-            // إضافة رسالة المستخدم
-            addUserMessage(text);
-            // إخفاء الدائرة مؤقتاً أثناء المعالجة
-            voiceOverlay.classList.remove('active');
-            // معالجة الرد
-            await processVoiceReply(text);
-            // إعادة إظهار الدائرة بعد الرد
-            if (isVoiceCall) {
-                voiceOverlay.classList.add('active');
-                voiceStatus.textContent = 'جاري الاستماع...';
-            }
-        }
-
-        // ===== دوال إضافة الرسائل =====
-        function addUserMessage(text) {
-            const msg = document.createElement('div');
-            msg.className = 'message user';
-            msg.innerHTML = escapeHtml(text) + `<span class="msg-time">الآن</span>`;
-            messagesArea.appendChild(msg);
-            scrollToBottom();
-        }
-
-        function addBotMessage(text, isVoice = false) {
-            const msg = document.createElement('div');
-            msg.className = 'message bot';
-            const icon = isVoice ? '<i class="fas fa-phone" style="margin-left:8px; color:var(--blue-light);"></i> ' : '';
-            msg.innerHTML = icon + text + `<span class="msg-time">الآن</span>`;
-            messagesArea.appendChild(msg);
-            scrollToBottom();
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function scrollToBottom() {
-            messagesArea.scrollTop = messagesArea.scrollHeight;
-        }
-
-        function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
-
-        // ===== معالجة الرد الصوتي (من responses2f.json) =====
-        async function processVoiceReply(text) {
-            isProcessing = true;
-            phoneBtn.disabled = true;
-            voiceBtn.disabled = true;
-            sendBtn.disabled = true;
-
-            try {
-                // مؤشر الكتابة
-                typingIndicator.style.display = 'flex';
-                scrollToBottom();
-                await delay(600 + Math.random() * 800);
-                typingIndicator.style.display = 'none';
-
-                let reply = '';
-                const mathResult = evaluateMath(text);
-                if (mathResult !== null) {
-                    reply = ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟`;
-                } else {
-                    const product = findProduct(text);
-                    if (product) {
-                        const cardHtml = buildProductCard(product);
-                        addBotMessage('تم العثور على المنتج التالي:', true);
-                        const cardWrapper = document.createElement('div');
-                        cardWrapper.className = 'message bot';
-                        cardWrapper.innerHTML = cardHtml + `<span class="msg-time">الآن</span>`;
-                        messagesArea.appendChild(cardWrapper);
-                        scrollToBottom();
-                        reply = 'تم عرض بطاقة المنتج';
-                    } else {
-                        let category = getCategoryForText(text, true);
-                        if (category !== 'default' && responsesVoice[category]) {
-                            reply = getReply(category, true);
-                        } else {
-                            reply = getReply('default', true);
-                        }
-                    }
-                }
-
-                if (reply) {
-                    if (!findProduct(text)) {
-                        addBotMessage(reply, true);
-                        // نطق الرد صوتياً
-                        speakText(reply);
-                    }
-                }
-
-                // إرسال إلى Discord
-                await sendToDiscord(text, reply);
-
-            } catch (error) {
-                console.error('خطأ في الرد الصوتي:', error);
-                addBotMessage('حدث خطأ، يرجى المحاولة مرة أخرى.', true);
-            } finally {
-                isProcessing = false;
-                phoneBtn.disabled = false;
-                voiceBtn.disabled = false;
-                sendBtn.disabled = false;
-                scrollToBottom();
-            }
-        }
-
-        // ===== نطق النص (Text-to-Speech) =====
-        function speakText(text) {
-            if (!window.speechSynthesis) {
-                console.warn('متصفحك لا يدعم خاصية النطق');
-                return;
-            }
-            // إزالة علامات Markdown والتنسيق
-            const plainText = text.replace(/\*\*/g, '').replace(/\n/g, ' ');
-            const utterance = new SpeechSynthesisUtterance(plainText);
-            utterance.lang = 'ar-SA';
-            utterance.rate = 1.0;
-            utterance.pitch = 1.0;
-            utterance.volume = 1.0;
-            // اختيار صوت عربي إذا وجد
-            const voices = window.speechSynthesis.getVoices();
-            const arabicVoice = voices.find(v => v.lang.startsWith('ar'));
-            if (arabicVoice) utterance.voice = arabicVoice;
-            window.speechSynthesis.speak(utterance);
-        }
-
-        // ===== وظيفة إرسال الرسالة النصية العادية =====
+        // ===================== دالة الإرسال الرئيسية =====================
         async function sendMessage() {
             const text = messageInput.value.trim();
-            if (!text || isProcessing) return;
+            if (!text) return;
+            if (isProcessing) return;
 
-            if (suggestedQuestions) suggestedQuestions.classList.add('hidden');
+            if (suggestedQuestions) {
+                suggestedQuestions.classList.add('hidden');
+            }
 
             isProcessing = true;
             sendBtn.disabled = true;
             voiceBtn.disabled = true;
-            phoneBtn.disabled = true;
 
             try {
+                // إضافة رسالة المستخدم
                 addUserMessage(text);
-                conversationHistory.push({ role: 'user', content: text });
-                if (conversationHistory.length > 10) conversationHistory.shift();
 
                 messageInput.value = '';
                 messageInput.style.height = 'auto';
                 charCount.textContent = '0';
                 scrollToBottom();
 
+                // إظهار مؤشر الكتابة
                 typingIndicator.style.display = 'flex';
                 scrollToBottom();
-                await delay(800 + Math.random() * 1200);
+
+                await delay(600 + Math.random() * 800);
+
                 typingIndicator.style.display = 'none';
 
-                const reply = await generateSmartReply(text);
+                // توليد الرد
+                const reply = generateSmartReply(text);
 
-                const botMsg = document.createElement('div');
-                botMsg.className = 'message bot';
-                messagesArea.appendChild(botMsg);
-                scrollToBottom();
-
-                let replyContent = '';
-                if (reply.type === 'product') {
-                    botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
-                    replyContent = 'تم عرض بطاقة منتج';
-                    await delay(200);
+                if (reply.type === 'image') {
+                    // معالجة الرد الصوري
+                    await handleImageReply(reply, text);
+                } else if (reply.type === 'product') {
+                    // عرض المنتج
+                    addBotMessage(reply.content, Date.now());
+                    await sendToDiscord(text, 'تم عرض منتج');
                 } else {
+                    // رد نصي عادي مع كتابة متحركة
+                    const botMsg = addBotMessage('', Date.now());
+                    // الكتابة المتحركة
                     await typeText(botMsg, reply.content, 22);
-                    const timeSpan = document.createElement('span');
-                    timeSpan.className = 'msg-time';
-                    timeSpan.textContent = 'الآن';
-                    botMsg.appendChild(timeSpan);
-                    replyContent = reply.content;
+                    // تحديث الوقت
+                    updateAllTimes();
+                    await sendToDiscord(text, reply.content);
                 }
-
-                conversationHistory.push({ role: 'bot', content: replyContent || 'تم عرض المنتج' });
-                if (conversationHistory.length > 10) conversationHistory.shift();
-
-                await sendToDiscord(text, replyContent);
 
             } catch (error) {
                 console.error('خطأ في sendMessage:', error);
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'message bot';
-                errorMsg.innerHTML = 'عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.' + `<span class="msg-time">الآن</span>`;
-                messagesArea.appendChild(errorMsg);
-                scrollToBottom();
+                addBotMessage('عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.', Date.now());
             } finally {
                 isProcessing = false;
                 sendBtn.disabled = false;
                 voiceBtn.disabled = false;
-                phoneBtn.disabled = false;
                 messageInput.focus();
                 scrollToBottom();
             }
         }
 
-        // ===== توليد الردود النصية العادية =====
-        async function generateSmartReply(text) {
-            const lower = text.trim().toLowerCase();
+        // ===================== دوال مساعدة =====================
+        function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
-            const mathResult = evaluateMath(text);
-            if (mathResult !== null) {
-                return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
-            }
-
-            if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
-                const now = new Date();
-                const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
-                const dateStr = now.toLocaleDateString('ar-SA', { timeZone: 'Asia/Riyadh' });
-                const template = getReply('time');
-                const reply = template.replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr);
-                return { type: 'text', content: reply };
-            }
-
-            const product = findProduct(text);
-            if (product) {
-                const cardHtml = buildProductCard(product);
-                return { type: 'product', content: cardHtml };
-            }
-
-            let category = getCategoryForText(text);
-            if (category !== 'default' && responses[category]) {
-                return { type: 'text', content: getReply(category) };
-            }
-
-            return { type: 'text', content: getReply('default') };
+        function scrollToBottom() {
+            messagesArea.scrollTop = messagesArea.scrollHeight;
         }
 
-        // ===== تأثير الكتابة =====
-        function typeText(element, text, speed = 20) {
+        async function typeText(element, text, speed = 20) {
             return new Promise((resolve) => {
                 let index = 0;
                 element.innerHTML = '';
@@ -916,7 +1455,7 @@
             });
         }
 
-        // ===== إرسال إلى Discord =====
+        // ===================== إرسال إلى Discord =====================
         async function sendToDiscord(userMessage, botReply) {
             try {
                 const payload = {
@@ -933,139 +1472,96 @@
             }
         }
 
-        // ===== تحميل الملفات =====
-        async function loadResponses() {
-            try {
-                const response = await fetch('responses.json');
-                if (!response.ok) throw new Error('تعذر تحميل responses.json');
-                const data = await response.json();
-                responses = data;
-                keywordsMap = buildKeywordsMap(data);
-                console.log('تم تحميل responses.json');
-                return true;
-            } catch (error) {
-                console.error('خطأ في تحميل responses.json، استخدام الافتراضي:', error);
-                responses = {
-                    default: { keywords: ['مرحبا', 'السلام', 'اهلا', 'كيف'], responses: ['مرحباً! كيف يمكنني مساعدتك؟', 'أهلاً بك! أنا MEN Ai، اسألني أي شيء.', 'السلام عليكم! كيف يمكنني خدمتك؟'] },
-                    time: { keywords: ['وقت', 'الساعة', 'تاريخ', 'الوقت'], responses: ['الوقت الآن {time} والتاريخ {date}', 'الساعة الآن {time}، والتاريخ {date}', 'حالياً الوقت {time}، اليوم {date}'] },
-                    founding: { keywords: ['تأسس', 'تأسيس', 'متى', 'منذ', 'تاريخ', 'انشئ', 'تأسس الفريق', 'الفريق'], responses: ['تأسس فريق MEN في عام 2020، على يد مجموعة من المطورين والمبدعين.', 'تم تأسيس فريق MEN عام 2020، وكانت البداية مع مجموعة من المتحمسين.', 'تعود انطلاقة MEN إلى سنة 2020، حيث اجتمع المؤسسون لبناء رؤية تقنية.'] },
-                    pass: { keywords: ['pass', 'اشتراك', 'اشترك', 'كيف اشترك', 'MEN pass'], responses: ['للاشتراك في MEN pass، يمكنك زيارة صفحة المتجر على موقعنا الرسمي.', 'اشترك في MEN pass عبر الضغط على زر "عرض المنتج" في بطاقة MEN PASS.', 'يمكنك الحصول على MEN pass من خلال متجرنا الإلكتروني بسهولة.'] },
-                    pro: { keywords: ['pro', 'مميزات', 'مزايا', 'MEN PRO'], responses: ['باقة MEN PRO تقدم لك أدوات متطورة، تحليلات ذكية، ودعم فني على مدار الساعة.', 'تمتع بمزايا MEN PRO الحصرية، مثل الوصول المبكر للمميزات الجديدة.', 'باقة PRO مصممة للمحترفين، وتشمل كل ما تحتاجه لتطوير مشاريعك.'] },
-                    support: { keywords: ['دعم', 'تواصل', 'مساعدة', 'الدعم'], responses: ['يمكنك التواصل مع الدعم عبر البريد الإلكتروني: clan.men.ts@gmail.com', 'للاستفسارات، يمكنك مراسلتنا على البريد الإلكتروني أو عبر حسابات التواصل.', 'فريق الدعم متاح لك عبر جميع قنوات التواصل الرسمية.'] },
-                    download: { keywords: ['تحميل', 'تطبيق', 'app', 'تنزيل'], responses: ['يمكنك تحميل تطبيق MEN من متجر Google Play أو App Store.', 'احصل على تطبيق MEN من خلال الروابط المتوفرة في موقعنا.', 'تطبيق MEN متاح للتحميل على جميع المنصات الرئيسية.'] }
-                };
-                keywordsMap = buildKeywordsMap(responses);
-                return false;
+        // ===================== التعرف على الصوت =====================
+        let recognition = null;
+        let isRecording = false;
+
+        function initSpeechRecognition() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                voiceBtn.style.display = 'none';
+                console.warn('التعرف على الصوت غير مدعوم');
+                return null;
             }
-        }
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const rec = new SpeechRecognition();
+            rec.lang = 'ar-SA';
+            rec.continuous = false;
+            rec.interimResults = true;
 
-        async function loadVoiceResponses() {
-            try {
-                const response = await fetch('responses2f.json');
-                if (!response.ok) throw new Error('تعذر تحميل responses2f.json');
-                const data = await response.json();
-                responsesVoice = data;
-                keywordsMapVoice = buildKeywordsMap(data);
-                console.log('تم تحميل responses2f.json');
-                return true;
-            } catch (error) {
-                console.error('خطأ في تحميل responses2f.json، استخدام الافتراضي:', error);
-                responsesVoice = {
-                    default: { keywords: ['مرحبا', 'السلام', 'اهلا', 'كيف'], responses: ['مرحباً (صوتياً)! كيف يمكنني مساعدتك؟', 'أهلاً بك! أنا MEN Ai الصوتي، اسألني أي شيء.', 'السلام عليكم! هذه المكالمة الصوتية، كيف يمكنني خدمتك؟'] },
-                    time: { keywords: ['وقت', 'الساعة', 'تاريخ', 'الوقت'], responses: ['الوقت الآن {time} والتاريخ {date} (صوتياً)', 'الساعة الآن {time}، والتاريخ {date} (صوتياً)', 'حالياً الوقت {time}، اليوم {date} (صوتياً)'] },
-                    founding: { keywords: ['تأسس', 'تأسيس', 'متى', 'منذ', 'تاريخ', 'انشئ', 'تأسس الفريق', 'الفريق'], responses: ['تأسس فريق MEN في عام 2020، على يد مجموعة من المطورين والمبدعين. (صوتياً)', 'تم تأسيس فريق MEN عام 2020، وكانت البداية مع مجموعة من المتحمسين. (صوتياً)'] },
-                    pass: { keywords: ['pass', 'اشتراك', 'اشترك', 'كيف اشترك', 'MEN pass'], responses: ['للاشتراك في MEN pass، يمكنك زيارة صفحة المتجر على موقعنا الرسمي. (صوتياً)', 'اشترك في MEN pass عبر الضغط على زر "عرض المنتج" في بطاقة MEN PASS. (صوتياً)'] },
-                    pro: { keywords: ['pro', 'مميزات', 'مزايا', 'MEN PRO'], responses: ['باقة MEN PRO تقدم لك أدوات متطورة، تحليلات ذكية، ودعم فني على مدار الساعة. (صوتياً)'] },
-                    support: { keywords: ['دعم', 'تواصل', 'مساعدة', 'الدعم'], responses: ['يمكنك التواصل مع الدعم عبر البريد الإلكتروني: clan.men.ts@gmail.com (صوتياً)'] },
-                    download: { keywords: ['تحميل', 'تطبيق', 'app', 'تنزيل'], responses: ['يمكنك تحميل تطبيق MEN من متجر Google Play أو App Store. (صوتياً)'] }
-                };
-                keywordsMapVoice = buildKeywordsMap(responsesVoice);
-                return false;
-            }
-        }
-
-        async function loadProducts() {
-            try {
-                const response = await fetch('products.json');
-                if (!response.ok) throw new Error('تعذر تحميل products.json');
-                const data = await response.json();
-                products = data;
-                console.log('تم تحميل المنتجات');
-                return true;
-            } catch (error) {
-                console.error('خطأ في تحميل المنتجات، استخدام الافتراضي:', error);
-                products = [
-                    { id: 'men-pass', name: 'MEN PASS', description: 'اشترك في MEN PASS واحصل على جميع المميزات الحصرية، ودعم أسرع، وتجربة احترافية داخل المنصة.', price: '49', currency: 'ر.س', image: 'images/pass.png', badge: ' منتج مميز', link: 'store.html', keywords: ['pass', 'اشتراك', 'men pass', 'باقة', 'عرض'] },
-                    { id: 'men-pro', name: 'MEN PRO', description: 'باقة احترافية للمطورين، تتضمن أدوات متقدمة وتحليلات ذكية ودعم فني على مدار الساعة.', price: '99', currency: 'ر.س', image: 'images/pro.png', badge: '🔥 باقة احترافية', link: 'pro.html', keywords: ['pro', 'احترافي', 'مطور', 'أدوات', 'تحليلات'] }
-                ];
-                return true;
-            }
-        }
-
-        // ===== بناء رسالة الترحيب =====
-        function buildWelcomeMessage() {
-            return `
-                <div class="welcome-animation">
-                    <div class="welcome-main">
-                        <span class="letter" style="animation-delay: 0s;"></span>
-                        <span class="letter" style="animation-delay: 0.12s;"></span>
-                        <span class="letter" style="animation-delay: 0.24s;"></span>
-                        <span class="letter" style="animation-delay: 0.36s;"></span>
-                        <span class="letter" style="animation-delay: 0.48s;"></span>
-                        <span class="letter" style="animation-delay: 0.60s;"></span>
-                    </div>
-                    <div class="typewriter-container">
-                        <span class="typewriter-text" id="typewriterText"></span>
-                        <span class="typewriter-cursor" id="typewriterCursor"></span>
-                    </div>
-                    <div class="welcome-desc">
-                        <i class="fas fa-circle-notch"></i> أنا هنا لمساعدتك اسألني عن أي شيء!
-                    </div>
-                </div>
-            `;
-        }
-
-        function typeTextEffect(element, text, speed = 60) {
-            return new Promise((resolve) => {
-                let index = 0;
-                element.textContent = '';
-                const interval = setInterval(() => {
-                    if (index < text.length) {
-                        element.textContent += text.charAt(index);
-                        index++;
+            rec.onresult = function(event) {
+                let finalText = '';
+                let interimText = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalText += transcript;
                     } else {
-                        clearInterval(interval);
-                        resolve();
+                        interimText += transcript;
                     }
-                }, speed);
-            });
+                }
+                if (finalText) {
+                    messageInput.value = finalText;
+                    charCount.textContent = finalText.length;
+                    if (finalText.trim()) {
+                        sendMessage();
+                    }
+                }
+            };
+
+            rec.onerror = function(event) {
+                console.warn('خطأ في التعرف على الصوت:', event.error);
+                stopRecording();
+                if (event.error !== 'not-allowed') {
+                    addBotMessage('عذراً، لم أتمكن من التعرف على صوتك. حاول مرة أخرى.', Date.now());
+                }
+            };
+
+            rec.onend = function() {
+                stopRecording();
+            };
+
+            return rec;
         }
 
-        // ===== الأحداث =====
+        function startRecording() {
+            if (isRecording) {
+                stopRecording();
+                return;
+            }
+            if (!recognition) {
+                recognition = initSpeechRecognition();
+                if (!recognition) return;
+            }
+            try {
+                recognition.start();
+                isRecording = true;
+                voiceBtn.classList.add('recording');
+                voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
+            } catch (e) {
+                console.warn('خطأ في بدء التسجيل:', e);
+                if (e.message && e.message.includes('already started')) {
+                    stopRecording();
+                    setTimeout(() => startRecording(), 300);
+                }
+            }
+        }
+
+        function stopRecording() {
+            if (recognition) {
+                try { recognition.stop(); } catch (e) {}
+            }
+            isRecording = false;
+            voiceBtn.classList.remove('recording');
+            voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+        }
+
         voiceBtn.addEventListener('click', function(e) {
             e.preventDefault();
             if (isProcessing) return;
-            // إذا كان الميكروفون نشطاً في وضع المكالمة، نوقف المكالمة أولاً
-            if (isVoiceCall) {
-                endVoiceCall();
-                stopRecording();
-                return;
-            }
-            startRecording(false);
+            startRecording();
         });
 
-        phoneBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (isProcessing) return;
-            if (phoneBtn.classList.contains('active')) {
-                // إيقاف المكالمة
-                endVoiceCall();
-                stopRecording();
-                return;
-            }
-            startRecording(true);
-        });
-
+        // ===================== أزرار الاقتراحات =====================
         document.querySelectorAll('.sq-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const question = this.dataset.question;
@@ -1077,12 +1573,7 @@
             });
         });
 
-        backBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (document.referrer) window.history.back();
-            else window.location.href = '/';
-        });
-
+        // ===================== أحداث الإدخال =====================
         messageInput.addEventListener('input', function() {
             const len = this.value.length;
             charCount.textContent = len > 0 ? len : '0';
@@ -1099,19 +1590,70 @@
 
         sendBtn.addEventListener('click', sendMessage);
 
-        // ===== التهيئة =====
+        backBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (document.referrer) window.history.back();
+            else window.location.href = '/';
+        });
+
+        // ===================== رسالة الترحيب =====================
+        function buildWelcomeMessage() {
+            return `
+                <div class="welcome-animation">
+                    <div class="welcome-main">
+                        <span class="letter" style="animation-delay: 0s;">م</span>
+                        <span class="letter" style="animation-delay: 0.12s;">ر</span>
+                        <span class="letter" style="animation-delay: 0.24s;">ح</span>
+                        <span class="letter" style="animation-delay: 0.36s;">ب</span>
+                        <span class="letter" style="animation-delay: 0.48s;">اً</span>
+                        <span class="letter" style="animation-delay: 0.60s;">!</span>
+                    </div>
+                    <div class="typewriter-container">
+                        <span class="typewriter-text" id="typewriterText"></span>
+                        <span class="typewriter-cursor" id="typewriterCursor"></span>
+                    </div>
+                    <div class="welcome-desc">
+                        <i class="fas fa-circle-notch"></i> أنا هنا لمساعدتك اسألني عن أي شيء!
+                    </div>
+                </div>
+            `;
+        }
+
+        async function typeTextEffect(element, text, speed = 60) {
+            return new Promise((resolve) => {
+                let index = 0;
+                element.textContent = '';
+                const interval = setInterval(() => {
+                    if (index < text.length) {
+                        element.textContent += text.charAt(index);
+                        index++;
+                    } else {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                }, speed);
+            });
+        }
+
+        // ===================== التهيئة =====================
         async function init() {
             messageInput.disabled = true;
             sendBtn.disabled = true;
             voiceBtn.disabled = true;
-            phoneBtn.disabled = true;
 
-            await Promise.all([loadResponses(), loadVoiceResponses(), loadProducts()]);
+            await Promise.all([loadCorData(), loadProducts()]);
 
             messagesArea.innerHTML = '';
             const welcomeMsg = document.createElement('div');
             welcomeMsg.className = 'message bot';
-            welcomeMsg.innerHTML = buildWelcomeMessage() + `<span class="msg-time">الآن</span>`;
+            welcomeMsg.innerHTML = buildWelcomeMessage();
+            // إضافة وقت للترحيب
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'msg-time';
+            const ts = Date.now();
+            timeSpan.setAttribute('data-time', ts);
+            timeSpan.textContent = formatTimeAgo(ts);
+            welcomeMsg.appendChild(timeSpan);
             messagesArea.appendChild(welcomeMsg);
             scrollToBottom();
 
@@ -1129,11 +1671,12 @@
             messageInput.focus();
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
-            phoneBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع ميزة المكالمة الصوتية (دائرة تردد حقيقية + نطق)');
+            updateAllTimes();
+            console.log('MEN Ai جاهز مع ميزة الرسم والتوقيت');
         }
 
+        // بدء التطبيق
         init();
     </script>
 </body>
