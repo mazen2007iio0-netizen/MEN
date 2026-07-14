@@ -1216,18 +1216,12 @@
         let isProcessing = false;
         let conversationHistory = [];
 
-        // --- الأسئلة المقترحة تظهر دائماً ---
-        // لا نخفيها أبداً عشان المستخدم يقدر يضغط عليها بأي وقت
-        // ولكن نزيل class hidden لو موجود
-        suggestedQuestions.classList.remove('hidden');
-
         document.querySelectorAll('.sq-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const question = this.dataset.question;
                 if (question) {
                     messageInput.value = question;
                     charCount.textContent = question.length;
-                    // نرسل الرسالة مباشرة
                     sendMessage();
                 }
             });
@@ -1298,67 +1292,80 @@
             }
         }
 
+        // ====== الحل الأساسي للمشكلة: استخدام try/finally لضمان تحرير القفل ======
         async function sendMessage() {
             const text = messageInput.value.trim();
             if (!text) return;
             if (isProcessing) return;
 
-            // --- لا نخفي الأسئلة المقترحة ---
-            // suggestedQuestions class hidden نزيلها نهائياً
-            suggestedQuestions.classList.remove('hidden');
+            if (suggestedQuestions) {
+                suggestedQuestions.classList.add('hidden');
+            }
 
             isProcessing = true;
             sendBtn.disabled = true;
 
-            const userMsg = document.createElement('div');
-            userMsg.className = 'message user';
-            userMsg.innerHTML = escapeHtml(text) + `<span class="msg-time">الآن</span>`;
-            messagesArea.appendChild(userMsg);
-            conversationHistory.push({ role: 'user', content: text });
-            if (conversationHistory.length > 10) conversationHistory.shift();
+            try {
+                const userMsg = document.createElement('div');
+                userMsg.className = 'message user';
+                userMsg.innerHTML = escapeHtml(text) + `<span class="msg-time">الآن</span>`;
+                messagesArea.appendChild(userMsg);
+                conversationHistory.push({ role: 'user', content: text });
+                if (conversationHistory.length > 10) conversationHistory.shift();
 
-            messageInput.value = '';
-            messageInput.style.height = 'auto';
-            charCount.textContent = '0';
-            scrollToBottom();
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                charCount.textContent = '0';
+                scrollToBottom();
 
-            typingIndicator.style.display = 'flex';
-            scrollToBottom();
+                typingIndicator.style.display = 'flex';
+                scrollToBottom();
 
-            await delay(800 + Math.random() * 1200);
+                await delay(800 + Math.random() * 1200);
 
-            typingIndicator.style.display = 'none';
+                typingIndicator.style.display = 'none';
 
-            const reply = await generateSmartReply(text);
+                const reply = await generateSmartReply(text);
 
-            const botMsg = document.createElement('div');
-            botMsg.className = 'message bot';
-            messagesArea.appendChild(botMsg);
-            scrollToBottom();
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot';
+                messagesArea.appendChild(botMsg);
+                scrollToBottom();
 
-            let replyContent = '';
-            if (reply.type === 'product') {
-                botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
-                replyContent = 'تم عرض بطاقة منتج';
-                await delay(200);
-            } else {
-                await typeText(botMsg, reply.content, 22);
-                const timeSpan = document.createElement('span');
-                timeSpan.className = 'msg-time';
-                timeSpan.textContent = 'الآن';
-                botMsg.appendChild(timeSpan);
-                replyContent = reply.content;
+                let replyContent = '';
+                if (reply.type === 'product') {
+                    botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
+                    replyContent = 'تم عرض بطاقة منتج';
+                    await delay(200);
+                } else {
+                    await typeText(botMsg, reply.content, 22);
+                    const timeSpan = document.createElement('span');
+                    timeSpan.className = 'msg-time';
+                    timeSpan.textContent = 'الآن';
+                    botMsg.appendChild(timeSpan);
+                    replyContent = reply.content;
+                }
+
+                conversationHistory.push({ role: 'bot', content: replyContent || 'تم عرض المنتج' });
+                if (conversationHistory.length > 10) conversationHistory.shift();
+
+                await sendToDiscord(text, replyContent);
+
+            } catch (error) {
+                console.error('خطأ في sendMessage:', error);
+                // عرض رسالة خطأ للمستخدم
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'message bot';
+                errorMsg.innerHTML = 'عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.' + `<span class="msg-time">الآن</span>`;
+                messagesArea.appendChild(errorMsg);
+                scrollToBottom();
+            } finally {
+                // ====== المفتاح: هنا يتم تحرير القفل في كل الأحوال ======
+                isProcessing = false;
+                sendBtn.disabled = false;
+                messageInput.focus();
+                scrollToBottom();
             }
-
-            conversationHistory.push({ role: 'bot', content: replyContent || 'تم عرض المنتج' });
-            if (conversationHistory.length > 10) conversationHistory.shift();
-
-            await sendToDiscord(text, replyContent);
-
-            isProcessing = false;
-            sendBtn.disabled = false;
-            messageInput.focus();
-            scrollToBottom();
         }
 
         sendBtn.addEventListener('click', sendMessage);
@@ -1474,10 +1481,7 @@
             messageInput.focus();
             sendBtn.disabled = false;
 
-            // نتأكد أن الأسئلة المقترحة ظاهرة
-            suggestedQuestions.classList.remove('hidden');
-
-            console.log('MEN Ai جاهز مع تأثير كتابة آلي وإرسال إلى Discord وأسئلة مقترحة - يمكنك إرسال أسئلة متعددة');
+            console.log('MEN Ai جاهز مع تأثير كتابة آلي وإرسال إلى Discord وأسئلة مقترحة');
         }
 
         init();
