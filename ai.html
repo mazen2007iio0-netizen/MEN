@@ -544,7 +544,7 @@
             transform: scale(1);
         }
 
-        /* ===== زر الميكروفون الجديد ===== */
+        /* ===== زر الميكروفون ===== */
         .input-area .btn-voice {
             width: 52px;
             height: 52px;
@@ -580,6 +580,10 @@
         @keyframes pulseMic {
             0%, 100% { box-shadow: 0 0 10px rgba(255, 68, 68, 0.2); }
             50% { box-shadow: 0 0 30px rgba(255, 68, 68, 0.5); }
+        }
+        .input-area .btn-voice:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
         }
 
         footer {
@@ -1048,9 +1052,9 @@
                         <textarea id="messageInput" rows="1" placeholder="اسألني عن أي شيء..."></textarea>
                         <span class="char-count" id="charCount">0</span>
                     </div>
-                    <!-- زر الميكروفون -->
+                    <!-- زر الميكروفون (تحويل الصوت إلى نص فقط) -->
                     <button class="btn-voice" id="voiceBtn" title="تسجيل صوتي">
-                        <i class="fas fa-microphone"></i>
+                        <i class="fas fa-circle-notch fa-spin"></i>
                     </button>
                     <!-- زر الإرسال -->
                     <button class="btn-send" id="sendBtn" title="إرسال">
@@ -1257,38 +1261,6 @@
             });
         }
 
-        // ===== دالة نطق الردود بصوت رجل =====
-        function speakReply(text) {
-            if (!window.speechSynthesis) return;
-            // إيقاف أي كلام سابق
-            window.speechSynthesis.cancel();
-
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ar-SA';
-            utterance.rate = 0.9;
-            utterance.pitch = 0.9;
-            utterance.volume = 1;
-
-            // اختيار صوت رجل (ذكر)
-            const voices = window.speechSynthesis.getVoices();
-            let maleVoice = voices.find(v => 
-                v.lang.startsWith('ar') && 
-                (v.name.includes('Male') || v.name.includes('ذكر') || v.name.includes('Google UK English Male'))
-            );
-            // إذا لم يوجد صوت عربي رجل، نبحث عن أي صوت رجل
-            if (!maleVoice) {
-                maleVoice = voices.find(v => 
-                    v.name.includes('Male') || v.name.toLowerCase().includes('male')
-                );
-            }
-            // إذا لم يوجد، استخدم الصوت الافتراضي
-            if (maleVoice) {
-                utterance.voice = maleVoice;
-            }
-
-            window.speechSynthesis.speak(utterance);
-        }
-
         const messagesArea = document.getElementById('messagesArea');
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -1301,7 +1273,7 @@
         let isProcessing = false;
         let conversationHistory = [];
 
-        // ===== المتغيرات الخاصة بالتسجيل الصوتي =====
+        // ===== المتغيرات الخاصة بالتسجيل الصوتي (تحويل الصوت إلى نص فقط) =====
         let recognition = null;
         let isRecording = false;
 
@@ -1343,7 +1315,6 @@
                 console.warn('خطأ في التعرف على الصوت:', event.error);
                 stopRecording();
                 if (event.error !== 'not-allowed') {
-                    // عرض رسالة خطأ للمستخدم
                     const errorMsg = document.createElement('div');
                     errorMsg.className = 'message bot';
                     errorMsg.innerHTML = 'عذراً، لم أتمكن من التعرف على صوتك. حاول مرة أخرى.' + `<span class="msg-time">الآن</span>`;
@@ -1375,8 +1346,7 @@
                 voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
             } catch (e) {
                 console.warn('خطأ في بدء التسجيل:', e);
-                // في حالة وجود خطأ مثل "already started" نحاول إعادة التعيين
-                if (e.message.includes('already started')) {
+                if (e.message && e.message.includes('already started')) {
                     stopRecording();
                     setTimeout(() => startRecording(), 300);
                 }
@@ -1394,7 +1364,6 @@
             voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
         }
 
-        // ===== دالة النقر على زر الصوت =====
         voiceBtn.addEventListener('click', function(e) {
             e.preventDefault();
             if (isProcessing) return;
@@ -1536,14 +1505,6 @@
 
                 await sendToDiscord(text, replyContent);
 
-                // ===== نطق الرد بصوت رجل =====
-                if (reply.type !== 'product') {
-                    // ننتظر قليلاً ثم ننطق
-                    setTimeout(() => {
-                        speakReply(replyContent);
-                    }, 300);
-                }
-
             } catch (error) {
                 console.error('خطأ في sendMessage:', error);
                 const errorMsg = document.createElement('div');
@@ -1653,14 +1614,6 @@
 
             await Promise.all([loadResponses(), loadProducts()]);
 
-            // تحميل الأصوات مسبقاً
-            if (window.speechSynthesis) {
-                window.speechSynthesis.getVoices();
-                window.speechSynthesis.onvoiceschanged = () => {
-                    window.speechSynthesis.getVoices();
-                };
-            }
-
             messagesArea.innerHTML = '';
             const welcomeMsg = document.createElement('div');
             welcomeMsg.className = 'message bot';
@@ -1683,7 +1636,7 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع المحادثة الصوتية (صوت رجل)');
+            console.log('MEN Ai جاهز مع ميزة تحويل الصوت إلى نص');
         }
 
         init();
