@@ -847,6 +847,7 @@
 
         let isProcessing = false;
         let isListening = false;
+        let ttsReady = false; // للتأكد من أن الصوت جاهز
 
         // ===== التعرف على الصوت =====
         let recognition = null;
@@ -860,9 +861,11 @@
         let preferredVoice = null;
 
         function getMaleVoice() {
-            if (preferredVoice) return preferredVoice;
             const voices = window.speechSynthesis.getVoices();
-            if (!voices || voices.length === 0) return null;
+            if (!voices || voices.length === 0) {
+                console.warn('لا توجد أصوات متاحة');
+                return null;
+            }
             // البحث عن صوت عربي ذكر
             let male = null;
             let fallback = null;
@@ -870,23 +873,78 @@
                 if (voice.lang.startsWith('ar')) {
                     fallback = voice;
                     const name = voice.name.toLowerCase();
-                    if (/محمد|mohammad|saudi|khaled|salem|male|ذكر/i.test(name)) {
+                    if (/محمد|mohammad|saudi|khaled|salem|male|ذكر|ahmed|ali|omar/i.test(name)) {
                         male = voice;
                         break;
                     }
                 }
             }
-            preferredVoice = male || fallback || voices[0];
-            return preferredVoice;
+            const selected = male || fallback || voices[0];
+            console.log('الصوت المختار:', selected ? selected.name : 'لا يوجد');
+            return selected;
         }
 
         // تأكد من تحميل الأصوات
         if (window.speechSynthesis) {
-            // في حال لم تكن الأصوات محملة بعد
-            window.speechSynthesis.onvoiceschanged = function() {
-                getMaleVoice(); // تخزين الصوت
+            // دالة لتحديث الصوت عند تغيير الأصوات
+            const updateVoice = () => {
+                const voice = getMaleVoice();
+                if (voice) {
+                    preferredVoice = voice;
+                    ttsReady = true;
+                    console.log('تم تجهيز الصوت:', voice.name);
+                } else {
+                    ttsReady = false;
+                    console.warn('لم يتم العثور على أي صوت');
+                }
             };
-            setTimeout(getMaleVoice, 300);
+            // استدعاء فوري إذا كانت الأصوات محملة
+            if (window.speechSynthesis.getVoices().length > 0) {
+                updateVoice();
+            } else {
+                window.speechSynthesis.onvoiceschanged = updateVoice;
+                // محاولة بعد 500 مللي في حال لم يعمل الحدث
+                setTimeout(updateVoice, 500);
+            }
+        } else {
+            console.warn('speechSynthesis غير مدعوم في هذا المتصفح');
+        }
+
+        // ===== اختبار الصوت =====
+        function testVoice() {
+            return new Promise((resolve) => {
+                if (!window.speechSynthesis) {
+                    console.warn('TTS غير مدعوم');
+                    resolve(false);
+                    return;
+                }
+                // ننتظر حتى تتوفر الأصوات
+                const waitForVoices = () => {
+                    if (window.speechSynthesis.getVoices().length > 0) {
+                        const voice = getMaleVoice();
+                        if (voice) preferredVoice = voice;
+                        ttsReady = true;
+                        // تشغيل صوت اختبار قصير
+                        const testUtterance = new SpeechSynthesisUtterance('اختبار الصوت');
+                        testUtterance.lang = 'ar-SA';
+                        testUtterance.rate = 0.7;
+                        if (preferredVoice) testUtterance.voice = preferredVoice;
+                        testUtterance.onend = () => {
+                            console.log('اختبار الصوت نجح');
+                            resolve(true);
+                        };
+                        testUtterance.onerror = (e) => {
+                            console.warn('فشل اختبار الصوت:', e);
+                            resolve(false);
+                        };
+                        window.speechSynthesis.speak(testUtterance);
+                    } else {
+                        // نعيد المحاولة بعد 300 مللي
+                        setTimeout(waitForVoices, 300);
+                    }
+                };
+                waitForVoices();
+            });
         }
 
         function initSpeechRecognition() {
@@ -1003,6 +1061,16 @@
             if (isListening) return;
             if (isProcessing) return;
 
+            // تأكد من أن الصوت جاهز
+            if (!ttsReady) {
+                addBotMessage('جاري تجهيز الصوت...');
+                const ready = await testVoice();
+                if (!ready) {
+                    addBotMessage('عذراً، تعذر تجهيز الصوت. تأكد من أن المتصفح يدعم خاصية النطق.');
+                    return;
+                }
+            }
+
             if (!recognition) {
                 recognition = initSpeechRecognition();
                 if (!recognition) {
@@ -1081,20 +1149,41 @@
         function speakText(text, rate = 0.7) {
             return new Promise((resolve) => {
                 if (!window.speechSynthesis) {
+                    console.warn('speechSynthesis غير مدعوم');
                     resolve();
                     return;
                 }
+                // إلغاء أي كلام سابق
                 window.speechSynthesis.cancel();
+
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'ar-SA';
                 utterance.rate = rate;
                 utterance.pitch = 1;
                 utterance.volume = 1;
-                // اختيار الصوت الذكر تلقائياً
-                const voice = getMaleVoice();
-                if (voice) utterance.voice = voice;
-                utterance.onend = () => resolve();
-                utterance.onerror = () => resolve();
+
+                // استخدام الصوت المفضل
+                if (preferredVoice) {
+                    utterance.voice = preferredVoice;
+                } else {
+                    // محاولة الحصول على صوت ذكر جديد
+                    const voice = getMaleVoice();
+                    if (voice) {
+                        preferredVoice = voice;
+                        utterance.voice = voice;
+                    }
+                }
+
+                utterance.onend = () => {
+                    console.log('انتهى النطق');
+                    resolve();
+                };
+                utterance.onerror = (e) => {
+                    console.warn('خطأ في النطق:', e);
+                    resolve(); // نكمل حتى لو فشل الصوت
+                };
+
+                // تشغيل الصوت
                 window.speechSynthesis.speak(utterance);
             });
         }
@@ -1118,6 +1207,7 @@
 
                 addBotMessage(replyText);
 
+                // نطق الرد
                 await speakText(replyText, 0.7);
 
                 sendToDiscord(userText, replyText);
@@ -1237,6 +1327,13 @@
 
         // ===== الترحيب =====
         async function welcome() {
+            // انتظر تجهيز الصوت
+            if (!ttsReady) {
+                const ready = await testVoice();
+                if (ready) {
+                    ttsReady = true;
+                }
+            }
             const welcomeText = 'مرحباً بك في MEN Ai، المحادثة الصوتية. اضغط على زر الميكروفون لبدء التحدث.';
             addBotMessage(welcomeText);
             await speakText(welcomeText, 0.7);
@@ -1249,21 +1346,31 @@
             voiceBtn.disabled = true;
             await Promise.all([loadResponses(), loadProducts()]);
             messagesArea.innerHTML = '';
+
             // التأكد من تحميل الأصوات
             if (window.speechSynthesis) {
                 const voices = window.speechSynthesis.getVoices();
                 if (voices.length === 0) {
                     window.speechSynthesis.onvoiceschanged = function() {
-                        getMaleVoice();
+                        const voice = getMaleVoice();
+                        if (voice) {
+                            preferredVoice = voice;
+                            ttsReady = true;
+                        }
                     };
                 } else {
-                    getMaleVoice();
+                    const voice = getMaleVoice();
+                    if (voice) {
+                        preferredVoice = voice;
+                        ttsReady = true;
+                    }
                 }
             }
+
             await welcome();
             voiceBtn.disabled = false;
             await setupAudioAnalyser();
-            console.log('MEN Ai الصوتي جاهز مع صوت ذكر تلقائي');
+            console.log('MEN Ai الصوتي جاهز');
         }
 
         init();
