@@ -3,190 +3,282 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>المحادثة الصوتية</title>
+  <title>الميكروفون</title>
   <style>
-    body {
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
       background: #0a1020;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       font-family: 'Cairo', sans-serif;
-      color: #f0f4ff;
+      overflow: hidden;
     }
-    .container {
-      text-align: center;
-      padding: 20px;
+
+    .mic-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
     }
-    .status {
-      font-size: 1.2rem;
-      background: rgba(255,255,255,0.05);
-      padding: 20px 30px;
-      border-radius: 40px;
-      border: 1px solid rgba(2,28,164,0.2);
-      display: inline-block;
-    }
-    .status i {
-      color: #4a7aff;
-      margin-left: 10px;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.9); }
-    }
-    .text-box {
-      margin-top: 30px;
-      background: rgba(255,255,255,0.03);
-      border-radius: 20px;
-      padding: 20px;
-      border: 1px solid rgba(2,28,164,0.1);
-      min-height: 80px;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-      word-break: break-word;
-    }
-    .btn {
-      margin-top: 20px;
-      background: linear-gradient(135deg, #021ca4, #1a3a9e);
+
+    /* الزر الدائري الكبير */
+    .mic-btn {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1a3a9e, #021ca4);
       border: none;
-      padding: 12px 30px;
-      border-radius: 40px;
-      color: #fff;
-      font-size: 1rem;
+      box-shadow: 0 0 40px rgba(74, 122, 255, 0.2);
       cursor: pointer;
-      font-family: 'Cairo', sans-serif;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 4rem;
+      position: relative;
+      outline: none;
+      user-select: none;
     }
-    .btn:hover {
-      opacity: 0.8;
+
+    .mic-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 60px rgba(74, 122, 255, 0.4);
+    }
+
+    .mic-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* حالة التسجيل (ميكروفون نشط) */
+    .mic-btn.recording {
+      background: linear-gradient(135deg, #ff4444, #cc0000);
+      box-shadow: 0 0 60px rgba(255, 68, 68, 0.5);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 30px rgba(255, 68, 68, 0.3); }
+      50% { box-shadow: 0 0 80px rgba(255, 68, 68, 0.7); }
+      100% { box-shadow: 0 0 30px rgba(255, 68, 68, 0.3); }
+    }
+
+    /* النص المساعد الصغير أسفل الزر */
+    .status-text {
+      color: #8a9abb;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.05);
+      padding: 8px 20px;
+      border-radius: 40px;
+      border: 1px solid rgba(2,28,164,0.1);
+      transition: 0.3s;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-text i {
+      color: #4a7aff;
+    }
+
+    .status-text.recording i {
+      color: #ff4444;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="status">
-      <i class="fas fa-microphone"></i> جاري الاستماع...
-    </div>
-    <div class="text-box" id="resultText">انتظر الكلام...</div>
-    <button class="btn" onclick="restartRecognition()">🔄 إعادة الاستماع</button>
+
+<div class="mic-container">
+  <!-- الزر الدائري -->
+  <button class="mic-btn" id="micButton">
+    <i class="fas fa-microphone"></i>
+  </button>
+
+  <!-- نص الحالة -->
+  <div class="status-text" id="statusText">
+    <i class="fas fa-circle"></i> اضغط للتحدث
   </div>
+</div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
-  <script>
+<!-- Font Awesome للأيقونات -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+
+<script>
+  (function() {
+    const micBtn = document.getElementById('micButton');
+    const statusText = document.getElementById('statusText');
+    const icon = micBtn.querySelector('i');
+
     let recognition = null;
-    let isListening = false;
+    let isRecording = false;
+    let finalTranscript = '';
 
+    // دالة لتهيئة التعرف على الصوت
     function initRecognition() {
       if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        document.getElementById('resultText').textContent = '⚠️ المتصفح لا يدعم التعرف على الصوت. استخدم Chrome.';
-        return;
+        statusText.innerHTML = '<i class="fas fa-exclamation-triangle"></i> المتصفح غير مدعوم';
+        micBtn.disabled = true;
+        return null;
       }
 
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognition = new SpeechRecognition();
-      recognition.lang = 'ar-SA';
-      recognition.continuous = true;
-      recognition.interimResults = true;
+      const rec = new SpeechRecognition();
+      rec.lang = 'ar-SA';
+      rec.continuous = true;      // استمرار التسجيل حتى نوقفه يدوياً
+      rec.interimResults = true;  // عرض النتائج المؤقتة
 
-      recognition.onresult = function(event) {
-        let finalText = '';
-        let interimText = '';
+      rec.onresult = function(event) {
+        let interim = '';
+        let final = '';
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const transcript = event.results[i][0].transcript;
           if (event.results[i].isFinal) {
-            finalText += transcript;
+            final += transcript;
           } else {
-            interimText += transcript;
+            interim += transcript;
           }
         }
-        if (finalText) {
-          document.getElementById('resultText').textContent = '🗣️ ' + finalText;
-          // إرسال النص إلى الصفحة الأم
-          window.parent.postMessage({ type: 'voice', text: finalText }, '*');
-        } else if (interimText) {
-          document.getElementById('resultText').textContent = '⏳ ' + interimText;
+
+        if (final) {
+          finalTranscript = final;
+          // إرسال النص النهائي إلى الصفحة الأم
+          window.parent.postMessage({ type: 'voice', text: final }, '*');
+          // تحديث النص المساعد (يظهر الكلمة الأخيرة)
+          statusText.innerHTML = `<i class="fas fa-check-circle" style="color:#4a7aff;"></i> تم الإرسال: "${final}"`;
+          // بعد إرسال الكلمة، يمكن إعادة تعيين المؤقت إن أردت، لكننا نترك الاستماع مستمراً
+        } else if (interim) {
+          // عرض النص المؤقت في الحالة
+          statusText.innerHTML = `<i class="fas fa-pen" style="color:#ffaa44;"></i> جاري الكتابة: "${interim}"`;
         }
       };
 
-      recognition.onerror = function(event) {
-        console.warn('خطأ:', event.error);
+      rec.onerror = function(event) {
+        console.warn('خطأ في التعرف:', event.error);
         if (event.error === 'not-allowed') {
-          document.getElementById('resultText').textContent = '❌ يرجى السماح باستخدام الميكروفون في إعدادات المتصفح.';
+          statusText.innerHTML = '<i class="fas fa-ban" style="color:#ff4444;"></i> الرجاء السماح بالميكروفون';
+          stopRecording();
         } else if (event.error === 'no-speech') {
-          document.getElementById('resultText').textContent = '🔇 لم يتم سماع صوت، حاول مرة أخرى.';
-          // إعادة التشغيل تلقائياً بعد ثانية
-          setTimeout(() => { if (recognition) recognition.start(); }, 1500);
+          statusText.innerHTML = '<i class="fas fa-volume-mute"></i> لم يتم سماع صوت، حاول مجدداً';
+          // لا نوقف التسجيل، نتركه يستمر
         } else {
-          document.getElementById('resultText').textContent = '⚠️ خطأ: ' + event.error;
+          statusText.innerHTML = `<i class="fas fa-exclamation-circle"></i> خطأ: ${event.error}`;
+          stopRecording();
         }
-        isListening = false;
       };
 
-      recognition.onend = function() {
-        isListening = false;
-        // إعادة التشغيل تلقائياً للحفاظ على الاستماع المستمر
-        if (recognition) {
+      rec.onend = function() {
+        // إذا انتهى التسجيل من تلقاء نفسه (نادراً مع continuous=true)
+        // نعيد تشغيله إذا كنا في وضع التسجيل
+        if (isRecording) {
           try {
             recognition.start();
-            isListening = true;
           } catch (e) {
-            console.warn('فشل إعادة التشغيل:', e);
+            // قد يحدث خطأ إذا كان التشغيل متعارضاً
           }
         }
       };
 
-      // طلب الإذن فوراً
+      return rec;
+    }
+
+    // بدء التسجيل
+    function startRecording() {
+      if (!recognition) {
+        recognition = initRecognition();
+        if (!recognition) return;
+      }
+
+      // طلب إذن الميكروفون أولاً (للتأكد من أنه مسموح)
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ audio: true })
           .then(function(stream) {
+            // تم الحصول على الإذن، نحتفظ بالـ stream مفتوحاً
             window.audioStream = stream;
-            startRecognition();
+            // نبدأ التعرف
+            try {
+              recognition.start();
+              isRecording = true;
+              updateUI(true);
+              statusText.innerHTML = '<i class="fas fa-circle" style="color:#ff4444;"></i> جاري الاستماع...';
+            } catch (e) {
+              console.warn('فشل بدء التعرف:', e);
+              // إذا كان started بالفعل، نعيد المحاولة
+              if (e.message && e.message.includes('already started')) {
+                // نوقف ثم نبدأ
+                try { recognition.stop(); } catch (ex) {}
+                setTimeout(() => {
+                  try { recognition.start(); isRecording = true; updateUI(true); } catch (err) {}
+                }, 200);
+              }
+            }
           })
           .catch(function(err) {
-            document.getElementById('resultText').textContent = '❌ تم رفض الإذن، اذهب إلى إعدادات الموقع واسمح بالميكروفون.';
+            statusText.innerHTML = '<i class="fas fa-ban" style="color:#ff4444;"></i> تم رفض الإذن، اذهب للإعدادات واسمح';
             console.warn(err);
           });
       } else {
-        document.getElementById('resultText').textContent = '⚠️ لا يمكن الوصول إلى الميكروفون.';
+        statusText.innerHTML = '<i class="fas fa-exclamation-triangle"></i> لا يمكن الوصول للميكروفون';
       }
     }
 
-    function startRecognition() {
-      if (recognition && !isListening) {
-        try {
-          recognition.start();
-          isListening = true;
-          document.getElementById('resultText').textContent = '🎤 جاري الاستماع...';
-        } catch (e) {
-          console.warn('خطأ بدء الاستماع:', e);
-        }
-      }
-    }
-
-    function restartRecognition() {
+    // إيقاف التسجيل
+    function stopRecording() {
       if (recognition) {
         try {
           recognition.stop();
-        } catch (e) {}
-        isListening = false;
-        setTimeout(() => startRecognition(), 300);
-      }
-    }
-
-    // التهيئة عند تحميل الصفحة
-    window.addEventListener('load', initRecognition);
-
-    // تنظيف عند إغلاق المودال (اختياري)
-    window.addEventListener('beforeunload', function() {
-      if (recognition) {
-        try { recognition.stop(); } catch (e) {}
+        } catch (e) { /* تجاهل */ }
       }
       if (window.audioStream) {
         window.audioStream.getTracks().forEach(t => t.stop());
+        window.audioStream = null;
       }
+      isRecording = false;
+      updateUI(false);
+      statusText.innerHTML = '<i class="fas fa-circle"></i> اضغط للتحدث';
+    }
+
+    // تبديل الحالة بين التشغيل والإيقاف
+    function toggleRecording() {
+      if (isRecording) {
+        stopRecording();
+      } else {
+        startRecording();
+      }
+    }
+
+    // تحديث شكل الزر والنص
+    function updateUI(recording) {
+      if (recording) {
+        micBtn.classList.add('recording');
+        icon.className = 'fas fa-stop';  // أيقونة إيقاف
+        micBtn.title = 'إيقاف التسجيل';
+      } else {
+        micBtn.classList.remove('recording');
+        icon.className = 'fas fa-microphone';
+        micBtn.title = 'بدء التسجيل';
+      }
+    }
+
+    // مستمع النقر على الزر
+    micBtn.addEventListener('click', toggleRecording);
+
+    // تنظيف عند إغلاق المودال (اختياري)
+    window.addEventListener('beforeunload', function() {
+      if (isRecording) stopRecording();
     });
-  </script>
+
+    // بداية سريعة: نطلب الإذن فقط دون بدء التسجيل (لتجنب طلب الإذن المزعج)
+    // لكن يمكننا ترك المستخدم يضغط بنفسه.
+
+    console.log('🎤 جاهز، اضغط على الدائرة للتحدث.');
+  })();
+</script>
 </body>
 </html>
