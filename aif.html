@@ -847,7 +847,7 @@
 
         let isProcessing = false;
         let isListening = false;
-        let ttsReady = false; // للتأكد من أن الصوت جاهز
+        let ttsReady = false;
 
         // ===== التعرف على الصوت =====
         let recognition = null;
@@ -866,7 +866,6 @@
                 console.warn('لا توجد أصوات متاحة');
                 return null;
             }
-            // البحث عن صوت عربي ذكر
             let male = null;
             let fallback = null;
             for (const voice of voices) {
@@ -884,9 +883,7 @@
             return selected;
         }
 
-        // تأكد من تحميل الأصوات
         if (window.speechSynthesis) {
-            // دالة لتحديث الصوت عند تغيير الأصوات
             const updateVoice = () => {
                 const voice = getMaleVoice();
                 if (voice) {
@@ -898,33 +895,27 @@
                     console.warn('لم يتم العثور على أي صوت');
                 }
             };
-            // استدعاء فوري إذا كانت الأصوات محملة
             if (window.speechSynthesis.getVoices().length > 0) {
                 updateVoice();
             } else {
                 window.speechSynthesis.onvoiceschanged = updateVoice;
-                // محاولة بعد 500 مللي في حال لم يعمل الحدث
                 setTimeout(updateVoice, 500);
             }
         } else {
             console.warn('speechSynthesis غير مدعوم في هذا المتصفح');
         }
 
-        // ===== اختبار الصوت =====
         function testVoice() {
             return new Promise((resolve) => {
                 if (!window.speechSynthesis) {
-                    console.warn('TTS غير مدعوم');
                     resolve(false);
                     return;
                 }
-                // ننتظر حتى تتوفر الأصوات
                 const waitForVoices = () => {
                     if (window.speechSynthesis.getVoices().length > 0) {
                         const voice = getMaleVoice();
                         if (voice) preferredVoice = voice;
                         ttsReady = true;
-                        // تشغيل صوت اختبار قصير
                         const testUtterance = new SpeechSynthesisUtterance('اختبار الصوت');
                         testUtterance.lang = 'ar-SA';
                         testUtterance.rate = 0.7;
@@ -939,7 +930,6 @@
                         };
                         window.speechSynthesis.speak(testUtterance);
                     } else {
-                        // نعيد المحاولة بعد 300 مللي
                         setTimeout(waitForVoices, 300);
                     }
                 };
@@ -1061,7 +1051,6 @@
             if (isListening) return;
             if (isProcessing) return;
 
-            // تأكد من أن الصوت جاهز
             if (!ttsReady) {
                 addBotMessage('جاري تجهيز الصوت...');
                 const ready = await testVoice();
@@ -1149,41 +1138,26 @@
         function speakText(text, rate = 0.7) {
             return new Promise((resolve) => {
                 if (!window.speechSynthesis) {
-                    console.warn('speechSynthesis غير مدعوم');
                     resolve();
                     return;
                 }
-                // إلغاء أي كلام سابق
                 window.speechSynthesis.cancel();
-
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'ar-SA';
                 utterance.rate = rate;
                 utterance.pitch = 1;
                 utterance.volume = 1;
-
-                // استخدام الصوت المفضل
                 if (preferredVoice) {
                     utterance.voice = preferredVoice;
                 } else {
-                    // محاولة الحصول على صوت ذكر جديد
                     const voice = getMaleVoice();
                     if (voice) {
                         preferredVoice = voice;
                         utterance.voice = voice;
                     }
                 }
-
-                utterance.onend = () => {
-                    console.log('انتهى النطق');
-                    resolve();
-                };
-                utterance.onerror = (e) => {
-                    console.warn('خطأ في النطق:', e);
-                    resolve(); // نكمل حتى لو فشل الصوت
-                };
-
-                // تشغيل الصوت
+                utterance.onend = () => resolve();
+                utterance.onerror = () => resolve();
                 window.speechSynthesis.speak(utterance);
             });
         }
@@ -1207,7 +1181,6 @@
 
                 addBotMessage(replyText);
 
-                // نطق الرد
                 await speakText(replyText, 0.7);
 
                 sendToDiscord(userText, replyText);
@@ -1325,18 +1298,15 @@
             }
         }
 
-        // ===== الترحيب =====
+        // ===== الترحيب (نص فقط، بدون صوت) =====
         async function welcome() {
-            // انتظر تجهيز الصوت
+            // نجهز الصوت في الخلفية لكن لا ننطق الترحيب
             if (!ttsReady) {
-                const ready = await testVoice();
-                if (ready) {
-                    ttsReady = true;
-                }
+                await testVoice(); // فقط للتأكد من جاهزية الصوت دون نطق الترحيب
             }
             const welcomeText = 'مرحباً بك في MEN Ai، المحادثة الصوتية. اضغط على زر الميكروفون لبدء التحدث.';
             addBotMessage(welcomeText);
-            await speakText(welcomeText, 0.7);
+            // لا ننطق الترحيب
             voiceBtn.classList.add('muted');
             voiceBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
         }
@@ -1347,7 +1317,6 @@
             await Promise.all([loadResponses(), loadProducts()]);
             messagesArea.innerHTML = '';
 
-            // التأكد من تحميل الأصوات
             if (window.speechSynthesis) {
                 const voices = window.speechSynthesis.getVoices();
                 if (voices.length === 0) {
@@ -1370,7 +1339,7 @@
             await welcome();
             voiceBtn.disabled = false;
             await setupAudioAnalyser();
-            console.log('MEN Ai الصوتي جاهز');
+            console.log('MEN Ai الصوتي جاهز (الترحيب نص فقط)');
         }
 
         init();
