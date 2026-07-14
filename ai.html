@@ -1216,12 +1216,18 @@
         let isProcessing = false;
         let conversationHistory = [];
 
+        // --- الأسئلة المقترحة تظهر دائماً ---
+        // لا نخفيها أبداً عشان المستخدم يقدر يضغط عليها بأي وقت
+        // ولكن نزيل class hidden لو موجود
+        suggestedQuestions.classList.remove('hidden');
+
         document.querySelectorAll('.sq-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const question = this.dataset.question;
                 if (question) {
                     messageInput.value = question;
                     charCount.textContent = question.length;
+                    // نرسل الرسالة مباشرة
                     sendMessage();
                 }
             });
@@ -1297,9 +1303,9 @@
             if (!text) return;
             if (isProcessing) return;
 
-            if (suggestedQuestions) {
-                suggestedQuestions.classList.add('hidden');
-            }
+            // --- لا نخفي الأسئلة المقترحة ---
+            // suggestedQuestions class hidden نزيلها نهائياً
+            suggestedQuestions.classList.remove('hidden');
 
             isProcessing = true;
             sendBtn.disabled = true;
@@ -1468,7 +1474,10 @@
             messageInput.focus();
             sendBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع تأثير كتابة آلي وإرسال إلى Discord وأسئلة مقترحة');
+            // نتأكد أن الأسئلة المقترحة ظاهرة
+            suggestedQuestions.classList.remove('hidden');
+
+            console.log('MEN Ai جاهز مع تأثير كتابة آلي وإرسال إلى Discord وأسئلة مقترحة - يمكنك إرسال أسئلة متعددة');
         }
 
         init();
