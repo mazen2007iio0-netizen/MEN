@@ -544,6 +544,44 @@
             transform: scale(1);
         }
 
+        /* ===== زر الميكروفون الجديد ===== */
+        .input-area .btn-voice {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(2, 28, 164, 0.2);
+            color: #a0b0d4;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .input-area .btn-voice:hover {
+            background: rgba(74, 122, 255, 0.08);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: scale(1.05);
+        }
+        .input-area .btn-voice:active {
+            transform: scale(0.92);
+        }
+        .input-area .btn-voice.recording {
+            background: rgba(255, 50, 50, 0.15);
+            border-color: #ff4444;
+            color: #ff4444;
+            animation: pulseMic 1s ease-in-out infinite;
+        }
+        @keyframes pulseMic {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 68, 68, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(255, 68, 68, 0.5); }
+        }
+
         footer {
             background: #000000;
             border-top: 1px solid rgba(2, 28, 164, 0.03);
@@ -749,7 +787,8 @@
                 font-size: 0.95rem;
                 min-height: 36px;
             }
-            .input-area .btn-send {
+            .input-area .btn-send,
+            .input-area .btn-voice {
                 width: 44px;
                 height: 44px;
                 min-width: 44px;
@@ -834,7 +873,8 @@
                 font-size: 0.85rem;
                 min-height: 32px;
             }
-            .input-area .btn-send {
+            .input-area .btn-send,
+            .input-area .btn-voice {
                 width: 38px;
                 height: 38px;
                 min-width: 38px;
@@ -953,6 +993,13 @@
                 font-size: 0.6rem;
                 padding: 3px 8px;
             }
+            .input-area .btn-send,
+            .input-area .btn-voice {
+                width: 32px;
+                height: 32px;
+                min-width: 32px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -1001,6 +1048,11 @@
                         <textarea id="messageInput" rows="1" placeholder="اسألني عن أي شيء..."></textarea>
                         <span class="char-count" id="charCount">0</span>
                     </div>
+                    <!-- زر الميكروفون -->
+                    <button class="btn-voice" id="voiceBtn" title="تسجيل صوتي">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <!-- زر الإرسال -->
                     <button class="btn-send" id="sendBtn" title="إرسال">
                         <i class="fas fa-arrow-up"></i>
                     </button>
@@ -1205,6 +1257,38 @@
             });
         }
 
+        // ===== دالة نطق الردود بصوت رجل =====
+        function speakReply(text) {
+            if (!window.speechSynthesis) return;
+            // إيقاف أي كلام سابق
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ar-SA';
+            utterance.rate = 0.9;
+            utterance.pitch = 0.9;
+            utterance.volume = 1;
+
+            // اختيار صوت رجل (ذكر)
+            const voices = window.speechSynthesis.getVoices();
+            let maleVoice = voices.find(v => 
+                v.lang.startsWith('ar') && 
+                (v.name.includes('Male') || v.name.includes('ذكر') || v.name.includes('Google UK English Male'))
+            );
+            // إذا لم يوجد صوت عربي رجل، نبحث عن أي صوت رجل
+            if (!maleVoice) {
+                maleVoice = voices.find(v => 
+                    v.name.includes('Male') || v.name.toLowerCase().includes('male')
+                );
+            }
+            // إذا لم يوجد، استخدم الصوت الافتراضي
+            if (maleVoice) {
+                utterance.voice = maleVoice;
+            }
+
+            window.speechSynthesis.speak(utterance);
+        }
+
         const messagesArea = document.getElementById('messagesArea');
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -1212,9 +1296,110 @@
         const typingIndicator = document.getElementById('typingIndicator');
         const backBtn = document.getElementById('backBtn');
         const suggestedQuestions = document.getElementById('suggestedQuestions');
+        const voiceBtn = document.getElementById('voiceBtn');
 
         let isProcessing = false;
         let conversationHistory = [];
+
+        // ===== المتغيرات الخاصة بالتسجيل الصوتي =====
+        let recognition = null;
+        let isRecording = false;
+
+        function initSpeechRecognition() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                voiceBtn.style.display = 'none';
+                console.warn('التعرف على الصوت غير مدعوم في هذا المتصفح');
+                return null;
+            }
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const rec = new SpeechRecognition();
+            rec.lang = 'ar-SA';
+            rec.continuous = false;
+            rec.interimResults = true;
+            rec.maxAlternatives = 1;
+
+            rec.onresult = function(event) {
+                let finalText = '';
+                let interimText = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalText += transcript;
+                    } else {
+                        interimText += transcript;
+                    }
+                }
+                if (finalText) {
+                    messageInput.value = finalText;
+                    charCount.textContent = finalText.length;
+                    // إرسال السؤال تلقائياً بعد التعرف على الصوت
+                    if (finalText.trim()) {
+                        sendMessage();
+                    }
+                }
+            };
+
+            rec.onerror = function(event) {
+                console.warn('خطأ في التعرف على الصوت:', event.error);
+                stopRecording();
+                if (event.error !== 'not-allowed') {
+                    // عرض رسالة خطأ للمستخدم
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'message bot';
+                    errorMsg.innerHTML = 'عذراً، لم أتمكن من التعرف على صوتك. حاول مرة أخرى.' + `<span class="msg-time">الآن</span>`;
+                    messagesArea.appendChild(errorMsg);
+                    scrollToBottom();
+                }
+            };
+
+            rec.onend = function() {
+                stopRecording();
+            };
+
+            return rec;
+        }
+
+        function startRecording() {
+            if (isRecording) {
+                stopRecording();
+                return;
+            }
+            if (!recognition) {
+                recognition = initSpeechRecognition();
+                if (!recognition) return;
+            }
+            try {
+                recognition.start();
+                isRecording = true;
+                voiceBtn.classList.add('recording');
+                voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
+            } catch (e) {
+                console.warn('خطأ في بدء التسجيل:', e);
+                // في حالة وجود خطأ مثل "already started" نحاول إعادة التعيين
+                if (e.message.includes('already started')) {
+                    stopRecording();
+                    setTimeout(() => startRecording(), 300);
+                }
+            }
+        }
+
+        function stopRecording() {
+            if (recognition) {
+                try {
+                    recognition.stop();
+                } catch (e) { /* تجاهل */ }
+            }
+            isRecording = false;
+            voiceBtn.classList.remove('recording');
+            voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+        }
+
+        // ===== دالة النقر على زر الصوت =====
+        voiceBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (isProcessing) return;
+            startRecording();
+        });
 
         document.querySelectorAll('.sq-btn').forEach(btn => {
             btn.addEventListener('click', function() {
@@ -1292,7 +1477,6 @@
             }
         }
 
-        // ====== الحل الأساسي للمشكلة: استخدام try/finally لضمان تحرير القفل ======
         async function sendMessage() {
             const text = messageInput.value.trim();
             if (!text) return;
@@ -1304,6 +1488,7 @@
 
             isProcessing = true;
             sendBtn.disabled = true;
+            voiceBtn.disabled = true;
 
             try {
                 const userMsg = document.createElement('div');
@@ -1351,18 +1536,25 @@
 
                 await sendToDiscord(text, replyContent);
 
+                // ===== نطق الرد بصوت رجل =====
+                if (reply.type !== 'product') {
+                    // ننتظر قليلاً ثم ننطق
+                    setTimeout(() => {
+                        speakReply(replyContent);
+                    }, 300);
+                }
+
             } catch (error) {
                 console.error('خطأ في sendMessage:', error);
-                // عرض رسالة خطأ للمستخدم
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'message bot';
                 errorMsg.innerHTML = 'عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.' + `<span class="msg-time">الآن</span>`;
                 messagesArea.appendChild(errorMsg);
                 scrollToBottom();
             } finally {
-                // ====== المفتاح: هنا يتم تحرير القفل في كل الأحوال ======
                 isProcessing = false;
                 sendBtn.disabled = false;
+                voiceBtn.disabled = false;
                 messageInput.focus();
                 scrollToBottom();
             }
@@ -1457,8 +1649,17 @@
         async function init() {
             messageInput.disabled = true;
             sendBtn.disabled = true;
+            voiceBtn.disabled = true;
 
             await Promise.all([loadResponses(), loadProducts()]);
+
+            // تحميل الأصوات مسبقاً
+            if (window.speechSynthesis) {
+                window.speechSynthesis.getVoices();
+                window.speechSynthesis.onvoiceschanged = () => {
+                    window.speechSynthesis.getVoices();
+                };
+            }
 
             messagesArea.innerHTML = '';
             const welcomeMsg = document.createElement('div');
@@ -1480,8 +1681,9 @@
             messageInput.disabled = false;
             messageInput.focus();
             sendBtn.disabled = false;
+            voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع تأثير كتابة آلي وإرسال إلى Discord وأسئلة مقترحة');
+            console.log('MEN Ai جاهز مع المحادثة الصوتية (صوت رجل)');
         }
 
         init();
