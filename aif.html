@@ -1,1348 +1,192 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <link rel="icon" type="image/png" href="logo.png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEN Ai – المحادثة الصوتية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: #000000;
-            color: #f0f4ff;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #000000;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #021ca4, #1a3a9e);
-            border-radius: 12px;
-        }
-
-        .bg-ambient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background:
-                radial-gradient(ellipse at 20% 30%, rgba(2, 28, 164, 0.15) 0%, transparent 55%),
-                radial-gradient(ellipse at 80% 70%, rgba(26, 58, 158, 0.10) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, #000000 0%, #000000 100%);
-            animation: ambientFloat 20s ease-in-out infinite alternate;
-        }
-        @keyframes ambientFloat {
-            0% {
-                transform: scale(1) rotate(0deg);
-            }
-            100% {
-                transform: scale(1.05) rotate(2deg);
-            }
-        }
-
-        .container {
-            width: 92%;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 18px;
-        }
-        :root {
-            --blue-deep: #021ca4;
-            --blue-mid: #1a3a9e;
-            --blue-light: #4a7aff;
-            --card-bg: rgba(10, 16, 32, 0.85);
-            --card-border: rgba(2, 28, 164, 0.25);
-            --radius-xl: 24px;
-            --radius-2xl: 40px;
-            --glow-neon: 0 0 30px rgba(74, 122, 255, 0.15);
-        }
-
-        header {
-            background: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(2, 28, 164, 0.10);
-            padding: 12px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
-        }
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 14px;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .btn-back {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(2, 28, 164, 0.15);
-            border-radius: 40px;
-            padding: 0 18px;
-            height: 44px;
-            color: #a0b0d4;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            text-decoration: none;
-            font-family: 'Cairo', sans-serif;
-        }
-        .btn-back i {
-            font-size: 1.2rem;
-        }
-        .btn-back .back-text {
-            font-weight: 600;
-            font-size: 0.95rem;
-            white-space: nowrap;
-        }
-        .btn-back:hover {
-            background: rgba(74, 122, 255, 0.1);
-            border-color: var(--blue-light);
-            color: #fff;
-            transform: scale(1.03);
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.1);
-        }
-        .btn-back:active {
-            transform: scale(0.95);
-        }
-
-        .logo img {
-            height: 48px;
-            filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(74, 122, 255, 0.3));
-        }
-        .logo h1 {
-            font-size: 2rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 40%, var(--blue-light));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 40px rgba(74, 122, 255, 0.2);
-        }
-        .logo h1 i {
-            color: var(--blue-light);
-            margin-left: 8px;
-            font-size: 1.6rem;
-            filter: drop-shadow(0 0 20px rgba(74, 122, 255, 0.3));
-            animation: sparkle 2s ease-in-out infinite alternate;
-        }
-        @keyframes sparkle {
-            0% {
-                filter: drop-shadow(0 0 10px rgba(74, 122, 255, 0.2));
-                transform: scale(1) rotate(0deg);
-            }
-            100% {
-                filter: drop-shadow(0 0 30px rgba(74, 122, 255, 0.6));
-                transform: scale(1.1) rotate(10deg);
-            }
-        }
-
-        .chat-wrapper {
-            margin: 30px 0 20px;
-            background: var(--card-bg);
-            backdrop-filter: blur(24px);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius-2xl);
-            overflow: hidden;
-            box-shadow: var(--glow-neon);
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 200px);
-            min-height: 500px;
-            position: relative;
-        }
-
-        .chat-header {
-            padding: 18px 24px;
-            border-bottom: 1px solid rgba(2, 28, 164, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-            background: rgba(0, 0, 0, 0.4);
-        }
-        .chat-header .bot-info {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .chat-header .bot-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-light));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            color: #fff;
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
-        }
-        .chat-header .bot-name {
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: #fff;
-        }
-
-        /* الدائرة الصوتية */
-        .voice-indicator {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(74, 122, 255, 0.2) 0%, rgba(2, 28, 164, 0.05) 70%);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 10;
-        }
-        .voice-indicator.active {
-            opacity: 1;
-        }
-        .voice-indicator .circle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #4a7aff, #021ca4);
-            box-shadow: 0 0 40px rgba(74, 122, 255, 0.6);
-            transition: transform 0.15s ease-out;
-        }
-        .voice-indicator .circle-glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(74, 122, 255, 0.15) 0%, transparent 70%);
-            transition: transform 0.2s ease-out;
-        }
-
-        .messages-area {
-            flex: 1;
-            padding: 20px 24px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            background: rgba(0, 0, 0, 0.3);
-        }
-        .messages-area::-webkit-scrollbar {
-            width: 4px;
-        }
-        .messages-area::-webkit-scrollbar-thumb {
-            background: var(--blue-deep);
-            border-radius: 12px;
-        }
-
-        .message {
-            max-width: 85%;
-            padding: 14px 20px;
-            border-radius: var(--radius-xl);
-            animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            word-wrap: break-word;
-            line-height: 1.7;
-        }
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        .message.user {
-            align-self: flex-end;
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            border-bottom-left-radius: 6px;
-            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
-        }
-        .message.bot {
-            align-self: flex-start;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(2, 28, 164, 0.08);
-            border-bottom-right-radius: 6px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-        .message .msg-time {
-            font-size: 0.65rem;
-            color: #6a708a;
-            margin-top: 6px;
-            display: block;
-            text-align: right;
-        }
-        .message.user .msg-time {
-            text-align: right;
-        }
-        .message.bot .msg-time {
-            text-align: left;
-        }
-
-        .typing-indicator {
-            align-self: flex-start;
-            display: none;
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius-xl);
-            border-bottom-right-radius: 6px;
-            border: 1px solid rgba(2, 28, 164, 0.08);
-            gap: 10px;
-            align-items: center;
-            color: #a0b0d4;
-            font-size: 0.95rem;
-        }
-        .typing-indicator .dots {
-            display: flex;
-            gap: 5px;
-        }
-        .typing-indicator .dots span {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--blue-light);
-            display: inline-block;
-            animation: typingBounce 1.4s ease-in-out infinite;
-        }
-        .typing-indicator .dots span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        .typing-indicator .dots span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-        @keyframes typingBounce {
-            0%, 60%, 100% {
-                transform: translateY(0);
-                opacity: 0.4;
-            }
-            30% {
-                transform: translateY(-10px);
-                opacity: 1;
-            }
-        }
-
-        .input-area {
-            padding: 12px 20px 16px;
-            border-top: 1px solid rgba(2, 28, 164, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            background: rgba(0, 0, 0, 0.4);
-        }
-
-        .input-area .btn-voice {
-            width: 64px;
-            height: 64px;
-            min-width: 64px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(2, 28, 164, 0.2);
-            color: #a0b0d4;
-            font-size: 1.8rem;
-            cursor: pointer;
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        .input-area .btn-voice:hover {
-            background: rgba(74, 122, 255, 0.08);
-            border-color: var(--blue-light);
-            color: #fff;
-            transform: scale(1.05);
-        }
-        .input-area .btn-voice:active {
-            transform: scale(0.92);
-        }
-        .input-area .btn-voice.active {
-            background: rgba(74, 122, 255, 0.15);
-            border-color: var(--blue-light);
-            color: #fff;
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.3);
-        }
-        .input-area .btn-voice.muted {
-            background: rgba(255, 50, 50, 0.1);
-            border-color: #ff4444;
-            color: #ff4444;
-        }
-
-        .input-area .btn-close {
-            width: 52px;
-            height: 52px;
-            min-width: 52px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(2, 28, 164, 0.15);
-            color: #a0b0d4;
-            font-size: 1.6rem;
-            cursor: pointer;
-            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .input-area .btn-close:hover {
-            background: rgba(255, 50, 50, 0.1);
-            border-color: #ff4444;
-            color: #ff4444;
-            transform: scale(1.05);
-        }
-        .input-area .btn-close:active {
-            transform: scale(0.92);
-        }
-
-        footer {
-            background: #000000;
-            border-top: 1px solid rgba(2, 28, 164, 0.03);
-            padding: 50px 0 30px;
-            margin-top: 30px;
-        }
-        .footer-flex {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 40px;
-        }
-        .footer-col h4 {
-            color: var(--blue-light);
-            margin-bottom: 18px;
-            font-size: 1.2rem;
-            text-shadow: 0 0 20px rgba(74, 122, 255, 0.1);
-        }
-        .footer-col p {
-            color: #6a708a;
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .footer-col p i {
-            color: #a0b0d4;
-            opacity: 0.7;
-            width: 20px;
-            transition: 0.3s;
-        }
-        .footer-col p:hover i {
-            color: var(--blue-light);
-            transform: scale(1.2);
-        }
-        .social-icons {
-            display: flex;
-            gap: 14px;
-            margin-top: 12px;
-        }
-        .social-icons a {
-            font-size: 1.4rem;
-            color: #6a708a;
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: inline-block;
-        }
-        .social-icons a:hover {
-            color: var(--blue-light);
-            transform: translateY(-6px) scale(1.2);
-            filter: drop-shadow(0 0 20px rgba(74, 122, 255, 0.2));
-        }
-        .copyright {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(2, 28, 164, 0.03);
-            color: #4a5070;
-            font-size: 0.9rem;
-            width: 100%;
-        }
-        .copyright span {
-            color: var(--blue-light);
-        }
-
-        @media (max-width: 768px) {
-            .chat-wrapper {
-                height: calc(100vh - 160px);
-                min-height: 400px;
-                border-radius: var(--radius-xl);
-            }
-            .message {
-                max-width: 90%;
-                padding: 12px 16px;
-                font-size: 0.95rem;
-            }
-            .input-area {
-                padding: 10px 14px 14px;
-                gap: 12px;
-            }
-            .input-area .btn-voice {
-                width: 56px;
-                height: 56px;
-                min-width: 56px;
-                font-size: 1.6rem;
-            }
-            .input-area .btn-close {
-                width: 44px;
-                height: 44px;
-                min-width: 44px;
-                font-size: 1.4rem;
-            }
-            .chat-header {
-                padding: 12px 16px;
-            }
-            .chat-header .bot-avatar {
-                width: 36px;
-                height: 36px;
-                font-size: 1.2rem;
-            }
-            .messages-area {
-                padding: 14px 16px;
-                gap: 10px;
-            }
-            .logo h1 {
-                font-size: 1.4rem;
-            }
-            .logo h1 i {
-                font-size: 1rem;
-            }
-            .logo img {
-                height: 36px;
-            }
-            .btn-back {
-                height: 38px;
-                padding: 0 14px;
-                font-size: 0.9rem;
-            }
-            .btn-back i {
-                font-size: 1rem;
-            }
-            .btn-back .back-text {
-                font-size: 0.85rem;
-            }
-            .voice-indicator {
-                width: 150px;
-                height: 150px;
-            }
-            .voice-indicator .circle {
-                width: 60px;
-                height: 60px;
-            }
-            .voice-indicator .circle-glow {
-                width: 90px;
-                height: 90px;
-            }
-        }
-        @media (max-width: 480px) {
-            .message {
-                max-width: 95%;
-                padding: 10px 14px;
-                font-size: 0.9rem;
-            }
-            .chat-wrapper {
-                height: calc(100vh - 140px);
-                min-height: 350px;
-                border-radius: 18px;
-            }
-            .messages-area {
-                padding: 10px 12px;
-                gap: 8px;
-            }
-            .container {
-                width: 96%;
-                padding: 0 10px;
-            }
-            .logo h1 {
-                font-size: 1.1rem;
-            }
-            .logo h1 i {
-                font-size: 0.9rem;
-            }
-            .logo img {
-                height: 30px;
-            }
-            .btn-back {
-                height: 34px;
-                padding: 0 10px;
-                font-size: 0.8rem;
-            }
-            .btn-back i {
-                font-size: 0.9rem;
-            }
-            .btn-back .back-text {
-                font-size: 0.75rem;
-            }
-            .input-area .btn-voice {
-                width: 48px;
-                height: 48px;
-                min-width: 48px;
-                font-size: 1.4rem;
-            }
-            .input-area .btn-close {
-                width: 38px;
-                height: 38px;
-                min-width: 38px;
-                font-size: 1.2rem;
-            }
-            .voice-indicator {
-                width: 120px;
-                height: 120px;
-            }
-            .voice-indicator .circle {
-                width: 50px;
-                height: 50px;
-            }
-            .voice-indicator .circle-glow {
-                width: 70px;
-                height: 70px;
-            }
-        }
-        @media (max-width: 360px) {
-            .logo h1 {
-                font-size: 0.9rem;
-            }
-            .logo h1 i {
-                font-size: 0.8rem;
-            }
-            .logo img {
-                height: 26px;
-            }
-            .btn-back {
-                height: 30px;
-                padding: 0 8px;
-                font-size: 0.7rem;
-            }
-            .btn-back i {
-                font-size: 0.8rem;
-            }
-            .btn-back .back-text {
-                font-size: 0.7rem;
-            }
-            .chat-header .bot-name {
-                font-size: 0.9rem;
-            }
-            .chat-header .bot-avatar {
-                width: 30px;
-                height: 30px;
-                font-size: 1rem;
-            }
-            .input-area .btn-voice {
-                width: 40px;
-                height: 40px;
-                min-width: 40px;
-                font-size: 1.2rem;
-            }
-            .input-area .btn-close {
-                width: 32px;
-                height: 32px;
-                min-width: 32px;
-                font-size: 1rem;
-            }
-            .voice-indicator {
-                width: 100px;
-                height: 100px;
-            }
-            .voice-indicator .circle {
-                width: 40px;
-                height: 40px;
-            }
-            .voice-indicator .circle-glow {
-                width: 60px;
-                height: 60px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحادثة الصوتية</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0a1020;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Cairo', sans-serif;
+      color: #f0f4ff;
+    }
+    .container {
+      text-align: center;
+      padding: 20px;
+    }
+    .status {
+      font-size: 1.2rem;
+      background: rgba(255,255,255,0.05);
+      padding: 20px 30px;
+      border-radius: 40px;
+      border: 1px solid rgba(2,28,164,0.2);
+      display: inline-block;
+    }
+    .status i {
+      color: #4a7aff;
+      margin-left: 10px;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.9); }
+    }
+    .text-box {
+      margin-top: 30px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid rgba(2,28,164,0.1);
+      min-height: 80px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      word-break: break-word;
+    }
+    .btn {
+      margin-top: 20px;
+      background: linear-gradient(135deg, #021ca4, #1a3a9e);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 40px;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+    }
+    .btn:hover {
+      opacity: 0.8;
+    }
+  </style>
 </head>
 <body>
-    <div class="bg-ambient"></div>
+  <div class="container">
+    <div class="status">
+      <i class="fas fa-microphone"></i> جاري الاستماع...
+    </div>
+    <div class="text-box" id="resultText">انتظر الكلام...</div>
+    <button class="btn" onclick="restartRecognition()">🔄 إعادة الاستماع</button>
+  </div>
 
-    <header>
-        <div class="container header-content">
-            <div class="logo">
-                <a href="#" class="btn-back" id="backBtn" title="رجوع">
-                    <i class="fas fa-arrow-right"></i>
-                    <span class="back-text">رجوع</span>
-                </a>
-            </div>
-        </div>
-    </header>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+  <script>
+    let recognition = null;
+    let isListening = false;
 
-    <main>
-        <div class="container">
-            <div class="chat-wrapper" id="chatWrapper">
-                <!-- الدائرة الصوتية -->
-                <div class="voice-indicator" id="voiceIndicator">
-                    <div class="circle-glow" id="circleGlow"></div>
-                    <div class="circle" id="circle"></div>
-                </div>
+    function initRecognition() {
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        document.getElementById('resultText').textContent = '⚠️ المتصفح لا يدعم التعرف على الصوت. استخدم Chrome.';
+        return;
+      }
 
-                <div class="chat-header">
-                    <div class="bot-info">
-                        <div class="bot-avatar"><i class="fas fa-wand-sparkles"></i></div>
-                        <div>
-                            <div class="bot-name">MEN Ai – صوتي</div>
-                        </div>
-                    </div>
-                </div>
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = 'ar-SA';
+      recognition.continuous = true;
+      recognition.interimResults = true;
 
-                <div class="messages-area" id="messagesArea"></div>
-
-                <div class="typing-indicator" id="typingIndicator">
-                    <i class="fas fa-circle-notch"></i>
-                    <span>جار التفكير</span>
-                    <span class="dots"><span></span><span></span><span></span></span>
-                </div>
-
-                <div class="input-area">
-                    <button class="btn-voice muted" id="voiceBtn" title="كتم / إلغاء كتم الميكروفون">
-                        <i class="fas fa-microphone-slash"></i>
-                    </button>
-                    <button class="btn-close" id="closeBtn" title="إغلاق والعودة إلى ai.html">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer>
-        <div class="container">
-            <div class="footer-flex">
-                <div class="footer-col">
-                    <h4><i class="fas fa-compass" style="margin-left:8px; color:var(--blue-deep);"></i>تواصل معنا</h4>
-                    <p><i class="fas fa-envelope"></i> clan.men.ts@gmail.com</p>
-                    <p><i class="fas fa-phone"></i> 0540367546</p>
-                    <div class="social-icons">
-                        <a href="https://x.com/men_vi5" target="_blank"><i class="fab fa-x-twitter"></i></a>
-                        <a href="https://youtube.com/@clan_men" target="_blank"><i class="fab fa-youtube"></i></a>
-                        <a href="https://discord.gg/UJTZfvGew" target="_blank"><i class="fab fa-discord"></i></a>
-                        <a href="https://www.tiktok.com/@team_men2020" target="_blank"><i class="fab fa-tiktok"></i></a>
-                    </div>
-                </div>
-                <div class="copyright">جميع الحقوق محفوظة © 2020 MEN <span></span></div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // ===== البيانات الأساسية (الردود والمنتجات) =====
-        let responses = {};
-        let keywordsMap = {};
-        let products = [];
-
-        function getReply(category) {
-            const list = responses[category]?.responses;
-            if (!list || list.length === 0) return getReply('default');
-            return list[Math.floor(Math.random() * list.length)];
+      recognition.onresult = function(event) {
+        let finalText = '';
+        let interimText = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalText += transcript;
+          } else {
+            interimText += transcript;
+          }
         }
-
-        function buildKeywordsMap(data) {
-            const map = {};
-            for (const [cat, obj] of Object.entries(data)) {
-                if (obj.keywords) map[cat] = obj.keywords.map(k => k.toLowerCase());
-            }
-            return map;
+        if (finalText) {
+          document.getElementById('resultText').textContent = '🗣️ ' + finalText;
+          // إرسال النص إلى الصفحة الأم
+          window.parent.postMessage({ type: 'voice', text: finalText }, '*');
+        } else if (interimText) {
+          document.getElementById('resultText').textContent = '⏳ ' + interimText;
         }
+      };
 
-        function getCategoryForText(text) {
-            const lower = text.trim().toLowerCase();
-            for (const [cat, patterns] of Object.entries(keywordsMap)) {
-                for (const pattern of patterns) {
-                    if (lower.includes(pattern)) return cat;
-                }
-            }
-            return 'default';
-        }
-
-        function evaluateMath(text) {
-            const match = text.match(/(\d+)\s*([+\-*/])\s*(\d+)/);
-            if (!match) return null;
-            const a = parseFloat(match[1]);
-            const op = match[2];
-            const b = parseFloat(match[3]);
-            if (isNaN(a) || isNaN(b)) return null;
-            let result;
-            switch (op) {
-                case '+': result = a + b; break;
-                case '-': result = a - b; break;
-                case '*': result = a * b; break;
-                case '/': result = b === 0 ? 'لا يمكن القسمة على صفر' : a / b; break;
-                default: return null;
-            }
-            return typeof result === 'number' ? (Number.isInteger(result) ? result : result.toFixed(2)) : result;
-        }
-
-        function findProduct(text) {
-            const lower = text.trim().toLowerCase();
-            for (const product of products) {
-                if (product.keywords?.some(k => lower.includes(k.toLowerCase()))) return product;
-                const name = (product.name || '').toLowerCase();
-                if (name.includes(lower) || lower.includes(name)) return product;
-            }
-            return null;
-        }
-
-        async function generateSmartReply(text) {
-            const lower = text.trim().toLowerCase();
-            const math = evaluateMath(text);
-            if (math !== null) return `النتيجة هي: ${math}`;
-
-            if (keywordsMap['time']?.some(p => lower.includes(p))) {
-                const now = new Date();
-                const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
-                const dateStr = now.toLocaleDateString('ar-SA', { timeZone: 'Asia/Riyadh' });
-                return getReply('time').replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr);
-            }
-
-            const product = findProduct(text);
-            if (product) {
-                return `عرض منتج: ${product.name}، السعر: ${product.price} ${product.currency}. ${product.description}`;
-            }
-
-            const cat = getCategoryForText(text);
-            if (cat !== 'default' && responses[cat]) return getReply(cat);
-            return getReply('default');
-        }
-
-        // ===== عناصر الصفحة =====
-        const messagesArea = document.getElementById('messagesArea');
-        const voiceBtn = document.getElementById('voiceBtn');
-        const closeBtn = document.getElementById('closeBtn');
-        const backBtn = document.getElementById('backBtn');
-        const typingIndicator = document.getElementById('typingIndicator');
-        const voiceIndicator = document.getElementById('voiceIndicator');
-        const circle = document.getElementById('circle');
-        const circleGlow = document.getElementById('circleGlow');
-
-        let isProcessing = false;
-        let isListening = false;
-        let ttsReady = false;
-
-        // ===== التعرف على الصوت =====
-        let recognition = null;
-        let audioContext = null;
-        let analyser = null;
-        let dataArray = null;
-        let animationFrame = null;
-        let stream = null;
-
-        // ===== الصوت المفضل (ذكر) =====
-        let preferredVoice = null;
-
-        function getMaleVoice() {
-            const voices = window.speechSynthesis.getVoices();
-            if (!voices || voices.length === 0) {
-                console.warn('لا توجد أصوات متاحة');
-                return null;
-            }
-            let male = null;
-            let fallback = null;
-            for (const voice of voices) {
-                if (voice.lang.startsWith('ar')) {
-                    fallback = voice;
-                    const name = voice.name.toLowerCase();
-                    if (/محمد|mohammad|saudi|khaled|salem|male|ذكر|ahmed|ali|omar/i.test(name)) {
-                        male = voice;
-                        break;
-                    }
-                }
-            }
-            const selected = male || fallback || voices[0];
-            console.log('الصوت المختار:', selected ? selected.name : 'لا يوجد');
-            return selected;
-        }
-
-        if (window.speechSynthesis) {
-            const updateVoice = () => {
-                const voice = getMaleVoice();
-                if (voice) {
-                    preferredVoice = voice;
-                    ttsReady = true;
-                    console.log('تم تجهيز الصوت:', voice.name);
-                } else {
-                    ttsReady = false;
-                    console.warn('لم يتم العثور على أي صوت');
-                }
-            };
-            if (window.speechSynthesis.getVoices().length > 0) {
-                updateVoice();
-            } else {
-                window.speechSynthesis.onvoiceschanged = updateVoice;
-                setTimeout(updateVoice, 500);
-            }
+      recognition.onerror = function(event) {
+        console.warn('خطأ:', event.error);
+        if (event.error === 'not-allowed') {
+          document.getElementById('resultText').textContent = '❌ يرجى السماح باستخدام الميكروفون في إعدادات المتصفح.';
+        } else if (event.error === 'no-speech') {
+          document.getElementById('resultText').textContent = '🔇 لم يتم سماع صوت، حاول مرة أخرى.';
+          // إعادة التشغيل تلقائياً بعد ثانية
+          setTimeout(() => { if (recognition) recognition.start(); }, 1500);
         } else {
-            console.warn('speechSynthesis غير مدعوم في هذا المتصفح');
+          document.getElementById('resultText').textContent = '⚠️ خطأ: ' + event.error;
         }
+        isListening = false;
+      };
 
-        function testVoice() {
-            return new Promise((resolve) => {
-                if (!window.speechSynthesis) {
-                    resolve(false);
-                    return;
-                }
-                const waitForVoices = () => {
-                    if (window.speechSynthesis.getVoices().length > 0) {
-                        const voice = getMaleVoice();
-                        if (voice) preferredVoice = voice;
-                        ttsReady = true;
-                        const testUtterance = new SpeechSynthesisUtterance('اختبار الصوت');
-                        testUtterance.lang = 'ar-SA';
-                        testUtterance.rate = 0.7;
-                        if (preferredVoice) testUtterance.voice = preferredVoice;
-                        testUtterance.onend = () => {
-                            console.log('اختبار الصوت نجح');
-                            resolve(true);
-                        };
-                        testUtterance.onerror = (e) => {
-                            console.warn('فشل اختبار الصوت:', e);
-                            resolve(false);
-                        };
-                        window.speechSynthesis.speak(testUtterance);
-                    } else {
-                        setTimeout(waitForVoices, 300);
-                    }
-                };
-                waitForVoices();
-            });
-        }
-
-        function initSpeechRecognition() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                voiceBtn.style.display = 'none';
-                console.warn('التعرف على الصوت غير مدعوم');
-                return null;
-            }
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const rec = new SpeechRecognition();
-            rec.lang = 'ar-SA';
-            rec.continuous = true;
-            rec.interimResults = true;
-            rec.maxAlternatives = 1;
-
-            rec.onresult = function(event) {
-                let finalText = '';
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    if (event.results[i].isFinal) {
-                        finalText += event.results[i][0].transcript;
-                    }
-                }
-                if (finalText.trim()) {
-                    addUserMessage(finalText);
-                    sendMessage(finalText);
-                }
-            };
-
-            rec.onerror = function(event) {
-                console.warn('خطأ في التعرف:', event.error);
-                if (event.error === 'not-allowed') {
-                    stopListening();
-                    addBotMessage('تم رفض الوصول إلى الميكروفون. يرجى السماح له.');
-                } else if (event.error !== 'no-speech') {
-                    if (isListening) {
-                        try { rec.stop(); } catch (e) {}
-                        setTimeout(() => { if (isListening) startRecognition(); }, 300);
-                    }
-                }
-            };
-
-            rec.onend = function() {
-                if (isListening) {
-                    try { rec.start(); } catch (e) {
-                        setTimeout(() => { if (isListening) startRecognition(); }, 500);
-                    }
-                }
-            };
-
-            return rec;
-        }
-
-        function startRecognition() {
-            if (!recognition) return;
-            try {
-                recognition.start();
-            } catch (e) {
-                console.warn('فشل بدء التعرف:', e);
-            }
-        }
-
-        // ===== تحليل الصوت للدائرة =====
-        async function setupAudioAnalyser() {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                analyser = audioContext.createAnalyser();
-                analyser.fftSize = 256;
-                const source = audioContext.createMediaStreamSource(stream);
-                source.connect(analyser);
-                dataArray = new Uint8Array(analyser.frequencyBinCount);
-                return true;
-            } catch (err) {
-                console.warn('لا يمكن الوصول إلى الميكروفون:', err);
-                return false;
-            }
-        }
-
-        function startVoiceIndicator() {
-            voiceIndicator.classList.add('active');
-            if (!animationFrame) animateIndicator();
-        }
-
-        function stopVoiceIndicator() {
-            voiceIndicator.classList.remove('active');
-            if (animationFrame) {
-                cancelAnimationFrame(animationFrame);
-                animationFrame = null;
-            }
-            circle.style.transform = 'translate(-50%, -50%) scale(1)';
-            circleGlow.style.transform = 'translate(-50%, -50%) scale(1)';
-        }
-
-        function animateIndicator() {
-            if (!analyser || !dataArray) {
-                animationFrame = requestAnimationFrame(animateIndicator);
-                return;
-            }
-            analyser.getByteTimeDomainData(dataArray);
-            let sum = 0;
-            for (let i = 0; i < dataArray.length; i++) {
-                const val = (dataArray[i] - 128) / 128;
-                sum += val * val;
-            }
-            const rms = Math.sqrt(sum / dataArray.length);
-            const scale = 1 + rms * 2.0;
-            circle.style.transform = `translate(-50%, -50%) scale(${scale})`;
-            circleGlow.style.transform = `translate(-50%, -50%) scale(${scale * 1.3})`;
-            animationFrame = requestAnimationFrame(animateIndicator);
-        }
-
-        // ===== بدء / إيقاف الاستماع =====
-        async function startListening() {
-            if (isListening) return;
-            if (isProcessing) return;
-
-            if (!ttsReady) {
-                addBotMessage('جاري تجهيز الصوت...');
-                const ready = await testVoice();
-                if (!ready) {
-                    addBotMessage('عذراً، تعذر تجهيز الصوت. تأكد من أن المتصفح يدعم خاصية النطق.');
-                    return;
-                }
-            }
-
-            if (!recognition) {
-                recognition = initSpeechRecognition();
-                if (!recognition) {
-                    addBotMessage('المتصفح لا يدعم التعرف على الصوت.');
-                    return;
-                }
-            }
-
-            if (!audioContext) {
-                const ok = await setupAudioAnalyser();
-                if (!ok) {
-                    addBotMessage('يرجى السماح بالوصول إلى الميكروفون.');
-                    return;
-                }
-            }
-
+      recognition.onend = function() {
+        isListening = false;
+        // إعادة التشغيل تلقائياً للحفاظ على الاستماع المستمر
+        if (recognition) {
+          try {
+            recognition.start();
             isListening = true;
-            voiceBtn.classList.add('active');
-            voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-            voiceBtn.classList.remove('muted');
-            startVoiceIndicator();
+          } catch (e) {
+            console.warn('فشل إعادة التشغيل:', e);
+          }
+        }
+      };
 
+      // طلب الإذن فوراً
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then(function(stream) {
+            window.audioStream = stream;
             startRecognition();
+          })
+          .catch(function(err) {
+            document.getElementById('resultText').textContent = '❌ تم رفض الإذن، اذهب إلى إعدادات الموقع واسمح بالميكروفون.';
+            console.warn(err);
+          });
+      } else {
+        document.getElementById('resultText').textContent = '⚠️ لا يمكن الوصول إلى الميكروفون.';
+      }
+    }
+
+    function startRecognition() {
+      if (recognition && !isListening) {
+        try {
+          recognition.start();
+          isListening = true;
+          document.getElementById('resultText').textContent = '🎤 جاري الاستماع...';
+        } catch (e) {
+          console.warn('خطأ بدء الاستماع:', e);
         }
+      }
+    }
 
-        function stopListening() {
-            isListening = false;
-            voiceBtn.classList.remove('active');
-            voiceBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
-            voiceBtn.classList.add('muted');
-            stopVoiceIndicator();
+    function restartRecognition() {
+      if (recognition) {
+        try {
+          recognition.stop();
+        } catch (e) {}
+        isListening = false;
+        setTimeout(() => startRecognition(), 300);
+      }
+    }
 
-            if (recognition) {
-                try { recognition.stop(); } catch (e) {}
-            }
-        }
+    // التهيئة عند تحميل الصفحة
+    window.addEventListener('load', initRecognition);
 
-        voiceBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (isProcessing) return;
-            if (isListening) {
-                stopListening();
-            } else {
-                startListening();
-            }
-        });
-
-        // ===== عرض الرسائل =====
-        function addUserMessage(text) {
-            const msg = document.createElement('div');
-            msg.className = 'message user';
-            msg.innerHTML = escapeHtml(text) + `<span class="msg-time">الآن</span>`;
-            messagesArea.appendChild(msg);
-            scrollToBottom();
-        }
-
-        function addBotMessage(text) {
-            const msg = document.createElement('div');
-            msg.className = 'message bot';
-            msg.innerHTML = escapeHtml(text) + `<span class="msg-time">الآن</span>`;
-            messagesArea.appendChild(msg);
-            scrollToBottom();
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function scrollToBottom() {
-            messagesArea.scrollTop = messagesArea.scrollHeight;
-        }
-
-        // ===== النطق الصوتي =====
-        function speakText(text, rate = 0.7) {
-            return new Promise((resolve) => {
-                if (!window.speechSynthesis) {
-                    resolve();
-                    return;
-                }
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'ar-SA';
-                utterance.rate = rate;
-                utterance.pitch = 1;
-                utterance.volume = 1;
-                if (preferredVoice) {
-                    utterance.voice = preferredVoice;
-                } else {
-                    const voice = getMaleVoice();
-                    if (voice) {
-                        preferredVoice = voice;
-                        utterance.voice = voice;
-                    }
-                }
-                utterance.onend = () => resolve();
-                utterance.onerror = () => resolve();
-                window.speechSynthesis.speak(utterance);
-            });
-        }
-
-        // ===== إرسال الرسالة =====
-        async function sendMessage(userText) {
-            if (!userText || isProcessing) return;
-            isProcessing = true;
-
-            if (isListening) {
-                stopListening();
-            }
-
-            try {
-                typingIndicator.style.display = 'flex';
-                scrollToBottom();
-
-                const replyText = await generateSmartReply(userText);
-
-                typingIndicator.style.display = 'none';
-
-                addBotMessage(replyText);
-
-                await speakText(replyText, 0.7);
-
-                sendToDiscord(userText, replyText);
-
-            } catch (error) {
-                console.error('خطأ:', error);
-                typingIndicator.style.display = 'none';
-                addBotMessage('حدث خطأ، حاول مرة أخرى.');
-            } finally {
-                isProcessing = false;
-                if (isListening) {
-                    startListening();
-                } else {
-                    voiceBtn.classList.remove('active');
-                    voiceBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
-                    voiceBtn.classList.add('muted');
-                }
-            }
-        }
-
-        // ===== إرسال إلى Discord =====
-        async function sendToDiscord(userMessage, botReply) {
-            try {
-                await fetch('https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        content: `**محادثة صوتية**\n**المستخدم:** ${userMessage}\n**رد البوت:** ${botReply}\n${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
-                    })
-                });
-            } catch (err) { console.warn('فشل webhook:', err); }
-        }
-
-        // ===== أحداث الأزرار =====
-        closeBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = 'ai.html';
-        });
-
-        backBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (document.referrer) window.history.back();
-            else window.location.href = '/';
-        });
-
-        // ===== تحميل البيانات =====
-        async function loadResponses() {
-            try {
-                const res = await fetch('responses2f.json');
-                if (!res.ok) throw new Error('ملف responses2f.json غير موجود');
-                const data = await res.json();
-                responses = data;
-                keywordsMap = buildKeywordsMap(data);
-                console.log('تم تحميل الردود من responses2f.json');
-            } catch (e) {
-                console.warn('فشل تحميل responses2f.json، استخدام ردود افتراضية:', e);
-                responses = {
-                    default: {
-                        keywords: ['مرحبا', 'السلام', 'اهلا', 'كيف'],
-                        responses: ['مرحباً! كيف يمكنني مساعدتك؟', 'أهلاً بك! أنا MEN Ai، اسألني أي شيء.', 'السلام عليكم! كيف يمكنني خدمتك؟']
-                    },
-                    time: {
-                        keywords: ['وقت', 'الساعة', 'تاريخ', 'الوقت'],
-                        responses: ['الوقت الآن {time} والتاريخ {date}', 'الساعة الآن {time}، والتاريخ {date}', 'حالياً الوقت {time}، اليوم {date}']
-                    },
-                    founding: {
-                        keywords: ['تأسس', 'تأسيس', 'متى', 'منذ', 'تاريخ', 'انشئ'],
-                        responses: ['تأسس فريق MEN في عام 2020، على يد مجموعة من المطورين والمبدعين.', 'تم تأسيس فريق MEN عام 2020، وكانت البداية مع مجموعة من المتحمسين.', 'تعود انطلاقة MEN إلى سنة 2020، حيث اجتمع المؤسسون لبناء رؤية تقنية.']
-                    },
-                    pass: {
-                        keywords: ['pass', 'اشتراك', 'اشترك', 'كيف اشترك'],
-                        responses: ['للاشتراك في MEN pass، يمكنك زيارة صفحة المتجر على موقعنا الرسمي.', 'اشترك في MEN pass عبر الضغط على زر "عرض المنتج" في بطاقة MEN PASS.', 'يمكنك الحصول على MEN pass من خلال متجرنا الإلكتروني بسهولة.']
-                    },
-                    pro: {
-                        keywords: ['pro', 'مميزات', 'مزايا'],
-                        responses: ['باقة MEN PRO تقدم لك أدوات متطورة، تحليلات ذكية، ودعم فني على مدار الساعة.', 'تمتع بمزايا MEN PRO الحصرية، مثل الوصول المبكر للمميزات الجديدة.', 'باقة PRO مصممة للمحترفين، وتشمل كل ما تحتاجه لتطوير مشاريعك.']
-                    },
-                    support: {
-                        keywords: ['دعم', 'تواصل', 'مساعدة', 'الدعم'],
-                        responses: ['يمكنك التواصل مع الدعم عبر البريد الإلكتروني: clan.men.ts@gmail.com', 'للاستفسارات، يمكنك مراسلتنا على البريد الإلكتروني أو عبر حسابات التواصل.', 'فريق الدعم متاح لك عبر جميع قنوات التواصل الرسمية.']
-                    },
-                    download: {
-                        keywords: ['تحميل', 'تطبيق', 'app', 'تنزيل'],
-                        responses: ['يمكنك تحميل تطبيق MEN من متجر Google Play أو App Store.', 'احصل على تطبيق MEN من خلال الروابط المتوفرة في موقعنا.', 'تطبيق MEN متاح للتحميل على جميع المنصات الرئيسية.']
-                    }
-                };
-                keywordsMap = buildKeywordsMap(responses);
-            }
-        }
-
-        async function loadProducts() {
-            try {
-                const res = await fetch('products.json');
-                if (!res.ok) throw new Error();
-                products = await res.json();
-            } catch (e) {
-                products = [
-                    {
-                        id: 'men-pass',
-                        name: 'MEN PASS',
-                        description: 'اشترك في MEN PASS واحصل على جميع المميزات الحصرية.',
-                        price: '49',
-                        currency: 'ر.س',
-                        keywords: ['pass', 'اشتراك', 'men pass']
-                    },
-                    {
-                        id: 'men-pro',
-                        name: 'MEN PRO',
-                        description: 'باقة احترافية للمطورين، تتضمن أدوات متقدمة.',
-                        price: '99',
-                        currency: 'ر.س',
-                        keywords: ['pro', 'احترافي', 'مطور']
-                    }
-                ];
-            }
-        }
-
-        // ===== الترحيب (نص فقط، بدون صوت) =====
-        async function welcome() {
-            // نجهز الصوت في الخلفية لكن لا ننطق الترحيب
-            if (!ttsReady) {
-                await testVoice(); // فقط للتأكد من جاهزية الصوت دون نطق الترحيب
-            }
-            const welcomeText = 'مرحباً بك في MEN Ai، المحادثة الصوتية. اضغط على زر الميكروفون لبدء التحدث.';
-            addBotMessage(welcomeText);
-            // لا ننطق الترحيب
-            voiceBtn.classList.add('muted');
-            voiceBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
-        }
-
-        // ===== التهيئة =====
-        async function init() {
-            voiceBtn.disabled = true;
-            await Promise.all([loadResponses(), loadProducts()]);
-            messagesArea.innerHTML = '';
-
-            if (window.speechSynthesis) {
-                const voices = window.speechSynthesis.getVoices();
-                if (voices.length === 0) {
-                    window.speechSynthesis.onvoiceschanged = function() {
-                        const voice = getMaleVoice();
-                        if (voice) {
-                            preferredVoice = voice;
-                            ttsReady = true;
-                        }
-                    };
-                } else {
-                    const voice = getMaleVoice();
-                    if (voice) {
-                        preferredVoice = voice;
-                        ttsReady = true;
-                    }
-                }
-            }
-
-            await welcome();
-            voiceBtn.disabled = false;
-            await setupAudioAnalyser();
-            console.log('MEN Ai الصوتي جاهز (الترحيب نص فقط)');
-        }
-
-        init();
-    </script>
+    // تنظيف عند إغلاق المودال (اختياري)
+    window.addEventListener('beforeunload', function() {
+      if (recognition) {
+        try { recognition.stop(); } catch (e) {}
+      }
+      if (window.audioStream) {
+        window.audioStream.getTracks().forEach(t => t.stop());
+      }
+    });
+  </script>
 </body>
 </html>
