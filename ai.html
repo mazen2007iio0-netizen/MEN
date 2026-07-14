@@ -544,7 +544,7 @@
             transform: scale(1);
         }
 
-        /* ===== زر الميكروفون ===== */
+        /* ===== زر الميكروفون مع تأثيرات الصوت ===== */
         .input-area .btn-voice {
             width: 52px;
             height: 52px;
@@ -571,15 +571,40 @@
         .input-area .btn-voice:active {
             transform: scale(0.92);
         }
+
+        /* حالة التسجيل - نبض وموجات */
         .input-area .btn-voice.recording {
-            background: rgba(255, 50, 50, 0.15);
+            background: rgba(255, 50, 50, 0.2);
             border-color: #ff4444;
             color: #ff4444;
             animation: pulseMic 1s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+        .input-area .btn-voice.recording::before,
+        .input-area .btn-voice.recording::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 68, 68, 0.4);
+            animation: ripple 1.5s ease-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .input-area .btn-voice.recording::after {
+            animation-delay: 0.75s;
+        }
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.8); opacity: 0; }
         }
         @keyframes pulseMic {
-            0%, 100% { box-shadow: 0 0 10px rgba(255, 68, 68, 0.2); }
-            50% { box-shadow: 0 0 30px rgba(255, 68, 68, 0.5); }
+            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 68, 68, 0.2); }
+            50% { transform: scale(1.12); box-shadow: 0 0 30px rgba(255, 68, 68, 0.5); }
         }
         .input-area .btn-voice:disabled {
             opacity: 0.3;
@@ -1052,9 +1077,9 @@
                         <textarea id="messageInput" rows="1" placeholder="اسألني عن أي شيء..."></textarea>
                         <span class="char-count" id="charCount">0</span>
                     </div>
-                    <!-- زر الميكروفون (تحويل الصوت إلى نص فقط) -->
+                    <!-- زر الميكروفون مع تأثيرات الصوت -->
                     <button class="btn-voice" id="voiceBtn" title="تسجيل صوتي">
-                        <i class="fas fa-solid fa-microphone"></i>
+                        <i class="fas fa-microphone"></i>
                     </button>
                     <!-- زر الإرسال -->
                     <button class="btn-send" id="sendBtn" title="إرسال">
@@ -1636,7 +1661,7 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع ميزة تحويل الصوت إلى نص');
+            console.log('MEN Ai جاهز مع ميزة تحويل الصوت إلى نص وتأثيرات صوتية');
         }
 
         init();
