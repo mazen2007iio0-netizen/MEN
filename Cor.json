@@ -1,1 +1,27 @@
-
+{
+  "drawing": {
+    "keywords": ["ارسم", "رسم", "صورة", "ارسم لي", "رسمة"],
+    "responses": [
+      {
+        "type": "image",
+        "text": "سأرسم لك صورة الآن...",
+        "image": "images/drawing1.png",
+        "drawingText": "قاعد ارسم...",
+        "finishText": "على وشك الانتهاء..."
+      }
+    ]
+  },
+  "default": {
+    "keywords": [],
+    "responses": [
+      {
+        "type": "text",
+        "content": "مرحباً! كيف يمكنني مساعدتك؟"
+      },
+      {
+        "type": "text",
+        "content": "أهلاً بك! أنا MEN Ai، اسألني أي شيء."
+      }
+    ]
+  }
+}
