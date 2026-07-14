@@ -1,0 +1,86 @@
+{
+  "subscriptions": {
+    "P10229": {
+      "user": {
+        "name": "مازن",
+        "discord": "#1029"
+      },
+      "credentials": {
+        "password": "1234"
+      },
+      "subscription": {
+        "expiryDate": "2030-01-01"
+      },
+      "status": "active"
+ 
+    },
+    "P10220": {
+      "user": {
+        "name": "رغد",
+        "discord": "#2030"
+      },
+      "credentials": {
+        "password": "1234"
+      },
+      "subscription": {
+        "expiryDate": "2030-01-01"
+      },
+      "status": "active"
+    },
+    "P10230": {
+      "user": {
+        "name": "عبدالرحمن",
+        "discord": "#2030"
+      },
+      "credentials": {
+        "password": "1212"
+      },
+      "subscription": {
+        "expiryDate": "2030-01-01"
+      },
+      "status": "active"
+    },
+    "P10231": {
+      "user": {
+        "name": "مشعل",
+        "discord": "#3031"
+      },
+      "credentials": {
+        "password": "1211"
+      },
+      "subscription": {
+        "expiryDate": "2030-01-01"
+      },
+      "status": "active"
+    },
+    "P10271": {
+      "user": {
+        "name": "جسار",
+        "discord": "#1071"
+      },
+      "credentials": {
+        "password": "1122"
+      },
+      "subscription": {
+        "expiryDate": "2026-08-01"
+      },
+      "status": "active"
+    },
+    "P10202": {
+      "user": {
+        "name": "سلمان",
+        "discord": "#4032"
+      },
+      "credentials": {
+        "password": "1234"
+      },
+      "subscription": {
+        "expiryDate": "2020-08-05"
+      },
+      "status": "expired"
+    }
+  },
+  "totalActive": 5,
+  "totalExpired": 1,
+  "lastUpdated": "2026-07-14"
+}
