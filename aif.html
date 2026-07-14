@@ -4,7 +4,7 @@
     <link rel="icon" type="image/png" href="logo.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEN Ai</title>
+    <title>MEN Ai – المحادثة الصوتية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -206,38 +206,6 @@
             font-weight: 700;
             font-size: 1.2rem;
             color: #fff;
-        }
-        .voice-selector {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .voice-selector label {
-            font-size: 0.9rem;
-            color: #a0b0d4;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .voice-selector select {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(2, 28, 164, 0.2);
-            border-radius: 30px;
-            padding: 8px 16px;
-            color: #f0f4ff;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.9rem;
-            outline: none;
-            cursor: pointer;
-            transition: 0.3s;
-            max-width: 200px;
-        }
-        .voice-selector select:hover {
-            border-color: var(--blue-light);
-        }
-        .voice-selector select option {
-            background: #1a1a2e;
-            color: #f0f4ff;
         }
 
         /* الدائرة الصوتية */
@@ -595,11 +563,6 @@
                 width: 90px;
                 height: 90px;
             }
-            .voice-selector select {
-                max-width: 140px;
-                font-size: 0.8rem;
-                padding: 6px 12px;
-            }
         }
         @media (max-width: 480px) {
             .message {
@@ -663,14 +626,6 @@
             .voice-indicator .circle-glow {
                 width: 70px;
                 height: 70px;
-            }
-            .voice-selector select {
-                max-width: 100px;
-                font-size: 0.7rem;
-                padding: 4px 8px;
-            }
-            .voice-selector label {
-                font-size: 0.7rem;
             }
         }
         @media (max-width: 360px) {
@@ -758,10 +713,6 @@
                         <div>
                             <div class="bot-name">MEN Ai – صوتي</div>
                         </div>
-                    </div>
-                    <div class="voice-selector">
-                        <label><i class="fas fa-volume-up"></i> الصوت:</label>
-                        <select id="voiceSelect"></select>
                     </div>
                 </div>
 
@@ -893,7 +844,6 @@
         const voiceIndicator = document.getElementById('voiceIndicator');
         const circle = document.getElementById('circle');
         const circleGlow = document.getElementById('circleGlow');
-        const voiceSelect = document.getElementById('voiceSelect');
 
         let isProcessing = false;
         let isListening = false;
@@ -906,58 +856,37 @@
         let animationFrame = null;
         let stream = null;
 
-        // ===== اختيار الصوت (ذكر) =====
-        let selectedVoice = null;
-        let availableVoices = [];
+        // ===== الصوت المفضل (ذكر) =====
+        let preferredVoice = null;
 
-        function populateVoiceList() {
+        function getMaleVoice() {
+            if (preferredVoice) return preferredVoice;
             const voices = window.speechSynthesis.getVoices();
-            availableVoices = voices;
-            voiceSelect.innerHTML = '';
-            // البحث عن صوت ذكر (يفضل أن يحتوي على "Mohammad" أو "Saudi" أو "Arabic" مع تجنب "Zira" و "Hoda")
-            let maleVoice = null;
-            let fallbackVoice = null;
+            if (!voices || voices.length === 0) return null;
+            // البحث عن صوت عربي ذكر
+            let male = null;
+            let fallback = null;
             for (const voice of voices) {
                 if (voice.lang.startsWith('ar')) {
-                    fallbackVoice = voice;
-                    if (/محمد|mohammad|saudi|khaled|salem/i.test(voice.name)) {
-                        maleVoice = voice;
+                    fallback = voice;
+                    const name = voice.name.toLowerCase();
+                    if (/محمد|mohammad|saudi|khaled|salem|male|ذكر/i.test(name)) {
+                        male = voice;
                         break;
                     }
                 }
             }
-            // إذا لم نجد صوت عربي، نستخدم الأول
-            if (!fallbackVoice && voices.length > 0) fallbackVoice = voices[0];
-            // تحديد الصوت المفضل (ذكر)
-            const preferred = maleVoice || fallbackVoice;
-            // ملء القائمة
-            for (const voice of voices) {
-                const option = document.createElement('option');
-                option.value = voice.voiceURI;
-                option.textContent = `${voice.name} (${voice.lang})`;
-                if (voice === preferred) option.selected = true;
-                voiceSelect.appendChild(option);
-            }
-            // تعيين الصوت المختار
-            if (preferred) {
-                selectedVoice = preferred;
-            } else {
-                // إذا لم يكن هناك أصوات، نتركها فارغة
-                voiceSelect.innerHTML = '<option value="">لا توجد أصوات</option>';
-            }
-            // تحديث الصوت عند تغيير القائمة
-            voiceSelect.addEventListener('change', function() {
-                const uri = this.value;
-                const found = availableVoices.find(v => v.voiceURI === uri);
-                if (found) selectedVoice = found;
-            });
+            preferredVoice = male || fallback || voices[0];
+            return preferredVoice;
         }
 
-        // ننتظر تحميل الأصوات
+        // تأكد من تحميل الأصوات
         if (window.speechSynthesis) {
-            window.speechSynthesis.onvoiceschanged = populateVoiceList;
-            // للتأكد في حال لم يعمل الحدث
-            setTimeout(populateVoiceList, 500);
+            // في حال لم تكن الأصوات محملة بعد
+            window.speechSynthesis.onvoiceschanged = function() {
+                getMaleVoice(); // تخزين الصوت
+            };
+            setTimeout(getMaleVoice, 300);
         }
 
         function initSpeechRecognition() {
@@ -1161,10 +1090,9 @@
                 utterance.rate = rate;
                 utterance.pitch = 1;
                 utterance.volume = 1;
-                // استخدام الصوت المختار (ذكر)
-                if (selectedVoice) {
-                    utterance.voice = selectedVoice;
-                }
+                // اختيار الصوت الذكر تلقائياً
+                const voice = getMaleVoice();
+                if (voice) utterance.voice = voice;
                 utterance.onend = () => resolve();
                 utterance.onerror = () => resolve();
                 window.speechSynthesis.speak(utterance);
@@ -1309,7 +1237,7 @@
 
         // ===== الترحيب =====
         async function welcome() {
-            const welcomeText = 'مرحباً بك في MEN Ai، المحادثة الصوتية. اختر الصوت المناسب من القائمة، واضغط على زر الميكروفون لبدء التحدث.';
+            const welcomeText = 'مرحباً بك في MEN Ai، المحادثة الصوتية. اضغط على زر الميكروفون لبدء التحدث.';
             addBotMessage(welcomeText);
             await speakText(welcomeText, 0.7);
             voiceBtn.classList.add('muted');
@@ -1321,21 +1249,21 @@
             voiceBtn.disabled = true;
             await Promise.all([loadResponses(), loadProducts()]);
             messagesArea.innerHTML = '';
-            // تأكد من تحميل الأصوات
+            // التأكد من تحميل الأصوات
             if (window.speechSynthesis) {
                 const voices = window.speechSynthesis.getVoices();
                 if (voices.length === 0) {
                     window.speechSynthesis.onvoiceschanged = function() {
-                        populateVoiceList();
+                        getMaleVoice();
                     };
                 } else {
-                    populateVoiceList();
+                    getMaleVoice();
                 }
             }
             await welcome();
             voiceBtn.disabled = false;
             await setupAudioAnalyser();
-            console.log('MEN Ai الصوتي جاهز مع صوت ذكر');
+            console.log('MEN Ai الصوتي جاهز مع صوت ذكر تلقائي');
         }
 
         init();
