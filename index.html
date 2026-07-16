@@ -285,6 +285,22 @@
             box-shadow: 0 8px 36px rgba(2, 28, 164, 0.4);
         }
 
+        .header-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid var(--blue-deep);
+            object-fit: cover;
+            cursor: pointer;
+            transition: var(--transition);
+            display: none; /* يظهر بعد تسجيل الدخول */
+        }
+        .header-avatar:hover {
+            border-color: var(--blue-light);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(2, 28, 164, 0.3);
+        }
+
         .menu-toggle-btn {
             background: rgba(2, 28, 164, 0.08);
             border: 1px solid rgba(2, 28, 164, 0.12);
@@ -1805,6 +1821,10 @@
                 font-size: 0.85rem;
                 gap: 6px;
             }
+            .header-avatar {
+                width: 36px;
+                height: 36px;
+            }
             .menu-toggle-btn {
                 width: 42px;
                 height: 42px;
@@ -1966,6 +1986,10 @@
                 padding: 6px 14px;
                 font-size: 0.8rem;
                 gap: 4px;
+            }
+            .header-avatar {
+                width: 32px;
+                height: 32px;
             }
             .menu-toggle-btn {
                 width: 38px;
@@ -2557,7 +2581,10 @@
                 <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN">
             </div>
             <div class="header-actions">
-                <button id="headerLoginBtn" class="login-header-btn"><i class="fas fa-fingerprint"></i> تسجيل دخول </button>
+                <!-- زر تسجيل الدخول (يظهر دائماً، لكن سيتم إخفاؤه عبر JS بعد الدخول) -->
+                <button id="headerLoginBtn" class="login-header-btn"><i class="fas fa-fingerprint"></i> تسجيل دخول</button>
+                <!-- صورة الحساب (مخفية افتراضياً، تظهر بعد تسجيل الدخول) -->
+                <img id="headerAvatar" class="header-avatar" src="" alt="صورة الحساب" onclick="switchPage('SS1')">
                 <button id="menuToggleBtn" class="menu-toggle-btn"><i class="fas fa-ellipsis-vertical"></i></button>
             </div>
             <div id="dropdownMenu" class="dropdown-menu">
@@ -2848,6 +2875,21 @@
         let calendarDate = new Date();
         let currentMonth = calendarDate.getMonth();
         let currentYear = calendarDate.getFullYear();
+
+        // ==================== HEADER UI CONTROL ====================
+        function updateHeaderUI(loggedIn, avatarSrc) {
+            const loginBtn = document.getElementById('headerLoginBtn');
+            const avatarImg = document.getElementById('headerAvatar');
+            if (loggedIn && avatarSrc) {
+                loginBtn.style.display = 'none';
+                avatarImg.src = avatarSrc;
+                avatarImg.style.display = 'inline-block';
+            } else {
+                loginBtn.style.display = 'inline-flex';
+                avatarImg.style.display = 'none';
+                avatarImg.src = '';
+            }
+        }
 
         // ==================== UTILITIES ====================
         function showToast(msg, type = "info") {
@@ -3415,6 +3457,7 @@
                 document.getElementById('portalRoot').innerHTML =
                     `<div class="card-soft" style="text-align:center; padding:40px;"><p style="color:#8890b0;"> تم تسجيل الخروج</p></div>`;
                 updatePortalMenuLink(false);
+                updateHeaderUI(false); // إخفاء الصورة وإظهار زر الدخول
                 showToast(" تم الخروج", "info");
                 switchPage('home');
             });
@@ -3481,6 +3524,7 @@
                 buildDashboard();
                 await sendLoginWebhook();
                 updatePortalMenuLink(true);
+                updateHeaderUI(true, user.avatar); // إظهار صورة الحساب وإخفاء زر الدخول
                 switchPage('SS1');
                 showToast(` مرحباً ${user.fullName}`, "success");
             } else {
@@ -3646,6 +3690,9 @@
         initStore();
         initStats();
         sendVisitorWebhook();
+
+        // تعيين الحالة الابتدائية للهيدر (زر الدخول ظاهر، الصورة مخفية)
+        updateHeaderUI(false);
     </script>
 </body>
 </html>
