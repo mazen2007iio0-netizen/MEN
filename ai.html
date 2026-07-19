@@ -1953,7 +1953,7 @@
                 }
             }
 
-            return '⚠️ نوع الملف غير مدعوم للاستخراج التلقائي.';
+            return ' نوع الملف غير مدعوم للاستخراج التلقائي.';
         }
 
         function showExtractedText(text) {
@@ -2043,7 +2043,7 @@
                 scrollToBottom();
 
                 let replyContent = '';
-                const modelPrefix = currentModel === 'core' ? 'MEN Core' : 'MEN VI3';
+                const modelPrefix = currentModel === 'core' ? '' : 'VI3';
                 if (reply.type === 'products' || reply.type === 'product') {
                     botMsg.innerHTML =
                         `📄 [${modelPrefix}] استجابة بناءً على محتوى الملف "${fileName}":<br><br>` + reply.content +
