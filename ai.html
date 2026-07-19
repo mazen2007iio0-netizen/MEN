@@ -265,6 +265,79 @@
             text-align: right;
         }
 
+        /* ===== عرض المنتجات في صف واحد جنباً إلى جنب ===== */
+        .products-row-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 6px 0 12px 0;
+            margin: 4px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--blue-deep) transparent;
+        }
+        .products-row-wrapper::-webkit-scrollbar {
+            height: 4px;
+        }
+        .products-row-wrapper::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+        .products-row-wrapper::-webkit-scrollbar-thumb {
+            background: var(--blue-deep);
+            border-radius: 12px;
+        }
+
+        .products-row {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 18px;
+            width: max-content;
+            min-width: 100%;
+            padding: 2px 2px 6px 2px;
+        }
+
+        .products-row .men-product-card {
+            min-width: 260px;
+            max-width: 280px;
+            flex: 0 0 auto;
+            margin: 0;
+            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .products-row .men-product-card:hover {
+            transform: translateY(-6px) scale(1.02);
+        }
+        .products-row .men-product-card .product-image {
+            height: 160px;
+            object-fit: cover;
+        }
+        .products-row .men-product-card .product-content {
+            padding: 14px 16px 16px;
+        }
+        .products-row .men-product-card .product-content h2 {
+            font-size: 1.2rem;
+            margin: 8px 0 4px;
+        }
+        .products-row .men-product-card .product-content p {
+            font-size: 0.8rem;
+            margin: 4px 0 12px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .products-row .men-product-card .price {
+            font-size: 1.2rem;
+        }
+        .products-row .men-product-card .btn-product {
+            padding: 6px 14px;
+            font-size: 0.75rem;
+        }
+        .products-row .men-product-card .badge {
+            font-size: 0.7rem;
+            padding: 4px 12px;
+        }
+
         .welcome-animation {
             display: flex;
             flex-direction: column;
@@ -544,7 +617,6 @@
             transform: scale(1);
         }
 
-        /* ===== زر الميكروفون مع تأثيرات الصوت ===== */
         .input-area .btn-voice {
             width: 52px;
             height: 52px;
@@ -572,7 +644,6 @@
             transform: scale(0.92);
         }
 
-        /* حالة التسجيل - نبض وموجات */
         .input-area .btn-voice.recording {
             background: rgba(255, 50, 50, 0.2);
             border-color: #ff4444;
@@ -891,6 +962,23 @@
                 font-size: 0.75rem;
                 padding: 6px 14px;
             }
+            .products-row .men-product-card {
+                min-width: 200px;
+                max-width: 220px;
+            }
+            .products-row .men-product-card .product-image {
+                height: 130px;
+            }
+            .products-row .men-product-card .product-content h2 {
+                font-size: 1rem;
+            }
+            .products-row .men-product-card .price {
+                font-size: 1rem;
+            }
+            .products-row .men-product-card .btn-product {
+                padding: 4px 10px;
+                font-size: 0.65rem;
+            }
         }
         @media (max-width: 480px) {
             .message {
@@ -979,6 +1067,38 @@
                 font-size: 0.65rem;
                 padding: 4px 10px;
             }
+            .products-row .men-product-card {
+                min-width: 160px;
+                max-width: 180px;
+            }
+            .products-row .men-product-card .product-image {
+                height: 110px;
+            }
+            .products-row .men-product-card .product-content {
+                padding: 10px 10px 12px;
+            }
+            .products-row .men-product-card .product-content h2 {
+                font-size: 0.9rem;
+                margin: 4px 0 2px;
+            }
+            .products-row .men-product-card .product-content p {
+                font-size: 0.7rem;
+                -webkit-line-clamp: 1;
+            }
+            .products-row .men-product-card .price {
+                font-size: 0.9rem;
+            }
+            .products-row .men-product-card .btn-product {
+                padding: 4px 8px;
+                font-size: 0.6rem;
+            }
+            .products-row .men-product-card .badge {
+                font-size: 0.6rem;
+                padding: 2px 8px;
+            }
+            .products-row {
+                gap: 10px;
+            }
         }
         @media (max-width: 360px) {
             .logo h1 {
@@ -1029,6 +1149,36 @@
                 min-width: 32px;
                 font-size: 0.8rem;
             }
+            .products-row .men-product-card {
+                min-width: 140px;
+                max-width: 150px;
+            }
+            .products-row .men-product-card .product-image {
+                height: 90px;
+            }
+            .products-row .men-product-card .product-content {
+                padding: 8px 8px 10px;
+            }
+            .products-row .men-product-card .product-content h2 {
+                font-size: 0.8rem;
+            }
+            .products-row .men-product-card .product-content p {
+                display: none;
+            }
+            .products-row .men-product-card .price {
+                font-size: 0.8rem;
+            }
+            .products-row .men-product-card .btn-product {
+                padding: 2px 6px;
+                font-size: 0.5rem;
+            }
+            .products-row .men-product-card .badge {
+                font-size: 0.5rem;
+                padding: 2px 6px;
+            }
+            .products-row {
+                gap: 8px;
+            }
         }
     </style>
 </head>
@@ -1077,11 +1227,9 @@
                         <textarea id="messageInput" rows="1" placeholder="اسألني عن أي شيء..."></textarea>
                         <span class="char-count" id="charCount">0</span>
                     </div>
-                    <!-- زر الميكروفون مع تأثيرات الصوت -->
                     <button class="btn-voice" id="voiceBtn" title="تسجيل صوتي">
                         <i class="fas fa-microphone"></i>
                     </button>
-                    <!-- زر الإرسال -->
                     <button class="btn-send" id="sendBtn" title="إرسال">
                         <i class="fas fa-arrow-up"></i>
                     </button>
@@ -1113,6 +1261,14 @@
         let responses = {};
         let keywordsMap = {};
         let products = [];
+
+        // ===== كلمات مفتاحية للاشتراك والمنتجات =====
+        const SUBSCRIPTION_KEYWORDS = [
+            'اشتراك', 'اشترك', 'اشتري', 'شراء', 'طلب', 'طلب منتج',
+            'pass', 'pro', 'باقة', 'عرض', 'خصم', 'سعر', 'كم سعر',
+            'كيف اشترك', 'اريد اشتراك', 'ابي اشتراك', 'ابغى اشتراك',
+            'عرض المنتج', 'المنتجات', 'قائمة المنتجات', 'عروض'
+        ];
 
         function getReply(category) {
             const list = responses[category]?.responses;
@@ -1188,6 +1344,30 @@
             return null;
         }
 
+        // ===== التحقق من طلب الاشتراك =====
+        function isSubscriptionRequest(text) {
+            const lower = text.trim().toLowerCase();
+            for (const keyword of SUBSCRIPTION_KEYWORDS) {
+                if (lower.includes(keyword.toLowerCase())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // ===== عرض جميع المنتجات في صف واحد جنباً إلى جنب =====
+        function buildAllProductsRow() {
+            if (!products || products.length === 0) {
+                return '<p style="color: #8a9abb; padding: 10px 0;">لا توجد منتجات متاحة حالياً.</p>';
+            }
+            let cardsHtml = '<div class="products-row-wrapper"><div class="products-row">';
+            for (const product of products) {
+                cardsHtml += buildProductCard(product);
+            }
+            cardsHtml += '</div></div>';
+            return cardsHtml;
+        }
+
         function buildProductCard(product) {
             const image = product.image || 'images/default.png';
             const name = product.name || 'منتج';
@@ -1209,7 +1389,7 @@
                                 ${price} <small>${currency}</small>
                             </div>
                             <button class="btn-product" onclick="window.location.href='${link}'">
-                                <i class="fas fa-arrow-left"></i> عرض المنتج
+                                <i class="fas fa-arrow-left"></i> عرض
                             </button>
                         </div>
                     </div>
@@ -1220,11 +1400,13 @@
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
 
+            // ===== العمليات الحسابية =====
             const mathResult = evaluateMath(text);
             if (mathResult !== null) {
                 return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
             }
 
+            // ===== الوقت =====
             if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
                 const now = new Date();
                 const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
@@ -1234,12 +1416,56 @@
                 return { type: 'text', content: reply };
             }
 
+            // ===== طلب الاشتراك أو المنتجات ← عرض جميع المنتجات في صف واحد =====
+            if (isSubscriptionRequest(text)) {
+                const specificProduct = findProduct(text);
+                let productsHtml = buildAllProductsRow();
+                let introMessage = '📦 هذه قائمة بجميع منتجاتنا:';
+                if (specificProduct) {
+                    introMessage = '📦 هذه قائمة بجميع منتجاتنا، بما في ذلك المنتج الذي طلبته:';
+                }
+                return {
+                    type: 'products',
+                    content: `
+                        <div style="width:100%;">
+                            <p style="color: #c0ccf0; margin-bottom: 6px; font-size: 1rem;">
+                                <i class="fas fa-shopping-bag" style="color: var(--blue-light); margin-left: 8px;"></i>
+                                ${introMessage}
+                            </p>
+                            ${productsHtml}
+                            <p style="color: #6a708a; font-size: 0.8rem; margin-top: 6px; text-align: center;">
+                                <i class="fas fa-chevron-left" style="color: var(--blue-light);"></i>
+                                اسحب لليمين لرؤية المزيد
+                                <i class="fas fa-chevron-right" style="color: var(--blue-light);"></i>
+                            </p>
+                        </div>
+                    `
+                };
+            }
+
+            // ===== منتج محدد =====
             const product = findProduct(text);
             if (product) {
                 const cardHtml = buildProductCard(product);
-                return { type: 'product', content: cardHtml };
+                return {
+                    type: 'product',
+                    content: `
+                        <div style="width:100%;">
+                            <p style="color: #c0ccf0; margin-bottom: 6px;">
+                                <i class="fas fa-box" style="color: var(--blue-light); margin-left: 6px;"></i>
+                                هذا المنتج الذي تبحث عنه:
+                            </p>
+                            <div class="products-row-wrapper">
+                                <div class="products-row">
+                                    ${cardHtml}
+                                </div>
+                            </div>
+                        </div>
+                    `
+                };
             }
 
+            // ===== الردود العادية =====
             let category = getCategoryForText(text);
             if (category !== 'default' && responses[category]) {
                 return { type: 'text', content: getReply(category) };
@@ -1298,7 +1524,6 @@
         let isProcessing = false;
         let conversationHistory = [];
 
-        // ===== المتغيرات الخاصة بالتسجيل الصوتي (تحويل الصوت إلى نص فقط) =====
         let recognition = null;
         let isRecording = false;
 
@@ -1317,19 +1542,15 @@
 
             rec.onresult = function(event) {
                 let finalText = '';
-                let interimText = '';
                 for (let i = event.resultIndex; i < event.results.length; i++) {
                     const transcript = event.results[i][0].transcript;
                     if (event.results[i].isFinal) {
                         finalText += transcript;
-                    } else {
-                        interimText += transcript;
                     }
                 }
                 if (finalText) {
                     messageInput.value = finalText;
                     charCount.textContent = finalText.length;
-                    // إرسال السؤال تلقائياً بعد التعرف على الصوت
                     if (finalText.trim()) {
                         sendMessage();
                     }
@@ -1512,9 +1733,9 @@
                 scrollToBottom();
 
                 let replyContent = '';
-                if (reply.type === 'product') {
+                if (reply.type === 'products' || reply.type === 'product') {
                     botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
-                    replyContent = 'تم عرض بطاقة منتج';
+                    replyContent = reply.type === 'products' ? 'تم عرض قائمة المنتجات' : 'تم عرض المنتج';
                     await delay(200);
                 } else {
                     await typeText(botMsg, reply.content, 22);
@@ -1608,24 +1829,35 @@
                     {
                         "id": "men-pass",
                         "name": "MEN PASS",
-                        "description": "اشترك في MEN PASS واحصل على جميع المميزات الحصرية، ودعم أسرع، وتجربة احترافية داخل المنصة.",
+                        "description": "اشترك في MEN PASS واحصل على جميع المميزات الحصرية",
                         "price": "49",
                         "currency": "ر.س",
                         "image": "images/pass.png",
-                        "badge": " منتج مميز",
+                        "badge": "⭐ مميز",
                         "link": "store.html",
-                        "keywords": ["pass", "اشتراك", "men pass", "باقة", "عرض"]
+                        "keywords": ["pass", "اشتراك", "men pass", "باقة"]
                     },
                     {
                         "id": "men-pro",
                         "name": "MEN PRO",
-                        "description": "باقة احترافية للمطورين، تتضمن أدوات متقدمة وتحليلات ذكية ودعم فني على مدار الساعة.",
+                        "description": "باقة احترافية للمطورين مع أدوات متقدمة",
                         "price": "99",
                         "currency": "ر.س",
                         "image": "images/pro.png",
-                        "badge": "🔥 باقة احترافية",
+                        "badge": "🔥 احترافية",
                         "link": "pro.html",
-                        "keywords": ["pro", "احترافي", "مطور", "أدوات", "تحليلات"]
+                        "keywords": ["pro", "احترافي", "مطور", "أدوات"]
+                    },
+                    {
+                        "id": "men-basic",
+                        "name": "MEN BASIC",
+                        "description": "باقة أساسية للمبتدئين",
+                        "price": "19",
+                        "currency": "ر.س",
+                        "image": "images/basic.png",
+                        "badge": "🚀 أساسية",
+                        "link": "basic.html",
+                        "keywords": ["basic", "أساسي", "مبتدئ"]
                     }
                 ];
                 return true;
@@ -1661,7 +1893,7 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع ميزة تحويل الصوت إلى نص وتأثيرات صوتية');
+            console.log('MEN Ai جاهز مع عرض المنتجات في صف واحد');
         }
 
         init();
