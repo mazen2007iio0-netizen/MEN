@@ -724,6 +724,9 @@
             color: var(--blue-light);
             background: rgba(74, 122, 255, 0.1);
         }
+        .input-area .btn-attach.hidden-attach {
+            display: none;
+        }
 
         .file-preview {
             display: none;
@@ -739,9 +742,13 @@
             max-width: 200px;
             overflow: hidden;
             text-overflow: ellipsis;
+            transition: 0.3s ease;
         }
         .file-preview.visible {
             display: inline-flex;
+        }
+        .file-preview.hidden-preview {
+            display: none !important;
         }
         .file-preview .remove-file {
             cursor: pointer;
@@ -1722,6 +1729,16 @@
             }
         });
 
+        // ===== إخفاء الملف بعد الإرسال =====
+        function hideAttachedFile() {
+            attachedFile = null;
+            extractedText = '';
+            filePreview.classList.remove('visible');
+            filePreview.classList.add('hidden-preview');
+            attachBtn.classList.remove('has-file');
+            fileInput.value = '';
+        }
+
         // ===== معالجة الملف المرفق =====
         const fileInput = document.getElementById('fileInput');
         const attachBtn = document.getElementById('attachBtn');
@@ -1736,6 +1753,7 @@
             attachedFile = file;
             fileNameSpan.textContent = file.name.length > 20 ? file.name.substring(0, 18) + '...' : file.name;
             filePreview.classList.add('visible');
+            filePreview.classList.remove('hidden-preview');
             attachBtn.classList.add('has-file');
 
             // استخراج النص
@@ -1758,16 +1776,14 @@
             // معالجة النص المستخرج والرد عليه
             await processExtractedText(text, file.name);
 
+            // ==== إخفاء الملف بعد الإرسال ====
+            hideAttachedFile();
             // إعادة تعيين input الملف
             this.value = '';
         });
 
         removeFileBtn.addEventListener('click', function() {
-            attachedFile = null;
-            extractedText = '';
-            filePreview.classList.remove('visible');
-            attachBtn.classList.remove('has-file');
-            fileInput.value = '';
+            hideAttachedFile();
         });
 
         // ===== معالجة النص المستخرج =====
@@ -1784,9 +1800,8 @@
                 typingIndicator.style.display = 'none';
 
                 // البحث في النص المستخرج عن كلمات مفتاحية
-                const searchQuery = text.substring(0, 500); // نأخذ أول 500 حرف للبحث
+                const searchQuery = text.substring(0, 500);
 
-                // تحقق إذا كان النص يحتوي على طلب اشتراك أو منتج
                 let reply = await generateSmartReply(searchQuery);
 
                 const botMsg = document.createElement('div');
@@ -2100,16 +2115,18 @@
 
         async function sendMessage() {
             const text = messageInput.value.trim();
-            if (!text) return;
-            if (isProcessing) return;
-
+            
             // إذا كان هناك ملف مرفق، نرسل النص مع الملف
             if (attachedFile) {
-                // نرسل النص الموجود مع الملف
                 const combinedText = text + '\n' + extractedText;
                 await processCombinedMessage(text, combinedText);
+                // إخفاء الملف بعد الإرسال
+                hideAttachedFile();
                 return;
             }
+
+            if (!text) return;
+            if (isProcessing) return;
 
             if (suggestedQuestions) {
                 suggestedQuestions.classList.add('hidden');
@@ -2204,7 +2221,6 @@
                 await delay(800 + Math.random() * 1000);
                 typingIndicator.style.display = 'none';
 
-                // البحث عن الرد بناءً على النص المدمج
                 const reply = await generateSmartReply(combinedText);
 
                 const botMsg = document.createElement('div');
@@ -2232,11 +2248,7 @@
                 await sendToDiscord(userText, replyContent);
 
                 // إعادة تعيين الملف بعد الإرسال
-                attachedFile = null;
-                extractedText = '';
-                filePreview.classList.remove('visible');
-                attachBtn.classList.remove('has-file');
-                fileInput.value = '';
+                hideAttachedFile();
 
             } catch (error) {
                 console.error('خطأ في معالجة الرسالة المدمجة:', error);
@@ -2356,7 +2368,6 @@
             sendBtn.disabled = true;
             voiceBtn.disabled = true;
 
-            // تحميل المكتبات الخارجية لاستخراج النص
             await loadExternalLibraries();
 
             await Promise.all([loadResponses(), loadProducts()]);
@@ -2383,10 +2394,9 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع إمكانية رفع الملفات واستخراج النص');
+            console.log('MEN Ai جاهز مع إمكانية رفع الملفات وإخفائها تلقائياً بعد الإرسال');
         }
 
-        // ===== تحميل المكتبات الخارجية =====
         function loadExternalLibraries() {
             return new Promise((resolve) => {
                 let loadedCount = 0;
@@ -2399,35 +2409,30 @@
                     }
                 }
 
-                // Tesseract.js للتعرف على النص في الصور
                 const tesseractScript = document.createElement('script');
                 tesseractScript.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
                 tesseractScript.onload = checkLoaded;
                 tesseractScript.onerror = checkLoaded;
                 document.head.appendChild(tesseractScript);
 
-                // PDF.js لقراءة PDF
                 const pdfScript = document.createElement('script');
                 pdfScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
                 pdfScript.onload = checkLoaded;
                 pdfScript.onerror = checkLoaded;
                 document.head.appendChild(pdfScript);
 
-                // Mammoth.js لقراءة DOCX
                 const mammothScript = document.createElement('script');
                 mammothScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
                 mammothScript.onload = checkLoaded;
                 mammothScript.onerror = checkLoaded;
                 document.head.appendChild(mammothScript);
 
-                // SheetJS لقراءة Excel
                 const xlsxScript = document.createElement('script');
                 xlsxScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
                 xlsxScript.onload = checkLoaded;
                 xlsxScript.onerror = checkLoaded;
                 document.head.appendChild(xlsxScript);
 
-                // مهلة في حال تعطل التحميل
                 setTimeout(resolve, 8000);
             });
         }
