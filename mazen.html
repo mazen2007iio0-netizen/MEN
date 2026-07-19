@@ -293,7 +293,7 @@
             object-fit: cover;
             cursor: pointer;
             transition: var(--transition);
-            display: none; /* يظهر بعد تسجيل الدخول */
+            display: none;
         }
         .header-avatar:hover {
             border-color: var(--blue-light);
@@ -399,46 +399,93 @@
             }
         }
 
-        /* ===== HERO ===== */
+        /* ===== HERO LUXURY (محسّنة) ===== */
         .hero-luxury {
-            padding: 100px 20px 70px;
+            padding: 120px 20px 80px;
             text-align: center;
             position: relative;
             overflow: hidden;
             border-radius: var(--radius-2xl);
             margin-bottom: 50px;
-            background: radial-gradient(ellipse at 50% 30%, rgba(2, 28, 164, 0.08), transparent 70%);
-            border: 1px solid rgba(2, 28, 164, 0.06);
+            background: radial-gradient(ellipse at 50% 30%, rgba(2, 28, 164, 0.12), transparent 70%);
+            border: 1px solid rgba(2, 28, 164, 0.08);
         }
         .hero-luxury .orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px);
+            filter: blur(100px);
             pointer-events: none;
-            opacity: 0.25;
+            opacity: 0.3;
         }
         .hero-luxury .orb.orb-1 {
-            width: 450px;
-            height: 450px;
-            top: -25%;
-            left: -15%;
-            background: radial-gradient(circle, rgba(2, 28, 164, 0.2), transparent 70%);
+            width: 550px;
+            height: 550px;
+            top: -30%;
+            left: -20%;
+            background: radial-gradient(circle, rgba(2, 28, 164, 0.25), transparent 70%);
             animation: orbFloat 22s ease-in-out infinite alternate;
         }
         .hero-luxury .orb.orb-2 {
-            width: 350px;
-            height: 350px;
-            bottom: -25%;
-            right: -15%;
-            background: radial-gradient(circle, rgba(26, 58, 158, 0.15), transparent 70%);
+            width: 450px;
+            height: 450px;
+            bottom: -30%;
+            right: -20%;
+            background: radial-gradient(circle, rgba(26, 58, 158, 0.2), transparent 70%);
             animation: orbFloat 26s ease-in-out infinite alternate-reverse;
+        }
+        .hero-luxury .orb.orb-3 {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            right: 10%;
+            background: radial-gradient(circle, rgba(74, 122, 255, 0.1), transparent 70%);
+            animation: orbFloat 18s ease-in-out infinite alternate;
         }
         @keyframes orbFloat {
             0% {
                 transform: translate(0, 0) scale(1);
             }
             100% {
-                transform: translate(30px, -30px) scale(1.15);
+                transform: translate(40px, -40px) scale(1.2);
+            }
+        }
+
+        .hero-luxury .glow-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(2, 28, 164, 0.05);
+            pointer-events: none;
+            animation: ringPulse 8s ease-in-out infinite;
+        }
+        .hero-luxury .glow-ring.ring-1 {
+            width: 600px;
+            height: 600px;
+            top: -15%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-color: rgba(2, 28, 164, 0.04);
+        }
+        .hero-luxury .glow-ring.ring-2 {
+            width: 800px;
+            height: 800px;
+            top: -25%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-color: rgba(2, 28, 164, 0.02);
+            animation-delay: 2s;
+        }
+        @keyframes ringPulse {
+            0% {
+                transform: translateX(-50%) scale(0.9);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateX(-50%) scale(1.05);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateX(-50%) scale(0.9);
+                opacity: 0.3;
             }
         }
 
@@ -446,75 +493,202 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            background: rgba(2, 28, 164, 0.08);
-            backdrop-filter: blur(8px);
-            padding: 6px 24px 6px 20px;
+            background: rgba(2, 28, 164, 0.1);
+            backdrop-filter: blur(12px);
+            padding: 8px 28px 8px 24px;
             border-radius: 60px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             letter-spacing: 2px;
             color: var(--blue-light);
-            border: 1px solid rgba(2, 28, 164, 0.08);
-            margin-bottom: 24px;
-            font-weight: 500;
+            border: 1px solid rgba(2, 28, 164, 0.1);
+            margin-bottom: 28px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
         }
         .hero-luxury .badge i {
-            color: var(--blue-deep);
+            color: var(--blue-light);
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        @keyframes sparkle {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
         }
 
         .hero-luxury h2 {
-            font-size: 4.6rem;
+            font-size: 5.2rem;
             font-weight: 900;
             line-height: 1.05;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, #ffffff 20%, var(--blue-light) 60%, #021ca4 100%);
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 15%, var(--blue-light) 50%, #021ca4 85%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 60px rgba(2, 28, 164, 0.08);
+            text-shadow: 0 0 80px rgba(2, 28, 164, 0.1);
+            position: relative;
+            z-index: 1;
         }
         .hero-luxury h2 .highlight {
             display: inline-block;
-            background: linear-gradient(135deg, #021ca4, #1a3a9e);
+            background: linear-gradient(135deg, #021ca4, #4a7aff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            border-bottom: 3px solid var(--blue-deep);
-            padding-bottom: 4px;
+            border-bottom: 4px solid var(--blue-light);
+            padding-bottom: 6px;
+            text-shadow: 0 0 40px rgba(74, 122, 255, 0.15);
+        }
+        .hero-luxury h2 .highlight-alt {
+            display: inline-block;
+            color: #ffffff;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            background: none;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
         }
         .hero-luxury p {
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             color: #a0b0d4;
-            max-width: 600px;
-            margin: 0 auto 34px;
+            max-width: 650px;
+            margin: 0 auto 38px;
             font-weight: 300;
             letter-spacing: 0.5px;
-            line-height: 1.9;
+            line-height: 2;
+            position: relative;
+            z-index: 1;
         }
         .hero-luxury .btn-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 18px;
+            gap: 20px;
             justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-luxury .btn-group .btn-primary {
+            padding: 16px 44px;
+            font-size: 1.05rem;
+            box-shadow: 0 8px 40px rgba(2, 28, 164, 0.35);
+        }
+        .hero-luxury .btn-group .btn-secondary {
+            padding: 16px 44px;
+            font-size: 1.05rem;
+            backdrop-filter: blur(16px);
         }
 
-        /* ===== MEN PASS AD ===== */
-        .men-pass-ad {
+        .hero-luxury .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .hero-luxury .floating-elements span {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.04;
+            animation: floatElem 15s ease-in-out infinite;
+        }
+        .hero-luxury .floating-elements span:nth-child(1) {
+            top: 15%;
+            left: 8%;
+            font-size: 4rem;
+            animation-delay: 0s;
+        }
+        .hero-luxury .floating-elements span:nth-child(2) {
+            top: 25%;
+            right: 12%;
+            font-size: 3rem;
+            animation-delay: 3s;
+        }
+        .hero-luxury .floating-elements span:nth-child(3) {
+            bottom: 20%;
+            left: 15%;
+            font-size: 5rem;
+            animation-delay: 6s;
+        }
+        .hero-luxury .floating-elements span:nth-child(4) {
+            bottom: 30%;
+            right: 8%;
+            font-size: 3.5rem;
+            animation-delay: 9s;
+        }
+        @keyframes floatElem {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.02;
+            }
+            50% {
+                transform: translateY(-30px) rotate(10deg);
+                opacity: 0.06;
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.02;
+            }
+        }
+
+        /* ===== HERO STATS BAR ===== */
+        .hero-stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            padding: 30px 40px;
+            margin: -30px auto 40px;
+            background: rgba(6, 8, 18, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(2, 28, 164, 0.06);
             max-width: 700px;
-            margin: -20px auto 50px;
-            padding: 35px 40px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-stats-bar .hs-item {
+            text-align: center;
+        }
+        .hero-stats-bar .hs-item .hs-num {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff, var(--blue-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+        .hero-stats-bar .hs-item .hs-label {
+            font-size: 0.8rem;
+            color: #8890b0;
+            font-weight: 500;
+        }
+
+        /* ===== MEN PASS AD (محسّن) ===== */
+        .men-pass-ad {
+            max-width: 750px;
+            margin: -10px auto 50px;
+            padding: 40px 48px;
             background: linear-gradient(135deg, #0a2a66, #0066ff);
-            border-radius: 22px;
+            border-radius: 28px;
             text-align: center;
             color: #fff;
             font-family: 'Cairo', sans-serif;
-            box-shadow: 0 0 35px rgba(0, 102, 255, 0.45);
+            box-shadow: 0 0 50px rgba(0, 102, 255, 0.4);
             position: relative;
             overflow: hidden;
             transition: var(--transition);
         }
         .men-pass-ad:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 0 50px rgba(0, 102, 255, 0.6);
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 0 70px rgba(0, 102, 255, 0.6);
         }
         .men-pass-ad::before {
             content: '';
@@ -523,7 +697,16 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.05), transparent 70%);
+            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.08), transparent 70%);
+            pointer-events: none;
+        }
+        .men-pass-ad::after {
+            content: '✦';
+            position: absolute;
+            bottom: -20%;
+            right: -5%;
+            font-size: 10rem;
+            color: rgba(255, 255, 255, 0.03);
             pointer-events: none;
         }
         .men-pass-ad>* {
@@ -534,7 +717,7 @@
             display: inline-block;
             background: #fff;
             color: #0066ff;
-            padding: 8px 22px;
+            padding: 8px 26px;
             border-radius: 50px;
             font-weight: 800;
             margin-bottom: 18px;
@@ -542,56 +725,60 @@
             letter-spacing: 0.5px;
         }
         .men-pass-ad h2 {
-            font-size: 2.2rem;
+            font-size: 2.6rem;
             margin: 10px 0 8px;
             font-weight: 900;
             color: #ffffff;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            text-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
         }
         .men-pass-ad p {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             color: #eef5ff;
-            line-height: 1.8;
-            max-width: 500px;
+            line-height: 1.9;
+            max-width: 550px;
             margin: 0 auto;
         }
         .men-pass-ad .features {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin: 28px 0 30px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin: 30px 0 32px;
         }
         .men-pass-ad .features div {
-            background: rgba(255, 255, 255, 0.12);
-            padding: 14px 18px;
-            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 16px 18px;
+            border-radius: 16px;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.95rem;
             backdrop-filter: blur(4px);
             border: 1px solid rgba(255, 255, 255, 0.06);
             transition: var(--transition);
         }
         .men-pass-ad .features div:hover {
             background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.03);
+            transform: scale(1.05);
+        }
+        .men-pass-ad .features div i {
+            margin-left: 8px;
+            font-size: 1.1rem;
         }
         .men-pass-ad .btn-pass {
             display: inline-block;
             background: #fff;
             color: #0066ff;
             text-decoration: none;
-            padding: 16px 42px;
-            border-radius: 16px;
-            font-size: 1.1rem;
+            padding: 18px 48px;
+            border-radius: 60px;
+            font-size: 1.15rem;
             font-weight: 800;
             transition: var(--transition);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
             letter-spacing: 0.5px;
         }
         .men-pass-ad .btn-pass:hover {
             transform: scale(1.06);
             background: #eaf2ff;
-            box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 45px rgba(0, 0, 0, 0.2);
         }
 
         /* ===== GAMES GRID ===== */
@@ -1762,7 +1949,12 @@
         /* ===== RESPONSIVE ===== */
         @media (max-width:1200px) {
             .hero-luxury h2 {
-                font-size: 3.2rem;
+                font-size: 3.8rem;
+            }
+            .hero-stats-bar {
+                gap: 40px;
+                padding: 25px 30px;
+                max-width: 90%;
             }
         }
         @media (max-width:992px) {
@@ -1776,7 +1968,7 @@
                 height: 200px;
             }
             .hero-luxury h2 {
-                font-size: 2.8rem;
+                font-size: 3rem;
             }
             .faq-grid {
                 grid-template-columns: 1fr;
@@ -1797,10 +1989,18 @@
             }
             .men-pass-ad {
                 padding: 30px 25px;
-                margin: -10px auto 40px;
+                margin: -5px auto 40px;
             }
             .men-pass-ad h2 {
-                font-size: 1.8rem;
+                font-size: 2rem;
+            }
+            .men-pass-ad .features {
+                grid-template-columns: 1fr 1fr;
+            }
+            .hero-stats-bar {
+                gap: 30px;
+                padding: 20px;
+                max-width: 100%;
             }
         }
         @media (max-width:768px) {
@@ -1869,14 +2069,22 @@
                 font-size: 1rem;
             }
             .hero-luxury {
-                padding: 60px 16px 50px;
+                padding: 70px 16px 60px;
                 border-radius: var(--radius-xl);
             }
             .hero-luxury h2 {
-                font-size: 2.2rem;
+                font-size: 2.5rem;
             }
             .hero-luxury p {
-                font-size: 1rem;
+                font-size: 1.05rem;
+            }
+            .hero-stats-bar {
+                gap: 20px;
+                padding: 18px 16px;
+                flex-wrap: wrap;
+            }
+            .hero-stats-bar .hs-item .hs-num {
+                font-size: 1.5rem;
             }
             .stats-showcase {
                 gap: 30px 40px;
@@ -1958,24 +2166,25 @@
                 width: 100%;
             }
             .men-pass-ad {
-                padding: 25px 20px;
+                padding: 28px 22px;
                 margin: -5px auto 35px;
-                border-radius: 18px;
+                border-radius: 20px;
             }
             .men-pass-ad h2 {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
             }
             .men-pass-ad .features {
-                gap: 8px;
-                margin: 20px 0 22px;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin: 22px 0 24px;
             }
             .men-pass-ad .features div {
-                padding: 10px 14px;
+                padding: 12px 16px;
                 font-size: 0.9rem;
             }
             .men-pass-ad .btn-pass {
-                padding: 14px 32px;
-                font-size: 1rem;
+                padding: 16px 38px;
+                font-size: 1.05rem;
             }
         }
         @media (max-width:480px) {
@@ -2003,12 +2212,18 @@
                 padding: 16px;
             }
             .hero-luxury h2 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
             .hero-luxury .btn-primary,
             .hero-luxury .btn-secondary {
                 padding: 10px 20px;
                 font-size: 0.85rem;
+            }
+            .hero-stats-bar .hs-item .hs-num {
+                font-size: 1.3rem;
+            }
+            .hero-stats-bar .hs-item .hs-label {
+                font-size: 0.7rem;
             }
             .games-grid {
                 grid-template-columns: 1fr;
@@ -2086,24 +2301,24 @@
                 padding: 6px 16px;
             }
             .men-pass-ad h2 {
-                font-size: 1.3rem;
+                font-size: 1.4rem;
             }
             .men-pass-ad p {
                 font-size: 0.9rem;
             }
             .men-pass-ad .features {
                 grid-template-columns: 1fr;
-                gap: 6px;
+                gap: 8px;
                 margin: 16px 0 18px;
             }
             .men-pass-ad .features div {
-                padding: 8px 12px;
+                padding: 10px 14px;
                 font-size: 0.85rem;
             }
             .men-pass-ad .btn-pass {
-                padding: 12px 28px;
-                font-size: 0.95rem;
-                border-radius: 12px;
+                padding: 14px 30px;
+                font-size: 1rem;
+                border-radius: 50px;
             }
         }
 
@@ -2784,7 +2999,7 @@
     <main>
         <div class="container">
 
-            <!-- ===== HOME ===== -->
+            <!-- ===== HOME (الصفحة الرئيسية المُحسَّنة) ===== -->
             <section id="home" class="page active">
                 <div class="fixed-ad" id="fixedAd">
                     <button class="close-ad-btn" id="closeAdBtn" aria-label="إغلاق الإعلان">✕</button>
@@ -2794,23 +3009,48 @@
                 <div class="hero-luxury">
                     <div class="orb orb-1"></div>
                     <div class="orb orb-2"></div>
-                    <div class="badge"><i class="fas fa-"></i> Team · MEN</div>
-                    <h2>سيطرة <span class="highlight">أقوى</span></h2>
-                    <p>فريق اللاعبين وصنّاع المحتوى.</p>
+                    <div class="orb orb-3"></div>
+                    <div class="glow-ring ring-1"></div>
+                    <div class="glow-ring ring-2"></div>
+                    <div class="floating-elements">
+                        <span>✦</span>
+                        <span>◆</span>
+                        <span>✦</span>
+                        <span>◆</span>
+                    </div>
+                    
+                    <div class="badge"><i class="fas fa-crown"></i> النخبة · MEN</div>
+                    <h2>حيث <span class="highlight-alt">تُصنع</span> <span class="highlight">الأساطير</span></h2>
+                    <p>فريق اللاعبين وصنّاع المحتوى، نُعيد تعريف المنافسة والإبداع في عالم الألعاب الإلكترونية.</p>
                     <div class="btn-group">
-                        <div class="men-pass" style="position:relative; overflow:hidden; padding:35px; border-radius:28px; background:rgba(8,18,40,.45); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.08); box-shadow:0 0 40px rgba(0,110,255,.35); text-align:center; color:#fff; font-family:Cairo,sans-serif; width:100%;">
-                            <h1 style="margin:0; font-size:2.5rem;">Pass</h1>
-                            <h3 style="margin:10px 0;">ارتقِ بتجربتك</h3>
-                            <p style="color:#dbe9ff; margin-bottom:25px;">احصل على أفضل تجربة مع مزايا حصرية.</p>
-                            <a href="pass.html" target="_blank" class="btn-primary" style="display:inline-block; padding:14px 34px; border-radius:50px; text-decoration:none; font-weight:bold; color:#fff; background:linear-gradient(90deg,#021ca4,#021ca4); box-shadow:0 0 25px rgba(0,119,255,.6); transition:.3s;">
-                                <i class="fas fa-plus"></i> اشترك الان
-                            </a>
-                        </div>
+                        <a href="#games" class="btn-primary"><i class="fas fa-rocket"></i> استكشف الألعاب</a>
+                        <a href="#about" class="btn-secondary"><i class="fas fa-chevron-left"></i> تعرف علينا</a>
                     </div>
                 </div>
 
+                <!-- Hero Stats Bar -->
+                <div class="hero-stats-bar">
+                    <div class="hs-item"><div class="hs-num" data-target="12">0</div><div class="hs-label">عضو أساسي</div></div>
+                    <div class="hs-item"><div class="hs-num" data-target="9">0</div><div class="hs-label">انتصار</div></div>
+                    <div class="hs-item"><div class="hs-num" data-target="2">0</div><div class="hs-label">بطولة</div></div>
+                    <div class="hs-item"><div class="hs-num" data-target="6">0</div><div class="hs-label">سنوات من التميز</div></div>
+                </div>
+
+                <!-- MEN PASS AD (محسّن) -->
+                <div class="men-pass-ad">
+                    <div class="badge"><i class="fas fa-gem"></i> عرض حصري</div>
+                    <h2>🌟 MEN Pass</h2>
+                    <p>ارتقِ بتجربتك مع مزايا حصرية لعشاق الألعاب والمحتوى الرقمي.</p>
+                    <div class="features">
+                        <div><i class="fas fa-trophy"></i> خصومات حصرية</div>
+                        <div><i class="fas fa-users"></i> وصول مبكر</div>
+                        <div><i class="fas fa-gift"></i> جوائز أسبوعية</div>
+                    </div>
+                    <a href="pass.html" target="_blank" class="btn-pass"><i class="fas fa-plus"></i> اشترك الآن</a>
+                </div>
+
                 <!-- NEWS -->
-                <div class="section-label">
+                <div class="section-label" id="games">
                     <span class="icon-badge"><i class="fas fa-newspaper"></i> أخبار</span>
                     <h3>أحدث الأخبار</h3>
                     <span class="line"></span>
@@ -3439,7 +3679,7 @@
                 if (Object.keys(usersDB).length > 0) {
                     for (const [id, u] of Object.entries(usersDB)) {
                         if (id !== currentUserData.userId) {
-                            employeeOptions += `<option value="${id}">${u.fullName} (${id})</option>`;
+                            employeeOptions += `<option value="${id}">${u.fullName}</option>`;
                         }
                     }
                 }
@@ -3488,7 +3728,7 @@
                             </div>
                         </div>
                         <div style="margin-top:12px;">
-                            <h4 style="color:var(--blue-light);">📋 متطلبات الأداء</h4>
+                            <h4 style="color:var(--blue-light);"> متطلبات الأداء</h4>
                             <div class="table-responsive">
                                 <table class="table-clean">
                                     <thead><tr><th>المتطلب</th><th>التاريخ</th><th>الحالة</th></tr></thead>
@@ -3512,11 +3752,11 @@
                             <button id="attendancePortalBtn2" class="btn-primary" style="padding:10px 28px; font-size:0.9rem;"><i class="fas fa-clock"></i> طلب تحضير</button>
                         </div>
                         <div style="margin-top:16px;">
-                            <h4 style="color:var(--blue-light);">📅 التقويم</h4>
+                            <h4 style="color:var(--blue-light);"> التقويم</h4>
                             <div id="calendarContainerMore"></div>
                         </div>
                         <div style="margin-top:12px;">
-                            <h4 style="color:var(--blue-light);">📋 الجدول</h4>
+                            <h4 style="color:var(--blue-light);"> الجدول</h4>
                             <div style="max-height:200px; overflow-y:auto;">
                                 <table class="table-clean" style="font-size:0.85rem;">
                                     <thead><tr><th>النوع</th><th>العنوان</th><th>التاريخ</th><th>الحالة</th></tr></thead>
@@ -3711,7 +3951,7 @@
                     }
 
                     const embed = {
-                        title: "📬 طلب خدمة",
+                        title: " طلب خدمة",
                         color: 0x021ca4,
                         fields: [
                             { name: "مرسل من", value: currentUserData.fullName, inline: true },
@@ -4031,7 +4271,7 @@
 
         // ==================== INIT ====================
         function initStats() {
-            document.querySelectorAll('#about .number, #home .stats-showcase .number').forEach(stat => {
+            document.querySelectorAll('#about .number, #home .stats-showcase .number, .hero-stats-bar .hs-num').forEach(stat => {
                 const target = +stat.getAttribute('data-target');
                 let cur = 0;
                 const inc = target / 50;
