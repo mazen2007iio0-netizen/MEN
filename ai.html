@@ -330,6 +330,7 @@
             padding: 2px 12px;
             border-radius: 20px;
             border: 1px solid rgba(74, 122, 255, 0.05);
+            margin-right: 6px;
         }
 
         .messages-area {
@@ -1686,28 +1687,23 @@
             'كيف اشترك', 'اريد اشتراك', 'ابي اشتراك', 'ابغى اشتراك'
         ];
 
-        // ===== متغيرات النموذج =====
-        let currentModel = 'core'; // 'core' | 'vi3'
+        let currentModel = 'core';
         let attachedFile = null;
         let extractedText = '';
 
-        // ===== عناصر النماذج =====
         const modelCoreBtn = document.getElementById('modelCore');
         const modelVI3Btn = document.getElementById('modelVI3');
         const currentModelBadge = document.getElementById('currentModelBadge');
         const modelStatusText = document.getElementById('modelStatusText');
 
-        // ===== تبديل النموذج =====
         function switchModel(model) {
             if (model === 'vi3') {
-                // MEN VI3 غير متاح بعد
                 modelVI3Btn.classList.add('disabled');
                 return;
             }
 
             currentModel = model;
 
-            // تحديث الأزرار
             document.querySelectorAll('.model-option').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -1718,10 +1714,10 @@
                 document.querySelector('.model-status .dot').className = 'dot online';
             }
 
-            // إضافة رسالة في المحادثة
+            // رسالة تبديل النموذج بدون اسم النموذج
             const modelMsg = document.createElement('div');
             modelMsg.className = 'message bot';
-            modelMsg.innerHTML = ` تم التبديل إلى <strong>${model === 'core' ? 'MEN Core' : 'MEN VI3'}</strong>` +
+            modelMsg.innerHTML = `🔄 تم التبديل إلى النموذج الجديد` +
                 `<span class="msg-time">الآن</span>`;
             messagesArea.appendChild(modelMsg);
             scrollToBottom();
@@ -1732,10 +1728,9 @@
         });
 
         modelVI3Btn.addEventListener('click', function() {
-            // إظهار رسالة بأن النموذج قريباً
             const msg = document.createElement('div');
             msg.className = 'message bot';
-            msg.innerHTML = `🚀 <strong>MEN VI3</strong> قريباً! ترقبوا التحديثات القادمة.` +
+            msg.innerHTML = `🚀 نموذج MEN VI3 قريباً! ترقبوا التحديثات القادمة.` +
                 `<span class="msg-time">الآن</span>`;
             messagesArea.appendChild(msg);
             scrollToBottom();
@@ -1953,7 +1948,7 @@
                 }
             }
 
-            return ' نوع الملف غير مدعوم للاستخراج التلقائي.';
+            return '⚠️ نوع الملف غير مدعوم للاستخراج التلقائي.';
         }
 
         function showExtractedText(text) {
@@ -2003,9 +1998,6 @@
 
             showExtractedText(text);
 
-            const userMessage =
-                `📎 تم رفع ملف: ${file.name}\n\n📄 النص المستخرج:\n${text.substring(0, 300)}${text.length > 300 ? '...' : ''}`;
-
             const userMsg = document.createElement('div');
             userMsg.className = 'message user';
             userMsg.innerHTML = `📎 <strong>${file.name}</strong> (تم استخراج النص)` + `<span class="msg-time">الآن</span>`;
@@ -2043,15 +2035,14 @@
                 scrollToBottom();
 
                 let replyContent = '';
-                const modelPrefix = currentModel === 'core' ? '' : 'VI3';
                 if (reply.type === 'products' || reply.type === 'product') {
                     botMsg.innerHTML =
-                        `📄 [${modelPrefix}] استجابة بناءً على محتوى الملف "${fileName}":<br><br>` + reply.content +
+                        `📄 استجابة بناءً على محتوى الملف "${fileName}":<br><br>` + reply.content +
                         `<span class="msg-time">الآن</span>`;
                     replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
                     await delay(200);
                 } else {
-                    const prefix = `📄 [${modelPrefix}] استجابة بناءً على محتوى الملف "${fileName}":\n\n`;
+                    const prefix = `📄 استجابة بناءً على محتوى الملف "${fileName}":\n\n`;
                     botMsg.innerHTML = prefix;
                     await typeText(botMsg, reply.content, 22);
                     const timeSpan = document.createElement('span');
@@ -2335,7 +2326,7 @@
         async function sendToDiscord(userMessage, botReply) {
             try {
                 const payload = {
-                    content: `**رسالة جديدة من MEN Ai [${currentModel === 'core' ? '' : ' VI3'}]**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
+                    content: `**رسالة جديدة من MEN Ai**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
                 };
                 await fetch('https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
                     method: 'POST',
@@ -2397,13 +2388,12 @@
                 scrollToBottom();
 
                 let replyContent = '';
-                const modelPrefix = currentModel === 'core' ? 'MEN Core' : 'MEN VI3';
                 if (reply.type === 'products' || reply.type === 'product') {
-                    botMsg.innerHTML = `[${modelPrefix}] ` + reply.content + `<span class="msg-time">الآن</span>`;
+                    botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
                     replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
                     await delay(200);
                 } else {
-                    await typeText(botMsg, `[${modelPrefix}] ${reply.content}`, 22);
+                    await typeText(botMsg, reply.content, 22);
                     const timeSpan = document.createElement('span');
                     timeSpan.className = 'msg-time';
                     timeSpan.textContent = 'الآن';
@@ -2462,15 +2452,14 @@
                 scrollToBottom();
 
                 let replyContent = '';
-                const modelPrefix = currentModel === 'core' ? '' : 'VI3';
                 if (reply.type === 'products' || reply.type === 'product') {
                     const fileNote = attachedFile ? `📄 بناءً على محتوى الملف "${attachedFile.name}"<br><br>` : '';
-                    botMsg.innerHTML = `[${modelPrefix}] ` + fileNote + reply.content + `<span class="msg-time">الآن</span>`;
+                    botMsg.innerHTML = fileNote + reply.content + `<span class="msg-time">الآن</span>`;
                     replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
                     await delay(200);
                 } else {
                     const prefix = attachedFile ? `📄 بناءً على محتوى الملف "${attachedFile.name}":\n\n` : '';
-                    botMsg.innerHTML = `[${modelPrefix}] ` + prefix;
+                    botMsg.innerHTML = prefix;
                     await typeText(botMsg, reply.content, 22);
                     const timeSpan = document.createElement('span');
                     timeSpan.className = 'msg-time';
@@ -2623,7 +2612,7 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع اختيار النماذج (MEN Core | MEN VI3 قريباً)');
+            console.log('MEN Ai جاهز مع اختيار النماذج (بدون ظهور اسم النموذج في الرسائل)');
         }
 
         function loadExternalLibraries() {
