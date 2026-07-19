@@ -2462,7 +2462,7 @@
                 scrollToBottom();
 
                 let replyContent = '';
-                const modelPrefix = currentModel === 'core' ? 'MEN Core' : 'MEN VI3';
+                const modelPrefix = currentModel === 'core' ? '' : 'VI3';
                 if (reply.type === 'products' || reply.type === 'product') {
                     const fileNote = attachedFile ? `📄 بناءً على محتوى الملف "${attachedFile.name}"<br><br>` : '';
                     botMsg.innerHTML = `[${modelPrefix}] ` + fileNote + reply.content + `<span class="msg-time">الآن</span>`;
