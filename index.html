@@ -401,14 +401,18 @@
 
         /* ===== HERO ===== */
         .hero-luxury {
-            padding: 100px 20px 70px;
+            padding: 80px 20px 50px;
             text-align: center;
             position: relative;
             overflow: hidden;
             border-radius: var(--radius-2xl);
-            margin-bottom: 50px;
+            margin-bottom: 40px;
             background: radial-gradient(ellipse at 50% 30%, rgba(2, 28, 164, 0.08), transparent 70%);
             border: 1px solid rgba(2, 28, 164, 0.06);
+            background-image: url('https://www.socialcreator.com/srv/imgs/ti_imgs/201002_328971.png');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
         }
         .hero-luxury .orb {
             position: absolute;
@@ -495,6 +499,60 @@
             flex-wrap: wrap;
             gap: 18px;
             justify-content: center;
+        }
+        .hero-luxury .search-bar {
+            max-width: 500px;
+            margin: 30px auto 0;
+            position: relative;
+        }
+        .hero-luxury .search-bar input {
+            width: 100%;
+            padding: 14px 24px 14px 50px;
+            border-radius: 60px;
+            border: 1px solid rgba(2, 28, 164, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            color: #f0f4ff;
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+        }
+        .hero-luxury .search-bar input::placeholder {
+            color: #8890b0;
+        }
+        .hero-luxury .search-bar input:focus {
+            border-color: var(--blue-light);
+            box-shadow: 0 0 30px rgba(2, 28, 164, 0.08);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .hero-luxury .search-bar .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--blue-light);
+            font-size: 1.2rem;
+            opacity: 0.6;
+        }
+        .hero-luxury .search-bar .search-btn {
+            position: absolute;
+            left: 6px;
+            top: 6px;
+            bottom: 6px;
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            border: none;
+            color: #fff;
+            padding: 0 24px;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        .hero-luxury .search-bar .search-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.3);
         }
 
         /* ===== MEN PASS AD ===== */
@@ -2797,7 +2855,15 @@
                     <div class="badge"><i class="fas fa-"></i> Team · MEN</div>
                     <h2>سيطرة <span class="highlight">أقوى</span></h2>
                     <p>فريق اللاعبين وصنّاع المحتوى.</p>
-                    <div class="btn-group">
+
+                    <!-- ===== NEW SEARCH BAR ===== -->
+                    <div class="search-bar">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" placeholder="ابحث في MEN Ai ..." id="globalSearchInput" onkeydown="if(event.key === 'Enter') performSearch()">
+                        <button class="search-btn" onclick="performSearch()">بحث</button>
+                    </div>
+
+                    <div class="btn-group" style="margin-top: 30px;">
                         <div class="men-pass" style="position:relative; overflow:hidden; padding:35px; border-radius:28px; background:rgba(8,18,40,.45); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.08); box-shadow:0 0 40px rgba(0,110,255,.35); text-align:center; color:#fff; font-family:Cairo,sans-serif; width:100%;">
                             <h1 style="margin:0; font-size:2.5rem;">Pass</h1>
                             <h3 style="margin:10px 0;">ارتقِ بتجربتك</h3>
@@ -3054,6 +3120,35 @@
         let calendarDate = new Date();
         let currentMonth = calendarDate.getMonth();
         let currentYear = calendarDate.getFullYear();
+
+        // ==================== SEARCH FUNCTION ====================
+        function performSearch() {
+            const query = document.getElementById('globalSearchInput').value.trim();
+            if (!query) {
+                showToast('الرجاء إدخال نص للبحث', 'info');
+                return;
+            }
+            // Simple search: navigate to news page and highlight matching games
+            switchPage('news');
+            const gameTitles = document.querySelectorAll('#news .game-card .game-content h4');
+            let found = false;
+            gameTitles.forEach(title => {
+                const parent = title.closest('.game-card');
+                if (title.textContent.toLowerCase().includes(query.toLowerCase())) {
+                    parent.style.borderColor = 'var(--blue-light)';
+                    parent.style.boxShadow = '0 0 40px rgba(2, 28, 164, 0.2)';
+                    found = true;
+                } else {
+                    parent.style.borderColor = '';
+                    parent.style.boxShadow = '';
+                }
+            });
+            if (!found) {
+                showToast('لم يتم العثور على نتائج', 'info');
+            } else {
+                showToast(`تم العثور على نتائج لـ "${query}"`, 'success');
+            }
+        }
 
         // ==================== HEADER UI CONTROL ====================
         function updateHeaderUI(loggedIn, avatarSrc) {
