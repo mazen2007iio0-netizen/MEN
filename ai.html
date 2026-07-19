@@ -530,11 +530,13 @@
             border-top: 1px solid rgba(2, 28, 164, 0.08);
             display: flex;
             align-items: flex-end;
-            gap: 12px;
+            gap: 8px;
             background: rgba(0, 0, 0, 0.4);
+            flex-wrap: wrap;
         }
         .input-area .input-wrapper {
             flex: 1;
+            min-width: 150px;
             display: flex;
             align-items: flex-end;
             background: rgba(255, 255, 255, 0.03);
@@ -680,6 +682,149 @@
         .input-area .btn-voice:disabled {
             opacity: 0.3;
             cursor: not-allowed;
+        }
+
+        /* ===== زر إرفاق الملف ===== */
+        .input-area .btn-attach {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(2, 28, 164, 0.2);
+            color: #a0b0d4;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .input-area .btn-attach:hover {
+            background: rgba(74, 122, 255, 0.08);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: scale(1.05);
+        }
+        .input-area .btn-attach:active {
+            transform: scale(0.92);
+        }
+        .input-area .btn-attach input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            font-size: 0;
+        }
+        .input-area .btn-attach.has-file {
+            border-color: var(--blue-light);
+            color: var(--blue-light);
+            background: rgba(74, 122, 255, 0.1);
+        }
+
+        .file-preview {
+            display: none;
+            padding: 6px 16px 6px 12px;
+            background: rgba(74, 122, 255, 0.08);
+            border-radius: 20px;
+            border: 1px solid rgba(74, 122, 255, 0.15);
+            font-size: 0.8rem;
+            color: #a0b0d4;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .file-preview.visible {
+            display: inline-flex;
+        }
+        .file-preview .remove-file {
+            cursor: pointer;
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            padding: 0 4px;
+            transition: 0.3s;
+        }
+        .file-preview .remove-file:hover {
+            transform: scale(1.2);
+            color: #ff4444;
+        }
+        .file-preview i {
+            color: var(--blue-light);
+        }
+
+        /* ===== Modal لعرض النص المستخرج ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-box {
+            background: rgba(10, 16, 32, 0.95);
+            border: 1px solid rgba(74, 122, 255, 0.2);
+            border-radius: 28px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            padding: 30px;
+            box-shadow: 0 0 60px rgba(74, 122, 255, 0.1);
+            overflow-y: auto;
+            position: relative;
+        }
+        .modal-box h3 {
+            color: var(--blue-light);
+            font-size: 1.3rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-box .modal-text {
+            color: #c0ccf0;
+            line-height: 1.8;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(74, 122, 255, 0.05);
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+        .modal-box .modal-close {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            border: none;
+            border-radius: 40px;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+        .modal-box .modal-close:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
+        }
+        .modal-box .modal-close:active {
+            transform: scale(0.95);
         }
 
         footer {
@@ -876,7 +1021,7 @@
             }
             .input-area {
                 padding: 10px 14px 14px;
-                gap: 8px;
+                gap: 6px;
             }
             .input-area .input-wrapper {
                 padding: 2px 12px 2px 6px;
@@ -888,7 +1033,8 @@
                 min-height: 36px;
             }
             .input-area .btn-send,
-            .input-area .btn-voice {
+            .input-area .btn-voice,
+            .input-area .btn-attach {
                 width: 44px;
                 height: 44px;
                 min-width: 44px;
@@ -979,6 +1125,15 @@
                 padding: 4px 10px;
                 font-size: 0.65rem;
             }
+            .file-preview {
+                max-width: 120px;
+                font-size: 0.7rem;
+                padding: 4px 10px 4px 8px;
+            }
+            .modal-box {
+                padding: 20px;
+                margin: 10px;
+            }
         }
         @media (max-width: 480px) {
             .message {
@@ -991,7 +1146,8 @@
                 min-height: 32px;
             }
             .input-area .btn-send,
-            .input-area .btn-voice {
+            .input-area .btn-voice,
+            .input-area .btn-attach {
                 width: 38px;
                 height: 38px;
                 min-width: 38px;
@@ -1099,6 +1255,24 @@
             .products-row {
                 gap: 10px;
             }
+            .file-preview {
+                max-width: 80px;
+                font-size: 0.6rem;
+                padding: 3px 6px 3px 4px;
+            }
+            .file-preview i {
+                font-size: 0.7rem;
+            }
+            .modal-box {
+                padding: 16px;
+            }
+            .modal-box h3 {
+                font-size: 1.1rem;
+            }
+            .modal-box .modal-text {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
         }
         @media (max-width: 360px) {
             .logo h1 {
@@ -1143,7 +1317,8 @@
                 padding: 3px 8px;
             }
             .input-area .btn-send,
-            .input-area .btn-voice {
+            .input-area .btn-voice,
+            .input-area .btn-attach {
                 width: 32px;
                 height: 32px;
                 min-width: 32px;
@@ -1178,6 +1353,18 @@
             }
             .products-row {
                 gap: 8px;
+            }
+            .file-preview {
+                max-width: 60px;
+                font-size: 0.5rem;
+                padding: 2px 4px;
+                gap: 4px;
+            }
+            .file-preview i {
+                font-size: 0.6rem;
+            }
+            .file-preview .remove-file {
+                font-size: 0.7rem;
             }
         }
     </style>
@@ -1223,10 +1410,23 @@
                 </div>
 
                 <div class="input-area">
+                    <!-- ===== زر إرفاق الملف (يسار الكتابة) ===== -->
+                    <button class="btn-attach" id="attachBtn" title="إرفاق ملف أو صورة">
+                        <i class="fas fa-paperclip"></i>
+                        <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls">
+                    </button>
+
+                    <div class="file-preview" id="filePreview">
+                        <i class="fas fa-file"></i>
+                        <span id="fileName">ملف</span>
+                        <span class="remove-file" id="removeFile"><i class="fas fa-times"></i></span>
+                    </div>
+
                     <div class="input-wrapper">
                         <textarea id="messageInput" rows="1" placeholder="اسألني عن أي شيء..."></textarea>
                         <span class="char-count" id="charCount">0</span>
                     </div>
+
                     <button class="btn-voice" id="voiceBtn" title="تسجيل صوتي">
                         <i class="fas fa-microphone"></i>
                     </button>
@@ -1237,6 +1437,15 @@
             </div>
         </div>
     </main>
+
+    <!-- ===== مودال عرض النص المستخرج ===== -->
+    <div class="modal-overlay" id="extractModal">
+        <div class="modal-box">
+            <h3><i class="fas fa-file-alt"></i> النص المستخرج من الملف</h3>
+            <div class="modal-text" id="extractedText">جاري استخراج النص...</div>
+            <button class="modal-close" id="modalClose">إغلاق</button>
+        </div>
+    </div>
 
     <footer>
         <div class="container">
@@ -1268,6 +1477,10 @@
             'MEN', 'pro', 'باقة', 'عرض', 'خصم', 'سعر', 'كم سعر',
             'كيف اشترك', 'اريد اشتراك', 'ابي اشتراك', 'ابغى اشتراك'
         ];
+
+        // ===== متغيرات الملف المرفق =====
+        let attachedFile = null;
+        let extractedText = '';
 
         function getReply(category) {
             const list = responses[category]?.responses;
@@ -1343,7 +1556,6 @@
             return null;
         }
 
-        // ===== التحقق من طلب الاشتراك =====
         function isSubscriptionRequest(text) {
             const lower = text.trim().toLowerCase();
             for (const keyword of SUBSCRIPTION_KEYWORDS) {
@@ -1354,7 +1566,6 @@
             return false;
         }
 
-        // ===== عرض جميع المنتجات في صف واحد جنباً إلى جنب =====
         function buildAllProductsRow() {
             if (!products || products.length === 0) {
                 return '<p style="color: #8a9abb; padding: 10px 0;">لا توجد منتجات متاحة حالياً.</p>';
@@ -1396,16 +1607,239 @@
             `;
         }
 
+        // ===== استخراج النص من الملف باستخدام Tesseract.js للصور =====
+        async function extractTextFromFile(file) {
+            const fileType = file.type;
+            const fileName = file.name.toLowerCase();
+
+            // صور
+            if (fileType.startsWith('image/')) {
+                try {
+                    const imageUrl = URL.createObjectURL(file);
+                    const result = await Tesseract.recognize(imageUrl, 'ara');
+                    URL.revokeObjectURL(imageUrl);
+                    return result.data.text || 'لم يتم التعرف على أي نص في الصورة.';
+                } catch (error) {
+                    console.error('خطأ في التعرف على الصورة:', error);
+                    return 'حدث خطأ أثناء معالجة الصورة.';
+                }
+            }
+
+            // ملفات نصية
+            if (fileType === 'text/plain' || fileName.endsWith('.txt')) {
+                try {
+                    const text = await file.text();
+                    return text || 'الملف فارغ.';
+                } catch (error) {
+                    return 'حدث خطأ أثناء قراءة الملف النصي.';
+                }
+            }
+
+            // ملفات PDF - استخدام PDF.js
+            if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    let fullText = '';
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items.map(item => item.str).join(' ');
+                        fullText += pageText + '\n';
+                    }
+                    return fullText || 'لم يتم العثور على نص في ملف PDF.';
+                } catch (error) {
+                    console.error('خطأ في قراءة PDF:', error);
+                    return 'حدث خطأ أثناء قراءة ملف PDF.';
+                }
+            }
+
+            // ملفات Word (docx) - استخدام mammoth.js
+            if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileName.endsWith(
+                    '.docx')) {
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
+                    return result.value || 'الملف فارغ أو لا يحتوي على نص.';
+                } catch (error) {
+                    console.error('خطأ في قراءة DOCX:', error);
+                    return 'حدث خطأ أثناء قراءة ملف Word.';
+                }
+            }
+
+            // ملفات Excel (xlsx) - استخدام SheetJS
+            if (fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || fileName.endsWith(
+                    '.xlsx') || fileName.endsWith('.xls')) {
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                    let allText = '';
+                    workbook.SheetNames.forEach(sheetName => {
+                        const sheet = workbook.Sheets[sheetName];
+                        const json = XLSX.utils.sheet_to_json(sheet);
+                        if (json.length > 0) {
+                            allText += `\n--- ${sheetName} ---\n`;
+                            json.forEach(row => {
+                                allText += Object.values(row).join(' | ') + '\n';
+                            });
+                        }
+                    });
+                    return allText || 'لم يتم العثور على بيانات في ملف Excel.';
+                } catch (error) {
+                    console.error('خطأ في قراءة Excel:', error);
+                    return 'حدث خطأ أثناء قراءة ملف Excel.';
+                }
+            }
+
+            // CSV
+            if (fileType === 'text/csv' || fileName.endsWith('.csv')) {
+                try {
+                    const text = await file.text();
+                    return text || 'الملف فارغ.';
+                } catch (error) {
+                    return 'حدث خطأ أثناء قراءة ملف CSV.';
+                }
+            }
+
+            return '⚠️ نوع الملف غير مدعوم للاستخراج التلقائي.';
+        }
+
+        // ===== عرض النص المستخرج في المودال =====
+        function showExtractedText(text) {
+            const modal = document.getElementById('extractModal');
+            const textArea = document.getElementById('extractedText');
+            textArea.textContent = text || 'لم يتم استخراج أي نص.';
+            modal.classList.add('active');
+        }
+
+        document.getElementById('modalClose').addEventListener('click', function() {
+            document.getElementById('extractModal').classList.remove('active');
+        });
+
+        document.getElementById('extractModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
+
+        // ===== معالجة الملف المرفق =====
+        const fileInput = document.getElementById('fileInput');
+        const attachBtn = document.getElementById('attachBtn');
+        const filePreview = document.getElementById('filePreview');
+        const fileNameSpan = document.getElementById('fileName');
+        const removeFileBtn = document.getElementById('removeFile');
+
+        fileInput.addEventListener('change', async function(e) {
+            const file = this.files[0];
+            if (!file) return;
+
+            attachedFile = file;
+            fileNameSpan.textContent = file.name.length > 20 ? file.name.substring(0, 18) + '...' : file.name;
+            filePreview.classList.add('visible');
+            attachBtn.classList.add('has-file');
+
+            // استخراج النص
+            const text = await extractTextFromFile(file);
+            extractedText = text;
+
+            // عرض النص المستخرج في المودال
+            showExtractedText(text);
+
+            // إرسال النص المستخرج كرسالة تلقائية مع السؤال
+            const userMessage = `📎 تم رفع ملف: ${file.name}\n\n📄 النص المستخرج:\n${text.substring(0, 300)}${text.length > 300 ? '...' : ''}`;
+
+            // إضافة رسالة المستخدم مع الملف
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.innerHTML = `📎 <strong>${file.name}</strong> (تم استخراج النص)` + `<span class="msg-time">الآن</span>`;
+            messagesArea.appendChild(userMsg);
+            scrollToBottom();
+
+            // معالجة النص المستخرج والرد عليه
+            await processExtractedText(text, file.name);
+
+            // إعادة تعيين input الملف
+            this.value = '';
+        });
+
+        removeFileBtn.addEventListener('click', function() {
+            attachedFile = null;
+            extractedText = '';
+            filePreview.classList.remove('visible');
+            attachBtn.classList.remove('has-file');
+            fileInput.value = '';
+        });
+
+        // ===== معالجة النص المستخرج =====
+        async function processExtractedText(text, fileName) {
+            if (isProcessing) return;
+            isProcessing = true;
+            sendBtn.disabled = true;
+            voiceBtn.disabled = true;
+
+            try {
+                typingIndicator.style.display = 'flex';
+                scrollToBottom();
+                await delay(800 + Math.random() * 1000);
+                typingIndicator.style.display = 'none';
+
+                // البحث في النص المستخرج عن كلمات مفتاحية
+                const searchQuery = text.substring(0, 500); // نأخذ أول 500 حرف للبحث
+
+                // تحقق إذا كان النص يحتوي على طلب اشتراك أو منتج
+                let reply = await generateSmartReply(searchQuery);
+
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot';
+                messagesArea.appendChild(botMsg);
+                scrollToBottom();
+
+                let replyContent = '';
+                if (reply.type === 'products' || reply.type === 'product') {
+                    botMsg.innerHTML = `📄 استجابة بناءً على محتوى الملف "${fileName}":<br><br>` + reply.content +
+                        `<span class="msg-time">الآن</span>`;
+                    replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
+                    await delay(200);
+                } else {
+                    const prefix = `📄 استجابة بناءً على محتوى الملف "${fileName}":\n\n`;
+                    botMsg.innerHTML = prefix;
+                    await typeText(botMsg, reply.content, 22);
+                    const timeSpan = document.createElement('span');
+                    timeSpan.className = 'msg-time';
+                    timeSpan.textContent = 'الآن';
+                    botMsg.appendChild(timeSpan);
+                    replyContent = reply.content;
+                }
+
+                conversationHistory.push({ role: 'bot', content: replyContent || 'تم عرض المنتج' });
+                if (conversationHistory.length > 10) conversationHistory.shift();
+
+                await sendToDiscord(`[ملف: ${fileName}]`, replyContent);
+
+            } catch (error) {
+                console.error('خطأ في معالجة النص المستخرج:', error);
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'message bot';
+                errorMsg.innerHTML = 'عذراً، حدث خطأ أثناء معالجة الملف.' + `<span class="msg-time">الآن</span>`;
+                messagesArea.appendChild(errorMsg);
+                scrollToBottom();
+            } finally {
+                isProcessing = false;
+                sendBtn.disabled = false;
+                voiceBtn.disabled = false;
+                messageInput.focus();
+                scrollToBottom();
+            }
+        }
+
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
 
-            // ===== العمليات الحسابية =====
             const mathResult = evaluateMath(text);
             if (mathResult !== null) {
                 return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
             }
 
-            // ===== الوقت =====
             if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
                 const now = new Date();
                 const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
@@ -1415,7 +1849,6 @@
                 return { type: 'text', content: reply };
             }
 
-            // ===== طلب الاشتراك ← عرض جميع المنتجات في صف واحد (بدون كلمات إضافية) =====
             if (isSubscriptionRequest(text)) {
                 const productsHtml = buildAllProductsRow();
                 return {
@@ -1424,7 +1857,6 @@
                 };
             }
 
-            // ===== منتج محدد =====
             const product = findProduct(text);
             if (product) {
                 const cardHtml = buildProductCard(product);
@@ -1440,7 +1872,6 @@
                 };
             }
 
-            // ===== الردود العادية =====
             let category = getCategoryForText(text);
             if (category !== 'default' && responses[category]) {
                 return { type: 'text', content: getReply(category) };
@@ -1672,6 +2103,14 @@
             if (!text) return;
             if (isProcessing) return;
 
+            // إذا كان هناك ملف مرفق، نرسل النص مع الملف
+            if (attachedFile) {
+                // نرسل النص الموجود مع الملف
+                const combinedText = text + '\n' + extractedText;
+                await processCombinedMessage(text, combinedText);
+                return;
+            }
+
             if (suggestedQuestions) {
                 suggestedQuestions.classList.add('hidden');
             }
@@ -1731,6 +2170,79 @@
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'message bot';
                 errorMsg.innerHTML = 'عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.' + `<span class="msg-time">الآن</span>`;
+                messagesArea.appendChild(errorMsg);
+                scrollToBottom();
+            } finally {
+                isProcessing = false;
+                sendBtn.disabled = false;
+                voiceBtn.disabled = false;
+                messageInput.focus();
+                scrollToBottom();
+            }
+        }
+
+        async function processCombinedMessage(userText, combinedText) {
+            if (isProcessing) return;
+            isProcessing = true;
+            sendBtn.disabled = true;
+            voiceBtn.disabled = true;
+
+            try {
+                // إرسال رسالة المستخدم
+                const userMsg = document.createElement('div');
+                userMsg.className = 'message user';
+                userMsg.innerHTML = escapeHtml(userText) + `<span class="msg-time">الآن</span>`;
+                messagesArea.appendChild(userMsg);
+                scrollToBottom();
+
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                charCount.textContent = '0';
+
+                typingIndicator.style.display = 'flex';
+                scrollToBottom();
+                await delay(800 + Math.random() * 1000);
+                typingIndicator.style.display = 'none';
+
+                // البحث عن الرد بناءً على النص المدمج
+                const reply = await generateSmartReply(combinedText);
+
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot';
+                messagesArea.appendChild(botMsg);
+                scrollToBottom();
+
+                let replyContent = '';
+                if (reply.type === 'products' || reply.type === 'product') {
+                    const fileNote = attachedFile ? `📄 بناءً على محتوى الملف "${attachedFile.name}"<br><br>` : '';
+                    botMsg.innerHTML = fileNote + reply.content + `<span class="msg-time">الآن</span>`;
+                    replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
+                    await delay(200);
+                } else {
+                    const prefix = attachedFile ? `📄 بناءً على محتوى الملف "${attachedFile.name}":\n\n` : '';
+                    botMsg.innerHTML = prefix;
+                    await typeText(botMsg, reply.content, 22);
+                    const timeSpan = document.createElement('span');
+                    timeSpan.className = 'msg-time';
+                    timeSpan.textContent = 'الآن';
+                    botMsg.appendChild(timeSpan);
+                    replyContent = reply.content;
+                }
+
+                await sendToDiscord(userText, replyContent);
+
+                // إعادة تعيين الملف بعد الإرسال
+                attachedFile = null;
+                extractedText = '';
+                filePreview.classList.remove('visible');
+                attachBtn.classList.remove('has-file');
+                fileInput.value = '';
+
+            } catch (error) {
+                console.error('خطأ في معالجة الرسالة المدمجة:', error);
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'message bot';
+                errorMsg.innerHTML = 'عذراً، حدث خطأ أثناء المعالجة.' + `<span class="msg-time">الآن</span>`;
                 messagesArea.appendChild(errorMsg);
                 scrollToBottom();
             } finally {
@@ -1844,6 +2356,9 @@
             sendBtn.disabled = true;
             voiceBtn.disabled = true;
 
+            // تحميل المكتبات الخارجية لاستخراج النص
+            await loadExternalLibraries();
+
             await Promise.all([loadResponses(), loadProducts()]);
 
             messagesArea.innerHTML = '';
@@ -1868,7 +2383,53 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع عرض المنتجات في صف واحد (بدون كلمات إضافية)');
+            console.log('MEN Ai جاهز مع إمكانية رفع الملفات واستخراج النص');
+        }
+
+        // ===== تحميل المكتبات الخارجية =====
+        function loadExternalLibraries() {
+            return new Promise((resolve) => {
+                let loadedCount = 0;
+                const totalLibraries = 4;
+
+                function checkLoaded() {
+                    loadedCount++;
+                    if (loadedCount >= totalLibraries) {
+                        resolve();
+                    }
+                }
+
+                // Tesseract.js للتعرف على النص في الصور
+                const tesseractScript = document.createElement('script');
+                tesseractScript.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+                tesseractScript.onload = checkLoaded;
+                tesseractScript.onerror = checkLoaded;
+                document.head.appendChild(tesseractScript);
+
+                // PDF.js لقراءة PDF
+                const pdfScript = document.createElement('script');
+                pdfScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+                pdfScript.onload = checkLoaded;
+                pdfScript.onerror = checkLoaded;
+                document.head.appendChild(pdfScript);
+
+                // Mammoth.js لقراءة DOCX
+                const mammothScript = document.createElement('script');
+                mammothScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+                mammothScript.onload = checkLoaded;
+                mammothScript.onerror = checkLoaded;
+                document.head.appendChild(mammothScript);
+
+                // SheetJS لقراءة Excel
+                const xlsxScript = document.createElement('script');
+                xlsxScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+                xlsxScript.onload = checkLoaded;
+                xlsxScript.onerror = checkLoaded;
+                document.head.appendChild(xlsxScript);
+
+                // مهلة في حال تعطل التحميل
+                setTimeout(resolve, 8000);
+            });
         }
 
         init();
