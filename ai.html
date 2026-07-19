@@ -1266,8 +1266,7 @@
         const SUBSCRIPTION_KEYWORDS = [
             'اشتراك', 'اشترك', 'اشتري', 'شراء', 'طلب', 'طلب منتج',
             'pass', 'pro', 'باقة', 'عرض', 'خصم', 'سعر', 'كم سعر',
-            'كيف اشترك', 'اريد اشتراك', 'ابي اشتراك', 'ابغى اشتراك',
-            'عرض المنتج', 'المنتجات', 'قائمة المنتجات', 'عروض'
+            'كيف اشترك', 'اريد اشتراك', 'ابي اشتراك', 'ابغى اشتراك'
         ];
 
         function getReply(category) {
@@ -1416,30 +1415,12 @@
                 return { type: 'text', content: reply };
             }
 
-            // ===== طلب الاشتراك أو المنتجات ← عرض جميع المنتجات في صف واحد =====
+            // ===== طلب الاشتراك ← عرض جميع المنتجات في صف واحد (بدون كلمات إضافية) =====
             if (isSubscriptionRequest(text)) {
-                const specificProduct = findProduct(text);
-                let productsHtml = buildAllProductsRow();
-                let introMessage = '📦 هذه قائمة بجميع منتجاتنا:';
-                if (specificProduct) {
-                    introMessage = '📦 هذه قائمة بجميع منتجاتنا، بما في ذلك المنتج الذي طلبته:';
-                }
+                const productsHtml = buildAllProductsRow();
                 return {
                     type: 'products',
-                    content: `
-                        <div style="width:100%;">
-                            <p style="color: #c0ccf0; margin-bottom: 6px; font-size: 1rem;">
-                                <i class="fas fa-shopping-bag" style="color: var(--blue-light); margin-left: 8px;"></i>
-                                ${introMessage}
-                            </p>
-                            ${productsHtml}
-                            <p style="color: #6a708a; font-size: 0.8rem; margin-top: 6px; text-align: center;">
-                                <i class="fas fa-chevron-left" style="color: var(--blue-light);"></i>
-                                اسحب لليمين لرؤية المزيد
-                                <i class="fas fa-chevron-right" style="color: var(--blue-light);"></i>
-                            </p>
-                        </div>
-                    `
+                    content: productsHtml
                 };
             }
 
@@ -1450,15 +1431,9 @@
                 return {
                     type: 'product',
                     content: `
-                        <div style="width:100%;">
-                            <p style="color: #c0ccf0; margin-bottom: 6px;">
-                                <i class="fas fa-box" style="color: var(--blue-light); margin-left: 6px;"></i>
-                                هذا المنتج الذي تبحث عنه:
-                            </p>
-                            <div class="products-row-wrapper">
-                                <div class="products-row">
-                                    ${cardHtml}
-                                </div>
+                        <div class="products-row-wrapper">
+                            <div class="products-row">
+                                ${cardHtml}
                             </div>
                         </div>
                     `
@@ -1735,7 +1710,7 @@
                 let replyContent = '';
                 if (reply.type === 'products' || reply.type === 'product') {
                     botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
-                    replyContent = reply.type === 'products' ? 'تم عرض قائمة المنتجات' : 'تم عرض المنتج';
+                    replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
                     await delay(200);
                 } else {
                     await typeText(botMsg, reply.content, 22);
@@ -1893,7 +1868,7 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع عرض المنتجات في صف واحد');
+            console.log('MEN Ai جاهز مع عرض المنتجات في صف واحد (بدون كلمات إضافية)');
         }
 
         init();
