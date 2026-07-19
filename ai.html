@@ -63,6 +63,7 @@
             --blue-deep: #021ca4;
             --blue-mid: #1a3a9e;
             --blue-light: #4a7aff;
+            --blue-glow: rgba(74, 122, 255, 0.2);
             --card-bg: rgba(10, 16, 32, 0.85);
             --card-border: rgba(2, 28, 164, 0.25);
             --radius-xl: 24px;
@@ -160,8 +161,125 @@
             }
         }
 
+        /* ===== شريط اختيار النماذج ===== */
+        .model-selector {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(2, 28, 164, 0.08);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .model-selector .model-label {
+            font-size: 0.85rem;
+            color: #8a9abb;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .model-selector .model-label i {
+            color: var(--blue-light);
+            font-size: 0.9rem;
+        }
+        .model-selector .model-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .model-selector .model-option {
+            padding: 6px 18px;
+            border-radius: 30px;
+            border: 1.5px solid rgba(74, 122, 255, 0.15);
+            background: rgba(255, 255, 255, 0.03);
+            color: #8a9abb;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+        .model-selector .model-option i {
+            font-size: 0.9rem;
+        }
+        .model-selector .model-option:hover:not(.disabled) {
+            background: rgba(74, 122, 255, 0.08);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(74, 122, 255, 0.05);
+        }
+        .model-selector .model-option.active {
+            background: linear-gradient(135deg, rgba(2, 28, 164, 0.3), rgba(74, 122, 255, 0.15));
+            border-color: var(--blue-light);
+            color: #fff;
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.08);
+        }
+        .model-selector .model-option.active::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, rgba(74, 122, 255, 0.2), transparent);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        .model-selector .model-option .badge-coming {
+            font-size: 0.55rem;
+            background: rgba(255, 200, 50, 0.15);
+            color: #ffcc44;
+            padding: 2px 8px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 200, 50, 0.1);
+            font-weight: 700;
+        }
+        .model-selector .model-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .model-selector .model-option.disabled:hover {
+            transform: none;
+            box-shadow: none;
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(74, 122, 255, 0.15);
+        }
+        .model-selector .model-status {
+            margin-right: auto;
+            font-size: 0.75rem;
+            color: #5a607a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .model-selector .model-status .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulseDot 1.5s ease-in-out infinite;
+        }
+        .model-selector .model-status .dot.online {
+            background: #44ff88;
+            box-shadow: 0 0 20px rgba(68, 255, 136, 0.2);
+        }
+        .model-selector .model-status .dot.offline {
+            background: #ff6644;
+            box-shadow: 0 0 20px rgba(255, 102, 68, 0.2);
+            animation: none;
+        }
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
         .chat-wrapper {
-            margin: 30px 0 20px;
+            margin: 0 0 20px;
             background: var(--card-bg);
             backdrop-filter: blur(24px);
             border: 1px solid var(--card-border);
@@ -204,6 +322,14 @@
             font-weight: 700;
             font-size: 1.2rem;
             color: #fff;
+        }
+        .chat-header .bot-model {
+            font-size: 0.75rem;
+            color: #6a708a;
+            background: rgba(74, 122, 255, 0.08);
+            padding: 2px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(74, 122, 255, 0.05);
         }
 
         .messages-area {
@@ -684,7 +810,6 @@
             cursor: not-allowed;
         }
 
-        /* ===== زر إرفاق الملف ===== */
         .input-area .btn-attach {
             width: 52px;
             height: 52px;
@@ -765,7 +890,6 @@
             color: var(--blue-light);
         }
 
-        /* ===== Modal لعرض النص المستخرج ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -1141,6 +1265,20 @@
                 padding: 20px;
                 margin: 10px;
             }
+            .model-selector {
+                padding: 10px 16px;
+                gap: 10px;
+            }
+            .model-selector .model-option {
+                font-size: 0.75rem;
+                padding: 4px 12px;
+            }
+            .model-selector .model-label {
+                font-size: 0.75rem;
+            }
+            .model-selector .model-status {
+                font-size: 0.65rem;
+            }
         }
         @media (max-width: 480px) {
             .message {
@@ -1280,6 +1418,28 @@
                 font-size: 0.9rem;
                 padding: 12px;
             }
+            .model-selector {
+                padding: 8px 12px;
+                gap: 8px;
+            }
+            .model-selector .model-option {
+                font-size: 0.65rem;
+                padding: 3px 10px;
+            }
+            .model-selector .model-option .badge-coming {
+                font-size: 0.45rem;
+                padding: 1px 5px;
+            }
+            .model-selector .model-label {
+                font-size: 0.65rem;
+            }
+            .model-selector .model-status {
+                font-size: 0.55rem;
+            }
+            .model-selector .model-status .dot {
+                width: 6px;
+                height: 6px;
+            }
         }
         @media (max-width: 360px) {
             .logo h1 {
@@ -1373,6 +1533,29 @@
             .file-preview .remove-file {
                 font-size: 0.7rem;
             }
+            .model-selector {
+                padding: 6px 8px;
+                gap: 6px;
+            }
+            .model-selector .model-option {
+                font-size: 0.55rem;
+                padding: 2px 8px;
+                gap: 4px;
+            }
+            .model-selector .model-option .badge-coming {
+                font-size: 0.4rem;
+                padding: 1px 4px;
+            }
+            .model-selector .model-label {
+                font-size: 0.55rem;
+            }
+            .model-selector .model-status {
+                font-size: 0.5rem;
+            }
+            .model-selector .model-status .dot {
+                width: 5px;
+                height: 5px;
+            }
         }
     </style>
 </head>
@@ -1393,11 +1576,32 @@
     <main>
         <div class="container">
             <div class="chat-wrapper">
+                <!-- ===== شريط اختيار النماذج ===== -->
+                <div class="model-selector">
+                    <span class="model-label">
+                        <i class="fas fa-brain"></i> النموذج:
+                    </span>
+                    <div class="model-options">
+                        <button class="model-option active" data-model="core" id="modelCore">
+                            <i class="fas fa-microchip"></i> MEN Core
+                        </button>
+                        <button class="model-option disabled" data-model="vi3" id="modelVI3" disabled>
+                            <i class="fas fa-rocket"></i> MEN VI3
+                            <span class="badge-coming">قريباً</span>
+                        </button>
+                    </div>
+                    <span class="model-status">
+                        <span class="dot online"></span>
+                        <span id="modelStatusText">متصل</span>
+                    </span>
+                </div>
+
                 <div class="chat-header">
                     <div class="bot-info">
                         <div class="bot-avatar"><i class="fas fa-wand-sparkles"></i></div>
                         <div>
                             <div class="bot-name">MEN Ai</div>
+                            <span class="bot-model" id="currentModelBadge">MEN Core</span>
                         </div>
                     </div>
                 </div>
@@ -1417,7 +1621,6 @@
                 </div>
 
                 <div class="input-area">
-                    <!-- ===== زر إرفاق الملف (يسار الكتابة) ===== -->
                     <button class="btn-attach" id="attachBtn" title="إرفاق ملف أو صورة">
                         <i class="fas fa-paperclip"></i>
                         <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls">
@@ -1445,7 +1648,6 @@
         </div>
     </main>
 
-    <!-- ===== مودال عرض النص المستخرج ===== -->
     <div class="modal-overlay" id="extractModal">
         <div class="modal-box">
             <h3><i class="fas fa-file-alt"></i> النص المستخرج من الملف</h3>
@@ -1478,16 +1680,66 @@
         let keywordsMap = {};
         let products = [];
 
-        // ===== كلمات مفتاحية للاشتراك والمنتجات =====
         const SUBSCRIPTION_KEYWORDS = [
             'اشتراك', 'اشترك', 'اشتري', 'شراء', 'طلب', 'طلب منتج',
             'MEN', 'pro', 'باقة', 'عرض', 'خصم', 'سعر', 'كم سعر',
             'كيف اشترك', 'اريد اشتراك', 'ابي اشتراك', 'ابغى اشتراك'
         ];
 
-        // ===== متغيرات الملف المرفق =====
+        // ===== متغيرات النموذج =====
+        let currentModel = 'core'; // 'core' | 'vi3'
         let attachedFile = null;
         let extractedText = '';
+
+        // ===== عناصر النماذج =====
+        const modelCoreBtn = document.getElementById('modelCore');
+        const modelVI3Btn = document.getElementById('modelVI3');
+        const currentModelBadge = document.getElementById('currentModelBadge');
+        const modelStatusText = document.getElementById('modelStatusText');
+
+        // ===== تبديل النموذج =====
+        function switchModel(model) {
+            if (model === 'vi3') {
+                // MEN VI3 غير متاح بعد
+                modelVI3Btn.classList.add('disabled');
+                return;
+            }
+
+            currentModel = model;
+
+            // تحديث الأزرار
+            document.querySelectorAll('.model-option').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            if (model === 'core') {
+                modelCoreBtn.classList.add('active');
+                currentModelBadge.textContent = 'MEN Core';
+                modelStatusText.textContent = 'متصل';
+                document.querySelector('.model-status .dot').className = 'dot online';
+            }
+
+            // إضافة رسالة في المحادثة
+            const modelMsg = document.createElement('div');
+            modelMsg.className = 'message bot';
+            modelMsg.innerHTML = `🔄 تم التبديل إلى <strong>${model === 'core' ? 'MEN Core' : 'MEN VI3'}</strong>` +
+                `<span class="msg-time">الآن</span>`;
+            messagesArea.appendChild(modelMsg);
+            scrollToBottom();
+        }
+
+        modelCoreBtn.addEventListener('click', function() {
+            switchModel('core');
+        });
+
+        modelVI3Btn.addEventListener('click', function() {
+            // إظهار رسالة بأن النموذج قريباً
+            const msg = document.createElement('div');
+            msg.className = 'message bot';
+            msg.innerHTML = `🚀 <strong>MEN VI3</strong> قريباً! ترقبوا التحديثات القادمة.` +
+                `<span class="msg-time">الآن</span>`;
+            messagesArea.appendChild(msg);
+            scrollToBottom();
+        });
 
         function getReply(category) {
             const list = responses[category]?.responses;
@@ -1614,12 +1866,10 @@
             `;
         }
 
-        // ===== استخراج النص من الملف باستخدام Tesseract.js للصور =====
         async function extractTextFromFile(file) {
             const fileType = file.type;
             const fileName = file.name.toLowerCase();
 
-            // صور
             if (fileType.startsWith('image/')) {
                 try {
                     const imageUrl = URL.createObjectURL(file);
@@ -1632,7 +1882,6 @@
                 }
             }
 
-            // ملفات نصية
             if (fileType === 'text/plain' || fileName.endsWith('.txt')) {
                 try {
                     const text = await file.text();
@@ -1642,7 +1891,6 @@
                 }
             }
 
-            // ملفات PDF - استخدام PDF.js
             if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
@@ -1661,7 +1909,6 @@
                 }
             }
 
-            // ملفات Word (docx) - استخدام mammoth.js
             if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileName.endsWith(
                     '.docx')) {
                 try {
@@ -1674,7 +1921,6 @@
                 }
             }
 
-            // ملفات Excel (xlsx) - استخدام SheetJS
             if (fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || fileName.endsWith(
                     '.xlsx') || fileName.endsWith('.xls')) {
                 try {
@@ -1698,7 +1944,6 @@
                 }
             }
 
-            // CSV
             if (fileType === 'text/csv' || fileName.endsWith('.csv')) {
                 try {
                     const text = await file.text();
@@ -1711,7 +1956,6 @@
             return '⚠️ نوع الملف غير مدعوم للاستخراج التلقائي.';
         }
 
-        // ===== عرض النص المستخرج في المودال =====
         function showExtractedText(text) {
             const modal = document.getElementById('extractModal');
             const textArea = document.getElementById('extractedText');
@@ -1729,7 +1973,6 @@
             }
         });
 
-        // ===== إخفاء الملف بعد الإرسال =====
         function hideAttachedFile() {
             attachedFile = null;
             extractedText = '';
@@ -1739,7 +1982,6 @@
             fileInput.value = '';
         }
 
-        // ===== معالجة الملف المرفق =====
         const fileInput = document.getElementById('fileInput');
         const attachBtn = document.getElementById('attachBtn');
         const filePreview = document.getElementById('filePreview');
@@ -1756,29 +1998,23 @@
             filePreview.classList.remove('hidden-preview');
             attachBtn.classList.add('has-file');
 
-            // استخراج النص
             const text = await extractTextFromFile(file);
             extractedText = text;
 
-            // عرض النص المستخرج في المودال
             showExtractedText(text);
 
-            // إرسال النص المستخرج كرسالة تلقائية مع السؤال
-            const userMessage = `📎 تم رفع ملف: ${file.name}\n\n📄 النص المستخرج:\n${text.substring(0, 300)}${text.length > 300 ? '...' : ''}`;
+            const userMessage =
+                `📎 تم رفع ملف: ${file.name}\n\n📄 النص المستخرج:\n${text.substring(0, 300)}${text.length > 300 ? '...' : ''}`;
 
-            // إضافة رسالة المستخدم مع الملف
             const userMsg = document.createElement('div');
             userMsg.className = 'message user';
             userMsg.innerHTML = `📎 <strong>${file.name}</strong> (تم استخراج النص)` + `<span class="msg-time">الآن</span>`;
             messagesArea.appendChild(userMsg);
             scrollToBottom();
 
-            // معالجة النص المستخرج والرد عليه
             await processExtractedText(text, file.name);
 
-            // ==== إخفاء الملف بعد الإرسال ====
             hideAttachedFile();
-            // إعادة تعيين input الملف
             this.value = '';
         });
 
@@ -1786,7 +2022,6 @@
             hideAttachedFile();
         });
 
-        // ===== معالجة النص المستخرج =====
         async function processExtractedText(text, fileName) {
             if (isProcessing) return;
             isProcessing = true;
@@ -1799,9 +2034,7 @@
                 await delay(800 + Math.random() * 1000);
                 typingIndicator.style.display = 'none';
 
-                // البحث في النص المستخرج عن كلمات مفتاحية
                 const searchQuery = text.substring(0, 500);
-
                 let reply = await generateSmartReply(searchQuery);
 
                 const botMsg = document.createElement('div');
@@ -1810,13 +2043,15 @@
                 scrollToBottom();
 
                 let replyContent = '';
+                const modelPrefix = currentModel === 'core' ? 'MEN Core' : 'MEN VI3';
                 if (reply.type === 'products' || reply.type === 'product') {
-                    botMsg.innerHTML = `📄 استجابة بناءً على محتوى الملف "${fileName}":<br><br>` + reply.content +
+                    botMsg.innerHTML =
+                        `📄 [${modelPrefix}] استجابة بناءً على محتوى الملف "${fileName}":<br><br>` + reply.content +
                         `<span class="msg-time">الآن</span>`;
                     replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
                     await delay(200);
                 } else {
-                    const prefix = `📄 استجابة بناءً على محتوى الملف "${fileName}":\n\n`;
+                    const prefix = `📄 [${modelPrefix}] استجابة بناءً على محتوى الملف "${fileName}":\n\n`;
                     botMsg.innerHTML = prefix;
                     await typeText(botMsg, reply.content, 22);
                     const timeSpan = document.createElement('span');
@@ -2100,7 +2335,7 @@
         async function sendToDiscord(userMessage, botReply) {
             try {
                 const payload = {
-                    content: `**رسالة جديدة من MEN Ai**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
+                    content: `**رسالة جديدة من MEN Ai [${currentModel === 'core' ? 'MEN Core' : 'MEN VI3'}]**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
                 };
                 await fetch('https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
                     method: 'POST',
@@ -2115,12 +2350,10 @@
 
         async function sendMessage() {
             const text = messageInput.value.trim();
-            
-            // إذا كان هناك ملف مرفق، نرسل النص مع الملف
+
             if (attachedFile) {
                 const combinedText = text + '\n' + extractedText;
                 await processCombinedMessage(text, combinedText);
-                // إخفاء الملف بعد الإرسال
                 hideAttachedFile();
                 return;
             }
@@ -2164,12 +2397,13 @@
                 scrollToBottom();
 
                 let replyContent = '';
+                const modelPrefix = currentModel === 'core' ? 'MEN Core' : 'MEN VI3';
                 if (reply.type === 'products' || reply.type === 'product') {
-                    botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
+                    botMsg.innerHTML = `[${modelPrefix}] ` + reply.content + `<span class="msg-time">الآن</span>`;
                     replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
                     await delay(200);
                 } else {
-                    await typeText(botMsg, reply.content, 22);
+                    await typeText(botMsg, `[${modelPrefix}] ${reply.content}`, 22);
                     const timeSpan = document.createElement('span');
                     timeSpan.className = 'msg-time';
                     timeSpan.textContent = 'الآن';
@@ -2205,7 +2439,6 @@
             voiceBtn.disabled = true;
 
             try {
-                // إرسال رسالة المستخدم
                 const userMsg = document.createElement('div');
                 userMsg.className = 'message user';
                 userMsg.innerHTML = escapeHtml(userText) + `<span class="msg-time">الآن</span>`;
@@ -2229,14 +2462,15 @@
                 scrollToBottom();
 
                 let replyContent = '';
+                const modelPrefix = currentModel === 'core' ? 'MEN Core' : 'MEN VI3';
                 if (reply.type === 'products' || reply.type === 'product') {
                     const fileNote = attachedFile ? `📄 بناءً على محتوى الملف "${attachedFile.name}"<br><br>` : '';
-                    botMsg.innerHTML = fileNote + reply.content + `<span class="msg-time">الآن</span>`;
+                    botMsg.innerHTML = `[${modelPrefix}] ` + fileNote + reply.content + `<span class="msg-time">الآن</span>`;
                     replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
                     await delay(200);
                 } else {
                     const prefix = attachedFile ? `📄 بناءً على محتوى الملف "${attachedFile.name}":\n\n` : '';
-                    botMsg.innerHTML = prefix;
+                    botMsg.innerHTML = `[${modelPrefix}] ` + prefix;
                     await typeText(botMsg, reply.content, 22);
                     const timeSpan = document.createElement('span');
                     timeSpan.className = 'msg-time';
@@ -2247,7 +2481,6 @@
 
                 await sendToDiscord(userText, replyContent);
 
-                // إعادة تعيين الملف بعد الإرسال
                 hideAttachedFile();
 
             } catch (error) {
@@ -2324,41 +2557,37 @@
                 return true;
             } catch (error) {
                 console.error('خطأ في تحميل المنتجات، سيتم استخدام البيانات الافتراضية:', error);
-                products = [
-                    {
-                        "id": "men-pass",
-                        "name": "MEN PASS",
-                        "description": "اشترك في MEN PASS واحصل على جميع المميزات الحصرية",
-                        "price": "49",
-                        "currency": "ر.س",
-                        "image": "images/pass.png",
-                        "badge": "⭐ مميز",
-                        "link": "store.html",
-                        "keywords": ["pass", "اشتراك", "men pass", "باقة"]
-                    },
-                    {
-                        "id": "men-pro",
-                        "name": "MEN PRO",
-                        "description": "باقة احترافية للمطورين مع أدوات متقدمة",
-                        "price": "99",
-                        "currency": "ر.س",
-                        "image": "images/pro.png",
-                        "badge": "🔥 احترافية",
-                        "link": "pro.html",
-                        "keywords": ["pro", "احترافي", "مطور", "أدوات"]
-                    },
-                    {
-                        "id": "men-basic",
-                        "name": "MEN BASIC",
-                        "description": "باقة أساسية للمبتدئين",
-                        "price": "19",
-                        "currency": "ر.س",
-                        "image": "images/basic.png",
-                        "badge": "🚀 أساسية",
-                        "link": "basic.html",
-                        "keywords": ["basic", "أساسي", "مبتدئ"]
-                    }
-                ];
+                products = [{
+                    "id": "men-pass",
+                    "name": "MEN PASS",
+                    "description": "اشترك في MEN PASS واحصل على جميع المميزات الحصرية",
+                    "price": "49",
+                    "currency": "ر.س",
+                    "image": "images/pass.png",
+                    "badge": "⭐ مميز",
+                    "link": "store.html",
+                    "keywords": ["pass", "اشتراك", "men pass", "باقة"]
+                }, {
+                    "id": "men-pro",
+                    "name": "MEN PRO",
+                    "description": "باقة احترافية للمطورين مع أدوات متقدمة",
+                    "price": "99",
+                    "currency": "ر.س",
+                    "image": "images/pro.png",
+                    "badge": "🔥 احترافية",
+                    "link": "pro.html",
+                    "keywords": ["pro", "احترافي", "مطور", "أدوات"]
+                }, {
+                    "id": "men-basic",
+                    "name": "MEN BASIC",
+                    "description": "باقة أساسية للمبتدئين",
+                    "price": "19",
+                    "currency": "ر.س",
+                    "image": "images/basic.png",
+                    "badge": "🚀 أساسية",
+                    "link": "basic.html",
+                    "keywords": ["basic", "أساسي", "مبتدئ"]
+                }];
                 return true;
             }
         }
@@ -2394,7 +2623,7 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع إمكانية رفع الملفات وإخفائها تلقائياً بعد الإرسال');
+            console.log('MEN Ai جاهز مع اختيار النماذج (MEN Core | MEN VI3 قريباً)');
         }
 
         function loadExternalLibraries() {
