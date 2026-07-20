@@ -158,7 +158,7 @@
     "dueDate": "2026-12-30",
     "customMsg": "<p>زيادة تفاعل السيرفر وزيادة الحضور اليومي.</p>",
     "attendance": 23,
-    "absences": 6,
+    "absences": 13,
     "leaves": 0,
     "meetings": [
       { "type": "اجتماع", "title": "اجتماع السيرفر", "date": "2026-06-18", "status": "حضر" },
@@ -180,12 +180,12 @@
     "followers": "0 ر.س",
     "dueDate": "2021-12-30",
     "customMsg": "<p>لاعب لـ TEAM MEN.</p>",
-    "attendance": 1,
+    "attendance": 3,
     "absences": 0,
     "leaves": 0,
     "meetings": [
-      { "type": "دورة", "title": "تدريب فورت نايت", "date": "2026-07-25", "status": "قادم" },
-      { "type": "دورة", "title": "تدريب فورت نايت", "date": "2026-06-29", "status": "حضر" }
+      { "type": "تدريب", "title": "تدريب فورت نايت", "date": "2026-07-25", "status": "قادم" },
+      { "type": "تدريب", "title": "تدريب فورت نايت", "date": "2026-06-29", "status": "حضر" }
     ]
   },
   "U2024": {
@@ -203,7 +203,7 @@
     "followers": "0 ر.س",
     "dueDate": "2025-11-15",
     "customMsg": "<p>البحث عن 3 إداريين جدد.</p>",
-    "attendance": 3,
+    "attendance": 7,
     "absences": 13,
     "leaves": 0,
     "meetings": [
