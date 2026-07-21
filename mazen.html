@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>القفز في الظلام</title>
+    <title>Dark Leap - القفز في الظلام</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -12,24 +14,43 @@
         }
 
         body {
-            background: #0a0a0a;
+            background: #050505;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            font-family: 'Arial', sans-serif;
-            direction: rtl;
+            min-height: 100vh;
+            font-family: 'Cairo', sans-serif;
+            overflow: hidden;
+        }
+
+        /* خلفية متحركة */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(20, 20, 40, 0.8) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(40, 20, 60, 0.6) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, rgba(10, 10, 30, 0.9) 0%, transparent 40%);
+            z-index: 0;
         }
 
         #gameContainer {
             position: relative;
-            width: 800px;
-            height: 500px;
-            background: #111;
-            border: 3px solid #333;
-            border-radius: 15px;
+            width: 900px;
+            height: 550px;
+            background: #0a0a0f;
+            border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(255, 255, 255, 0.05);
+            box-shadow: 
+                0 0 80px rgba(80, 40, 120, 0.15),
+                0 0 160px rgba(40, 20, 80, 0.08),
+                inset 0 0 60px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            z-index: 1;
         }
 
         canvas {
@@ -38,265 +59,443 @@
             height: 100%;
         }
 
-        #loginScreen, #gameOverScreen {
+        /* ===== شاشات ===== */
+        .screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: white;
             z-index: 10;
-            padding: 20px;
+            padding: 30px;
+            transition: all 0.5s ease;
+        }
+
+        #loginScreen {
+            background: rgba(5, 5, 10, 0.92);
+            backdrop-filter: blur(20px);
         }
 
         #gameOverScreen {
+            background: rgba(5, 5, 10, 0.93);
+            backdrop-filter: blur(20px);
             display: none;
         }
 
-        h1 {
-            color: #fff;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        /* ===== عناصر ===== */
+        .game-title {
+            font-size: 3.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, #8888bb 50%, #444466 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 60px rgba(100, 80, 200, 0.15);
+            margin-bottom: 5px;
             letter-spacing: 2px;
         }
 
-        .subtitle {
-            color: #888;
-            font-size: 0.9rem;
+        .game-subtitle {
+            color: rgba(255, 255, 255, 0.25);
+            font-size: 1rem;
             margin-bottom: 30px;
+            letter-spacing: 4px;
+        }
+
+        .glow-text {
+            color: rgba(255, 255, 255, 0.08);
+            font-size: 0.8rem;
+            margin-top: 20px;
+            letter-spacing: 2px;
         }
 
         .input-group {
-            margin: 10px 0;
-            width: 80%;
-            max-width: 300px;
+            margin: 8px 0;
+            width: 85%;
+            max-width: 320px;
+            position: relative;
         }
 
         .input-group input {
             width: 100%;
-            padding: 12px 20px;
-            background: #1a1a1a;
-            border: 2px solid #333;
-            border-radius: 8px;
-            color: white;
+            padding: 14px 22px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            color: #ddd;
             font-size: 1rem;
-            transition: all 0.3s;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.4s ease;
             outline: none;
+            backdrop-filter: blur(10px);
         }
 
         .input-group input:focus {
-            border-color: #666;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            border-color: rgba(150, 120, 255, 0.3);
+            box-shadow: 0 0 30px rgba(100, 80, 200, 0.05);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .input-group input::placeholder {
-            color: #555;
+            color: rgba(255, 255, 255, 0.2);
         }
 
         .btn {
-            padding: 12px 40px;
-            background: #222;
-            border: 2px solid #444;
-            border-radius: 8px;
-            color: white;
+            padding: 14px 48px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ddd;
             font-size: 1.1rem;
+            font-family: 'Cairo', sans-serif;
             cursor: pointer;
-            transition: all 0.3s;
-            margin: 10px 5px;
-            min-width: 150px;
-            font-weight: bold;
+            transition: all 0.4s ease;
+            margin: 8px 5px;
+            min-width: 160px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            backdrop-filter: blur(10px);
         }
 
         .btn:hover {
-            background: #333;
-            border-color: #666;
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+            box-shadow: 0 0 40px rgba(100, 80, 200, 0.05);
         }
 
         .btn-primary {
-            background: #2a2a2a;
-            border-color: #555;
+            background: rgba(120, 100, 255, 0.12);
+            border-color: rgba(120, 100, 255, 0.2);
         }
 
         .btn-primary:hover {
-            background: #3a3a3a;
-            border-color: #777;
+            background: rgba(120, 100, 255, 0.2);
+            border-color: rgba(120, 100, 255, 0.35);
+            box-shadow: 0 0 60px rgba(120, 100, 255, 0.08);
         }
 
-        .stats {
+        .btn-danger {
+            border-color: rgba(255, 80, 80, 0.2);
+        }
+
+        .btn-danger:hover {
+            background: rgba(255, 80, 80, 0.1);
+            border-color: rgba(255, 80, 80, 0.3);
+        }
+
+        /* ===== شريط الإحصائيات ===== */
+        #statsBar {
             position: absolute;
             top: 20px;
             left: 20px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 1.2rem;
-            z-index: 5;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+            right: 20px;
             display: none;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 5;
+            padding: 12px 24px;
             background: rgba(0, 0, 0, 0.5);
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        .stats span {
+        .stat-item {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-item span {
             color: #fff;
-            font-weight: bold;
+            font-weight: 700;
         }
 
-        #scoreDisplay {
+        .stat-item .highlight {
             color: #ffd700;
         }
 
+        .stat-item .level-badge {
+            background: rgba(120, 100, 255, 0.15);
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(120, 100, 255, 0.15);
+            color: #a99bff;
+            font-size: 0.8rem;
+        }
+
+        /* ===== شاشة النهاية ===== */
         .game-over-title {
-            color: #ff4444;
-            font-size: 2.8rem;
+            font-size: 3.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff4466, #ff6644);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 5px;
-            text-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
         }
 
-        .final-score {
-            font-size: 1.5rem;
-            color: #fff;
+        .final-score-box {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px 50px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             margin: 15px 0;
+            text-align: center;
         }
 
-        .final-score span {
+        .final-score-box .score-number {
+            font-size: 3.5rem;
+            font-weight: 900;
             color: #ffd700;
-            font-weight: bold;
+            text-shadow: 0 0 40px rgba(255, 215, 0, 0.1);
         }
 
-        .player-name-display {
-            color: #888;
+        .final-score-box .score-label {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.9rem;
+        }
+
+        .level-reached {
+            color: rgba(255, 255, 255, 0.2);
             font-size: 1rem;
-            margin-bottom: 20px;
+            margin: 5px 0 15px;
+        }
+
+        .level-reached span {
+            color: #a99bff;
         }
 
         .bonus-text {
             color: #4caf50;
-            font-size: 1.2rem;
-            margin: 5px 0;
+            font-size: 1.1rem;
+            margin: 5px 0 15px;
+            padding: 8px 24px;
+            background: rgba(76, 175, 80, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(76, 175, 80, 0.1);
         }
 
-        .hidden {
-            display: none !important;
+        /* ===== أنيميشن ===== */
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
 
+        .pulsing {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* ===== رموز التحكم ===== */
         .controls-hint {
-            color: #555;
-            font-size: 0.8rem;
-            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.08);
+            font-size: 0.75rem;
+            margin-top: 15px;
+            letter-spacing: 1px;
+        }
+
+        .controls-hint kbd {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 2px 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            font-family: 'Cairo', sans-serif;
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* ===== نجمة متحركة ===== */
+        .stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: twinkle 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.1; transform: scale(0.8); }
+            100% { opacity: 0.6; transform: scale(1.2); }
         }
     </style>
 </head>
 <body>
 
 <div id="gameContainer">
-    <canvas id="gameCanvas" width="800" height="500"></canvas>
+    <!-- نجوم خلفية -->
+    <div class="stars-container" id="starsContainer"></div>
 
-    <!-- شاشة تسجيل الدخول -->
-    <div id="loginScreen">
-        <h1>🌑 القفز في الظلام</h1>
-        <p class="subtitle">اقفز في الظلام واجمع النقاط</p>
+    <canvas id="gameCanvas" width="900" height="550"></canvas>
+
+    <!-- شاشة الدخول -->
+    <div class="screen" id="loginScreen">
+        <div class="game-title">DARK LEAP</div>
+        <div class="game-subtitle">✦ القفز في الظلام ✦</div>
         <div class="input-group">
-            <input type="text" id="playerName" placeholder="الاسم" maxlength="20" value="أحمد">
+            <input type="text" id="playerName" placeholder="الاسم" maxlength="20" value="محارب">
         </div>
         <div class="input-group">
             <input type="text" id="playerPhone" placeholder="رقم الجوال" maxlength="15" value="0501234567">
         </div>
-        <button class="btn btn-primary" onclick="startGame()">بدء اللعبة</button>
-        <p class="controls-hint">␣ مسافة | ↑ للأعلى | W | أو اضغط على الشاشة للقفز</p>
+        <button class="btn btn-primary" onclick="startGame()">🚀 ابدأ المغامرة</button>
+        <div class="controls-hint">
+            <kbd>␣</kbd> <kbd>↑</kbd> <kbd>W</kbd> للقفز &nbsp;·&nbsp; اضغط الشاشة أيضاً
+        </div>
+        <div class="glow-text">— 5 مستويات من الظلام —</div>
     </div>
 
-    <!-- شاشة انتهاء اللعبة -->
-    <div id="gameOverScreen">
-        <h1 class="game-over-title">💀 انتهت اللعبة</h1>
-        <div class="final-score">النقاط: <span id="finalScore">0</span></div>
-        <div class="player-name-display" id="finalPlayerInfo"></div>
+    <!-- شاشة النهاية -->
+    <div class="screen" id="gameOverScreen">
+        <div class="game-over-title">💀 انتهت الرحلة</div>
+        <div class="final-score-box">
+            <div class="score-label">النقاط</div>
+            <div class="score-number" id="finalScore">0</div>
+        </div>
+        <div class="level-reached">المستوى: <span id="finalLevel">1</span></div>
         <div id="bonusMessage" class="bonus-text"></div>
+        <div id="finalPlayerInfo" style="color:rgba(255,255,255,0.2);font-size:0.9rem;margin-bottom:15px;"></div>
         <div>
             <button class="btn" onclick="restartGame()">🔄 العب مرة أخرى</button>
-            <button class="btn" onclick="showLogin()">🏠 القائمة الرئيسية</button>
+            <button class="btn btn-danger" onclick="showLogin()">🏠 القائمة</button>
         </div>
     </div>
 
-    <!-- عرض النقاط والإحصائيات -->
-    <div class="stats" id="statsBar">
-        <span>👤 <span id="displayName">---</span></span>
-        <span style="margin-left: 20px;">⭐ <span id="displayScore">0</span></span>
-        <span style="margin-left: 20px;">🏆 <span id="displayHighScore">0</span></span>
+    <!-- شريط الإحصائيات -->
+    <div id="statsBar">
+        <div class="stat-item">👤 <span id="displayName">---</span></div>
+        <div class="stat-item">⭐ <span class="highlight" id="displayScore">0</span></div>
+        <div class="stat-item">🏆 <span id="displayHighScore">0</span></div>
+        <div class="stat-item"><span class="level-badge" id="displayLevel">المستوى 1</span></div>
     </div>
 </div>
 
 <script>
-    // ==================== إعدادات اللعبة ====================
+    // ========================================================================
+    //  DARK LEAP — لعبة القفز في الظلام مع مستويات ومكافآت
+    // ========================================================================
+
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
+    const W = 900,
+        H = 550;
+
     const WEBHOOK_URL = 'https://discord.com/api/webhooks/1529157218094547035/4KRu-0ND_mNGJx9ZYR9D50rhyqkdr2N5Upl_E0ufyhRGEPznDFb9T11I5Lq3KsA8Poa9';
 
-    // ==================== متغيرات اللعبة ====================
+    // ------------------- نجوم الخلفية -------------------
+    (function createStars() {
+        const container = document.getElementById('starsContainer');
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = (1 + Math.random() * 2) + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDelay = (Math.random() * 5) + 's';
+            star.style.animationDuration = (2 + Math.random() * 4) + 's';
+            container.appendChild(star);
+        }
+    })();
+
+    // ------------------- متغيرات اللعبة -------------------
     let player = {
-        x: 100,
-        y: 350,
-        width: 30,
-        height: 40,
+        x: 120,
+        y: 400,
+        width: 28,
+        height: 38,
         vy: 0,
-        jumpPower: -10,
-        gravity: 0.5,
+        jumpPower: -11.5,
+        gravity: 0.55,
         grounded: false
     };
 
     let obstacles = [];
     let coins = [];
+    let particles = [];
     let score = 0;
     let highScore = 0;
+    let level = 1;
     let gameRunning = false;
     let gameLoopId = null;
     let spawnTimer = 0;
     let coinSpawnTimer = 0;
-    let speed = 4;
+    let speed = 4.5;
     let playerName = '';
     let playerPhone = '';
     let frameCount = 0;
+    let distanceTraveled = 0;
+    let comboCount = 0;
+    let lastCoinTime = 0;
 
-    // ==================== إدارة الحسابات ====================
+    // مستويات اللعبة
+    const LEVELS = [
+        { level: 1, speed: 4.5, spawnRate: 85, coinRate: 45, obstacleHeight: [20, 35], label: 'البداية' },
+        { level: 2, speed: 5.8, spawnRate: 70, coinRate: 38, obstacleHeight: [22, 38], label: 'الظلام الخفيف' },
+        { level: 3, speed: 7.2, spawnRate: 55, coinRate: 30, obstacleHeight: [25, 40], label: 'الظلام العميق' },
+        { level: 4, speed: 8.8, spawnRate: 42, coinRate: 24, obstacleHeight: [28, 42], label: 'الظلام المطلق' },
+        { level: 5, speed: 10.5, spawnRate: 30, coinRate: 18, obstacleHeight: [30, 45], label: 'قلب الظلام' },
+    ];
+
+    const keys = {};
+
+    // ------------------- دوال الحسابات -------------------
     function getPlayerData(name) {
         try {
-            const data = localStorage.getItem('dark_jump_' + name);
-            if (data) {
-                return JSON.parse(data);
-            }
-        } catch(e) {}
-        return null;
+            const data = localStorage.getItem('darkleap_' + name);
+            return data ? JSON.parse(data) : null;
+        } catch { return null; }
     }
 
     function savePlayerData(name, phone, score) {
         const data = {
-            name: name,
-            phone: phone,
+            name,
+            phone,
             highScore: Math.max(score, getPlayerData(name)?.highScore || 0),
             lastScore: score,
             lastPlay: new Date().toISOString()
         };
-        localStorage.setItem('dark_jump_' + name, JSON.stringify(data));
+        localStorage.setItem('darkleap_' + name, JSON.stringify(data));
         return data;
     }
 
-    function updateHighScore() {
-        const data = getPlayerData(playerName);
-        if (data) {
-            highScore = data.highScore || 0;
+    // ------------------- دوال المستوى -------------------
+    function getLevelConfig() {
+        let lvl = 1;
+        for (let i = LEVELS.length - 1; i >= 0; i--) {
+            if (score >= i * 60 + 30) {
+                lvl = i + 1;
+                break;
+            }
         }
-        document.getElementById('displayHighScore').textContent = highScore;
+        if (lvl > LEVELS.length) lvl = LEVELS.length;
+        return LEVELS[lvl - 1];
     }
 
-    // ==================== دوال اللعبة ====================
+    function updateLevel() {
+        const config = getLevelConfig();
+        level = config.level;
+        speed = config.speed;
+        document.getElementById('displayLevel').textContent = `المستوى ${level}`;
+    }
+
+    // ------------------- دوال اللعبة الأساسية -------------------
     function startGame() {
         const name = document.getElementById('playerName').value.trim();
         const phone = document.getElementById('playerPhone').value.trim();
@@ -313,7 +512,7 @@
         highScore = data?.highScore || 0;
 
         document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('statsBar').style.display = 'block';
+        document.getElementById('statsBar').style.display = 'flex';
         document.getElementById('gameOverScreen').style.display = 'none';
 
         document.getElementById('displayName').textContent = name;
@@ -327,63 +526,82 @@
     }
 
     function resetGame() {
-        player.y = 350;
+        player.y = 400;
         player.vy = 0;
         player.grounded = true;
         obstacles = [];
         coins = [];
+        particles = [];
         score = 0;
-        speed = 4;
+        speed = 4.5;
+        level = 1;
         spawnTimer = 0;
         coinSpawnTimer = 0;
         frameCount = 0;
+        distanceTraveled = 0;
+        comboCount = 0;
         document.getElementById('displayScore').textContent = '0';
+        document.getElementById('displayLevel').textContent = 'المستوى 1';
+        updateLevel();
     }
 
     function gameLoop() {
         if (!gameRunning) return;
-
         frameCount++;
         update();
         draw();
         gameLoopId = requestAnimationFrame(gameLoop);
     }
 
+    // ------------------- التحديث -------------------
     function update() {
         // الجاذبية
         player.vy += player.gravity;
         player.y += player.vy;
 
         // الأرض
-        if (player.y >= 350) {
-            player.y = 350;
+        if (player.y >= 400) {
+            player.y = 400;
             player.vy = 0;
             player.grounded = true;
         }
 
-        // القفز - التحقق من المفتاح المضغوط
+        // القفز
         if (player.grounded && (keys[' '] || keys['ArrowUp'] || keys['w'] || keys['W'])) {
             player.vy = player.jumpPower;
             player.grounded = false;
+            // تأثير عند القفز
+            for (let i = 0; i < 6; i++) {
+                particles.push({
+                    x: player.x + player.width / 2,
+                    y: player.y + player.height,
+                    vx: (Math.random() - 0.5) * 3,
+                    vy: -Math.random() * 2 - 1,
+                    life: 20 + Math.random() * 15,
+                    maxLife: 35,
+                    size: 2 + Math.random() * 4,
+                    color: `rgba(150,130,255,${0.1 + Math.random() * 0.1})`
+                });
+            }
         }
 
-        // زيادة السرعة
-        if (frameCount % 200 === 0 && speed < 10) {
-            speed += 0.3;
-        }
+        // تحديث المستوى
+        updateLevel();
+
+        // المسافة المقطوعة
+        distanceTraveled += speed * 0.05;
 
         // spawn العوائق
+        const config = getLevelConfig();
         spawnTimer++;
-        let spawnRate = Math.max(60, 120 - speed * 6);
-        if (spawnTimer > spawnRate) {
-            spawnObstacle();
+        if (spawnTimer > config.spawnRate) {
+            spawnObstacle(config);
             spawnTimer = 0;
         }
 
         // spawn العملات
         coinSpawnTimer++;
-        let coinRate = Math.max(30, 60 - speed * 3);
-        if (coinSpawnTimer > coinRate) {
+        if (coinSpawnTimer > config.coinRate) {
             spawnCoin();
             coinSpawnTimer = 0;
         }
@@ -409,229 +627,264 @@
                 continue;
             }
             if (checkCollision(player, coins[i])) {
-                score += 10;
+                const bonus = (Date.now() - lastCoinTime < 500) ? 1.5 : 1;
+                lastCoinTime = Date.now();
+                const points = Math.round(10 * bonus);
+                score += points;
+                comboCount = (bonus > 1) ? comboCount + 1 : 1;
                 document.getElementById('displayScore').textContent = score;
                 coins.splice(i, 1);
+
+                // تأثير جمع العملة
+                for (let j = 0; j < 10; j++) {
+                    particles.push({
+                        x: player.x + player.width / 2,
+                        y: player.y + player.height / 2,
+                        vx: (Math.random() - 0.5) * 6,
+                        vy: (Math.random() - 0.5) * 6,
+                        life: 15 + Math.random() * 15,
+                        maxLife: 30,
+                        size: 2 + Math.random() * 5,
+                        color: `rgba(255,215,0,${0.3 + Math.random() * 0.5})`
+                    });
+                }
             }
+        }
+
+        // تحديث الجزيئات
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.x += p.vx || 0;
+            p.y += p.vy || 0;
+            p.life--;
+            if (p.life <= 0) {
+                particles.splice(i, 1);
+            }
+        }
+
+        // تحديث الهاي سكور
+        if (score > highScore) {
+            highScore = score;
+            document.getElementById('displayHighScore').textContent = highScore;
         }
     }
 
-    function spawnObstacle() {
-        const height = 25 + Math.random() * 35;
+    // ------------------- spawn -------------------
+    function spawnObstacle(config) {
+        const minH = config.obstacleHeight[0];
+        const maxH = config.obstacleHeight[1];
+        const height = minH + Math.random() * (maxH - minH);
+        const width = 14 + Math.random() * 22;
+        // نوع العائق (عادي أو مزدوج)
+        const type = Math.random() < 0.15 ? 'double' : 'normal';
+
         obstacles.push({
-            x: 800,
-            y: 370 - height,
-            width: 15 + Math.random() * 20,
-            height: height
+            x: W,
+            y: 410 - height,
+            width: width,
+            height: height,
+            type: type,
+            color: `hsl(240, ${5 + Math.random() * 10}%, ${8 + Math.random() * 8}%)`
         });
+
+        // عائق مزدوج
+        if (type === 'double') {
+            obstacles.push({
+                x: W + width + 20 + Math.random() * 30,
+                y: 410 - (height * 0.7),
+                width: width * 0.7,
+                height: height * 0.7,
+                type: 'normal',
+                color: `hsl(240, ${5 + Math.random() * 10}%, ${8 + Math.random() * 8}%)`
+            });
+        }
     }
 
     function spawnCoin() {
+        const yPos = 180 + Math.random() * 200;
         coins.push({
-            x: 800,
-            y: 200 + Math.random() * 150,
-            width: 15,
-            height: 15
+            x: W,
+            y: yPos,
+            width: 14,
+            height: 14,
+            floatOffset: Math.random() * Math.PI * 2
         });
     }
 
+    // ------------------- التصادم -------------------
     function checkCollision(a, b) {
-        return a.x < b.x + b.width &&
-            a.x + a.width > b.x &&
-            a.y < b.y + b.height &&
-            a.y + a.height > b.y;
+        const shrink = 4;
+        return a.x + shrink < b.x + b.width - shrink &&
+            a.x + a.width - shrink > b.x + shrink &&
+            a.y + shrink < b.y + b.height - shrink &&
+            a.y + a.height - shrink > b.y + shrink;
     }
 
+    // ------------------- الرسم -------------------
     function draw() {
-        // خلفية مظلمة
-        ctx.fillStyle = '#0a0a0a';
-        ctx.fillRect(0, 0, 800, 500);
+        // خلفية
+        const grad = ctx.createRadialGradient(450, 250, 100, 450, 250, 600);
+        grad.addColorStop(0, '#0d0d18');
+        grad.addColorStop(1, '#050508');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
 
-        // أرضية
-        ctx.fillStyle = '#111';
-        ctx.fillRect(0, 390, 800, 110);
+        // أرضية متدرجة
+        const groundGrad = ctx.createLinearGradient(0, 410, 0, H);
+        groundGrad.addColorStop(0, 'rgba(20,15,35,0.8)');
+        groundGrad.addColorStop(0.3, 'rgba(15,10,25,0.9)');
+        groundGrad.addColorStop(1, '#050508');
+        ctx.fillStyle = groundGrad;
+        ctx.fillRect(0, 410, W, H - 410);
 
-        // خط أرضي خافت
-        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+        // خط أرضي متوهج
+        ctx.shadowColor = 'rgba(100,80,200,0.05)';
+        ctx.shadowBlur = 30;
+        ctx.strokeStyle = 'rgba(100,80,200,0.06)';
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(0, 390);
-        ctx.lineTo(800, 390);
+        ctx.moveTo(0, 410);
+        ctx.lineTo(W, 410);
         ctx.stroke();
+        ctx.shadowBlur = 0;
 
-        // رسم العوائق
+        // شبكة خافتة
+        ctx.strokeStyle = 'rgba(255,255,255,0.01)';
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < W; i += 40) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, H);
+            ctx.stroke();
+        }
+        for (let i = 0; i < H; i += 40) {
+            ctx.beginPath();
+            ctx.moveTo(0, i);
+            ctx.lineTo(W, i);
+            ctx.stroke();
+        }
+
+        // ---- العوائق ----
         for (let obs of obstacles) {
-            ctx.fillStyle = '#1a1a1a';
-            ctx.shadowColor = 'rgba(255,255,255,0.03)';
-            ctx.shadowBlur = 10;
+            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+            ctx.shadowBlur = 20;
+            ctx.fillStyle = obs.color || '#14141e';
             ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
-            ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+            // حواف خافتة
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = 'rgba(100,80,200,0.04)';
             ctx.lineWidth = 1;
             ctx.strokeRect(obs.x, obs.y, obs.width, obs.height);
+            // تفاصيل داخلية
+            if (obs.type === 'double') {
+                ctx.fillStyle = 'rgba(200,180,255,0.02)';
+                ctx.fillRect(obs.x + 3, obs.y + 3, obs.width - 6, obs.height - 6);
+            }
         }
         ctx.shadowBlur = 0;
 
-        // رسم العملات
+        // ---- العملات ----
         for (let coin of coins) {
-            ctx.fillStyle = '#ffd700';
-            ctx.shadowColor = 'rgba(255,215,0,0.3)';
-            ctx.shadowBlur = 20;
+            const floatY = Math.sin(frameCount * 0.04 + (coin.floatOffset || 0)) * 3;
+            const cx = coin.x + coin.width / 2;
+            const cy = coin.y + coin.height / 2 + floatY;
+            const r = coin.width / 2;
+
+            // توهج
+            ctx.shadowColor = 'rgba(255,215,0,0.2)';
+            ctx.shadowBlur = 25;
+            // قرص العملة
+            const gradCoin = ctx.createRadialGradient(cx - 3, cy - 3, 2, cx, cy, r);
+            gradCoin.addColorStop(0, '#ffec80');
+            gradCoin.addColorStop(0.5, '#ffd700');
+            gradCoin.addColorStop(1, '#b8960f');
+            ctx.fillStyle = gradCoin;
             ctx.beginPath();
-            ctx.arc(coin.x + coin.width/2, coin.y + coin.height/2, coin.width/2, 0, Math.PI * 2);
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
             ctx.fill();
+
             // بريق
-            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = 'rgba(255,255,255,0.25)';
             ctx.beginPath();
-            ctx.arc(coin.x + coin.width/3, coin.y + coin.height/3, 3, 0, Math.PI * 2);
+            ctx.arc(cx - 3, cy - 4, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = 'rgba(255,255,255,0.1)';
+            ctx.beginPath();
+            ctx.arc(cx + 3, cy + 2, 2, 0, Math.PI * 2);
             ctx.fill();
         }
         ctx.shadowBlur = 0;
 
-        // رسم اللاعب (شخصية مظلمة)
-        ctx.shadowColor = 'rgba(255,255,255,0.05)';
-        ctx.shadowBlur = 20;
-        
+        // ---- اللاعب (شخصية مظلمة مع توهج) ----
+        ctx.shadowColor = 'rgba(150,130,255,0.04)';
+        ctx.shadowBlur = 40;
+
         // جسم
-        const grad = ctx.createRadialGradient(
-            player.x + player.width/2, player.y + player.height/2, 5,
-            player.x + player.width/2, player.y + player.height/2, 25
+        const pGrad = ctx.createRadialGradient(
+            player.x + player.width / 2 - 5, player.y + player.height / 2 - 5, 5,
+            player.x + player.width / 2, player.y + player.height / 2, 30
         );
-        grad.addColorStop(0, '#2a2a2a');
-        grad.addColorStop(1, '#0a0a0a');
-        ctx.fillStyle = grad;
-        ctx.fillRect(player.x, player.y, player.width, player.height);
-        
-        // عيون خافتة (تتوهج قليلاً)
-        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        pGrad.addColorStop(0, '#2a2840');
+        pGrad.addColorStop(0.5, '#1a1830');
+        pGrad.addColorStop(1, '#08081a');
+        ctx.fillStyle = pGrad;
+        ctx.beginPath();
+        ctx.roundRect(player.x, player.y, player.width, player.height, 4);
+        ctx.fill();
+
+        // عيون متوهجة
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = 'rgba(150,130,255,0.1)';
+        ctx.fillStyle = 'rgba(180,170,255,0.12)';
         ctx.fillRect(player.x + 5, player.y + 10, 6, 6);
         ctx.fillRect(player.x + player.width - 11, player.y + 10, 6, 6);
-        
-        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+        // حدقة
+        ctx.fillStyle = 'rgba(180,170,255,0.08)';
+        ctx.fillRect(player.x + 7, player.y + 12, 2, 2);
+        ctx.fillRect(player.x + player.width - 9, player.y + 12, 2, 2);
+
+        // غطاء/وشاح
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = 'rgba(100,80,200,0.04)';
         ctx.lineWidth = 1;
-        ctx.strokeRect(player.x, player.y, player.width, player.height);
+        ctx.beginPath();
+        ctx.roundRect(player.x, player.y, player.width, player.height, 4);
+        ctx.stroke();
+
+        // توهج تحت اللاعب
+        ctx.shadowColor = 'rgba(150,130,255,0.02)';
+        ctx.shadowBlur = 50;
+        ctx.fillStyle = 'rgba(150,130,255,0.01)';
+        ctx.beginPath();
+        ctx.ellipse(player.x + player.width / 2, player.y + player.height + 5, 20, 5, 0, 0, Math.PI * 2);
+        ctx.fill();
         ctx.shadowBlur = 0;
 
-        // توهج خفيف جداً
-        ctx.fillStyle = `rgba(255,255,255,${0.005 + Math.sin(Date.now() / 2000) * 0.005})`;
-        ctx.fillRect(0, 0, 800, 500);
-
-        // عرض السرعة
-        ctx.fillStyle = 'rgba(255,255,255,0.1)';
-        ctx.font = '12px Arial';
-        ctx.fillText(`السرعة: ${Math.round(speed * 10) / 10}`, 700, 30);
-    }
-
-    // ==================== التحكم باللوحة ====================
-    const keys = {};
-    document.addEventListener('keydown', (e) => {
-        keys[e.key] = true;
-        if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
-            e.preventDefault();
+        // ---- الجزيئات ----
+        for (let p of particles) {
+            const alpha = p.life / p.maxLife;
+            ctx.globalAlpha = alpha;
+            ctx.fillStyle = p.color || 'rgba(255,255,255,0.1)';
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = 'rgba(150,130,255,0.05)';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size * alpha, 0, Math.PI * 2);
+            ctx.fill();
         }
-    });
-    document.addEventListener('keyup', (e) => {
-        keys[e.key] = false;
-    });
+        ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
 
-    // النقر على الشاشة للقفز
-    canvas.addEventListener('click', () => {
-        if (gameRunning && player.grounded) {
-            player.vy = player.jumpPower;
-            player.grounded = false;
-        }
-    });
-
-    // ==================== إنهاء اللعبة ====================
-    function endGame() {
-        gameRunning = false;
-        if (gameLoopId) cancelAnimationFrame(gameLoopId);
-
-        let newHighScore = highScore;
-        if (score > highScore) {
-            newHighScore = score;
-            highScore = score;
-        }
-        savePlayerData(playerName, playerPhone, score);
-
-        sendToDiscord(playerName, playerPhone, score, newHighScore);
-
-        document.getElementById('finalScore').textContent = score;
-        document.getElementById('finalPlayerInfo').textContent = `👤 ${playerName} | 📱 ${playerPhone}`;
-        
-        const bonusMsg = document.getElementById('bonusMessage');
-        if (score >= 100) {
-            bonusMsg.textContent = '🎉 مكافأة: 50 نقطة إضافية!';
-            bonusMsg.style.color = '#4caf50';
-        } else if (score >= 50) {
-            bonusMsg.textContent = '✨ مكافأة: 20 نقطة إضافية!';
-            bonusMsg.style.color = '#ff9800';
-        } else {
-            bonusMsg.textContent = '💪 حاول مرة أخرى للحصول على مكافآت!';
-            bonusMsg.style.color = '#888';
+        // ---- معلومات إضافية ----
+        ctx.fillStyle = 'rgba(255,255,255,0.03)';
+        ctx.font = '11px Cairo, sans-serif';
+        ctx.fillText(`المسافة: ${Math.floor(distanceTraveled)}`, W - 120, 35);
+        if (comboCount > 2) {
+            ctx.fillStyle = `rgba(255,215,0,${0.1 + Math.sin(frameCount * 0.1) * 0.03})`;
+            ctx.font = '14px Cairo, sans-serif';
+            ctx.fillText(`🔥 ×${comboCount}`, W - 120, 55);
         }
 
-        document.getElementById('gameOverScreen').style.display = 'flex';
-    }
-
-    function restartGame() {
-        document.getElementById('gameOverScreen').style.display = 'none';
-        resetGame();
-        gameRunning = true;
-        if (gameLoopId) cancelAnimationFrame(gameLoopId);
-        gameLoop();
-    }
-
-    function showLogin() {
-        gameRunning = false;
-        if (gameLoopId) cancelAnimationFrame(gameLoopId);
-        document.getElementById('gameOverScreen').style.display = 'none';
-        document.getElementById('statsBar').style.display = 'none';
-        document.getElementById('loginScreen').style.display = 'flex';
-        resetGame();
-    }
-
-    // ==================== إرسال إلى Discord ====================
-    function sendToDiscord(name, phone, score, highScore) {
-        try {
-            const message = {
-                content: null,
-                embeds: [{
-                    title: '🎮 نتيجة لعبة القفز في الظلام',
-                    color: 0x2b2d42,
-                    fields: [
-                        { name: '👤 الاسم', value: name, inline: true },
-                        { name: '📱 رقم الجوال', value: phone, inline: true },
-                        { name: '⭐ النقاط', value: `${score}`, inline: true },
-                        { name: '🏆 أعلى نتيجة', value: `${highScore}`, inline: true },
-                        { name: '📅 التاريخ', value: new Date().toLocaleString('ar-SA'), inline: false }
-                    ],
-                    footer: { text: 'Dark Jump Game' },
-                    timestamp: new Date().toISOString()
-                }]
-            };
-
-            fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(message)
-            }).catch(err => console.log('خطأ في الإرسال:', err));
-        } catch(e) {}
-    }
-
-    // ==================== بدء التشغيل ====================
-    document.getElementById('loginScreen').style.display = 'flex';
-    document.getElementById('gameOverScreen').style.display = 'none';
-    document.getElementById('statsBar').style.display = 'none';
-
-    // رسم الخلفية
-    ctx.fillStyle = '#0a0a0a';
-    ctx.fillRect(0, 0, 800, 500);
-    ctx.fillStyle = '#111';
-    ctx.fillRect(0, 390, 800, 110);
-    ctx.fillStyle = 'rgba(255,255,255,0.03)';
-    ctx.font = '20px Arial';
-    ctx.fillText('ادخل اسمك وابدأ القفز', 280, 250);
-</script>
-
-</body>
-</html>
+        // ---- مستوى متوهج ----
+        ctx.fillStyle = 'rgba(150,130,255,0.03)';
+        ctx.font = '12
