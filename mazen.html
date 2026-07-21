@@ -887,4 +887,137 @@
 
         // ---- مستوى متوهج ----
         ctx.fillStyle = 'rgba(150,130,255,0.03)';
-        ctx.font = '12
+        ctx.font = '12px Cairo, sans-serif';
+        ctx.fillText(`✦ المستوى ${level}`, 20, 35);
+    }
+
+    // ------------------- إنهاء اللعبة -------------------
+    function endGame() {
+        gameRunning = false;
+        if (gameLoopId) cancelAnimationFrame(gameLoopId);
+
+        const data = savePlayerData(playerName, playerPhone, score);
+
+        // مكافآت
+        let bonus = 0;
+        let bonusMsg = '';
+        if (score >= 150) { bonus = 60;
+            bonusMsg = '🎉 مكافأة ذهبية: 60 نقطة!'; } else if (score >= 100) { bonus = 40;
+            bonusMsg = '✨ مكافأة فضية: 40 نقطة!'; } else if (score >= 50) { bonus = 20;
+            bonusMsg = '⭐ مكافأة برونزية: 20 نقطة!'; } else {
+            bonusMsg = '💪 اجمع 50 نقطة للحصول على مكافأة!'; }
+
+        const finalScore = score + bonus;
+
+        sendToDiscord(playerName, playerPhone, finalScore, data.highScore, level);
+
+        document.getElementById('finalScore').textContent = finalScore;
+        document.getElementById('finalLevel').textContent = level;
+        document.getElementById('finalPlayerInfo').textContent = `👤 ${playerName} · 📱 ${playerPhone}`;
+
+        const msgEl = document.getElementById('bonusMessage');
+        msgEl.textContent = bonusMsg;
+        if (bonus > 0) {
+            msgEl.style.color = '#ffd700';
+            msgEl.style.borderColor = 'rgba(255,215,0,0.15)';
+        } else {
+            msgEl.style.color = 'rgba(255,255,255,0.2)';
+            msgEl.style.borderColor = 'rgba(255,255,255,0.03)';
+        }
+
+        document.getElementById('gameOverScreen').style.display = 'flex';
+    }
+
+    // ------------------- إعادة التشغيل -------------------
+    function restartGame() {
+        document.getElementById('gameOverScreen').style.display = 'none';
+        resetGame();
+        gameRunning = true;
+        if (gameLoopId) cancelAnimationFrame(gameLoopId);
+        gameLoop();
+    }
+
+    function showLogin() {
+        gameRunning = false;
+        if (gameLoopId) cancelAnimationFrame(gameLoopId);
+        document.getElementById('gameOverScreen').style.display = 'none';
+        document.getElementById('statsBar').style.display = 'none';
+        document.getElementById('loginScreen').style.display = 'flex';
+        resetGame();
+    }
+
+    // ------------------- إرسال إلى Discord -------------------
+    function sendToDiscord(name, phone, score, highScore, level) {
+        try {
+            const message = {
+                embeds: [{
+                    title: '🌑 Dark Leap - نتيجة اللعبة',
+                    color: 0x2b1a4a,
+                    fields: [
+                        { name: '👤 الاسم', value: name, inline: true },
+                        { name: '📱 الجوال', value: phone, inline: true },
+                        { name: '⭐ النقاط النهائية', value: `${score}`, inline: true },
+                        { name: '🏆 أعلى نتيجة', value: `${highScore}`, inline: true },
+                        { name: '📊 المستوى', value: `${level}`, inline: true },
+                        { name: '📅 التاريخ', value: new Date().toLocaleString('ar-SA'), inline: false }
+                    ],
+                    footer: { text: 'Dark Leap · القفز في الظلام' },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(message)
+            }).catch(() => {});
+        } catch (e) {}
+    }
+
+    // ------------------- أحداث لوحة المفاتيح -------------------
+    document.addEventListener('keydown', (e) => {
+        keys[e.key] = true;
+        if ([' ', 'ArrowUp', 'w', 'W'].includes(e.key)) e.preventDefault();
+    });
+    document.addEventListener('keyup', (e) => { keys[e.key] = false; });
+
+    canvas.addEventListener('click', () => {
+        if (gameRunning && player.grounded) {
+            player.vy = player.jumpPower;
+            player.grounded = false;
+        }
+    });
+
+    // ------------------- polyfill roundRect -------------------
+    if (!CanvasRenderingContext2D.prototype.roundRect) {
+        CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+            if (r > w / 2) r = w / 2;
+            if (r > h / 2) r = h / 2;
+            this.moveTo(x + r, y);
+            this.lineTo(x + w - r, y);
+            this.quadraticCurveTo(x + w, y, x + w, y + r);
+            this.lineTo(x + w, y + h - r);
+            this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            this.lineTo(x + r, y + h);
+            this.quadraticCurveTo(x, y + h, x, y + h - r);
+            this.lineTo(x, y + r);
+            this.quadraticCurveTo(x, y, x + r, y);
+            return this;
+        };
+    }
+
+    // ------------------- التشغيل الأولي -------------------
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('gameOverScreen').style.display = 'none';
+    document.getElementById('statsBar').style.display = 'none';
+
+    // رسم خلفية أولية
+    ctx.fillStyle = '#0a0a0f';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(255,255,255,0.02)';
+    ctx.font = '18px Cairo, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('ادخل بياناتك وابدأ', W / 2, 280);
+    ctx.textAlign = 'left';
+</script>
+</body>
+</html>
