@@ -172,6 +172,14 @@
             padding: 0 20px;
         }
 
+        .title-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 2px;
+        }
+
         .game-title {
             font-size: 4.6rem;
             font-weight: 900;
@@ -179,19 +187,50 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 100px rgba(130, 100, 255, 0.12);
-            margin-bottom: 2px;
             letter-spacing: 4px;
             position: relative;
         }
 
-        .game-title::after {
-            content: '✦';
+        /* القمر المصغر بجوار العنوان */
+        .mini-moon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #faf4e8, #d4c8b0 55%, #9a8a7a 85%, #5a4e42);
+            box-shadow: 
+                0 0 40px rgba(210, 190, 170, 0.25),
+                0 0 80px rgba(180, 160, 140, 0.10),
+                inset -8px -8px 30px rgba(0, 0, 0, 0.5);
+            flex-shrink: 0;
+            position: relative;
+            transform: rotate(-5deg);
+        }
+
+        .mini-moon::before {
+            content: '';
             position: absolute;
-            font-size: 1.8rem;
-            color: rgba(255, 215, 0, 0.15);
-            top: -10px;
-            right: -50px;
-            -webkit-text-fill-color: initial;
+            top: 12px;
+            left: 15px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.08);
+            box-shadow: 
+                18px 12px 0 4px rgba(0, 0, 0, 0.06),
+                30px 22px 0 6px rgba(0, 0, 0, 0.05),
+                8px 30px 0 5px rgba(0, 0, 0, 0.07);
+        }
+
+        .mini-moon::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+            pointer-events: none;
         }
 
         .game-subtitle {
@@ -399,7 +438,7 @@
     <!-- نجوم الخلفية -->
     <div class="stars-container" id="starsContainer"></div>
 
-    <!-- القمر في صفحة الدخول (بارز) -->
+    <!-- القمر الخلفي الكبير -->
     <div class="moon-container" id="moonContainer">
         <div class="moon-glow"></div>
         <div class="moon"></div>
@@ -410,16 +449,20 @@
     <!-- ===== شاشة الدخول ===== -->
     <div class="screen" id="loginScreen">
         <div class="login-content">
-            <div class="game-title">DARK LEAP</div>
+            <!-- عنوان مع قمر مصغر -->
+            <div class="title-wrapper">
+                <div class="game-title">DARK LEAP</div>
+                <div class="mini-moon"></div>
+            </div>
             <div class="game-subtitle">✦ القفز في الظلام ✦</div>
 
             <div class="input-group">
                 <label>الاسم</label>
-                <input type="text" id="playerName" placeholder="اكتب اسمك" maxlength="20" value="محارب">
+                <input type="text" id="playerName" placeholder="اكتب اسمك" maxlength="20" value="">
             </div>
             <div class="input-group">
                 <label>رقم الجوال</label>
-                <input type="text" id="playerPhone" placeholder="05xxxxxxxx" maxlength="15" value="0501234567">
+                <input type="text" id="playerPhone" placeholder="05xxxxxxxx" maxlength="15" value="">
             </div>
 
             <button class="btn btn-primary" onclick="startGame()">🚀 ابدأ المغامرة</button>
@@ -457,7 +500,7 @@
 
 <script>
     // ========================================================================
-    //  DARK LEAP — إصدار محسّن مع قمر بارز ووضوح عالٍ
+    //  DARK LEAP — شخصيات واضحة + قمر مصغر بجوار العنوان
     // ========================================================================
 
     const canvas = document.getElementById('gameCanvas');
@@ -489,8 +532,8 @@
     let player = {
         x: 120,
         y: 440,
-        width: 30,
-        height: 40,
+        width: 34,      // أوسع قليلاً للوضوح
+        height: 44,     // أطول قليلاً
         vy: 0,
         jumpPower: -11.8,
         gravity: 0.55,
@@ -648,7 +691,7 @@
         if (player.grounded && (keys[' '] || keys['ArrowUp'] || keys['w'] || keys['W'])) {
             player.vy = player.jumpPower;
             player.grounded = false;
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 12; i++) {
                 particles.push({
                     x: player.x + player.width / 2 + (Math.random() - 0.5) * 10,
                     y: player.y + player.height,
@@ -705,7 +748,7 @@
                 document.getElementById('displayScore').textContent = score;
                 coins.splice(i, 1);
 
-                for (let j = 0; j < 20; j++) {
+                for (let j = 0; j < 24; j++) {
                     particles.push({
                         x: player.x + player.width / 2,
                         y: player.y + player.height / 2,
@@ -770,8 +813,8 @@
         coins.push({
             x: W,
             y: yPos,
-            width: 16,
-            height: 16,
+            width: 18,   // أكبر قليلاً
+            height: 18,
             floatOffset: Math.random() * Math.PI * 2
         });
     }
@@ -820,38 +863,40 @@
             ctx.fill();
         }
 
-        // العوائق
+        // العوائق (واضحة)
         for (let obs of obstacles) {
             ctx.shadowColor = 'rgba(0,0,0,0.6)';
             ctx.shadowBlur = 25;
-            ctx.fillStyle = obs.color || '#14141e';
+            // لون غامق مع حدود واضحة
+            ctx.fillStyle = obs.color || '#1a1a2e';
             ctx.beginPath();
-            ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 3);
+            ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 4);
             ctx.fill();
 
             ctx.shadowBlur = 0;
-            ctx.strokeStyle = 'rgba(120,100,220,0.03)';
-            ctx.lineWidth = 1;
+            // حد فاتح للوضوح
+            ctx.strokeStyle = 'rgba(150,130,255,0.08)';
+            ctx.lineWidth = 1.5;
             ctx.beginPath();
-            ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 3);
+            ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 4);
             ctx.stroke();
 
             if (obs.type === 'double') {
-                ctx.fillStyle = 'rgba(200,180,255,0.015)';
+                ctx.fillStyle = 'rgba(200,180,255,0.02)';
                 ctx.fillRect(obs.x + 3, obs.y + 3, obs.width - 6, obs.height - 6);
             }
         }
         ctx.shadowBlur = 0;
 
-        // العملات
+        // العملات (واضحة ولامعة)
         for (let coin of coins) {
             const floatY = Math.sin(frameCount * 0.045 + (coin.floatOffset || 0)) * 4;
             const cx = coin.x + coin.width / 2;
             const cy = coin.y + coin.height / 2 + floatY;
             const r = coin.width / 2;
 
-            ctx.shadowColor = 'rgba(255,215,0,0.15)';
-            ctx.shadowBlur = 30;
+            ctx.shadowColor = 'rgba(255,215,0,0.2)';
+            ctx.shadowBlur = 35;
 
             const gradCoin = ctx.createRadialGradient(cx - 3, cy - 3, 2, cx, cy, r);
             gradCoin.addColorStop(0, '#ffec80');
@@ -864,54 +909,69 @@
             ctx.fill();
 
             ctx.shadowBlur = 0;
-            ctx.fillStyle = 'rgba(255,255,255,0.3)';
+            ctx.fillStyle = 'rgba(255,255,255,0.4)';
             ctx.beginPath();
-            ctx.arc(cx - 3, cy - 4, 3, 0, Math.PI * 2);
+            ctx.arc(cx - 3, cy - 4, 3.5, 0, Math.PI * 2);
             ctx.fill();
-            ctx.fillStyle = 'rgba(255,255,255,0.1)';
+            ctx.fillStyle = 'rgba(255,255,255,0.15)';
             ctx.beginPath();
-            ctx.arc(cx + 4, cy + 3, 2, 0, Math.PI * 2);
+            ctx.arc(cx + 4, cy + 3, 2.5, 0, Math.PI * 2);
             ctx.fill();
         }
         ctx.shadowBlur = 0;
 
-        // اللاعب
-        ctx.shadowColor = 'rgba(150,130,255,0.03)';
-        ctx.shadowBlur = 50;
+        // ===== اللاعب (شخصية واضحة مع تفاصيل) =====
+        ctx.shadowColor = 'rgba(150,130,255,0.05)';
+        ctx.shadowBlur = 60;
 
+        // جسم اللاعب - تدرج واضح
         const pGrad = ctx.createRadialGradient(
-            player.x + player.width / 2 - 5, player.y + player.height / 2 - 5, 5,
-            player.x + player.width / 2, player.y + player.height / 2, 35
+            player.x + player.width / 2 - 6, player.y + player.height / 2 - 6, 6,
+            player.x + player.width / 2, player.y + player.height / 2, 40
         );
-        pGrad.addColorStop(0, '#2a2848');
-        pGrad.addColorStop(0.4, '#1a1835');
+        pGrad.addColorStop(0, '#3a3570');
+        pGrad.addColorStop(0.3, '#25224a');
+        pGrad.addColorStop(0.7, '#14122a');
         pGrad.addColorStop(1, '#08081a');
         ctx.fillStyle = pGrad;
         ctx.beginPath();
-        ctx.roundRect(player.x, player.y, player.width, player.height, 5);
+        ctx.roundRect(player.x, player.y, player.width, player.height, 6);
         ctx.fill();
 
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = 'rgba(150,130,255,0.06)';
-        ctx.fillStyle = 'rgba(180,170,255,0.08)';
-        ctx.fillRect(player.x + 5, player.y + 10, 7, 7);
-        ctx.fillRect(player.x + player.width - 12, player.y + 10, 7, 7);
-        ctx.fillStyle = 'rgba(180,170,255,0.05)';
-        ctx.fillRect(player.x + 7, player.y + 12, 3, 3);
-        ctx.fillRect(player.x + player.width - 10, player.y + 12, 3, 3);
-
+        // إطار فاتح للشخصية
         ctx.shadowBlur = 0;
-        ctx.strokeStyle = 'rgba(120,100,220,0.03)';
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = 'rgba(180,170,255,0.10)';
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
-        ctx.roundRect(player.x, player.y, player.width, player.height, 5);
+        ctx.roundRect(player.x, player.y, player.width, player.height, 6);
         ctx.stroke();
 
-        ctx.shadowColor = 'rgba(150,130,255,0.015)';
-        ctx.shadowBlur = 60;
-        ctx.fillStyle = 'rgba(150,130,255,0.008)';
+        // عيون متوهجة (واضحة)
+        ctx.shadowBlur = 25;
+        ctx.shadowColor = 'rgba(150,130,255,0.12)';
+        ctx.fillStyle = 'rgba(200,190,255,0.15)';
+        ctx.fillRect(player.x + 6, player.y + 10, 8, 8);
+        ctx.fillRect(player.x + player.width - 14, player.y + 10, 8, 8);
+        // حدقة
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = 'rgba(200,190,255,0.25)';
+        ctx.fillRect(player.x + 8, player.y + 12, 4, 4);
+        ctx.fillRect(player.x + player.width - 12, player.y + 12, 4, 4);
+
+        // غطاء / قناع خفيف
+        ctx.strokeStyle = 'rgba(150,130,255,0.04)';
+        ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.ellipse(player.x + player.width / 2, player.y + player.height + 8, 25, 6, 0, 0, Math.PI * 2);
+        ctx.moveTo(player.x + 4, player.y + 6);
+        ctx.lineTo(player.x + player.width - 4, player.y + 6);
+        ctx.stroke();
+
+        // توهج تحت اللاعب
+        ctx.shadowColor = 'rgba(150,130,255,0.02)';
+        ctx.shadowBlur = 70;
+        ctx.fillStyle = 'rgba(150,130,255,0.01)';
+        ctx.beginPath();
+        ctx.ellipse(player.x + player.width / 2, player.y + player.height + 10, 30, 8, 0, 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0;
 
@@ -929,6 +989,7 @@
         ctx.globalAlpha = 1;
         ctx.shadowBlur = 0;
 
+        // معلومات إضافية
         ctx.fillStyle = 'rgba(255,255,255,0.02)';
         ctx.font = '12px Cairo, sans-serif';
         ctx.fillText(`المسافة: ${Math.floor(distanceTraveled)}`, W - 130, 38);
