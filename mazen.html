@@ -96,7 +96,6 @@
             transform: rotate(-5deg);
         }
 
-        /* فوهات القمر (الحفر) */
         .moon::before {
             content: '';
             position: absolute;
@@ -501,6 +500,7 @@
 <script>
     // ========================================================================
     //  DARK LEAP — شخصيات واضحة + قمر مصغر بجوار العنوان
+    //  التعديلات: حواجز بيضاء / شخصية بيضاء بتفاصيل فنية
     // ========================================================================
 
     const canvas = document.getElementById('gameCanvas');
@@ -700,7 +700,7 @@
                     life: 15 + Math.random() * 20,
                     maxLife: 35,
                     size: 2 + Math.random() * 5,
-                    color: `rgba(150,130,255,${0.05 + Math.random() * 0.08})`
+                    color: `rgba(200,200,230,${0.05 + Math.random() * 0.08})`
                 });
             }
         }
@@ -793,7 +793,9 @@
             width: width,
             height: height,
             type: type,
-            color: `hsl(240, ${6 + Math.random() * 8}%, ${7 + Math.random() * 6}%)`
+            // حواجز بيضاء مع لمسة فنية
+            color: `rgba(230, 230, 250, ${0.6 + Math.random() * 0.3})`,
+            glow: 0.04 + Math.random() * 0.06
         });
 
         if (type === 'double') {
@@ -803,7 +805,8 @@
                 width: width * 0.7,
                 height: height * 0.7,
                 type: 'normal',
-                color: `hsl(240, ${6 + Math.random() * 8}%, ${7 + Math.random() * 6}%)`
+                color: `rgba(220, 220, 245, ${0.5 + Math.random() * 0.3})`,
+                glow: 0.03 + Math.random() * 0.05
             });
         }
     }
@@ -813,7 +816,7 @@
         coins.push({
             x: W,
             y: yPos,
-            width: 18,   // أكبر قليلاً
+            width: 18,
             height: 18,
             floatOffset: Math.random() * Math.PI * 2
         });
@@ -830,23 +833,26 @@
 
     // ==================== الرسم ====================
     function draw() {
+        // خلفية درامية
         const bgGrad = ctx.createRadialGradient(480, 280, 100, 480, 280, 700);
-        bgGrad.addColorStop(0, '#0f0f1e');
+        bgGrad.addColorStop(0, '#14141f');
         bgGrad.addColorStop(0.5, '#0a0a14');
-        bgGrad.addColorStop(1, '#040408');
+        bgGrad.addColorStop(1, '#030308');
         ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, W, H);
 
+        // أرضية مع تدرج
         const groundGrad = ctx.createLinearGradient(0, 450, 0, H);
-        groundGrad.addColorStop(0, 'rgba(20,15,40,0.7)');
-        groundGrad.addColorStop(0.3, 'rgba(12,8,25,0.85)');
+        groundGrad.addColorStop(0, 'rgba(30,25,55,0.7)');
+        groundGrad.addColorStop(0.3, 'rgba(18,12,35,0.85)');
         groundGrad.addColorStop(1, '#040408');
         ctx.fillStyle = groundGrad;
         ctx.fillRect(0, 450, W, H - 450);
 
-        ctx.shadowColor = 'rgba(120,100,220,0.04)';
-        ctx.shadowBlur = 40;
-        ctx.strokeStyle = 'rgba(120,100,220,0.04)';
+        // خط أرضي متوهج خفيف
+        ctx.shadowColor = 'rgba(180,170,255,0.08)';
+        ctx.shadowBlur = 30;
+        ctx.strokeStyle = 'rgba(200,190,255,0.08)';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(0, 450);
@@ -854,49 +860,63 @@
         ctx.stroke();
         ctx.shadowBlur = 0;
 
-        // أثر اللاعب
+        // أثر اللاعب (ضوء باهت)
         for (let t of player.trail) {
             const alpha = t.life / 15 * 0.08;
-            ctx.fillStyle = `rgba(150,130,255,${alpha})`;
+            ctx.fillStyle = `rgba(210,210,255,${alpha})`;
             ctx.beginPath();
             ctx.arc(t.x, t.y, 4, 0, Math.PI * 2);
             ctx.fill();
         }
 
-        // العوائق (واضحة)
+        // ===== العوائق (بيضاء مع توهج فني) =====
         for (let obs of obstacles) {
-            ctx.shadowColor = 'rgba(0,0,0,0.6)';
-            ctx.shadowBlur = 25;
-            // لون غامق مع حدود واضحة
-            ctx.fillStyle = obs.color || '#1a1a2e';
+            // توهج خلفي
+            ctx.shadowColor = 'rgba(200,200,255,0.08)';
+            ctx.shadowBlur = 35;
+            
+            // جسم الحاجز بلون أبيض شفاف مع تدرج
+            const grad = ctx.createLinearGradient(obs.x, obs.y, obs.x + obs.width, obs.y + obs.height);
+            grad.addColorStop(0, `rgba(240, 240, 255, ${0.7 + Math.random() * 0.2})`);
+            grad.addColorStop(0.5, `rgba(220, 220, 250, ${0.5 + Math.random() * 0.2})`);
+            grad.addColorStop(1, `rgba(200, 200, 230, ${0.4 + Math.random() * 0.2})`);
+            
+            ctx.fillStyle = grad;
             ctx.beginPath();
-            ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 4);
+            ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 5);
             ctx.fill();
 
+            // حدود مضيئة
             ctx.shadowBlur = 0;
-            // حد فاتح للوضوح
-            ctx.strokeStyle = 'rgba(150,130,255,0.08)';
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
             ctx.lineWidth = 1.5;
             ctx.beginPath();
-            ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 4);
+            ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 5);
             ctx.stroke();
 
-            if (obs.type === 'double') {
-                ctx.fillStyle = 'rgba(200,180,255,0.02)';
-                ctx.fillRect(obs.x + 3, obs.y + 3, obs.width - 6, obs.height - 6);
-            }
+            // خطوط داخلية فنية
+            ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(obs.x + 4, obs.y + 4);
+            ctx.lineTo(obs.x + obs.width - 4, obs.y + obs.height - 4);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(obs.x + obs.width - 4, obs.y + 4);
+            ctx.lineTo(obs.x + 4, obs.y + obs.height - 4);
+            ctx.stroke();
         }
         ctx.shadowBlur = 0;
 
-        // العملات (واضحة ولامعة)
+        // ===== العملات الذهبية (مثل السابق) =====
         for (let coin of coins) {
             const floatY = Math.sin(frameCount * 0.045 + (coin.floatOffset || 0)) * 4;
             const cx = coin.x + coin.width / 2;
             const cy = coin.y + coin.height / 2 + floatY;
             const r = coin.width / 2;
 
-            ctx.shadowColor = 'rgba(255,215,0,0.2)';
-            ctx.shadowBlur = 35;
+            ctx.shadowColor = 'rgba(255,215,0,0.3)';
+            ctx.shadowBlur = 40;
 
             const gradCoin = ctx.createRadialGradient(cx - 3, cy - 3, 2, cx, cy, r);
             gradCoin.addColorStop(0, '#ffec80');
@@ -920,68 +940,80 @@
         }
         ctx.shadowBlur = 0;
 
-        // ===== اللاعب (شخصية واضحة مع تفاصيل) =====
-        ctx.shadowColor = 'rgba(150,130,255,0.05)';
-        ctx.shadowBlur = 60;
+        // ===== الشخصية (بيضاء مع تفاصيل فنية واضحة) =====
+        ctx.shadowColor = 'rgba(200,200,255,0.1)';
+        ctx.shadowBlur = 50;
 
-        // جسم اللاعب - تدرج واضح
+        // جسم الشخصية - تدرج أبيض / فضي
         const pGrad = ctx.createRadialGradient(
             player.x + player.width / 2 - 6, player.y + player.height / 2 - 6, 6,
             player.x + player.width / 2, player.y + player.height / 2, 40
         );
-        pGrad.addColorStop(0, '#3a3570');
-        pGrad.addColorStop(0.3, '#25224a');
-        pGrad.addColorStop(0.7, '#14122a');
-        pGrad.addColorStop(1, '#08081a');
+        pGrad.addColorStop(0, '#ffffff');
+        pGrad.addColorStop(0.2, '#f0f0ff');
+        pGrad.addColorStop(0.5, '#d8d8f0');
+        pGrad.addColorStop(0.8, '#b8b8d0');
+        pGrad.addColorStop(1, '#9898b0');
         ctx.fillStyle = pGrad;
         ctx.beginPath();
-        ctx.roundRect(player.x, player.y, player.width, player.height, 6);
+        ctx.roundRect(player.x, player.y, player.width, player.height, 7);
         ctx.fill();
 
         // إطار فاتح للشخصية
         ctx.shadowBlur = 0;
-        ctx.strokeStyle = 'rgba(180,170,255,0.10)';
+        ctx.strokeStyle = 'rgba(255,255,255,0.2)';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
-        ctx.roundRect(player.x, player.y, player.width, player.height, 6);
+        ctx.roundRect(player.x, player.y, player.width, player.height, 7);
         ctx.stroke();
 
-        // عيون متوهجة (واضحة)
+        // عيون متوهجة (بيضاء مع توهج أزرق)
         ctx.shadowBlur = 25;
-        ctx.shadowColor = 'rgba(150,130,255,0.12)';
-        ctx.fillStyle = 'rgba(200,190,255,0.15)';
+        ctx.shadowColor = 'rgba(150,180,255,0.2)';
+        
+        // العين اليسرى
+        ctx.fillStyle = 'rgba(200,220,255,0.2)';
         ctx.fillRect(player.x + 6, player.y + 10, 8, 8);
+        // العين اليمنى
         ctx.fillRect(player.x + player.width - 14, player.y + 10, 8, 8);
-        // حدقة
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = 'rgba(200,190,255,0.25)';
+        
+        // حدقة (توهج أزرق)
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = 'rgba(100,150,255,0.3)';
+        ctx.fillStyle = 'rgba(120,180,255,0.4)';
         ctx.fillRect(player.x + 8, player.y + 12, 4, 4);
         ctx.fillRect(player.x + player.width - 12, player.y + 12, 4, 4);
 
-        // غطاء / قناع خفيف
-        ctx.strokeStyle = 'rgba(150,130,255,0.04)';
+        // خطوط تفاصيل على الجسم (فنية)
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = 'rgba(200,200,255,0.06)';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(player.x + 4, player.y + 6);
         ctx.lineTo(player.x + player.width - 4, player.y + 6);
         ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(player.x + 6, player.y + 22);
+        ctx.lineTo(player.x + player.width - 6, player.y + 22);
+        ctx.stroke();
 
-        // توهج تحت اللاعب
-        ctx.shadowColor = 'rgba(150,130,255,0.02)';
-        ctx.shadowBlur = 70;
-        ctx.fillStyle = 'rgba(150,130,255,0.01)';
+        // توهج تحت اللاعب (انعكاس أرضي)
+        ctx.shadowColor = 'rgba(200,200,255,0.04)';
+        ctx.shadowBlur = 60;
+        ctx.fillStyle = 'rgba(200,200,255,0.02)';
         ctx.beginPath();
         ctx.ellipse(player.x + player.width / 2, player.y + player.height + 10, 30, 8, 0, 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0;
 
-        // الجزيئات
+        // ===== الجزيئات =====
         for (let p of particles) {
             const alpha = p.life / p.maxLife;
             ctx.globalAlpha = alpha * 0.8;
             ctx.fillStyle = p.color || 'rgba(255,255,255,0.05)';
             ctx.shadowBlur = 15;
-            ctx.shadowColor = 'rgba(150,130,255,0.03)';
+            ctx.shadowColor = 'rgba(180,180,255,0.03)';
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size * alpha, 0, Math.PI * 2);
             ctx.fill();
@@ -989,8 +1021,8 @@
         ctx.globalAlpha = 1;
         ctx.shadowBlur = 0;
 
-        // معلومات إضافية
-        ctx.fillStyle = 'rgba(255,255,255,0.02)';
+        // ===== معلومات إضافية فنية =====
+        ctx.fillStyle = 'rgba(255,255,255,0.04)';
         ctx.font = '12px Cairo, sans-serif';
         ctx.fillText(`المسافة: ${Math.floor(distanceTraveled)}`, W - 130, 38);
 
@@ -1000,11 +1032,12 @@
             ctx.fillText(`🔥 ×${comboCount}`, W - 130, 58);
         }
 
-        ctx.fillStyle = 'rgba(150,130,255,0.02)';
+        ctx.fillStyle = 'rgba(200,200,255,0.03)';
         ctx.font = '13px Cairo, sans-serif';
         ctx.fillText(`✦ المستوى ${level}`, 18, 35);
 
-        ctx.fillStyle = `rgba(150,130,255,${0.002 + Math.sin(frameCount * 0.02) * 0.001})`;
+        // لمسة نهائية: توهج عام خفيف
+        ctx.fillStyle = `rgba(200,200,255,${0.002 + Math.sin(frameCount * 0.02) * 0.001})`;
         ctx.fillRect(0, 0, W, H);
     }
 
