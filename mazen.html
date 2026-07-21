@@ -71,52 +71,68 @@
             display: none;
         }
 
-        /* ===== القمر في صفحة الدخول ===== */
+        /* ===== القمر في صفحة الدخول (بارز وجميل) ===== */
         .moon-container {
             position: absolute;
-            top: -80px;
-            right: -80px;
-            width: 350px;
-            height: 350px;
+            top: -60px;
+            right: -60px;
+            width: 400px;
+            height: 400px;
             pointer-events: none;
-            opacity: 0.15;
-            z-index: 0;
+            z-index: 1;
+            opacity: 0.25;
         }
 
         .moon {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, #f0e8d0, #c8b898 60%, #8a7a6a);
+            background: radial-gradient(circle at 30% 30%, #faf4e8, #d4c8b0 55%, #9a8a7a 85%, #5a4e42);
             box-shadow: 
-                0 0 80px rgba(200, 180, 150, 0.1),
-                inset -20px -20px 60px rgba(0, 0, 0, 0.4);
+                0 0 120px rgba(210, 190, 170, 0.2),
+                0 0 240px rgba(180, 160, 140, 0.08),
+                inset -30px -30px 80px rgba(0, 0, 0, 0.5);
             position: relative;
+            transform: rotate(-5deg);
+        }
+
+        /* فوهات القمر (الحفر) */
+        .moon::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 70px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.08);
+            box-shadow: 
+                90px 60px 0 20px rgba(0, 0, 0, 0.06),
+                160px 130px 0 30px rgba(0, 0, 0, 0.05),
+                40px 170px 0 25px rgba(0, 0, 0, 0.07),
+                200px 50px 0 15px rgba(0, 0, 0, 0.04);
         }
 
         .moon::after {
             content: '';
             position: absolute;
-            top: 40px;
-            left: 50px;
-            width: 60px;
-            height: 60px;
+            top: 20px;
+            left: 20px;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            background: rgba(0, 0, 0, 0.08);
-            box-shadow: 
-                80px 50px 0 20px rgba(0, 0, 0, 0.06),
-                140px 100px 0 10px rgba(0, 0, 0, 0.04),
-                30px 130px 0 30px rgba(0, 0, 0, 0.05);
+            background: radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+            pointer-events: none;
         }
 
         .moon-glow {
             position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 450px;
-            height: 450px;
+            top: -80px;
+            right: -80px;
+            width: 560px;
+            height: 560px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(200, 185, 160, 0.06) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(220, 200, 180, 0.10) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -142,44 +158,56 @@
 
         @keyframes twinkle {
             0% { opacity: 0.05; transform: scale(0.6); }
-            100% { opacity: 0.6; transform: scale(1.3); }
+            100% { opacity: 0.7; transform: scale(1.4); }
         }
 
         /* ===== عناصر الدخول ===== */
         .login-content {
             position: relative;
-            z-index: 2;
+            z-index: 3;
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
+            padding: 0 20px;
         }
 
         .game-title {
-            font-size: 4.2rem;
+            font-size: 4.6rem;
             font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 20%, #8888cc 50%, #555588 80%);
+            background: linear-gradient(135deg, #ffffff 15%, #a89bff 50%, #6a5acd 85%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 80px rgba(100, 80, 200, 0.08);
+            text-shadow: 0 0 100px rgba(130, 100, 255, 0.12);
             margin-bottom: 2px;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
+            position: relative;
+        }
+
+        .game-title::after {
+            content: '✦';
+            position: absolute;
+            font-size: 1.8rem;
+            color: rgba(255, 215, 0, 0.15);
+            top: -10px;
+            right: -50px;
+            -webkit-text-fill-color: initial;
         }
 
         .game-subtitle {
-            color: rgba(255, 255, 255, 0.15);
-            font-size: 0.95rem;
-            margin-bottom: 35px;
-            letter-spacing: 6px;
+            color: rgba(255, 255, 255, 0.12);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            letter-spacing: 8px;
             font-weight: 400;
         }
 
         .input-group {
-            margin: 8px 0;
+            margin: 6px 0;
             width: 85%;
-            max-width: 340px;
+            max-width: 360px;
             position: relative;
-            z-index: 2;
+            z-index: 3;
         }
 
         .input-group input {
@@ -197,21 +225,21 @@
         }
 
         .input-group input:focus {
-            border-color: rgba(150, 120, 255, 0.2);
-            box-shadow: 0 0 40px rgba(100, 80, 200, 0.04);
-            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(150, 120, 255, 0.25);
+            box-shadow: 0 0 50px rgba(100, 80, 200, 0.06);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .input-group input::placeholder {
-            color: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.10);
         }
 
         .input-group label {
-            color: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.12);
             font-size: 0.7rem;
             display: block;
             margin-bottom: 4px;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
 
         .btn {
@@ -225,47 +253,47 @@
             cursor: pointer;
             transition: all 0.4s ease;
             margin: 10px 5px;
-            min-width: 170px;
+            min-width: 180px;
             font-weight: 700;
             letter-spacing: 1px;
             backdrop-filter: blur(10px);
             position: relative;
-            z-index: 2;
+            z-index: 3;
         }
 
         .btn:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.18);
             transform: scale(1.02);
-            box-shadow: 0 0 60px rgba(100, 80, 200, 0.05);
+            box-shadow: 0 0 70px rgba(100, 80, 200, 0.06);
         }
 
         .btn-primary {
-            background: rgba(120, 100, 255, 0.08);
-            border-color: rgba(120, 100, 255, 0.15);
+            background: rgba(120, 100, 255, 0.10);
+            border-color: rgba(120, 100, 255, 0.20);
         }
 
         .btn-primary:hover {
-            background: rgba(120, 100, 255, 0.15);
-            border-color: rgba(120, 100, 255, 0.25);
-            box-shadow: 0 0 80px rgba(120, 100, 255, 0.06);
+            background: rgba(120, 100, 255, 0.18);
+            border-color: rgba(120, 100, 255, 0.30);
+            box-shadow: 0 0 90px rgba(120, 100, 255, 0.08);
         }
 
         .controls-hint {
             color: rgba(255, 255, 255, 0.04);
-            font-size: 0.7rem;
-            margin-top: 18px;
+            font-size: 0.75rem;
+            margin-top: 20px;
             letter-spacing: 2px;
-            z-index: 2;
+            z-index: 3;
         }
 
         .controls-hint kbd {
             background: rgba(255, 255, 255, 0.03);
-            padding: 2px 12px;
+            padding: 3px 14px;
             border-radius: 6px;
             border: 1px solid rgba(255, 255, 255, 0.03);
             font-family: 'Cairo', sans-serif;
-            color: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.10);
         }
 
         /* ===== شريط الإحصائيات ===== */
@@ -368,11 +396,11 @@
 <body>
 
 <div id="gameContainer">
-    <!-- نجوم -->
+    <!-- نجوم الخلفية -->
     <div class="stars-container" id="starsContainer"></div>
 
-    <!-- القمر في الخلفية -->
-    <div class="moon-container">
+    <!-- القمر في صفحة الدخول (بارز) -->
+    <div class="moon-container" id="moonContainer">
         <div class="moon-glow"></div>
         <div class="moon"></div>
     </div>
@@ -429,7 +457,7 @@
 
 <script>
     // ========================================================================
-    //  DARK LEAP — إصدار احترافي مع قمر ومستويات وإرسال تلقائي
+    //  DARK LEAP — إصدار محسّن مع قمر بارز ووضوح عالٍ
     // ========================================================================
 
     const canvas = document.getElementById('gameCanvas');
@@ -437,22 +465,22 @@
     const W = 960,
         H = 600;
 
-    // 🔗 رابط الـ Webhook (تم وضعه كما طلبت)
+    // 🔗 رابط الـ Webhook
     const WEBHOOK_URL = 'https://discord.com/api/webhooks/1529157218094547035/4KRu-0ND_mNGJx9ZYR9D50rhyqkdr2N5Upl_E0ufyhRGEPznDFb9T11I5Lq3KsA8Poa9';
 
     // ==================== نجوم الخلفية ====================
     (function createStars() {
         const container = document.getElementById('starsContainer');
-        for (let i = 0; i < 120; i++) {
+        for (let i = 0; i < 140; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             star.style.left = Math.random() * 100 + '%';
             star.style.top = Math.random() * 100 + '%';
-            const size = 1 + Math.random() * 2.5;
+            const size = 1 + Math.random() * 2.8;
             star.style.width = size + 'px';
             star.style.height = size + 'px';
-            star.style.setProperty('--duration', (2 + Math.random() * 4) + 's');
-            star.style.animationDelay = (Math.random() * 6) + 's';
+            star.style.setProperty('--duration', (2 + Math.random() * 5) + 's');
+            star.style.animationDelay = (Math.random() * 7) + 's';
             container.appendChild(star);
         }
     })();
@@ -599,18 +627,15 @@
 
     // ==================== التحديث ====================
     function update() {
-        // الجاذبية
         player.vy += player.gravity;
         player.y += player.vy;
 
-        // الأرض
         if (player.y >= 440) {
             player.y = 440;
             player.vy = 0;
             player.grounded = true;
         }
 
-        // أثر الحركة
         if (frameCount % 2 === 0) {
             player.trail.push({ x: player.x + player.width / 2, y: player.y + player.height / 2, life: 15 });
             if (player.trail.length > 20) player.trail.shift();
@@ -620,11 +645,9 @@
             if (player.trail[i].life <= 0) player.trail.splice(i, 1);
         }
 
-        // القفز
         if (player.grounded && (keys[' '] || keys['ArrowUp'] || keys['w'] || keys['W'])) {
             player.vy = player.jumpPower;
             player.grounded = false;
-            // تأثير القفز
             for (let i = 0; i < 10; i++) {
                 particles.push({
                     x: player.x + player.width / 2 + (Math.random() - 0.5) * 10,
@@ -640,9 +663,7 @@
         }
 
         updateLevel();
-
         distanceTraveled += speed * 0.05;
-
         const config = getLevelConfig();
 
         spawnTimer++;
@@ -657,7 +678,6 @@
             coinSpawnTimer = 0;
         }
 
-        // تحديث العوائق
         for (let i = obstacles.length - 1; i >= 0; i--) {
             obstacles[i].x -= speed;
             if (obstacles[i].x + obstacles[i].width < 0) {
@@ -670,7 +690,6 @@
             }
         }
 
-        // تحديث العملات
         for (let i = coins.length - 1; i >= 0; i--) {
             coins[i].x -= speed;
             if (coins[i].x + coins[i].width < 0) {
@@ -686,7 +705,6 @@
                 document.getElementById('displayScore').textContent = score;
                 coins.splice(i, 1);
 
-                // تأثير جمع العملة
                 for (let j = 0; j < 20; j++) {
                     particles.push({
                         x: player.x + player.width / 2,
@@ -702,7 +720,6 @@
             }
         }
 
-        // تحديث الجزيئات
         for (let i = particles.length - 1; i >= 0; i--) {
             const p = particles[i];
             p.x += p.vx || 0;
@@ -770,7 +787,6 @@
 
     // ==================== الرسم ====================
     function draw() {
-        // خلفية
         const bgGrad = ctx.createRadialGradient(480, 280, 100, 480, 280, 700);
         bgGrad.addColorStop(0, '#0f0f1e');
         bgGrad.addColorStop(0.5, '#0a0a14');
@@ -778,7 +794,6 @@
         ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, W, H);
 
-        // أرضية متدرجة مع توهج
         const groundGrad = ctx.createLinearGradient(0, 450, 0, H);
         groundGrad.addColorStop(0, 'rgba(20,15,40,0.7)');
         groundGrad.addColorStop(0.3, 'rgba(12,8,25,0.85)');
@@ -786,7 +801,6 @@
         ctx.fillStyle = groundGrad;
         ctx.fillRect(0, 450, W, H - 450);
 
-        // خط أرضي متوهج
         ctx.shadowColor = 'rgba(120,100,220,0.04)';
         ctx.shadowBlur = 40;
         ctx.strokeStyle = 'rgba(120,100,220,0.04)';
@@ -797,7 +811,7 @@
         ctx.stroke();
         ctx.shadowBlur = 0;
 
-        // ---- أثر اللاعب ----
+        // أثر اللاعب
         for (let t of player.trail) {
             const alpha = t.life / 15 * 0.08;
             ctx.fillStyle = `rgba(150,130,255,${alpha})`;
@@ -806,7 +820,7 @@
             ctx.fill();
         }
 
-        // ---- العوائق ----
+        // العوائق
         for (let obs of obstacles) {
             ctx.shadowColor = 'rgba(0,0,0,0.6)';
             ctx.shadowBlur = 25;
@@ -822,7 +836,6 @@
             ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 3);
             ctx.stroke();
 
-            // تفاصيل
             if (obs.type === 'double') {
                 ctx.fillStyle = 'rgba(200,180,255,0.015)';
                 ctx.fillRect(obs.x + 3, obs.y + 3, obs.width - 6, obs.height - 6);
@@ -830,14 +843,13 @@
         }
         ctx.shadowBlur = 0;
 
-        // ---- العملات ----
+        // العملات
         for (let coin of coins) {
             const floatY = Math.sin(frameCount * 0.045 + (coin.floatOffset || 0)) * 4;
             const cx = coin.x + coin.width / 2;
             const cy = coin.y + coin.height / 2 + floatY;
             const r = coin.width / 2;
 
-            // توهج
             ctx.shadowColor = 'rgba(255,215,0,0.15)';
             ctx.shadowBlur = 30;
 
@@ -852,7 +864,6 @@
             ctx.fill();
 
             ctx.shadowBlur = 0;
-            // بريق
             ctx.fillStyle = 'rgba(255,255,255,0.3)';
             ctx.beginPath();
             ctx.arc(cx - 3, cy - 4, 3, 0, Math.PI * 2);
@@ -864,11 +875,10 @@
         }
         ctx.shadowBlur = 0;
 
-        // ---- اللاعب (شخصية مظلمة مع توهج) ----
+        // اللاعب
         ctx.shadowColor = 'rgba(150,130,255,0.03)';
         ctx.shadowBlur = 50;
 
-        // جسم
         const pGrad = ctx.createRadialGradient(
             player.x + player.width / 2 - 5, player.y + player.height / 2 - 5, 5,
             player.x + player.width / 2, player.y + player.height / 2, 35
@@ -881,18 +891,15 @@
         ctx.roundRect(player.x, player.y, player.width, player.height, 5);
         ctx.fill();
 
-        // عيون متوهجة
         ctx.shadowBlur = 20;
         ctx.shadowColor = 'rgba(150,130,255,0.06)';
         ctx.fillStyle = 'rgba(180,170,255,0.08)';
         ctx.fillRect(player.x + 5, player.y + 10, 7, 7);
         ctx.fillRect(player.x + player.width - 12, player.y + 10, 7, 7);
-        // حدقة
         ctx.fillStyle = 'rgba(180,170,255,0.05)';
         ctx.fillRect(player.x + 7, player.y + 12, 3, 3);
         ctx.fillRect(player.x + player.width - 10, player.y + 12, 3, 3);
 
-        // غطاء
         ctx.shadowBlur = 0;
         ctx.strokeStyle = 'rgba(120,100,220,0.03)';
         ctx.lineWidth = 1;
@@ -900,7 +907,6 @@
         ctx.roundRect(player.x, player.y, player.width, player.height, 5);
         ctx.stroke();
 
-        // توهج تحت اللاعب
         ctx.shadowColor = 'rgba(150,130,255,0.015)';
         ctx.shadowBlur = 60;
         ctx.fillStyle = 'rgba(150,130,255,0.008)';
@@ -909,7 +915,7 @@
         ctx.fill();
         ctx.shadowBlur = 0;
 
-        // ---- الجزيئات ----
+        // الجزيئات
         for (let p of particles) {
             const alpha = p.life / p.maxLife;
             ctx.globalAlpha = alpha * 0.8;
@@ -923,7 +929,6 @@
         ctx.globalAlpha = 1;
         ctx.shadowBlur = 0;
 
-        // ---- معلومات إضافية ----
         ctx.fillStyle = 'rgba(255,255,255,0.02)';
         ctx.font = '12px Cairo, sans-serif';
         ctx.fillText(`المسافة: ${Math.floor(distanceTraveled)}`, W - 130, 38);
@@ -934,12 +939,10 @@
             ctx.fillText(`🔥 ×${comboCount}`, W - 130, 58);
         }
 
-        // مستوى في الزاوية
         ctx.fillStyle = 'rgba(150,130,255,0.02)';
         ctx.font = '13px Cairo, sans-serif';
         ctx.fillText(`✦ المستوى ${level}`, 18, 35);
 
-        // توهج خفيف جداً
         ctx.fillStyle = `rgba(150,130,255,${0.002 + Math.sin(frameCount * 0.02) * 0.001})`;
         ctx.fillRect(0, 0, W, H);
     }
@@ -961,9 +964,6 @@
 
         const finalScore = score + bonus;
 
-        // ============================================================
-        //  ✅ هنا يتم إرسال البيانات إلى Discord عند انتهاء اللعبة
-        // ============================================================
         sendToDiscord(playerName, playerPhone, finalScore, data.highScore, level);
 
         document.getElementById('finalScore').textContent = finalScore;
