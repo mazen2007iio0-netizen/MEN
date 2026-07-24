@@ -161,65 +161,8 @@
             }
         }
 
-        /* ===== شريط الشعار والاسم (بدلاً من النماذج) ===== */
-        .brand-header {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(2, 28, 164, 0.08);
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            flex-wrap: wrap;
-        }
-        .brand-header .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .brand-header .brand-logo img {
-            height: 42px;
-            filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(74, 122, 255, 0.3));
-        }
-        .brand-header .brand-logo span {
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 40%, var(--blue-light));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .brand-header .brand-status {
-            margin-right: auto;
-            font-size: 0.8rem;
-            color: #5a607a;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .brand-header .brand-status .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            animation: pulseDot 1.5s ease-in-out infinite;
-            background: #44ff88;
-            box-shadow: 0 0 20px rgba(68, 255, 136, 0.2);
-        }
-        @keyframes pulseDot {
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.4;
-                transform: scale(0.8);
-            }
-        }
-
         .chat-wrapper {
-            margin: 0 0 20px;
+            margin: 20px 0;
             background: var(--card-bg);
             backdrop-filter: blur(24px);
             border: 1px solid var(--card-border);
@@ -228,17 +171,18 @@
             box-shadow: var(--glow-neon);
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 200px);
+            height: calc(100vh - 160px);
             min-height: 500px;
         }
 
         .chat-header {
-            padding: 14px 24px;
+            padding: 18px 24px;
             border-bottom: 1px solid rgba(2, 28, 164, 0.1);
             display: flex;
             align-items: center;
-            gap: 16px;
+            justify-content: space-between;
             flex-wrap: wrap;
+            gap: 16px;
             background: rgba(0, 0, 0, 0.4);
         }
         .chat-header .bot-info {
@@ -257,11 +201,25 @@
             font-size: 1.6rem;
             color: #fff;
             box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
+            overflow: hidden;
+        }
+        .chat-header .bot-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0) invert(1);
         }
         .chat-header .bot-name {
             font-weight: 700;
             font-size: 1.2rem;
             color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .chat-header .bot-name img {
+            height: 28px;
+            filter: brightness(0) invert(1);
         }
 
         .messages-area {
@@ -323,72 +281,7 @@
             text-align: right;
         }
 
-        /* ===== عرض الاقتراحات المتعددة (نصوص) ===== */
-        .suggestions-row-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding: 6px 0 12px 0;
-            margin: 4px 0;
-            scrollbar-width: thin;
-            scrollbar-color: var(--blue-deep) transparent;
-        }
-        .suggestions-row-wrapper::-webkit-scrollbar {
-            height: 4px;
-        }
-        .suggestions-row-wrapper::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-        }
-        .suggestions-row-wrapper::-webkit-scrollbar-thumb {
-            background: var(--blue-deep);
-            border-radius: 12px;
-        }
-
-        .suggestions-row {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 14px;
-            width: max-content;
-            min-width: 100%;
-            padding: 2px 2px 6px 2px;
-        }
-
-        .suggestions-row .suggestion-item {
-            min-width: 160px;
-            max-width: 220px;
-            flex: 0 0 auto;
-            margin: 0;
-            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(74, 122, 255, 0.15);
-            border-radius: 40px;
-            padding: 12px 24px;
-            color: #b0c4e8;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            backdrop-filter: blur(4px);
-            white-space: nowrap;
-            font-family: 'Cairo', sans-serif;
-        }
-        .suggestions-row .suggestion-item:hover {
-            background: rgba(74, 122, 255, 0.12);
-            border-color: var(--blue-light);
-            color: #fff;
-            transform: translateY(-4px) scale(1.04);
-            box-shadow: 0 4px 30px rgba(74, 122, 255, 0.1);
-        }
-        .suggestions-row .suggestion-item:active {
-            transform: scale(0.95);
-        }
-        .suggestions-row .suggestion-item i {
-            margin-left: 8px;
-            color: var(--blue-light);
-        }
-
-        /* ===== عرض المنتجات في صف واحد ===== */
+        /* ===== عرض المنتجات والاقتراحات في صف واحد جنباً إلى جنب ===== */
         .products-row-wrapper {
             width: 100%;
             overflow-x: auto;
@@ -461,6 +354,49 @@
             padding: 4px 12px;
         }
 
+        /* اقتراحات بتصميم مختلف للنصوص متوافقة مع عرض المنتجات الأفقي */
+        .suggestions-row-card {
+            min-width: 240px;
+            max-width: 260px;
+            flex: 0 0 auto;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(74, 122, 255, 0.2);
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .suggestions-row-card:hover {
+            border-color: var(--blue-light);
+            transform: translateY(-4px);
+            box-shadow: 0 0 25px rgba(74, 122, 255, 0.15);
+        }
+        .suggestions-row-card .sug-badge {
+            font-size: 0.7rem;
+            color: var(--blue-light);
+            background: rgba(74, 122, 255, 0.1);
+            padding: 3px 10px;
+            border-radius: 12px;
+            width: max-content;
+        }
+        .suggestions-row-card p {
+            font-size: 0.9rem;
+            color: #d0dcf5;
+            line-height: 1.5;
+        }
+        .suggestions-row-card .sug-action {
+            font-size: 0.75rem;
+            color: var(--blue-light);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .welcome-animation {
             display: flex;
             flex-direction: column;
@@ -527,13 +463,8 @@
             vertical-align: middle;
         }
         @keyframes blinkCursor {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         .welcome-desc {
@@ -551,22 +482,12 @@
             animation: spinSlow 4s linear infinite;
         }
         @keyframes spinSlow {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .typing-indicator {
@@ -601,9 +522,7 @@
             animation-delay: 0.4s;
         }
         @keyframes typingBounce {
-            0%,
-            60%,
-            100% {
+            0%, 60%, 100% {
                 transform: translateY(0);
                 opacity: 0.4;
             }
@@ -618,12 +537,8 @@
             font-size: 1.1rem;
         }
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .suggested-questions {
@@ -816,25 +731,12 @@
             animation-delay: 0.75s;
         }
         @keyframes ripple {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.8);
-                opacity: 0;
-            }
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.8); opacity: 0; }
         }
         @keyframes pulseMic {
-            0%,
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 10px rgba(255, 68, 68, 0.2);
-            }
-            50% {
-                transform: scale(1.12);
-                box-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
-            }
+            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 68, 68, 0.2); }
+            50% { transform: scale(1.12); box-shadow: 0 0 30px rgba(255, 68, 68, 0.5); }
         }
         .input-area .btn-voice:disabled {
             opacity: 0.3;
@@ -880,9 +782,6 @@
             color: var(--blue-light);
             background: rgba(74, 122, 255, 0.1);
         }
-        .input-area .btn-attach.hidden-attach {
-            display: none;
-        }
 
         .file-preview {
             display: none;
@@ -902,9 +801,6 @@
         }
         .file-preview.visible {
             display: inline-flex;
-        }
-        .file-preview.hidden-preview {
-            display: none !important;
         }
         .file-preview .remove-file {
             cursor: pointer;
@@ -984,9 +880,6 @@
         .modal-box .modal-close:hover {
             transform: scale(1.05);
             box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
-        }
-        .modal-box .modal-close:active {
-            transform: scale(0.95);
         }
 
         footer {
@@ -1172,7 +1065,7 @@
 
         @media (max-width: 768px) {
             .chat-wrapper {
-                height: calc(100vh - 160px);
+                height: calc(100vh - 140px);
                 min-height: 400px;
                 border-radius: var(--radius-xl);
             }
@@ -1217,9 +1110,6 @@
             .logo h1 {
                 font-size: 1.4rem;
             }
-            .logo h1 i {
-                font-size: 1rem;
-            }
             .logo img {
                 height: 36px;
             }
@@ -1228,39 +1118,17 @@
                 padding: 0 14px;
                 font-size: 0.9rem;
             }
-            .btn-back i {
-                font-size: 1rem;
-            }
             .btn-back .back-text {
                 font-size: 0.85rem;
             }
             .men-product-card {
                 max-width: 100%;
             }
-            .men-product-card .product-image {
-                height: 170px;
-            }
-            .men-product-card .product-content {
-                padding: 18px 16px 16px;
-            }
-            .men-product-card .product-content h2 {
-                font-size: 1.5rem;
-            }
-            .men-product-card .price {
-                font-size: 1.6rem;
-            }
-            .men-product-card .btn-product {
-                padding: 10px 20px;
-                font-size: 0.85rem;
-            }
             .welcome-main {
                 font-size: 2rem;
             }
             .typewriter-container {
                 font-size: 1.2rem;
-            }
-            .typewriter-cursor {
-                height: 1.4rem;
             }
             .suggested-questions {
                 padding: 8px 14px 4px 14px;
@@ -1274,25 +1142,6 @@
                 min-width: 200px;
                 max-width: 220px;
             }
-            .products-row .men-product-card .product-image {
-                height: 130px;
-            }
-            .products-row .men-product-card .product-content h2 {
-                font-size: 1rem;
-            }
-            .products-row .men-product-card .price {
-                font-size: 1rem;
-            }
-            .products-row .men-product-card .btn-product {
-                padding: 4px 10px;
-                font-size: 0.65rem;
-            }
-            .suggestions-row .suggestion-item {
-                min-width: 120px;
-                max-width: 170px;
-                padding: 8px 16px;
-                font-size: 0.8rem;
-            }
             .file-preview {
                 max-width: 120px;
                 font-size: 0.7rem;
@@ -1301,286 +1150,6 @@
             .modal-box {
                 padding: 20px;
                 margin: 10px;
-            }
-            .brand-header {
-                padding: 12px 18px;
-            }
-            .brand-header .brand-logo img {
-                height: 32px;
-            }
-            .brand-header .brand-logo span {
-                font-size: 1.4rem;
-            }
-            .brand-header .brand-status {
-                font-size: 0.7rem;
-            }
-        }
-        @media (max-width: 480px) {
-            .message {
-                max-width: 95%;
-                padding: 10px 14px;
-                font-size: 0.9rem;
-            }
-            .input-area .input-wrapper textarea {
-                font-size: 0.85rem;
-                min-height: 32px;
-            }
-            .input-area .btn-send,
-            .input-area .btn-voice,
-            .input-area .btn-attach {
-                width: 38px;
-                height: 38px;
-                min-width: 38px;
-                font-size: 1rem;
-            }
-            .chat-wrapper {
-                height: calc(100vh - 140px);
-                min-height: 350px;
-                border-radius: 18px;
-            }
-            .messages-area {
-                padding: 10px 12px;
-                gap: 8px;
-            }
-            .container {
-                width: 96%;
-                padding: 0 10px;
-            }
-            .logo h1 {
-                font-size: 1.1rem;
-            }
-            .logo h1 i {
-                font-size: 0.9rem;
-            }
-            .logo img {
-                height: 30px;
-            }
-            .btn-back {
-                height: 34px;
-                padding: 0 10px;
-                font-size: 0.8rem;
-            }
-            .btn-back i {
-                font-size: 0.9rem;
-            }
-            .btn-back .back-text {
-                font-size: 0.75rem;
-            }
-            .men-product-card .product-image {
-                height: 140px;
-            }
-            .men-product-card .product-content {
-                padding: 14px 12px 12px;
-            }
-            .men-product-card .product-content h2 {
-                font-size: 1.3rem;
-            }
-            .men-product-card .price {
-                font-size: 1.4rem;
-            }
-            .men-product-card .btn-product {
-                padding: 8px 16px;
-                font-size: 0.8rem;
-            }
-            .welcome-main {
-                font-size: 1.6rem;
-                gap: 2px;
-            }
-            .typewriter-container {
-                font-size: 1rem;
-            }
-            .typewriter-cursor {
-                height: 1.2rem;
-            }
-            .welcome-desc {
-                font-size: 0.8rem;
-            }
-            .suggested-questions {
-                padding: 6px 10px 2px 10px;
-                gap: 4px;
-            }
-            .suggested-questions .sq-btn {
-                font-size: 0.65rem;
-                padding: 4px 10px;
-            }
-            .products-row .men-product-card {
-                min-width: 160px;
-                max-width: 180px;
-            }
-            .products-row .men-product-card .product-image {
-                height: 110px;
-            }
-            .products-row .men-product-card .product-content {
-                padding: 10px 10px 12px;
-            }
-            .products-row .men-product-card .product-content h2 {
-                font-size: 0.9rem;
-                margin: 4px 0 2px;
-            }
-            .products-row .men-product-card .product-content p {
-                font-size: 0.7rem;
-                -webkit-line-clamp: 1;
-            }
-            .products-row .men-product-card .price {
-                font-size: 0.9rem;
-            }
-            .products-row .men-product-card .btn-product {
-                padding: 4px 8px;
-                font-size: 0.6rem;
-            }
-            .products-row .men-product-card .badge {
-                font-size: 0.6rem;
-                padding: 2px 8px;
-            }
-            .products-row {
-                gap: 10px;
-            }
-            .suggestions-row .suggestion-item {
-                min-width: 100px;
-                max-width: 140px;
-                padding: 6px 12px;
-                font-size: 0.7rem;
-            }
-            .file-preview {
-                max-width: 80px;
-                font-size: 0.6rem;
-                padding: 3px 6px 3px 4px;
-            }
-            .file-preview i {
-                font-size: 0.7rem;
-            }
-            .modal-box {
-                padding: 16px;
-            }
-            .modal-box h3 {
-                font-size: 1.1rem;
-            }
-            .modal-box .modal-text {
-                font-size: 0.9rem;
-                padding: 12px;
-            }
-            .brand-header {
-                padding: 10px 14px;
-            }
-            .brand-header .brand-logo img {
-                height: 26px;
-            }
-            .brand-header .brand-logo span {
-                font-size: 1.1rem;
-            }
-            .brand-header .brand-status {
-                font-size: 0.6rem;
-            }
-        }
-        @media (max-width: 360px) {
-            .logo h1 {
-                font-size: 0.9rem;
-            }
-            .logo h1 i {
-                font-size: 0.8rem;
-            }
-            .logo img {
-                height: 26px;
-            }
-            .btn-back {
-                height: 30px;
-                padding: 0 8px;
-                font-size: 0.7rem;
-            }
-            .btn-back i {
-                font-size: 0.8rem;
-            }
-            .btn-back .back-text {
-                font-size: 0.7rem;
-            }
-            .chat-header .bot-name {
-                font-size: 0.9rem;
-            }
-            .chat-header .bot-avatar {
-                width: 30px;
-                height: 30px;
-                font-size: 1rem;
-            }
-            .welcome-main {
-                font-size: 1.2rem;
-            }
-            .typewriter-container {
-                font-size: 0.8rem;
-            }
-            .typewriter-cursor {
-                height: 1rem;
-            }
-            .suggested-questions .sq-btn {
-                font-size: 0.6rem;
-                padding: 3px 8px;
-            }
-            .input-area .btn-send,
-            .input-area .btn-voice,
-            .input-area .btn-attach {
-                width: 32px;
-                height: 32px;
-                min-width: 32px;
-                font-size: 0.8rem;
-            }
-            .products-row .men-product-card {
-                min-width: 140px;
-                max-width: 150px;
-            }
-            .products-row .men-product-card .product-image {
-                height: 90px;
-            }
-            .products-row .men-product-card .product-content {
-                padding: 8px 8px 10px;
-            }
-            .products-row .men-product-card .product-content h2 {
-                font-size: 0.8rem;
-            }
-            .products-row .men-product-card .product-content p {
-                display: none;
-            }
-            .products-row .men-product-card .price {
-                font-size: 0.8rem;
-            }
-            .products-row .men-product-card .btn-product {
-                padding: 2px 6px;
-                font-size: 0.5rem;
-            }
-            .products-row .men-product-card .badge {
-                font-size: 0.5rem;
-                padding: 2px 6px;
-            }
-            .products-row {
-                gap: 8px;
-            }
-            .suggestions-row .suggestion-item {
-                min-width: 80px;
-                max-width: 110px;
-                padding: 4px 10px;
-                font-size: 0.6rem;
-            }
-            .file-preview {
-                max-width: 60px;
-                font-size: 0.5rem;
-                padding: 2px 4px;
-                gap: 4px;
-            }
-            .file-preview i {
-                font-size: 0.6rem;
-            }
-            .file-preview .remove-file {
-                font-size: 0.7rem;
-            }
-            .brand-header {
-                padding: 8px 10px;
-            }
-            .brand-header .brand-logo img {
-                height: 22px;
-            }
-            .brand-header .brand-logo span {
-                font-size: 0.9rem;
-            }
-            .brand-header .brand-status {
-                font-size: 0.5rem;
             }
         }
     </style>
@@ -1602,23 +1171,15 @@
     <main>
         <div class="container">
             <div class="chat-wrapper">
-                <!-- ===== شريط الشعار والاسم (بدلاً من النماذج) ===== -->
-                <div class="brand-header">
-                    <div class="brand-logo">
-                        <img src="logo.png" alt="MEN Ai" onerror="this.style.display='none'">
-                        <span>MEN Ai</span>
-                    </div>
-                    <span class="brand-status">
-                        <span class="dot"></span>
-                        <span>متصل</span>
-                    </span>
-                </div>
-
                 <div class="chat-header">
                     <div class="bot-info">
-                        <div class="bot-avatar"><i class="fas fa-wand-sparkles"></i></div>
-                        <div>
-                            <div class="bot-name">MEN Ai</div>
+                        <div class="bot-avatar">
+                            <img src="logo.png" alt="شعار MEN" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <i class="fas fa-wand-sparkles" style="display:none;"></i>
+                        </div>
+                        <div class="bot-name">
+                            <img src="logo.png" alt="شعار MEN" style="height:28px;" onerror="this.style.display='none';">
+                            <span>MEN Ai</span>
                         </div>
                     </div>
                 </div>
@@ -1667,7 +1228,7 @@
 
     <div class="modal-overlay" id="extractModal">
         <div class="modal-box">
-            <h3><i class="fas fa-file-alt"></i> النص المستخرج من الملف</h3>
+            <h3><i class="fas fa-file-alt"></i> تحليل الملف والكلمات المفتاحية</h3>
             <div class="modal-text" id="extractedText">جاري استخراج النص...</div>
             <button class="modal-close" id="modalClose">إغلاق</button>
         </div>
@@ -1725,16 +1286,47 @@
             return map;
         }
 
-        function getCategoryForText(text) {
-            const lower = text.trim().toLowerCase();
+        // استخراج الكلمات المتشابهة وتقديم اقتراحات أفقية (اقتراح واحد أو اثنين بتصميم نص مختلف)
+        function findSuggestionsOrMatches(queryText) {
+            const lower = queryText.trim().toLowerCase();
+            const matchedCategories = [];
+
             for (const [cat, patterns] of Object.entries(keywordsMap)) {
                 for (const pattern of patterns) {
-                    if (lower.includes(pattern)) {
-                        return cat;
+                    if (lower.includes(pattern) && !matchedCategories.includes(cat)) {
+                        matchedCategories.push(cat);
                     }
                 }
             }
-            return 'default';
+
+            if (matchedCategories.length > 0) {
+                let html = '<div class="products-row-wrapper"><div class="products-row">';
+                // جلب اقتراحين كحد أقصى لتصميم النصوص
+                const limit = Math.min(matchedCategories.length, 2);
+                for (let i = 0; i < limit; i++) {
+                    const cat = matchedCategories[i];
+                    const replyText = getReply(cat);
+                    html += `
+                        <div class="suggestions-row-card" onclick="selectSuggestion('${cat}')">
+                            <span class="sug-badge"><i class="fas fa-lightbulb"></i> اقتراح ${i + 1} (${cat})</span>
+                            <p>${replyText}</p>
+                            <div class="sug-action">عرض الإجابة <i class="fas fa-arrow-left"></i></div>
+                        </div>
+                    `;
+                }
+                html += '</div></div>';
+                return { type: 'suggestions', content: html };
+            }
+            return null;
+        }
+
+        window.selectSuggestion = function(category) {
+            const replyText = getReply(category);
+            const botMsg = document.createElement('div');
+            botMsg.className = 'message bot';
+            botMsg.innerHTML = `💡 بناءً على اختيارك للاقتراح:<br><br>${replyText}<span class="msg-time">الآن</span>`;
+            messagesArea.appendChild(botMsg);
+            scrollToBottom();
         }
 
         function evaluateMath(text) {
@@ -1812,38 +1404,23 @@
             const link = product.link || '#';
 
             return `
-                    <div class="men-product-card">
-                        <img src="${image}" class="product-image" alt="${name}" onerror="this.src='images/default.png'">
-                        <div class="product-content">
-                            <span class="badge">${badge}</span>
-                            <h2>${name}</h2>
-                            <p>${description}</p>
-                            <div class="bottom">
-                                <div class="price">
-                                    ${price} <small>${currency}</small>
-                                </div>
-                                <button class="btn-product" onclick="window.location.href='${link}'">
-                                    <i class="fas fa-arrow-left"></i> عرض
-                                </button>
+                <div class="men-product-card">
+                    <img src="${image}" class="product-image" alt="${name}" onerror="this.src='images/default.png'">
+                    <div class="product-content">
+                        <span class="badge">${badge}</span>
+                        <h2>${name}</h2>
+                        <p>${description}</p>
+                        <div class="bottom">
+                            <div class="price">
+                                ${price} <small>${currency}</small>
                             </div>
+                            <button class="btn-product" onclick="window.location.href='${link}'">
+                                <i class="fas fa-arrow-left"></i> عرض
+                            </button>
                         </div>
                     </div>
-                `;
-        }
-
-        // ===== بناء الاقتراحات المتعددة (نصوص) =====
-        function buildSuggestionsRow(suggestions) {
-            if (!suggestions || suggestions.length === 0) return '';
-            let html = '<div class="suggestions-row-wrapper"><div class="suggestions-row">';
-            for (const suggestion of suggestions) {
-                html += `
-                        <div class="suggestion-item" data-suggestion="${suggestion}">
-                            <i class="fas fa-lightbulb"></i> ${suggestion}
-                        </div>
-                    `;
-            }
-            html += '</div></div>';
-            return html;
+                </div>
+            `;
         }
 
         async function extractTextFromFile(file) {
@@ -1857,15 +1434,13 @@
                     URL.revokeObjectURL(imageUrl);
                     return result.data.text || 'لم يتم التعرف على أي نص في الصورة.';
                 } catch (error) {
-                    console.error('خطأ في التعرف على الصورة:', error);
                     return 'حدث خطأ أثناء معالجة الصورة.';
                 }
             }
 
             if (fileType === 'text/plain' || fileName.endsWith('.txt')) {
                 try {
-                    const text = await file.text();
-                    return text || 'الملف فارغ.';
+                    return await file.text() || 'الملف فارغ.';
                 } catch (error) {
                     return 'حدث خطأ أثناء قراءة الملف النصي.';
                 }
@@ -1884,25 +1459,21 @@
                     }
                     return fullText || 'لم يتم العثور على نص في ملف PDF.';
                 } catch (error) {
-                    console.error('خطأ في قراءة PDF:', error);
                     return 'حدث خطأ أثناء قراءة ملف PDF.';
                 }
             }
 
-            if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileName.endsWith(
-                    '.docx')) {
+            if (fileType.includes('wordprocessingml') || fileName.endsWith('.docx')) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
                     const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
-                    return result.value || 'الملف فارغ أو لا يحتوي على نص.';
+                    return result.value || 'الملف فارغ.';
                 } catch (error) {
-                    console.error('خطأ في قراءة DOCX:', error);
                     return 'حدث خطأ أثناء قراءة ملف Word.';
                 }
             }
 
-            if (fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || fileName.endsWith(
-                    '.xlsx') || fileName.endsWith('.xls')) {
+            if (fileType.includes('sheet') || fileName.endsWith('.xlsx') || fileName.endsWith('.xls') || fileName.endsWith('.csv')) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
                     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
@@ -1917,29 +1488,24 @@
                             });
                         }
                     });
-                    return allText || 'لم يتم العثور على بيانات في ملف Excel.';
+                    return allText || 'لم يتم العثور على بيانات.';
                 } catch (error) {
-                    console.error('خطأ في قراءة Excel:', error);
-                    return 'حدث خطأ أثناء قراءة ملف Excel.';
-                }
-            }
-
-            if (fileType === 'text/csv' || fileName.endsWith('.csv')) {
-                try {
-                    const text = await file.text();
-                    return text || 'الملف فارغ.';
-                } catch (error) {
-                    return 'حدث خطأ أثناء قراءة ملف CSV.';
+                    return 'حدث خطأ أثناء قراءة ملف البيانات.';
                 }
             }
 
             return '⚠️ نوع الملف غير مدعوم للاستخراج التلقائي.';
         }
 
-        function showExtractedText(text) {
+        // قارئ الملفات المحدث: يعرض الكلمة المفتاحية المستخرجة ويجيب على أي شيء نص أو منتج
+        function showExtractedTextWithKeywords(text, fileName) {
             const modal = document.getElementById('extractModal');
             const textArea = document.getElementById('extractedText');
-            textArea.textContent = text || 'لم يتم استخراج أي نص.';
+            
+            // استخراج كلمات مفتاحية بسيطة أو أول 200 حرف كملخص
+            const snippet = text.length > 300 ? text.substring(0, 300) + '...' : text;
+            textArea.innerHTML = `<strong>اسم الملف:</strong> ${fileName}\n\n` +
+                                 `<strong>النص المستخلص / الكلمات المفتاحية:</strong>\n${snippet}`;
             modal.classList.add('active');
         }
 
@@ -1947,17 +1513,10 @@
             document.getElementById('extractModal').classList.remove('active');
         });
 
-        document.getElementById('extractModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('active');
-            }
-        });
-
         function hideAttachedFile() {
             attachedFile = null;
             extractedText = '';
             filePreview.classList.remove('visible');
-            filePreview.classList.add('hidden-preview');
             attachBtn.classList.remove('has-file');
             fileInput.value = '';
         }
@@ -1975,24 +1534,20 @@
             attachedFile = file;
             fileNameSpan.textContent = file.name.length > 20 ? file.name.substring(0, 18) + '...' : file.name;
             filePreview.classList.add('visible');
-            filePreview.classList.remove('hidden-preview');
             attachBtn.classList.add('has-file');
 
             const text = await extractTextFromFile(file);
             extractedText = text;
 
-            showExtractedText(text);
+            showExtractedTextWithKeywords(text, file.name);
 
             const userMsg = document.createElement('div');
             userMsg.className = 'message user';
-            userMsg.innerHTML = `📎 <strong>${file.name}</strong> (تم استخراج النص)` + `<span class="msg-time">الآن</span>`;
+            userMsg.innerHTML = `📎 <strong>${file.name}</strong> (تم استخراج النص وتحليل الكلمات المفتاحية)` + `<span class="msg-time">الآن</span>`;
             messagesArea.appendChild(userMsg);
             scrollToBottom();
 
             await processExtractedText(text, file.name);
-
-            hideAttachedFile();
-            this.value = '';
         });
 
         removeFileBtn.addEventListener('click', function() {
@@ -2008,11 +1563,10 @@
             try {
                 typingIndicator.style.display = 'flex';
                 scrollToBottom();
-                await delay(800 + Math.random() * 1000);
+                await delay(800);
                 typingIndicator.style.display = 'none';
 
-                const searchQuery = text.substring(0, 500);
-                let reply = await generateSmartReply(searchQuery);
+                let reply = await generateSmartReply(text);
 
                 const botMsg = document.createElement('div');
                 botMsg.className = 'message bot';
@@ -2020,21 +1574,11 @@
                 scrollToBottom();
 
                 let replyContent = '';
-                if (reply.type === 'products' || reply.type === 'product') {
-                    botMsg.innerHTML =
-                        `📄 استجابة بناءً على محتوى الملف "${fileName}":<br><br>` + reply.content +
-                        `<span class="msg-time">الآن</span>`;
-                    replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
-                    await delay(200);
-                } else if (reply.type === 'suggestions') {
-                    botMsg.innerHTML =
-                        `📄 بناءً على محتوى الملف "${fileName}"، إليك بعض الاقتراحات:<br><br>` + reply.content +
-                        `<span class="msg-time">الآن</span>`;
-                    replyContent = 'تم عرض الاقتراحات';
-                    await delay(200);
+                if (reply.type === 'products' || reply.type === 'product' || reply.type === 'suggestions') {
+                    botMsg.innerHTML = `📄 نتائج التحليل والكلمات المفتاحية من الملف "${fileName}":<br><br>` + reply.content + `<span class="msg-time">الآن</span>`;
+                    replyContent = 'تم عرض محتوى التحليل';
                 } else {
-                    const prefix = `📄 استجابة بناءً على محتوى الملف "${fileName}":\n\n`;
-                    botMsg.innerHTML = prefix;
+                    botMsg.innerHTML = `📄 نتائج التحليل من الملف "${fileName}":<br><br>`;
                     await typeText(botMsg, reply.content, 22);
                     const timeSpan = document.createElement('span');
                     timeSpan.className = 'msg-time';
@@ -2043,18 +1587,9 @@
                     replyContent = reply.content;
                 }
 
-                conversationHistory.push({ role: 'bot', content: replyContent || 'تم عرض المنتج' });
-                if (conversationHistory.length > 10) conversationHistory.shift();
-
                 await sendToDiscord(`[ملف: ${fileName}]`, replyContent);
-
             } catch (error) {
-                console.error('خطأ في معالجة النص المستخرج:', error);
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'message bot';
-                errorMsg.innerHTML = 'عذراً، حدث خطأ أثناء معالجة الملف.' + `<span class="msg-time">الآن</span>`;
-                messagesArea.appendChild(errorMsg);
-                scrollToBottom();
+                console.error(error);
             } finally {
                 isProcessing = false;
                 sendBtn.disabled = false;
@@ -2065,28 +1600,13 @@
         }
 
         async function generateSmartReply(text) {
-            const lower = text.trim().toLowerCase();
-
             const mathResult = evaluateMath(text);
             if (mathResult !== null) {
-                return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
-            }
-
-            if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
-                const now = new Date();
-                const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
-                const dateStr = now.toLocaleDateString('ar-SA', { timeZone: 'Asia/Riyadh' });
-                const template = getReply('time');
-                const reply = template.replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr);
-                return { type: 'text', content: reply };
+                return { type: 'text', content: `النتيجة الرياضية هي: **${mathResult}**` };
             }
 
             if (isSubscriptionRequest(text)) {
-                const productsHtml = buildAllProductsRow();
-                return {
-                    type: 'products',
-                    content: productsHtml
-                };
+                return { type: 'products', content: buildAllProductsRow() };
             }
 
             const product = findProduct(text);
@@ -2094,24 +1614,14 @@
                 const cardHtml = buildProductCard(product);
                 return {
                     type: 'product',
-                    content: `
-                            <div class="products-row-wrapper">
-                                <div class="products-row">
-                                    ${cardHtml}
-                                </div>
-                            </div>
-                        `
+                    content: `<div class="products-row-wrapper"><div class="products-row">${cardHtml}</div></div>`
                 };
             }
 
-            // ===== استخراج الكلمات المفتاحية وتوليد اقتراحات متعددة =====
-            const keywords = extractKeywords(text);
-            if (keywords.length > 1) {
-                const suggestionsHtml = buildSuggestionsRow(keywords);
-                return {
-                    type: 'suggestions',
-                    content: suggestionsHtml
-                };
+            // فحص الاقتراحات المتعددة والكلمات المتشابهة
+            const suggestions = findSuggestionsOrMatches(text);
+            if (suggestions) {
+                return suggestions;
             }
 
             let category = getCategoryForText(text);
@@ -2122,75 +1632,36 @@
             return { type: 'text', content: getReply('default') };
         }
 
-        // ===== دالة لاستخراج الكلمات المفتاحية من النص =====
-        function extractKeywords(text) {
-            const words = text.split(/\s+/);
-            const stopWords = ['من', 'الى', 'عن', 'على', 'في', 'هذا', 'هذه', 'ذلك', 'التي', 'الذي', 'و', 'ف', 'ب', 'ك', 'ل', 'ما',
-                'لا', 'هل', 'ماذا', 'كيف', 'لماذا', 'أين', 'متى'
-            ];
-            const keywords = [];
-            const seen = new Set();
-
-            for (const word of words) {
-                const cleanWord = word.replace(/[^a-zA-Z\u0600-\u06FF0-9]/g, '');
-                if (cleanWord.length > 2 && !stopWords.includes(cleanWord)) {
-                    // تحقق إذا كانت الكلمة موجودة في الكلمات المفتاحية للردود
-                    let found = false;
-                    for (const [cat, patterns] of Object.entries(keywordsMap)) {
-                        for (const pattern of patterns) {
-                            if (cleanWord.includes(pattern) || pattern.includes(cleanWord)) {
-                                if (!seen.has(cleanWord)) {
-                                    seen.add(cleanWord);
-                                    keywords.push(cleanWord);
-                                    found = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (found) break;
-                    }
-                    // إذا لم تكن موجودة في الكلمات المفتاحية، أضفها كاقتراح عام
-                    if (!found && !seen.has(cleanWord)) {
-                        seen.add(cleanWord);
-                        keywords.push(cleanWord);
+        function getCategoryForText(text) {
+            const lower = text.trim().toLowerCase();
+            for (const [cat, patterns] of Object.entries(keywordsMap)) {
+                for (const pattern of patterns) {
+                    if (lower.includes(pattern)) {
+                        return cat;
                     }
                 }
             }
-
-            // إذا كان عدد الكلمات المفتاحية قليل، أضف اقتراحات افتراضية
-            if (keywords.length < 2) {
-                const defaultSuggestions = ['تأسيس الفريق', 'MEN pass', 'الدعم الفني', 'مميزات PRO'];
-                for (const suggestion of defaultSuggestions) {
-                    if (!seen.has(suggestion)) {
-                        keywords.push(suggestion);
-                        if (keywords.length >= 4) break;
-                    }
-                }
-            }
-
-            return keywords.slice(0, 6); // حد أقصى 6 اقتراحات
+            return 'default';
         }
 
         function buildWelcomeMessage() {
             return `
-                    <div class="welcome-animation">
-                        <div class="welcome-main">
-                            <span class="letter" style="animation-delay: 0s;"></span>
-                            <span class="letter" style="animation-delay: 0.12s;"></span>
-                            <span class="letter" style="animation-delay: 0.24s;"></span>
-                            <span class="letter" style="animation-delay: 0.36s;"></span>
-                            <span class="letter" style="animation-delay: 0.48s;"></span>
-                            <span class="letter" style="animation-delay: 0.60s;"></span>
-                        </div>
-                        <div class="typewriter-container">
-                            <span class="typewriter-text" id="typewriterText"></span>
-                            <span class="typewriter-cursor" id="typewriterCursor"></span>
-                        </div>
-                        <div class="welcome-desc">
-                            <i class="fas fa-circle-notch"></i> أنا هنا لمساعدتك اسألني عن أي شيء!
-                        </div>
+                <div class="welcome-animation">
+                    <div class="welcome-main">
+                        <span class="letter" style="animation-delay: 0s;">م</span>
+                        <span class="letter" style="animation-delay: 0.12s;">ر</span>
+                        <span class="letter" style="animation-delay: 0.24s;">ح</span>
+                        <span class="letter" style="animation-delay: 0.36s;">با</span>
                     </div>
-                `;
+                    <div class="typewriter-container">
+                        <span class="typewriter-text" id="typewriterText"></span>
+                        <span class="typewriter-cursor" id="typewriterCursor"></span>
+                    </div>
+                    <div class="welcome-desc">
+                        <i class="fas fa-circle-notch"></i> أنا هنا لمساعدتك في أي نص أو منتج!
+                    </div>
+                </div>
+            `;
         }
 
         function typeTextEffect(element, text, speed = 60) {
@@ -2219,112 +1690,49 @@
         const voiceBtn = document.getElementById('voiceBtn');
 
         let isProcessing = false;
-        let conversationHistory = [];
-
         let recognition = null;
         let isRecording = false;
 
         function initSpeechRecognition() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                voiceBtn.style.display = 'none';
-                console.warn('التعرف على الصوت غير مدعوم في هذا المتصفح');
-                return null;
-            }
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) return null;
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             const rec = new SpeechRecognition();
             rec.lang = 'ar-SA';
             rec.continuous = false;
             rec.interimResults = true;
-            rec.maxAlternatives = 1;
 
             rec.onresult = function(event) {
                 let finalText = '';
                 for (let i = event.resultIndex; i < event.results.length; i++) {
-                    const transcript = event.results[i][0].transcript;
-                    if (event.results[i].isFinal) {
-                        finalText += transcript;
-                    }
+                    if (event.results[i].isFinal) finalText += event.results[i][0].transcript;
                 }
                 if (finalText) {
                     messageInput.value = finalText;
                     charCount.textContent = finalText.length;
-                    if (finalText.trim()) {
-                        sendMessage();
-                    }
+                    sendMessage();
                 }
             };
-
-            rec.onerror = function(event) {
-                console.warn('خطأ في التعرف على الصوت:', event.error);
-                stopRecording();
-                if (event.error !== 'not-allowed') {
-                    const errorMsg = document.createElement('div');
-                    errorMsg.className = 'message bot';
-                    errorMsg.innerHTML = 'عذراً، لم أتمكن من التعرف على صوتك. حاول مرة أخرى.' + `<span class="msg-time">الآن</span>`;
-                    messagesArea.appendChild(errorMsg);
-                    scrollToBottom();
-                }
-            };
-
-            rec.onend = function() {
-                stopRecording();
-            };
-
+            rec.onend = () => stopRecording();
             return rec;
         }
 
         function startRecording() {
-            if (isRecording) {
-                stopRecording();
-                return;
-            }
-            if (!recognition) {
-                recognition = initSpeechRecognition();
-                if (!recognition) return;
-            }
-            try {
-                recognition.start();
-                isRecording = true;
-                voiceBtn.classList.add('recording');
-                voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
-            } catch (e) {
-                console.warn('خطأ في بدء التسجيل:', e);
-                if (e.message && e.message.includes('already started')) {
-                    stopRecording();
-                    setTimeout(() => startRecording(), 300);
-                }
-            }
+            if (isRecording) { stopRecording(); return; }
+            if (!recognition) { recognition = initSpeechRecognition(); if (!recognition) return; }
+            recognition.start();
+            isRecording = true;
+            voiceBtn.classList.add('recording');
+            voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
         }
 
         function stopRecording() {
-            if (recognition) {
-                try {
-                    recognition.stop();
-                } catch (e) { /* تجاهل */ }
-            }
+            if (recognition) try { recognition.stop(); } catch(e){}
             isRecording = false;
             voiceBtn.classList.remove('recording');
             voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
         }
 
-        voiceBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (isProcessing) return;
-            startRecording();
-        });
-
-        // ===== إضافة مستمع لاقتراحات النصوص =====
-        document.addEventListener('click', function(e) {
-            const item = e.target.closest('.suggestion-item');
-            if (item) {
-                const suggestion = item.dataset.suggestion;
-                if (suggestion) {
-                    messageInput.value = suggestion;
-                    charCount.textContent = suggestion.length;
-                    sendMessage();
-                }
-            }
-        });
+        voiceBtn.addEventListener('click', (e) => { e.preventDefault(); if (!isProcessing) startRecording(); });
 
         document.querySelectorAll('.sq-btn').forEach(btn => {
             btn.addEventListener('click', function() {
@@ -2344,8 +1752,7 @@
         });
 
         messageInput.addEventListener('input', function() {
-            const len = this.value.length;
-            charCount.textContent = len > 0 ? len : '0';
+            charCount.textContent = this.value.length;
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 150) + 'px';
         });
@@ -2358,16 +1765,8 @@
         });
 
         function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function scrollToBottom() {
-            messagesArea.scrollTop = messagesArea.scrollHeight;
-        }
+        function escapeHtml(text) { const d = document.createElement('div'); d.textContent = text; return d.innerHTML; }
+        function scrollToBottom() { messagesArea.scrollTop = messagesArea.scrollHeight; }
 
         function typeText(element, text, speed = 20) {
             return new Promise((resolve) => {
@@ -2377,7 +1776,7 @@
                     if (index < text.length) {
                         element.innerHTML += text.charAt(index);
                         index++;
-                        messagesArea.scrollTop = messagesArea.scrollHeight;
+                        scrollToBottom();
                     } else {
                         clearInterval(interval);
                         resolve();
@@ -2388,48 +1787,31 @@
 
         async function sendToDiscord(userMessage, botReply) {
             try {
-                const payload = {
-                    content: `**رسالة جديدة من MEN Ai**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
-                };
                 await fetch('https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ content: `**رسالة جديدة**\n**المستخدم:** ${userMessage}\n**الرد:** ${botReply}` })
                 });
-                console.log('تم إرسال المحادثة إلى Discord');
-            } catch (err) {
-                console.warn('فشل إرسال الـ webhook:', err);
-            }
+            } catch (err) {}
         }
 
         async function sendMessage() {
             const text = messageInput.value.trim();
-
-            if (attachedFile) {
-                const combinedText = text + '\n' + extractedText;
-                await processCombinedMessage(text, combinedText);
-                hideAttachedFile();
-                return;
-            }
-
-            if (!text) return;
+            if (!text && !attachedFile) return;
             if (isProcessing) return;
 
-            if (suggestedQuestions) {
-                suggestedQuestions.classList.add('hidden');
-            }
+            if (suggestedQuestions) suggestedQuestions.classList.add('hidden');
 
             isProcessing = true;
             sendBtn.disabled = true;
             voiceBtn.disabled = true;
 
             try {
+                const queryText = attachedFile ? text + '\n' + extractedText : text;
                 const userMsg = document.createElement('div');
                 userMsg.className = 'message user';
-                userMsg.innerHTML = escapeHtml(text) + `<span class="msg-time">الآن</span>`;
+                userMsg.innerHTML = escapeHtml(text || 'إرسال مرفق') + `<span class="msg-time">الآن</span>`;
                 messagesArea.appendChild(userMsg);
-                conversationHistory.push({ role: 'user', content: text });
-                if (conversationHistory.length > 10) conversationHistory.shift();
 
                 messageInput.value = '';
                 messageInput.style.height = 'auto';
@@ -2438,12 +1820,10 @@
 
                 typingIndicator.style.display = 'flex';
                 scrollToBottom();
-
-                await delay(800 + Math.random() * 1200);
-
+                await delay(1000);
                 typingIndicator.style.display = 'none';
 
-                const reply = await generateSmartReply(text);
+                const reply = await generateSmartReply(queryText);
 
                 const botMsg = document.createElement('div');
                 botMsg.className = 'message bot';
@@ -2451,14 +1831,9 @@
                 scrollToBottom();
 
                 let replyContent = '';
-                if (reply.type === 'products' || reply.type === 'product') {
+                if (reply.type === 'products' || reply.type === 'product' || reply.type === 'suggestions') {
                     botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
-                    replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
-                    await delay(200);
-                } else if (reply.type === 'suggestions') {
-                    botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
-                    replyContent = 'تم عرض الاقتراحات';
-                    await delay(200);
+                    replyContent = 'عرض المحتوى التفاعلي';
                 } else {
                     await typeText(botMsg, reply.content, 22);
                     const timeSpan = document.createElement('span');
@@ -2468,89 +1843,10 @@
                     replyContent = reply.content;
                 }
 
-                conversationHistory.push({ role: 'bot', content: replyContent || 'تم عرض المنتج' });
-                if (conversationHistory.length > 10) conversationHistory.shift();
-
+                if (attachedFile) hideAttachedFile();
                 await sendToDiscord(text, replyContent);
-
             } catch (error) {
-                console.error('خطأ في sendMessage:', error);
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'message bot';
-                errorMsg.innerHTML = 'عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.' + `<span class="msg-time">الآن</span>`;
-                messagesArea.appendChild(errorMsg);
-                scrollToBottom();
-            } finally {
-                isProcessing = false;
-                sendBtn.disabled = false;
-                voiceBtn.disabled = false;
-                messageInput.focus();
-                scrollToBottom();
-            }
-        }
-
-        async function processCombinedMessage(userText, combinedText) {
-            if (isProcessing) return;
-            isProcessing = true;
-            sendBtn.disabled = true;
-            voiceBtn.disabled = true;
-
-            try {
-                const userMsg = document.createElement('div');
-                userMsg.className = 'message user';
-                userMsg.innerHTML = escapeHtml(userText) + `<span class="msg-time">الآن</span>`;
-                messagesArea.appendChild(userMsg);
-                scrollToBottom();
-
-                messageInput.value = '';
-                messageInput.style.height = 'auto';
-                charCount.textContent = '0';
-
-                typingIndicator.style.display = 'flex';
-                scrollToBottom();
-                await delay(800 + Math.random() * 1000);
-                typingIndicator.style.display = 'none';
-
-                const reply = await generateSmartReply(combinedText);
-
-                const botMsg = document.createElement('div');
-                botMsg.className = 'message bot';
-                messagesArea.appendChild(botMsg);
-                scrollToBottom();
-
-                let replyContent = '';
-                if (reply.type === 'products' || reply.type === 'product') {
-                    const fileNote = attachedFile ? `📄 بناءً على محتوى الملف "${attachedFile.name}"<br><br>` : '';
-                    botMsg.innerHTML = fileNote + reply.content + `<span class="msg-time">الآن</span>`;
-                    replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
-                    await delay(200);
-                } else if (reply.type === 'suggestions') {
-                    const fileNote = attachedFile ? `📄 بناءً على محتوى الملف "${attachedFile.name}"<br><br>` : '';
-                    botMsg.innerHTML = fileNote + reply.content + `<span class="msg-time">الآن</span>`;
-                    replyContent = 'تم عرض الاقتراحات';
-                    await delay(200);
-                } else {
-                    const prefix = attachedFile ? `📄 بناءً على محتوى الملف "${attachedFile.name}":\n\n` : '';
-                    botMsg.innerHTML = prefix;
-                    await typeText(botMsg, reply.content, 22);
-                    const timeSpan = document.createElement('span');
-                    timeSpan.className = 'msg-time';
-                    timeSpan.textContent = 'الآن';
-                    botMsg.appendChild(timeSpan);
-                    replyContent = reply.content;
-                }
-
-                await sendToDiscord(userText, replyContent);
-
-                hideAttachedFile();
-
-            } catch (error) {
-                console.error('خطأ في معالجة الرسالة المدمجة:', error);
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'message bot';
-                errorMsg.innerHTML = 'عذراً، حدث خطأ أثناء المعالجة.' + `<span class="msg-time">الآن</span>`;
-                messagesArea.appendChild(errorMsg);
-                scrollToBottom();
+                console.error(error);
             } finally {
                 isProcessing = false;
                 sendBtn.disabled = false;
@@ -2565,103 +1861,39 @@
         async function loadResponses() {
             try {
                 const response = await fetch('responses.json');
-                if (!response.ok) throw new Error('تعذر تحميل ملف الردود');
                 const data = await response.json();
                 responses = data;
                 keywordsMap = buildKeywordsMap(data);
-                console.log('تم تحميل الردود والكلمات المفتاحية بنجاح');
-                return true;
             } catch (error) {
-                console.error('خطأ في تحميل الردود، سيتم استخدام الردود الافتراضية:', error);
                 responses = {
-                    default: {
-                        keywords: ['مرحبا', 'السلام', 'اهلا', 'كيف'],
-                        responses: ['مرحباً! كيف يمكنني مساعدتك؟', 'أهلاً بك! أنا MEN Ai، اسألني أي شيء.', 'السلام عليكم! كيف يمكنني خدمتك؟']
-                    },
-                    time: {
-                        keywords: ['وقت', 'الساعة', 'تاريخ', 'الوقت'],
-                        responses: ['الوقت الآن {time} والتاريخ {date}', 'الساعة الآن {time}، والتاريخ {date}', 'حالياً الوقت {time}، اليوم {date}']
-                    },
-                    founding: {
-                        keywords: ['تأسس', 'تأسيس', 'متى', 'منذ', 'تاريخ', 'انشئ', 'تأسس الفريق', 'الفريق'],
-                        responses: ['تأسس فريق MEN في عام 2020، على يد مجموعة من المطورين والمبدعين.', 'تم تأسيس فريق MEN عام 2020، وكانت البداية مع مجموعة من المتحمسين.', 'تعود انطلاقة MEN إلى سنة 2020، حيث اجتمع المؤسسون لبناء رؤية تقنية.']
-                    },
-                    pass: {
-                        keywords: ['pass', 'اشتراك', 'اشترك', 'كيف اشترك', 'MEN pass'],
-                        responses: ['للاشتراك في MEN pass، يمكنك زيارة صفحة المتجر على موقعنا الرسمي.', 'اشترك في MEN pass عبر الضغط على زر "عرض المنتج" في بطاقة MEN PASS.', 'يمكنك الحصول على MEN pass من خلال متجرنا الإلكتروني بسهولة.']
-                    },
-                    pro: {
-                        keywords: ['pro', 'مميزات', 'مزايا', 'MEN PRO'],
-                        responses: ['باقة MEN PRO تقدم لك أدوات متطورة، تحليلات ذكية، ودعم فني على مدار الساعة.', 'تمتع بمزايا MEN PRO الحصرية، مثل الوصول المبكر للمميزات الجديدة.', 'باقة PRO مصممة للمحترفين، وتشمل كل ما تحتاجه لتطوير مشاريعك.']
-                    },
-                    support: {
-                        keywords: ['دعم', 'تواصل', 'مساعدة', 'الدعم'],
-                        responses: ['يمكنك التواصل مع الدعم عبر البريد الإلكتروني: clan.men.ts@gmail.com', 'للاستفسارات، يمكنك مراسلتنا على البريد الإلكتروني أو عبر حسابات التواصل.', 'فريق الدعم متاح لك عبر جميع قنوات التواصل الرسمية.']
-                    },
-                    download: {
-                        keywords: ['تحميل', 'تطبيق', 'app', 'تنزيل'],
-                        responses: ['يمكنك تحميل تطبيق MEN من متجر Google Play أو App Store.', 'احصل على تطبيق MEN من خلال الروابط المتوفرة في موقعنا.', 'تطبيق MEN متاح للتحميل على جميع المنصات الرئيسية.']
-                    }
+                    default: { keywords: ['مرحبا', 'السلام'], responses: ['مرحباً بك! كيف يمكنني مساعدتك؟'] },
+                    time: { keywords: ['وقت', 'الساعة'], responses: ['الوقت الحالي متاح في النظام.'] },
+                    founding: { keywords: ['تأسس', 'تأسيس'], responses: ['تأسس فريق MEN في عام 2020.'] }
                 };
                 keywordsMap = buildKeywordsMap(responses);
-                return false;
             }
         }
 
         async function loadProducts() {
             try {
                 const response = await fetch('products.json');
-                if (!response.ok) throw new Error('تعذر تحميل ملف المنتجات');
-                const data = await response.json();
-                products = data;
-                console.log('تم تحميل المنتجات بنجاح، عددها:', products.length);
-                return true;
+                products = await response.json();
             } catch (error) {
-                console.error('خطأ في تحميل المنتجات، سيتم استخدام البيانات الافتراضية:', error);
                 products = [{
                     "id": "men-pass",
                     "name": "MEN PASS",
-                    "description": "اشترك في MEN PASS واحصل على جميع المميزات الحصرية",
+                    "description": "اشتراك MEN PASS المميز",
                     "price": "49",
                     "currency": "ر.س",
-                    "image": "images/pass.png",
                     "badge": "⭐ مميز",
                     "link": "store.html",
-                    "keywords": ["pass", "اشتراك", "men pass", "باقة"]
-                }, {
-                    "id": "men-pro",
-                    "name": "MEN PRO",
-                    "description": "باقة احترافية للمطورين مع أدوات متقدمة",
-                    "price": "99",
-                    "currency": "ر.س",
-                    "image": "images/pro.png",
-                    "badge": "🔥 احترافية",
-                    "link": "pro.html",
-                    "keywords": ["pro", "احترافي", "مطور", "أدوات"]
-                }, {
-                    "id": "men-basic",
-                    "name": "MEN BASIC",
-                    "description": "باقة أساسية للمبتدئين",
-                    "price": "19",
-                    "currency": "ر.س",
-                    "image": "images/basic.png",
-                    "badge": "🚀 أساسية",
-                    "link": "basic.html",
-                    "keywords": ["basic", "أساسي", "مبتدئ"]
+                    "keywords": ["pass", "اشتراك"]
                 }];
-                return true;
             }
         }
 
         async function init() {
-            messageInput.disabled = true;
-            sendBtn.disabled = true;
-            voiceBtn.disabled = true;
-
-            await loadExternalLibraries();
-
             await Promise.all([loadResponses(), loadProducts()]);
-
             messagesArea.innerHTML = '';
             const welcomeMsg = document.createElement('div');
             welcomeMsg.className = 'message bot';
@@ -2673,58 +1905,9 @@
             if (typewriterElement) {
                 const fullText = 'مرحبا بك في MEN Ai';
                 await typeTextEffect(typewriterElement, fullText, 70);
-                const finalHtml = fullText.replace('MEN Ai', '<span class="highlight">MEN Ai</span>');
-                typewriterElement.innerHTML = finalHtml;
-                const cursor = document.getElementById('typewriterCursor');
-                if (cursor) cursor.style.display = 'none';
+                typewriterElement.innerHTML = fullText.replace('MEN Ai', '<span class="highlight">MEN Ai</span>');
+                document.getElementById('typewriterCursor').style.display = 'none';
             }
-
-            messageInput.disabled = false;
-            messageInput.focus();
-            sendBtn.disabled = false;
-            voiceBtn.disabled = false;
-
-            console.log('MEN Ai جاهز مع عرض الاقتراحات المتعددة وقارئ الملفات');
-        }
-
-        function loadExternalLibraries() {
-            return new Promise((resolve) => {
-                let loadedCount = 0;
-                const totalLibraries = 4;
-
-                function checkLoaded() {
-                    loadedCount++;
-                    if (loadedCount >= totalLibraries) {
-                        resolve();
-                    }
-                }
-
-                const tesseractScript = document.createElement('script');
-                tesseractScript.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
-                tesseractScript.onload = checkLoaded;
-                tesseractScript.onerror = checkLoaded;
-                document.head.appendChild(tesseractScript);
-
-                const pdfScript = document.createElement('script');
-                pdfScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-                pdfScript.onload = checkLoaded;
-                pdfScript.onerror = checkLoaded;
-                document.head.appendChild(pdfScript);
-
-                const mammothScript = document.createElement('script');
-                mammothScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
-                mammothScript.onload = checkLoaded;
-                mammothScript.onerror = checkLoaded;
-                document.head.appendChild(mammothScript);
-
-                const xlsxScript = document.createElement('script');
-                xlsxScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
-                xlsxScript.onload = checkLoaded;
-                xlsxScript.onerror = checkLoaded;
-                document.head.appendChild(xlsxScript);
-
-                setTimeout(resolve, 8000);
-            });
         }
 
         init();
