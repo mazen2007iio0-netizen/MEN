@@ -986,6 +986,88 @@
 
         .attendance-btn-wrap { margin-top: 12px; text-align: center; }
 
+        /* ===== CALENDAR ===== */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin: 16px 0;
+        }
+        .calendar-day {
+            background: rgba(0,0,0,0.15);
+            border-radius: 12px;
+            padding: 10px 4px;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            border: 1px solid rgba(2, 28, 164, 0.03);
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.85rem;
+        }
+        .calendar-day .day-number { font-weight: 700; color: #a0a8c0; font-size: 0.9rem; }
+        .calendar-day .event-dot {
+            width: 8px; height: 8px; border-radius: 50%; margin-top: 4px; display: inline-block;
+        }
+        .calendar-day .event-dot.orange { background: #f5b342; box-shadow: 0 0 12px rgba(245, 179, 66, 0.4); }
+        .calendar-day .event-dot.green { background: #4caf50; box-shadow: 0 0 12px rgba(76, 175, 80, 0.4); }
+        .calendar-day .event-dot.red { background: #ff6b6b; box-shadow: 0 0 12px rgba(255, 107, 107, 0.4); }
+        .calendar-day .event-title { font-size: 0.55rem; color: #b0b8d0; margin-top: 2px; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .calendar-day.has-event { border-color: rgba(2, 28, 164, 0.10); background: rgba(2, 28, 164, 0.03); }
+        .calendar-day.today { border-color: var(--blue-deep); background: rgba(2, 28, 164, 0.06); }
+        .calendar-day.today .day-number { color: var(--blue-light); }
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .calendar-header span { text-align: center; font-weight: 700; color: var(--blue-light); font-size: 0.8rem; }
+        .calendar-month { text-align: center; font-size: 1.2rem; font-weight: 700; color: #ffffff; margin-bottom: 12px; }
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .calendar-nav button {
+            background: rgba(2, 28, 164, 0.06);
+            border: 1px solid rgba(2, 28, 164, 0.08);
+            color: var(--blue-light);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .calendar-nav button:hover { background: rgba(2, 28, 164, 0.12); border-color: var(--blue-deep); }
+        .calendar-legend {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .calendar-legend .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: #8890b0;
+        }
+        .calendar-legend .legend-item .dot {
+            width: 10px; height: 10px; border-radius: 50%; display: inline-block;
+        }
+        .calendar-legend .legend-item .dot.orange { background: #f5b342; }
+        .calendar-legend .legend-item .dot.green { background: #4caf50; }
+        .calendar-legend .legend-item .dot.red { background: #ff6b6b; }
+
         @media (max-width: 992px) {
             .news-luxury-grid { grid-template-columns: 1fr; }
             .news-luxury-grid .tile-main { flex-direction: column; }
@@ -1015,6 +1097,9 @@
             .user-type-badge { font-size: 0.7rem; padding: 2px 12px; }
             .more-menu-grid { grid-template-columns: 1fr 1fr; }
             .discipline-summary { grid-template-columns: 1fr 1fr 1fr; }
+            .calendar-grid { gap: 4px; }
+            .calendar-day { min-height: 50px; padding: 6px 2px; font-size: 0.75rem; }
+            .calendar-day .day-number { font-size: 0.75rem; }
         }
         @media (max-width: 480px) {
             .games-grid { grid-template-columns: 1fr; }
@@ -1030,6 +1115,10 @@
             .more-menu-box { padding: 20px 12px; }
             .more-menu-box i { font-size: 2rem; }
             .discipline-summary { grid-template-columns: 1fr 1fr; }
+            .calendar-grid { gap: 3px; }
+            .calendar-day { min-height: 40px; padding: 4px 2px; font-size: 0.65rem; }
+            .calendar-day .day-number { font-size: 0.65rem; }
+            .calendar-header span { font-size: 0.6rem; }
         }
     </style>
 </head>
@@ -1198,6 +1287,9 @@
         let currentUser = null;
         let currentUserData = null;
         let userTypeLabel = '';
+        let calendarDate = new Date();
+        let currentMonth = calendarDate.getMonth();
+        let currentYear = calendarDate.getFullYear();
 
         // ==================== UTILITIES ====================
         function showToast(msg, type = "info") {
@@ -1234,6 +1326,95 @@
                 ],
                 timestamp: new Date().toISOString()
             };
+        }
+
+        function getFirstName(fullName) {
+            if (!fullName) return 'عضو';
+            return fullName.split(' ')[0];
+        }
+
+        // ==================== CALENDAR ====================
+        function renderCalendar(meetings, containerId = 'calendarContainer') {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", 
+                               "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+            const dayNames = ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"];
+
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const today = new Date();
+            const todayDate = today.getDate();
+            const todayMonth = today.getMonth();
+            const todayYear = today.getFullYear();
+
+            let html = `
+                <div class="calendar-nav">
+                    <button onclick="changeMonth(-1, '${containerId}')"><i class="fas fa-chevron-right"></i></button>
+                    <span class="calendar-month">${monthNames[currentMonth]} ${currentYear}</span>
+                    <button onclick="changeMonth(1, '${containerId}')"><i class="fas fa-chevron-left"></i></button>
+                </div>
+                <div class="calendar-header">
+                    ${dayNames.map(d => `<span>${d}</span>`).join('')}
+                </div>
+                <div class="calendar-grid">
+            `;
+
+            for (let i = 0; i < firstDay; i++) {
+                html += `<div class="calendar-day"></div>`;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isToday = (day === todayDate && currentMonth === todayMonth && currentYear === todayYear);
+                
+                let dayEvents = [];
+                if (meetings) {
+                    dayEvents = meetings.filter(m => m.date === dateStr);
+                }
+
+                let eventDots = '';
+                let eventTitles = '';
+                if (dayEvents.length > 0) {
+                    dayEvents.forEach(e => {
+                        let color = 'orange';
+                        if (e.status === 'حضر') color = 'green';
+                        else if (e.status === 'غاب') color = 'red';
+                        eventDots += `<span class="event-dot ${color}"></span>`;
+                        eventTitles += `<div class="event-title">${e.title}</div>`;
+                    });
+                }
+
+                html += `
+                    <div class="calendar-day ${dayEvents.length > 0 ? 'has-event' : ''} ${isToday ? 'today' : ''}">
+                        <span class="day-number">${day}</span>
+                        ${eventDots}
+                        ${eventTitles}
+                    </div>
+                `;
+            }
+
+            html += `</div>`;
+
+            html += `
+                <div class="calendar-legend">
+                    <span class="legend-item"><span class="dot orange"></span> قادم</span>
+                    <span class="legend-item"><span class="dot green"></span> حضر</span>
+                    <span class="legend-item"><span class="dot red"></span> غاب</span>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function changeMonth(delta, containerId = 'calendarContainer') {
+            currentMonth += delta;
+            if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+            if (currentUserData) {
+                renderCalendar(currentUserData.meetings || [], containerId);
+            }
         }
 
         // ==================== LOAD ALL DB FILES ====================
@@ -1306,12 +1487,13 @@
                 // Update header
                 updateHeaderUI(true, user.avatar, user._type);
 
-                // Update welcome message
-                document.getElementById('welcomeName').textContent = user.fullName;
+                // Update welcome message - show first name only
+                const firstName = getFirstName(user.fullName);
+                document.getElementById('welcomeName').textContent = firstName;
                 document.getElementById('welcomeMsg').textContent = `مرحباً بك في منصة TCM · فئتك: ${user._type}`;
 
                 switchPage('home');
-                showToast(`مرحباً ${user.fullName}`, "success");
+                showToast(`مرحباً ${firstName}`, "success");
             } else {
                 const errDiv = document.getElementById('modalLoginError');
                 errDiv.innerText = '⚠️ الرقم الوظيفي أو كلمة المرور غير صحيحة';
@@ -1438,6 +1620,11 @@
                                 <h4>إدارة المهام</h4>
                                 <p>إنهاء أو إعادة المهمة</p>
                             </div>
+                            <div class="more-menu-box" onclick="showMoreSection('moreSectionCalendar')">
+                                <i class="fas fa-calendar-alt"></i>
+                                <h4>التقويم والجدول</h4>
+                                <p>عرض الأحداث والمواعيد</p>
+                            </div>
                         </div>
                         <div id="moreSectionAttendance" class="more-section">
                             <button class="more-back-btn" onclick="showMoreMenu()"><i class="fas fa-arrow-right"></i> رجوع</button>
@@ -1513,6 +1700,20 @@
                                     ${user.dueDate && user.dueDate !== '-' ? `المهمة الحالية: ${user.customMsg || 'مهمة'} (تنتهي ${user.dueDate})` : 'لا توجد مهمة نشطة'}
                                 </div>
                                 <div id="taskMoreButtons" class="btn-group" style="justify-content:center;"></div>
+                            </div>
+                        </div>
+                        <div id="moreSectionCalendar" class="more-section">
+                            <button class="more-back-btn" onclick="showMoreMenu()"><i class="fas fa-arrow-right"></i> رجوع</button>
+                            <h4 style="color:var(--blue-light); margin-bottom:8px;">📅 التقويم والجدول</h4>
+                            <div id="calendarContainerMore"></div>
+                            <div style="margin-top:16px;">
+                                <h4 style="color:var(--blue-light);">📋 جدول الأحداث</h4>
+                                <div style="max-height:250px; overflow-y:auto;">
+                                    <table class="table-clean" style="font-size:0.85rem;">
+                                        <thead><tr><th>النوع</th><th>العنوان</th><th>التاريخ</th><th>الحالة</th></tr></thead>
+                                        <tbody id="meetingsTableBodyMore"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1612,8 +1813,19 @@
                 document.getElementById('supportFileName').classList.remove('show');
             });
 
-            // Update task buttons in main and more tab
+            // Update task buttons
             updateTaskButtons();
+
+            // Render calendar in more tab
+            renderCalendar(user.meetings || [], 'calendarContainerMore');
+
+            // Render meetings table in more tab
+            const tbodyMore = document.getElementById('meetingsTableBodyMore');
+            if (tbodyMore && user.meetings) {
+                tbodyMore.innerHTML = user.meetings.map(m =>
+                    `<tr><td>${m.type}</td><td>${m.title}</td><td>${m.date}</td><td><span style="background:${m.status === 'حضر' ? '#4caf5020' : m.status === 'قادم' ? '#f5b34220' : '#ff6b6b20'}; color:${m.status === 'حضر' ? '#4caf50' : m.status === 'قادم' ? '#f5b342' : '#ff6b6b'}; padding:2px 12px; border-radius:30px; font-size:0.7rem;">${m.status}</span></td></tr>`
+                ).join('');
+            }
 
             // Tab switching
             const tabs = document.querySelectorAll('.tab-soft');
@@ -1633,6 +1845,16 @@
                     if (tab === 'tasks') {
                         updateTaskButtons();
                         updateTaskStats();
+                    }
+                    if (tab === 'more') {
+                        // Re-render calendar when more tab is opened
+                        renderCalendar(currentUserData?.meetings || [], 'calendarContainerMore');
+                        const tbodyMore2 = document.getElementById('meetingsTableBodyMore');
+                        if (tbodyMore2 && currentUserData?.meetings) {
+                            tbodyMore2.innerHTML = currentUserData.meetings.map(m =>
+                                `<tr><td>${m.type}</td><td>${m.title}</td><td>${m.date}</td><td><span style="background:${m.status === 'حضر' ? '#4caf5020' : m.status === 'قادم' ? '#f5b34220' : '#ff6b6b20'}; color:${m.status === 'حضر' ? '#4caf50' : m.status === 'قادم' ? '#f5b342' : '#ff6b6b'}; padding:2px 12px; border-radius:30px; font-size:0.7rem;">${m.status}</span></td></tr>`
+                            ).join('');
+                        }
                     }
                 });
             });
@@ -1670,7 +1892,6 @@
             const hasTask = user.dueDate && user.dueDate !== '-';
             const isExpired = hasTask && new Date(user.dueDate) < new Date();
 
-            // Update status messages
             if (taskStatus) {
                 taskStatus.textContent = hasTask ? `📅 تنتهي في ${user.dueDate}` : '✅ لا توجد مهمة نشطة';
             }
@@ -1678,7 +1899,6 @@
                 taskMoreStatus.textContent = hasTask ? `📌 ${user.customMsg || 'مهمة'} (تنتهي ${user.dueDate})` : '✅ لا توجد مهمة نشطة';
             }
 
-            // Update buttons in main tasks tab
             if (container) {
                 if (!hasTask) {
                     container.innerHTML = '<p style="color:#8890b0;">✅ لا توجد مهمة حالياً</p>';
@@ -1695,7 +1915,6 @@
                 }
             }
 
-            // Update buttons in more tab
             if (moreContainer) {
                 if (!hasTask) {
                     moreContainer.innerHTML = '<p style="color:#8890b0;">✅ لا توجد مهمة</p>';
@@ -1712,7 +1931,6 @@
                 }
             }
 
-            // Update stats
             updateTaskStats();
         }
 
@@ -1723,13 +1941,10 @@
             ]);
             await sendToWebhook(TASK_WEBHOOK, { embeds: [embed] }, "✅ تم إنهاء المهمة");
             showToast("✅ تم إكمال المهمة", "success");
-            // Update UI
             if (currentUserData) {
                 currentUserData.taskCompleted = true;
-                // Mark task as completed locally
-                const user = currentUserData;
-                user.dueDate = null;
-                user.customMsg = '✅ مكتملة';
+                currentUserData.dueDate = null;
+                currentUserData.customMsg = '✅ مكتملة';
             }
             updateTaskButtons();
             updateTaskStats();
@@ -1840,6 +2055,7 @@
             window.showMoreSection = showMoreSection;
             window.showMoreMenu = showMoreMenu;
             window.switchPage = switchPage;
+            window.changeMonth = changeMonth;
         }
 
         document.addEventListener('DOMContentLoaded', init);
