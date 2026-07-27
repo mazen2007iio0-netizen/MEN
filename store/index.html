@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MEN stor</title>
+    <title>MEN stor — متجر متكامل</title>
     <link rel="icon" type="image/png" href="logo.png" />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200..900&family=Cairo:wght@300..900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -439,6 +439,75 @@
             font-size: 1.1rem;
             opacity: 0.4;
             pointer-events: none;
+        }
+
+        /* ===== SORT & FILTER BAR ===== */
+        .sort-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            background: rgba(10, 16, 32, 0.4);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 8px 20px;
+            border: 1px solid rgba(2, 28, 164, 0.04);
+            margin-bottom: 24px;
+        }
+        .sort-bar label {
+            color: #b0b8d0;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .sort-bar select {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(2, 28, 164, 0.06);
+            border-radius: 30px;
+            padding: 8px 16px;
+            color: #f0f4ff;
+            font-size: 0.9rem;
+            outline: none;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .sort-bar select:focus {
+            border-color: var(--blue-deep);
+            box-shadow: 0 0 20px rgba(2, 28, 164, 0.02);
+        }
+        .sort-bar select option {
+            background: #060812;
+            color: #f0f4ff;
+        }
+        .sort-bar .filter-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .sort-bar .filter-tags button {
+            background: rgba(2, 28, 164, 0.04);
+            border: 1px solid rgba(2, 28, 164, 0.06);
+            border-radius: 30px;
+            padding: 4px 16px;
+            color: #b0b8d0;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            font-family: 'Cairo', sans-serif;
+        }
+        .sort-bar .filter-tags button.active {
+            background: rgba(2, 28, 164, 0.12);
+            border-color: var(--blue-deep);
+            color: #ffffff;
+        }
+        .sort-bar .filter-tags button:hover {
+            background: rgba(2, 28, 164, 0.08);
+            color: #ffffff;
         }
 
         /* ===== PRODUCT GRID ===== */
@@ -1368,6 +1437,19 @@
             .ai-fab .fab-btn i {
                 font-size: 24px;
             }
+            .sort-bar {
+                flex-direction: column;
+                align-items: stretch;
+                border-radius: 28px;
+                padding: 16px 20px;
+                gap: 10px;
+            }
+            .sort-bar .filter-tags {
+                justify-content: center;
+            }
+            .sort-bar label {
+                justify-content: center;
+            }
         }
         @media (max-width:480px) {
             .header-cart-btn {
@@ -1475,6 +1557,26 @@
                 </div>
             </div>
 
+            <!-- ===== SORT & FILTER BAR ===== -->
+            <div class="sort-bar">
+                <div class="filter-tags">
+                    <button class="active" data-filter="all">الكل</button>
+                    <button data-filter="ملابس">ملابس</button>
+                    <button data-filter="بطاقات شحن">بطاقات شحن</button>
+                    <button data-filter="اشتراكات">اشتراكات</button>
+                </div>
+                <label>
+                    <i class="fas fa-arrow-up-wide-short"></i> ترتيب:
+                    <select id="sortSelect">
+                        <option value="default">الافتراضي</option>
+                        <option value="price-asc">السعر: من الأقل</option>
+                        <option value="price-desc">السعر: من الأعلى</option>
+                        <option value="rating-desc">التقييم: الأعلى</option>
+                        <option value="popular">الأكثر مبيعاً</option>
+                    </select>
+                </label>
+            </div>
+
             <!-- ===== PRODUCT GRID ===== -->
             <div class="shop-grid" id="storeProductsGrid"></div>
 
@@ -1578,35 +1680,7 @@
         const SAR_ICON = "https://www.socialcreator.com/srv/imgs/ti_imgs/200732_328971.png";
 
         const productsArray = [
-            { id: 1, name: "تيشيرت الجديد", price: "39.99",
-                image: "https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png",
-                category: "ملابس", rating: 4.8, features: ["قطني ناعم", "مقاس مرن", "تصميم عصري"],
-                cons: ["قد يكون مقاسه غير دقيق"], description: "تيشيرت قطني مريح بتصميم عصري يناسب جميع الأوقات.",
-                tags: ["سفر", "هدية", "أسود", "صيفي"], usage: "يمكن ارتداؤه مع جينز أو شورت.",
-                warranty: "ضمان 30 يوم ضد عيوب الصناعة", popular: false },
-
-            { id: 3, name: "روبلوكس 20 ريال", price: "19.90",
-                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
-                category: "بطاقات شحن", rating: 4.6, features: ["سعر مناسب", "شحن فوري"],
-                cons: ["لا يمكن استخدامه في حسابات غير سعودية"], description: "بطاقة روبلوكس بقيمة 20 ريال.",
-                tags: ["ألعاب", "هدية", "رقمي"], usage: "أدخل الكود في موقع روبلوكس.",
-                warranty: "ضمان الاستبدال في حال عدم صلاحية الكود", popular: false },
-
-            { id: 4, name: "ببجي 5 $", price: "19.90",
-                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp",
-                category: "بطاقات شحن", rating: 4.4, features: ["شحن فوري", "يدعم ببجي موبايل"],
-                cons: ["غير متوفر لجميع المناطق"], description: "بطاقة ببجي بقيمة 5 دولارات.",
-                tags: ["ألعاب", "هدية", "رقمي"], usage: "ادخل الكود في متجر اللعبة.",
-                warranty: "ضمان استبدال الكود في حال العطل", popular: false },
-
-            { id: 2, name: "ستور سوني 10$", price: "39.35",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10",
-                category: "بطاقات شحن", rating: 4.7, features: ["شحن فوري", "متوافق مع PlayStation Network"],
-                cons: ["يستخدم في حساب سوني فقط"], description: "بطاقة شحن بقيمة 10$ لحساب سوني (PlayStation).",
-                tags: ["سوني", "ستور", "رقمي", "هدية", "ألعاب"],
-                usage: "أدخل الكود في متجر PlayStation لإضافة الرصيد.",
-                warranty: "ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular: false },
-
+            // MEN Pass في الأعلى
             { id: 5, name: "اشتراك MEN Pass", price: "7.50",
                 image: "https://www.socialcreator.com/srv/imgs/ti_imgs/200908_328971.png",
                 category: "اشتراكات", rating: 5.0,
@@ -1616,7 +1690,33 @@
                 tags: ["اشتراك", "عضوية", "حصرية", "ألعاب", "فيديوهات", "بثوث"],
                 usage: "بعد الشراء، سيتم إرسال تفاصيل الدخول إلى بريدك الإلكتروني خلال 24 ساعة.",
                 warranty: "ضمان استرداد خلال 3 أيام في حال عدم الرضا",
-                popular: true }
+                popular: true },
+            // باقي المنتجات
+            { id: 1, name: "تيشيرت الجديد", price: "39.99",
+                image: "https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png",
+                category: "ملابس", rating: 4.8, features: ["قطني ناعم", "مقاس مرن", "تصميم عصري"],
+                cons: ["قد يكون مقاسه غير دقيق"], description: "تيشيرت قطني مريح بتصميم عصري يناسب جميع الأوقات.",
+                tags: ["سفر", "هدية", "أسود", "صيفي"], usage: "يمكن ارتداؤه مع جينز أو شورت.",
+                warranty: "ضمان 30 يوم ضد عيوب الصناعة", popular: false },
+            { id: 3, name: "روبلوكس 20 ريال", price: "19.90",
+                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
+                category: "بطاقات شحن", rating: 4.6, features: ["سعر مناسب", "شحن فوري"],
+                cons: ["لا يمكن استخدامه في حسابات غير سعودية"], description: "بطاقة روبلوكس بقيمة 20 ريال.",
+                tags: ["ألعاب", "هدية", "رقمي"], usage: "أدخل الكود في موقع روبلوكس.",
+                warranty: "ضمان الاستبدال في حال عدم صلاحية الكود", popular: false },
+            { id: 4, name: "ببجي 5 $", price: "19.90",
+                image: "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp",
+                category: "بطاقات شحن", rating: 4.4, features: ["شحن فوري", "يدعم ببجي موبايل"],
+                cons: ["غير متوفر لجميع المناطق"], description: "بطاقة ببجي بقيمة 5 دولارات.",
+                tags: ["ألعاب", "هدية", "رقمي"], usage: "ادخل الكود في متجر اللعبة.",
+                warranty: "ضمان استبدال الكود في حال العطل", popular: false },
+            { id: 2, name: "ستور سوني 10$", price: "39.35",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10",
+                category: "بطاقات شحن", rating: 4.7, features: ["شحن فوري", "متوافق مع PlayStation Network"],
+                cons: ["يستخدم في حساب سوني فقط"], description: "بطاقة شحن بقيمة 10$ لحساب سوني (PlayStation).",
+                tags: ["سوني", "ستور", "رقمي", "هدية", "ألعاب"],
+                usage: "أدخل الكود في متجر PlayStation لإضافة الرصيد.",
+                warranty: "ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة", popular: false }
         ];
 
         const reviewsData = [
@@ -1624,7 +1724,8 @@
             { author: "نورة العتيبي", stars: 4, text: "خدمة سريعة ومنتجات جيدة." },
             { author: "خالد الحربي", stars: 5, text: "أفضل تيشيرتات في السوق." },
             { author: "سارة الغامدي", stars: 4, text: "الشحن سريع والدعم متعاون." },
-            { author: "فيصل المالكي", stars: 3, text: "منتج جيد لكن السعر مرتفع قليلاً." }
+            { author: "فيصل المالكي", stars: 3, text: "منتج جيد لكن السعر مرتفع قليلاً." },
+            { author: "منى الشمري", stars: 5, text: "اشتراك MEN Pass ممتاز ويستحق التجربة!" }
         ];
 
         // ============================================================
@@ -1636,6 +1737,8 @@
         let discountCode = '';
         let lastViewedProductId = null;
         let currentReviewIndex = 0;
+        let currentFilter = 'all';
+        let currentSort = 'default';
 
         // ============================================================
         // UTILITIES
@@ -2054,12 +2157,40 @@
         }
 
         // ============================================================
-        // RENDER STORE
+        // SORT & FILTER
         // ============================================================
-        function renderStore(items) {
+        function sortProducts(products, sortType) {
+            const sorted = [...products];
+            switch (sortType) {
+                case 'price-asc':
+                    sorted.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+                    break;
+                case 'price-desc':
+                    sorted.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+                    break;
+                case 'rating-desc':
+                    sorted.sort((a, b) => b.rating - a.rating);
+                    break;
+                case 'popular':
+                    sorted.sort((a, b) => (b.popular ? 1 : 0) - (a.popular ? 1 : 0));
+                    break;
+                default:
+                    // ترتيب افتراضي: MEN Pass أولاً ثم الباقي
+                    sorted.sort((a, b) => (a.id === 5 ? -1 : (b.id === 5 ? 1 : a.id - b.id)));
+                    break;
+            }
+            return sorted;
+        }
+
+        function renderStore(filter = 'all', sort = 'default') {
+            let filtered = productsArray;
+            if (filter !== 'all') {
+                filtered = productsArray.filter(p => p.category === filter);
+            }
+            const sorted = sortProducts(filtered, sort);
             const grid = document.getElementById('storeProductsGrid');
             if (!grid) return;
-            grid.innerHTML = items.map(p => `
+            grid.innerHTML = sorted.map(p => `
             <div class="product-item" data-id="${p.id}">
               <img src="${p.image}" alt="${p.name}" class="product-img">
               <div class="product-info">
@@ -2102,7 +2233,9 @@
         function renderReviews() {
             const track = document.getElementById('reviewsTrack');
             if (!track) return;
-            track.innerHTML = reviewsData.map(r => `
+            // ترتيب عشوائي لتنويع العرض
+            const shuffled = [...reviewsData].sort(() => Math.random() - 0.5);
+            track.innerHTML = shuffled.map(r => `
             <div class="review-card">
               <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div>
               <div class="review-text">“${r.text}”</div>
@@ -2131,21 +2264,71 @@
         // INIT
         // ============================================================
         function init() {
-            renderStore(productsArray);
+            renderStore('all', 'default');
             renderReviews();
             updateCartUI();
 
             // Search
             document.getElementById('storeSearchInput')?.addEventListener('input', (e) => {
                 const term = e.target.value.toLowerCase().trim();
-                if (term === '') renderStore(productsArray);
+                if (term === '') renderStore(currentFilter, currentSort);
                 else {
                     const filtered = productsArray.filter(p =>
                         p.name.toLowerCase().includes(term) ||
                         p.tags.some(t => t.includes(term))
                     );
-                    renderStore(filtered);
+                    const sorted = sortProducts(filtered, currentSort);
+                    const grid = document.getElementById('storeProductsGrid');
+                    if (!grid) return;
+                    grid.innerHTML = sorted.map(p => `
+                <div class="product-item" data-id="${p.id}">
+                  <img src="${p.image}" alt="${p.name}" class="product-img">
+                  <div class="product-info">
+                    <div class="product-name">
+                      ${p.name}
+                      ${p.popular ? '<span class="product-popular-badge"> الأكثر مبيعاً</span>' : ''}
+                    </div>
+                    <div class="product-price">
+                      <span>${p.price}</span>
+                      <img src="${SAR_ICON}" class="currency-icon" alt="ر.س" />
+                    </div>
+                    <div style="font-size:0.8rem; color:#8890b0; margin-bottom:8px;">★ ${p.rating}/5 • ${p.category}</div>
+                    <div class="product-actions">
+                      <button class="btn-ai-search" data-id="${p.id}"><i class="fas fa-wand-sparkles"></i> بحث</button>
+                      <button class="btn-cart add-to-cart" data-id="${p.id}"><i class="fas fa-plus-circle"></i> إضافة</button>
+                    </div>
+                  </div>
+                </div>
+              `).join('');
+                    document.querySelectorAll('.btn-ai-search').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const id = parseInt(this.dataset.id);
+                            openAIForProduct(id);
+                        });
+                    });
+                    document.querySelectorAll('.add-to-cart').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const id = parseInt(this.dataset.id);
+                            const product = productsArray.find(p => p.id === id);
+                            if (product) addToCart(product);
+                        });
+                    });
                 }
+            });
+
+            // Sort & Filter
+            document.querySelectorAll('.filter-tags button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-tags button').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderStore(currentFilter, currentSort);
+                });
+            });
+
+            document.getElementById('sortSelect').addEventListener('change', function() {
+                currentSort = this.value;
+                renderStore(currentFilter, currentSort);
             });
 
             // Header Cart Button
@@ -2199,7 +2382,7 @@
                 });
             });
 
-            // FAB - opens AI chat directly
+            // FAB
             document.getElementById('fabOpenChat').addEventListener('click', openAIChat);
 
             // Carousel
