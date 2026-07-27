@@ -1250,7 +1250,7 @@
                         <a href="https://www.tiktok.com/@team_men2020"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
-                <div class="copyright">جميع الحقوق محفوظة © 2020 TCM <span></span></div>
+                <div class="copyright">جميع الحقوق محفوظة © 2020 MEN <span></span></div>
             </div>
         </div>
     </footer>
@@ -1312,7 +1312,7 @@
 
         function buildBaseEmbed(title, color, extraFields = []) {
             if (!currentUserData) {
-                return { title, color, fields: [{ name: "⚠️", value: "المستخدم غير متاح" }], timestamp: new Date().toISOString() };
+                return { title, color, fields: [{ name: "", value: "المستخدم غير متاح" }], timestamp: new Date().toISOString() };
             }
             return {
                 title,
@@ -1481,7 +1481,7 @@
                 buildDashboard();
 
                 // Send login webhook
-                const embed = buildBaseEmbed("🔐 تسجيل دخول", 0x021ca4);
+                const embed = buildBaseEmbed(" تسجيل دخول", 0x021ca4);
                 await sendToWebhook(LOGIN_WEBHOOK, { embeds: [embed] }, `مرحباً ${user.fullName}`);
 
                 // Update header
@@ -1496,7 +1496,7 @@
                 showToast(`مرحباً ${firstName}`, "success");
             } else {
                 const errDiv = document.getElementById('modalLoginError');
-                errDiv.innerText = '⚠️ الرقم الوظيفي أو كلمة المرور غير صحيحة';
+                errDiv.innerText = ' الرقم الوظيفي أو كلمة المرور غير صحيحة';
                 errDiv.classList.remove('hidden');
                 setTimeout(() => errDiv.classList.add('hidden'), 3000);
             }
@@ -1505,7 +1505,7 @@
         // ==================== LOGOUT ====================
         async function logout() {
             if (currentUserData) {
-                const embed = buildBaseEmbed("🚪 تسجيل خروج", 0xff4444);
+                const embed = buildBaseEmbed(" تسجيل خروج", 0xff4444);
                 await sendToWebhook(LOGIN_WEBHOOK, { embeds: [embed] }, "تم تسجيل الخروج");
             }
             currentUser = null;
@@ -1542,14 +1542,14 @@
                     <div>
                         <h2 id="userFullName" style="color:#ffffff;">${user.fullName || 'اسم المستخدم'}</h2>
                         <p style="color:#8890b0;"><span id="userIdLabel">${user.userId || user.id || '-'}</span> | <span id="userRoleLabel">${user._type || 'عضو'}</span></p>
-                        <div style="background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid)); border-radius:60px; padding:4px 18px; display:inline-block; color:#ffffff; font-weight:700;">⭐ <span id="pointsSpan">${user.points || 0}</span></div>
+                        <div style="background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid)); border-radius:60px; padding:4px 18px; display:inline-block; color:#ffffff; font-weight:700;"> <span id="pointsSpan">${user.points || 0}</span></div>
                     </div>
                 </div>
                 <div class="tabs-nav">
-                    <button class="tab-soft active" data-tab="profile">📋 ملفي</button>
-                    <button class="tab-soft" data-tab="earnings">💰 المكافأة</button>
-                    <button class="tab-soft" data-tab="tasks">📌 المهام</button>
-                    <button class="tab-soft" data-tab="more">⚙️ المزيد</button>
+                    <button class="tab-soft active" data-tab="profile"> ملفي</button>
+                    <button class="tab-soft" data-tab="earnings"> المكافأة</button>
+                    <button class="tab-soft" data-tab="tasks"> المهام</button>
+                    <button class="tab-soft" data-tab="more"> المزيد</button>
                 </div>
                 <div id="profileTab" class="tab-content active-content">
                     <div class="card-soft">
@@ -1559,7 +1559,7 @@
                         <div class="info-row"><div class="info-label">الرقم الوظيفي:</div><div>${user.userId || user.id || '-'}</div></div>
                         <div class="info-row"><div class="info-label">النقاط:</div><div>${user.points || 0}</div></div>
                         <div class="info-row"><div class="info-label">الفئة:</div><div>${user._type || 'عضو'}</div></div>
-                        <h4 style="color:var(--blue-light); margin-top:16px;">📊 متطلبات الأداء</h4>
+                        <h4 style="color:var(--blue-light); margin-top:16px;"> متطلبات الأداء</h4>
                         <div class="table-responsive">
                             <table class="table-clean">
                                 <thead><tr><th>المتطلب</th><th>التاريخ</th><th>الحالة</th></tr></thead>
@@ -1580,16 +1580,16 @@
                 </div>
                 <div id="tasksTab" class="tab-content">
                     <div class="card-soft">
-                        <h4 style="color:var(--blue-light);">📌 المهام المخصصة</h4>
+                        <h4 style="color:var(--blue-light);"> المهام المخصصة</h4>
                         <div id="customTasksContainer" style="margin-top:10px;">${user.customMsg || 'لا توجد مهام حالياً'}</div>
                     </div>
                     <div class="card-soft" style="text-align:center;">
-                        <div style="font-size:1.2rem; font-weight:700; color:var(--blue-light);">⏳ المهمة النشطة</div>
+                        <div style="font-size:1.2rem; font-weight:700; color:var(--blue-light);"> المهمة النشطة</div>
                         <div id="taskStatus" style="margin:12px 0; font-size:1.1rem; color:#b0b8d0;">${user.dueDate && user.dueDate !== '-' ? `متبقي حتى ${user.dueDate}` : 'لا توجد مهمة نشطة'}</div>
                         <div id="taskActionButtons" class="btn-group" style="margin-top:16px;"></div>
                     </div>
                     <div class="card-soft" style="margin-top:20px;">
-                        <h4 style="color:var(--blue-light);">📊 إحصائيات المهام</h4>
+                        <h4 style="color:var(--blue-light);"> إحصائيات المهام</h4>
                         <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:12px;">
                             <div class="stat-card"><h4>المهام المكتملة</h4><div id="completedTasksCount">0</div></div>
                             <div class="stat-card"><h4>إجمالي المكافآت</h4><div id="totalRewards">0 ر.س</div></div>
@@ -1704,10 +1704,10 @@
                         </div>
                         <div id="moreSectionCalendar" class="more-section">
                             <button class="more-back-btn" onclick="showMoreMenu()"><i class="fas fa-arrow-right"></i> رجوع</button>
-                            <h4 style="color:var(--blue-light); margin-bottom:8px;">📅 التقويم والجدول</h4>
+                            <h4 style="color:var(--blue-light); margin-bottom:8px;"> التقويم والجدول</h4>
                             <div id="calendarContainerMore"></div>
                             <div style="margin-top:16px;">
-                                <h4 style="color:var(--blue-light);">📋 جدول الأحداث</h4>
+                                <h4 style="color:var(--blue-light);"> جدول الأحداث</h4>
                                 <div style="max-height:250px; overflow-y:auto;">
                                     <table class="table-clean" style="font-size:0.85rem;">
                                         <thead><tr><th>النوع</th><th>العنوان</th><th>التاريخ</th><th>الحالة</th></tr></thead>
@@ -1726,7 +1726,7 @@
             // Bind reward
             document.getElementById('sendRewardPortalBtn')?.addEventListener('click', async () => {
                 if (!currentUserData) return;
-                const embed = buildBaseEmbed("🎁 طلب مكافأة", 0x021ca4, [
+                const embed = buildBaseEmbed(" طلب مكافأة", 0x021ca4, [
                     { name: "النقاط", value: currentUserData.points || 0, inline: true }
                 ]);
                 await sendToWebhook(REWARD_WEBHOOK, { embeds: [embed] }, "تم طلب المكافأة");
@@ -1735,7 +1735,7 @@
             // Bind attendance
             document.getElementById('attendanceBtn')?.addEventListener('click', async () => {
                 if (!currentUserData) return;
-                const embed = buildBaseEmbed("✅ تسجيل تحضير", 0x4caf50);
+                const embed = buildBaseEmbed(" تسجيل تحضير", 0x4caf50);
                 await sendToWebhook(ATTENDANCE_WEBHOOK, { embeds: [embed] }, "تم تسجيل التحضير");
             });
 
@@ -1749,7 +1749,7 @@
                 const targetUser = usersDB[targetId];
                 if (!targetUser) { showToast('الموظف غير موجود', 'error'); return; }
                 const embed = {
-                    title: "📨 طلب خدمة",
+                    title: " طلب خدمة",
                     color: 0x021ca4,
                     fields: [
                         { name: "مرسل من", value: currentUserData.fullName, inline: true },
@@ -1770,7 +1770,7 @@
             document.getElementById('supportFile')?.addEventListener('change', function() {
                 const fn = document.getElementById('supportFileName');
                 if (this.files.length > 0) {
-                    fn.textContent = `📎 ${this.files[0].name}`;
+                    fn.textContent = ` ${this.files[0].name}`;
                     fn.classList.add('show');
                 } else {
                     fn.classList.remove('show');
@@ -1790,7 +1790,7 @@
                 }
 
                 const embed = {
-                    title: "🎫 تذكرة دعم فني جديدة",
+                    title: " تذكرة دعم فني جديدة",
                     color: 0x021ca4,
                     fields: [
                         { name: "الموظف", value: currentUserData.fullName, inline: true },
@@ -1893,15 +1893,15 @@
             const isExpired = hasTask && new Date(user.dueDate) < new Date();
 
             if (taskStatus) {
-                taskStatus.textContent = hasTask ? `📅 تنتهي في ${user.dueDate}` : '✅ لا توجد مهمة نشطة';
+                taskStatus.textContent = hasTask ? ` تنتهي في ${user.dueDate}` : ' لا توجد مهمة نشطة';
             }
             if (taskMoreStatus) {
-                taskMoreStatus.textContent = hasTask ? `📌 ${user.customMsg || 'مهمة'} (تنتهي ${user.dueDate})` : '✅ لا توجد مهمة نشطة';
+                taskMoreStatus.textContent = hasTask ? ` ${user.customMsg || 'مهمة'} (تنتهي ${user.dueDate})` : ' لا توجد مهمة نشطة';
             }
 
             if (container) {
                 if (!hasTask) {
-                    container.innerHTML = '<p style="color:#8890b0;">✅ لا توجد مهمة حالياً</p>';
+                    container.innerHTML = '<p style="color:#8890b0;"> لا توجد مهمة حالياً</p>';
                 } else if (isExpired) {
                     container.innerHTML = `
                         <button id="resetTaskBtn" class="btn-primary" style="background:linear-gradient(135deg,#6b3a3a,#a55a5a);"><i class="fas fa-redo"></i> طلب إعادة المهمة</button>
@@ -1917,7 +1917,7 @@
 
             if (moreContainer) {
                 if (!hasTask) {
-                    moreContainer.innerHTML = '<p style="color:#8890b0;">✅ لا توجد مهمة</p>';
+                    moreContainer.innerHTML = '<p style="color:#8890b0;"> لا توجد مهمة</p>';
                 } else if (isExpired) {
                     moreContainer.innerHTML = `
                         <button id="resetTaskBtnMore" class="btn-primary" style="background:linear-gradient(135deg,#6b3a3a,#a55a5a);"><i class="fas fa-redo"></i> طلب إعادة المهمة</button>
@@ -1936,15 +1936,15 @@
 
         async function completeTaskHandler() {
             if (!currentUserData) return;
-            const embed = buildBaseEmbed("✅ إكمال المهمة", 0x4caf50, [
+            const embed = buildBaseEmbed(" إكمال المهمة", 0x4caf50, [
                 { name: "المهمة", value: currentUserData.customMsg || 'مهمة', inline: false }
             ]);
-            await sendToWebhook(TASK_WEBHOOK, { embeds: [embed] }, "✅ تم إنهاء المهمة");
-            showToast("✅ تم إكمال المهمة", "success");
+            await sendToWebhook(TASK_WEBHOOK, { embeds: [embed] }, " تم إنهاء المهمة");
+            showToast(" تم إكمال المهمة", "success");
             if (currentUserData) {
                 currentUserData.taskCompleted = true;
                 currentUserData.dueDate = null;
-                currentUserData.customMsg = '✅ مكتملة';
+                currentUserData.customMsg = ' مكتملة';
             }
             updateTaskButtons();
             updateTaskStats();
@@ -1952,11 +1952,11 @@
 
         async function resetTaskHandler() {
             if (!currentUserData) return;
-            const embed = buildBaseEmbed("🔄 طلب إعادة المهمة", 0xffaa00, [
+            const embed = buildBaseEmbed(" طلب إعادة المهمة", 0xffaa00, [
                 { name: "المهمة", value: currentUserData.customMsg || 'مهمة', inline: false }
             ]);
             await sendToWebhook(TASK_WEBHOOK, { embeds: [embed] }, "تم طلب إعادة المهمة");
-            showToast("🔄 تم طلب إعادة المهمة", "info");
+            showToast(" تم طلب إعادة المهمة", "info");
         }
 
         function updateTaskStats() {
