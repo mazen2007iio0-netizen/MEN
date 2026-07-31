@@ -354,6 +354,10 @@
             object-fit: cover;
             display: block;
             filter: brightness(0.8) saturate(1.1);
+            transition: transform 6s ease;
+        }
+        .carousel-slide:hover img {
+            transform: scale(1.05);
         }
         .carousel-slide .slide-overlay {
             position: absolute;
@@ -2007,9 +2011,21 @@
 
         // ===== CAROUSEL ADS =====
         const ads = [
-            { img: "https://via.placeholder.com/1200x400/021ca4/ffffff?text=عروض+MEN+الجديدة", title: "تشكيلة جديدة", desc: "خصومات تصل إلى 30% على الملابس" },
-            { img: "https://via.placeholder.com/1200x400/1a3a9e/ffffff?text=بطاقات+الشحن+الأسرع", title: "بطاقات الشحن", desc: "روبلوكس، ببجي، سوني بأسعار مميزة" },
-            { img: "https://via.placeholder.com/1200x400/4a7aff/ffffff?text=اشتراك+MEN+Pass", title: "MEN Pass", desc: "محتوى حصري وألعاب وفيديوهات بدون إعلانات" }
+            { 
+                img: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=1200&h=400&fit=crop&crop=center",
+                title: "تشكيلة جديدة", 
+                desc: "خصومات تصل إلى 30% على الملابس" 
+            },
+            { 
+                img: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=1200&h=400&fit=crop&crop=center",
+                title: "بطاقات الشحن", 
+                desc: "روبلوكس، ببجي، سوني بأسعار مميزة" 
+            },
+            { 
+                img: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1200&h=400&fit=crop&crop=center",
+                title: "MEN Pass", 
+                desc: "محتوى حصري وألعاب وفيديوهات بدون إعلانات" 
+            }
         ];
 
         // ============================================================
