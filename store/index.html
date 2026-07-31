@@ -381,35 +381,6 @@
             font-size: 1.1rem;
             opacity: 0.9;
         }
-        .carousel-controls {
-            position: absolute;
-            bottom: 20px;
-            right: 50%;
-            transform: translateX(50%);
-            display: flex;
-            gap: 12px;
-            z-index: 10;
-        }
-        .carousel-controls button {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 50%;
-            width: 42px;
-            height: 42px;
-            color: #ffffff;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-        .carousel-controls button:hover {
-            background: rgba(2, 28, 164, 0.3);
-            border-color: var(--blue-deep);
-            transform: scale(1.08);
-        }
         .carousel-dots {
             position: absolute;
             bottom: 12px;
@@ -1745,11 +1716,6 @@
             .carousel-slide {
                 aspect-ratio: 16/6;
             }
-            .carousel-controls button {
-                width: 34px;
-                height: 34px;
-                font-size: 1rem;
-            }
         }
     </style>
 </head>
@@ -1778,10 +1744,6 @@
             <div class="hero-carousel" id="heroCarousel">
                 <div class="carousel-slides" id="carouselSlides">
                     <!-- سيتم ملؤها بـ JS -->
-                </div>
-                <div class="carousel-controls">
-                    <button id="carouselPrev"><i class="fas fa-chevron-right"></i></button>
-                    <button id="carouselNext"><i class="fas fa-chevron-left"></i></button>
                 </div>
                 <div class="carousel-dots" id="carouselDots"></div>
             </div>
@@ -2009,21 +1971,21 @@
             { author: "منى الشمري", stars: 5, text: "اشتراك MEN Pass ممتاز ويستحق التجربة!" }
         ];
 
-        // ===== CAROUSEL ADS =====
+        // ===== CAROUSEL ADS (بطاقة معركة + عروض) =====
         const ads = [
             { 
-                img: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=1200&h=400&fit=crop&crop=center",
-                title: "تشكيلة جديدة", 
-                desc: "خصومات تصل إلى 30% على الملابس" 
+                img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=400&fit=crop&crop=center",
+                title: "🎮 بطاقة المعركة - الموسم الثالث", 
+                desc: "Fortnite Battle Pass 🔥 خصم 9.99$ فقط" 
             },
             { 
-                img: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=1200&h=400&fit=crop&crop=center",
-                title: "بطاقات الشحن", 
-                desc: "روبلوكس، ببجي، سوني بأسعار مميزة" 
+                img: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=1200&h=400&fit=crop&crop=center",
+                title: "🏆 عروض الألعاب", 
+                desc: "بطاقات شحن ببجي، روبلوكس، سوني بأسعار مميزة" 
             },
             { 
                 img: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1200&h=400&fit=crop&crop=center",
-                title: "MEN Pass", 
+                title: "🎫 اشتراك MEN Pass", 
                 desc: "محتوى حصري وألعاب وفيديوهات بدون إعلانات" 
             }
         ];
@@ -2106,7 +2068,7 @@
             if (carouselInterval) clearInterval(carouselInterval);
             carouselInterval = setInterval(() => {
                 goToCarousel(carouselIndex + 1);
-            }, 4500);
+            }, 5000);
         }
 
         function stopCarousel() {
@@ -2676,17 +2638,7 @@
             renderReviews();
             updateCartUI();
 
-            // Carousel controls
-            document.getElementById('carouselPrev').addEventListener('click', () => {
-                stopCarousel();
-                goToCarousel(carouselIndex - 1);
-                startCarousel();
-            });
-            document.getElementById('carouselNext').addEventListener('click', () => {
-                stopCarousel();
-                goToCarousel(carouselIndex + 1);
-                startCarousel();
-            });
+            // Carousel controls - auto play with pause on hover
             document.getElementById('heroCarousel').addEventListener('mouseenter', stopCarousel);
             document.getElementById('heroCarousel').addEventListener('mouseleave', startCarousel);
 
