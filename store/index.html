@@ -348,15 +348,15 @@
             justify-content: center;
             background: #0e1222;
         }
-        .carousel-slide .slide-bg {
-            position: absolute;
-            inset: 0;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: brightness(0.8) saturate(1.1);
             transition: transform 6s ease;
         }
-        .carousel-slide:hover .slide-bg {
+        .carousel-slide:hover img {
             transform: scale(1.05);
         }
         .carousel-slide .slide-overlay {
@@ -371,7 +371,6 @@
             max-width: 500px;
             color: #fff;
             text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
-            z-index: 1;
         }
         .carousel-slide .slide-text h2 {
             font-size: 2.2rem;
@@ -1651,9 +1650,6 @@
             .carousel-slide .slide-text p {
                 font-size: 0.9rem;
             }
-            .carousel-slide {
-                aspect-ratio: 16/6;
-            }
         }
         @media (max-width:480px) {
             .header-cart-btn {
@@ -1716,6 +1712,9 @@
             }
             .ai-fab .fab-label {
                 display: none;
+            }
+            .carousel-slide {
+                aspect-ratio: 16/6;
             }
         }
     </style>
@@ -1980,12 +1979,12 @@
                 desc: "Fortnite Battle Pass خصم 9.99$ فقط" 
             },
             { 
-                img: "https://www.socialcreator.com/srv/imgs/ti_imgs/200908_328971.png",
+                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX_hazXMUuciQL_MFEdc8TXiCbT8xl5c_Aeb7X3hmvdg&s=10",
                 title: "🏆 عروض الألعاب", 
                 desc: "بطاقات شحن ببجي، روبلوكس، سوني بأسعار مميزة" 
             },
             { 
-                img: "https://www.socialcreator.com/srv/imgs/ti_imgs/200908_328971.png",
+                img: "https://www.socialcreator.com/srv/imgs/ti_imgs/201133_332160.png",
                 title: "🎫 اشتراك MEN Pass", 
                 desc: "محتوى حصري وألعاب وفيديوهات بدون إعلانات" 
             }
@@ -2027,10 +2026,9 @@
             const slides = document.getElementById('carouselSlides');
             const dots = document.getElementById('carouselDots');
             if (!slides || !dots) return;
-
             slides.innerHTML = ads.map((ad, i) => `
-                <div class="carousel-slide" style="background-color: #0e1222;">
-                    <div class="slide-bg" style="background-image: url('${ad.img}');"></div>
+                <div class="carousel-slide">
+                    <img src="${ad.img}" alt="${ad.title}" loading="lazy" />
                     <div class="slide-overlay">
                         <div class="slide-text">
                             <h2>${ad.title}</h2>
@@ -2039,7 +2037,6 @@
                     </div>
                 </div>
             `).join('');
-
             dots.innerHTML = ads.map((_, i) => `<span class="${i===0?'active':''}" data-index="${i}"></span>`).join('');
             dots.querySelectorAll('span').forEach(dot => {
                 dot.addEventListener('click', function() {
@@ -2047,22 +2044,8 @@
                     goToCarousel(idx);
                 });
             });
-
             goToCarousel(0);
             startCarousel();
-
-            // Preload images
-            preloadCarouselImages();
-        }
-
-        function preloadCarouselImages() {
-            ads.forEach(ad => {
-                const img = new Image();
-                img.src = ad.img;
-                img.onerror = function() {
-                    this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Crect width="100" height="100" fill="%230e1222"/%3E%3Ctext x="50" y="50" font-family="Arial" font-size="12" fill="%235a607a" text-anchor="middle" dy=".3em"%3E🖼️%3C/text%3E%3C/svg%3E';
-                };
-            });
         }
 
         function goToCarousel(index) {
@@ -2586,8 +2569,10 @@
             </div>
           `).join('');
 
+            // Product click -> detail modal
             grid.querySelectorAll('.product-item').forEach(el => {
                 el.addEventListener('click', function(e) {
+                    // منع الفتح إذا تم الضغط على زر
                     if (e.target.closest('.btn-ai-search') || e.target.closest('.add-to-cart')) return;
                     const id = parseInt(this.dataset.id);
                     openProductDetail(id);
@@ -2653,9 +2638,11 @@
             renderReviews();
             updateCartUI();
 
+            // Carousel controls - auto play with pause on hover
             document.getElementById('heroCarousel').addEventListener('mouseenter', stopCarousel);
             document.getElementById('heroCarousel').addEventListener('mouseleave', startCarousel);
 
+            // Search
             document.getElementById('storeSearchInput')?.addEventListener('input', (e) => {
                 const term = e.target.value.toLowerCase().trim();
                 if (term === '') renderStore(currentFilter, currentSort);
@@ -2713,6 +2700,7 @@
                 }
             });
 
+            // Sort & Filter
             document.querySelectorAll('.filter-tags button').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.filter-tags button').forEach(b => b.classList.remove('active'));
@@ -2727,11 +2715,13 @@
                 renderStore(currentFilter, currentSort);
             });
 
+            // Header Cart
             document.getElementById('headerCartBtn').addEventListener('click', () => {
                 updateCartUI();
                 document.getElementById('cartModal').classList.add('active');
             });
 
+            // Cart Modal
             document.getElementById('cartModalClose').addEventListener('click', () => {
                 document.getElementById('cartModal').classList.remove('active');
             });
@@ -2750,6 +2740,7 @@
                 sendCartRequest(name, phone);
             });
 
+            // Product Detail Modal
             document.getElementById('productModalClose').addEventListener('click', () => {
                 document.getElementById('productDetailModal').classList.remove('active');
             });
@@ -2759,6 +2750,7 @@
                 }
             });
 
+            // AI Modal
             const aiModal = document.getElementById('aiModal');
             document.getElementById('aiAssistantBtn').addEventListener('click', openAIChat);
             document.getElementById('aiModalClose').addEventListener('click', () => aiModal.classList.remove('active'));
@@ -2784,8 +2776,10 @@
                 });
             });
 
+            // FAB
             document.getElementById('fabOpenChat').addEventListener('click', openAIChat);
 
+            // Reviews Carousel
             document.getElementById('prevReviewBtn').addEventListener('click', () => {
                 if (currentReviewIndex > 0) { currentReviewIndex--;
                     updateCarousel(); }
@@ -2802,19 +2796,16 @@
             });
             window.addEventListener('resize', updateCarousel);
 
+            // Header scroll
             window.addEventListener('scroll', () => {
                 const header = document.getElementById('mainHeader');
                 if (window.scrollY > 30) header.classList.add('scrolled');
                 else header.classList.remove('scrolled');
             });
-
-            // Fix for carousel display after load
-            setTimeout(() => {
-                goToCarousel(carouselIndex);
-            }, 100);
         }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
+ 
