@@ -2405,14 +2405,14 @@
             const p = productsArray.find(pr => pr.id === productId);
             if (!p) return "⚠️ المنتج غير موجود.";
             let advice =
-                `🔍 **نصيحة حول ${p.name}**\n\n⭐ التقييم: ${p.rating}/5\n📂 التصنيف: ${p.category}\n💰 السعر: ${p.price} ر.س\n📝 الوصف: ${p.description}\n✨ المميزات:\n`;
+                `🔍 نصيحة حول ${p.name}\n\n⭐ التقييم: ${p.rating}/5\n📂 التصنيف: ${p.category}\n💰 السعر: ${p.price} ر.س\n📝 الوصف: ${p.description}\n✨ المميزات:\n`;
             p.features.forEach(f => advice += `  ✅ ${f}\n`);
             if (p.cons && p.cons.length) {
                 advice += `⚠️ العيوب:\n`;
                 p.cons.forEach(c => advice += `  ❌ ${c}\n`);
             }
             advice += `🛠️ طريقة الاستخدام: ${p.usage}\n🛡️ الضمان: ${p.warranty}\n🏷️ الوسوم: ${p.tags.join('، ')}\n`;
-            if (p.popular) advice += `🔥 **هذا المنتج الأكثر مبيعاً!**\n`;
+            if (p.popular) advice += `🔥 هذا المنتج الأكثر مبيعاً!\n`;
             advice += `\n💡 هل تريد إضافته إلى السلة؟ اكتب "أضف ${p.name}"`;
             return advice;
         }
@@ -2420,7 +2420,7 @@
         function getPersonalizedOffers() {
             const all = productsArray.filter(p => p.popular).slice(0, 3);
             if (all.length === 0) return "🎁 لا توجد عروض حالياً، تابعنا للمزيد.";
-            return `🎁 **عروض خاصة لك:**\n${all.map(p => `- ${p.name} بسعر ${p.price} ر.س (${p.category})`).join('\n')}\n\n🔖 استخدم كود (MEN1) لخصم إضافي 10% على الإلكترونيات.`;
+            return `🎁 عروض خاصة لك:\n${all.map(p => `- ${p.name} بسعر ${p.price} ر.س (${p.category})`).join('\n')}\n\n🔖 استخدم كود (MEN1) لخصم إضافي 10% على الإلكترونيات.`;
         }
 
         function findClosestMatch(query) {
