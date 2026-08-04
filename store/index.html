@@ -2331,7 +2331,7 @@
             }
             if (lower.includes('مرحب') || lower.includes('سلام') || lower.includes('اهلا') || lower.includes('hi') ||
                 lower.includes('hello')) {
-                return `👋 أهلاً وسهلاً! أنا مساعد MEN الذكي.\n\nأستطيع مساعدتك في:\n• عرض المنتجات والبحث عنها.\n• مقارنة المنتجات.\n• نصائح الشراء.\n• تتبع الطلبات.\n• العروض والكوبونات.\n• إدارة السلة والمفضلة.\n• **🎫 اشتراك MEN Pass** - اسألني عنه!\n\n📌 اكتب ما تريده بالعربية، وسأفهمك.`;
+                return `👋 أهلاً وسهلاً! أنا مساعد MEN الذكي.\n\nأستطيع مساعدتك في:\n• عرض المنتجات والبحث عنها.\n• مقارنة المنتجات.\n• نصائح الشراء.\n• تتبع الطلبات.\n• العروض والكوبونات.\n• إدارة السلة والمفضلة.\n• 🎫 اشتراك MEN Pass - اسألني عنه!\n\n📌 اكتب ما تريده بالعربية، وسأفهمك.`;
             }
             if (lower.includes('شكر') || lower.includes('thank')) return '🙏 الشكر لك! أنا هنا لخدمتك دائماً. هل تحتاج مساعدة أخرى؟ 😊';
             if (lower.includes('سلتي') || lower.includes('ماذا في السلة') || lower.includes('show cart') || lower.includes(
@@ -2396,7 +2396,7 @@
             html += `\n💰 الإجمالي: ${total.toFixed(2)} ر.س`;
             if (discountApplied && discountPercent > 0) {
                 const disc = total * (discountPercent / 100);
-                html += ` (خصم ${discountPercent}% = -${disc.toFixed(2)} ر.س) → **${(total - disc).toFixed(2)} ر.س**`;
+                html += ` (خصم ${discountPercent}% = -${disc.toFixed(2)} ر.س) → ${(total - disc).toFixed(2)} ر.س`;
             }
             return html;
         }
@@ -2420,7 +2420,7 @@
         function getPersonalizedOffers() {
             const all = productsArray.filter(p => p.popular).slice(0, 3);
             if (all.length === 0) return "🎁 لا توجد عروض حالياً، تابعنا للمزيد.";
-            return `🎁 **عروض خاصة لك:**\n${all.map(p => `- **${p.name}** بسعر ${p.price} ر.س (${p.category})`).join('\n')}\n\n🔖 استخدم كود **MEN1** لخصم إضافي 10% على الإلكترونيات.`;
+            return `🎁 **عروض خاصة لك:**\n${all.map(p => `- ${p.name} بسعر ${p.price} ر.س (${p.category})`).join('\n')}\n\n🔖 استخدم كود (MEN1) لخصم إضافي 10% على الإلكترونيات.`;
         }
 
         function findClosestMatch(query) {
