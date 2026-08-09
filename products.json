@@ -7,7 +7,7 @@
     "currency": "ر.س",
     "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/200908_328971.png",
     "badge": "بطاقة شحن",
-    "link": "stor.html",
+    "link": "/stor/",
     "keywords": [
       "pass",
       "men pass",
@@ -27,7 +27,7 @@
     "currency": "ر.س",
     "image": "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp",
     "badge": "بطاقة شحن",
-    "link": "stor.html",
+    "link": "/stor/",
     "keywords": [
       "ببجي",
       "شحن",
@@ -48,7 +48,7 @@
     "currency": "ر.س",
     "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png",
     "badge": "ملابس",
-    "link": "stor.html",
+    "link": "/stor/",
     "keywords": [
       "ملابس",
       "لبس",
@@ -69,7 +69,7 @@
     "currency": "ر.س",
     "image": "images/store.png",
     "badge": "بطاقة شحن",
-    "link": "stor.html",
+    "link": "/stor/",
     "keywords": [
       "متجر",
       "منتجات",
