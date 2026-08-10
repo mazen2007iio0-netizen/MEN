@@ -293,7 +293,7 @@
             object-fit: cover;
             cursor: pointer;
             transition: var(--transition);
-            display: none; /* يظهر بعد تسجيل الدخول */
+            display: none;
         }
         .header-avatar:hover {
             border-color: var(--blue-light);
@@ -2522,7 +2522,7 @@
         /* ===== MORE TAB - BOXES AS BUTTONS ===== */
         .more-menu-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 20px;
             margin-top: 10px;
         }
@@ -2712,12 +2712,190 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
+
+        /* ===== WALLET CHART ===== */
+        .wallet-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+        .wallet-summary .ws-item {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            padding: 16px 12px;
+            text-align: center;
+            border: 1px solid rgba(2, 28, 164, 0.03);
+        }
+        .wallet-summary .ws-item .ws-label {
+            font-size: 0.8rem;
+            color: #8890b0;
+        }
+        .wallet-summary .ws-item .ws-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-top: 4px;
+        }
+        .wallet-summary .ws-item .ws-value.green {
+            color: #4caf50;
+        }
+        .wallet-summary .ws-item .ws-value.red {
+            color: #ff6b6b;
+        }
+        .wallet-summary .ws-item .ws-value.gold {
+            color: #f5b342;
+        }
+
+        .chart-container {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: var(--radius-xl);
+            padding: 20px 16px 16px;
+            margin: 16px 0;
+            border: 1px solid rgba(2, 28, 164, 0.03);
+            position: relative;
+        }
+        .chart-container canvas {
+            width: 100% !important;
+            height: auto !important;
+            max-height: 220px;
+            display: block;
+            border-radius: 12px;
+        }
+        .chart-container .chart-title {
+            text-align: center;
+            color: #8890b0;
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+        .chart-container .chart-legend-custom {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .chart-container .chart-legend-custom .leg-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: #8890b0;
+        }
+        .chart-container .chart-legend-custom .leg-item .dot {
+            width: 12px;
+            height: 4px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .chart-container .chart-legend-custom .leg-item .dot.green {
+            background: #4caf50;
+        }
+        .chart-container .chart-legend-custom .leg-item .dot.red {
+            background: #ff6b6b;
+        }
+
+        .wallet-timeline {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 8px 0;
+            font-size: 0.65rem;
+            color: #4a5070;
+            direction: ltr;
+        }
+        .wallet-timeline span {
+            flex: 1;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .wallet-summary {
+                grid-template-columns: 1fr 1fr;
+            }
+            .wallet-summary .ws-item .ws-value {
+                font-size: 1.2rem;
+            }
+            .chart-container canvas {
+                max-height: 160px;
+            }
+        }
+
+        /* ===== AI MENU (unchanged) ===== */
+        .ai-menu {
+            position: fixed;
+            left: 25px;
+            bottom: 25px;
+            z-index: 99999;
+        }
+        .ai-button {
+            width: 65px;
+            height: 65px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(2, 28, 164, .85);
+            color: #fff;
+            font-size: 28px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 25px rgba(2, 28, 164, .45);
+            transition: .35s;
+        }
+        .ai-menu.active .ai-button {
+            transform: rotate(45deg);
+        }
+        .menu-item {
+            position: absolute;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(2, 28, 164, .85);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            font-size: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: .35s;
+            box-shadow: 0 0 20px rgba(2, 28, 164, .4);
+        }
+        .menu-item:hover {
+            transform: scale(1.12);
+            box-shadow: 0 0 30px rgba(2, 28, 164, .7);
+        }
+        .menu-item span {
+            position: absolute;
+            left: 65px;
+            background: #111827;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: .3s;
+        }
+        .menu-item:hover span {
+            opacity: 1;
+        }
+        .ai-menu.active .item-chat {
+            transform: translate(-5px, -85px);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .ai-menu.active .item-store {
+            transform: translate(75px, 15px);
+            opacity: 1;
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body>
-    <!-- ===== MEN Ai ===== -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+    <!-- ===== AI MENU ===== -->
     <div class="ai-menu" id="aiMenu">
         <a href="/ai" class="menu-item item-chat">
             <i class="fas fa-comments"></i>
@@ -2727,91 +2905,20 @@
             <i class="fas fa-wand-sparkles"></i>
         </button>
     </div>
-
-    <style>
-        .ai-menu{
-            position:fixed;
-            left:25px;
-            bottom:25px;
-            z-index:99999;
-        }
-        .ai-button{
-            width:65px;
-            height:65px;
-            border:none;
-            border-radius:50%;
-            background:rgba(2,28,164,.85);
-            color:#fff;
-            font-size:28px;
-            cursor:pointer;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            box-shadow:0 0 25px rgba(2,28,164,.45);
-            transition:.35s;
-        }
-        .ai-menu.active .ai-button{
-            transform:rotate(45deg);
-        }
-        .menu-item{
-            position:absolute;
-            width:52px;
-            height:52px;
-            border-radius:50%;
-            background:rgba(2,28,164,.85);
-            color:#fff;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            text-decoration:none;
-            font-size:20px;
-            opacity:0;
-            pointer-events:none;
-            transition:.35s;
-            box-shadow:0 0 20px rgba(2,28,164,.4);
-        }
-        .menu-item:hover{
-            transform:scale(1.12);
-            box-shadow:0 0 30px rgba(2,28,164,.7);
-        }
-        .menu-item span{
-            position:absolute;
-            left:65px;
-            background:#111827;
-            color:#fff;
-            padding:6px 12px;
-            border-radius:20px;
-            font-size:13px;
-            white-space:nowrap;
-            opacity:0;
-            transition:.3s;
-        }
-        .menu-item:hover span{
-            opacity:1;
-        }
-        .ai-menu.active .item-chat{
-            transform:translate(-5px,-85px);
-            opacity:1;
-            pointer-events:auto;
-        }
-        .ai-menu.active .item-store{
-            transform:translate(75px,15px);
-            opacity:1;
-            pointer-events:auto;
-        }
-    </style>
-
     <script>
-        const menu = document.getElementById("aiMenu");
-        const btn = document.getElementById("toggleAI");
-        btn.onclick = () => {
-            menu.classList.toggle("active");
-        };
-        document.addEventListener("click", (e) => {
-            if (!menu.contains(e.target)) {
-                menu.classList.remove("active");
+        (function() {
+            const menu = document.getElementById("aiMenu");
+            const btn = document.getElementById("toggleAI");
+            if (btn && menu) {
+                btn.onclick = function(e) {
+                    e.stopPropagation();
+                    menu.classList.toggle("active");
+                };
+                document.addEventListener("click", function(e) {
+                    if (!menu.contains(e.target)) menu.classList.remove("active");
+                });
             }
-        });
+        })();
     </script>
 
     <div class="bg-ambient"></div>
@@ -2841,18 +2948,15 @@
         <div class="container">
 
             <!-- ===== HOME ===== -->
-
+            <section id="home" class="page active">
                 <div class="hero-luxury">
                     <div class="orb orb-1"></div>
                     <div class="orb orb-2"></div>
                     <div class="badge"><i class="fas fa-"></i> Team · MEN</div>
                     <h2>سيطرة <span class="highlight">أقوى</span></h2>
                     <p>فريق اللاعبين وصنّاع المحتوى.</p>
+                </div>
 
-                    <!-- ===== NEW SEARCH BAR ===== -->
-                    
-
-                    
                 <!-- NEWS -->
                 <div class="section-label">
                     <span class="icon-badge"><i class="fas fa-newspaper"></i> أخبار</span>
@@ -2881,10 +2985,7 @@
                         <div class="tile-content"><h4>Call of Duty BO7</h4><p>آخر إصدارات السلسلة الأسطورية.</p><a href="#" class="btn-outline-blue">استكشف</a></div>
                     </div>
                 </div>
-
-                
-
-                
+            </section>
 
             <!-- ===== ABOUT ===== -->
             <section id="about" class="page">
@@ -3018,6 +3119,41 @@
 
         let usersDB = {};
 
+        // ==================== INVESTMENT DATA ====================
+        const INVESTMENT_DATA = {
+            "U2022": { amount: 50000, history: [45000, 47000, 49000, 48500, 51000, 52000, 53500, 54200, 54800, 55500] },
+            "U2026": { amount: 45000, history: [42000, 43500, 44500, 44000, 45500, 46000, 47200, 47800, 48200, 49000] },
+            "U2024": { amount: 40000, history: [38000, 39000, 39500, 40500, 41500, 42000, 43000, 42500, 44000, 44800] },
+            "U2021": { amount: 35000, history: [33000, 34000, 34500, 35000, 36000, 35500, 36500, 37200, 37800, 38500] },
+            "U2023": { amount: 30000, history: [28000, 29000, 29500, 30500, 31000, 31500, 32000, 32500, 33000, 33800] },
+            "U2027": { amount: 25000, history: [23000, 24000, 24500, 25000, 26000, 25500, 26500, 27000, 27500, 28200] },
+            "U2028": { amount: 20000, history: [18500, 19000, 19500, 20000, 20500, 21000, 21500, 22000, 22500, 23000] },
+            "U2020": { amount: 15000, history: [14000, 14500, 14800, 15200, 15500, 15800, 16000, 16200, 16500, 16800] },
+            "U2025": { amount: 10000, history: [9500, 9800, 10000, 10200, 10500, 10300, 10600, 10800, 11000, 11200] }
+        };
+
+        function getInvestmentForUser(userId) {
+            const data = INVESTMENT_DATA[userId];
+            if (!data) return { amount: 0, history: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] };
+            return {
+                amount: data.amount,
+                history: data.history.slice()
+            };
+        }
+
+        function getCurrentValue(history) {
+            return history.length > 0 ? history[history.length - 1] : 0;
+        }
+
+        function getProfitLoss(amount, currentValue) {
+            return currentValue - amount;
+        }
+
+        function getProfitPercent(amount, currentValue) {
+            if (amount === 0) return 0;
+            return ((currentValue - amount) / amount) * 100;
+        }
+
         // ==================== GLOBAL STATE ====================
         let currentUser = null,
             currentUserData = null,
@@ -3027,35 +3163,6 @@
         let calendarDate = new Date();
         let currentMonth = calendarDate.getMonth();
         let currentYear = calendarDate.getFullYear();
-
-        // ==================== SEARCH FUNCTION ====================
-        function performSearch() {
-            const query = document.getElementById('globalSearchInput').value.trim();
-            if (!query) {
-                showToast('الرجاء إدخال نص للبحث', 'info');
-                return;
-            }
-            // Simple search: navigate to news page and highlight matching games
-            switchPage('news');
-            const gameTitles = document.querySelectorAll('#news .game-card .game-content h4');
-            let found = false;
-            gameTitles.forEach(title => {
-                const parent = title.closest('.game-card');
-                if (title.textContent.toLowerCase().includes(query.toLowerCase())) {
-                    parent.style.borderColor = 'var(--blue-light)';
-                    parent.style.boxShadow = '0 0 40px rgba(2, 28, 164, 0.2)';
-                    found = true;
-                } else {
-                    parent.style.borderColor = '';
-                    parent.style.boxShadow = '';
-                }
-            });
-            if (!found) {
-                showToast('لم يتم العثور على نتائج', 'info');
-            } else {
-                showToast(`تم العثور على نتائج لـ "${query}"`, 'success');
-            }
-        }
 
         // ==================== HEADER UI CONTROL ====================
         function updateHeaderUI(loggedIn, avatarSrc) {
@@ -3209,8 +3316,9 @@
             const container = document.getElementById('calendarContainer');
             if (!container) return;
 
-            const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", 
-                               "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+            const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+                "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+            ];
             const dayNames = ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"];
 
             const firstDay = new Date(currentYear, currentMonth, 1).getDay();
@@ -3237,9 +3345,10 @@
             }
 
             for (let day = 1; day <= daysInMonth; day++) {
-                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dateStr =
+                `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const isToday = (day === todayDate && currentMonth === todayMonth && currentYear === todayYear);
-                
+
                 let dayEvents = [];
                 if (meetings) {
                     dayEvents = meetings.filter(m => m.date === dateStr);
@@ -3281,8 +3390,10 @@
 
         function changeMonth(delta) {
             currentMonth += delta;
-            if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+            if (currentMonth > 11) { currentMonth = 0;
+                currentYear++; }
+            if (currentMonth < 0) { currentMonth = 11;
+                currentYear--; }
             if (currentUserData) {
                 renderCalendar(currentUserData.meetings || []);
             }
@@ -3379,21 +3490,151 @@
             renderCalendar(meetings || []);
         }
 
+        // ===== DRAW INVESTMENT CHART =====
+        function drawInvestmentChart(canvasId, history, amount) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const width = canvas.parentElement.clientWidth - 32;
+            const height = Math.min(200, Math.max(140, width * 0.35));
+            canvas.width = width * 2;
+            canvas.height = height * 2;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            ctx.scale(2, 2);
+
+            const pad = { top: 12, bottom: 20, left: 8, right: 8 };
+            const chartW = width - pad.left - pad.right;
+            const chartH = height - pad.top - pad.bottom;
+
+            const data = history.length > 0 ? history : [0, 0, 0, 0, 0];
+            const minVal = Math.min(...data) * 0.92;
+            const maxVal = Math.max(...data) * 1.08;
+            const range = maxVal - minVal || 1;
+
+            const points = data.map((v, i) => ({
+                x: pad.left + (i / (data.length - 1 || 1)) * chartW,
+                y: pad.top + chartH - ((v - minVal) / range) * chartH
+            }));
+
+            // background
+            ctx.clearRect(0, 0, width, height);
+
+            // grid lines
+            ctx.strokeStyle = 'rgba(2,28,164,0.04)';
+            ctx.lineWidth = 0.5;
+            for (let i = 0; i < 4; i++) {
+                const y = pad.top + (i / 3) * chartH;
+                ctx.beginPath();
+                ctx.moveTo(pad.left, y);
+                ctx.lineTo(width - pad.right, y);
+                ctx.stroke();
+            }
+
+            // draw segments
+            for (let i = 0; i < points.length - 1; i++) {
+                const p1 = points[i];
+                const p2 = points[i + 1];
+                const isUp = data[i + 1] >= data[i];
+                ctx.strokeStyle = isUp ? '#4caf50' : '#ff6b6b';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+
+                // glow
+                ctx.shadowColor = isUp ? 'rgba(76,175,80,0.15)' : 'rgba(255,107,107,0.15)';
+                ctx.shadowBlur = 6;
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+            }
+
+            // dots
+            points.forEach((p, i) => {
+                const isUp = (i === 0) || (data[i] >= data[i - 1]);
+                ctx.fillStyle = isUp ? '#4caf50' : '#ff6b6b';
+                ctx.shadowColor = isUp ? 'rgba(76,175,80,0.3)' : 'rgba(255,107,107,0.3)';
+                ctx.shadowBlur = 8;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                // white ring
+                ctx.strokeStyle = 'rgba(6,8,18,0.6)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
+                ctx.stroke();
+            });
+
+            // first & last values
+            ctx.fillStyle = '#8890b0';
+            ctx.font = '8px Cairo, sans-serif';
+            ctx.textAlign = 'center';
+            const firstVal = data[0] || 0;
+            const lastVal = data[data.length - 1] || 0;
+            ctx.fillText(firstVal.toLocaleString() + ' ر.س', points[0].x, height - 4);
+            ctx.fillText(lastVal.toLocaleString() + ' ر.س', points[points.length - 1].x, height - 4);
+
+            // profit/loss badge
+            const currentVal = lastVal;
+            const profit = currentVal - amount;
+            const percent = amount > 0 ? ((profit / amount) * 100) : 0;
+            const isProfit = profit >= 0;
+            const label = isProfit ? '▲ ربح' : '▼ خسارة';
+            const color = isProfit ? '#4caf50' : '#ff6b6b';
+            ctx.fillStyle = color;
+            ctx.font = 'bold 10px Cairo, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText(`${label} ${Math.abs(profit).toFixed(0)} ر.س (${percent.toFixed(1)}%)`, width - pad.right, pad
+            .top + 12);
+
+            // current value
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 11px Cairo, sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(`القيمة الحالية: ${currentVal.toLocaleString()} ر.س`, pad.left + 4, pad.top + 12);
+        }
+
         // ===== MORE TAB FUNCTIONS =====
         function showMoreSection(sectionId) {
             document.querySelectorAll('.more-section').forEach(el => el.classList.remove('active-section'));
-            document.getElementById('moreMenuContainer').style.display = 'none';
-            document.getElementById(sectionId).classList.add('active-section');
+            const menuContainer = document.getElementById('moreMenuContainer');
+            if (menuContainer) menuContainer.style.display = 'none';
+            const section = document.getElementById(sectionId);
+            if (section) section.classList.add('active-section');
+
+            // If wallet section, draw chart after a small delay
+            if (sectionId === 'moreSectionWallet') {
+                setTimeout(() => {
+                    drawInvestmentChart('walletChartCanvas', currentUserData?.investment?.history || [
+                        0, 0, 0, 0, 0
+                    ], currentUserData?.investment?.amount || 0);
+                }, 100);
+            }
         }
 
         function showMoreMenu() {
             document.querySelectorAll('.more-section').forEach(el => el.classList.remove('active-section'));
-            document.getElementById('moreMenuContainer').style.display = 'grid';
+            const menuContainer = document.getElementById('moreMenuContainer');
+            if (menuContainer) menuContainer.style.display = 'grid';
         }
 
         function loadUserData(user) {
             currentUserData = JSON.parse(JSON.stringify(user));
             if (!currentUserData.taskCompleted) currentUserData.taskCompleted = false;
+
+            // Attach investment data
+            const inv = getInvestmentForUser(currentUserData.userId);
+            currentUserData.investment = {
+                amount: inv.amount,
+                history: inv.history.slice(),
+                currentValue: getCurrentValue(inv.history)
+            };
+
             document.getElementById('userFullName').innerText = currentUserData.fullName;
             document.getElementById('userIdLabel').innerText = currentUserData.userId;
             document.getElementById('userRoleLabel').innerText = currentUserData.category;
@@ -3434,8 +3675,11 @@
                 const dayNames = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
                 const dayName = dayNames[now.getDay()];
                 const dateStr = now.toLocaleDateString('ar-SA');
-                const hasTask = currentUserData.dueDate && currentUserData.dueDate !== '-' && !currentUserData.taskCompleted;
-                const taskMsg = hasTask ? `📌 ${currentUserData.customMsg?.replace(/<[^>]*>/g, '').substring(0, 50) || 'مهمة نشطة'}` : '✅ خالي من العمل';
+                const hasTask = currentUserData.dueDate && currentUserData.dueDate !== '-' && !currentUserData
+                .taskCompleted;
+                const taskMsg = hasTask ?
+                    `📌 ${currentUserData.customMsg?.replace(/<[^>]*>/g, '').substring(0, 50) || 'مهمة نشطة'}` :
+                    '✅ خالي من العمل';
 
                 let employeeOptions = '';
                 if (Object.keys(usersDB).length > 0) {
@@ -3446,10 +3690,17 @@
                     }
                 }
 
+                // Wallet data
+                const inv = currentUserData.investment || { amount: 0, history: [0, 0, 0, 0, 0], currentValue: 0 };
+                const currentVal = inv.currentValue || getCurrentValue(inv.history) || 0;
+                const profit = currentVal - inv.amount;
+                const profitPercent = inv.amount > 0 ? ((profit / inv.amount) * 100) : 0;
+                const isProfit = profit >= 0;
+
                 const wrapper = document.createElement('div');
                 wrapper.className = 'more-content-wrapper';
 
-                // Menu (boxes as buttons)
+                // Menu (boxes as buttons) — now 5 items
                 wrapper.innerHTML = `
                     <div id="moreMenuContainer" class="more-menu-grid">
                         <div class="more-menu-box" onclick="showMoreSection('moreSectionCard')">
@@ -3461,6 +3712,11 @@
                             <i class="fas fa-calendar-check"></i>
                             <h4>الدوامات</h4>
                             <p>الحضور والغياب والإجازات</p>
+                        </div>
+                        <div class="more-menu-box" onclick="showMoreSection('moreSectionWallet')">
+                            <i class="fas fa-wallet"></i>
+                            <h4>المحفظة</h4>
+                            <p>الاستثمار والأرباح</p>
                         </div>
                         <div class="more-menu-box" onclick="showMoreSection('moreSectionServices')">
                             <i class="fas fa-concierge-bell"></i>
@@ -3528,7 +3784,46 @@
                         </div>
                     </div>
 
-                    <!-- Section 3: الخدمات -->
+                    <!-- Section 3: المحفظة (WALLET) -->
+                    <div id="moreSectionWallet" class="more-section">
+                        <button class="more-back-btn" onclick="showMoreMenu()"><i class="fas fa-arrow-right"></i> رجوع</button>
+                        <div class="wallet-summary">
+                            <div class="ws-item">
+                                <div class="ws-label">المبلغ المستثمر</div>
+                                <div class="ws-value gold">${inv.amount.toLocaleString()} ر.س</div>
+                            </div>
+                            <div class="ws-item">
+                                <div class="ws-label">القيمة الحالية</div>
+                                <div class="ws-value">${currentVal.toLocaleString()} ر.س</div>
+                            </div>
+                            <div class="ws-item">
+                                <div class="ws-label">الربح / الخسارة</div>
+                                <div class="ws-value ${isProfit ? 'green' : 'red'}">${isProfit ? '+' : ''}${profit.toFixed(0)} ر.س (${profitPercent.toFixed(1)}%)</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-title"><i class="fas fa-chart-line" style="color:var(--blue-light);"></i> أداء الاستثمار</div>
+                            <canvas id="walletChartCanvas"></canvas>
+                            <div class="chart-legend-custom">
+                                <span class="leg-item"><span class="dot green"></span> ارتفاع</span>
+                                <span class="leg-item"><span class="dot red"></span> انخفاض</span>
+                            </div>
+                            <div class="wallet-timeline">
+                                <span>اليوم 1</span>
+                                <span>اليوم 3</span>
+                                <span>اليوم 5</span>
+                                <span>اليوم 7</span>
+                                <span>اليوم 9</span>
+                                <span>اليوم 10</span>
+                            </div>
+                        </div>
+                        <div style="margin-top:12px; text-align:center; color:#4a5070; font-size:0.8rem;">
+                            <i class="fas fa-info-circle"></i> البيانات محدثة يومياً · 
+                            <span style="color:var(--blue-light);">${new Date().toLocaleDateString('ar-SA')}</span>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: الخدمات -->
                     <div id="moreSectionServices" class="more-section">
                         <button class="more-back-btn" onclick="showMoreMenu()"><i class="fas fa-arrow-right"></i> رجوع</button>
                         <div class="services-form">
@@ -3562,7 +3857,7 @@
                         </div>
                     </div>
 
-                    <!-- Section 4: الدعم الفني -->
+                    <!-- Section 5: الدعم الفني -->
                     <div id="moreSectionSupport" class="more-section">
                         <button class="more-back-btn" onclick="showMoreMenu()"><i class="fas fa-arrow-right"></i> رجوع</button>
                         <div class="support-form" style="margin:0; padding:0; background:transparent; border:none;">
@@ -3610,8 +3905,9 @@
                 // Calendar for more tab
                 const calendarMore = document.getElementById('calendarContainerMore');
                 if (calendarMore) {
-                    const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", 
-                                       "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+                    const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+                        "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+                    ];
                     const dayNames = ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"];
                     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
                     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -3635,9 +3931,12 @@
                         html += `<div class="calendar-day"></div>`;
                     }
                     for (let day = 1; day <= daysInMonth; day++) {
-                        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                        const isToday = (day === todayDate && currentMonth === todayMonth && currentYear === todayYear);
-                        let dayEvents = currentUserData.meetings ? currentUserData.meetings.filter(m => m.date === dateStr) : [];
+                        const dateStr =
+                            `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        const isToday = (day === todayDate && currentMonth === todayMonth && currentYear ===
+                        todayYear);
+                        let dayEvents = currentUserData.meetings ? currentUserData.meetings.filter(m => m.date ===
+                            dateStr) : [];
                         let eventDots = '';
                         let eventTitles = '';
                         if (dayEvents.length > 0) {
@@ -3757,22 +4056,36 @@
 
                 // Show menu by default
                 showMoreMenu();
+
+                // Draw wallet chart if wallet section is visible by default (it's not, but we handle on click)
+                // Also handle window resize for chart
+                window.addEventListener('resize', function() {
+                    const walletSection = document.getElementById('moreSectionWallet');
+                    if (walletSection && walletSection.classList.contains('active-section')) {
+                        drawInvestmentChart('walletChartCanvas', currentUserData?.investment?.history || [
+                            0, 0, 0, 0, 0
+                        ], currentUserData?.investment?.amount || 0);
+                    }
+                });
             }
         }
 
         window.showMoreSection = showMoreSection;
         window.showMoreMenu = showMoreMenu;
+
         window.changeMonthMore = function(delta) {
             currentMonth += delta;
-            if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+            if (currentMonth > 11) { currentMonth = 0;
+                currentYear++; }
+            if (currentMonth < 0) { currentMonth = 11;
+                currentYear--; }
             if (currentUserData) {
                 renderCalendar(currentUserData.meetings || []);
-                // Also update more tab calendar if exists
                 const calendarMore = document.getElementById('calendarContainerMore');
                 if (calendarMore) {
-                    const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", 
-                                       "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+                    const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+                        "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+                    ];
                     const dayNames = ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"];
                     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
                     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -3796,9 +4109,12 @@
                         html += `<div class="calendar-day"></div>`;
                     }
                     for (let day = 1; day <= daysInMonth; day++) {
-                        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                        const isToday = (day === todayDate && currentMonth === todayMonth && currentYear === todayYear);
-                        let dayEvents = currentUserData.meetings ? currentUserData.meetings.filter(m => m.date === dateStr) : [];
+                        const dateStr =
+                            `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        const isToday = (day === todayDate && currentMonth === todayMonth && currentYear ===
+                            todayYear);
+                        let dayEvents = currentUserData.meetings ? currentUserData.meetings.filter(m => m.date ===
+                            dateStr) : [];
                         let eventDots = '';
                         let eventTitles = '';
                         if (dayEvents.length > 0) {
@@ -3944,7 +4260,7 @@
                 switchPage('home');
             });
             document.getElementById('sendRewardPortalBtn')?.addEventListener('click', sendUserReward);
-            
+
             const tabs = document.querySelectorAll('.tab-soft');
             const contents = {
                 profile: document.getElementById('profileTab'),
@@ -4075,15 +4391,24 @@
             const grid = document.getElementById('teamGrid');
             if (!grid) return;
             const members = [
-                { name: "مازن السلمي", role: "رئيس المشاريع - رئيس مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "مشعل السلمي", role: "نائب الرئيس - عضو مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "عبدالرحمن الزهراني", role: "نائب الرئيس - عضو مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "صالح الزهراني", role: "مدير عام", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "محمد العنزي", role: "مدير الإدارة العامة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "عبدالعزيز الحربي", role: "مدير الاستقطاب", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },           
-                { name: "يزيد النفيعي", role: "مدير التقديم", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "حسن الشريف", role: "مدير السيرفر", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "جاك ويليام", role: "مدير فني", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" }
+                { name: "مازن السلمي", role: "رئيس المشاريع - رئيس مجلس الإدارة",
+                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "مشعل السلمي", role: "نائب الرئيس - عضو مجلس الإدارة",
+                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "عبدالرحمن الزهراني", role: "نائب الرئيس - عضو مجلس الإدارة",
+                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "صالح الزهراني", role: "مدير عام",
+                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "محمد العنزي", role: "مدير الإدارة العامة",
+                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "عبدالعزيز الحربي", role: "مدير الاستقطاب",
+                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "يزيد النفيعي", role: "مدير التقديم",
+                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "حسن الشريف", role: "مدير السيرفر",
+                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "جاك ويليام", role: "مدير فني",
+                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" }
             ];
             grid.innerHTML = members.map(m => `
             <div class="team-card">
@@ -4147,14 +4472,12 @@
                 .remove('active');
         });
 
-        // ===== HEADER SCROLL =====
         window.addEventListener('scroll', () => {
             const header = document.getElementById('mainHeader');
             if (window.scrollY > 30) header.classList.add('scrolled');
             else header.classList.remove('scrolled');
         });
 
-        // ===== إخفاء الإعلان الثابت =====
         document.getElementById('closeAdBtn')?.addEventListener('click', function() {
             const ad = document.getElementById('fixedAd');
             ad.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
