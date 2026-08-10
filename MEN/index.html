@@ -3104,7 +3104,223 @@
     </svg>
 
     <script>
-        // ==================== WEBHOOKS & DATABASE ====================
+        // ==================== EMBEDDED USERS DATABASE ====================
+        const USERS_DATA = {
+            "U2028": {
+                "pass": "12122",
+                "fullName": "JACK Wiliam",
+                "phone": "0502799166",
+                "discord": "8u4",
+                "userId": "U2007",
+                "points": "77",
+                "category": "إداري",
+                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
+                "activities": ["تقرير إبداعي", "تقرير إحصائي"],
+                "monthEarn": "0 ر.س",
+                "totalEarn": "0 ر.س",
+                "followers": "0 ر.س",
+                "dueDate": "2028-04-22",
+                "customMsg": "<p>مهمتك: ابحث عن أعضاء جدد.</p>",
+                "attendance": 20,
+                "absences": 2,
+                "leaves": 10,
+                "meetings": [
+                    { "type": "اجتماع", "title": "اجتماع التخطيط السنوي", "date": "2026-01-15", "status": "حضر" },
+                    { "type": "دورة", "title": "دورة القيادة الفعالة", "date": "2026-02-10", "status": "حضر" },
+                    { "type": "جلسة", "title": "جلسة مراجعة الأداء", "date": "2026-03-05", "status": "غاب" }
+                ]
+            },
+            "U2020": {
+                "pass": "12345",
+                "fullName": "محمد ثامر العنزي",
+                "phone": "0502799166",
+                "discord": "8u4",
+                "userId": "U2020",
+                "points": "52",
+                "category": "صانع محتوى",
+                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
+                "activities": ["تقرير إبداعي"],
+                "monthEarn": "0 ر.س",
+                "totalEarn": "0 ر.س",
+                "followers": "0 ر.س",
+                "dueDate": "-",
+                "customMsg": "<p>لا توجد مهام حالياً.</p>",
+                "attendance": 0,
+                "absences": 19,
+                "leaves": 0,
+                "meetings": [
+                    { "type": "اجتماع", "title": "اجتماع ", "date": "2026-06-20", "status": "غاب" },
+                    { "type": "اجتماع", "title": "اجتماع", "date": "2026-06-14", "status": "غاب" }
+                ]
+            },
+            "U2021": {
+                "pass": "123456",
+                "fullName": "صالح محمد الزهراني",
+                "phone": "0549724238",
+                "discord": "sl_z7h._57465",
+                "userId": "U2021",
+                "points": "46",
+                "category": "إداري + رئيس الإدارة العليا",
+                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
+                "activities": ["لايوجد", "لايوجد", "لايوجد"],
+                "monthEarn": "0 ر.س",
+                "totalEarn": "0 ر.س",
+                "followers": "0 ر.س",
+                "dueDate": "-",
+                "customMsg": "<p>تم ترقيتك إلى مدير عام. المهام: رسم خطة جديدة للعام 2026.</p>",
+                "attendance": 2,
+                "absences": 14,
+                "leaves": 0,
+                "meetings": [
+                    { "type": "اجتماع", "title": "اجتماع الإدارة العليا", "date": "2026-01-10", "status": "حضر" },
+                    { "type": "دورة", "title": "دورة التخطيط الإستراتيجي", "date": "2026-02-20", "status": "غاب" }
+                ]
+            },
+            "U2022": {
+                "pass": "Mz102030",
+                "fullName": "مازن بن منصور السلمي",
+                "phone": "0543431914",
+                "discord": "mazen_x",
+                "userId": "U2022",
+                "points": "73",
+                "category": "رئيس مجلس المشروع",
+                "avatar": "https://www.socialcreator.com/srv/imgs/ti_imgs/197914_309202.png",
+                "activities": ["إدارة المشاريع"],
+                "monthEarn": "0 ر.س",
+                "totalEarn": "0 ر.س",
+                "followers": "0 ر.س",
+                "dueDate": "2025-12-30",
+                "customMsg": "<p>إنجاز خطة الربع الأول.</p>",
+                "attendance": 45,
+                "absences": 1,
+                "leaves": 3,
+                "meetings": [
+                    { "type": "اجتماع", "title": "اجتماع المشروع", "date": "2026-01-05", "status": "حضر" },
+                    { "type": "دورة", "title": "دورة إدارة المشاريع", "date": "2026-01-25", "status": "حضر" },
+                    { "type": "جلسة", "title": "اجتماع متابعة السيرفر", "date": "2026-07-07", "status": "غاب" },
+                    { "type": "جلسة", "title": "اجتماع مجلس الادارة", "date": "2026-07-07", "status": "حضر" },
+                    { "type": "دورة", "title": "دورة التخطيط الإستراتيجي", "date": "2026-02-20", "status": "حضر" }
+                ],
+                "following": ["يزيد النفيعي", "عبدالرحمن الزهراني", "مشعل السلمي", "صالح الزهراني", "حسن الشريف", "محمد العنزي"]
+            },
+            "U2023": {
+                "pass": "12345",
+                "fullName": "يزيد يوسف النفيعي",
+                "phone": "0538322511",
+                "discord": "bzgif",
+                "userId": "U2023",
+                "points": "50",
+                "category": "إداري + مسؤول التقديم",
+                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
+                "activities": ["توظيف", "مقابلات", "تقييم المتقدمين"],
+                "monthEarn": "0 ر.س",
+                "totalEarn": "0 ر.س",
+                "followers": "0 ر.س",
+                "dueDate": "2026-04-22",
+                "customMsg": "<p>البحث عن 4 إداريين جدد. الإنجاز 0/4.</p>",
+                "attendance": 1,
+                "absences": 17,
+                "leaves": 0,
+                "meetings": [
+                    { "type": "اجتماع", "title": "اجتماع التوظيف", "date": "2026-06-12", "status": "حضر" },
+                    { "type": "دورة", "title": "اجتماع دليل الإدارة", "date": "2026-06-05", "status": "حضر" }
+                ]
+            },
+            "U2026": {
+                "pass": "1417",
+                "fullName": "مشعل منصور البنوي",
+                "phone": "05696069087",
+                "discord": "meshal71001",
+                "userId": "U2026",
+                "points": "38",
+                "category": "رئيس مجلس الإدارة",
+                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
+                "activities": ["لايوجد"],
+                "monthEarn": "0 ر.س",
+                "totalEarn": "0 ر.س",
+                "followers": "0 ر.س",
+                "dueDate": "-",
+                "customMsg": "<p>أنشاء متجر الإلكتروني.</p>",
+                "attendance": 28,
+                "absences": 5,
+                "leaves": 2,
+                "meetings": [
+                    { "type": "اجتماع", "title": "اجتماع مجلس الإدارة", "date": "2026-01-08", "status": "حضر" },
+                    { "type": "جلسة", "title": "اجتماع مجلس الادارة", "date": "2026-07-07", "status": "غاب" }
+                ]
+            },
+            "U2027": {
+                "pass": "123123",
+                "fullName": "حسن محمد الشريف",
+                "phone": "0562250944",
+                "discord": "hss0328",
+                "userId": "U2027",
+                "points": "48",
+                "category": "إداري + مسؤول السيرفر",
+                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
+                "activities": ["إدارة المشاريع"],
+                "monthEarn": "0 ر.س",
+                "totalEarn": "14.21 ر.س",
+                "followers": "0 ر.س",
+                "dueDate": "2026-12-30",
+                "customMsg": "<p>زيادة تفاعل السيرفر وزيادة الحضور اليومي.</p>",
+                "attendance": 23,
+                "absences": 13,
+                "leaves": 0,
+                "meetings": [
+                    { "type": "اجتماع", "title": "اجتماع السيرفر", "date": "2026-06-18", "status": "حضر" },
+                    { "type": "اجتماع", "title": "اجتماع متابعة السيرفر", "date": "2026-07-07", "status": "غاب" }
+                ]
+            },
+            "U2025": {
+                "pass": "12345678",
+                "fullName": "جسار وليد السلمي",
+                "phone": "0542360558",
+                "discord": "غير متوفر",
+                "userId": "U2025",
+                "points": "0",
+                "category": "لاعب",
+                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
+                "activities": ["لاعب هاوي"],
+                "monthEarn": "0 ر.س",
+                "totalEarn": "0 ر.س",
+                "followers": "0 ر.س",
+                "dueDate": "2021-12-30",
+                "customMsg": "<p>لاعب لـ TEAM MEN.</p>",
+                "attendance": 3,
+                "absences": 0,
+                "leaves": 0,
+                "meetings": [
+                    { "type": "تدريب", "title": "تدريب فورت نايت", "date": "2026-07-25", "status": "قادم" },
+                    { "type": "تدريب", "title": "تدريب فورت نايت", "date": "2026-06-29", "status": "حضر" }
+                ]
+            },
+            "U2024": {
+                "pass": "X2h3054",
+                "fullName": "عبدالرحمن سعد الزهراني",
+                "phone": "0556655679",
+                "discord": "racer702",
+                "userId": "U2024",
+                "points": "46",
+                "category": "نائب رئيس مجلس الإدارة",
+                "avatar": "https://e7.pngegg.com/pngimages/813/118/png-clipart-silhouette-icon-blank-person-template-share-icon-black-and-white.png",
+                "activities": ["إدارة الفريق"],
+                "monthEarn": "0 ر.س",
+                "totalEarn": "0 ر.س",
+                "followers": "0 ر.س",
+                "dueDate": "2025-11-15",
+                "customMsg": "<p>البحث عن 3 إداريين جدد.</p>",
+                "attendance": 7,
+                "absences": 13,
+                "leaves": 0,
+                "meetings": [
+                    { "type": "اجتماع", "title": "اجتماع الإدارة", "date": "2026-01-07", "status": "حضر" },
+                    { "type": "جلسة", "title": "اجتماع مجلس الادارة", "date": "2026-07-07", "status": "غاب" }
+                ]
+            }
+        };
+
+        // ==================== WEBHOOKS ====================
         const WEBHOOKS = {
             reward: "https://discord.com/api/webhooks/1490773319384043671/GScQiyloP0dtRKqMH_C0KVut3C0M-LJbMI6gJVWLEIRPus-YTfhMqmn1N2fcmvdmFNen",
             task: "https://discord.com/api/webhooks/1495908179001872505/1ttvpIJNfSAIX8d_NmivafYcoGdmZVxsjMynDG5kDlYqa8d8jMa54fVtVVCuTdtFM5-T",
@@ -3143,15 +3359,6 @@
 
         function getCurrentValue(history) {
             return history.length > 0 ? history[history.length - 1] : 0;
-        }
-
-        function getProfitLoss(amount, currentValue) {
-            return currentValue - amount;
-        }
-
-        function getProfitPercent(amount, currentValue) {
-            if (amount === 0) return 0;
-            return ((currentValue - amount) / amount) * 100;
         }
 
         // ==================== GLOBAL STATE ====================
@@ -3519,10 +3726,8 @@
                 y: pad.top + chartH - ((v - minVal) / range) * chartH
             }));
 
-            // background
             ctx.clearRect(0, 0, width, height);
 
-            // grid lines
             ctx.strokeStyle = 'rgba(2,28,164,0.04)';
             ctx.lineWidth = 0.5;
             for (let i = 0; i < 4; i++) {
@@ -3533,7 +3738,6 @@
                 ctx.stroke();
             }
 
-            // draw segments
             for (let i = 0; i < points.length - 1; i++) {
                 const p1 = points[i];
                 const p2 = points[i + 1];
@@ -3544,15 +3748,12 @@
                 ctx.moveTo(p1.x, p1.y);
                 ctx.lineTo(p2.x, p2.y);
                 ctx.stroke();
-
-                // glow
                 ctx.shadowColor = isUp ? 'rgba(76,175,80,0.15)' : 'rgba(255,107,107,0.15)';
                 ctx.shadowBlur = 6;
                 ctx.stroke();
                 ctx.shadowBlur = 0;
             }
 
-            // dots
             points.forEach((p, i) => {
                 const isUp = (i === 0) || (data[i] >= data[i - 1]);
                 ctx.fillStyle = isUp ? '#4caf50' : '#ff6b6b';
@@ -3562,7 +3763,6 @@
                 ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.shadowBlur = 0;
-                // white ring
                 ctx.strokeStyle = 'rgba(6,8,18,0.6)';
                 ctx.lineWidth = 1;
                 ctx.beginPath();
@@ -3570,7 +3770,6 @@
                 ctx.stroke();
             });
 
-            // first & last values
             ctx.fillStyle = '#8890b0';
             ctx.font = '8px Cairo, sans-serif';
             ctx.textAlign = 'center';
@@ -3579,7 +3778,6 @@
             ctx.fillText(firstVal.toLocaleString() + ' ر.س', points[0].x, height - 4);
             ctx.fillText(lastVal.toLocaleString() + ' ر.س', points[points.length - 1].x, height - 4);
 
-            // profit/loss badge
             const currentVal = lastVal;
             const profit = currentVal - amount;
             const percent = amount > 0 ? ((profit / amount) * 100) : 0;
@@ -3590,9 +3788,8 @@
             ctx.font = 'bold 10px Cairo, sans-serif';
             ctx.textAlign = 'right';
             ctx.fillText(`${label} ${Math.abs(profit).toFixed(0)} ر.س (${percent.toFixed(1)}%)`, width - pad.right, pad
-            .top + 12);
+                .top + 12);
 
-            // current value
             ctx.fillStyle = '#ffffff';
             ctx.font = 'bold 11px Cairo, sans-serif';
             ctx.textAlign = 'left';
@@ -3607,7 +3804,6 @@
             const section = document.getElementById(sectionId);
             if (section) section.classList.add('active-section');
 
-            // If wallet section, draw chart after a small delay
             if (sectionId === 'moreSectionWallet') {
                 setTimeout(() => {
                     drawInvestmentChart('walletChartCanvas', currentUserData?.investment?.history || [
@@ -3627,7 +3823,6 @@
             currentUserData = JSON.parse(JSON.stringify(user));
             if (!currentUserData.taskCompleted) currentUserData.taskCompleted = false;
 
-            // Attach investment data
             const inv = getInvestmentForUser(currentUserData.userId);
             currentUserData.investment = {
                 amount: inv.amount,
@@ -3690,7 +3885,6 @@
                     }
                 }
 
-                // Wallet data
                 const inv = currentUserData.investment || { amount: 0, history: [0, 0, 0, 0, 0], currentValue: 0 };
                 const currentVal = inv.currentValue || getCurrentValue(inv.history) || 0;
                 const profit = currentVal - inv.amount;
@@ -3700,7 +3894,6 @@
                 const wrapper = document.createElement('div');
                 wrapper.className = 'more-content-wrapper';
 
-                // Menu (boxes as buttons) — now 5 items
                 wrapper.innerHTML = `
                     <div id="moreMenuContainer" class="more-menu-grid">
                         <div class="more-menu-box" onclick="showMoreSection('moreSectionCard')">
@@ -3934,7 +4127,7 @@
                         const dateStr =
                             `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                         const isToday = (day === todayDate && currentMonth === todayMonth && currentYear ===
-                        todayYear);
+                            todayYear);
                         let dayEvents = currentUserData.meetings ? currentUserData.meetings.filter(m => m.date ===
                             dateStr) : [];
                         let eventDots = '';
@@ -3967,7 +4160,6 @@
                     calendarMore.innerHTML = html;
                 }
 
-                // Meetings table for more tab
                 const tbodyMore = document.getElementById('meetingsTableBodyMore');
                 if (tbodyMore && currentUserData.meetings) {
                     tbodyMore.innerHTML = currentUserData.meetings.map(m =>
@@ -3975,10 +4167,8 @@
                     ).join('');
                 }
 
-                // Attendance button
                 document.getElementById('attendancePortalBtn2')?.addEventListener('click', sendAttendance);
 
-                // Service form
                 document.getElementById('serviceFile')?.addEventListener('change', function() {
                     const fn = document.getElementById('serviceFileName');
                     if (this.files.length > 0) {
@@ -4034,7 +4224,6 @@
                     document.getElementById('serviceFileName').classList.remove('show');
                 });
 
-                // Support form in more tab
                 document.getElementById('supportFile2')?.addEventListener('change', function() {
                     const fn = document.getElementById('supportFileName2');
                     if (this.files.length > 0) {
@@ -4054,11 +4243,8 @@
                     sendSupportTicket(issueType, caseName, notes, file);
                 });
 
-                // Show menu by default
                 showMoreMenu();
 
-                // Draw wallet chart if wallet section is visible by default (it's not, but we handle on click)
-                // Also handle window resize for chart
                 window.addEventListener('resize', function() {
                     const walletSection = document.getElementById('moreSectionWallet');
                     if (walletSection && walletSection.classList.contains('active-section')) {
@@ -4303,16 +4489,9 @@
 
         // ==================== LOGIN ====================
         async function login(uid, pwd) {
-            if (Object.keys(usersDB).length === 0) {
-                try {
-                    const response = await fetch('bo1.json');
-                    if (!response.ok) throw new Error('فشل تحميل bo1.json');
-                    usersDB = await response.json();
-                } catch (e) {
-                    showToast('فشل تحميل قاعدة البيانات', 'error');
-                    return;
-                }
-            }
+            // Use embedded database directly
+            usersDB = USERS_DATA; // ensure it's set
+
             const user = usersDB[uid];
             if (user && user.pass === pwd) {
                 currentUser = user;
