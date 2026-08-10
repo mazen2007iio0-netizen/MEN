@@ -293,7 +293,7 @@
             object-fit: cover;
             cursor: pointer;
             transition: var(--transition);
-            display: none;
+            display: none; /* يظهر بعد تسجيل الدخول */
         }
         .header-avatar:hover {
             border-color: var(--blue-light);
@@ -650,6 +650,97 @@
             transform: scale(1.06);
             background: #eaf2ff;
             box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ===== GAMES GRID ===== */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 28px;
+            margin: 30px 0 50px;
+        }
+        .game-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.01);
+            border-color: var(--blue-deep);
+            box-shadow: 0 30px 60px -20px rgba(2, 28, 164, 0.12);
+        }
+        .game-card .game-img {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        .game-card .game-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .game-card:hover .game-img img {
+            transform: scale(1.08);
+        }
+        .game-card .game-badge {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(2, 28, 164, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 4px 16px;
+            border-radius: 60px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .game-card .game-content {
+            padding: 22px 24px 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .game-card .game-content h4 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #ffffff;
+        }
+        .game-card .game-content .game-meta {
+            display: flex;
+            gap: 18px;
+            font-size: 0.85rem;
+            color: #8890b0;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .game-card .game-content .game-meta i {
+            color: var(--blue-light);
+            margin-left: 4px;
+            opacity: 0.7;
+        }
+        .game-card .game-content p {
+            color: #b0b8d0;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            flex: 1;
+            margin-bottom: 16px;
+        }
+        .game-card .game-content .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         /* ===== FEATURED BANNER ===== */
@@ -1860,6 +1951,9 @@
             .featured-banner .text h2 {
                 font-size: 1.6rem;
             }
+            .games-grid {
+                grid-template-columns: 1fr 1fr;
+            }
             .section-label h3 {
                 font-size: 1.4rem;
             }
@@ -1973,6 +2067,9 @@
             .hero-luxury .btn-secondary {
                 padding: 10px 20px;
                 font-size: 0.85rem;
+            }
+            .games-grid {
+                grid-template-columns: 1fr;
             }
             .section-label h3 {
                 font-size: 1.2rem;
@@ -2615,190 +2712,12 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
-
-        /* ===== WALLET CHART ===== */
-        .wallet-summary {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 16px;
-            margin: 16px 0;
-        }
-        .wallet-summary .ws-item {
-            background: rgba(0, 0, 0, 0.15);
-            border-radius: 16px;
-            padding: 16px 12px;
-            text-align: center;
-            border: 1px solid rgba(2, 28, 164, 0.03);
-        }
-        .wallet-summary .ws-item .ws-label {
-            font-size: 0.8rem;
-            color: #8890b0;
-        }
-        .wallet-summary .ws-item .ws-value {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #ffffff;
-            margin-top: 4px;
-        }
-        .wallet-summary .ws-item .ws-value.green {
-            color: #4caf50;
-        }
-        .wallet-summary .ws-item .ws-value.red {
-            color: #ff6b6b;
-        }
-        .wallet-summary .ws-item .ws-value.gold {
-            color: #f5b342;
-        }
-
-        .chart-container {
-            background: rgba(0, 0, 0, 0.15);
-            border-radius: var(--radius-xl);
-            padding: 20px 16px 16px;
-            margin: 16px 0;
-            border: 1px solid rgba(2, 28, 164, 0.03);
-            position: relative;
-        }
-        .chart-container canvas {
-            width: 100% !important;
-            height: auto !important;
-            max-height: 220px;
-            display: block;
-            border-radius: 12px;
-        }
-        .chart-container .chart-title {
-            text-align: center;
-            color: #8890b0;
-            font-size: 0.8rem;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-        }
-        .chart-container .chart-legend-custom {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-        .chart-container .chart-legend-custom .leg-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.75rem;
-            color: #8890b0;
-        }
-        .chart-container .chart-legend-custom .leg-item .dot {
-            width: 12px;
-            height: 4px;
-            border-radius: 4px;
-            display: inline-block;
-        }
-        .chart-container .chart-legend-custom .leg-item .dot.green {
-            background: #4caf50;
-        }
-        .chart-container .chart-legend-custom .leg-item .dot.red {
-            background: #ff6b6b;
-        }
-
-        .wallet-timeline {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 8px 0;
-            font-size: 0.65rem;
-            color: #4a5070;
-            direction: ltr;
-        }
-        .wallet-timeline span {
-            flex: 1;
-            text-align: center;
-        }
-
-        @media (max-width: 480px) {
-            .wallet-summary {
-                grid-template-columns: 1fr 1fr;
-            }
-            .wallet-summary .ws-item .ws-value {
-                font-size: 1.2rem;
-            }
-            .chart-container canvas {
-                max-height: 160px;
-            }
-        }
-
-        /* ===== AI MENU (unchanged) ===== */
-        .ai-menu {
-            position: fixed;
-            left: 25px;
-            bottom: 25px;
-            z-index: 99999;
-        }
-        .ai-button {
-            width: 65px;
-            height: 65px;
-            border: none;
-            border-radius: 50%;
-            background: rgba(2, 28, 164, .85);
-            color: #fff;
-            font-size: 28px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 25px rgba(2, 28, 164, .45);
-            transition: .35s;
-        }
-        .ai-menu.active .ai-button {
-            transform: rotate(45deg);
-        }
-        .menu-item {
-            position: absolute;
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: rgba(2, 28, 164, .85);
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-decoration: none;
-            font-size: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: .35s;
-            box-shadow: 0 0 20px rgba(2, 28, 164, .4);
-        }
-        .menu-item:hover {
-            transform: scale(1.12);
-            box-shadow: 0 0 30px rgba(2, 28, 164, .7);
-        }
-        .menu-item span {
-            position: absolute;
-            left: 65px;
-            background: #111827;
-            color: #fff;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            white-space: nowrap;
-            opacity: 0;
-            transition: .3s;
-        }
-        .menu-item:hover span {
-            opacity: 1;
-        }
-        .ai-menu.active .item-chat {
-            transform: translate(-5px, -85px);
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .ai-menu.active .item-store {
-            transform: translate(75px, 15px);
-            opacity: 1;
-            pointer-events: auto;
-        }
     </style>
 </head>
 <body>
-    <!-- ===== AI MENU ===== -->
+    <!-- ===== MEN Ai ===== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <div class="ai-menu" id="aiMenu">
         <a href="/ai" class="menu-item item-chat">
             <i class="fas fa-comments"></i>
@@ -2808,20 +2727,91 @@
             <i class="fas fa-wand-sparkles"></i>
         </button>
     </div>
+
+    <style>
+        .ai-menu{
+            position:fixed;
+            left:25px;
+            bottom:25px;
+            z-index:99999;
+        }
+        .ai-button{
+            width:65px;
+            height:65px;
+            border:none;
+            border-radius:50%;
+            background:rgba(2,28,164,.85);
+            color:#fff;
+            font-size:28px;
+            cursor:pointer;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            box-shadow:0 0 25px rgba(2,28,164,.45);
+            transition:.35s;
+        }
+        .ai-menu.active .ai-button{
+            transform:rotate(45deg);
+        }
+        .menu-item{
+            position:absolute;
+            width:52px;
+            height:52px;
+            border-radius:50%;
+            background:rgba(2,28,164,.85);
+            color:#fff;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            text-decoration:none;
+            font-size:20px;
+            opacity:0;
+            pointer-events:none;
+            transition:.35s;
+            box-shadow:0 0 20px rgba(2,28,164,.4);
+        }
+        .menu-item:hover{
+            transform:scale(1.12);
+            box-shadow:0 0 30px rgba(2,28,164,.7);
+        }
+        .menu-item span{
+            position:absolute;
+            left:65px;
+            background:#111827;
+            color:#fff;
+            padding:6px 12px;
+            border-radius:20px;
+            font-size:13px;
+            white-space:nowrap;
+            opacity:0;
+            transition:.3s;
+        }
+        .menu-item:hover span{
+            opacity:1;
+        }
+        .ai-menu.active .item-chat{
+            transform:translate(-5px,-85px);
+            opacity:1;
+            pointer-events:auto;
+        }
+        .ai-menu.active .item-store{
+            transform:translate(75px,15px);
+            opacity:1;
+            pointer-events:auto;
+        }
+    </style>
+
     <script>
-        (function() {
-            const menu = document.getElementById("aiMenu");
-            const btn = document.getElementById("toggleAI");
-            if (btn && menu) {
-                btn.onclick = function(e) {
-                    e.stopPropagation();
-                    menu.classList.toggle("active");
-                };
-                document.addEventListener("click", function(e) {
-                    if (!menu.contains(e.target)) menu.classList.remove("active");
-                });
+        const menu = document.getElementById("aiMenu");
+        const btn = document.getElementById("toggleAI");
+        btn.onclick = () => {
+            menu.classList.toggle("active");
+        };
+        document.addEventListener("click", (e) => {
+            if (!menu.contains(e.target)) {
+                menu.classList.remove("active");
             }
-        })();
+        });
     </script>
 
     <div class="bg-ambient"></div>
@@ -2839,7 +2829,8 @@
             </div>
             <div id="dropdownMenu" class="dropdown-menu">
                 <a data-page="home"><i class="fas fa-home"></i> الرئيسية</a>
-                <!-- تم حذف المتجر والألعاب -->
+                <a data-page="news"><i class="fas fa-gamepad"></i> الألعاب</a>
+                <a data-page="storeRedirect" style="cursor:pointer;" onclick="window.open('/store/','_blank');"><i class="fas fa-store"></i> المتجر</a>
                 <a data-page="about"><i class="fas fa-users"></i> من نحن</a>
                 <a data-page="timeline"><i class="fas fa-timeline"></i> رحلتنا</a>
                 <a data-page="team"><i class="fas fa-user-tie"></i> الفريق</a>
@@ -2865,6 +2856,9 @@
                     <h2>سيطرة <span class="highlight">أقوى</span></h2>
                     <p>فريق اللاعبين وصنّاع المحتوى.</p>
 
+                    <!-- ===== NEW SEARCH BAR ===== -->
+                    
+
                     <div class="btn-group" style="margin-top: 30px;">
                         <div class="men-pass" style="position:relative; overflow:hidden; padding:35px; border-radius:28px; background:rgba(8,18,40,.45); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.08); box-shadow:0 0 40px rgba(0,110,255,.35); text-align:center; color:#fff; font-family:Cairo,sans-serif; width:100%;">
                             <h1 style="margin:0; font-size:2.5rem;">Pass</h1>
@@ -2877,7 +2871,7 @@
                     </div>
                 </div>
 
-                <!-- NEWS (أخبار فقط، بدون ألعاب) -->
+                <!-- NEWS -->
                 <div class="section-label">
                     <span class="icon-badge"><i class="fas fa-newspaper"></i> أخبار</span>
                     <h3>أحدث الأخبار</h3>
@@ -2906,12 +2900,78 @@
                     </div>
                 </div>
 
+                <!-- GAMES -->
+                <div class="section-label">
+                    <span class="icon-badge"><i class="fas fa-trophy"></i> ألعاب</span>
+                    <h3>ألعاب مميزة</h3>
+                    <span class="line"></span>
+                </div>
+                <div class="games-grid">
+                    <div class="game-card">
+                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200539_328971.png" alt="كابتن سنوبل"><span class="game-badge">حصرية</span></div>
+                        <div class="game-content">
+                            <h4>كابتن سنوبل</h4>
+                            <div class="game-meta"><span><i class="fas fa-users"></i> 500+ لاعب</span><span><i class="fas fa-star"></i> 4.8</span></div>
+                            <p>مغامرات أكشن واستراتيجية في عوالم خيالية.</p>
+                            <div class="btn-group"><a href="https://sites.google.com/view/clan-men/كابتن-سنوبل" class="btn-outline-blue"><i class="fas fa-gamepad"></i> العب</a></div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200540_328971.png" alt="طلقة نار"><span class="game-badge">جديدة</span></div>
+                        <div class="game-content">
+                            <h4>طلقة نار</h4>
+                            <div class="game-meta"><span><i class="fas fa-users"></i> 300+ لاعب</span><span><i class="fas fa-star"></i> 4.6</span></div>
+                            <p>إطلاق نار سريع بتقنيات جرافيك حديثة.</p>
+                            <div class="btn-group"><a href="https://sites.google.com/view/clan-men/طلقة-نار" class="btn-outline-blue"><i class="fas fa-gamepad"></i> العب</a></div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- STATS -->
                 <div class="stats-showcase">
                     <div class="stat-item"><div class="number" data-target="12">0</div><div class="label">عضو أساسي</div></div>
                     <div class="stat-item"><div class="number" data-target="9">0</div><div class="label">انتصار</div></div>
                     <div class="stat-item"><div class="number" data-target="2">0</div><div class="label">بطولة</div></div>
                     <div class="stat-item"><div class="number" data-target="6">0</div><div class="label">سنوات</div></div>
+                </div>
+            </section>
+
+            <!-- ===== GAMES PAGE ===== -->
+            <section id="news" class="page">
+                <div class="featured-banner">
+                    <div class="text">
+                        <h2><i class=""></i> مكتبة الألعاب الحصرية</h2>
+                        <p>استمتع بألعابنا المصممة خصيصاً لأعضاء MEN</p>
+                    </div>
+                </div>
+                <div class="games-grid">
+                    <div class="game-card">
+                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200539_328971.png" alt="كابتن سنوبل"><span class="game-badge">حصرية</span></div>
+                        <div class="game-content">
+                            <h4>كابتن سنوبل</h4>
+                            <div class="game-meta"><span><i class="fas fa-users"></i> 500+ لاعب</span><span><i class="fas fa-star"></i> 4.8</span></div>
+                            <p>مغامرات أكشن واستراتيجية في عوالم خيالية.</p>
+                            <div class="btn-group"><a href="https://sites.google.com/view/clan-men/كابتن-سنوبل" class="btn-outline-blue"><i class="fas fa-gamepad"></i> العب</a></div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200540_328971.png" alt="طلقة نار"><span class="game-badge">جديدة</span></div>
+                        <div class="game-content">
+                            <h4>طلقة نار</h4>
+                            <div class="game-meta"><span><i class="fas fa-users"></i> 300+ لاعب</span><span><i class="fas fa-star"></i> 4.6</span></div>
+                            <p>إطلاق نار سريع بتقنيات جرافيك حديثة.</p>
+                            <div class="btn-group"><a href="https://sites.google.com/view/clan-men/طلقة-نار" class="btn-outline-blue"><i class="fas fa-gamepad"></i> العب</a></div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200685_328971.png" alt="بطولة MEN"><span class="game-badge">بطولة</span></div>
+                        <div class="game-content">
+                            <h4>بطولة</h4>
+                            <div class="game-meta"><span><i class="fas fa-trophy"></i> جائزة للفريق</span><span><i class="fas fa-calendar"></i> 2027</span></div>
+                            <p>أكبر بطولة إلكترونية بمشاركة نخبة الفرق.</p>
+                            <div class="btn-group"><a href="https://sites.google.com/view/festival-of-creativity/festival-of-creativity" class="btn-outline-blue"><i class="fas fa-ticket-alt"></i> سجل</a></div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -3032,7 +3092,7 @@
     </svg>
 
     <script>
-        // ==================== WEBHOOKS ====================
+        // ==================== WEBHOOKS & DATABASE ====================
         const WEBHOOKS = {
             reward: "https://discord.com/api/webhooks/1490773319384043671/GScQiyloP0dtRKqMH_C0KVut3C0M-LJbMI6gJVWLEIRPus-YTfhMqmn1N2fcmvdmFNen",
             task: "https://discord.com/api/webhooks/1495908179001872505/1ttvpIJNfSAIX8d_NmivafYcoGdmZVxsjMynDG5kDlYqa8d8jMa54fVtVVCuTdtFM5-T",
@@ -3056,6 +3116,35 @@
         let calendarDate = new Date();
         let currentMonth = calendarDate.getMonth();
         let currentYear = calendarDate.getFullYear();
+
+        // ==================== SEARCH FUNCTION ====================
+        function performSearch() {
+            const query = document.getElementById('globalSearchInput').value.trim();
+            if (!query) {
+                showToast('الرجاء إدخال نص للبحث', 'info');
+                return;
+            }
+            // Simple search: navigate to news page and highlight matching games
+            switchPage('news');
+            const gameTitles = document.querySelectorAll('#news .game-card .game-content h4');
+            let found = false;
+            gameTitles.forEach(title => {
+                const parent = title.closest('.game-card');
+                if (title.textContent.toLowerCase().includes(query.toLowerCase())) {
+                    parent.style.borderColor = 'var(--blue-light)';
+                    parent.style.boxShadow = '0 0 40px rgba(2, 28, 164, 0.2)';
+                    found = true;
+                } else {
+                    parent.style.borderColor = '';
+                    parent.style.boxShadow = '';
+                }
+            });
+            if (!found) {
+                showToast('لم يتم العثور على نتائج', 'info');
+            } else {
+                showToast(`تم العثور على نتائج لـ "${query}"`, 'success');
+            }
+        }
 
         // ==================== HEADER UI CONTROL ====================
         function updateHeaderUI(loggedIn, avatarSrc) {
@@ -3379,134 +3468,21 @@
             renderCalendar(meetings || []);
         }
 
-        // ===== DRAW INVESTMENT CHART =====
-        function drawInvestmentChart(canvasId, history, amount) {
-            const canvas = document.getElementById(canvasId);
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-
-            const rect = canvas.parentElement.getBoundingClientRect();
-            const width = canvas.parentElement.clientWidth - 32;
-            const height = Math.min(200, Math.max(140, width * 0.35));
-            canvas.width = width * 2;
-            canvas.height = height * 2;
-            canvas.style.width = width + 'px';
-            canvas.style.height = height + 'px';
-            ctx.scale(2, 2);
-
-            const pad = { top: 12, bottom: 20, left: 8, right: 8 };
-            const chartW = width - pad.left - pad.right;
-            const chartH = height - pad.top - pad.bottom;
-
-            const data = history.length > 0 ? history : [0, 0, 0, 0, 0];
-            const minVal = Math.min(...data) * 0.92;
-            const maxVal = Math.max(...data) * 1.08;
-            const range = maxVal - minVal || 1;
-
-            const points = data.map((v, i) => ({
-                x: pad.left + (i / (data.length - 1 || 1)) * chartW,
-                y: pad.top + chartH - ((v - minVal) / range) * chartH
-            }));
-
-            ctx.clearRect(0, 0, width, height);
-
-            ctx.strokeStyle = 'rgba(2,28,164,0.04)';
-            ctx.lineWidth = 0.5;
-            for (let i = 0; i < 4; i++) {
-                const y = pad.top + (i / 3) * chartH;
-                ctx.beginPath();
-                ctx.moveTo(pad.left, y);
-                ctx.lineTo(width - pad.right, y);
-                ctx.stroke();
-            }
-
-            for (let i = 0; i < points.length - 1; i++) {
-                const p1 = points[i];
-                const p2 = points[i + 1];
-                const isUp = data[i + 1] >= data[i];
-                ctx.strokeStyle = isUp ? '#4caf50' : '#ff6b6b';
-                ctx.lineWidth = 2.5;
-                ctx.beginPath();
-                ctx.moveTo(p1.x, p1.y);
-                ctx.lineTo(p2.x, p2.y);
-                ctx.stroke();
-                ctx.shadowColor = isUp ? 'rgba(76,175,80,0.15)' : 'rgba(255,107,107,0.15)';
-                ctx.shadowBlur = 6;
-                ctx.stroke();
-                ctx.shadowBlur = 0;
-            }
-
-            points.forEach((p, i) => {
-                const isUp = (i === 0) || (data[i] >= data[i - 1]);
-                ctx.fillStyle = isUp ? '#4caf50' : '#ff6b6b';
-                ctx.shadowColor = isUp ? 'rgba(76,175,80,0.3)' : 'rgba(255,107,107,0.3)';
-                ctx.shadowBlur = 8;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.shadowBlur = 0;
-                ctx.strokeStyle = 'rgba(6,8,18,0.6)';
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
-                ctx.stroke();
-            });
-
-            ctx.fillStyle = '#8890b0';
-            ctx.font = '8px Cairo, sans-serif';
-            ctx.textAlign = 'center';
-            const firstVal = data[0] || 0;
-            const lastVal = data[data.length - 1] || 0;
-            ctx.fillText(firstVal.toLocaleString() + ' ر.س', points[0].x, height - 4);
-            ctx.fillText(lastVal.toLocaleString() + ' ر.س', points[points.length - 1].x, height - 4);
-
-            const currentVal = lastVal;
-            const profit = currentVal - amount;
-            const percent = amount > 0 ? ((profit / amount) * 100) : 0;
-            const isProfit = profit >= 0;
-            const label = isProfit ? '▲ ربح' : '▼ خسارة';
-            const color = isProfit ? '#4caf50' : '#ff6b6b';
-            ctx.fillStyle = color;
-            ctx.font = 'bold 10px Cairo, sans-serif';
-            ctx.textAlign = 'right';
-            ctx.fillText(`${label} ${Math.abs(profit).toFixed(0)} ر.س (${percent.toFixed(1)}%)`, width - pad.right, pad.top + 12);
-
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 11px Cairo, sans-serif';
-            ctx.textAlign = 'left';
-            ctx.fillText(`القيمة الحالية: ${currentVal.toLocaleString()} ر.س`, pad.left + 4, pad.top + 12);
-        }
-
         // ===== MORE TAB FUNCTIONS =====
         function showMoreSection(sectionId) {
             document.querySelectorAll('.more-section').forEach(el => el.classList.remove('active-section'));
-            const menuContainer = document.getElementById('moreMenuContainer');
-            if (menuContainer) menuContainer.style.display = 'none';
-            const section = document.getElementById(sectionId);
-            if (section) section.classList.add('active-section');
-
-            if (sectionId === 'moreSectionWallet') {
-                setTimeout(() => {
-                    drawInvestmentChart('walletChartCanvas', currentUserData?.investment?.history || [0,0,0,0,0], currentUserData?.investment?.amount || 0);
-                }, 100);
-            }
+            document.getElementById('moreMenuContainer').style.display = 'none';
+            document.getElementById(sectionId).classList.add('active-section');
         }
 
         function showMoreMenu() {
             document.querySelectorAll('.more-section').forEach(el => el.classList.remove('active-section'));
-            const menuContainer = document.getElementById('moreMenuContainer');
-            if (menuContainer) menuContainer.style.display = 'grid';
+            document.getElementById('moreMenuContainer').style.display = 'grid';
         }
 
         function loadUserData(user) {
             currentUserData = JSON.parse(JSON.stringify(user));
             if (!currentUserData.taskCompleted) currentUserData.taskCompleted = false;
-
-            // Ensure investment data exists
-            if (!currentUserData.investment) {
-                currentUserData.investment = { amount: 0, history: [0,0,0,0,0] };
-            }
-
             document.getElementById('userFullName').innerText = currentUserData.fullName;
             document.getElementById('userIdLabel').innerText = currentUserData.userId;
             document.getElementById('userRoleLabel').innerText = currentUserData.category;
@@ -3559,15 +3535,10 @@
                     }
                 }
 
-                const inv = currentUserData.investment || { amount: 0, history: [0,0,0,0,0] };
-                const currentVal = inv.history.length > 0 ? inv.history[inv.history.length - 1] : 0;
-                const profit = currentVal - inv.amount;
-                const profitPercent = inv.amount > 0 ? ((profit / inv.amount) * 100) : 0;
-                const isProfit = profit >= 0;
-
                 const wrapper = document.createElement('div');
                 wrapper.className = 'more-content-wrapper';
 
+                // Menu (boxes as buttons)
                 wrapper.innerHTML = `
                     <div id="moreMenuContainer" class="more-menu-grid">
                         <div class="more-menu-box" onclick="showMoreSection('moreSectionCard')">
@@ -3579,11 +3550,6 @@
                             <i class="fas fa-calendar-check"></i>
                             <h4>الدوامات</h4>
                             <p>الحضور والغياب والإجازات</p>
-                        </div>
-                        <div class="more-menu-box" onclick="showMoreSection('moreSectionWallet')">
-                            <i class="fas fa-wallet"></i>
-                            <h4>المحفظة</h4>
-                            <p>الاستثمار والأرباح</p>
                         </div>
                         <div class="more-menu-box" onclick="showMoreSection('moreSectionServices')">
                             <i class="fas fa-concierge-bell"></i>
@@ -3651,46 +3617,7 @@
                         </div>
                     </div>
 
-                    <!-- Section 3: المحفظة (WALLET) -->
-                    <div id="moreSectionWallet" class="more-section">
-                        <button class="more-back-btn" onclick="showMoreMenu()"><i class="fas fa-arrow-right"></i> رجوع</button>
-                        <div class="wallet-summary">
-                            <div class="ws-item">
-                                <div class="ws-label">المبلغ المستثمر</div>
-                                <div class="ws-value gold">${inv.amount.toLocaleString()} ر.س</div>
-                            </div>
-                            <div class="ws-item">
-                                <div class="ws-label">القيمة الحالية</div>
-                                <div class="ws-value">${currentVal.toLocaleString()} ر.س</div>
-                            </div>
-                            <div class="ws-item">
-                                <div class="ws-label">الربح / الخسارة</div>
-                                <div class="ws-value ${isProfit ? 'green' : 'red'}">${isProfit ? '+' : ''}${profit.toFixed(0)} ر.س (${profitPercent.toFixed(1)}%)</div>
-                            </div>
-                        </div>
-                        <div class="chart-container">
-                            <div class="chart-title"><i class="fas fa-chart-line" style="color:var(--blue-light);"></i> أداء الاستثمار</div>
-                            <canvas id="walletChartCanvas"></canvas>
-                            <div class="chart-legend-custom">
-                                <span class="leg-item"><span class="dot green"></span> ارتفاع</span>
-                                <span class="leg-item"><span class="dot red"></span> انخفاض</span>
-                            </div>
-                            <div class="wallet-timeline">
-                                <span>اليوم 1</span>
-                                <span>اليوم 3</span>
-                                <span>اليوم 5</span>
-                                <span>اليوم 7</span>
-                                <span>اليوم 9</span>
-                                <span>اليوم 10</span>
-                            </div>
-                        </div>
-                        <div style="margin-top:12px; text-align:center; color:#4a5070; font-size:0.8rem;">
-                            <i class="fas fa-info-circle"></i> البيانات محدثة يومياً · 
-                            <span style="color:var(--blue-light);">${new Date().toLocaleDateString('ar-SA')}</span>
-                        </div>
-                    </div>
-
-                    <!-- Section 4: الخدمات -->
+                    <!-- Section 3: الخدمات -->
                     <div id="moreSectionServices" class="more-section">
                         <button class="more-back-btn" onclick="showMoreMenu()"><i class="fas fa-arrow-right"></i> رجوع</button>
                         <div class="services-form">
@@ -3724,7 +3651,7 @@
                         </div>
                     </div>
 
-                    <!-- Section 5: الدعم الفني -->
+                    <!-- Section 4: الدعم الفني -->
                     <div id="moreSectionSupport" class="more-section">
                         <button class="more-back-btn" onclick="showMoreMenu()"><i class="fas fa-arrow-right"></i> رجوع</button>
                         <div class="support-form" style="margin:0; padding:0; background:transparent; border:none;">
@@ -4149,14 +4076,13 @@
 
         // ==================== LOGIN ====================
         async function login(uid, pwd) {
-            // Load users from external file
             if (Object.keys(usersDB).length === 0) {
                 try {
                     const response = await fetch('bo1.json');
                     if (!response.ok) throw new Error('فشل تحميل bo1.json');
                     usersDB = await response.json();
                 } catch (e) {
-                    showToast('فشل تحميل قاعدة البيانات. تأكد من وجود ملف bo1.json.', 'error');
+                    showToast('فشل تحميل قاعدة البيانات', 'error');
                     return;
                 }
             }
