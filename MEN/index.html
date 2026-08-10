@@ -293,7 +293,7 @@
             object-fit: cover;
             cursor: pointer;
             transition: var(--transition);
-            display: none;
+            display: none; /* يظهر بعد تسجيل الدخول */
         }
         .header-avatar:hover {
             border-color: var(--blue-light);
@@ -2522,7 +2522,7 @@
         /* ===== MORE TAB - BOXES AS BUTTONS ===== */
         .more-menu-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin-top: 10px;
         }
@@ -2712,190 +2712,12 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
-
-        /* ===== WALLET CHART ===== */
-        .wallet-summary {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 16px;
-            margin: 16px 0;
-        }
-        .wallet-summary .ws-item {
-            background: rgba(0, 0, 0, 0.15);
-            border-radius: 16px;
-            padding: 16px 12px;
-            text-align: center;
-            border: 1px solid rgba(2, 28, 164, 0.03);
-        }
-        .wallet-summary .ws-item .ws-label {
-            font-size: 0.8rem;
-            color: #8890b0;
-        }
-        .wallet-summary .ws-item .ws-value {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #ffffff;
-            margin-top: 4px;
-        }
-        .wallet-summary .ws-item .ws-value.green {
-            color: #4caf50;
-        }
-        .wallet-summary .ws-item .ws-value.red {
-            color: #ff6b6b;
-        }
-        .wallet-summary .ws-item .ws-value.gold {
-            color: #f5b342;
-        }
-
-        .chart-container {
-            background: rgba(0, 0, 0, 0.15);
-            border-radius: var(--radius-xl);
-            padding: 20px 16px 16px;
-            margin: 16px 0;
-            border: 1px solid rgba(2, 28, 164, 0.03);
-            position: relative;
-        }
-        .chart-container canvas {
-            width: 100% !important;
-            height: auto !important;
-            max-height: 220px;
-            display: block;
-            border-radius: 12px;
-        }
-        .chart-container .chart-title {
-            text-align: center;
-            color: #8890b0;
-            font-size: 0.8rem;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-        }
-        .chart-container .chart-legend-custom {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-        .chart-container .chart-legend-custom .leg-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.75rem;
-            color: #8890b0;
-        }
-        .chart-container .chart-legend-custom .leg-item .dot {
-            width: 12px;
-            height: 4px;
-            border-radius: 4px;
-            display: inline-block;
-        }
-        .chart-container .chart-legend-custom .leg-item .dot.green {
-            background: #4caf50;
-        }
-        .chart-container .chart-legend-custom .leg-item .dot.red {
-            background: #ff6b6b;
-        }
-
-        .wallet-timeline {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 8px 0;
-            font-size: 0.65rem;
-            color: #4a5070;
-            direction: ltr;
-        }
-        .wallet-timeline span {
-            flex: 1;
-            text-align: center;
-        }
-
-        @media (max-width: 480px) {
-            .wallet-summary {
-                grid-template-columns: 1fr 1fr;
-            }
-            .wallet-summary .ws-item .ws-value {
-                font-size: 1.2rem;
-            }
-            .chart-container canvas {
-                max-height: 160px;
-            }
-        }
-
-        /* ===== AI MENU (unchanged) ===== */
-        .ai-menu {
-            position: fixed;
-            left: 25px;
-            bottom: 25px;
-            z-index: 99999;
-        }
-        .ai-button {
-            width: 65px;
-            height: 65px;
-            border: none;
-            border-radius: 50%;
-            background: rgba(2, 28, 164, .85);
-            color: #fff;
-            font-size: 28px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 25px rgba(2, 28, 164, .45);
-            transition: .35s;
-        }
-        .ai-menu.active .ai-button {
-            transform: rotate(45deg);
-        }
-        .menu-item {
-            position: absolute;
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: rgba(2, 28, 164, .85);
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-decoration: none;
-            font-size: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: .35s;
-            box-shadow: 0 0 20px rgba(2, 28, 164, .4);
-        }
-        .menu-item:hover {
-            transform: scale(1.12);
-            box-shadow: 0 0 30px rgba(2, 28, 164, .7);
-        }
-        .menu-item span {
-            position: absolute;
-            left: 65px;
-            background: #111827;
-            color: #fff;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            white-space: nowrap;
-            opacity: 0;
-            transition: .3s;
-        }
-        .menu-item:hover span {
-            opacity: 1;
-        }
-        .ai-menu.active .item-chat {
-            transform: translate(-5px, -85px);
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .ai-menu.active .item-store {
-            transform: translate(75px, 15px);
-            opacity: 1;
-            pointer-events: auto;
-        }
     </style>
 </head>
 <body>
-    <!-- ===== AI MENU ===== -->
+    <!-- ===== MEN Ai ===== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <div class="ai-menu" id="aiMenu">
         <a href="/ai" class="menu-item item-chat">
             <i class="fas fa-comments"></i>
@@ -2905,20 +2727,91 @@
             <i class="fas fa-wand-sparkles"></i>
         </button>
     </div>
+
+    <style>
+        .ai-menu{
+            position:fixed;
+            left:25px;
+            bottom:25px;
+            z-index:99999;
+        }
+        .ai-button{
+            width:65px;
+            height:65px;
+            border:none;
+            border-radius:50%;
+            background:rgba(2,28,164,.85);
+            color:#fff;
+            font-size:28px;
+            cursor:pointer;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            box-shadow:0 0 25px rgba(2,28,164,.45);
+            transition:.35s;
+        }
+        .ai-menu.active .ai-button{
+            transform:rotate(45deg);
+        }
+        .menu-item{
+            position:absolute;
+            width:52px;
+            height:52px;
+            border-radius:50%;
+            background:rgba(2,28,164,.85);
+            color:#fff;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            text-decoration:none;
+            font-size:20px;
+            opacity:0;
+            pointer-events:none;
+            transition:.35s;
+            box-shadow:0 0 20px rgba(2,28,164,.4);
+        }
+        .menu-item:hover{
+            transform:scale(1.12);
+            box-shadow:0 0 30px rgba(2,28,164,.7);
+        }
+        .menu-item span{
+            position:absolute;
+            left:65px;
+            background:#111827;
+            color:#fff;
+            padding:6px 12px;
+            border-radius:20px;
+            font-size:13px;
+            white-space:nowrap;
+            opacity:0;
+            transition:.3s;
+        }
+        .menu-item:hover span{
+            opacity:1;
+        }
+        .ai-menu.active .item-chat{
+            transform:translate(-5px,-85px);
+            opacity:1;
+            pointer-events:auto;
+        }
+        .ai-menu.active .item-store{
+            transform:translate(75px,15px);
+            opacity:1;
+            pointer-events:auto;
+        }
+    </style>
+
     <script>
-        (function() {
-            const menu = document.getElementById("aiMenu");
-            const btn = document.getElementById("toggleAI");
-            if (btn && menu) {
-                btn.onclick = function(e) {
-                    e.stopPropagation();
-                    menu.classList.toggle("active");
-                };
-                document.addEventListener("click", function(e) {
-                    if (!menu.contains(e.target)) menu.classList.remove("active");
-                });
+        const menu = document.getElementById("aiMenu");
+        const btn = document.getElementById("toggleAI");
+        btn.onclick = () => {
+            menu.classList.toggle("active");
+        };
+        document.addEventListener("click", (e) => {
+            if (!menu.contains(e.target)) {
+                menu.classList.remove("active");
             }
-        })();
+        });
     </script>
 
     <div class="bg-ambient"></div>
@@ -2949,12 +2842,31 @@
 
             <!-- ===== HOME ===== -->
             <section id="home" class="page active">
+                <div class="fixed-ad" id="fixedAd">
+                    <button class="close-ad-btn" id="closeAdBtn" aria-label="إغلاق الإعلان">✕</button>
+                    <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200764_328971.png" alt="إعلان">
+                </div>
+
                 <div class="hero-luxury">
                     <div class="orb orb-1"></div>
                     <div class="orb orb-2"></div>
                     <div class="badge"><i class="fas fa-"></i> Team · MEN</div>
                     <h2>سيطرة <span class="highlight">أقوى</span></h2>
                     <p>فريق اللاعبين وصنّاع المحتوى.</p>
+
+                    <!-- ===== NEW SEARCH BAR ===== -->
+                    
+
+                    <div class="btn-group" style="margin-top: 30px;">
+                        <div class="men-pass" style="position:relative; overflow:hidden; padding:35px; border-radius:28px; background:rgba(8,18,40,.45); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.08); box-shadow:0 0 40px rgba(0,110,255,.35); text-align:center; color:#fff; font-family:Cairo,sans-serif; width:100%;">
+                            <h1 style="margin:0; font-size:2.5rem;">Pass</h1>
+                            <h3 style="margin:10px 0;">ارتقِ بتجربتك</h3>
+                            <p style="color:#dbe9ff; margin-bottom:25px;">احصل على أفضل تجربة مع مزايا حصرية.</p>
+                            <a href="/pass/" target="_blank" class="btn-primary" style="display:inline-block; padding:14px 34px; border-radius:50px; text-decoration:none; font-weight:bold; color:#fff; background:linear-gradient(90deg,#021ca4,#021ca4); box-shadow:0 0 25px rgba(0,119,255,.6); transition:.3s;">
+                                <i class="fas fa-plus"></i> اشترك الان
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- NEWS -->
@@ -2983,6 +2895,80 @@
                     <div class="tile-sub">
                         <div class="tile-img"><img src="https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/hero/bo7/BO7-REVEAL-ANNOUNCEMENT-TOUT.jpg" alt="COD"></div>
                         <div class="tile-content"><h4>Call of Duty BO7</h4><p>آخر إصدارات السلسلة الأسطورية.</p><a href="#" class="btn-outline-blue">استكشف</a></div>
+                    </div>
+                </div>
+
+                <!-- GAMES -->
+                <div class="section-label">
+                    <span class="icon-badge"><i class="fas fa-trophy"></i> ألعاب</span>
+                    <h3>ألعاب مميزة</h3>
+                    <span class="line"></span>
+                </div>
+                <div class="games-grid">
+                    <div class="game-card">
+                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200539_328971.png" alt="كابتن سنوبل"><span class="game-badge">حصرية</span></div>
+                        <div class="game-content">
+                            <h4>كابتن سنوبل</h4>
+                            <div class="game-meta"><span><i class="fas fa-users"></i> 500+ لاعب</span><span><i class="fas fa-star"></i> 4.8</span></div>
+                            <p>مغامرات أكشن واستراتيجية في عوالم خيالية.</p>
+                            <div class="btn-group"><a href="https://sites.google.com/view/clan-men/كابتن-سنوبل" class="btn-outline-blue"><i class="fas fa-gamepad"></i> العب</a></div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200540_328971.png" alt="طلقة نار"><span class="game-badge">جديدة</span></div>
+                        <div class="game-content">
+                            <h4>طلقة نار</h4>
+                            <div class="game-meta"><span><i class="fas fa-users"></i> 300+ لاعب</span><span><i class="fas fa-star"></i> 4.6</span></div>
+                            <p>إطلاق نار سريع بتقنيات جرافيك حديثة.</p>
+                            <div class="btn-group"><a href="https://sites.google.com/view/clan-men/طلقة-نار" class="btn-outline-blue"><i class="fas fa-gamepad"></i> العب</a></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATS -->
+                <div class="stats-showcase">
+                    <div class="stat-item"><div class="number" data-target="12">0</div><div class="label">عضو أساسي</div></div>
+                    <div class="stat-item"><div class="number" data-target="9">0</div><div class="label">انتصار</div></div>
+                    <div class="stat-item"><div class="number" data-target="2">0</div><div class="label">بطولة</div></div>
+                    <div class="stat-item"><div class="number" data-target="6">0</div><div class="label">سنوات</div></div>
+                </div>
+            </section>
+
+            <!-- ===== GAMES PAGE ===== -->
+            <section id="news" class="page">
+                <div class="featured-banner">
+                    <div class="text">
+                        <h2><i class=""></i> مكتبة الألعاب الحصرية</h2>
+                        <p>استمتع بألعابنا المصممة خصيصاً لأعضاء MEN</p>
+                    </div>
+                </div>
+                <div class="games-grid">
+                    <div class="game-card">
+                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200539_328971.png" alt="كابتن سنوبل"><span class="game-badge">حصرية</span></div>
+                        <div class="game-content">
+                            <h4>كابتن سنوبل</h4>
+                            <div class="game-meta"><span><i class="fas fa-users"></i> 500+ لاعب</span><span><i class="fas fa-star"></i> 4.8</span></div>
+                            <p>مغامرات أكشن واستراتيجية في عوالم خيالية.</p>
+                            <div class="btn-group"><a href="https://sites.google.com/view/clan-men/كابتن-سنوبل" class="btn-outline-blue"><i class="fas fa-gamepad"></i> العب</a></div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200540_328971.png" alt="طلقة نار"><span class="game-badge">جديدة</span></div>
+                        <div class="game-content">
+                            <h4>طلقة نار</h4>
+                            <div class="game-meta"><span><i class="fas fa-users"></i> 300+ لاعب</span><span><i class="fas fa-star"></i> 4.6</span></div>
+                            <p>إطلاق نار سريع بتقنيات جرافيك حديثة.</p>
+                            <div class="btn-group"><a href="https://sites.google.com/view/clan-men/طلقة-نار" class="btn-outline-blue"><i class="fas fa-gamepad"></i> العب</a></div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-img"><img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200685_328971.png" alt="بطولة MEN"><span class="game-badge">بطولة</span></div>
+                        <div class="game-content">
+                            <h4>بطولة</h4>
+                            <div class="game-meta"><span><i class="fas fa-trophy"></i> جائزة للفريق</span><span><i class="fas fa-calendar"></i> 2027</span></div>
+                            <p>أكبر بطولة إلكترونية بمشاركة نخبة الفرق.</p>
+                            <div class="btn-group"><a href="https://sites.google.com/view/festival-of-creativity/festival-of-creativity" class="btn-outline-blue"><i class="fas fa-ticket-alt"></i> سجل</a></div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -3104,223 +3090,7 @@
     </svg>
 
     <script>
-        // ==================== EMBEDDED USERS DATABASE ====================
-        const USERS_DATA = {
-            "U2028": {
-                "pass": "12122",
-                "fullName": "JACK Wiliam",
-                "phone": "0502799166",
-                "discord": "8u4",
-                "userId": "U2007",
-                "points": "77",
-                "category": "إداري",
-                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
-                "activities": ["تقرير إبداعي", "تقرير إحصائي"],
-                "monthEarn": "0 ر.س",
-                "totalEarn": "0 ر.س",
-                "followers": "0 ر.س",
-                "dueDate": "2028-04-22",
-                "customMsg": "<p>مهمتك: ابحث عن أعضاء جدد.</p>",
-                "attendance": 20,
-                "absences": 2,
-                "leaves": 10,
-                "meetings": [
-                    { "type": "اجتماع", "title": "اجتماع التخطيط السنوي", "date": "2026-01-15", "status": "حضر" },
-                    { "type": "دورة", "title": "دورة القيادة الفعالة", "date": "2026-02-10", "status": "حضر" },
-                    { "type": "جلسة", "title": "جلسة مراجعة الأداء", "date": "2026-03-05", "status": "غاب" }
-                ]
-            },
-            "U2020": {
-                "pass": "12345",
-                "fullName": "محمد ثامر العنزي",
-                "phone": "0502799166",
-                "discord": "8u4",
-                "userId": "U2020",
-                "points": "52",
-                "category": "صانع محتوى",
-                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
-                "activities": ["تقرير إبداعي"],
-                "monthEarn": "0 ر.س",
-                "totalEarn": "0 ر.س",
-                "followers": "0 ر.س",
-                "dueDate": "-",
-                "customMsg": "<p>لا توجد مهام حالياً.</p>",
-                "attendance": 0,
-                "absences": 19,
-                "leaves": 0,
-                "meetings": [
-                    { "type": "اجتماع", "title": "اجتماع ", "date": "2026-06-20", "status": "غاب" },
-                    { "type": "اجتماع", "title": "اجتماع", "date": "2026-06-14", "status": "غاب" }
-                ]
-            },
-            "U2021": {
-                "pass": "123456",
-                "fullName": "صالح محمد الزهراني",
-                "phone": "0549724238",
-                "discord": "sl_z7h._57465",
-                "userId": "U2021",
-                "points": "46",
-                "category": "إداري + رئيس الإدارة العليا",
-                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
-                "activities": ["لايوجد", "لايوجد", "لايوجد"],
-                "monthEarn": "0 ر.س",
-                "totalEarn": "0 ر.س",
-                "followers": "0 ر.س",
-                "dueDate": "-",
-                "customMsg": "<p>تم ترقيتك إلى مدير عام. المهام: رسم خطة جديدة للعام 2026.</p>",
-                "attendance": 2,
-                "absences": 14,
-                "leaves": 0,
-                "meetings": [
-                    { "type": "اجتماع", "title": "اجتماع الإدارة العليا", "date": "2026-01-10", "status": "حضر" },
-                    { "type": "دورة", "title": "دورة التخطيط الإستراتيجي", "date": "2026-02-20", "status": "غاب" }
-                ]
-            },
-            "U2022": {
-                "pass": "Mz102030",
-                "fullName": "مازن بن منصور السلمي",
-                "phone": "0543431914",
-                "discord": "mazen_x",
-                "userId": "U2022",
-                "points": "73",
-                "category": "رئيس مجلس المشروع",
-                "avatar": "https://www.socialcreator.com/srv/imgs/ti_imgs/197914_309202.png",
-                "activities": ["إدارة المشاريع"],
-                "monthEarn": "0 ر.س",
-                "totalEarn": "0 ر.س",
-                "followers": "0 ر.س",
-                "dueDate": "2025-12-30",
-                "customMsg": "<p>إنجاز خطة الربع الأول.</p>",
-                "attendance": 45,
-                "absences": 1,
-                "leaves": 3,
-                "meetings": [
-                    { "type": "اجتماع", "title": "اجتماع المشروع", "date": "2026-01-05", "status": "حضر" },
-                    { "type": "دورة", "title": "دورة إدارة المشاريع", "date": "2026-01-25", "status": "حضر" },
-                    { "type": "جلسة", "title": "اجتماع متابعة السيرفر", "date": "2026-07-07", "status": "غاب" },
-                    { "type": "جلسة", "title": "اجتماع مجلس الادارة", "date": "2026-07-07", "status": "حضر" },
-                    { "type": "دورة", "title": "دورة التخطيط الإستراتيجي", "date": "2026-02-20", "status": "حضر" }
-                ],
-                "following": ["يزيد النفيعي", "عبدالرحمن الزهراني", "مشعل السلمي", "صالح الزهراني", "حسن الشريف", "محمد العنزي"]
-            },
-            "U2023": {
-                "pass": "12345",
-                "fullName": "يزيد يوسف النفيعي",
-                "phone": "0538322511",
-                "discord": "bzgif",
-                "userId": "U2023",
-                "points": "50",
-                "category": "إداري + مسؤول التقديم",
-                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
-                "activities": ["توظيف", "مقابلات", "تقييم المتقدمين"],
-                "monthEarn": "0 ر.س",
-                "totalEarn": "0 ر.س",
-                "followers": "0 ر.س",
-                "dueDate": "2026-04-22",
-                "customMsg": "<p>البحث عن 4 إداريين جدد. الإنجاز 0/4.</p>",
-                "attendance": 1,
-                "absences": 17,
-                "leaves": 0,
-                "meetings": [
-                    { "type": "اجتماع", "title": "اجتماع التوظيف", "date": "2026-06-12", "status": "حضر" },
-                    { "type": "دورة", "title": "اجتماع دليل الإدارة", "date": "2026-06-05", "status": "حضر" }
-                ]
-            },
-            "U2026": {
-                "pass": "1417",
-                "fullName": "مشعل منصور البنوي",
-                "phone": "05696069087",
-                "discord": "meshal71001",
-                "userId": "U2026",
-                "points": "38",
-                "category": "رئيس مجلس الإدارة",
-                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
-                "activities": ["لايوجد"],
-                "monthEarn": "0 ر.س",
-                "totalEarn": "0 ر.س",
-                "followers": "0 ر.س",
-                "dueDate": "-",
-                "customMsg": "<p>أنشاء متجر الإلكتروني.</p>",
-                "attendance": 28,
-                "absences": 5,
-                "leaves": 2,
-                "meetings": [
-                    { "type": "اجتماع", "title": "اجتماع مجلس الإدارة", "date": "2026-01-08", "status": "حضر" },
-                    { "type": "جلسة", "title": "اجتماع مجلس الادارة", "date": "2026-07-07", "status": "غاب" }
-                ]
-            },
-            "U2027": {
-                "pass": "123123",
-                "fullName": "حسن محمد الشريف",
-                "phone": "0562250944",
-                "discord": "hss0328",
-                "userId": "U2027",
-                "points": "48",
-                "category": "إداري + مسؤول السيرفر",
-                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
-                "activities": ["إدارة المشاريع"],
-                "monthEarn": "0 ر.س",
-                "totalEarn": "14.21 ر.س",
-                "followers": "0 ر.س",
-                "dueDate": "2026-12-30",
-                "customMsg": "<p>زيادة تفاعل السيرفر وزيادة الحضور اليومي.</p>",
-                "attendance": 23,
-                "absences": 13,
-                "leaves": 0,
-                "meetings": [
-                    { "type": "اجتماع", "title": "اجتماع السيرفر", "date": "2026-06-18", "status": "حضر" },
-                    { "type": "اجتماع", "title": "اجتماع متابعة السيرفر", "date": "2026-07-07", "status": "غاب" }
-                ]
-            },
-            "U2025": {
-                "pass": "12345678",
-                "fullName": "جسار وليد السلمي",
-                "phone": "0542360558",
-                "discord": "غير متوفر",
-                "userId": "U2025",
-                "points": "0",
-                "category": "لاعب",
-                "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
-                "activities": ["لاعب هاوي"],
-                "monthEarn": "0 ر.س",
-                "totalEarn": "0 ر.س",
-                "followers": "0 ر.س",
-                "dueDate": "2021-12-30",
-                "customMsg": "<p>لاعب لـ TEAM MEN.</p>",
-                "attendance": 3,
-                "absences": 0,
-                "leaves": 0,
-                "meetings": [
-                    { "type": "تدريب", "title": "تدريب فورت نايت", "date": "2026-07-25", "status": "قادم" },
-                    { "type": "تدريب", "title": "تدريب فورت نايت", "date": "2026-06-29", "status": "حضر" }
-                ]
-            },
-            "U2024": {
-                "pass": "X2h3054",
-                "fullName": "عبدالرحمن سعد الزهراني",
-                "phone": "0556655679",
-                "discord": "racer702",
-                "userId": "U2024",
-                "points": "46",
-                "category": "نائب رئيس مجلس الإدارة",
-                "avatar": "https://e7.pngegg.com/pngimages/813/118/png-clipart-silhouette-icon-blank-person-template-share-icon-black-and-white.png",
-                "activities": ["إدارة الفريق"],
-                "monthEarn": "0 ر.س",
-                "totalEarn": "0 ر.س",
-                "followers": "0 ر.س",
-                "dueDate": "2025-11-15",
-                "customMsg": "<p>البحث عن 3 إداريين جدد.</p>",
-                "attendance": 7,
-                "absences": 13,
-                "leaves": 0,
-                "meetings": [
-                    { "type": "اجتماع", "title": "اجتماع الإدارة", "date": "2026-01-07", "status": "حضر" },
-                    { "type": "جلسة", "title": "اجتماع مجلس الادارة", "date": "2026-07-07", "status": "غاب" }
-                ]
-            }
-        };
-
-        // ==================== WEBHOOKS ====================
+        // ==================== WEBHOOKS & DATABASE ====================
         const WEBHOOKS = {
             reward: "https://discord.com/api/webhooks/1490773319384043671/GScQiyloP0dtRKqMH_C0KVut3C0M-LJbMI6gJVWLEIRPus-YTfhMqmn1N2fcmvdmFNen",
             task: "https://discord.com/api/webhooks/1495908179001872505/1ttvpIJNfSAIX8d_NmivafYcoGdmZVxsjMynDG5kDlYqa8d8jMa54fVtVVCuTdtFM5-T",
@@ -3335,32 +3105,6 @@
 
         let usersDB = {};
 
-        // ==================== INVESTMENT DATA ====================
-        const INVESTMENT_DATA = {
-            "U2022": { amount: 50000, history: [45000, 47000, 49000, 48500, 51000, 52000, 53500, 54200, 54800, 55500] },
-            "U2026": { amount: 45000, history: [42000, 43500, 44500, 44000, 45500, 46000, 47200, 47800, 48200, 49000] },
-            "U2024": { amount: 40000, history: [38000, 39000, 39500, 40500, 41500, 42000, 43000, 42500, 44000, 44800] },
-            "U2021": { amount: 35000, history: [33000, 34000, 34500, 35000, 36000, 35500, 36500, 37200, 37800, 38500] },
-            "U2023": { amount: 30000, history: [28000, 29000, 29500, 30500, 31000, 31500, 32000, 32500, 33000, 33800] },
-            "U2027": { amount: 25000, history: [23000, 24000, 24500, 25000, 26000, 25500, 26500, 27000, 27500, 28200] },
-            "U2028": { amount: 20000, history: [18500, 19000, 19500, 20000, 20500, 21000, 21500, 22000, 22500, 23000] },
-            "U2020": { amount: 15000, history: [14000, 14500, 14800, 15200, 15500, 15800, 16000, 16200, 16500, 16800] },
-            "U2025": { amount: 10000, history: [9500, 9800, 10000, 10200, 10500, 10300, 10600, 10800, 11000, 11200] }
-        };
-
-        function getInvestmentForUser(userId) {
-            const data = INVESTMENT_DATA[userId];
-            if (!data) return { amount: 0, history: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] };
-            return {
-                amount: data.amount,
-                history: data.history.slice()
-            };
-        }
-
-        function getCurrentValue(history) {
-            return history.length > 0 ? history[history.length - 1] : 0;
-        }
-
         // ==================== GLOBAL STATE ====================
         let currentUser = null,
             currentUserData = null,
@@ -3370,6 +3114,35 @@
         let calendarDate = new Date();
         let currentMonth = calendarDate.getMonth();
         let currentYear = calendarDate.getFullYear();
+
+        // ==================== SEARCH FUNCTION ====================
+        function performSearch() {
+            const query = document.getElementById('globalSearchInput').value.trim();
+            if (!query) {
+                showToast('الرجاء إدخال نص للبحث', 'info');
+                return;
+            }
+            // Simple search: navigate to news page and highlight matching games
+            switchPage('news');
+            const gameTitles = document.querySelectorAll('#news .game-card .game-content h4');
+            let found = false;
+            gameTitles.forEach(title => {
+                const parent = title.closest('.game-card');
+                if (title.textContent.toLowerCase().includes(query.toLowerCase())) {
+                    parent.style.borderColor = 'var(--blue-light)';
+                    parent.style.boxShadow = '0 0 40px rgba(2, 28, 164, 0.2)';
+                    found = true;
+                } else {
+                    parent.style.borderColor = '';
+                    parent.style.boxShadow = '';
+                }
+            });
+            if (!found) {
+                showToast('لم يتم العثور على نتائج', 'info');
+            } else {
+                showToast(`تم العثور على نتائج لـ "${query}"`, 'success');
+            }
+        }
 
         // ==================== HEADER UI CONTROL ====================
         function updateHeaderUI(loggedIn, avatarSrc) {
@@ -3523,9 +3296,8 @@
             const container = document.getElementById('calendarContainer');
             if (!container) return;
 
-            const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
-                "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
-            ];
+            const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", 
+                               "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
             const dayNames = ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"];
 
             const firstDay = new Date(currentYear, currentMonth, 1).getDay();
@@ -3552,10 +3324,9 @@
             }
 
             for (let day = 1; day <= daysInMonth; day++) {
-                const dateStr =
-                `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const isToday = (day === todayDate && currentMonth === todayMonth && currentYear === todayYear);
-
+                
                 let dayEvents = [];
                 if (meetings) {
                     dayEvents = meetings.filter(m => m.date === dateStr);
@@ -3597,10 +3368,8 @@
 
         function changeMonth(delta) {
             currentMonth += delta;
-            if (currentMonth > 11) { currentMonth = 0;
-                currentYear++; }
-            if (currentMonth < 0) { currentMonth = 11;
-                currentYear--; }
+            if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
             if (currentUserData) {
                 renderCalendar(currentUserData.meetings || []);
             }
@@ -3697,139 +3466,21 @@
             renderCalendar(meetings || []);
         }
 
-        // ===== DRAW INVESTMENT CHART =====
-        function drawInvestmentChart(canvasId, history, amount) {
-            const canvas = document.getElementById(canvasId);
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-
-            const rect = canvas.parentElement.getBoundingClientRect();
-            const width = canvas.parentElement.clientWidth - 32;
-            const height = Math.min(200, Math.max(140, width * 0.35));
-            canvas.width = width * 2;
-            canvas.height = height * 2;
-            canvas.style.width = width + 'px';
-            canvas.style.height = height + 'px';
-            ctx.scale(2, 2);
-
-            const pad = { top: 12, bottom: 20, left: 8, right: 8 };
-            const chartW = width - pad.left - pad.right;
-            const chartH = height - pad.top - pad.bottom;
-
-            const data = history.length > 0 ? history : [0, 0, 0, 0, 0];
-            const minVal = Math.min(...data) * 0.92;
-            const maxVal = Math.max(...data) * 1.08;
-            const range = maxVal - minVal || 1;
-
-            const points = data.map((v, i) => ({
-                x: pad.left + (i / (data.length - 1 || 1)) * chartW,
-                y: pad.top + chartH - ((v - minVal) / range) * chartH
-            }));
-
-            ctx.clearRect(0, 0, width, height);
-
-            ctx.strokeStyle = 'rgba(2,28,164,0.04)';
-            ctx.lineWidth = 0.5;
-            for (let i = 0; i < 4; i++) {
-                const y = pad.top + (i / 3) * chartH;
-                ctx.beginPath();
-                ctx.moveTo(pad.left, y);
-                ctx.lineTo(width - pad.right, y);
-                ctx.stroke();
-            }
-
-            for (let i = 0; i < points.length - 1; i++) {
-                const p1 = points[i];
-                const p2 = points[i + 1];
-                const isUp = data[i + 1] >= data[i];
-                ctx.strokeStyle = isUp ? '#4caf50' : '#ff6b6b';
-                ctx.lineWidth = 2.5;
-                ctx.beginPath();
-                ctx.moveTo(p1.x, p1.y);
-                ctx.lineTo(p2.x, p2.y);
-                ctx.stroke();
-                ctx.shadowColor = isUp ? 'rgba(76,175,80,0.15)' : 'rgba(255,107,107,0.15)';
-                ctx.shadowBlur = 6;
-                ctx.stroke();
-                ctx.shadowBlur = 0;
-            }
-
-            points.forEach((p, i) => {
-                const isUp = (i === 0) || (data[i] >= data[i - 1]);
-                ctx.fillStyle = isUp ? '#4caf50' : '#ff6b6b';
-                ctx.shadowColor = isUp ? 'rgba(76,175,80,0.3)' : 'rgba(255,107,107,0.3)';
-                ctx.shadowBlur = 8;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.shadowBlur = 0;
-                ctx.strokeStyle = 'rgba(6,8,18,0.6)';
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
-                ctx.stroke();
-            });
-
-            ctx.fillStyle = '#8890b0';
-            ctx.font = '8px Cairo, sans-serif';
-            ctx.textAlign = 'center';
-            const firstVal = data[0] || 0;
-            const lastVal = data[data.length - 1] || 0;
-            ctx.fillText(firstVal.toLocaleString() + ' ر.س', points[0].x, height - 4);
-            ctx.fillText(lastVal.toLocaleString() + ' ر.س', points[points.length - 1].x, height - 4);
-
-            const currentVal = lastVal;
-            const profit = currentVal - amount;
-            const percent = amount > 0 ? ((profit / amount) * 100) : 0;
-            const isProfit = profit >= 0;
-            const label = isProfit ? '▲ ربح' : '▼ خسارة';
-            const color = isProfit ? '#4caf50' : '#ff6b6b';
-            ctx.fillStyle = color;
-            ctx.font = 'bold 10px Cairo, sans-serif';
-            ctx.textAlign = 'right';
-            ctx.fillText(`${label} ${Math.abs(profit).toFixed(0)} ر.س (${percent.toFixed(1)}%)`, width - pad.right, pad
-                .top + 12);
-
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 11px Cairo, sans-serif';
-            ctx.textAlign = 'left';
-            ctx.fillText(`القيمة الحالية: ${currentVal.toLocaleString()} ر.س`, pad.left + 4, pad.top + 12);
-        }
-
         // ===== MORE TAB FUNCTIONS =====
         function showMoreSection(sectionId) {
             document.querySelectorAll('.more-section').forEach(el => el.classList.remove('active-section'));
-            const menuContainer = document.getElementById('moreMenuContainer');
-            if (menuContainer) menuContainer.style.display = 'none';
-            const section = document.getElementById(sectionId);
-            if (section) section.classList.add('active-section');
-
-            if (sectionId === 'moreSectionWallet') {
-                setTimeout(() => {
-                    drawInvestmentChart('walletChartCanvas', currentUserData?.investment?.history || [
-                        0, 0, 0, 0, 0
-                    ], currentUserData?.investment?.amount || 0);
-                }, 100);
-            }
+            document.getElementById('moreMenuContainer').style.display = 'none';
+            document.getElementById(sectionId).classList.add('active-section');
         }
 
         function showMoreMenu() {
             document.querySelectorAll('.more-section').forEach(el => el.classList.remove('active-section'));
-            const menuContainer = document.getElementById('moreMenuContainer');
-            if (menuContainer) menuContainer.style.display = 'grid';
+            document.getElementById('moreMenuContainer').style.display = 'grid';
         }
 
         function loadUserData(user) {
             currentUserData = JSON.parse(JSON.stringify(user));
             if (!currentUserData.taskCompleted) currentUserData.taskCompleted = false;
-
-            const inv = getInvestmentForUser(currentUserData.userId);
-            currentUserData.investment = {
-                amount: inv.amount,
-                history: inv.history.slice(),
-                currentValue: getCurrentValue(inv.history)
-            };
-
             document.getElementById('userFullName').innerText = currentUserData.fullName;
             document.getElementById('userIdLabel').innerText = currentUserData.userId;
             document.getElementById('userRoleLabel').innerText = currentUserData.category;
@@ -3870,11 +3521,8 @@
                 const dayNames = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
                 const dayName = dayNames[now.getDay()];
                 const dateStr = now.toLocaleDateString('ar-SA');
-                const hasTask = currentUserData.dueDate && currentUserData.dueDate !== '-' && !currentUserData
-                .taskCompleted;
-                const taskMsg = hasTask ?
-                    `📌 ${currentUserData.customMsg?.replace(/<[^>]*>/g, '').substring(0, 50) || 'مهمة نشطة'}` :
-                    '✅ خالي من العمل';
+                const hasTask = currentUserData.dueDate && currentUserData.dueDate !== '-' && !currentUserData.taskCompleted;
+                const taskMsg = hasTask ? `📌 ${currentUserData.customMsg?.replace(/<[^>]*>/g, '').substring(0, 50) || 'مهمة نشطة'}` : '✅ خالي من العمل';
 
                 let employeeOptions = '';
                 if (Object.keys(usersDB).length > 0) {
@@ -3885,15 +3533,10 @@
                     }
                 }
 
-                const inv = currentUserData.investment || { amount: 0, history: [0, 0, 0, 0, 0], currentValue: 0 };
-                const currentVal = inv.currentValue || getCurrentValue(inv.history) || 0;
-                const profit = currentVal - inv.amount;
-                const profitPercent = inv.amount > 0 ? ((profit / inv.amount) * 100) : 0;
-                const isProfit = profit >= 0;
-
                 const wrapper = document.createElement('div');
                 wrapper.className = 'more-content-wrapper';
 
+                // Menu (boxes as buttons)
                 wrapper.innerHTML = `
                     <div id="moreMenuContainer" class="more-menu-grid">
                         <div class="more-menu-box" onclick="showMoreSection('moreSectionCard')">
@@ -3905,11 +3548,6 @@
                             <i class="fas fa-calendar-check"></i>
                             <h4>الدوامات</h4>
                             <p>الحضور والغياب والإجازات</p>
-                        </div>
-                        <div class="more-menu-box" onclick="showMoreSection('moreSectionWallet')">
-                            <i class="fas fa-wallet"></i>
-                            <h4>المحفظة</h4>
-                            <p>الاستثمار والأرباح</p>
                         </div>
                         <div class="more-menu-box" onclick="showMoreSection('moreSectionServices')">
                             <i class="fas fa-concierge-bell"></i>
@@ -3977,46 +3615,7 @@
                         </div>
                     </div>
 
-                    <!-- Section 3: المحفظة (WALLET) -->
-                    <div id="moreSectionWallet" class="more-section">
-                        <button class="more-back-btn" onclick="showMoreMenu()"><i class="fas fa-arrow-right"></i> رجوع</button>
-                        <div class="wallet-summary">
-                            <div class="ws-item">
-                                <div class="ws-label">المبلغ المستثمر</div>
-                                <div class="ws-value gold">${inv.amount.toLocaleString()} ر.س</div>
-                            </div>
-                            <div class="ws-item">
-                                <div class="ws-label">القيمة الحالية</div>
-                                <div class="ws-value">${currentVal.toLocaleString()} ر.س</div>
-                            </div>
-                            <div class="ws-item">
-                                <div class="ws-label">الربح / الخسارة</div>
-                                <div class="ws-value ${isProfit ? 'green' : 'red'}">${isProfit ? '+' : ''}${profit.toFixed(0)} ر.س (${profitPercent.toFixed(1)}%)</div>
-                            </div>
-                        </div>
-                        <div class="chart-container">
-                            <div class="chart-title"><i class="fas fa-chart-line" style="color:var(--blue-light);"></i> أداء الاستثمار</div>
-                            <canvas id="walletChartCanvas"></canvas>
-                            <div class="chart-legend-custom">
-                                <span class="leg-item"><span class="dot green"></span> ارتفاع</span>
-                                <span class="leg-item"><span class="dot red"></span> انخفاض</span>
-                            </div>
-                            <div class="wallet-timeline">
-                                <span>اليوم 1</span>
-                                <span>اليوم 3</span>
-                                <span>اليوم 5</span>
-                                <span>اليوم 7</span>
-                                <span>اليوم 9</span>
-                                <span>اليوم 10</span>
-                            </div>
-                        </div>
-                        <div style="margin-top:12px; text-align:center; color:#4a5070; font-size:0.8rem;">
-                            <i class="fas fa-info-circle"></i> البيانات محدثة يومياً · 
-                            <span style="color:var(--blue-light);">${new Date().toLocaleDateString('ar-SA')}</span>
-                        </div>
-                    </div>
-
-                    <!-- Section 4: الخدمات -->
+                    <!-- Section 3: الخدمات -->
                     <div id="moreSectionServices" class="more-section">
                         <button class="more-back-btn" onclick="showMoreMenu()"><i class="fas fa-arrow-right"></i> رجوع</button>
                         <div class="services-form">
@@ -4050,7 +3649,7 @@
                         </div>
                     </div>
 
-                    <!-- Section 5: الدعم الفني -->
+                    <!-- Section 4: الدعم الفني -->
                     <div id="moreSectionSupport" class="more-section">
                         <button class="more-back-btn" onclick="showMoreMenu()"><i class="fas fa-arrow-right"></i> رجوع</button>
                         <div class="support-form" style="margin:0; padding:0; background:transparent; border:none;">
@@ -4098,9 +3697,8 @@
                 // Calendar for more tab
                 const calendarMore = document.getElementById('calendarContainerMore');
                 if (calendarMore) {
-                    const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
-                        "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
-                    ];
+                    const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", 
+                                       "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
                     const dayNames = ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"];
                     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
                     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -4124,12 +3722,9 @@
                         html += `<div class="calendar-day"></div>`;
                     }
                     for (let day = 1; day <= daysInMonth; day++) {
-                        const dateStr =
-                            `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                        const isToday = (day === todayDate && currentMonth === todayMonth && currentYear ===
-                            todayYear);
-                        let dayEvents = currentUserData.meetings ? currentUserData.meetings.filter(m => m.date ===
-                            dateStr) : [];
+                        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        const isToday = (day === todayDate && currentMonth === todayMonth && currentYear === todayYear);
+                        let dayEvents = currentUserData.meetings ? currentUserData.meetings.filter(m => m.date === dateStr) : [];
                         let eventDots = '';
                         let eventTitles = '';
                         if (dayEvents.length > 0) {
@@ -4160,6 +3755,7 @@
                     calendarMore.innerHTML = html;
                 }
 
+                // Meetings table for more tab
                 const tbodyMore = document.getElementById('meetingsTableBodyMore');
                 if (tbodyMore && currentUserData.meetings) {
                     tbodyMore.innerHTML = currentUserData.meetings.map(m =>
@@ -4167,8 +3763,10 @@
                     ).join('');
                 }
 
+                // Attendance button
                 document.getElementById('attendancePortalBtn2')?.addEventListener('click', sendAttendance);
 
+                // Service form
                 document.getElementById('serviceFile')?.addEventListener('change', function() {
                     const fn = document.getElementById('serviceFileName');
                     if (this.files.length > 0) {
@@ -4224,6 +3822,7 @@
                     document.getElementById('serviceFileName').classList.remove('show');
                 });
 
+                // Support form in more tab
                 document.getElementById('supportFile2')?.addEventListener('change', function() {
                     const fn = document.getElementById('supportFileName2');
                     if (this.files.length > 0) {
@@ -4243,35 +3842,24 @@
                     sendSupportTicket(issueType, caseName, notes, file);
                 });
 
+                // Show menu by default
                 showMoreMenu();
-
-                window.addEventListener('resize', function() {
-                    const walletSection = document.getElementById('moreSectionWallet');
-                    if (walletSection && walletSection.classList.contains('active-section')) {
-                        drawInvestmentChart('walletChartCanvas', currentUserData?.investment?.history || [
-                            0, 0, 0, 0, 0
-                        ], currentUserData?.investment?.amount || 0);
-                    }
-                });
             }
         }
 
         window.showMoreSection = showMoreSection;
         window.showMoreMenu = showMoreMenu;
-
         window.changeMonthMore = function(delta) {
             currentMonth += delta;
-            if (currentMonth > 11) { currentMonth = 0;
-                currentYear++; }
-            if (currentMonth < 0) { currentMonth = 11;
-                currentYear--; }
+            if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
             if (currentUserData) {
                 renderCalendar(currentUserData.meetings || []);
+                // Also update more tab calendar if exists
                 const calendarMore = document.getElementById('calendarContainerMore');
                 if (calendarMore) {
-                    const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
-                        "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
-                    ];
+                    const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", 
+                                       "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
                     const dayNames = ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"];
                     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
                     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -4295,12 +3883,9 @@
                         html += `<div class="calendar-day"></div>`;
                     }
                     for (let day = 1; day <= daysInMonth; day++) {
-                        const dateStr =
-                            `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                        const isToday = (day === todayDate && currentMonth === todayMonth && currentYear ===
-                            todayYear);
-                        let dayEvents = currentUserData.meetings ? currentUserData.meetings.filter(m => m.date ===
-                            dateStr) : [];
+                        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        const isToday = (day === todayDate && currentMonth === todayMonth && currentYear === todayYear);
+                        let dayEvents = currentUserData.meetings ? currentUserData.meetings.filter(m => m.date === dateStr) : [];
                         let eventDots = '';
                         let eventTitles = '';
                         if (dayEvents.length > 0) {
@@ -4446,7 +4031,7 @@
                 switchPage('home');
             });
             document.getElementById('sendRewardPortalBtn')?.addEventListener('click', sendUserReward);
-
+            
             const tabs = document.querySelectorAll('.tab-soft');
             const contents = {
                 profile: document.getElementById('profileTab'),
@@ -4489,9 +4074,16 @@
 
         // ==================== LOGIN ====================
         async function login(uid, pwd) {
-            // Use embedded database directly
-            usersDB = USERS_DATA; // ensure it's set
-
+            if (Object.keys(usersDB).length === 0) {
+                try {
+                    const response = await fetch('bo1.json');
+                    if (!response.ok) throw new Error('فشل تحميل bo1.json');
+                    usersDB = await response.json();
+                } catch (e) {
+                    showToast('فشل تحميل قاعدة البيانات', 'error');
+                    return;
+                }
+            }
             const user = usersDB[uid];
             if (user && user.pass === pwd) {
                 currentUser = user;
@@ -4570,24 +4162,15 @@
             const grid = document.getElementById('teamGrid');
             if (!grid) return;
             const members = [
-                { name: "مازن السلمي", role: "رئيس المشاريع - رئيس مجلس الإدارة",
-                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "مشعل السلمي", role: "نائب الرئيس - عضو مجلس الإدارة",
-                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "عبدالرحمن الزهراني", role: "نائب الرئيس - عضو مجلس الإدارة",
-                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "صالح الزهراني", role: "مدير عام",
-                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "محمد العنزي", role: "مدير الإدارة العامة",
-                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "عبدالعزيز الحربي", role: "مدير الاستقطاب",
-                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "يزيد النفيعي", role: "مدير التقديم",
-                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "حسن الشريف", role: "مدير السيرفر",
-                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
-                { name: "جاك ويليام", role: "مدير فني",
-                avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" }
+                { name: "مازن السلمي", role: "رئيس المشاريع - رئيس مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "مشعل السلمي", role: "نائب الرئيس - عضو مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "عبدالرحمن الزهراني", role: "نائب الرئيس - عضو مجلس الإدارة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "صالح الزهراني", role: "مدير عام", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "محمد العنزي", role: "مدير الإدارة العامة", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "عبدالعزيز الحربي", role: "مدير الاستقطاب", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },           
+                { name: "يزيد النفيعي", role: "مدير التقديم", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "حسن الشريف", role: "مدير السيرفر", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" },
+                { name: "جاك ويليام", role: "مدير فني", avatar: "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256" }
             ];
             grid.innerHTML = members.map(m => `
             <div class="team-card">
@@ -4651,12 +4234,14 @@
                 .remove('active');
         });
 
+        // ===== HEADER SCROLL =====
         window.addEventListener('scroll', () => {
             const header = document.getElementById('mainHeader');
             if (window.scrollY > 30) header.classList.add('scrolled');
             else header.classList.remove('scrolled');
         });
 
+        // ===== إخفاء الإعلان الثابت =====
         document.getElementById('closeAdBtn')?.addEventListener('click', function() {
             const ad = document.getElementById('fixedAd');
             ad.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
