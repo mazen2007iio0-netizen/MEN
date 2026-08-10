@@ -1,4 +1,86 @@
-\{
+{
+  "U2028": {
+    "pass": "12122",
+    "fullName": "JACK Wiliam",
+    "phone": "0502799166",
+    "discord": "8u4",
+    "userId": "U2007",
+    "points": "77",
+    "category": "إداري",
+    "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
+    "activities": ["تقرير إبداعي", "تقرير إحصائي"],
+    "monthEarn": "12,456.66 ر.س",
+    "totalEarn": "17,783.89 ر.س",
+    "followers": "12,456.66 ر.س",
+    "dueDate": "2028-04-22",
+    "customMsg": "<p>مهمتك: ابحث عن أعضاء جدد.</p>",
+    "attendance": 20,
+    "absences": 2,
+    "leaves": 10,
+    "meetings": [
+      { "type": "اجتماع", "title": "اجتماع التخطيط السنوي", "date": "2026-01-15", "status": "حضر" },
+      { "type": "دورة", "title": "دورة القيادة الفعالة", "date": "2026-02-10", "status": "حضر" },
+      { "type": "جلسة", "title": "جلسة مراجعة الأداء", "date": "2026-03-05", "status": "غاب" }
+    ],
+    "investment": {
+      "amount": 20000,
+      "history": [18500, 19000, 19500, 20000, 20500, 21000, 21500, 22000, 22500, 23000]
+    }
+  },
+  "U2020": {
+    "pass": "12345",
+    "fullName": "محمد ثامر العنزي",
+    "phone": "0502799166",
+    "discord": "8u4",
+    "userId": "U2020",
+    "points": "52",
+    "category": "صانع محتوى",
+    "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
+    "activities": ["تقرير إبداعي"],
+    "monthEarn": "0 ر.س",
+    "totalEarn": "0 ر.س",
+    "followers": "0 ر.س",
+    "dueDate": "-",
+    "customMsg": "<p>لا توجد مهام حالياً.</p>",
+    "attendance": 0,
+    "absences": 19,
+    "leaves": 0,
+    "meetings": [
+      { "type": "اجتماع", "title": "اجتماع ", "date": "2026-06-20", "status": "غاب" },
+      { "type": "اجتماع", "title": "اجتماع", "date": "2026-06-14", "status": "غاب" }
+    ],
+    "investment": {
+      "amount": 15000,
+      "history": [14000, 14500, 14800, 15200, 15500, 15800, 16000, 16200, 16500, 16800]
+    }
+  },
+  "U2021": {
+    "pass": "123456",
+    "fullName": "صالح محمد الزهراني",
+    "phone": "0549724238",
+    "discord": "sl_z7h._57465",
+    "userId": "U2021",
+    "points": "46",
+    "category": "إداري + رئيس الإدارة العليا",
+    "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
+    "activities": ["لايوجد", "لايوجد", "لايوجد"],
+    "monthEarn": "0 ر.س",
+    "totalEarn": "0 ر.س",
+    "followers": "0 ر.س",
+    "dueDate": "-",
+    "customMsg": "<p>تم ترقيتك إلى مدير عام. المهام: رسم خطة جديدة للعام 2026.</p>",
+    "attendance": 2,
+    "absences": 14,
+    "leaves": 0,
+    "meetings": [
+      { "type": "اجتماع", "title": "اجتماع الإدارة العليا", "date": "2026-01-10", "status": "حضر" },
+      { "type": "دورة", "title": "دورة التخطيط الإستراتيجي", "date": "2026-02-20", "status": "غاب" }
+    ],
+    "investment": {
+      "amount": 35000,
+      "history": [33000, 34000, 34500, 35000, 36000, 35500, 36500, 37200, 37800, 38500]
+    }
+  },
   "U2022": {
     "pass": "Mz102030",
     "fullName": "مازن بن منصور السلمي",
@@ -18,36 +100,151 @@
     "absences": 1,
     "leaves": 3,
     "meetings": [
-      { "type": "اجتماع", "title": "اجتماع المشروع", "date": "2026-01-05", "status": "حضر" }
+      { "type": "اجتماع", "title": "اجتماع المشروع", "date": "2026-01-05", "status": "حضر" },
+      { "type": "دورة", "title": "دورة إدارة المشاريع", "date": "2026-01-25", "status": "حضر" },
+      { "type": "جلسة", "title": "اجتماع متابعة السيرفر", "date": "2026-07-07", "status": "غاب" },
+      { "type": "جلسة", "title": "اجتماع مجلس الادارة", "date": "2026-07-07", "status": "حضر" },
+      { "type": "دورة", "title": "دورة التخطيط الإستراتيجي", "date": "2026-02-20", "status": "حضر" }
     ],
+    "following": ["يزيد النفيعي", "عبدالرحمن الزهراني", "مشعل السلمي", "صالح الزهراني", "حسن الشريف", "محمد العنزي"],
     "investment": {
       "amount": 50000,
       "history": [45000, 47000, 49000, 48500, 51000, 52000, 53500, 54200, 54800, 55500]
     }
   },
-  "U2021": {
-    "pass": "123456",
-    "fullName": "صالح محمد الزهراني",
-    "phone": "0549724238",
-    "discord": "sl_z7h._57465",
-    "userId": "U2021",
-    "points": "46",
-    "category": "إداري + رئيس الإدارة العليا",
+  "U2023": {
+    "pass": "12345",
+    "fullName": "يزيد يوسف النفيعي",
+    "phone": "0538322511",
+    "discord": "bzgif",
+    "userId": "U2023",
+    "points": "50",
+    "category": "إداري + مسؤول التقديم",
+    "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
+    "activities": ["توظيف", "مقابلات", "تقييم المتقدمين"],
+    "monthEarn": "0 ر.س",
+    "totalEarn": "0 ر.س",
+    "followers": "0 ر.س",
+    "dueDate": "2026-04-22",
+    "customMsg": "<p>البحث عن 4 إداريين جدد. الإنجاز 0/4.</p>",
+    "attendance": 1,
+    "absences": 17,
+    "leaves": 0,
+    "meetings": [
+      { "type": "اجتماع", "title": "اجتماع التوظيف", "date": "2026-06-12", "status": "حضر" },
+      { "type": "دورة", "title": "اجتماع دليل الإدارة", "date": "2026-06-05", "status": "حضر" }
+    ],
+    "investment": {
+      "amount": 30000,
+      "history": [28000, 29000, 29500, 30500, 31000, 31500, 32000, 32500, 33000, 33800]
+    }
+  },
+  "U2026": {
+    "pass": "1417",
+    "fullName": "مشعل منصور البنوي",
+    "phone": "05696069087",
+    "discord": "meshal71001",
+    "userId": "U2026",
+    "points": "38",
+    "category": "رئيس مجلس الإدارة",
     "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
     "activities": ["لايوجد"],
     "monthEarn": "0 ر.س",
     "totalEarn": "0 ر.س",
-    "followers": "0 ر.س",
+    "followers": "0.75 ر.س",
     "dueDate": "-",
-    "customMsg": "<p>تم ترقيتك إلى مدير عام.</p>",
-    "attendance": 2,
-    "absences": 14,
-    "leaves": 0,
-    "meetings": [],
+    "customMsg": "<p>أنشاء متجر الإلكتروني.</p>",
+    "attendance": 28,
+    "absences": 5,
+    "leaves": 2,
+    "meetings": [
+      { "type": "اجتماع", "title": "اجتماع مجلس الإدارة", "date": "2026-01-08", "status": "حضر" },
+      { "type": "جلسة", "title": "اجتماع مجلس الادارة", "date": "2026-07-07", "status": "غاب" }
+    ],
     "investment": {
-      "amount": 35000,
-      "history": [33000, 34000, 34500, 35000, 36000, 35500, 36500, 37200, 37800, 38500]
+      "amount": 45000,
+      "history": [42000, 43500, 44500, 44000, 45500, 46000, 47200, 47800, 48200, 49000]
+    }
+  },
+  "U2027": {
+    "pass": "123123",
+    "fullName": "حسن محمد الشريف",
+    "phone": "0562250944",
+    "discord": "hss0328",
+    "userId": "U2027",
+    "points": "48",
+    "category": "إداري + مسؤول السيرفر",
+    "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
+    "activities": ["إدارة المشاريع"],
+    "monthEarn": "0 ر.س",
+    "totalEarn": "14.21 ر.س",
+    "followers": "0.75 ر.س",
+    "dueDate": "2026-12-30",
+    "customMsg": "<p>زيادة تفاعل السيرفر وزيادة الحضور اليومي.</p>",
+    "attendance": 23,
+    "absences": 13,
+    "leaves": 0,
+    "meetings": [
+      { "type": "اجتماع", "title": "اجتماع السيرفر", "date": "2026-06-18", "status": "حضر" },
+      { "type": "اجتماع", "title": "اجتماع متابعة السيرفر", "date": "2026-07-07", "status": "غاب" }
+    ],
+    "investment": {
+      "amount": 25000,
+      "history": [23000, 24000, 24500, 25000, 26000, 25500, 26500, 27000, 27500, 28200]
+    }
+  },
+  "U2025": {
+    "pass": "12345678",
+    "fullName": "جسار وليد السلمي",
+    "phone": "0542360558",
+    "discord": "غير متوفر",
+    "userId": "U2025",
+    "points": "0",
+    "category": "لاعب",
+    "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
+    "activities": ["لاعب هاوي"],
+    "monthEarn": "0 ر.س",
+    "totalEarn": "0 ر.س",
+    "followers": "0.75 ر.س",
+    "dueDate": "2021-12-30",
+    "customMsg": "<p>لاعب لـ TEAM MEN.</p>",
+    "attendance": 3,
+    "absences": 0,
+    "leaves": 0,
+    "meetings": [
+      { "type": "تدريب", "title": "تدريب فورت نايت", "date": "2026-07-25", "status": "قادم" },
+      { "type": "تدريب", "title": "تدريب فورت نايت", "date": "2026-06-29", "status": "حضر" }
+    ],
+    "investment": {
+      "amount": 10000,
+      "history": [9500, 9800, 10000, 10200, 10500, 10300, 10600, 10800, 11000, 11200]
+    }
+  },
+  "U2024": {
+    "pass": "X2h3054",
+    "fullName": "عبدالرحمن سعد الزهراني",
+    "phone": "0556655679",
+    "discord": "racer702",
+    "userId": "U2024",
+    "points": "46",
+    "category": "نائب رئيس مجلس الإدارة",
+    "avatar": "https://e7.pngegg.com/pngimages/813/118/png-clipart-silhouette-icon-blank-person-template-share-icon-black-and-white.png",
+    "activities": ["إدارة الفريق"],
+    "monthEarn": "0 ر.س",
+    "totalEarn": "0 ر.س",
+    "followers": "0 ر.س",
+    "dueDate": "2025-11-15",
+    "customMsg": "<p>البحث عن 3 إداريين جدد.</p>",
+    "attendance": 7,
+    "absences": 13,
+    "leaves": 0,
+    "meetings": [
+      { "type": "اجتماع", "title": "اجتماع الإدارة", "date": "2026-01-07", "status": "حضر" },
+      { "type": "جلسة", "title": "اجتماع مجلس الادارة", "date": "2026-07-07", "status": "غاب" }
+    ],
+    "investment": {
+      "amount": 40000,
+      "history": [38000, 39000, 39500, 40500, 41500, 42000, 43000, 42500, 44000, 44800]
     }
   }
-  // ... باقي المستخدمين مع حقل investment لكل منهم
 }
