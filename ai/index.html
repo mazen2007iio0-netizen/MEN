@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+        /* === البداية === */
         * {
             margin: 0;
             padding: 0;
@@ -99,40 +100,84 @@
             gap: 12px;
         }
 
-        .btn-back, .btn-memory {
+        /* === أزرار جديدة فخمة === */
+        .btn-back,
+        .btn-memory {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(2, 28, 164, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(74, 122, 255, 0.15);
             border-radius: 40px;
-            padding: 0 18px;
+            padding: 0 20px;
             height: 44px;
-            color: #a0b0d4;
+            color: #b0c4e8;
             font-size: 1rem;
             cursor: pointer;
             transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             text-decoration: none;
             font-family: 'Cairo', sans-serif;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
         }
-        .btn-back i, .btn-memory i {
+        .btn-back::before,
+        .btn-memory::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 40px;
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(74, 122, 255, 0.2), transparent, rgba(74, 122, 255, 0.2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: 0.6s;
+        }
+        .btn-back:hover::before,
+        .btn-memory:hover::before {
+            opacity: 1;
+        }
+        .btn-back i,
+        .btn-memory i {
             font-size: 1.2rem;
+            transition: 0.3s;
         }
-        .btn-back .back-text, .btn-memory .memory-text {
+        .btn-back .back-text,
+        .btn-memory .memory-text {
             font-weight: 600;
             font-size: 0.95rem;
             white-space: nowrap;
         }
-        .btn-back:hover, .btn-memory:hover {
-            background: rgba(74, 122, 255, 0.1);
+        .btn-back:hover,
+        .btn-memory:hover {
+            background: rgba(74, 122, 255, 0.08);
             border-color: var(--blue-light);
             color: #fff;
-            transform: scale(1.03);
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.1);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 30px rgba(74, 122, 255, 0.15);
         }
-        .btn-back:active, .btn-memory:active {
+        .btn-back:active,
+        .btn-memory:active {
             transform: scale(0.95);
+        }
+        .btn-memory i {
+            color: var(--blue-light);
+        }
+        .btn-memory:hover i {
+            animation: pulseBrain 1.2s ease-in-out infinite;
+        }
+        @keyframes pulseBrain {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2) rotate(-5deg);
+            }
         }
 
         .logo img {
@@ -249,7 +294,7 @@
         }
         .message.user {
             align-self: flex-end;
-            background: rgba(74, 122, 255, 0.2); /* أزرق فاتح */
+            background: rgba(74, 122, 255, 0.2);
             border: 1px solid rgba(74, 122, 255, 0.15);
             border-bottom-left-radius: 6px;
             box-shadow: 0 4px 20px rgba(74, 122, 255, 0.08);
@@ -272,6 +317,7 @@
             text-align: right;
         }
 
+        /* ===== منتجات ===== */
         .products-row-wrapper {
             width: 100%;
             overflow-x: auto;
@@ -344,6 +390,7 @@
             padding: 4px 12px;
         }
 
+        /* ===== الترحيب ===== */
         .welcome-animation {
             display: flex;
             flex-direction: column;
@@ -410,8 +457,13 @@
             vertical-align: middle;
         }
         @keyframes blinkCursor {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
         }
 
         .welcome-desc {
@@ -429,12 +481,22 @@
             animation: spinSlow 4s linear infinite;
         }
         @keyframes spinSlow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .typing-indicator {
@@ -469,7 +531,9 @@
             animation-delay: 0.4s;
         }
         @keyframes typingBounce {
-            0%, 60%, 100% {
+            0%,
+            60%,
+            100% {
                 transform: translateY(0);
                 opacity: 0.4;
             }
@@ -484,8 +548,12 @@
             font-size: 1.1rem;
         }
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .suggested-questions {
@@ -531,6 +599,7 @@
             transform: scale(0.95);
         }
 
+        /* ===== منطقة الإدخال ===== */
         .input-area {
             padding: 12px 20px 16px;
             border-top: 1px solid rgba(2, 28, 164, 0.08);
@@ -581,6 +650,7 @@
             direction: ltr;
         }
 
+        /* === أزرار الإدخال الجديدة === */
         .input-area .btn-send {
             width: 52px;
             height: 52px;
@@ -598,7 +668,6 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
-            transform: none;
         }
         .input-area .btn-send::after {
             content: '';
@@ -678,19 +747,32 @@
             animation-delay: 0.75s;
         }
         @keyframes ripple {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.8); opacity: 0; }
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
         }
         @keyframes pulseMic {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 68, 68, 0.2); }
-            50% { transform: scale(1.12); box-shadow: 0 0 30px rgba(255, 68, 68, 0.5); }
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(255, 68, 68, 0.2);
+            }
+            50% {
+                transform: scale(1.12);
+                box-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
+            }
         }
         .input-area .btn-voice:disabled {
             opacity: 0.3;
             cursor: not-allowed;
         }
 
-        /* زر الإرفاق معطل */
+        /* === زر الإرفاق (مفعل الآن) === */
         .input-area .btn-attach {
             width: 52px;
             height: 52px;
@@ -701,15 +783,24 @@
             border: 1px solid rgba(2, 28, 164, 0.2);
             color: #a0b0d4;
             font-size: 1.4rem;
-            cursor: not-allowed;
+            cursor: pointer;
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
-            opacity: 0.5;
-            pointer-events: none; /* منع أي تفاعل */
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .input-area .btn-attach:hover {
+            background: rgba(74, 122, 255, 0.08);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: scale(1.05);
+        }
+        .input-area .btn-attach:active {
+            transform: scale(0.92);
         }
         .input-area .btn-attach.has-file {
             border-color: var(--blue-light);
@@ -717,7 +808,12 @@
             background: rgba(74, 122, 255, 0.1);
         }
         .input-area .btn-attach input[type="file"] {
-            display: none; /* إخفاء الإدخال لأنه معطل */
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
         }
 
         .file-preview {
@@ -757,47 +853,65 @@
             color: var(--blue-light);
         }
 
-        /* === مودال الذاكرة === */
+        /* ===== مودال الذاكرة الفخم ===== */
         .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
             z-index: 9999;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            animation: modalFade 0.4s ease;
         }
         .modal-overlay.active {
             display: flex;
         }
+        @keyframes modalFade {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
         .modal-box {
-            background: rgba(10, 16, 32, 0.98);
+            background: radial-gradient(ellipse at 50% 0%, rgba(10, 16, 32, 0.98), #0a0f1f);
             border: 1px solid rgba(74, 122, 255, 0.2);
-            border-radius: 28px;
+            border-radius: 32px;
             max-width: 700px;
             width: 100%;
             max-height: 85vh;
-            padding: 30px 25px;
-            box-shadow: 0 0 60px rgba(74, 122, 255, 0.15);
+            padding: 30px 28px;
+            box-shadow: 0 0 80px rgba(74, 122, 255, 0.1), inset 0 1px 0 rgba(74, 122, 255, 0.1);
             overflow-y: auto;
             position: relative;
         }
         .modal-box h3 {
-            color: var(--blue-light);
-            font-size: 1.4rem;
+            color: #fff;
+            font-size: 1.6rem;
             margin-bottom: 18px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            background: linear-gradient(135deg, #fff, var(--blue-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
         .modal-box h3 i {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
+            color: var(--blue-light);
+            filter: drop-shadow(0 0 20px rgba(74, 122, 255, 0.3));
         }
         .modal-box .modal-close {
             margin-top: 20px;
-            padding: 10px 30px;
+            padding: 10px 32px;
             background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
             border: none;
             border-radius: 40px;
@@ -807,20 +921,22 @@
             cursor: pointer;
             transition: 0.3s;
             font-weight: 600;
+            box-shadow: 0 4px 30px rgba(2, 28, 164, 0.2);
         }
         .modal-box .modal-close:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
+            box-shadow: 0 0 40px rgba(74, 122, 255, 0.2);
         }
         .modal-box .modal-close:active {
             transform: scale(0.95);
         }
 
+        /* قائمة الذاكرة فخمة */
         .memory-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin: 10px 0 20px;
+            gap: 14px;
+            margin: 12px 0 22px;
             max-height: 55vh;
             overflow-y: auto;
             padding-left: 4px;
@@ -836,28 +952,57 @@
         .memory-item {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(74, 122, 255, 0.08);
-            border-radius: 16px;
-            padding: 14px 18px;
+            border-radius: 20px;
+            padding: 16px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .memory-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(74, 122, 255, 0.15), transparent, rgba(74, 122, 255, 0.15));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: 0.6s;
+        }
+        .memory-item:hover::before {
+            opacity: 1;
         }
         .memory-item:hover {
             background: rgba(74, 122, 255, 0.05);
-            border-color: var(--blue-light);
+            border-color: rgba(74, 122, 255, 0.2);
+            transform: translateX(-4px) scale(1.01);
+            box-shadow: 0 8px 30px rgba(74, 122, 255, 0.05);
         }
         .memory-item .memory-content {
             flex: 1;
             min-width: 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 6px 10px;
         }
         .memory-item .memory-role {
             font-weight: 700;
             font-size: 0.85rem;
             color: var(--blue-light);
-            margin-left: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
         .memory-item .memory-role.user {
             color: #8ac4ff;
@@ -866,27 +1011,29 @@
             color: #7ae0b0;
         }
         .memory-item .memory-text {
-            color: #c0ccf0;
-            font-size: 0.9rem;
+            color: #d0dcf5;
+            font-size: 0.95rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             display: inline;
+            max-width: 300px;
         }
         .memory-item .memory-time {
             color: #6a708a;
             font-size: 0.7rem;
-            margin-right: 10px;
+            margin-right: 6px;
             white-space: nowrap;
+            opacity: 0.7;
         }
         .memory-item .memory-delete {
             color: #ff6b6b;
-            background: rgba(255, 0, 0, 0.1);
+            background: rgba(255, 0, 0, 0.08);
             border: none;
             border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            min-width: 32px;
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -896,28 +1043,29 @@
             flex-shrink: 0;
         }
         .memory-item .memory-delete:hover {
-            background: rgba(255, 0, 0, 0.25);
-            transform: scale(1.1);
+            background: rgba(255, 0, 0, 0.2);
+            transform: scale(1.1) rotate(-5deg);
         }
         .memory-empty {
             color: #6a708a;
             text-align: center;
-            padding: 30px 0;
-            font-size: 1rem;
+            padding: 40px 0;
+            font-size: 1.1rem;
+            opacity: 0.7;
         }
 
         .memory-actions {
             display: flex;
             justify-content: flex-end;
             gap: 12px;
-            margin-top: 10px;
+            margin-top: 12px;
             flex-wrap: wrap;
         }
         .memory-actions .btn-clear {
-            background: rgba(255, 0, 0, 0.1);
-            border: 1px solid rgba(255, 0, 0, 0.2);
+            background: rgba(255, 0, 0, 0.08);
+            border: 1px solid rgba(255, 0, 0, 0.15);
             border-radius: 30px;
-            padding: 8px 20px;
+            padding: 8px 22px;
             color: #ff6b6b;
             font-family: 'Cairo', sans-serif;
             font-size: 0.9rem;
@@ -928,10 +1076,27 @@
             gap: 8px;
         }
         .memory-actions .btn-clear:hover {
-            background: rgba(255, 0, 0, 0.2);
+            background: rgba(255, 0, 0, 0.15);
             transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.05);
         }
 
+        /* ===== مودال استخراج النص ===== */
+        .modal-text {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            padding: 18px 20px;
+            color: #c0ccf0;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            max-height: 50vh;
+            overflow-y: auto;
+            border: 1px solid rgba(74, 122, 255, 0.08);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* ===== footer ===== */
         footer {
             background: #000000;
             border-top: 1px solid rgba(2, 28, 164, 0.03);
@@ -996,6 +1161,7 @@
             color: var(--blue-light);
         }
 
+        /* ===== بطاقات المنتجات ===== */
         .men-product-card {
             width: 100%;
             max-width: 380px;
@@ -1113,6 +1279,7 @@
             }
         }
 
+        /* ===== التجاوب ===== */
         @media (max-width: 768px) {
             .chat-wrapper {
                 height: calc(100vh - 160px);
@@ -1166,15 +1333,18 @@
             .logo img {
                 height: 36px;
             }
-            .btn-back, .btn-memory {
+            .btn-back,
+            .btn-memory {
                 height: 38px;
                 padding: 0 14px;
                 font-size: 0.9rem;
             }
-            .btn-back i, .btn-memory i {
+            .btn-back i,
+            .btn-memory i {
                 font-size: 1rem;
             }
-            .btn-back .back-text, .btn-memory .memory-text {
+            .btn-back .back-text,
+            .btn-memory .memory-text {
                 font-size: 0.85rem;
             }
             .men-product-card {
@@ -1240,13 +1410,16 @@
                 margin: 10px;
             }
             .memory-item {
-                padding: 12px 14px;
+                padding: 12px 16px;
                 flex-wrap: wrap;
             }
             .memory-item .memory-time {
                 margin-right: 0;
                 width: 100%;
                 text-align: left;
+            }
+            .memory-item .memory-text {
+                max-width: 150px;
             }
         }
         @media (max-width: 480px) {
@@ -1289,15 +1462,18 @@
             .logo img {
                 height: 30px;
             }
-            .btn-back, .btn-memory {
+            .btn-back,
+            .btn-memory {
                 height: 34px;
                 padding: 0 10px;
                 font-size: 0.8rem;
             }
-            .btn-back i, .btn-memory i {
+            .btn-back i,
+            .btn-memory i {
                 font-size: 0.9rem;
             }
-            .btn-back .back-text, .btn-memory .memory-text {
+            .btn-back .back-text,
+            .btn-memory .memory-text {
                 font-size: 0.75rem;
             }
             .men-product-card .product-image {
@@ -1392,6 +1568,7 @@
             }
             .memory-item .memory-text {
                 font-size: 0.8rem;
+                max-width: 100px;
             }
             .memory-item .memory-role {
                 font-size: 0.75rem;
@@ -1416,15 +1593,18 @@
             .logo img {
                 height: 26px;
             }
-            .btn-back, .btn-memory {
+            .btn-back,
+            .btn-memory {
                 height: 30px;
                 padding: 0 8px;
                 font-size: 0.7rem;
             }
-            .btn-back i, .btn-memory i {
+            .btn-back i,
+            .btn-memory i {
                 font-size: 0.8rem;
             }
-            .btn-back .back-text, .btn-memory .memory-text {
+            .btn-back .back-text,
+            .btn-memory .memory-text {
                 font-size: 0.7rem;
             }
             .chat-header .bot-name {
@@ -1516,7 +1696,6 @@
                     <span class="memory-text">الذاكرة</span>
                 </button>
             </div>
-            
         </div>
     </header>
 
@@ -1542,18 +1721,18 @@
 
                 <div class="suggested-questions" id="suggestedQuestions">
                     <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
-                    <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
+                    <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i>  MEN pass؟</button>
                     <button class="sq-btn" data-question="كيف يمكنني التواصل مع الدعم؟"><i class="fas fa-headset"></i> التواصل مع الدعم</button>
                 </div>
 
                 <div class="input-area">
-                    <!-- زر الإرفاق معطل -->
-                    <button class="btn-attach" id="attachBtn" title="الإرفاق معطل" disabled>
+                    <!-- زر الإرفاق مفعل الآن -->
+                    <button class="btn-attach" id="attachBtn" title="إرفاق ملف">
                         <i class="fas fa-paperclip"></i>
-                        <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls" disabled>
+                        <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls">
                     </button>
 
-                    <div class="file-preview" id="filePreview">
+                    <div class="file-preview hidden-preview" id="filePreview">
                         <i class="fas fa-file"></i>
                         <span id="fileName">ملف</span>
                         <span class="remove-file" id="removeFile"><i class="fas fa-times"></i></span>
@@ -1575,10 +1754,10 @@
         </div>
     </main>
 
-    <!-- مودال الذاكرة -->
+    <!-- مودال الذاكرة الفخم -->
     <div class="modal-overlay" id="memoryModal">
         <div class="modal-box">
-            <h3><i class="fas fa-brain"></i> الذاكرة المحفوظة</h3>
+            <h3><i class="fas fa-brain"></i> ذاكرة MEN Ai</h3>
             <div class="memory-list" id="memoryList">
                 <div class="memory-empty">لا توجد محادثات محفوظة بعد.</div>
             </div>
@@ -1589,7 +1768,7 @@
         </div>
     </div>
 
-    <!-- مودال استخراج النص (للملفات) -->
+    <!-- مودال استخراج النص -->
     <div class="modal-overlay" id="extractModal">
         <div class="modal-box">
             <h3><i class="fas fa-file-alt"></i> النص المستخرج من الملف</h3>
@@ -1627,7 +1806,7 @@
 
         const SUBSCRIPTION_KEYWORDS = [
             'اشتراك', 'اشترك', 'اشتري', 'شراء', 'طلب', 'طلب منتج',
-            'MEN', 'pro', 'باقة', 'عرض', 'خصم', 'سعر', 'كم سعر',
+            'عرض', 'pro', 'باقة', 'عرض', 'خصم', 'سعر', 'كم سعر',
             'كيف اشترك', 'اريد اشتراك', 'ابي اشتراك', 'ابغى اشتراك'
         ];
 
@@ -1635,7 +1814,7 @@
         let extractedText = '';
 
         // ============================================================
-        //  دوال الردود والمنتجات (نفس الكود السابق)
+        //  دوال الردود والمنتجات
         // ============================================================
         function getReply(category) {
             const list = responses[category]?.responses;
@@ -1744,7 +1923,7 @@
         }
 
         // ============================================================
-        //  دوال استخراج النص من الملفات (كما هي)
+        //  دوال استخراج النص من الملفات
         // ============================================================
         async function extractTextFromFile(file) {
             const fileType = file.type;
@@ -1806,7 +1985,7 @@
         }
 
         // ============================================================
-        //  دوال المودالات (الذاكرة واستخراج النص)
+        //  دوال المودالات
         // ============================================================
         function showExtractedText(text) {
             document.getElementById('extractedText').textContent = text || 'لم يتم استخراج أي نص.';
@@ -1821,8 +2000,18 @@
         });
 
         // ============================================================
-        //  دوال إدارة الملفات المرفقة (معطلة)
+        //  دوال إدارة الملفات المرفقة (مفعلة)
         // ============================================================
+        function showAttachedFile(file) {
+            attachedFile = file;
+            const preview = document.getElementById('filePreview');
+            const nameSpan = document.getElementById('fileName');
+            nameSpan.textContent = file.name;
+            preview.classList.remove('hidden-preview');
+            preview.classList.add('visible');
+            document.getElementById('attachBtn').classList.add('has-file');
+        }
+
         function hideAttachedFile() {
             attachedFile = null;
             extractedText = '';
@@ -1832,29 +2021,32 @@
             document.getElementById('fileInput').value = '';
         }
 
-        // تعطيل أي تفاعل مع الإرفاق
         const fileInput = document.getElementById('fileInput');
         const attachBtn = document.getElementById('attachBtn');
-        const filePreview = document.getElementById('filePreview');
-        const fileNameSpan = document.getElementById('fileName');
         const removeFileBtn = document.getElementById('removeFile');
 
-        // إزالة أي مستمع سابق (لن يتم إضافته)
-        // نمنع أي تغيير على input
         fileInput.addEventListener('change', function(e) {
-            e.preventDefault();
-            this.value = '';
-            alert('عذراً، خاصية إرفاق الملفات معطلة حالياً.');
+            if (this.files && this.files.length > 0) {
+                const file = this.files[0];
+                // التحقق من الحجم (10 ميجابايت كحد أقصى)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('الملف كبير جداً. الحد الأقصى 10 ميجابايت.');
+                    this.value = '';
+                    return;
+                }
+                showAttachedFile(file);
+            } else {
+                hideAttachedFile();
+            }
         });
 
         removeFileBtn.addEventListener('click', hideAttachedFile);
 
         // ============================================================
-        //  دوال الذاكرة (مع اختصار عناوين الرسائل)
+        //  دوال الذاكرة (فخمة)
         // ============================================================
         const MEMORY_KEY = 'menChatMemory';
 
-        /** حفظ رسالة في localStorage */
         function saveToMemory(role, content) {
             try {
                 let memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
@@ -1862,12 +2054,9 @@
                 memory.push({ role, content, timestamp });
                 if (memory.length > 200) memory = memory.slice(-200);
                 localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
-            } catch (e) {
-                console.warn('فشل حفظ الذاكرة:', e);
-            }
+            } catch (e) { console.warn('فشل حفظ الذاكرة:', e); }
         }
 
-        /** تحميل الذاكرة وعرضها في المودال */
         function loadMemory() {
             try {
                 const memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
@@ -1879,11 +2068,10 @@
             }
         }
 
-        /** عرض قائمة الذاكرة مع اختصار عناوين رسائل المستخدم إلى كلمتين */
         function renderMemoryList(memory) {
             const container = document.getElementById('memoryList');
             if (!memory || memory.length === 0) {
-                container.innerHTML = '<div class="memory-empty">لا توجد محادثات محفوظة بعد.</div>';
+                container.innerHTML = '<div class="memory-empty"> لا توجد محادثات محفوظة بعد.</div>';
                 return;
             }
             const reversed = [...memory].reverse();
@@ -1891,20 +2079,18 @@
             reversed.forEach((item, index) => {
                 const originalIndex = memory.length - 1 - index;
                 const roleClass = item.role === 'user' ? 'user' : 'bot';
-                const roleIcon = item.role === 'user' ? '👤' : '🤖';
+                const roleIcon = item.role === 'user' ? '' : '';
                 let displayText = item.content;
-                // اختصار رسائل المستخدم إلى أول كلمتين
                 if (item.role === 'user') {
                     const words = item.content.trim().split(/\s+/);
-                    if (words.length > 2) {
-                        displayText = words.slice(0, 2).join(' ') + '...';
+                    if (words.length > 3) {
+                        displayText = words.slice(0, 3).join(' ') + '...';
                     } else {
                         displayText = words.join(' ');
                     }
                 }
-                // للبوت نعرض أول 40 حرفاً
-                if (item.role === 'bot' && item.content.length > 40) {
-                    displayText = item.content.substring(0, 40) + '...';
+                if (item.role === 'bot' && item.content.length > 50) {
+                    displayText = item.content.substring(0, 50) + '...';
                 }
                 html += `
                     <div class="memory-item" data-index="${originalIndex}">
@@ -1919,7 +2105,6 @@
             });
             container.innerHTML = html;
 
-            // مستمعات الأحداث
             container.querySelectorAll('.memory-item').forEach(el => {
                 el.addEventListener('click', function(e) {
                     if (e.target.closest('.memory-delete')) return;
@@ -1935,7 +2120,6 @@
             });
         }
 
-        /** حذف عنصر واحد من الذاكرة */
         function deleteMemoryItem(index) {
             try {
                 let memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
@@ -1944,33 +2128,26 @@
                     localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
                     loadMemory();
                 }
-            } catch (e) {
-                console.warn('فشل حذف العنصر:', e);
-            }
+            } catch (e) { console.warn('فشل حذف العنصر:', e); }
         }
 
-        /** مسح كل الذاكرة */
         function clearMemory() {
             if (!confirm('هل تريد مسح كل سجل المحادثات؟')) return;
             localStorage.removeItem(MEMORY_KEY);
             loadMemory();
         }
 
-        /** استرجاع النص الكامل للمحادثة إلى حقل الإدخال */
         function restoreConversation(index) {
             try {
                 const memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
                 if (index < 0 || index >= memory.length) return;
                 const item = memory[index];
-                // نأخذ النص الكامل من العنصر المخزن
                 const fullText = item.content;
                 document.getElementById('messageInput').value = fullText;
                 document.getElementById('messageInput').dispatchEvent(new Event('input'));
                 document.getElementById('messageInput').focus();
                 document.getElementById('memoryModal').classList.remove('active');
-            } catch (e) {
-                console.warn('فشل استرجاع المحادثة:', e);
-            }
+            } catch (e) { console.warn('فشل استرجاع المحادثة:', e); }
         }
 
         // ربط أزرار الذاكرة
@@ -1987,7 +2164,7 @@
         document.getElementById('clearMemoryBtn').addEventListener('click', clearMemory);
 
         // ============================================================
-        //  دوال إنشاء الرد الذكي (مع دمج الذاكرة)
+        //  دوال إنشاء الرد الذكي
         // ============================================================
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
@@ -2094,7 +2271,7 @@
         function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
         // ============================================================
-        //  دوال إرسال الرسائل (مع حفظ الذاكرة)
+        //  دوال إرسال الرسائل مع دعم الملفات
         // ============================================================
         const messagesArea = document.getElementById('messagesArea');
         const messageInput = document.getElementById('messageInput');
@@ -2187,7 +2364,7 @@
         });
 
         // ============================================================
-        //  الأزرار المساعدة (الأسئلة المقترحة)
+        //  الأزرار المساعدة
         // ============================================================
         document.querySelectorAll('.sq-btn').forEach(btn => {
             btn.addEventListener('click', function() {
@@ -2226,19 +2403,13 @@
         sendBtn.addEventListener('click', sendMessage);
 
         // ============================================================
-        //  دوال الإرسال الأساسية مع حفظ الذاكرة
+        //  دوال الإرسال الأساسية مع الملفات
         // ============================================================
         async function sendMessage() {
             const text = messageInput.value.trim();
 
-            // الإرفاق معطل، لذا نتجاهل أي ملف مرفق
-            if (attachedFile) {
-                alert('عذراً، خاصية إرفاق الملفات معطلة حالياً.');
-                hideAttachedFile();
-                return;
-            }
-
-            if (!text || isProcessing) return;
+            if (!text && !attachedFile) return;
+            if (isProcessing) return;
 
             if (suggestedQuestions) suggestedQuestions.classList.add('hidden');
 
@@ -2247,15 +2418,35 @@
             voiceBtn.disabled = true;
 
             try {
+                // معالجة الملف المرفق إن وجد
+                let fileText = '';
+                if (attachedFile) {
+                    fileText = await extractTextFromFile(attachedFile);
+                    // عرض النص المستخرج في مودال
+                    showExtractedText(fileText);
+                    // نضيف النص المستخرج مع رسالة المستخدم
+                }
+
+                // بناء محتوى المستخدم
+                let userContent = text;
+                if (attachedFile) {
+                    userContent += `\n[ملف: ${attachedFile.name}]\n${fileText}`;
+                    // حفظ الملف مؤقتاً في المتغيرات لاستخدامه في الرد
+                }
+
                 // عرض رسالة المستخدم
                 const userMsg = document.createElement('div');
                 userMsg.className = 'message user';
-                userMsg.innerHTML = escapeHtml(text) + `<span class="msg-time">الآن</span>`;
+                let userDisplay = text || '📎 أرسل ملفاً';
+                if (attachedFile) {
+                    userDisplay += ` <span style="color:#4a7aff;font-size:0.8rem;">📎 ${attachedFile.name}</span>`;
+                }
+                userMsg.innerHTML = escapeHtml(userDisplay) + `<span class="msg-time">الآن</span>`;
                 messagesArea.appendChild(userMsg);
-                conversationHistory.push({ role: 'user', content: text });
+                conversationHistory.push({ role: 'user', content: userContent });
                 if (conversationHistory.length > 10) conversationHistory.shift();
 
-                saveToMemory('user', text);
+                saveToMemory('user', userContent);
 
                 messageInput.value = '';
                 messageInput.style.height = 'auto';
@@ -2269,7 +2460,15 @@
 
                 typingIndicator.style.display = 'none';
 
-                const reply = await generateSmartReply(text);
+                // إنشاء الرد مع إمكانية دمج النص المستخرج
+                let reply = await generateSmartReply(text || fileText || 'ملف');
+                // إذا كان هناك ملف، نضيف سياقاً للرد
+                if (attachedFile && fileText && fileText.length > 0) {
+                    // نعدل الرد قليلاً
+                    if (reply.type === 'text') {
+                        reply.content = `📄 لقد استخرجت النص من ملفك:\n"${fileText.substring(0, 200)}${fileText.length > 200 ? '...' : ''}"\n\n${reply.content}`;
+                    }
+                }
 
                 const botMsg = document.createElement('div');
                 botMsg.className = 'message bot';
@@ -2295,7 +2494,10 @@
                 conversationHistory.push({ role: 'bot', content: replyContent || 'تم عرض المنتج' });
                 if (conversationHistory.length > 10) conversationHistory.shift();
 
-                await sendToDiscord(text, replyContent);
+                await sendToDiscord(userContent, replyContent);
+
+                // حذف الملف بعد الإرسال
+                if (attachedFile) hideAttachedFile();
 
             } catch (error) {
                 console.error('خطأ في sendMessage:', error);
@@ -2304,6 +2506,7 @@
                 errorMsg.innerHTML = 'عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.' + `<span class="msg-time">الآن</span>`;
                 messagesArea.appendChild(errorMsg);
                 scrollToBottom();
+                if (attachedFile) hideAttachedFile();
             } finally {
                 isProcessing = false;
                 sendBtn.disabled = false;
@@ -2314,7 +2517,7 @@
         }
 
         // ============================================================
-        //  إرسال إلى Discord (ويب هوك)
+        //  إرسال إلى Discord
         // ============================================================
         async function sendToDiscord(userMessage, botReply) {
             try {
@@ -2492,7 +2695,7 @@
                 if (cursor) cursor.style.display = 'none';
             }
 
-            // تحميل الذاكرة المحفوظة (لعرضها عند فتح المودال)
+            // تحميل الذاكرة
             loadMemory();
 
             messageInput.disabled = false;
@@ -2500,7 +2703,7 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع دعم الذاكرة الدائمة ✅');
+            console.log('MEN Ai جاهز مع دعم الملفات والذاكرة الفخمة ✅');
         }
 
         // بدء التشغيل
