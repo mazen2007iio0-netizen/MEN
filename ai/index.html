@@ -1848,7 +1848,7 @@
 
                 <div class="suggested-questions" id="suggestedQuestions">
                     <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
-                    <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
+                    <button class="sq-btn" data-question=" MEN pass"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
                     <button class="sq-btn" data-question="كيف يمكنني التواصل مع الدعم؟"><i class="fas fa-headset"></i> التواصل مع الدعم</button>
                 </div>
 
@@ -1884,7 +1884,7 @@
     <!-- مودال الذاكرة - يعرض الجلسات -->
     <div class="modal-overlay" id="memoryModal">
         <div class="modal-box">
-            <h3><i class="fas fa-brain"></i> ذاكرة MEN Ai (الجلسات)</h3>
+            <h3><i class="fas fa-brain"></i> ذاكرة MEN Ai (المحادثات)</h3>
             <div class="memory-list" id="memoryList">
                 <div class="memory-empty">لا توجد محادثات محفوظة بعد.</div>
             </div>
@@ -2208,7 +2208,7 @@
                 const area = document.getElementById('messagesArea');
                 const infoMsg = document.createElement('div');
                 infoMsg.className = 'message bot';
-                infoMsg.innerHTML = `🔄 تم التبديل إلى المحادثة: <strong>${escapeHtml(session.title)}</strong><span class="msg-time">الآن</span>`;
+                infoMsg.innerHTML = ` تم التبديل إلى المحادثة: <strong>${escapeHtml(session.title)}</strong><span class="msg-time">الآن</span>`;
                 area.appendChild(infoMsg);
                 scrollToBottom();
             } catch (e) { console.warn('فشل استرجاع الجلسة:', e); }
@@ -2528,7 +2528,7 @@
             const area = document.getElementById('messagesArea');
             const infoMsg = document.createElement('div');
             infoMsg.className = 'message bot';
-            infoMsg.innerHTML = `✨ تم إنشاء محادثة جديدة. <span class="msg-time">الآن</span>`;
+            infoMsg.innerHTML = ` تم إنشاء محادثة جديدة. <span class="msg-time">الآن</span>`;
             area.appendChild(infoMsg);
             scrollToBottom();
         });
@@ -3088,7 +3088,7 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع دعم الجلسات ورسالة الترحيب ✅');
+            console.log('MEN Ai جاهز مع دعم المحادثات ورسالة الترحيب ');
         }
 
         // بدء التشغيل
