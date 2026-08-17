@@ -102,7 +102,8 @@
 
         /* === أزرار جديدة فخمة === */
         .btn-back,
-        .btn-memory {
+        .btn-memory,
+        .btn-settings {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -124,7 +125,8 @@
             overflow: hidden;
         }
         .btn-back::before,
-        .btn-memory::before {
+        .btn-memory::before,
+        .btn-settings::before {
             content: '';
             position: absolute;
             inset: 0;
@@ -138,22 +140,26 @@
             transition: 0.6s;
         }
         .btn-back:hover::before,
-        .btn-memory:hover::before {
+        .btn-memory:hover::before,
+        .btn-settings:hover::before {
             opacity: 1;
         }
         .btn-back i,
-        .btn-memory i {
+        .btn-memory i,
+        .btn-settings i {
             font-size: 1.2rem;
             transition: 0.3s;
         }
         .btn-back .back-text,
-        .btn-memory .memory-text {
+        .btn-memory .memory-text,
+        .btn-settings .settings-text {
             font-weight: 600;
             font-size: 0.95rem;
             white-space: nowrap;
         }
         .btn-back:hover,
-        .btn-memory:hover {
+        .btn-memory:hover,
+        .btn-settings:hover {
             background: rgba(74, 122, 255, 0.08);
             border-color: var(--blue-light);
             color: #fff;
@@ -161,7 +167,8 @@
             box-shadow: 0 8px 30px rgba(74, 122, 255, 0.15);
         }
         .btn-back:active,
-        .btn-memory:active {
+        .btn-memory:active,
+        .btn-settings:active {
             transform: scale(0.95);
         }
         .btn-memory i {
@@ -169,6 +176,16 @@
         }
         .btn-memory:hover i {
             animation: pulseBrain 1.2s ease-in-out infinite;
+        }
+        .btn-settings i {
+            color: #a0b0d4;
+        }
+        .btn-settings:hover i {
+            animation: spinSettings 2s linear infinite;
+        }
+        @keyframes spinSettings {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
         @keyframes pulseBrain {
             0%,
@@ -1081,6 +1098,90 @@
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.05);
         }
 
+        /* ===== مودال الإعدادات ===== */
+        .settings-group {
+            margin: 20px 0;
+        }
+        .settings-group label {
+            display: block;
+            color: #b0c4e8;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .settings-group .settings-input {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .settings-group select,
+        .settings-group input[type="number"] {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(74, 122, 255, 0.2);
+            border-radius: 30px;
+            padding: 10px 18px;
+            color: #f0f4ff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            min-width: 120px;
+        }
+        .settings-group select:focus,
+        .settings-group input[type="number"]:focus {
+            border-color: var(--blue-light);
+            box-shadow: 0 0 20px rgba(74, 122, 255, 0.05);
+        }
+        .settings-group select option {
+            background: #0a0f1f;
+        }
+        .settings-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .settings-actions .btn-apply {
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            border: none;
+            border-radius: 40px;
+            padding: 10px 30px;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
+        }
+        .settings-actions .btn-apply:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
+        }
+        .settings-actions .btn-apply:active {
+            transform: scale(0.95);
+        }
+        .settings-actions .btn-clear-settings {
+            background: rgba(255, 0, 0, 0.08);
+            border: 1px solid rgba(255, 0, 0, 0.15);
+            border-radius: 40px;
+            padding: 10px 24px;
+            color: #ff6b6b;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .settings-actions .btn-clear-settings:hover {
+            background: rgba(255, 0, 0, 0.15);
+            transform: scale(1.02);
+        }
+
         /* ===== مودال استخراج النص ===== */
         .modal-text {
             background: rgba(0, 0, 0, 0.4);
@@ -1334,17 +1435,20 @@
                 height: 36px;
             }
             .btn-back,
-            .btn-memory {
+            .btn-memory,
+            .btn-settings {
                 height: 38px;
                 padding: 0 14px;
                 font-size: 0.9rem;
             }
             .btn-back i,
-            .btn-memory i {
+            .btn-memory i,
+            .btn-settings i {
                 font-size: 1rem;
             }
             .btn-back .back-text,
-            .btn-memory .memory-text {
+            .btn-memory .memory-text,
+            .btn-settings .settings-text {
                 font-size: 0.85rem;
             }
             .men-product-card {
@@ -1463,17 +1567,20 @@
                 height: 30px;
             }
             .btn-back,
-            .btn-memory {
+            .btn-memory,
+            .btn-settings {
                 height: 34px;
                 padding: 0 10px;
                 font-size: 0.8rem;
             }
             .btn-back i,
-            .btn-memory i {
+            .btn-memory i,
+            .btn-settings i {
                 font-size: 0.9rem;
             }
             .btn-back .back-text,
-            .btn-memory .memory-text {
+            .btn-memory .memory-text,
+            .btn-settings .settings-text {
                 font-size: 0.75rem;
             }
             .men-product-card .product-image {
@@ -1594,17 +1701,20 @@
                 height: 26px;
             }
             .btn-back,
-            .btn-memory {
+            .btn-memory,
+            .btn-settings {
                 height: 30px;
                 padding: 0 8px;
                 font-size: 0.7rem;
             }
             .btn-back i,
-            .btn-memory i {
+            .btn-memory i,
+            .btn-settings i {
                 font-size: 0.8rem;
             }
             .btn-back .back-text,
-            .btn-memory .memory-text {
+            .btn-memory .memory-text,
+            .btn-settings .settings-text {
                 font-size: 0.7rem;
             }
             .chat-header .bot-name {
@@ -1695,6 +1805,10 @@
                     <i class="fas fa-brain"></i>
                     <span class="memory-text">الذاكرة</span>
                 </button>
+                <button class="btn-settings" id="settingsBtn" title="الإعدادات">
+                    <i class="fas fa-cog"></i>
+                    <span class="settings-text">الإعدادات</span>
+                </button>
             </div>
         </div>
     </header>
@@ -1721,7 +1835,7 @@
 
                 <div class="suggested-questions" id="suggestedQuestions">
                     <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
-                    <button class="sq-btn" data-question=" MEN pass"><i class="fas fa-ticket-alt"></i>كيف اشترك في MEN pass؟</button>
+                    <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
                     <button class="sq-btn" data-question="كيف يمكنني التواصل مع الدعم؟"><i class="fas fa-headset"></i> التواصل مع الدعم</button>
                 </div>
 
@@ -1765,6 +1879,35 @@
                 <button class="btn-clear" id="clearMemoryBtn"><i class="fas fa-trash-alt"></i> مسح الكل</button>
                 <button class="modal-close" id="memoryModalClose">إغلاق</button>
             </div>
+        </div>
+    </div>
+
+    <!-- مودال الإعدادات -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-box">
+            <h3><i class="fas fa-sliders-h"></i> إعدادات الذاكرة</h3>
+            <div class="settings-group">
+                <label>الحد الأقصى للذاكرة (عدد الرسائل)</label>
+                <div class="settings-input">
+                    <select id="memoryLimitSelect">
+                        <option value="12">12 (افتراضي)</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="500">500</option>
+                        <option value="1000">1000</option>
+                        <option value="2000">2000</option>
+                    </select>
+                    <span style="color:#6a708a;font-size:0.9rem;">أو أدخل قيمة مخصصة</span>
+                    <input type="number" id="customLimitInput" min="1" max="10000" placeholder="مخصص" style="width:100px;">
+                </div>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند تجاوز العدد، سيتم مسح كل الذاكرة تلقائياً.</p>
+            </div>
+            <div class="settings-actions">
+                <button class="btn-clear-settings" id="clearMemorySettingsBtn"><i class="fas fa-trash-alt"></i> مسح الذاكرة</button>
+                <button class="btn-apply" id="applySettingsBtn">تطبيق الإعدادات</button>
+            </div>
+            <button class="modal-close" id="settingsModalClose" style="margin-top:10px;">إغلاق</button>
         </div>
     </div>
 
@@ -1812,6 +1955,36 @@
 
         let attachedFile = null;
         let extractedText = '';
+
+        // ============================================================
+        //  إدارة الإعدادات والحد الأقصى للذاكرة
+        // ============================================================
+        const MEMORY_KEY = 'menChatMemory';
+        const SETTINGS_KEY = 'menChatSettings';
+
+        // القيمة الافتراضية للحد الأقصى (12)
+        const DEFAULT_LIMIT = 12;
+
+        // قراءة الإعدادات المحفوظة
+        function loadSettings() {
+            try {
+                const saved = localStorage.getItem(SETTINGS_KEY);
+                if (saved) {
+                    const settings = JSON.parse(saved);
+                    return settings.limit || DEFAULT_LIMIT;
+                }
+            } catch (e) {}
+            return DEFAULT_LIMIT;
+        }
+
+        // حفظ الإعدادات
+        function saveSettings(limit) {
+            try {
+                localStorage.setItem(SETTINGS_KEY, JSON.stringify({ limit }));
+            } catch (e) {}
+        }
+
+        let maxMemoryItems = loadSettings();
 
         // ============================================================
         //  دوال الردود والمنتجات
@@ -2028,7 +2201,6 @@
         fileInput.addEventListener('change', function(e) {
             if (this.files && this.files.length > 0) {
                 const file = this.files[0];
-                // التحقق من الحجم (10 ميجابايت كحد أقصى)
                 if (file.size > 10 * 1024 * 1024) {
                     alert('الملف كبير جداً. الحد الأقصى 10 ميجابايت.');
                     this.value = '';
@@ -2043,17 +2215,25 @@
         removeFileBtn.addEventListener('click', hideAttachedFile);
 
         // ============================================================
-        //  دوال الذاكرة (فخمة)
+        //  دوال الذاكرة (فخمة) مع الإدارة التلقائية
         // ============================================================
-        const MEMORY_KEY = 'menChatMemory';
-
         function saveToMemory(role, content) {
             try {
                 let memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
                 const timestamp = new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' });
                 memory.push({ role, content, timestamp });
-                if (memory.length > 200) memory = memory.slice(-200);
-                localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
+
+                // التحقق من العدد ومسح الكل إذا تجاوز الحد
+                if (memory.length > maxMemoryItems) {
+                    // مسح الكل
+                    localStorage.removeItem(MEMORY_KEY);
+                    memory = [];
+                    // يمكن إضافة رسالة تنبيه أو تسجيل
+                    console.log(`تم مسح الذاكرة لأنها تجاوزت الحد (${maxMemoryItems})`);
+                } else {
+                    // حفظ محدث
+                    localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
+                }
             } catch (e) { console.warn('فشل حفظ الذاكرة:', e); }
         }
 
@@ -2071,7 +2251,7 @@
         function renderMemoryList(memory) {
             const container = document.getElementById('memoryList');
             if (!memory || memory.length === 0) {
-                container.innerHTML = '<div class="memory-empty"> لا توجد محادثات محفوظة بعد.</div>';
+                container.innerHTML = '<div class="memory-empty">📭 لا توجد محادثات محفوظة بعد.</div>';
                 return;
             }
             const reversed = [...memory].reverse();
@@ -2079,7 +2259,7 @@
             reversed.forEach((item, index) => {
                 const originalIndex = memory.length - 1 - index;
                 const roleClass = item.role === 'user' ? 'user' : 'bot';
-                const roleIcon = item.role === 'user' ? '' : '';
+                const roleIcon = item.role === 'user' ? '👤' : '🤖';
                 let displayText = item.content;
                 if (item.role === 'user') {
                     const words = item.content.trim().split(/\s+/);
@@ -2135,6 +2315,9 @@
             if (!confirm('هل تريد مسح كل سجل المحادثات؟')) return;
             localStorage.removeItem(MEMORY_KEY);
             loadMemory();
+            // إغلاق المودال إن كان مفتوحاً
+            document.getElementById('memoryModal').classList.remove('active');
+            document.getElementById('settingsModal').classList.remove('active');
         }
 
         function restoreConversation(index) {
@@ -2162,6 +2345,101 @@
             if (e.target === this) this.classList.remove('active');
         });
         document.getElementById('clearMemoryBtn').addEventListener('click', clearMemory);
+
+        // ============================================================
+        //  إعدادات الذاكرة (مودال الإعدادات)
+        // ============================================================
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsModal = document.getElementById('settingsModal');
+        const settingsModalClose = document.getElementById('settingsModalClose');
+        const memoryLimitSelect = document.getElementById('memoryLimitSelect');
+        const customLimitInput = document.getElementById('customLimitInput');
+        const applySettingsBtn = document.getElementById('applySettingsBtn');
+        const clearMemorySettingsBtn = document.getElementById('clearMemorySettingsBtn');
+
+        // فتح مودال الإعدادات
+        settingsBtn.addEventListener('click', function() {
+            // تحميل القيمة الحالية في الواجهة
+            const currentLimit = maxMemoryItems;
+            // محاولة مطابقة القيمة مع الخيارات
+            const options = memoryLimitSelect.options;
+            let found = false;
+            for (let opt of options) {
+                if (parseInt(opt.value) === currentLimit) {
+                    memoryLimitSelect.value = opt.value;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                memoryLimitSelect.value = '12'; // افتراضي
+                customLimitInput.value = currentLimit;
+            } else {
+                customLimitInput.value = '';
+            }
+            settingsModal.classList.add('active');
+        });
+
+        settingsModalClose.addEventListener('click', function() {
+            settingsModal.classList.remove('active');
+        });
+        settingsModal.addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('active');
+        });
+
+        // تطبيق الإعدادات
+        applySettingsBtn.addEventListener('click', function() {
+            let newLimit = parseInt(memoryLimitSelect.value);
+            // إذا كان الخيار "مخصص" نأخذ من المدخل
+            if (memoryLimitSelect.value === 'custom') {
+                const customVal = parseInt(customLimitInput.value);
+                if (!isNaN(customVal) && customVal > 0) {
+                    newLimit = customVal;
+                } else {
+                    alert('الرجاء إدخال عدد صحيح موجب.');
+                    return;
+                }
+            }
+            if (isNaN(newLimit) || newLimit < 1) {
+                alert('الرجاء إدخال عدد صحيح موجب.');
+                return;
+            }
+            // تطبيق الحد الجديد
+            maxMemoryItems = newLimit;
+            saveSettings(newLimit);
+            // التحقق من الذاكرة الحالية ومسحها إذا تجاوزت الحد الجديد
+            try {
+                let memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
+                if (memory.length > maxMemoryItems) {
+                    localStorage.removeItem(MEMORY_KEY);
+                    memory = [];
+                    alert(`تم مسح الذاكرة لأنها تجاوزت الحد الجديد (${maxMemoryItems})`);
+                }
+            } catch (e) {}
+            settingsModal.classList.remove('active');
+            // إعادة تحميل الذاكرة في حال فتحها لاحقاً
+            loadMemory();
+        });
+
+        // مسح الذاكرة من الإعدادات
+        clearMemorySettingsBtn.addEventListener('click', function() {
+            clearMemory();
+            settingsModal.classList.remove('active');
+        });
+
+        // عند تغيير القائمة المنسدلة، نضبط المدخل المخصص
+        memoryLimitSelect.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                customLimitInput.style.display = 'inline-block';
+                customLimitInput.focus();
+            } else {
+                customLimitInput.style.display = 'none';
+            }
+        });
+        // التحقق من وجود قيمة مخصصة مسبقة
+        if (memoryLimitSelect.value !== 'custom') {
+            customLimitInput.style.display = 'none';
+        }
 
         // ============================================================
         //  دوال إنشاء الرد الذكي
@@ -2418,23 +2696,17 @@
             voiceBtn.disabled = true;
 
             try {
-                // معالجة الملف المرفق إن وجد
                 let fileText = '';
                 if (attachedFile) {
                     fileText = await extractTextFromFile(attachedFile);
-                    // عرض النص المستخرج في مودال
                     showExtractedText(fileText);
-                    // نضيف النص المستخرج مع رسالة المستخدم
                 }
 
-                // بناء محتوى المستخدم
                 let userContent = text;
                 if (attachedFile) {
                     userContent += `\n[ملف: ${attachedFile.name}]\n${fileText}`;
-                    // حفظ الملف مؤقتاً في المتغيرات لاستخدامه في الرد
                 }
 
-                // عرض رسالة المستخدم
                 const userMsg = document.createElement('div');
                 userMsg.className = 'message user';
                 let userDisplay = text || '📎 أرسل ملفاً';
@@ -2460,11 +2732,8 @@
 
                 typingIndicator.style.display = 'none';
 
-                // إنشاء الرد مع إمكانية دمج النص المستخرج
                 let reply = await generateSmartReply(text || fileText || 'ملف');
-                // إذا كان هناك ملف، نضيف سياقاً للرد
                 if (attachedFile && fileText && fileText.length > 0) {
-                    // نعدل الرد قليلاً
                     if (reply.type === 'text') {
                         reply.content = `📄 لقد استخرجت النص من ملفك:\n"${fileText.substring(0, 200)}${fileText.length > 200 ? '...' : ''}"\n\n${reply.content}`;
                     }
@@ -2496,7 +2765,6 @@
 
                 await sendToDiscord(userContent, replyContent);
 
-                // حذف الملف بعد الإرسال
                 if (attachedFile) hideAttachedFile();
 
             } catch (error) {
@@ -2677,7 +2945,6 @@
             await loadExternalLibraries();
             await Promise.all([loadResponses(), loadProducts()]);
 
-            // عرض رسالة الترحيب
             messagesArea.innerHTML = '';
             const welcomeMsg = document.createElement('div');
             welcomeMsg.className = 'message bot';
@@ -2685,7 +2952,6 @@
             messagesArea.appendChild(welcomeMsg);
             scrollToBottom();
 
-            // تأثير الكتابة
             const typewriterElement = document.getElementById('typewriterText');
             if (typewriterElement) {
                 const fullText = 'مرحبا بك في MEN Ai';
@@ -2695,7 +2961,6 @@
                 if (cursor) cursor.style.display = 'none';
             }
 
-            // تحميل الذاكرة
             loadMemory();
 
             messageInput.disabled = false;
