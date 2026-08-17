@@ -249,9 +249,10 @@
         }
         .message.user {
             align-self: flex-end;
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            background: rgba(74, 122, 255, 0.2); /* أزرق فاتح */
+            border: 1px solid rgba(74, 122, 255, 0.15);
             border-bottom-left-radius: 6px;
-            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
+            box-shadow: 0 4px 20px rgba(74, 122, 255, 0.08);
         }
         .message.bot {
             align-self: flex-start;
@@ -689,6 +690,7 @@
             cursor: not-allowed;
         }
 
+        /* زر الإرفاق معطل */
         .input-area .btn-attach {
             width: 52px;
             height: 52px;
@@ -699,37 +701,23 @@
             border: 1px solid rgba(2, 28, 164, 0.2);
             color: #a0b0d4;
             font-size: 1.4rem;
-            cursor: pointer;
+            cursor: not-allowed;
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
-        }
-        .input-area .btn-attach:hover {
-            background: rgba(74, 122, 255, 0.08);
-            border-color: var(--blue-light);
-            color: #fff;
-            transform: scale(1.05);
-        }
-        .input-area .btn-attach:active {
-            transform: scale(0.92);
-        }
-        .input-area .btn-attach input[type="file"] {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-            font-size: 0;
+            opacity: 0.5;
+            pointer-events: none; /* منع أي تفاعل */
         }
         .input-area .btn-attach.has-file {
             border-color: var(--blue-light);
             color: var(--blue-light);
             background: rgba(74, 122, 255, 0.1);
         }
-        .input-area .btn-attach.hidden-attach {
-            display: none;
+        .input-area .btn-attach input[type="file"] {
+            display: none; /* إخفاء الإدخال لأنه معطل */
         }
 
         .file-preview {
@@ -1559,9 +1547,10 @@
                 </div>
 
                 <div class="input-area">
-                    <button class="btn-attach" id="attachBtn" title="إرفاق ملف أو صورة">
+                    <!-- زر الإرفاق معطل -->
+                    <button class="btn-attach" id="attachBtn" title="الإرفاق معطل" disabled>
                         <i class="fas fa-paperclip"></i>
-                        <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls">
+                        <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls" disabled>
                     </button>
 
                     <div class="file-preview" id="filePreview">
@@ -1832,7 +1821,7 @@
         });
 
         // ============================================================
-        //  دوال إدارة الملفات المرفقة
+        //  دوال إدارة الملفات المرفقة (معطلة)
         // ============================================================
         function hideAttachedFile() {
             attachedFile = null;
@@ -1843,40 +1832,25 @@
             document.getElementById('fileInput').value = '';
         }
 
+        // تعطيل أي تفاعل مع الإرفاق
         const fileInput = document.getElementById('fileInput');
         const attachBtn = document.getElementById('attachBtn');
         const filePreview = document.getElementById('filePreview');
         const fileNameSpan = document.getElementById('fileName');
         const removeFileBtn = document.getElementById('removeFile');
 
-        fileInput.addEventListener('change', async function(e) {
-            const file = this.files[0];
-            if (!file) return;
-            attachedFile = file;
-            fileNameSpan.textContent = file.name.length > 20 ? file.name.substring(0, 18) + '...' : file.name;
-            filePreview.classList.add('visible');
-            filePreview.classList.remove('hidden-preview');
-            attachBtn.classList.add('has-file');
-
-            const text = await extractTextFromFile(file);
-            extractedText = text;
-            showExtractedText(text);
-
-            const userMsg = document.createElement('div');
-            userMsg.className = 'message user';
-            userMsg.innerHTML = `📎 <strong>${file.name}</strong> (تم استخراج النص)` + `<span class="msg-time">الآن</span>`;
-            document.getElementById('messagesArea').appendChild(userMsg);
-            scrollToBottom();
-
-            await processExtractedText(text, file.name);
-            hideAttachedFile();
+        // إزالة أي مستمع سابق (لن يتم إضافته)
+        // نمنع أي تغيير على input
+        fileInput.addEventListener('change', function(e) {
+            e.preventDefault();
             this.value = '';
+            alert('عذراً، خاصية إرفاق الملفات معطلة حالياً.');
         });
 
         removeFileBtn.addEventListener('click', hideAttachedFile);
 
         // ============================================================
-        //  دوال الذاكرة (المضافة حديثاً)
+        //  دوال الذاكرة (مع اختصار عناوين الرسائل)
         // ============================================================
         const MEMORY_KEY = 'menChatMemory';
 
@@ -1886,7 +1860,6 @@
                 let memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
                 const timestamp = new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' });
                 memory.push({ role, content, timestamp });
-                // الاحتفاظ بآخر 200 رسالة فقط (لتجنب تجاوز الحجم)
                 if (memory.length > 200) memory = memory.slice(-200);
                 localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
             } catch (e) {
@@ -1906,27 +1879,38 @@
             }
         }
 
-        /** عرض قائمة الذاكرة */
+        /** عرض قائمة الذاكرة مع اختصار عناوين رسائل المستخدم إلى كلمتين */
         function renderMemoryList(memory) {
             const container = document.getElementById('memoryList');
             if (!memory || memory.length === 0) {
                 container.innerHTML = '<div class="memory-empty">لا توجد محادثات محفوظة بعد.</div>';
                 return;
             }
-            // عرض من الأحدث إلى الأقدم
             const reversed = [...memory].reverse();
             let html = '';
             reversed.forEach((item, index) => {
-                // index هنا هو الفهرس في المصفوفة المعكوسة، نريد الفهرس الأصلي للحذف
                 const originalIndex = memory.length - 1 - index;
                 const roleClass = item.role === 'user' ? 'user' : 'bot';
-                const roleIcon = item.role === 'user' ? '' : '';
-                const snippet = item.content.length > 60 ? item.content.substring(0, 60) + '…' : item.content;
+                const roleIcon = item.role === 'user' ? '👤' : '🤖';
+                let displayText = item.content;
+                // اختصار رسائل المستخدم إلى أول كلمتين
+                if (item.role === 'user') {
+                    const words = item.content.trim().split(/\s+/);
+                    if (words.length > 2) {
+                        displayText = words.slice(0, 2).join(' ') + '...';
+                    } else {
+                        displayText = words.join(' ');
+                    }
+                }
+                // للبوت نعرض أول 40 حرفاً
+                if (item.role === 'bot' && item.content.length > 40) {
+                    displayText = item.content.substring(0, 40) + '...';
+                }
                 html += `
                     <div class="memory-item" data-index="${originalIndex}">
-                        <div class="memory-content">
+                        <div class="memory-content" data-full="${escapeHtml(item.content)}">
                             <span class="memory-role ${roleClass}">${roleIcon} ${item.role === 'user' ? 'أنت' : 'MEN Ai'}</span>
-                            <span class="memory-text">${escapeHtml(snippet)}</span>
+                            <span class="memory-text">${escapeHtml(displayText)}</span>
                             <span class="memory-time">${item.timestamp || ''}</span>
                         </div>
                         <button class="memory-delete" data-index="${originalIndex}" title="حذف"><i class="fas fa-times"></i></button>
@@ -1935,15 +1919,13 @@
             });
             container.innerHTML = html;
 
-            // إضافة مستمعي الأحداث للبطاقات
+            // مستمعات الأحداث
             container.querySelectorAll('.memory-item').forEach(el => {
-                // استرجاع المحادثة عند النقر على البطاقة (عدا زر الحذف)
                 el.addEventListener('click', function(e) {
                     if (e.target.closest('.memory-delete')) return;
                     const idx = parseInt(this.dataset.index);
                     restoreConversation(idx);
                 });
-                // زر الحذف
                 const delBtn = el.querySelector('.memory-delete');
                 delBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -1960,7 +1942,7 @@
                 if (index >= 0 && index < memory.length) {
                     memory.splice(index, 1);
                     localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
-                    loadMemory(); // تحديث العرض
+                    loadMemory();
                 }
             } catch (e) {
                 console.warn('فشل حذف العنصر:', e);
@@ -1974,35 +1956,18 @@
             loadMemory();
         }
 
-        /** استرجاع محادثة إلى حقل الإدخال (آخر رسالة من المستخدم في تلك المحادثة) */
+        /** استرجاع النص الكامل للمحادثة إلى حقل الإدخال */
         function restoreConversation(index) {
             try {
                 const memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
                 if (index < 0 || index >= memory.length) return;
                 const item = memory[index];
-                if (item.role === 'user') {
-                    document.getElementById('messageInput').value = item.content;
-                    document.getElementById('messageInput').dispatchEvent(new Event('input'));
-                    document.getElementById('messageInput').focus();
-                    // إغلاق المودال
-                    document.getElementById('memoryModal').classList.remove('active');
-                } else {
-                    // إذا كان البوت، نحاول إيجاد رسالة المستخدم السابقة
-                    for (let i = index - 1; i >= 0; i--) {
-                        if (memory[i].role === 'user') {
-                            document.getElementById('messageInput').value = memory[i].content;
-                            document.getElementById('messageInput').dispatchEvent(new Event('input'));
-                            document.getElementById('messageInput').focus();
-                            document.getElementById('memoryModal').classList.remove('active');
-                            return;
-                        }
-                    }
-                    // إذا لم نجد، نضع رسالة البوت نفسها
-                    document.getElementById('messageInput').value = item.content;
-                    document.getElementById('messageInput').dispatchEvent(new Event('input'));
-                    document.getElementById('messageInput').focus();
-                    document.getElementById('memoryModal').classList.remove('active');
-                }
+                // نأخذ النص الكامل من العنصر المخزن
+                const fullText = item.content;
+                document.getElementById('messageInput').value = fullText;
+                document.getElementById('messageInput').dispatchEvent(new Event('input'));
+                document.getElementById('messageInput').focus();
+                document.getElementById('memoryModal').classList.remove('active');
             } catch (e) {
                 console.warn('فشل استرجاع المحادثة:', e);
             }
@@ -2266,9 +2231,9 @@
         async function sendMessage() {
             const text = messageInput.value.trim();
 
+            // الإرفاق معطل، لذا نتجاهل أي ملف مرفق
             if (attachedFile) {
-                const combinedText = text + '\n' + extractedText;
-                await processCombinedMessage(text, combinedText);
+                alert('عذراً، خاصية إرفاق الملفات معطلة حالياً.');
                 hideAttachedFile();
                 return;
             }
@@ -2290,7 +2255,6 @@
                 conversationHistory.push({ role: 'user', content: text });
                 if (conversationHistory.length > 10) conversationHistory.shift();
 
-                // حفظ رسالة المستخدم في الذاكرة
                 saveToMemory('user', text);
 
                 messageInput.value = '';
@@ -2326,7 +2290,6 @@
                     replyContent = reply.content;
                 }
 
-                // حفظ رد البوت في الذاكرة
                 saveToMemory('bot', replyContent || 'تم عرض المنتج');
 
                 conversationHistory.push({ role: 'bot', content: replyContent || 'تم عرض المنتج' });
@@ -2339,138 +2302,6 @@
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'message bot';
                 errorMsg.innerHTML = 'عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.' + `<span class="msg-time">الآن</span>`;
-                messagesArea.appendChild(errorMsg);
-                scrollToBottom();
-            } finally {
-                isProcessing = false;
-                sendBtn.disabled = false;
-                voiceBtn.disabled = false;
-                messageInput.focus();
-                scrollToBottom();
-            }
-        }
-
-        async function processCombinedMessage(userText, combinedText) {
-            if (isProcessing) return;
-            isProcessing = true;
-            sendBtn.disabled = true;
-            voiceBtn.disabled = true;
-
-            try {
-                // عرض رسالة المستخدم
-                const userMsg = document.createElement('div');
-                userMsg.className = 'message user';
-                userMsg.innerHTML = escapeHtml(userText) + `<span class="msg-time">الآن</span>`;
-                messagesArea.appendChild(userMsg);
-                scrollToBottom();
-
-                saveToMemory('user', userText);
-
-                messageInput.value = '';
-                messageInput.style.height = 'auto';
-                charCount.textContent = '0';
-
-                typingIndicator.style.display = 'flex';
-                scrollToBottom();
-                await delay(800 + Math.random() * 1000);
-                typingIndicator.style.display = 'none';
-
-                const reply = await generateSmartReply(combinedText);
-
-                const botMsg = document.createElement('div');
-                botMsg.className = 'message bot';
-                messagesArea.appendChild(botMsg);
-                scrollToBottom();
-
-                let replyContent = '';
-                if (reply.type === 'products' || reply.type === 'product') {
-                    const fileNote = attachedFile ? `📄 بناءً على محتوى الملف "${attachedFile.name}"<br><br>` : '';
-                    botMsg.innerHTML = fileNote + reply.content + `<span class="msg-time">الآن</span>`;
-                    replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
-                    await delay(200);
-                } else {
-                    const prefix = attachedFile ? `📄 بناءً على محتوى الملف "${attachedFile.name}":\n\n` : '';
-                    botMsg.innerHTML = prefix;
-                    await typeText(botMsg, reply.content, 22);
-                    const timeSpan = document.createElement('span');
-                    timeSpan.className = 'msg-time';
-                    timeSpan.textContent = 'الآن';
-                    botMsg.appendChild(timeSpan);
-                    replyContent = reply.content;
-                }
-
-                saveToMemory('bot', replyContent || 'تم عرض المنتج');
-
-                await sendToDiscord(userText, replyContent);
-
-                hideAttachedFile();
-
-            } catch (error) {
-                console.error('خطأ في processCombinedMessage:', error);
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'message bot';
-                errorMsg.innerHTML = 'عذراً، حدث خطأ أثناء المعالجة.' + `<span class="msg-time">الآن</span>`;
-                messagesArea.appendChild(errorMsg);
-                scrollToBottom();
-            } finally {
-                isProcessing = false;
-                sendBtn.disabled = false;
-                voiceBtn.disabled = false;
-                messageInput.focus();
-                scrollToBottom();
-            }
-        }
-
-        async function processExtractedText(text, fileName) {
-            if (isProcessing) return;
-            isProcessing = true;
-            sendBtn.disabled = true;
-            voiceBtn.disabled = true;
-
-            try {
-                typingIndicator.style.display = 'flex';
-                scrollToBottom();
-                await delay(800 + Math.random() * 1000);
-                typingIndicator.style.display = 'none';
-
-                const searchQuery = text.substring(0, 500);
-                const reply = await generateSmartReply(searchQuery);
-
-                const botMsg = document.createElement('div');
-                botMsg.className = 'message bot';
-                messagesArea.appendChild(botMsg);
-                scrollToBottom();
-
-                let replyContent = '';
-                if (reply.type === 'products' || reply.type === 'product') {
-                    botMsg.innerHTML =
-                        `📄 استجابة بناءً على محتوى الملف "${fileName}":<br><br>` + reply.content +
-                        `<span class="msg-time">الآن</span>`;
-                    replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
-                    await delay(200);
-                } else {
-                    const prefix = `📄 استجابة بناءً على محتوى الملف "${fileName}":\n\n`;
-                    botMsg.innerHTML = prefix;
-                    await typeText(botMsg, reply.content, 22);
-                    const timeSpan = document.createElement('span');
-                    timeSpan.className = 'msg-time';
-                    timeSpan.textContent = 'الآن';
-                    botMsg.appendChild(timeSpan);
-                    replyContent = reply.content;
-                }
-
-                saveToMemory('bot', replyContent || 'تم عرض المنتج');
-
-                conversationHistory.push({ role: 'bot', content: replyContent || 'تم عرض المنتج' });
-                if (conversationHistory.length > 10) conversationHistory.shift();
-
-                await sendToDiscord(`[ملف: ${fileName}]`, replyContent);
-
-            } catch (error) {
-                console.error('خطأ في processExtractedText:', error);
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'message bot';
-                errorMsg.innerHTML = 'عذراً، حدث خطأ أثناء معالجة الملف.' + `<span class="msg-time">الآن</span>`;
                 messagesArea.appendChild(errorMsg);
                 scrollToBottom();
             } finally {
