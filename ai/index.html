@@ -948,7 +948,7 @@
             transform: scale(0.95);
         }
 
-        /* قائمة الذاكرة فخمة */
+        /* قائمة الجلسات في الذاكرة */
         .memory-list {
             display: flex;
             flex-direction: column;
@@ -1013,35 +1013,25 @@
             align-items: baseline;
             gap: 6px 10px;
         }
-        .memory-item .memory-role {
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: var(--blue-light);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .memory-item .memory-role.user {
-            color: #8ac4ff;
-        }
-        .memory-item .memory-role.bot {
-            color: #7ae0b0;
-        }
-        .memory-item .memory-text {
+        .memory-item .memory-title {
             color: #d0dcf5;
-            font-size: 0.95rem;
+            font-size: 1rem;
+            font-weight: 700;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            display: inline;
-            max-width: 300px;
+            max-width: 200px;
+        }
+        .memory-item .memory-count {
+            color: #6a708a;
+            font-size: 0.8rem;
         }
         .memory-item .memory-time {
             color: #6a708a;
             font-size: 0.7rem;
-            margin-right: 6px;
             white-space: nowrap;
             opacity: 0.7;
+            margin-right: auto;
         }
         .memory-item .memory-delete {
             color: #ff6b6b;
@@ -1096,6 +1086,29 @@
             background: rgba(255, 0, 0, 0.15);
             transform: scale(1.02);
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.05);
+        }
+        .memory-actions .btn-new-session {
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            border: none;
+            border-radius: 30px;
+            padding: 8px 22px;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
+        }
+        .memory-actions .btn-new-session:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
+        }
+        .memory-actions .btn-new-session:active {
+            transform: scale(0.95);
         }
 
         /* ===== مودال الإعدادات ===== */
@@ -1522,8 +1535,8 @@
                 width: 100%;
                 text-align: left;
             }
-            .memory-item .memory-text {
-                max-width: 150px;
+            .memory-item .memory-title {
+                max-width: 120px;
             }
         }
         @media (max-width: 480px) {
@@ -1673,12 +1686,12 @@
             .memory-item {
                 padding: 10px 12px;
             }
-            .memory-item .memory-text {
-                font-size: 0.8rem;
+            .memory-item .memory-title {
+                font-size: 0.9rem;
                 max-width: 100px;
             }
-            .memory-item .memory-role {
-                font-size: 0.75rem;
+            .memory-item .memory-count {
+                font-size: 0.7rem;
             }
             .memory-item .memory-time {
                 font-size: 0.6rem;
@@ -1835,7 +1848,7 @@
 
                 <div class="suggested-questions" id="suggestedQuestions">
                     <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
-                    <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
+                    <button class="sq-btn" data-question=" MEN pass"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
                     <button class="sq-btn" data-question="كيف يمكنني التواصل مع الدعم؟"><i class="fas fa-headset"></i> التواصل مع الدعم</button>
                 </div>
 
@@ -1868,14 +1881,15 @@
         </div>
     </main>
 
-    <!-- مودال الذاكرة الفخم -->
+    <!-- مودال الذاكرة - يعرض الجلسات -->
     <div class="modal-overlay" id="memoryModal">
         <div class="modal-box">
-            <h3><i class="fas fa-brain"></i> ذاكرة MEN Ai</h3>
+            <h3><i class="fas fa-brain"></i> ذاكرة MEN Ai (الجلسات)</h3>
             <div class="memory-list" id="memoryList">
                 <div class="memory-empty">لا توجد محادثات محفوظة بعد.</div>
             </div>
             <div class="memory-actions">
+                <button class="btn-new-session" id="newSessionBtn"><i class="fas fa-plus-circle"></i> محادثة جديدة</button>
                 <button class="btn-clear" id="clearMemoryBtn"><i class="fas fa-trash-alt"></i> مسح الكل</button>
                 <button class="modal-close" id="memoryModalClose">إغلاق</button>
             </div>
@@ -1887,21 +1901,20 @@
         <div class="modal-box">
             <h3><i class="fas fa-sliders-h"></i> إعدادات الذاكرة</h3>
             <div class="settings-group">
-                <label>الحد الأقصى للذاكرة (عدد الرسائل)</label>
+                <label>الحد الأقصى للرسائل في كل محادثة</label>
                 <div class="settings-input">
                     <select id="memoryLimitSelect">
                         <option value="12">12 (افتراضي)</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
                         <option value="200">200</option>
-                        <option value="500">500</option>
-                        <option value="1000">1000</option>
-                        <option value="2000">2000</option>
                     </select>
                     <span style="color:#6a708a;font-size:0.9rem;">أو أدخل قيمة مخصصة</span>
                     <input type="number" id="customLimitInput" min="1" max="10000" placeholder="مخصص" style="width:100px;">
                 </div>
-                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند تجاوز العدد، سيتم مسح كل الذاكرة تلقائياً.</p>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند تجاوز العدد في أي محادثة، سيتم حذف المحادثة بالكامل.</p>
             </div>
             <div class="settings-actions">
                 <button class="btn-clear-settings" id="clearMemorySettingsBtn"><i class="fas fa-trash-alt"></i> مسح الذاكرة</button>
@@ -1957,15 +1970,15 @@
         let extractedText = '';
 
         // ============================================================
-        //  إدارة الإعدادات والحد الأقصى للذاكرة
+        //  إدارة الذاكرة على شكل جلسات (مثل شات جي بي تي)
         // ============================================================
         const MEMORY_KEY = 'menChatMemory';
         const SETTINGS_KEY = 'menChatSettings';
 
-        // القيمة الافتراضية للحد الأقصى (12)
+        // الحد الأقصى للرسائل في كل جلسة
         const DEFAULT_LIMIT = 12;
+        let maxMessagesPerSession = loadSettings();
 
-        // قراءة الإعدادات المحفوظة
         function loadSettings() {
             try {
                 const saved = localStorage.getItem(SETTINGS_KEY);
@@ -1977,17 +1990,304 @@
             return DEFAULT_LIMIT;
         }
 
-        // حفظ الإعدادات
         function saveSettings(limit) {
             try {
                 localStorage.setItem(SETTINGS_KEY, JSON.stringify({ limit }));
+                maxMessagesPerSession = limit;
             } catch (e) {}
         }
 
-        let maxMemoryItems = loadSettings();
+        // هيكل التخزين: { sessions: [ { id, title, messages: [ {role, content, timestamp} ], lastUpdated } ], currentSessionId }
+        function getMemory() {
+            try {
+                const data = localStorage.getItem(MEMORY_KEY);
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    if (parsed.sessions && Array.isArray(parsed.sessions)) {
+                        return parsed;
+                    }
+                }
+            } catch (e) {}
+            return { sessions: [], currentSessionId: null };
+        }
+
+        function saveMemory(memory) {
+            try {
+                localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
+            } catch (e) {}
+        }
+
+        // إنشاء جلسة جديدة
+        function createNewSession(title) {
+            const memory = getMemory();
+            const id = Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 5);
+            const session = {
+                id: id,
+                title: title || 'محادثة جديدة',
+                messages: [],
+                lastUpdated: new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })
+            };
+            memory.sessions.unshift(session); // إضافة في البداية
+            memory.currentSessionId = id;
+            saveMemory(memory);
+            return id;
+        }
+
+        // الحصول على الجلسة الحالية
+        function getCurrentSession() {
+            const memory = getMemory();
+            if (!memory.currentSessionId || !memory.sessions.some(s => s.id === memory.currentSessionId)) {
+                // إذا لم تكن هناك جلسة حالية، أنشئ واحدة
+                const id = createNewSession('محادثة جديدة');
+                memory.currentSessionId = id;
+                saveMemory(memory);
+            }
+            return memory.sessions.find(s => s.id === memory.currentSessionId);
+        }
+
+        // تعيين جلسة حالية
+        function setCurrentSession(sessionId) {
+            const memory = getMemory();
+            if (memory.sessions.some(s => s.id === sessionId)) {
+                memory.currentSessionId = sessionId;
+                saveMemory(memory);
+                return true;
+            }
+            return false;
+        }
+
+        // حفظ رسالة في الجلسة الحالية
+        function saveToMemory(role, content) {
+            try {
+                const memory = getMemory();
+                let session = memory.sessions.find(s => s.id === memory.currentSessionId);
+                if (!session) {
+                    // إذا لم توجد جلسة حالية، أنشئ واحدة
+                    const id = createNewSession('محادثة جديدة');
+                    memory.currentSessionId = id;
+                    session = memory.sessions.find(s => s.id === id);
+                }
+                const timestamp = new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' });
+                session.messages.push({ role, content, timestamp });
+                session.lastUpdated = timestamp;
+                // تحديث العنوان إذا كانت أول رسالة من المستخدم
+                if (role === 'user' && session.messages.length === 1) {
+                    const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
+                    session.title = title || 'محادثة جديدة';
+                }
+                // التحقق من الحد الأقصى
+                if (session.messages.length > maxMessagesPerSession) {
+                    // حذف الجلسة بالكامل
+                    const index = memory.sessions.findIndex(s => s.id === session.id);
+                    if (index !== -1) {
+                        memory.sessions.splice(index, 1);
+                        // إذا كانت هذه الجلسة هي الحالية، نعيد تعيينها
+                        if (memory.currentSessionId === session.id) {
+                            memory.currentSessionId = null;
+                            // إنشاء جلسة جديدة تلقائياً
+                            const newId = createNewSession('محادثة جديدة');
+                            memory.currentSessionId = newId;
+                        }
+                        saveMemory(memory);
+                        // نعيد تحميل الجلسة الجديدة
+                        return;
+                    }
+                }
+                saveMemory(memory);
+            } catch (e) { console.warn('فشل حفظ الذاكرة:', e); }
+        }
+
+        // تحميل كل الجلسات وعرضها في المودال
+        function loadMemory() {
+            try {
+                const memory = getMemory();
+                renderMemoryList(memory.sessions);
+            } catch (e) {
+                console.warn('فشل تحميل الذاكرة:', e);
+                document.getElementById('memoryList').innerHTML =
+                    '<div class="memory-empty">حدث خطأ في تحميل الذاكرة.</div>';
+            }
+        }
+
+        // عرض قائمة الجلسات
+        function renderMemoryList(sessions) {
+            const container = document.getElementById('memoryList');
+            if (!sessions || sessions.length === 0) {
+                container.innerHTML = '<div class="memory-empty">📭 لا توجد محادثات محفوظة بعد.</div>';
+                return;
+            }
+            let html = '';
+            sessions.forEach(session => {
+                const msgCount = session.messages.length;
+                const title = session.title || 'محادثة بدون عنوان';
+                const lastUpdated = session.lastUpdated || '';
+                html += `
+                    <div class="memory-item" data-session-id="${session.id}">
+                        <div class="memory-content">
+                            <span class="memory-title">${escapeHtml(title)}</span>
+                            <span class="memory-count">(${msgCount} رسالة)</span>
+                            <span class="memory-time">${lastUpdated}</span>
+                        </div>
+                        <button class="memory-delete" data-session-id="${session.id}" title="حذف الجلسة"><i class="fas fa-times"></i></button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+
+            // مستمعات الأحداث
+            container.querySelectorAll('.memory-item').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    if (e.target.closest('.memory-delete')) return;
+                    const sessionId = this.dataset.sessionId;
+                    restoreSession(sessionId);
+                });
+                const delBtn = el.querySelector('.memory-delete');
+                delBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const sessionId = this.dataset.sessionId;
+                    deleteSession(sessionId);
+                });
+            });
+        }
+
+        // حذف جلسة
+        function deleteSession(sessionId) {
+            if (!confirm('هل تريد حذف هذه المحادثة؟')) return;
+            try {
+                const memory = getMemory();
+                const index = memory.sessions.findIndex(s => s.id === sessionId);
+                if (index !== -1) {
+                    memory.sessions.splice(index, 1);
+                    if (memory.currentSessionId === sessionId) {
+                        memory.currentSessionId = null;
+                        // إذا بقيت جلسات، نختار أولها، وإلا ننشئ جديدة
+                        if (memory.sessions.length > 0) {
+                            memory.currentSessionId = memory.sessions[0].id;
+                        } else {
+                            const newId = createNewSession('محادثة جديدة');
+                            memory.currentSessionId = newId;
+                        }
+                    }
+                    saveMemory(memory);
+                    loadMemory();
+                }
+            } catch (e) { console.warn('فشل حذف الجلسة:', e); }
+        }
+
+        // مسح كل الجلسات
+        function clearAllSessions() {
+            if (!confirm('هل تريد مسح كل المحادثات المحفوظة؟')) return;
+            try {
+                const memory = { sessions: [], currentSessionId: null };
+                saveMemory(memory);
+                // إنشاء جلسة جديدة
+                const newId = createNewSession('محادثة جديدة');
+                memory.currentSessionId = newId;
+                saveMemory(memory);
+                loadMemory();
+                // إغلاق المودال
+                document.getElementById('memoryModal').classList.remove('active');
+                document.getElementById('settingsModal').classList.remove('active');
+                // إعادة تحميل الجلسة الحالية
+                loadCurrentSession();
+            } catch (e) { console.warn('فشل مسح الذاكرة:', e); }
+        }
+
+        // استرجاع آخر رسالة من جلسة محددة إلى حقل الإدخال
+        function restoreSession(sessionId) {
+            try {
+                const memory = getMemory();
+                const session = memory.sessions.find(s => s.id === sessionId);
+                if (!session) return;
+                // تعيين الجلسة الحالية
+                setCurrentSession(sessionId);
+                // استرجاع آخر رسالة من المستخدم أو البوت
+                const lastUserMsg = session.messages.filter(m => m.role === 'user').pop();
+                if (lastUserMsg) {
+                    document.getElementById('messageInput').value = lastUserMsg.content;
+                    document.getElementById('messageInput').dispatchEvent(new Event('input'));
+                    document.getElementById('messageInput').focus();
+                } else {
+                    // إذا لم توجد رسالة مستخدم، نضع أول رسالة
+                    if (session.messages.length > 0) {
+                        document.getElementById('messageInput').value = session.messages[0].content;
+                        document.getElementById('messageInput').dispatchEvent(new Event('input'));
+                        document.getElementById('messageInput').focus();
+                    }
+                }
+                // إغلاق المودال
+                document.getElementById('memoryModal').classList.remove('active');
+                // عرض رسالة في الشات تشير إلى تغيير الجلسة
+                const area = document.getElementById('messagesArea');
+                const infoMsg = document.createElement('div');
+                infoMsg.className = 'message bot';
+                infoMsg.innerHTML = ` تم التبديل إلى المحادثة: <strong>${escapeHtml(session.title)}</strong><span class="msg-time">الآن</span>`;
+                area.appendChild(infoMsg);
+                scrollToBottom();
+            } catch (e) { console.warn('فشل استرجاع الجلسة:', e); }
+        }
+
+        // تحميل الجلسة الحالية وعرض رسائلها في الشات
+        function loadCurrentSession() {
+            const session = getCurrentSession();
+            if (!session) return;
+            const area = document.getElementById('messagesArea');
+            // مسح الرسائل الحالية (باستثناء الترحيب؟)
+            // سنقوم بحذف كل الرسائل وإعادة بناء التاريخ
+            // لكننا سنحتفظ برسالة الترحيب إذا كانت فارغة
+            // نستخدم حل بسيط: نمسح ونعرض رسائل الجلسة
+            area.innerHTML = '';
+            session.messages.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = `message ${msg.role}`;
+                div.innerHTML = escapeHtml(msg.content) + `<span class="msg-time">${msg.timestamp || 'الآن'}</span>`;
+                area.appendChild(div);
+            });
+            if (session.messages.length === 0) {
+                // عرض رسالة ترحيب
+                const welcome = document.createElement('div');
+                welcome.className = 'message bot';
+                welcome.innerHTML = buildWelcomeMessage() + `<span class="msg-time">الآن</span>`;
+                area.appendChild(welcome);
+                // تأثير الكتابة
+                const typewriterElement = document.getElementById('typewriterText');
+                if (typewriterElement) {
+                    const fullText = 'مرحبا بك في MEN Ai';
+                    typeTextEffect(typewriterElement, fullText, 70).then(() => {
+                        typewriterElement.innerHTML = fullText.replace('MEN Ai', '<span class="highlight">MEN Ai</span>');
+                        const cursor = document.getElementById('typewriterCursor');
+                        if (cursor) cursor.style.display = 'none';
+                    });
+                }
+            }
+            scrollToBottom();
+        }
+
+        // دالة مساعدة لبناء رسالة الترحيب (نفسها)
+        function buildWelcomeMessage() {
+            return `
+                <div class="welcome-animation">
+                    <div class="welcome-main">
+                        <span class="letter" style="animation-delay: 0s;"></span>
+                        <span class="letter" style="animation-delay: 0.12s;"></span>
+                        <span class="letter" style="animation-delay: 0.24s;"></span>
+                        <span class="letter" style="animation-delay: 0.36s;"></span>
+                        <span class="letter" style="animation-delay: 0.48s;"></span>
+                        <span class="letter" style="animation-delay: 0.60s;"></span>
+                    </div>
+                    <div class="typewriter-container">
+                        <span class="typewriter-text" id="typewriterText"></span>
+                        <span class="typewriter-cursor" id="typewriterCursor"></span>
+                    </div>
+                    <div class="welcome-desc">
+                        <i class="fas fa-circle-notch"></i> أنا هنا لمساعدتك اسألني عن أي شيء!
+                    </div>
+                </div>
+            `;
+        }
 
         // ============================================================
-        //  دوال الردود والمنتجات
+        //  دوال الردود والمنتجات (نفس السابق)
         // ============================================================
         function getReply(category) {
             const list = responses[category]?.responses;
@@ -2018,27 +2318,15 @@
         function evaluateMath(text) {
             const match = text.match(/(\d+)\s*([+\-*/])\s*(\d+)/);
             if (!match) return null;
-            const a = parseFloat(match[1]),
-                op = match[2],
-                b = parseFloat(match[3]);
+            const a = parseFloat(match[1]), op = match[2], b = parseFloat(match[3]);
             if (isNaN(a) || isNaN(b)) return null;
             let result;
             switch (op) {
-                case '+':
-                    result = a + b;
-                    break;
-                case '-':
-                    result = a - b;
-                    break;
-                case '*':
-                    result = a * b;
-                    break;
-                case '/':
-                    if (b === 0) return 'لا يمكن القسمة على صفر';
-                    result = a / b;
-                    break;
-                default:
-                    return null;
+                case '+': result = a + b; break;
+                case '-': result = a - b; break;
+                case '*': result = a * b; break;
+                case '/': if (b === 0) return 'لا يمكن القسمة على صفر'; result = a / b; break;
+                default: return null;
             }
             return Number.isInteger(result) ? result : result.toFixed(2);
         }
@@ -2096,7 +2384,7 @@
         }
 
         // ============================================================
-        //  دوال استخراج النص من الملفات
+        //  دوال استخراج النص من الملفات (نفس السابق)
         // ============================================================
         async function extractTextFromFile(file) {
             const fileType = file.type;
@@ -2126,16 +2414,14 @@
                     return fullText || 'لم يتم العثور على نص في ملف PDF.';
                 } catch (e) { return 'حدث خطأ أثناء قراءة ملف PDF.'; }
             }
-            if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileName.endsWith(
-                    '.docx')) {
+            if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileName.endsWith('.docx')) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
                     const result = await mammoth.extractRawText({ arrayBuffer });
                     return result.value || 'الملف فارغ أو لا يحتوي على نص.';
                 } catch (e) { return 'حدث خطأ أثناء قراءة ملف Word.'; }
             }
-            if (fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || fileName.endsWith(
-                    '.xlsx') || fileName.endsWith('.xls')) {
+            if (fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
                     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
@@ -2195,7 +2481,6 @@
         }
 
         const fileInput = document.getElementById('fileInput');
-        const attachBtn = document.getElementById('attachBtn');
         const removeFileBtn = document.getElementById('removeFile');
 
         fileInput.addEventListener('change', function(e) {
@@ -2215,125 +2500,8 @@
         removeFileBtn.addEventListener('click', hideAttachedFile);
 
         // ============================================================
-        //  دوال الذاكرة (فخمة) مع الإدارة التلقائية
+        //  ربط أزرار الذاكرة والإعدادات
         // ============================================================
-        function saveToMemory(role, content) {
-            try {
-                let memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
-                const timestamp = new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' });
-                memory.push({ role, content, timestamp });
-
-                // التحقق من العدد ومسح الكل إذا تجاوز الحد
-                if (memory.length > maxMemoryItems) {
-                    // مسح الكل
-                    localStorage.removeItem(MEMORY_KEY);
-                    memory = [];
-                    // يمكن إضافة رسالة تنبيه أو تسجيل
-                    console.log(`تم مسح الذاكرة لأنها تجاوزت الحد (${maxMemoryItems})`);
-                } else {
-                    // حفظ محدث
-                    localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
-                }
-            } catch (e) { console.warn('فشل حفظ الذاكرة:', e); }
-        }
-
-        function loadMemory() {
-            try {
-                const memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
-                renderMemoryList(memory);
-            } catch (e) {
-                console.warn('فشل تحميل الذاكرة:', e);
-                document.getElementById('memoryList').innerHTML =
-                    '<div class="memory-empty">حدث خطأ في تحميل الذاكرة.</div>';
-            }
-        }
-
-        function renderMemoryList(memory) {
-            const container = document.getElementById('memoryList');
-            if (!memory || memory.length === 0) {
-                container.innerHTML = '<div class="memory-empty">📭 لا توجد محادثات محفوظة بعد.</div>';
-                return;
-            }
-            const reversed = [...memory].reverse();
-            let html = '';
-            reversed.forEach((item, index) => {
-                const originalIndex = memory.length - 1 - index;
-                const roleClass = item.role === 'user' ? 'user' : 'bot';
-                const roleIcon = item.role === 'user' ? '👤' : '🤖';
-                let displayText = item.content;
-                if (item.role === 'user') {
-                    const words = item.content.trim().split(/\s+/);
-                    if (words.length > 3) {
-                        displayText = words.slice(0, 3).join(' ') + '...';
-                    } else {
-                        displayText = words.join(' ');
-                    }
-                }
-                if (item.role === 'bot' && item.content.length > 50) {
-                    displayText = item.content.substring(0, 50) + '...';
-                }
-                html += `
-                    <div class="memory-item" data-index="${originalIndex}">
-                        <div class="memory-content" data-full="${escapeHtml(item.content)}">
-                            <span class="memory-role ${roleClass}">${roleIcon} ${item.role === 'user' ? 'أنت' : 'MEN Ai'}</span>
-                            <span class="memory-text">${escapeHtml(displayText)}</span>
-                            <span class="memory-time">${item.timestamp || ''}</span>
-                        </div>
-                        <button class="memory-delete" data-index="${originalIndex}" title="حذف"><i class="fas fa-times"></i></button>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-
-            container.querySelectorAll('.memory-item').forEach(el => {
-                el.addEventListener('click', function(e) {
-                    if (e.target.closest('.memory-delete')) return;
-                    const idx = parseInt(this.dataset.index);
-                    restoreConversation(idx);
-                });
-                const delBtn = el.querySelector('.memory-delete');
-                delBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const idx = parseInt(this.dataset.index);
-                    deleteMemoryItem(idx);
-                });
-            });
-        }
-
-        function deleteMemoryItem(index) {
-            try {
-                let memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
-                if (index >= 0 && index < memory.length) {
-                    memory.splice(index, 1);
-                    localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
-                    loadMemory();
-                }
-            } catch (e) { console.warn('فشل حذف العنصر:', e); }
-        }
-
-        function clearMemory() {
-            if (!confirm('هل تريد مسح كل سجل المحادثات؟')) return;
-            localStorage.removeItem(MEMORY_KEY);
-            loadMemory();
-            // إغلاق المودال إن كان مفتوحاً
-            document.getElementById('memoryModal').classList.remove('active');
-            document.getElementById('settingsModal').classList.remove('active');
-        }
-
-        function restoreConversation(index) {
-            try {
-                const memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
-                if (index < 0 || index >= memory.length) return;
-                const item = memory[index];
-                const fullText = item.content;
-                document.getElementById('messageInput').value = fullText;
-                document.getElementById('messageInput').dispatchEvent(new Event('input'));
-                document.getElementById('messageInput').focus();
-                document.getElementById('memoryModal').classList.remove('active');
-            } catch (e) { console.warn('فشل استرجاع المحادثة:', e); }
-        }
-
-        // ربط أزرار الذاكرة
         document.getElementById('memoryBtn').addEventListener('click', function() {
             loadMemory();
             document.getElementById('memoryModal').classList.add('active');
@@ -2344,7 +2512,23 @@
         document.getElementById('memoryModal').addEventListener('click', function(e) {
             if (e.target === this) this.classList.remove('active');
         });
-        document.getElementById('clearMemoryBtn').addEventListener('click', clearMemory);
+        document.getElementById('clearMemoryBtn').addEventListener('click', clearAllSessions);
+
+        // زر محادثة جديدة
+        document.getElementById('newSessionBtn').addEventListener('click', function() {
+            const newId = createNewSession('محادثة جديدة');
+            setCurrentSession(newId);
+            document.getElementById('memoryModal').classList.remove('active');
+            // إعادة تحميل الشات
+            loadCurrentSession();
+            // عرض رسالة
+            const area = document.getElementById('messagesArea');
+            const infoMsg = document.createElement('div');
+            infoMsg.className = 'message bot';
+            infoMsg.innerHTML = `✨ تم إنشاء محادثة جديدة. <span class="msg-time">الآن</span>`;
+            area.appendChild(infoMsg);
+            scrollToBottom();
+        });
 
         // ============================================================
         //  إعدادات الذاكرة (مودال الإعدادات)
@@ -2357,11 +2541,8 @@
         const applySettingsBtn = document.getElementById('applySettingsBtn');
         const clearMemorySettingsBtn = document.getElementById('clearMemorySettingsBtn');
 
-        // فتح مودال الإعدادات
         settingsBtn.addEventListener('click', function() {
-            // تحميل القيمة الحالية في الواجهة
-            const currentLimit = maxMemoryItems;
-            // محاولة مطابقة القيمة مع الخيارات
+            const currentLimit = maxMessagesPerSession;
             const options = memoryLimitSelect.options;
             let found = false;
             for (let opt of options) {
@@ -2372,7 +2553,7 @@
                 }
             }
             if (!found) {
-                memoryLimitSelect.value = '12'; // افتراضي
+                memoryLimitSelect.value = '12';
                 customLimitInput.value = currentLimit;
             } else {
                 customLimitInput.value = '';
@@ -2387,10 +2568,8 @@
             if (e.target === this) this.classList.remove('active');
         });
 
-        // تطبيق الإعدادات
         applySettingsBtn.addEventListener('click', function() {
             let newLimit = parseInt(memoryLimitSelect.value);
-            // إذا كان الخيار "مخصص" نأخذ من المدخل
             if (memoryLimitSelect.value === 'custom') {
                 const customVal = parseInt(customLimitInput.value);
                 if (!isNaN(customVal) && customVal > 0) {
@@ -2404,42 +2583,34 @@
                 alert('الرجاء إدخال عدد صحيح موجب.');
                 return;
             }
-            // تطبيق الحد الجديد
-            maxMemoryItems = newLimit;
             saveSettings(newLimit);
-            // التحقق من الذاكرة الحالية ومسحها إذا تجاوزت الحد الجديد
-            try {
-                let memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
-                if (memory.length > maxMemoryItems) {
-                    localStorage.removeItem(MEMORY_KEY);
-                    memory = [];
-                    alert(`تم مسح الذاكرة لأنها تجاوزت الحد الجديد (${maxMemoryItems})`);
-                }
-            } catch (e) {}
             settingsModal.classList.remove('active');
-            // إعادة تحميل الذاكرة في حال فتحها لاحقاً
+            // التحقق من الجلسات الحالية وحذف أي جلسة تتجاوز الحد
+            const memory = getMemory();
+            let changed = false;
+            memory.sessions = memory.sessions.filter(session => {
+                if (session.messages.length > newLimit) {
+                    changed = true;
+                    return false;
+                }
+                return true;
+            });
+            if (changed) {
+                if (!memory.sessions.some(s => s.id === memory.currentSessionId)) {
+                    memory.currentSessionId = memory.sessions.length > 0 ? memory.sessions[0].id : null;
+                    if (!memory.currentSessionId) {
+                        const newId = createNewSession('محادثة جديدة');
+                        memory.currentSessionId = newId;
+                    }
+                }
+                saveMemory(memory);
+                loadCurrentSession();
+                alert(`تم حذف المحادثات التي تجاوزت الحد الجديد (${newLimit})`);
+            }
             loadMemory();
         });
 
-        // مسح الذاكرة من الإعدادات
-        clearMemorySettingsBtn.addEventListener('click', function() {
-            clearMemory();
-            settingsModal.classList.remove('active');
-        });
-
-        // عند تغيير القائمة المنسدلة، نضبط المدخل المخصص
-        memoryLimitSelect.addEventListener('change', function() {
-            if (this.value === 'custom') {
-                customLimitInput.style.display = 'inline-block';
-                customLimitInput.focus();
-            } else {
-                customLimitInput.style.display = 'none';
-            }
-        });
-        // التحقق من وجود قيمة مخصصة مسبقة
-        if (memoryLimitSelect.value !== 'custom') {
-            customLimitInput.style.display = 'none';
-        }
+        clearMemorySettingsBtn.addEventListener('click', clearAllSessions);
 
         // ============================================================
         //  دوال إنشاء الرد الذكي
@@ -2480,28 +2651,6 @@
         // ============================================================
         //  دوال واجهة المستخدم
         // ============================================================
-        function buildWelcomeMessage() {
-            return `
-                <div class="welcome-animation">
-                    <div class="welcome-main">
-                        <span class="letter" style="animation-delay: 0s;"></span>
-                        <span class="letter" style="animation-delay: 0.12s;"></span>
-                        <span class="letter" style="animation-delay: 0.24s;"></span>
-                        <span class="letter" style="animation-delay: 0.36s;"></span>
-                        <span class="letter" style="animation-delay: 0.48s;"></span>
-                        <span class="letter" style="animation-delay: 0.60s;"></span>
-                    </div>
-                    <div class="typewriter-container">
-                        <span class="typewriter-text" id="typewriterText"></span>
-                        <span class="typewriter-cursor" id="typewriterCursor"></span>
-                    </div>
-                    <div class="welcome-desc">
-                        <i class="fas fa-circle-notch"></i> أنا هنا لمساعدتك اسألني عن أي شيء!
-                    </div>
-                </div>
-            `;
-        }
-
         function typeTextEffect(element, text, speed = 60) {
             return new Promise((resolve) => {
                 let index = 0;
@@ -2707,23 +2856,23 @@
                     userContent += `\n[ملف: ${attachedFile.name}]\n${fileText}`;
                 }
 
+                // عرض رسالة المستخدم
                 const userMsg = document.createElement('div');
                 userMsg.className = 'message user';
-                let userDisplay = text || '📎 أرسل ملفاً';
+                let userDisplay = text || ' أرسل ملفاً';
                 if (attachedFile) {
                     userDisplay += ` <span style="color:#4a7aff;font-size:0.8rem;">📎 ${attachedFile.name}</span>`;
                 }
                 userMsg.innerHTML = escapeHtml(userDisplay) + `<span class="msg-time">الآن</span>`;
                 messagesArea.appendChild(userMsg);
-                conversationHistory.push({ role: 'user', content: userContent });
-                if (conversationHistory.length > 10) conversationHistory.shift();
+                scrollToBottom();
 
+                // حفظ في الذاكرة (الجلسة الحالية)
                 saveToMemory('user', userContent);
 
                 messageInput.value = '';
                 messageInput.style.height = 'auto';
                 charCount.textContent = '0';
-                scrollToBottom();
 
                 typingIndicator.style.display = 'flex';
                 scrollToBottom();
@@ -2735,7 +2884,7 @@
                 let reply = await generateSmartReply(text || fileText || 'ملف');
                 if (attachedFile && fileText && fileText.length > 0) {
                     if (reply.type === 'text') {
-                        reply.content = `📄 لقد استخرجت النص من ملفك:\n"${fileText.substring(0, 200)}${fileText.length > 200 ? '...' : ''}"\n\n${reply.content}`;
+                        reply.content = ` لقد استخرجت النص من ملفك:\n"${fileText.substring(0, 200)}${fileText.length > 200 ? '...' : ''}"\n\n${reply.content}`;
                     }
                 }
 
@@ -2758,10 +2907,8 @@
                     replyContent = reply.content;
                 }
 
+                // حفظ رد البوت في الذاكرة
                 saveToMemory('bot', replyContent || 'تم عرض المنتج');
-
-                conversationHistory.push({ role: 'bot', content: replyContent || 'تم عرض المنتج' });
-                if (conversationHistory.length > 10) conversationHistory.shift();
 
                 await sendToDiscord(userContent, replyContent);
 
@@ -2945,22 +3092,10 @@
             await loadExternalLibraries();
             await Promise.all([loadResponses(), loadProducts()]);
 
-            messagesArea.innerHTML = '';
-            const welcomeMsg = document.createElement('div');
-            welcomeMsg.className = 'message bot';
-            welcomeMsg.innerHTML = buildWelcomeMessage() + `<span class="msg-time">الآن</span>`;
-            messagesArea.appendChild(welcomeMsg);
-            scrollToBottom();
+            // تحميل الجلسة الحالية وعرضها
+            loadCurrentSession();
 
-            const typewriterElement = document.getElementById('typewriterText');
-            if (typewriterElement) {
-                const fullText = 'مرحبا بك في MEN Ai';
-                await typeTextEffect(typewriterElement, fullText, 70);
-                typewriterElement.innerHTML = fullText.replace('MEN Ai', '<span class="highlight">MEN Ai</span>');
-                const cursor = document.getElementById('typewriterCursor');
-                if (cursor) cursor.style.display = 'none';
-            }
-
+            // تحميل الذاكرة (للإعدادات)
             loadMemory();
 
             messageInput.disabled = false;
@@ -2968,7 +3103,7 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع دعم الملفات والذاكرة الفخمة ✅');
+            console.log('MEN Ai جاهز مع دعم الجلسات  ');
         }
 
         // بدء التشغيل
