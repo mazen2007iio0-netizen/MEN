@@ -1529,7 +1529,7 @@
                 </button>
             </div>
             <div class="logo">
-                <img src="logo1.png" alt="MEN Ai" style="height:48px; filter: brightness(0) invert(1);">
+                <img src="" alt="MEN Ai" style="height:48px; filter: brightness(0) invert(1);">
             </div>
         </div>
     </header>
@@ -1922,7 +1922,7 @@
                 // index هنا هو الفهرس في المصفوفة المعكوسة، نريد الفهرس الأصلي للحذف
                 const originalIndex = memory.length - 1 - index;
                 const roleClass = item.role === 'user' ? 'user' : 'bot';
-                const roleIcon = item.role === 'user' ? '👤' : '🤖';
+                const roleIcon = item.role === 'user' ? '' : '';
                 const snippet = item.content.length > 60 ? item.content.substring(0, 60) + '…' : item.content;
                 html += `
                     <div class="memory-item" data-index="${originalIndex}">
