@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* === البداية === */
+        /* === جميع الأنماط كما هي، لم تتغير === */
         * {
             margin: 0;
             padding: 0;
@@ -1848,7 +1848,7 @@
 
                 <div class="suggested-questions" id="suggestedQuestions">
                     <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
-                    <button class="sq-btn" data-question=" MEN pass"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
+                    <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
                     <button class="sq-btn" data-question="كيف يمكنني التواصل مع الدعم؟"><i class="fas fa-headset"></i> التواصل مع الدعم</button>
                 </div>
 
@@ -2027,7 +2027,7 @@
                 messages: [],
                 lastUpdated: new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })
             };
-            memory.sessions.unshift(session); // إضافة في البداية
+            memory.sessions.unshift(session);
             memory.currentSessionId = id;
             saveMemory(memory);
             return id;
@@ -2037,7 +2037,6 @@
         function getCurrentSession() {
             const memory = getMemory();
             if (!memory.currentSessionId || !memory.sessions.some(s => s.id === memory.currentSessionId)) {
-                // إذا لم تكن هناك جلسة حالية، أنشئ واحدة
                 const id = createNewSession('محادثة جديدة');
                 memory.currentSessionId = id;
                 saveMemory(memory);
@@ -2062,7 +2061,6 @@
                 const memory = getMemory();
                 let session = memory.sessions.find(s => s.id === memory.currentSessionId);
                 if (!session) {
-                    // إذا لم توجد جلسة حالية، أنشئ واحدة
                     const id = createNewSession('محادثة جديدة');
                     memory.currentSessionId = id;
                     session = memory.sessions.find(s => s.id === id);
@@ -2070,26 +2068,23 @@
                 const timestamp = new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' });
                 session.messages.push({ role, content, timestamp });
                 session.lastUpdated = timestamp;
-                // تحديث العنوان إذا كانت أول رسالة من المستخدم
                 if (role === 'user' && session.messages.length === 1) {
                     const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
                     session.title = title || 'محادثة جديدة';
                 }
                 // التحقق من الحد الأقصى
                 if (session.messages.length > maxMessagesPerSession) {
-                    // حذف الجلسة بالكامل
                     const index = memory.sessions.findIndex(s => s.id === session.id);
                     if (index !== -1) {
                         memory.sessions.splice(index, 1);
-                        // إذا كانت هذه الجلسة هي الحالية، نعيد تعيينها
                         if (memory.currentSessionId === session.id) {
                             memory.currentSessionId = null;
-                            // إنشاء جلسة جديدة تلقائياً
                             const newId = createNewSession('محادثة جديدة');
                             memory.currentSessionId = newId;
                         }
                         saveMemory(memory);
-                        // نعيد تحميل الجلسة الجديدة
+                        // إعادة تحميل الجلسة الجديدة
+                        loadCurrentSession();
                         return;
                     }
                 }
@@ -2113,7 +2108,7 @@
         function renderMemoryList(sessions) {
             const container = document.getElementById('memoryList');
             if (!sessions || sessions.length === 0) {
-                container.innerHTML = '<div class="memory-empty">📭 لا توجد محادثات محفوظة بعد.</div>';
+                container.innerHTML = '<div class="memory-empty"> لا توجد محادثات محفوظة بعد.</div>';
                 return;
             }
             let html = '';
@@ -2134,7 +2129,6 @@
             });
             container.innerHTML = html;
 
-            // مستمعات الأحداث
             container.querySelectorAll('.memory-item').forEach(el => {
                 el.addEventListener('click', function(e) {
                     if (e.target.closest('.memory-delete')) return;
@@ -2160,7 +2154,6 @@
                     memory.sessions.splice(index, 1);
                     if (memory.currentSessionId === sessionId) {
                         memory.currentSessionId = null;
-                        // إذا بقيت جلسات، نختار أولها، وإلا ننشئ جديدة
                         if (memory.sessions.length > 0) {
                             memory.currentSessionId = memory.sessions[0].id;
                         } else {
@@ -2170,6 +2163,7 @@
                     }
                     saveMemory(memory);
                     loadMemory();
+                    loadCurrentSession();
                 }
             } catch (e) { console.warn('فشل حذف الجلسة:', e); }
         }
@@ -2180,15 +2174,12 @@
             try {
                 const memory = { sessions: [], currentSessionId: null };
                 saveMemory(memory);
-                // إنشاء جلسة جديدة
                 const newId = createNewSession('محادثة جديدة');
                 memory.currentSessionId = newId;
                 saveMemory(memory);
                 loadMemory();
-                // إغلاق المودال
                 document.getElementById('memoryModal').classList.remove('active');
                 document.getElementById('settingsModal').classList.remove('active');
-                // إعادة تحميل الجلسة الحالية
                 loadCurrentSession();
             } catch (e) { console.warn('فشل مسح الذاكرة:', e); }
         }
@@ -2199,57 +2190,45 @@
                 const memory = getMemory();
                 const session = memory.sessions.find(s => s.id === sessionId);
                 if (!session) return;
-                // تعيين الجلسة الحالية
                 setCurrentSession(sessionId);
-                // استرجاع آخر رسالة من المستخدم أو البوت
                 const lastUserMsg = session.messages.filter(m => m.role === 'user').pop();
                 if (lastUserMsg) {
                     document.getElementById('messageInput').value = lastUserMsg.content;
                     document.getElementById('messageInput').dispatchEvent(new Event('input'));
                     document.getElementById('messageInput').focus();
                 } else {
-                    // إذا لم توجد رسالة مستخدم، نضع أول رسالة
                     if (session.messages.length > 0) {
                         document.getElementById('messageInput').value = session.messages[0].content;
                         document.getElementById('messageInput').dispatchEvent(new Event('input'));
                         document.getElementById('messageInput').focus();
                     }
                 }
-                // إغلاق المودال
                 document.getElementById('memoryModal').classList.remove('active');
-                // عرض رسالة في الشات تشير إلى تغيير الجلسة
+                loadCurrentSession();
                 const area = document.getElementById('messagesArea');
                 const infoMsg = document.createElement('div');
                 infoMsg.className = 'message bot';
-                infoMsg.innerHTML = ` تم التبديل إلى المحادثة: <strong>${escapeHtml(session.title)}</strong><span class="msg-time">الآن</span>`;
+                infoMsg.innerHTML = `🔄 تم التبديل إلى المحادثة: <strong>${escapeHtml(session.title)}</strong><span class="msg-time">الآن</span>`;
                 area.appendChild(infoMsg);
                 scrollToBottom();
             } catch (e) { console.warn('فشل استرجاع الجلسة:', e); }
         }
 
-        // تحميل الجلسة الحالية وعرض رسائلها في الشات
+        // تحميل الجلسة الحالية وعرض رسائلها في الشات مع رسالة الترحيب
         function loadCurrentSession() {
             const session = getCurrentSession();
             if (!session) return;
             const area = document.getElementById('messagesArea');
-            // مسح الرسائل الحالية (باستثناء الترحيب؟)
-            // سنقوم بحذف كل الرسائل وإعادة بناء التاريخ
-            // لكننا سنحتفظ برسالة الترحيب إذا كانت فارغة
-            // نستخدم حل بسيط: نمسح ونعرض رسائل الجلسة
             area.innerHTML = '';
-            session.messages.forEach(msg => {
-                const div = document.createElement('div');
-                div.className = `message ${msg.role}`;
-                div.innerHTML = escapeHtml(msg.content) + `<span class="msg-time">${msg.timestamp || 'الآن'}</span>`;
-                area.appendChild(div);
-            });
+
+            // إذا كانت الجلسة فارغة، نعرض رسالة الترحيب
             if (session.messages.length === 0) {
-                // عرض رسالة ترحيب
-                const welcome = document.createElement('div');
-                welcome.className = 'message bot';
-                welcome.innerHTML = buildWelcomeMessage() + `<span class="msg-time">الآن</span>`;
-                area.appendChild(welcome);
-                // تأثير الكتابة
+                const welcomeDiv = document.createElement('div');
+                welcomeDiv.className = 'message bot';
+                welcomeDiv.innerHTML = buildWelcomeMessage() + `<span class="msg-time">الآن</span>`;
+                area.appendChild(welcomeDiv);
+                scrollToBottom();
+                // تشغيل تأثير الكتابة
                 const typewriterElement = document.getElementById('typewriterText');
                 if (typewriterElement) {
                     const fullText = 'مرحبا بك في MEN Ai';
@@ -2259,11 +2238,20 @@
                         if (cursor) cursor.style.display = 'none';
                     });
                 }
+                return;
             }
+
+            // عرض الرسائل المحفوظة
+            session.messages.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = `message ${msg.role}`;
+                div.innerHTML = escapeHtml(msg.content) + `<span class="msg-time">${msg.timestamp || 'الآن'}</span>`;
+                area.appendChild(div);
+            });
             scrollToBottom();
         }
 
-        // دالة مساعدة لبناء رسالة الترحيب (نفسها)
+        // دالة بناء رسالة الترحيب
         function buildWelcomeMessage() {
             return `
                 <div class="welcome-animation">
@@ -2284,6 +2272,23 @@
                     </div>
                 </div>
             `;
+        }
+
+        // تأثير الكتابة
+        function typeTextEffect(element, text, speed = 60) {
+            return new Promise((resolve) => {
+                let index = 0;
+                element.textContent = '';
+                const interval = setInterval(() => {
+                    if (index < text.length) {
+                        element.textContent += text.charAt(index);
+                        index++;
+                    } else {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                }, speed);
+            });
         }
 
         // ============================================================
@@ -2519,9 +2524,7 @@
             const newId = createNewSession('محادثة جديدة');
             setCurrentSession(newId);
             document.getElementById('memoryModal').classList.remove('active');
-            // إعادة تحميل الشات
             loadCurrentSession();
-            // عرض رسالة
             const area = document.getElementById('messagesArea');
             const infoMsg = document.createElement('div');
             infoMsg.className = 'message bot';
@@ -2651,22 +2654,6 @@
         // ============================================================
         //  دوال واجهة المستخدم
         // ============================================================
-        function typeTextEffect(element, text, speed = 60) {
-            return new Promise((resolve) => {
-                let index = 0;
-                element.textContent = '';
-                const interval = setInterval(() => {
-                    if (index < text.length) {
-                        element.textContent += text.charAt(index);
-                        index++;
-                    } else {
-                        clearInterval(interval);
-                        resolve();
-                    }
-                }, speed);
-            });
-        }
-
         function typeText(element, text, speed = 20) {
             return new Promise((resolve) => {
                 let index = 0;
@@ -2710,8 +2697,6 @@
         const voiceBtn = document.getElementById('voiceBtn');
 
         let isProcessing = false;
-        let conversationHistory = [];
-
         let recognition = null;
         let isRecording = false;
 
@@ -2861,7 +2846,7 @@
                 userMsg.className = 'message user';
                 let userDisplay = text || ' أرسل ملفاً';
                 if (attachedFile) {
-                    userDisplay += ` <span style="color:#4a7aff;font-size:0.8rem;">📎 ${attachedFile.name}</span>`;
+                    userDisplay += ` <span style="color:#4a7aff;font-size:0.8rem;"> ${attachedFile.name}</span>`;
                 }
                 userMsg.innerHTML = escapeHtml(userDisplay) + `<span class="msg-time">الآن</span>`;
                 messagesArea.appendChild(userMsg);
@@ -3092,7 +3077,7 @@
             await loadExternalLibraries();
             await Promise.all([loadResponses(), loadProducts()]);
 
-            // تحميل الجلسة الحالية وعرضها
+            // تحميل الجلسة الحالية (ستعرض الترحيب إذا كانت فارغة)
             loadCurrentSession();
 
             // تحميل الذاكرة (للإعدادات)
@@ -3103,7 +3088,7 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع دعم الجلسات  ');
+            console.log('MEN Ai جاهز مع دعم الجلسات ورسالة الترحيب ✅');
         }
 
         // بدء التشغيل
