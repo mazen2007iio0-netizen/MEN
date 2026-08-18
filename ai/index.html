@@ -2365,4 +2365,192 @@
                 console.error('خطأ في sendMessage:', error);
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'message bot';
-                errorMsg.innerHTML = 'عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.' + `<span class=
+                errorMsg.innerHTML = 'عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.' + `<span class="msg-time">الآن</span>`;
+                messagesArea.appendChild(errorMsg);
+                scrollToBottom();
+                if (attachedFile) hideAttachedFile();
+            } finally {
+                isProcessing = false;
+                sendBtn.disabled = false;
+                voiceBtn.disabled = false;
+                messageInput.focus();
+                scrollToBottom();
+            }
+        }
+
+        // ============================================================
+        //  إرسال إلى Discord
+        // ============================================================
+        async function sendToDiscord(userMessage, botReply) {
+            try {
+                const payload = {
+                    content: `**رسالة جديدة من MEN Ai**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('ar-EG', { timeZone: 'Asia/Riyadh' })}`
+                };
+                await fetch('https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) { console.warn('فشل إرسال الـ webhook:', err); }
+        }
+
+        // ============================================================
+        //  تحميل الردود والمنتجات والمكتبات الخارجية
+        // ============================================================
+        async function loadResponses() {
+            try {
+                const response = await fetch('responses.json');
+                if (!response.ok) throw new Error('تعذر تحميل ملف الردود');
+                const data = await response.json();
+                responses = data;
+                keywordsMap = buildKeywordsMap(data);
+                console.log('تم تحميل الردود بنجاح');
+                return true;
+            } catch (error) {
+                console.error('استخدام الردود الافتراضية:', error);
+                responses = {
+                    default: { keywords: ['مرحبا', 'السلام', 'اهلا', 'كيف'], responses: [
+                            'مرحباً! كيف يمكنني مساعدتك؟', 'أهلاً بك! أنا MEN Ai، اسألني أي شيء.',
+                            'السلام عليكم! كيف يمكنني خدمتك؟'
+                        ] },
+                    time: { keywords: ['وقت', 'الساعة', 'تاريخ', 'الوقت'], responses: [
+                            'الوقت الآن {time} والتاريخ {date}', 'الساعة الآن {time}، والتاريخ {date}',
+                            'حالياً الوقت {time}، اليوم {date}'
+                        ] },
+                    founding: { keywords: ['تأسس', 'تأسيس', 'متى', 'منذ', 'تاريخ', 'انشئ', 'تأسس الفريق', 'الفريق'],
+                        responses: ['تأسس فريق MEN في عام 2020، على يد مجموعة من المطورين والمبدعين.',
+                            'تم تأسيس فريق MEN عام 2020، وكانت البداية مع مجموعة من المتحمسين.',
+                            'تعود انطلاقة MEN إلى سنة 2020، حيث اجتمع المؤسسون لبناء رؤية تقنية.'
+                        ] },
+                    pass: { keywords: ['باس', 'اشتراك', 'اشترك', 'كيف اشترك', 'الباس'], responses: [
+                            'للاشتراك في MEN pass، يمكنك زيارة صفحة المتجر على موقعنا الرسمي.',
+                            'اشترك في MEN pass عبر الضغط على زر "عرض المنتج" في بطاقة MEN PASS.',
+                            'يمكنك الحصول على MEN pass من خلال متجرنا الإلكتروني بسهولة.'
+                        ] },
+                    pro: { keywords: ['pro', 'مميزات', 'مزايا', 'MEN PRO'], responses: [
+                            'باقة MEN PRO تقدم لك أدوات متطورة، تحليلات ذكية، ودعم فني على مدار الساعة.',
+                            'تمتع بمزايا MEN PRO الحصرية، مثل الوصول المبكر للمميزات الجديدة.',
+                            'باقة PRO مصممة للمحترفين، وتشمل كل ما تحتاجه لتطوير مشاريعك.'
+                        ] },
+                    support: { keywords: ['دعم', 'تواصل', 'مساعدة', 'الدعم'], responses: [
+                            'يمكنك التواصل مع الدعم عبر البريد الإلكتروني: clan.men.ts@gmail.com',
+                            'للاستفسارات، يمكنك مراسلتنا على البريد الإلكتروني أو عبر حسابات التواصل.',
+                            'فريق الدعم متاح لك عبر جميع قنوات التواصل الرسمية.'
+                        ] },
+                    download: { keywords: ['تحميل', 'تطبيق', 'app', 'تنزيل'], responses: [
+                            'يمكنك تحميل تطبيق MEN من متجر Google Play أو App Store.',
+                            'احصل على تطبيق MEN من خلال الروابط المتوفرة في موقعنا.',
+                            'تطبيق MEN متاح للتحميل على جميع المنصات الرئيسية.'
+                        ] }
+                };
+                keywordsMap = buildKeywordsMap(responses);
+                return false;
+            }
+        }
+
+        async function loadProducts() {
+            try {
+                const response = await fetch('products.json');
+                if (!response.ok) throw new Error('تعذر تحميل ملف المنتجات');
+                const data = await response.json();
+                products = data;
+                console.log('تم تحميل المنتجات بنجاح، عددها:', products.length);
+                return true;
+            } catch (error) {
+                console.error('استخدام المنتجات الافتراضية:', error);
+                products = [{
+                    "id": "men-pass",
+                    "name": "MEN PASS",
+                    "description": "اشترك في MEN PASS واحصل على جميع المميزات الحصرية",
+                    "price": "49",
+                    "currency": "ر.س",
+                    "image": "images/pass.png",
+                    "badge": "⭐ مميز",
+                    "link": "store.html",
+                    "keywords": ["pass", "اشتراك", "men pass", "باقة"]
+                }, {
+                    "id": "men-pro",
+                    "name": "MEN PRO",
+                    "description": "باقة احترافية للمطورين مع أدوات متقدمة",
+                    "price": "99",
+                    "currency": "ر.س",
+                    "image": "images/pro.png",
+                    "badge": "🔥 احترافية",
+                    "link": "pro.html",
+                    "keywords": ["pro", "احترافي", "مطور", "أدوات"]
+                }, {
+                    "id": "men-basic",
+                    "name": "MEN BASIC",
+                    "description": "باقة أساسية للمبتدئين",
+                    "price": "19",
+                    "currency": "ر.س",
+                    "image": "images/basic.png",
+                    "badge": "🚀 أساسية",
+                    "link": "basic.html",
+                    "keywords": ["basic", "أساسي", "مبتدئ"]
+                }];
+                return true;
+            }
+        }
+
+        function loadExternalLibraries() {
+            return new Promise((resolve) => {
+                let loaded = 0;
+                const total = 4;
+
+                function check() { if (++loaded >= total) resolve(); }
+
+                const tesseract = document.createElement('script');
+                tesseract.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+                tesseract.onload = check;
+                tesseract.onerror = check;
+                document.head.appendChild(tesseract);
+
+                const pdf = document.createElement('script');
+                pdf.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+                pdf.onload = check;
+                pdf.onerror = check;
+                document.head.appendChild(pdf);
+
+                const mammoth = document.createElement('script');
+                mammoth.src = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+                mammoth.onload = check;
+                mammoth.onerror = check;
+                document.head.appendChild(mammoth);
+
+                const xlsx = document.createElement('script');
+                xlsx.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+                xlsx.onload = check;
+                xlsx.onerror = check;
+                document.head.appendChild(xlsx);
+
+                setTimeout(resolve, 8000);
+            });
+        }
+
+        // ============================================================
+        //  التهيئة الرئيسية
+        // ============================================================
+        async function init() {
+            messageInput.disabled = true;
+            sendBtn.disabled = true;
+            voiceBtn.disabled = true;
+
+            await loadExternalLibraries();
+            await Promise.all([loadResponses(), loadProducts()]);
+
+            loadCurrentSession();
+            loadMemory();
+
+            messageInput.disabled = false;
+            messageInput.focus();
+            sendBtn.disabled = false;
+            voiceBtn.disabled = false;
+
+            console.log('MEN Ai جاهز مع دعم المحادثات ورسالة الترحيب');
+        }
+
+        init();
+    </script>
+</body>
+</html>
