@@ -5,44 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEN Ai</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* ============================================================
-           MEN Ai — Royal / Luxury Edition
-           Palette: obsidian void + deep royal sapphire + champagne gold
-           Type: Amiri (display, ornamental) + Cairo (interface, body)
-           Signature: the gold "seal" emblem — a faceted diamond mark
-           used at the bot avatar, the header divider and card corners,
-           standing in for the brand's crest across the whole product.
-        ============================================================ */
+        /* === جميع الأنماط كما هي، لم تتغير === */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        :root {
-            --void: #050609;
-            --obsidian: #0a0c14;
-            --sapphire-deep: #050b2e;
-            --sapphire: #0d1a5c;
-            --sapphire-mid: #1c3384;
-            --sapphire-light: #4d6fe0;
-            --gold: #4a7aff;
-            --gold-bright: #8fb0ff;
-            --gold-dim: #1a3a9e;
-            --ivory: #f3efe4;
-            --ivory-dim: #a9a493;
-            --card-bg: rgba(8, 11, 24, 0.86);
-            --card-border: rgba(74, 122, 255, 0.16);
-            --radius-xl: 22px;
-            --radius-2xl: 36px;
-            --glow-royal: 0 0 40px rgba(77, 111, 224, 0.10), 0 0 1px rgba(74, 122, 255, 0.25);
-        }
         body {
             font-family: 'Cairo', sans-serif;
-            background: var(--void);
-            color: var(--ivory);
+            background: #000000;
+            color: #f0f4ff;
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -50,10 +25,10 @@
             width: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: var(--void);
+            background: #000000;
         }
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, var(--gold-dim), var(--sapphire-mid));
+            background: linear-gradient(180deg, #021ca4, #1a3a9e);
             border-radius: 12px;
         }
 
@@ -65,25 +40,18 @@
             height: 100%;
             z-index: -2;
             background:
-                radial-gradient(ellipse at 18% 22%, rgba(13, 26, 92, 0.35) 0%, transparent 52%),
-                radial-gradient(ellipse at 82% 12%, rgba(74, 122, 255, 0.06) 0%, transparent 45%),
-                radial-gradient(ellipse at 78% 78%, rgba(28, 51, 132, 0.20) 0%, transparent 55%),
-                radial-gradient(ellipse at 50% 50%, #05060a 0%, #000000 100%);
-            animation: ambientFloat 24s ease-in-out infinite alternate;
-        }
-        .bg-ambient::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(74, 122, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(74, 122, 255, 0.02) 1px, transparent 1px);
-            background-size: 64px 64px;
-            opacity: 0.5;
+                radial-gradient(ellipse at 20% 30%, rgba(2, 28, 164, 0.15) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 70%, rgba(26, 58, 158, 0.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, #000000 0%, #000000 100%);
+            animation: ambientFloat 20s ease-in-out infinite alternate;
         }
         @keyframes ambientFloat {
-            0% { transform: scale(1) rotate(0deg); }
-            100% { transform: scale(1.06) rotate(1.5deg); }
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+            100% {
+                transform: scale(1.05) rotate(2deg);
+            }
         }
 
         .container {
@@ -92,29 +60,27 @@
             margin: 0 auto;
             padding: 0 18px;
         }
-
-        /* ===== الشعار (الختم الذهبي) — العنصر المميز ===== */
-        .seal {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 1em;
-            height: 1em;
-            position: relative;
-            flex-shrink: 0;
+        :root {
+            --blue-deep: #021ca4;
+            --blue-mid: #1a3a9e;
+            --blue-light: #4a7aff;
+            --blue-glow: rgba(74, 122, 255, 0.2);
+            --card-bg: rgba(10, 16, 32, 0.85);
+            --card-border: rgba(2, 28, 164, 0.25);
+            --radius-xl: 24px;
+            --radius-2xl: 40px;
+            --glow-neon: 0 0 30px rgba(74, 122, 255, 0.15);
         }
-        .seal svg { width: 100%; height: 100%; display: block; }
-        .seal .facet { fill: none; stroke: url(#sealGrad); stroke-width: 1.1; }
 
         header {
-            background: rgba(5, 6, 9, 0.94);
+            background: rgba(0, 0, 0, 0.92);
             backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(74, 122, 255, 0.10);
+            border-bottom: 1px solid rgba(2, 28, 164, 0.10);
             padding: 12px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 34px rgba(0, 0, 0, 0.85);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
         }
         .header-content {
             display: flex;
@@ -134,6 +100,7 @@
             gap: 12px;
         }
 
+        /* === أزرار جديدة فخمة === */
         .btn-back,
         .btn-memory,
         .btn-settings {
@@ -141,19 +108,19 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(74, 122, 255, 0.16);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(74, 122, 255, 0.15);
             border-radius: 40px;
             padding: 0 20px;
             height: 44px;
-            color: #b8b2a0;
+            color: #b0c4e8;
             font-size: 1rem;
             cursor: pointer;
-            transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             text-decoration: none;
             font-family: 'Cairo', sans-serif;
             backdrop-filter: blur(8px);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
         }
@@ -164,8 +131,8 @@
             position: absolute;
             inset: 0;
             border-radius: 40px;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(74, 122, 255, 0.5), transparent, rgba(77, 111, 224, 0.4));
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(74, 122, 255, 0.2), transparent, rgba(74, 122, 255, 0.2));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
@@ -180,110 +147,109 @@
         .btn-back i,
         .btn-memory i,
         .btn-settings i {
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             transition: 0.3s;
         }
         .btn-back .back-text,
         .btn-memory .memory-text,
         .btn-settings .settings-text {
             font-weight: 600;
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             white-space: nowrap;
         }
         .btn-back:hover,
         .btn-memory:hover,
         .btn-settings:hover {
-            background: rgba(74, 122, 255, 0.06);
-            border-color: var(--gold);
-            color: var(--ivory);
+            background: rgba(74, 122, 255, 0.08);
+            border-color: var(--blue-light);
+            color: #fff;
             transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 8px 30px rgba(74, 122, 255, 0.10);
+            box-shadow: 0 8px 30px rgba(74, 122, 255, 0.15);
         }
         .btn-back:active,
         .btn-memory:active,
         .btn-settings:active {
             transform: scale(0.95);
         }
-        .btn-memory i { color: var(--gold); }
-        .btn-memory:hover i { animation: pulseBrain 1.2s ease-in-out infinite; }
-        .btn-settings i { color: #9aa3c4; }
-        .btn-settings:hover i { animation: spinSettings 2.4s linear infinite; }
+        .btn-memory i {
+            color: var(--blue-light);
+        }
+        .btn-memory:hover i {
+            animation: pulseBrain 1.2s ease-in-out infinite;
+        }
+        .btn-settings i {
+            color: #a0b0d4;
+        }
+        .btn-settings:hover i {
+            animation: spinSettings 2s linear infinite;
+        }
         @keyframes spinSettings {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
         @keyframes pulseBrain {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2) rotate(-5deg); }
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2) rotate(-5deg);
+            }
         }
 
         .logo img {
             height: 48px;
-            filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(74, 122, 255, 0.25));
+            filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(74, 122, 255, 0.3));
         }
         .logo h1 {
             font-size: 2rem;
             font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 30%, var(--gold-bright) 65%, var(--gold) 100%);
+            background: linear-gradient(135deg, #ffffff 40%, var(--blue-light));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 40px rgba(74, 122, 255, 0.15);
-            letter-spacing: 0.5px;
+            text-shadow: 0 0 40px rgba(74, 122, 255, 0.2);
         }
-        .logo h1 .seal {
-            color: var(--gold);
+        .logo h1 i {
+            color: var(--blue-light);
             margin-left: 8px;
-            font-size: 1.5rem;
-            filter: drop-shadow(0 0 16px rgba(74, 122, 255, 0.4));
-            animation: sparkle 3s ease-in-out infinite alternate;
+            font-size: 1.6rem;
+            filter: drop-shadow(0 0 20px rgba(74, 122, 255, 0.3));
+            animation: sparkle 2s ease-in-out infinite alternate;
         }
         @keyframes sparkle {
             0% {
-                filter: drop-shadow(0 0 6px rgba(74, 122, 255, 0.2));
+                filter: drop-shadow(0 0 10px rgba(74, 122, 255, 0.2));
                 transform: scale(1) rotate(0deg);
             }
             100% {
-                filter: drop-shadow(0 0 22px rgba(74, 122, 255, 0.55));
-                transform: scale(1.08) rotate(8deg);
+                filter: drop-shadow(0 0 30px rgba(74, 122, 255, 0.6));
+                transform: scale(1.1) rotate(10deg);
             }
         }
 
         .chat-wrapper {
-            margin: 22px 0 20px;
+            margin: 0 0 20px;
             background: var(--card-bg);
             backdrop-filter: blur(24px);
             border: 1px solid var(--card-border);
             border-radius: var(--radius-2xl);
             overflow: hidden;
-            box-shadow: var(--glow-royal), 0 30px 80px rgba(0,0,0,0.5);
+            box-shadow: var(--glow-neon);
             display: flex;
             flex-direction: column;
             height: calc(100vh - 200px);
             min-height: 500px;
-            position: relative;
-        }
-        .chat-wrapper::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: var(--radius-2xl);
-            padding: 1px;
-            background: linear-gradient(160deg, rgba(74, 122, 255, 0.35), transparent 30%, transparent 70%, rgba(77, 111, 224, 0.25));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
         }
 
         .chat-header {
             padding: 18px 24px;
-            border-bottom: 1px solid rgba(74, 122, 255, 0.10);
+            border-bottom: 1px solid rgba(2, 28, 164, 0.1);
             display: flex;
             align-items: center;
             gap: 16px;
             flex-wrap: wrap;
-            background: linear-gradient(180deg, rgba(13, 26, 92, 0.20), rgba(0,0,0,0.3));
+            background: rgba(0, 0, 0, 0.4);
         }
         .chat-header .bot-info {
             display: flex;
@@ -291,22 +257,21 @@
             gap: 14px;
         }
         .chat-header .bot-avatar {
-            width: 46px;
-            height: 46px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 25%, var(--sapphire-light), var(--sapphire-deep) 75%);
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-light));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            color: #ffffff;
-            box-shadow: 0 0 0 1px rgba(74, 122, 255, 0.35), 0 0 30px rgba(77, 111, 224, 0.25);
+            font-size: 1.6rem;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
         }
         .chat-header .bot-name {
             font-weight: 700;
             font-size: 1.2rem;
-            color: var(--ivory);
-            letter-spacing: 0.3px;
+            color: #fff;
         }
 
         .messages-area {
@@ -316,10 +281,15 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.3);
         }
-        .messages-area::-webkit-scrollbar { width: 4px; }
-        .messages-area::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 12px; }
+        .messages-area::-webkit-scrollbar {
+            width: 4px;
+        }
+        .messages-area::-webkit-scrollbar-thumb {
+            background: var(--blue-deep);
+            border-radius: 12px;
+        }
 
         .message {
             max-width: 85%;
@@ -327,35 +297,42 @@
             border-radius: var(--radius-xl);
             animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             word-wrap: break-word;
-            line-height: 1.75;
+            line-height: 1.7;
         }
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px) scale(0.96); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
         .message.user {
             align-self: flex-end;
-            background: linear-gradient(135deg, rgba(77, 111, 224, 0.22), rgba(13, 26, 92, 0.3));
-            border: 1px solid rgba(74, 122, 255, 0.18);
+            background: rgba(74, 122, 255, 0.2);
+            border: 1px solid rgba(74, 122, 255, 0.15);
             border-bottom-left-radius: 6px;
-            box-shadow: 0 4px 20px rgba(13, 26, 92, 0.2);
+            box-shadow: 0 4px 20px rgba(74, 122, 255, 0.08);
         }
         .message.bot {
             align-self: flex-start;
-            background: rgba(255, 255, 255, 0.035);
-            border: 1px solid rgba(74, 122, 255, 0.10);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(2, 28, 164, 0.08);
             border-bottom-right-radius: 6px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
         .message .msg-time {
             font-size: 0.65rem;
-            color: var(--ivory-dim);
+            color: #6a708a;
             margin-top: 6px;
             display: block;
             text-align: left;
-            opacity: 0.7;
         }
-        .message.user .msg-time { text-align: right; }
+        .message.user .msg-time {
+            text-align: right;
+        }
 
         /* ===== منتجات ===== */
         .products-row-wrapper {
@@ -365,11 +342,19 @@
             padding: 6px 0 12px 0;
             margin: 4px 0;
             scrollbar-width: thin;
-            scrollbar-color: var(--gold-dim) transparent;
+            scrollbar-color: var(--blue-deep) transparent;
         }
-        .products-row-wrapper::-webkit-scrollbar { height: 4px; }
-        .products-row-wrapper::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 12px; }
-        .products-row-wrapper::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 12px; }
+        .products-row-wrapper::-webkit-scrollbar {
+            height: 4px;
+        }
+        .products-row-wrapper::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+        .products-row-wrapper::-webkit-scrollbar-thumb {
+            background: var(--blue-deep);
+            border-radius: 12px;
+        }
 
         .products-row {
             display: flex;
@@ -385,12 +370,22 @@
             max-width: 280px;
             flex: 0 0 auto;
             margin: 0;
-            transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .products-row .men-product-card:hover { transform: translateY(-6px) scale(1.02); }
-        .products-row .men-product-card .product-image { height: 160px; object-fit: cover; }
-        .products-row .men-product-card .product-content { padding: 14px 16px 16px; }
-        .products-row .men-product-card .product-content h2 { font-size: 1.2rem; margin: 8px 0 4px; }
+        .products-row .men-product-card:hover {
+            transform: translateY(-6px) scale(1.02);
+        }
+        .products-row .men-product-card .product-image {
+            height: 160px;
+            object-fit: cover;
+        }
+        .products-row .men-product-card .product-content {
+            padding: 14px 16px 16px;
+        }
+        .products-row .men-product-card .product-content h2 {
+            font-size: 1.2rem;
+            margin: 8px 0 4px;
+        }
         .products-row .men-product-card .product-content p {
             font-size: 0.8rem;
             margin: 4px 0 12px;
@@ -400,9 +395,17 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-        .products-row .men-product-card .price { font-size: 1.2rem; }
-        .products-row .men-product-card .btn-product { padding: 6px 14px; font-size: 0.75rem; }
-        .products-row .men-product-card .badge { font-size: 0.7rem; padding: 4px 12px; }
+        .products-row .men-product-card .price {
+            font-size: 1.2rem;
+        }
+        .products-row .men-product-card .btn-product {
+            padding: 6px 14px;
+            font-size: 0.75rem;
+        }
+        .products-row .men-product-card .badge {
+            font-size: 0.7rem;
+            padding: 4px 12px;
+        }
 
         /* ===== الترحيب ===== */
         .welcome-animation {
@@ -416,29 +419,33 @@
             display: flex;
             flex-wrap: wrap;
             gap: 4px;
-            font-size: 2.3rem;
+            font-size: 2.4rem;
             font-weight: 900;
             margin-bottom: 4px;
         }
         .welcome-main .letter {
             display: inline-block;
-            background: linear-gradient(135deg, #ffffff 15%, var(--gold-bright) 60%, var(--gold) 100%);
+            background: linear-gradient(135deg, #ffffff 20%, var(--blue-light));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            animation: bounceGlow 2s ease-in-out infinite alternate;
-            text-shadow: 0 0 22px rgba(74, 122, 255, 0.18);
+            animation: bounceGlow 1.8s ease-in-out infinite alternate;
+            text-shadow: 0 0 20px rgba(74, 122, 255, 0.2);
             transform-origin: center bottom;
         }
         @keyframes bounceGlow {
-            0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 4px rgba(74, 122, 255, 0.12)); }
-            100% { transform: translateY(-11px) scale(1.07); filter: drop-shadow(0 0 22px rgba(74, 122, 255, 0.5)); }
+            0% {
+                transform: translateY(0px) scale(1);
+                filter: drop-shadow(0 0 5px rgba(74, 122, 255, 0.1));
+            }
+            100% {
+                transform: translateY(-12px) scale(1.08);
+                filter: drop-shadow(0 0 25px rgba(74, 122, 255, 0.6));
+            }
         }
 
         .typewriter-container {
-            font-family: 'Amiri', serif;
-            font-style: italic;
-            font-size: 1.55rem;
+            font-size: 1.4rem;
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -446,80 +453,124 @@
             min-height: 2.8rem;
             direction: rtl;
         }
-        .typewriter-text { display: inline; color: #cfd3e8; }
+        .typewriter-text {
+            display: inline;
+            color: #c0ccf0;
+        }
         .typewriter-text .highlight {
-            background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+            background: linear-gradient(135deg, var(--blue-light), #a0c0ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            font-weight: 700;
+            font-weight: 900;
         }
         .typewriter-cursor {
             display: inline-block;
             width: 3px;
-            height: 1.7rem;
-            background: var(--gold);
+            height: 1.8rem;
+            background: var(--blue-light);
             margin-right: 4px;
             animation: blinkCursor 0.7s step-end infinite;
             vertical-align: middle;
         }
         @keyframes blinkCursor {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
         }
 
         .welcome-desc {
-            font-size: 0.94rem;
-            color: var(--ivory-dim);
-            margin-top: 8px;
+            font-size: 0.95rem;
+            color: #8a9abb;
+            margin-top: 6px;
             display: flex;
             align-items: center;
             gap: 8px;
             opacity: 0;
             animation: fadeInUp 1s ease-out 1.8s forwards;
         }
-        .welcome-desc .seal { color: var(--gold); font-size: 0.9rem; animation: spinSlow 5s linear infinite; }
+        .welcome-desc i {
+            color: var(--blue-light);
+            animation: spinSlow 4s linear infinite;
+        }
         @keyframes spinSlow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .typing-indicator {
             align-self: flex-start;
             display: none;
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.035);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: var(--radius-xl);
             border-bottom-right-radius: 6px;
-            border: 1px solid rgba(74, 122, 255, 0.10);
+            border: 1px solid rgba(2, 28, 164, 0.08);
             gap: 10px;
             align-items: center;
-            color: var(--ivory-dim);
+            color: #a0b0d4;
             font-size: 0.95rem;
         }
-        .typing-indicator .dots { display: flex; gap: 5px; }
+        .typing-indicator .dots {
+            display: flex;
+            gap: 5px;
+        }
         .typing-indicator .dots span {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--gold);
+            background: var(--blue-light);
             display: inline-block;
             animation: typingBounce 1.4s ease-in-out infinite;
         }
-        .typing-indicator .dots span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-indicator .dots span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes typingBounce {
-            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-            30% { transform: translateY(-10px); opacity: 1; }
+        .typing-indicator .dots span:nth-child(2) {
+            animation-delay: 0.2s;
         }
-        .typing-indicator i { color: var(--gold); animation: spin 1s linear infinite; font-size: 1.1rem; }
+        .typing-indicator .dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typingBounce {
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+        .typing-indicator i {
+            color: var(--blue-light);
+            animation: spin 1s linear infinite;
+            font-size: 1.1rem;
+        }
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .suggested-questions {
@@ -527,19 +578,21 @@
             flex-wrap: wrap;
             gap: 8px;
             padding: 10px 20px 4px 20px;
-            background: rgba(0, 0, 0, 0.2);
-            border-top: 1px solid rgba(74, 122, 255, 0.08);
+            background: rgba(0, 0, 0, 0.25);
+            border-top: 1px solid rgba(2, 28, 164, 0.08);
             transition: all 0.3s ease;
         }
-        .suggested-questions.hidden { display: none; }
+        .suggested-questions.hidden {
+            display: none;
+        }
         .suggested-questions .sq-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(74, 122, 255, 0.16);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(74, 122, 255, 0.15);
             border-radius: 30px;
             padding: 8px 18px;
             font-family: 'Cairo', sans-serif;
             font-size: 0.85rem;
-            color: #b8b2a0;
+            color: #b0c4e8;
             cursor: pointer;
             transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             white-space: nowrap;
@@ -548,24 +601,29 @@
             align-items: center;
             gap: 6px;
         }
-        .suggested-questions .sq-btn i { font-size: 0.8rem; opacity: 0.6; color: var(--gold); }
-        .suggested-questions .sq-btn:hover {
-            background: rgba(74, 122, 255, 0.07);
-            border-color: var(--gold);
-            color: var(--ivory);
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 4px 20px rgba(74, 122, 255, 0.06);
+        .suggested-questions .sq-btn i {
+            font-size: 0.8rem;
+            opacity: 0.6;
         }
-        .suggested-questions .sq-btn:active { transform: scale(0.95); }
+        .suggested-questions .sq-btn:hover {
+            background: rgba(74, 122, 255, 0.08);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 20px rgba(74, 122, 255, 0.05);
+        }
+        .suggested-questions .sq-btn:active {
+            transform: scale(0.95);
+        }
 
         /* ===== منطقة الإدخال ===== */
         .input-area {
             padding: 12px 20px 16px;
-            border-top: 1px solid rgba(74, 122, 255, 0.10);
+            border-top: 1px solid rgba(2, 28, 164, 0.08);
             display: flex;
             align-items: flex-end;
             gap: 8px;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             flex-wrap: wrap;
         }
         .input-area .input-wrapper {
@@ -573,23 +631,23 @@
             min-width: 150px;
             display: flex;
             align-items: flex-end;
-            background: rgba(255, 255, 255, 0.025);
+            background: rgba(255, 255, 255, 0.03);
             border-radius: var(--radius-xl);
-            border: 1.5px solid rgba(74, 122, 255, 0.14);
+            border: 1.5px solid rgba(2, 28, 164, 0.1);
             transition: 0.3s;
             padding: 4px 16px 4px 8px;
             min-height: 52px;
         }
         .input-area .input-wrapper:focus-within {
-            border-color: var(--gold);
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.06);
+            border-color: var(--blue-light);
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.05);
         }
         .input-area .input-wrapper textarea {
             flex: 1;
             background: transparent;
             border: none;
             outline: none;
-            color: var(--ivory);
+            color: #f0f4ff;
             font-size: 1rem;
             font-family: 'Cairo', sans-serif;
             resize: none;
@@ -598,27 +656,30 @@
             max-height: 150px;
             line-height: 1.6;
         }
-        .input-area .input-wrapper textarea::placeholder { color: #5c5a52; }
+        .input-area .input-wrapper textarea::placeholder {
+            color: #5a607a;
+        }
         .input-area .input-wrapper .char-count {
             font-size: 0.7rem;
-            color: #4a4840;
+            color: #4a5070;
             padding: 8px 4px;
             white-space: nowrap;
             direction: ltr;
         }
 
+        /* === أزرار الإدخال الجديدة === */
         .input-area .btn-send {
             width: 52px;
             height: 52px;
             min-width: 52px;
             border-radius: 50%;
             border: none;
-            background: linear-gradient(135deg, var(--gold-dim), var(--gold));
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            color: #fff;
             font-size: 1.4rem;
             cursor: pointer;
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 30px rgba(74, 122, 255, 0.25);
+            box-shadow: 0 4px 30px rgba(2, 28, 164, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -630,28 +691,35 @@
             position: absolute;
             inset: -2px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(232, 207, 154, 0.6), transparent);
+            background: linear-gradient(135deg, rgba(74, 122, 255, 0.4), transparent);
             opacity: 0;
             transition: 0.6s;
         }
-        .input-area .btn-send:hover::after { opacity: 1; }
+        .input-area .btn-send:hover::after {
+            opacity: 1;
+        }
         .input-area .btn-send:hover {
             transform: scale(1.08);
-            box-shadow: 0 8px 40px rgba(74, 122, 255, 0.45);
+            box-shadow: 0 8px 40px rgba(2, 28, 164, 0.4);
         }
-        .input-area .btn-send:active { transform: scale(0.92); }
-        .input-area .btn-send:disabled { opacity: 0.4; cursor: not-allowed; transform: scale(1); }
+        .input-area .btn-send:active {
+            transform: scale(0.92);
+        }
+        .input-area .btn-send:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
 
-        .input-area .btn-voice,
-        .input-area .btn-attach {
+        .input-area .btn-voice {
             width: 52px;
             height: 52px;
             min-width: 52px;
             border-radius: 50%;
             border: none;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(74, 122, 255, 0.18);
-            color: #b8b2a0;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(2, 28, 164, 0.2);
+            color: #a0b0d4;
             font-size: 1.4rem;
             cursor: pointer;
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -660,20 +728,20 @@
             justify-content: center;
             position: relative;
         }
-        .input-area .btn-voice:hover,
-        .input-area .btn-attach:hover {
-            background: rgba(74, 122, 255, 0.07);
-            border-color: var(--gold);
-            color: var(--ivory);
+        .input-area .btn-voice:hover {
+            background: rgba(74, 122, 255, 0.08);
+            border-color: var(--blue-light);
+            color: #fff;
             transform: scale(1.05);
         }
-        .input-area .btn-voice:active,
-        .input-area .btn-attach:active { transform: scale(0.92); }
+        .input-area .btn-voice:active {
+            transform: scale(0.92);
+        }
 
         .input-area .btn-voice.recording {
-            background: rgba(200, 60, 60, 0.18);
-            border-color: #d4534a;
-            color: #e8877e;
+            background: rgba(255, 50, 50, 0.2);
+            border-color: #ff4444;
+            color: #ff4444;
             animation: pulseMic 1s ease-in-out infinite;
             position: relative;
             z-index: 1;
@@ -682,28 +750,79 @@
         .input-area .btn-voice.recording::after {
             content: '';
             position: absolute;
-            top: -4px; left: -4px; right: -4px; bottom: -4px;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
             border-radius: 50%;
-            border: 2px solid rgba(212, 83, 74, 0.4);
+            border: 2px solid rgba(255, 68, 68, 0.4);
             animation: ripple 1.5s ease-out infinite;
             pointer-events: none;
             z-index: -1;
         }
-        .input-area .btn-voice.recording::after { animation-delay: 0.75s; }
+        .input-area .btn-voice.recording::after {
+            animation-delay: 0.75s;
+        }
         @keyframes ripple {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.8); opacity: 0; }
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
         }
         @keyframes pulseMic {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(212, 83, 74, 0.2); }
-            50% { transform: scale(1.12); box-shadow: 0 0 28px rgba(212, 83, 74, 0.45); }
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(255, 68, 68, 0.2);
+            }
+            50% {
+                transform: scale(1.12);
+                box-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
+            }
         }
-        .input-area .btn-voice:disabled { opacity: 0.3; cursor: not-allowed; }
+        .input-area .btn-voice:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
 
+        /* === زر الإرفاق (مفعل الآن) === */
+        .input-area .btn-attach {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(2, 28, 164, 0.2);
+            color: #a0b0d4;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .input-area .btn-attach:hover {
+            background: rgba(74, 122, 255, 0.08);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: scale(1.05);
+        }
+        .input-area .btn-attach:active {
+            transform: scale(0.92);
+        }
         .input-area .btn-attach.has-file {
-            border-color: var(--gold);
-            color: var(--gold);
-            background: rgba(74, 122, 255, 0.10);
+            border-color: var(--blue-light);
+            color: var(--blue-light);
+            background: rgba(74, 122, 255, 0.1);
         }
         .input-area .btn-attach input[type="file"] {
             position: absolute;
@@ -719,9 +838,9 @@
             padding: 6px 16px 6px 12px;
             background: rgba(74, 122, 255, 0.08);
             border-radius: 20px;
-            border: 1px solid rgba(74, 122, 255, 0.18);
+            border: 1px solid rgba(74, 122, 255, 0.15);
             font-size: 0.8rem;
-            color: #b8b2a0;
+            color: #a0b0d4;
             align-items: center;
             gap: 8px;
             white-space: nowrap;
@@ -730,19 +849,28 @@
             text-overflow: ellipsis;
             transition: 0.3s ease;
         }
-        .file-preview.visible { display: inline-flex; }
-        .file-preview.hidden-preview { display: none !important; }
+        .file-preview.visible {
+            display: inline-flex;
+        }
+        .file-preview.hidden-preview {
+            display: none !important;
+        }
         .file-preview .remove-file {
             cursor: pointer;
-            color: #e08b83;
+            color: #ff6b6b;
             font-size: 0.9rem;
             padding: 0 4px;
             transition: 0.3s;
         }
-        .file-preview .remove-file:hover { transform: scale(1.2); color: #e8877e; }
-        .file-preview i { color: var(--gold); }
+        .file-preview .remove-file:hover {
+            transform: scale(1.2);
+            color: #ff4444;
+        }
+        .file-preview i {
+            color: var(--blue-light);
+        }
 
-        /* ===== المودالات ===== */
+        /* ===== مودال الذاكرة الفخم ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -755,54 +883,72 @@
             padding: 20px;
             animation: modalFade 0.4s ease;
         }
-        .modal-overlay.active { display: flex; }
+        .modal-overlay.active {
+            display: flex;
+        }
         @keyframes modalFade {
-            from { opacity: 0; transform: scale(0.95) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .modal-box {
-            background: radial-gradient(ellipse at 50% 0%, rgba(13, 18, 34, 0.98), #07080f);
-            border: 1px solid rgba(74, 122, 255, 0.22);
-            border-radius: 30px;
+            background: radial-gradient(ellipse at 50% 0%, rgba(10, 16, 32, 0.98), #0a0f1f);
+            border: 1px solid rgba(74, 122, 255, 0.2);
+            border-radius: 32px;
             max-width: 700px;
             width: 100%;
             max-height: 85vh;
             padding: 30px 28px;
-            box-shadow: 0 0 80px rgba(74, 122, 255, 0.08), inset 0 1px 0 rgba(74, 122, 255, 0.08);
+            box-shadow: 0 0 80px rgba(74, 122, 255, 0.1), inset 0 1px 0 rgba(74, 122, 255, 0.1);
             overflow-y: auto;
             position: relative;
         }
         .modal-box h3 {
-            color: var(--ivory);
-            font-size: 1.55rem;
+            color: #fff;
+            font-size: 1.6rem;
             margin-bottom: 18px;
             display: flex;
             align-items: center;
             gap: 12px;
-            background: linear-gradient(135deg, #fff, var(--gold-bright));
+            background: linear-gradient(135deg, #fff, var(--blue-light));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        .modal-box h3 i { font-size: 1.7rem; color: var(--gold); filter: drop-shadow(0 0 16px rgba(74, 122, 255, 0.3)); }
+        .modal-box h3 i {
+            font-size: 1.8rem;
+            color: var(--blue-light);
+            filter: drop-shadow(0 0 20px rgba(74, 122, 255, 0.3));
+        }
         .modal-box .modal-close {
             margin-top: 20px;
             padding: 10px 32px;
-            background: linear-gradient(135deg, var(--sapphire), var(--sapphire-mid));
-            border: 1px solid rgba(74, 122, 255, 0.25);
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            border: none;
             border-radius: 40px;
-            color: var(--ivory);
+            color: #fff;
             font-family: 'Cairo', sans-serif;
             font-size: 1rem;
             cursor: pointer;
             transition: 0.3s;
             font-weight: 600;
-            box-shadow: 0 4px 30px rgba(13, 26, 92, 0.3);
+            box-shadow: 0 4px 30px rgba(2, 28, 164, 0.2);
         }
-        .modal-box .modal-close:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(74, 122, 255, 0.15); }
-        .modal-box .modal-close:active { transform: scale(0.95); }
+        .modal-box .modal-close:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(74, 122, 255, 0.2);
+        }
+        .modal-box .modal-close:active {
+            transform: scale(0.95);
+        }
 
+        /* قائمة الجلسات في الذاكرة */
         .memory-list {
             display: flex;
             flex-direction: column;
@@ -812,13 +958,18 @@
             overflow-y: auto;
             padding-left: 4px;
         }
-        .memory-list::-webkit-scrollbar { width: 4px; }
-        .memory-list::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 12px; }
+        .memory-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .memory-list::-webkit-scrollbar-thumb {
+            background: var(--blue-deep);
+            border-radius: 12px;
+        }
 
         .memory-item {
-            background: rgba(255, 255, 255, 0.025);
-            border: 1px solid rgba(74, 122, 255, 0.10);
-            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(74, 122, 255, 0.08);
+            border-radius: 20px;
             padding: 16px 20px;
             display: flex;
             justify-content: space-between;
@@ -835,9 +986,9 @@
             content: '';
             position: absolute;
             inset: 0;
-            border-radius: 18px;
+            border-radius: 20px;
             padding: 1px;
-            background: linear-gradient(135deg, rgba(74, 122, 255, 0.25), transparent, rgba(77, 111, 224, 0.2));
+            background: linear-gradient(135deg, rgba(74, 122, 255, 0.15), transparent, rgba(74, 122, 255, 0.15));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
@@ -845,12 +996,14 @@
             opacity: 0;
             transition: 0.6s;
         }
-        .memory-item:hover::before { opacity: 1; }
+        .memory-item:hover::before {
+            opacity: 1;
+        }
         .memory-item:hover {
-            background: rgba(74, 122, 255, 0.04);
-            border-color: rgba(74, 122, 255, 0.25);
+            background: rgba(74, 122, 255, 0.05);
+            border-color: rgba(74, 122, 255, 0.2);
             transform: translateX(-4px) scale(1.01);
-            box-shadow: 0 8px 30px rgba(74, 122, 255, 0.06);
+            box-shadow: 0 8px 30px rgba(74, 122, 255, 0.05);
         }
         .memory-item .memory-content {
             flex: 1;
@@ -861,7 +1014,7 @@
             gap: 6px 10px;
         }
         .memory-item .memory-title {
-            color: #ded8c6;
+            color: #d0dcf5;
             font-size: 1rem;
             font-weight: 700;
             white-space: nowrap;
@@ -869,17 +1022,20 @@
             text-overflow: ellipsis;
             max-width: 200px;
         }
-        .memory-item .memory-count { color: var(--ivory-dim); font-size: 0.8rem; }
+        .memory-item .memory-count {
+            color: #6a708a;
+            font-size: 0.8rem;
+        }
         .memory-item .memory-time {
-            color: var(--ivory-dim);
+            color: #6a708a;
             font-size: 0.7rem;
             white-space: nowrap;
             opacity: 0.7;
             margin-right: auto;
         }
         .memory-item .memory-delete {
-            color: #e08b83;
-            background: rgba(200, 60, 60, 0.08);
+            color: #ff6b6b;
+            background: rgba(255, 0, 0, 0.08);
             border: none;
             border-radius: 50%;
             width: 34px;
@@ -893,8 +1049,17 @@
             transition: 0.3s;
             flex-shrink: 0;
         }
-        .memory-item .memory-delete:hover { background: rgba(200, 60, 60, 0.2); transform: scale(1.1) rotate(-5deg); }
-        .memory-empty { color: var(--ivory-dim); text-align: center; padding: 40px 0; font-size: 1.1rem; opacity: 0.7; }
+        .memory-item .memory-delete:hover {
+            background: rgba(255, 0, 0, 0.2);
+            transform: scale(1.1) rotate(-5deg);
+        }
+        .memory-empty {
+            color: #6a708a;
+            text-align: center;
+            padding: 40px 0;
+            font-size: 1.1rem;
+            opacity: 0.7;
+        }
 
         .memory-actions {
             display: flex;
@@ -904,11 +1069,11 @@
             flex-wrap: wrap;
         }
         .memory-actions .btn-clear {
-            background: rgba(200, 60, 60, 0.08);
-            border: 1px solid rgba(200, 60, 60, 0.18);
+            background: rgba(255, 0, 0, 0.08);
+            border: 1px solid rgba(255, 0, 0, 0.15);
             border-radius: 30px;
             padding: 8px 22px;
-            color: #e08b83;
+            color: #ff6b6b;
             font-family: 'Cairo', sans-serif;
             font-size: 0.9rem;
             cursor: pointer;
@@ -918,16 +1083,16 @@
             gap: 8px;
         }
         .memory-actions .btn-clear:hover {
-            background: rgba(200, 60, 60, 0.16);
+            background: rgba(255, 0, 0, 0.15);
             transform: scale(1.02);
-            box-shadow: 0 0 20px rgba(200, 60, 60, 0.06);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.05);
         }
         .memory-actions .btn-new-session {
-            background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
             border: none;
             border-radius: 30px;
             padding: 8px 22px;
-            color: #ffffff;
+            color: #fff;
             font-family: 'Cairo', sans-serif;
             font-size: 0.9rem;
             cursor: pointer;
@@ -935,17 +1100,24 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-weight: 700;
-            box-shadow: 0 4px 20px rgba(74, 122, 255, 0.25);
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
         }
-        .memory-actions .btn-new-session:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(74, 122, 255, 0.35); }
-        .memory-actions .btn-new-session:active { transform: scale(0.95); }
+        .memory-actions .btn-new-session:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
+        }
+        .memory-actions .btn-new-session:active {
+            transform: scale(0.95);
+        }
 
-        /* ===== الإعدادات ===== */
-        .settings-group { margin: 20px 0; }
+        /* ===== مودال الإعدادات ===== */
+        .settings-group {
+            margin: 20px 0;
+        }
         .settings-group label {
             display: block;
-            color: #ded8c6;
+            color: #b0c4e8;
             font-size: 1rem;
             margin-bottom: 8px;
             font-weight: 600;
@@ -958,11 +1130,11 @@
         }
         .settings-group select,
         .settings-group input[type="number"] {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(74, 122, 255, 0.22);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(74, 122, 255, 0.2);
             border-radius: 30px;
             padding: 10px 18px;
-            color: var(--ivory);
+            color: #f0f4ff;
             font-family: 'Cairo', sans-serif;
             font-size: 1rem;
             outline: none;
@@ -971,10 +1143,12 @@
         }
         .settings-group select:focus,
         .settings-group input[type="number"]:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 20px rgba(74, 122, 255, 0.06);
+            border-color: var(--blue-light);
+            box-shadow: 0 0 20px rgba(74, 122, 255, 0.05);
         }
-        .settings-group select option { background: #0a0c14; }
+        .settings-group select option {
+            background: #0a0f1f;
+        }
         .settings-actions {
             display: flex;
             gap: 12px;
@@ -983,26 +1157,31 @@
             flex-wrap: wrap;
         }
         .settings-actions .btn-apply {
-            background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
             border: none;
             border-radius: 40px;
             padding: 10px 30px;
-            color: #ffffff;
+            color: #fff;
             font-family: 'Cairo', sans-serif;
             font-size: 1rem;
             cursor: pointer;
             transition: 0.3s;
-            font-weight: 700;
-            box-shadow: 0 4px 20px rgba(74, 122, 255, 0.25);
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
         }
-        .settings-actions .btn-apply:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(74, 122, 255, 0.35); }
-        .settings-actions .btn-apply:active { transform: scale(0.95); }
+        .settings-actions .btn-apply:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
+        }
+        .settings-actions .btn-apply:active {
+            transform: scale(0.95);
+        }
         .settings-actions .btn-clear-settings {
-            background: rgba(200, 60, 60, 0.08);
-            border: 1px solid rgba(200, 60, 60, 0.18);
+            background: rgba(255, 0, 0, 0.08);
+            border: 1px solid rgba(255, 0, 0, 0.15);
             border-radius: 40px;
             padding: 10px 24px;
-            color: #e08b83;
+            color: #ff6b6b;
             font-family: 'Cairo', sans-serif;
             font-size: 1rem;
             cursor: pointer;
@@ -1011,13 +1190,17 @@
             align-items: center;
             gap: 8px;
         }
-        .settings-actions .btn-clear-settings:hover { background: rgba(200, 60, 60, 0.16); transform: scale(1.02); }
+        .settings-actions .btn-clear-settings:hover {
+            background: rgba(255, 0, 0, 0.15);
+            transform: scale(1.02);
+        }
 
+        /* ===== مودال استخراج النص ===== */
         .modal-text {
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 16px;
             padding: 18px 20px;
-            color: #cfd3e8;
+            color: #c0ccf0;
             font-size: 0.95rem;
             line-height: 1.8;
             max-height: 50vh;
@@ -1029,115 +1212,153 @@
 
         /* ===== footer ===== */
         footer {
-            background: var(--void);
-            border-top: 1px solid rgba(74, 122, 255, 0.06);
+            background: #000000;
+            border-top: 1px solid rgba(2, 28, 164, 0.03);
             padding: 50px 0 30px;
             margin-top: 30px;
         }
-        .footer-flex { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; }
+        .footer-flex {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;
+        }
         .footer-col h4 {
-            color: var(--gold);
+            color: var(--blue-light);
             margin-bottom: 18px;
             font-size: 1.2rem;
-            text-shadow: 0 0 20px rgba(74, 122, 255, 0.12);
+            text-shadow: 0 0 20px rgba(74, 122, 255, 0.1);
+        }
+        .footer-col p {
+            color: #6a708a;
+            margin: 10px 0;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
-        .footer-col p { color: var(--ivory-dim); margin: 10px 0; display: flex; align-items: center; gap: 10px; }
-        .footer-col p i { color: #9aa3c4; opacity: 0.8; width: 20px; transition: 0.3s; }
-        .footer-col p:hover i { color: var(--gold); transform: scale(1.2); }
-        .social-icons { display: flex; gap: 14px; margin-top: 12px; }
-        .social-icons a { font-size: 1.4rem; color: var(--ivory-dim); transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: inline-block; }
+        .footer-col p i {
+            color: #a0b0d4;
+            opacity: 0.7;
+            width: 20px;
+            transition: 0.3s;
+        }
+        .footer-col p:hover i {
+            color: var(--blue-light);
+            transform: scale(1.2);
+        }
+        .social-icons {
+            display: flex;
+            gap: 14px;
+            margin-top: 12px;
+        }
+        .social-icons a {
+            font-size: 1.4rem;
+            color: #6a708a;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-block;
+        }
         .social-icons a:hover {
-            color: var(--gold);
+            color: var(--blue-light);
             transform: translateY(-6px) scale(1.2);
-            filter: drop-shadow(0 0 18px rgba(74, 122, 255, 0.3));
+            filter: drop-shadow(0 0 20px rgba(74, 122, 255, 0.2));
         }
         .copyright {
             text-align: center;
             margin-top: 40px;
             padding-top: 20px;
-            border-top: 1px solid rgba(74, 122, 255, 0.06);
+            border-top: 1px solid rgba(2, 28, 164, 0.03);
             color: #4a5070;
             font-size: 0.9rem;
             width: 100%;
         }
-        .copyright span { color: var(--gold); }
+        .copyright span {
+            color: var(--blue-light);
+        }
 
         /* ===== بطاقات المنتجات ===== */
         .men-product-card {
             width: 100%;
             max-width: 380px;
-            background: linear-gradient(165deg, rgba(13, 18, 34, 0.97), rgba(7, 9, 16, 0.97));
+            background: rgba(10, 16, 32, 0.95);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(74, 122, 255, 0.22);
-            border-radius: 26px;
+            border: 1px solid rgba(2, 28, 164, 0.3);
+            border-radius: 28px;
             overflow: hidden;
             font-family: 'Cairo', sans-serif;
-            color: var(--ivory);
-            box-shadow: 0 0 40px rgba(13, 26, 92, 0.25), inset 0 1px 0 rgba(74, 122, 255, 0.10);
+            color: #f0f4ff;
+            box-shadow: 0 0 40px rgba(2, 28, 164, 0.15), inset 0 1px 0 rgba(74, 122, 255, 0.1);
             animation: show 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             transition: 0.4s;
             margin: 6px 0;
-            position: relative;
-        }
-        .men-product-card::after {
-            content: '';
-            position: absolute;
-            top: 0; right: 0;
-            width: 46px; height: 46px;
-            background: linear-gradient(225deg, rgba(74, 122, 255, 0.35), transparent 60%);
-            pointer-events: none;
         }
         .men-product-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 0 60px rgba(74, 122, 255, 0.15), inset 0 1px 0 rgba(74, 122, 255, 0.2);
-            border-color: rgba(74, 122, 255, 0.45);
+            box-shadow: 0 0 60px rgba(74, 122, 255, 0.2), inset 0 1px 0 rgba(74, 122, 255, 0.2);
+            border-color: rgba(74, 122, 255, 0.4);
         }
         .men-product-card .product-image {
             width: 100%;
             height: 220px;
             object-fit: cover;
-            border-bottom: 1px solid rgba(74, 122, 255, 0.14);
+            border-bottom: 1px solid rgba(2, 28, 164, 0.15);
             transition: 0.4s;
         }
-        .men-product-card:hover .product-image { transform: scale(1.02); }
-        .men-product-card .product-content { padding: 24px 22px 22px; }
+        .men-product-card:hover .product-image {
+            transform: scale(1.02);
+        }
+        .men-product-card .product-content {
+            padding: 24px 22px 22px;
+        }
         .men-product-card .badge {
             display: inline-block;
             background: rgba(74, 122, 255, 0.12);
-            color: var(--gold-bright);
+            color: var(--blue-light);
             padding: 6px 16px;
             border-radius: 40px;
             font-size: 0.8rem;
             font-weight: 600;
             letter-spacing: 0.3px;
-            border: 1px solid rgba(74, 122, 255, 0.20);
+            border: 1px solid rgba(74, 122, 255, 0.08);
             backdrop-filter: blur(4px);
         }
         .men-product-card .product-content h2 {
             margin: 14px 0 8px;
-            font-size: 1.75rem;
+            font-size: 1.8rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #ffffff 25%, var(--gold-bright));
+            background: linear-gradient(135deg, #ffffff 30%, var(--blue-light));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        .men-product-card .product-content p { color: var(--ivory-dim); line-height: 1.8; margin: 8px 0 20px; font-size: 0.95rem; }
-        .men-product-card .bottom { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .men-product-card .product-content p {
+            color: #a0b0d4;
+            line-height: 1.8;
+            margin: 8px 0 20px;
+            font-size: 0.95rem;
+        }
+        .men-product-card .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
         .men-product-card .price {
             font-size: 2rem;
             font-weight: 900;
-            color: var(--gold-bright);
-            text-shadow: 0 0 26px rgba(74, 122, 255, 0.25);
+            color: var(--blue-light);
+            text-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
         }
-        .men-product-card .price small { font-size: 1rem; color: #8aa8e0; font-weight: 600; margin-right: 4px; }
+        .men-product-card .price small {
+            font-size: 1rem;
+            color: #6a8ab0;
+            font-weight: 600;
+            margin-right: 4px;
+        }
         .men-product-card .btn-product {
-            background: linear-gradient(135deg, var(--sapphire), var(--sapphire-mid));
-            color: var(--ivory);
-            border: 1px solid rgba(74, 122, 255, 0.25);
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            color: #fff;
+            border: none;
             padding: 12px 28px;
             border-radius: 40px;
             font-family: 'Cairo', sans-serif;
@@ -1145,153 +1366,446 @@
             font-weight: 700;
             cursor: pointer;
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 30px rgba(13, 26, 92, 0.3);
+            box-shadow: 0 4px 30px rgba(2, 28, 164, 0.2);
             display: inline-flex;
             align-items: center;
             gap: 8px;
         }
-        .men-product-card .btn-product i { font-size: 1.1rem; color: var(--gold); }
+        .men-product-card .btn-product i {
+            font-size: 1.1rem;
+        }
         .men-product-card .btn-product:hover {
             transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 8px 40px rgba(74, 122, 255, 0.25);
-            border-color: var(--gold);
+            box-shadow: 0 8px 40px rgba(74, 122, 255, 0.3);
+            background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
         }
-        .men-product-card .btn-product:active { transform: scale(0.95); }
+        .men-product-card .btn-product:active {
+            transform: scale(0.95);
+        }
         @keyframes show {
-            from { opacity: 0; transform: translateY(24px) scale(0.96); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         /* ===== التجاوب ===== */
         @media (max-width: 768px) {
-            .chat-wrapper { height: calc(100vh - 160px); min-height: 400px; border-radius: var(--radius-xl); }
-            .message { max-width: 90%; padding: 12px 16px; font-size: 0.95rem; }
-            .input-area { padding: 10px 14px 14px; gap: 6px; }
-            .input-area .input-wrapper { padding: 2px 12px 2px 6px; min-height: 44px; }
-            .input-area .input-wrapper textarea { padding: 8px 2px; font-size: 0.95rem; min-height: 36px; }
+            .chat-wrapper {
+                height: calc(100vh - 160px);
+                min-height: 400px;
+                border-radius: var(--radius-xl);
+            }
+            .message {
+                max-width: 90%;
+                padding: 12px 16px;
+                font-size: 0.95rem;
+            }
+            .input-area {
+                padding: 10px 14px 14px;
+                gap: 6px;
+            }
+            .input-area .input-wrapper {
+                padding: 2px 12px 2px 6px;
+                min-height: 44px;
+            }
+            .input-area .input-wrapper textarea {
+                padding: 8px 2px;
+                font-size: 0.95rem;
+                min-height: 36px;
+            }
             .input-area .btn-send,
             .input-area .btn-voice,
-            .input-area .btn-attach { width: 44px; height: 44px; min-width: 44px; font-size: 1.2rem; }
-            .chat-header { padding: 12px 16px; }
-            .chat-header .bot-avatar { width: 36px; height: 36px; font-size: 1.2rem; }
-            .messages-area { padding: 14px 16px; gap: 10px; }
-            .logo h1 { font-size: 1.4rem; }
-            .logo h1 .seal { font-size: 1rem; }
-            .logo img { height: 36px; }
-            .btn-back, .btn-memory, .btn-settings { height: 38px; padding: 0 14px; font-size: 0.9rem; }
-            .btn-back i, .btn-memory i, .btn-settings i { font-size: 1rem; }
-            .btn-back .back-text, .btn-memory .memory-text, .btn-settings .settings-text { font-size: 0.85rem; }
-            .men-product-card { max-width: 100%; }
-            .men-product-card .product-image { height: 170px; }
-            .men-product-card .product-content { padding: 18px 16px 16px; }
-            .men-product-card .product-content h2 { font-size: 1.5rem; }
-            .men-product-card .price { font-size: 1.6rem; }
-            .men-product-card .btn-product { padding: 10px 20px; font-size: 0.85rem; }
-            .welcome-main { font-size: 1.9rem; }
-            .typewriter-container { font-size: 1.15rem; }
-            .typewriter-cursor { height: 1.4rem; }
-            .suggested-questions { padding: 8px 14px 4px 14px; gap: 6px; }
-            .suggested-questions .sq-btn { font-size: 0.75rem; padding: 6px 14px; }
-            .products-row .men-product-card { min-width: 200px; max-width: 220px; }
-            .products-row .men-product-card .product-image { height: 130px; }
-            .products-row .men-product-card .product-content h2 { font-size: 1rem; }
-            .products-row .men-product-card .price { font-size: 1rem; }
-            .products-row .men-product-card .btn-product { padding: 4px 10px; font-size: 0.65rem; }
-            .file-preview { max-width: 120px; font-size: 0.7rem; padding: 4px 10px 4px 8px; }
-            .modal-box { padding: 20px; margin: 10px; }
-            .memory-item { padding: 12px 16px; flex-wrap: wrap; }
-            .memory-item .memory-time { margin-right: 0; width: 100%; text-align: left; }
-            .memory-item .memory-title { max-width: 120px; }
+            .input-area .btn-attach {
+                width: 44px;
+                height: 44px;
+                min-width: 44px;
+                font-size: 1.2rem;
+            }
+            .chat-header {
+                padding: 12px 16px;
+            }
+            .chat-header .bot-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 1.2rem;
+            }
+            .messages-area {
+                padding: 14px 16px;
+                gap: 10px;
+            }
+            .logo h1 {
+                font-size: 1.4rem;
+            }
+            .logo h1 i {
+                font-size: 1rem;
+            }
+            .logo img {
+                height: 36px;
+            }
+            .btn-back,
+            .btn-memory,
+            .btn-settings {
+                height: 38px;
+                padding: 0 14px;
+                font-size: 0.9rem;
+            }
+            .btn-back i,
+            .btn-memory i,
+            .btn-settings i {
+                font-size: 1rem;
+            }
+            .btn-back .back-text,
+            .btn-memory .memory-text,
+            .btn-settings .settings-text {
+                font-size: 0.85rem;
+            }
+            .men-product-card {
+                max-width: 100%;
+            }
+            .men-product-card .product-image {
+                height: 170px;
+            }
+            .men-product-card .product-content {
+                padding: 18px 16px 16px;
+            }
+            .men-product-card .product-content h2 {
+                font-size: 1.5rem;
+            }
+            .men-product-card .price {
+                font-size: 1.6rem;
+            }
+            .men-product-card .btn-product {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+            .welcome-main {
+                font-size: 2rem;
+            }
+            .typewriter-container {
+                font-size: 1.2rem;
+            }
+            .typewriter-cursor {
+                height: 1.4rem;
+            }
+            .suggested-questions {
+                padding: 8px 14px 4px 14px;
+                gap: 6px;
+            }
+            .suggested-questions .sq-btn {
+                font-size: 0.75rem;
+                padding: 6px 14px;
+            }
+            .products-row .men-product-card {
+                min-width: 200px;
+                max-width: 220px;
+            }
+            .products-row .men-product-card .product-image {
+                height: 130px;
+            }
+            .products-row .men-product-card .product-content h2 {
+                font-size: 1rem;
+            }
+            .products-row .men-product-card .price {
+                font-size: 1rem;
+            }
+            .products-row .men-product-card .btn-product {
+                padding: 4px 10px;
+                font-size: 0.65rem;
+            }
+            .file-preview {
+                max-width: 120px;
+                font-size: 0.7rem;
+                padding: 4px 10px 4px 8px;
+            }
+            .modal-box {
+                padding: 20px;
+                margin: 10px;
+            }
+            .memory-item {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+            }
+            .memory-item .memory-time {
+                margin-right: 0;
+                width: 100%;
+                text-align: left;
+            }
+            .memory-item .memory-title {
+                max-width: 120px;
+            }
         }
         @media (max-width: 480px) {
-            .message { max-width: 95%; padding: 10px 14px; font-size: 0.9rem; }
-            .input-area .input-wrapper textarea { font-size: 0.85rem; min-height: 32px; }
+            .message {
+                max-width: 95%;
+                padding: 10px 14px;
+                font-size: 0.9rem;
+            }
+            .input-area .input-wrapper textarea {
+                font-size: 0.85rem;
+                min-height: 32px;
+            }
             .input-area .btn-send,
             .input-area .btn-voice,
-            .input-area .btn-attach { width: 38px; height: 38px; min-width: 38px; font-size: 1rem; }
-            .chat-wrapper { height: calc(100vh - 140px); min-height: 350px; border-radius: 18px; }
-            .messages-area { padding: 10px 12px; gap: 8px; }
-            .container { width: 96%; padding: 0 10px; }
-            .logo h1 { font-size: 1.1rem; }
-            .logo h1 .seal { font-size: 0.85rem; }
-            .logo img { height: 30px; }
-            .btn-back, .btn-memory, .btn-settings { height: 34px; padding: 0 10px; font-size: 0.8rem; }
-            .btn-back i, .btn-memory i, .btn-settings i { font-size: 0.9rem; }
-            .btn-back .back-text, .btn-memory .memory-text, .btn-settings .settings-text { font-size: 0.75rem; }
-            .men-product-card .product-image { height: 140px; }
-            .men-product-card .product-content { padding: 14px 12px 12px; }
-            .men-product-card .product-content h2 { font-size: 1.3rem; }
-            .men-product-card .price { font-size: 1.4rem; }
-            .men-product-card .btn-product { padding: 8px 16px; font-size: 0.8rem; }
-            .welcome-main { font-size: 1.5rem; gap: 2px; }
-            .typewriter-container { font-size: 0.95rem; }
-            .typewriter-cursor { height: 1.2rem; }
-            .welcome-desc { font-size: 0.8rem; }
-            .suggested-questions { padding: 6px 10px 2px 10px; gap: 4px; }
-            .suggested-questions .sq-btn { font-size: 0.65rem; padding: 4px 10px; }
-            .products-row .men-product-card { min-width: 160px; max-width: 180px; }
-            .products-row .men-product-card .product-image { height: 110px; }
-            .products-row .men-product-card .product-content { padding: 10px 10px 12px; }
-            .products-row .men-product-card .product-content h2 { font-size: 0.9rem; margin: 4px 0 2px; }
-            .products-row .men-product-card .product-content p { font-size: 0.7rem; -webkit-line-clamp: 1; }
-            .products-row .men-product-card .price { font-size: 0.9rem; }
-            .products-row .men-product-card .btn-product { padding: 4px 8px; font-size: 0.6rem; }
-            .products-row .men-product-card .badge { font-size: 0.6rem; padding: 2px 8px; }
-            .products-row { gap: 10px; }
-            .file-preview { max-width: 80px; font-size: 0.6rem; padding: 3px 6px 3px 4px; }
-            .file-preview i { font-size: 0.7rem; }
-            .modal-box { padding: 16px; }
-            .modal-box h3 { font-size: 1.1rem; }
-            .modal-box .modal-text { font-size: 0.9rem; padding: 12px; }
-            .memory-item { padding: 10px 12px; }
-            .memory-item .memory-title { font-size: 0.9rem; max-width: 100px; }
-            .memory-item .memory-count { font-size: 0.7rem; }
-            .memory-item .memory-time { font-size: 0.6rem; }
-            .memory-item .memory-delete { width: 28px; height: 28px; min-width: 28px; font-size: 0.8rem; }
+            .input-area .btn-attach {
+                width: 38px;
+                height: 38px;
+                min-width: 38px;
+                font-size: 1rem;
+            }
+            .chat-wrapper {
+                height: calc(100vh - 140px);
+                min-height: 350px;
+                border-radius: 18px;
+            }
+            .messages-area {
+                padding: 10px 12px;
+                gap: 8px;
+            }
+            .container {
+                width: 96%;
+                padding: 0 10px;
+            }
+            .logo h1 {
+                font-size: 1.1rem;
+            }
+            .logo h1 i {
+                font-size: 0.9rem;
+            }
+            .logo img {
+                height: 30px;
+            }
+            .btn-back,
+            .btn-memory,
+            .btn-settings {
+                height: 34px;
+                padding: 0 10px;
+                font-size: 0.8rem;
+            }
+            .btn-back i,
+            .btn-memory i,
+            .btn-settings i {
+                font-size: 0.9rem;
+            }
+            .btn-back .back-text,
+            .btn-memory .memory-text,
+            .btn-settings .settings-text {
+                font-size: 0.75rem;
+            }
+            .men-product-card .product-image {
+                height: 140px;
+            }
+            .men-product-card .product-content {
+                padding: 14px 12px 12px;
+            }
+            .men-product-card .product-content h2 {
+                font-size: 1.3rem;
+            }
+            .men-product-card .price {
+                font-size: 1.4rem;
+            }
+            .men-product-card .btn-product {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+            .welcome-main {
+                font-size: 1.6rem;
+                gap: 2px;
+            }
+            .typewriter-container {
+                font-size: 1rem;
+            }
+            .typewriter-cursor {
+                height: 1.2rem;
+            }
+            .welcome-desc {
+                font-size: 0.8rem;
+            }
+            .suggested-questions {
+                padding: 6px 10px 2px 10px;
+                gap: 4px;
+            }
+            .suggested-questions .sq-btn {
+                font-size: 0.65rem;
+                padding: 4px 10px;
+            }
+            .products-row .men-product-card {
+                min-width: 160px;
+                max-width: 180px;
+            }
+            .products-row .men-product-card .product-image {
+                height: 110px;
+            }
+            .products-row .men-product-card .product-content {
+                padding: 10px 10px 12px;
+            }
+            .products-row .men-product-card .product-content h2 {
+                font-size: 0.9rem;
+                margin: 4px 0 2px;
+            }
+            .products-row .men-product-card .product-content p {
+                font-size: 0.7rem;
+                -webkit-line-clamp: 1;
+            }
+            .products-row .men-product-card .price {
+                font-size: 0.9rem;
+            }
+            .products-row .men-product-card .btn-product {
+                padding: 4px 8px;
+                font-size: 0.6rem;
+            }
+            .products-row .men-product-card .badge {
+                font-size: 0.6rem;
+                padding: 2px 8px;
+            }
+            .products-row {
+                gap: 10px;
+            }
+            .file-preview {
+                max-width: 80px;
+                font-size: 0.6rem;
+                padding: 3px 6px 3px 4px;
+            }
+            .file-preview i {
+                font-size: 0.7rem;
+            }
+            .modal-box {
+                padding: 16px;
+            }
+            .modal-box h3 {
+                font-size: 1.1rem;
+            }
+            .modal-box .modal-text {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
+            .memory-item {
+                padding: 10px 12px;
+            }
+            .memory-item .memory-title {
+                font-size: 0.9rem;
+                max-width: 100px;
+            }
+            .memory-item .memory-count {
+                font-size: 0.7rem;
+            }
+            .memory-item .memory-time {
+                font-size: 0.6rem;
+            }
+            .memory-item .memory-delete {
+                width: 28px;
+                height: 28px;
+                min-width: 28px;
+                font-size: 0.8rem;
+            }
         }
         @media (max-width: 360px) {
-            .logo h1 { font-size: 0.9rem; }
-            .logo h1 .seal { font-size: 0.75rem; }
-            .logo img { height: 26px; }
-            .btn-back, .btn-memory, .btn-settings { height: 30px; padding: 0 8px; font-size: 0.7rem; }
-            .btn-back i, .btn-memory i, .btn-settings i { font-size: 0.8rem; }
-            .btn-back .back-text, .btn-memory .memory-text, .btn-settings .settings-text { font-size: 0.7rem; }
-            .chat-header .bot-name { font-size: 0.9rem; }
-            .chat-header .bot-avatar { width: 30px; height: 30px; font-size: 1rem; }
-            .welcome-main { font-size: 1.15rem; }
-            .typewriter-container { font-size: 0.78rem; }
-            .typewriter-cursor { height: 1rem; }
-            .suggested-questions .sq-btn { font-size: 0.6rem; padding: 3px 8px; }
+            .logo h1 {
+                font-size: 0.9rem;
+            }
+            .logo h1 i {
+                font-size: 0.8rem;
+            }
+            .logo img {
+                height: 26px;
+            }
+            .btn-back,
+            .btn-memory,
+            .btn-settings {
+                height: 30px;
+                padding: 0 8px;
+                font-size: 0.7rem;
+            }
+            .btn-back i,
+            .btn-memory i,
+            .btn-settings i {
+                font-size: 0.8rem;
+            }
+            .btn-back .back-text,
+            .btn-memory .memory-text,
+            .btn-settings .settings-text {
+                font-size: 0.7rem;
+            }
+            .chat-header .bot-name {
+                font-size: 0.9rem;
+            }
+            .chat-header .bot-avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+            .welcome-main {
+                font-size: 1.2rem;
+            }
+            .typewriter-container {
+                font-size: 0.8rem;
+            }
+            .typewriter-cursor {
+                height: 1rem;
+            }
+            .suggested-questions .sq-btn {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
             .input-area .btn-send,
             .input-area .btn-voice,
-            .input-area .btn-attach { width: 32px; height: 32px; min-width: 32px; font-size: 0.8rem; }
-            .products-row .men-product-card { min-width: 140px; max-width: 150px; }
-            .products-row .men-product-card .product-image { height: 90px; }
-            .products-row .men-product-card .product-content { padding: 8px 8px 10px; }
-            .products-row .men-product-card .product-content h2 { font-size: 0.8rem; }
-            .products-row .men-product-card .product-content p { display: none; }
-            .products-row .men-product-card .price { font-size: 0.8rem; }
-            .products-row .men-product-card .btn-product { padding: 2px 6px; font-size: 0.5rem; }
-            .products-row .men-product-card .badge { font-size: 0.5rem; padding: 2px 6px; }
-            .products-row { gap: 8px; }
-            .file-preview { max-width: 60px; font-size: 0.5rem; padding: 2px 4px; gap: 4px; }
-            .file-preview i { font-size: 0.6rem; }
-            .file-preview .remove-file { font-size: 0.7rem; }
+            .input-area .btn-attach {
+                width: 32px;
+                height: 32px;
+                min-width: 32px;
+                font-size: 0.8rem;
+            }
+            .products-row .men-product-card {
+                min-width: 140px;
+                max-width: 150px;
+            }
+            .products-row .men-product-card .product-image {
+                height: 90px;
+            }
+            .products-row .men-product-card .product-content {
+                padding: 8px 8px 10px;
+            }
+            .products-row .men-product-card .product-content h2 {
+                font-size: 0.8rem;
+            }
+            .products-row .men-product-card .product-content p {
+                display: none;
+            }
+            .products-row .men-product-card .price {
+                font-size: 0.8rem;
+            }
+            .products-row .men-product-card .btn-product {
+                padding: 2px 6px;
+                font-size: 0.5rem;
+            }
+            .products-row .men-product-card .badge {
+                font-size: 0.5rem;
+                padding: 2px 6px;
+            }
+            .products-row {
+                gap: 8px;
+            }
+            .file-preview {
+                max-width: 60px;
+                font-size: 0.5rem;
+                padding: 2px 4px;
+                gap: 4px;
+            }
+            .file-preview i {
+                font-size: 0.6rem;
+            }
+            .file-preview .remove-file {
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="bg-ambient"></div>
-
-    <!-- تعريف تدرّج الختم الذهبي (SVG مخفي) -->
-    <svg width="0" height="0" style="position:absolute">
-        <defs>
-            <linearGradient id="sealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#8fb0ff"/>
-                <stop offset="100%" stop-color="#1a3a9e"/>
-            </linearGradient>
-        </defs>
-    </svg>
 
     <header>
         <div class="container header-content">
@@ -1334,11 +1848,12 @@
 
                 <div class="suggested-questions" id="suggestedQuestions">
                     <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
-                    <button class="sq-btn" data-question=" MEN pass"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
+                    <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
                     <button class="sq-btn" data-question="كيف يمكنني التواصل مع الدعم؟"><i class="fas fa-headset"></i> التواصل مع الدعم</button>
                 </div>
 
                 <div class="input-area">
+                    <!-- زر الإرفاق مفعل الآن -->
                     <button class="btn-attach" id="attachBtn" title="إرفاق ملف">
                         <i class="fas fa-paperclip"></i>
                         <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls">
@@ -1366,10 +1881,10 @@
         </div>
     </main>
 
-    <!-- مودال الذاكرة -->
+    <!-- مودال الذاكرة - يعرض الجلسات -->
     <div class="modal-overlay" id="memoryModal">
         <div class="modal-box">
-            <h3><i class="fas fa-brain"></i> ذاكرة MEN Ai (المحادثات)</h3>
+            <h3><i class="fas fa-brain"></i> ذاكرة MEN Ai (الجلسات)</h3>
             <div class="memory-list" id="memoryList">
                 <div class="memory-empty">لا توجد محادثات محفوظة بعد.</div>
             </div>
@@ -1396,10 +1911,10 @@
                         <option value="100">100</option>
                         <option value="200">200</option>
                     </select>
-                    <span style="color:var(--ivory-dim);font-size:0.9rem;">أو أدخل قيمة مخصصة</span>
+                    <span style="color:#6a708a;font-size:0.9rem;">أو أدخل قيمة مخصصة</span>
                     <input type="number" id="customLimitInput" min="1" max="10000" placeholder="مخصص" style="width:100px;">
                 </div>
-                <p style="color:var(--ivory-dim);font-size:0.8rem;margin-top:6px;">عند تجاوز العدد في أي محادثة، سيتم حذف المحادثة بالكامل.</p>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند تجاوز العدد في أي محادثة، سيتم حذف المحادثة بالكامل.</p>
             </div>
             <div class="settings-actions">
                 <button class="btn-clear-settings" id="clearMemorySettingsBtn"><i class="fas fa-trash-alt"></i> مسح الذاكرة</button>
@@ -1422,7 +1937,7 @@
         <div class="container">
             <div class="footer-flex">
                 <div class="footer-col">
-                    <h4><i class="fas fa-compass"></i>تواصل معنا</h4>
+                    <h4><i class="fas fa-compass" style="margin-left:8px; color:var(--blue-deep);"></i>تواصل معنا</h4>
                     <p><i class="fas fa-envelope"></i> clan.men.ts@gmail.com</p>
                     <p><i class="fas fa-phone"></i> 0540367546</p>
                     <div class="social-icons">
@@ -1432,7 +1947,7 @@
                         <a href="https://www.tiktok.com/@team_men2020" target="_blank"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
-                <div class="copyright">جميع الحقوق محفوظة © 2020 MEN <span>Ai</span></div>
+                <div class="copyright">جميع الحقوق محفوظة © 2020 MEN <span></span></div>
             </div>
         </div>
     </footer>
@@ -1447,7 +1962,7 @@
 
         const SUBSCRIPTION_KEYWORDS = [
             'اشتراك', 'اشترك', 'اشتري', 'شراء', 'طلب', 'طلب منتج',
-            'عرض', 'متجر', 'المتجر', 'عرض', 'خصم', 'سعر', 'كم سعر',
+            'عرض', 'pro', 'باقة', 'عرض', 'خصم', 'سعر', 'كم سعر',
             'كيف اشترك', 'اريد اشتراك', 'ابي اشتراك', 'ابغى اشتراك'
         ];
 
@@ -1460,6 +1975,7 @@
         const MEMORY_KEY = 'menChatMemory';
         const SETTINGS_KEY = 'menChatSettings';
 
+        // الحد الأقصى للرسائل في كل جلسة
         const DEFAULT_LIMIT = 12;
         let maxMessagesPerSession = loadSettings();
 
@@ -1481,6 +1997,7 @@
             } catch (e) {}
         }
 
+        // هيكل التخزين: { sessions: [ { id, title, messages: [ {role, content, timestamp} ], lastUpdated } ], currentSessionId }
         function getMemory() {
             try {
                 const data = localStorage.getItem(MEMORY_KEY);
@@ -1500,6 +2017,7 @@
             } catch (e) {}
         }
 
+        // إنشاء جلسة جديدة
         function createNewSession(title) {
             const memory = getMemory();
             const id = Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 5);
@@ -1507,7 +2025,7 @@
                 id: id,
                 title: title || 'محادثة جديدة',
                 messages: [],
-                lastUpdated: new Date().toLocaleString('ar-EG', { timeZone: 'Asia/Riyadh' })
+                lastUpdated: new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })
             };
             memory.sessions.unshift(session);
             memory.currentSessionId = id;
@@ -1515,6 +2033,7 @@
             return id;
         }
 
+        // الحصول على الجلسة الحالية
         function getCurrentSession() {
             const memory = getMemory();
             if (!memory.currentSessionId || !memory.sessions.some(s => s.id === memory.currentSessionId)) {
@@ -1525,6 +2044,7 @@
             return memory.sessions.find(s => s.id === memory.currentSessionId);
         }
 
+        // تعيين جلسة حالية
         function setCurrentSession(sessionId) {
             const memory = getMemory();
             if (memory.sessions.some(s => s.id === sessionId)) {
@@ -1535,6 +2055,7 @@
             return false;
         }
 
+        // حفظ رسالة في الجلسة الحالية
         function saveToMemory(role, content) {
             try {
                 const memory = getMemory();
@@ -1544,13 +2065,14 @@
                     memory.currentSessionId = id;
                     session = memory.sessions.find(s => s.id === id);
                 }
-                const timestamp = new Date().toLocaleString('ar-EG', { timeZone: 'Asia/Riyadh' });
+                const timestamp = new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' });
                 session.messages.push({ role, content, timestamp });
                 session.lastUpdated = timestamp;
                 if (role === 'user' && session.messages.length === 1) {
                     const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
                     session.title = title || 'محادثة جديدة';
                 }
+                // التحقق من الحد الأقصى
                 if (session.messages.length > maxMessagesPerSession) {
                     const index = memory.sessions.findIndex(s => s.id === session.id);
                     if (index !== -1) {
@@ -1561,6 +2083,7 @@
                             memory.currentSessionId = newId;
                         }
                         saveMemory(memory);
+                        // إعادة تحميل الجلسة الجديدة
                         loadCurrentSession();
                         return;
                     }
@@ -1569,6 +2092,7 @@
             } catch (e) { console.warn('فشل حفظ الذاكرة:', e); }
         }
 
+        // تحميل كل الجلسات وعرضها في المودال
         function loadMemory() {
             try {
                 const memory = getMemory();
@@ -1580,6 +2104,7 @@
             }
         }
 
+        // عرض قائمة الجلسات
         function renderMemoryList(sessions) {
             const container = document.getElementById('memoryList');
             if (!sessions || sessions.length === 0) {
@@ -1619,6 +2144,7 @@
             });
         }
 
+        // حذف جلسة
         function deleteSession(sessionId) {
             if (!confirm('هل تريد حذف هذه المحادثة؟')) return;
             try {
@@ -1642,6 +2168,7 @@
             } catch (e) { console.warn('فشل حذف الجلسة:', e); }
         }
 
+        // مسح كل الجلسات
         function clearAllSessions() {
             if (!confirm('هل تريد مسح كل المحادثات المحفوظة؟')) return;
             try {
@@ -1657,6 +2184,7 @@
             } catch (e) { console.warn('فشل مسح الذاكرة:', e); }
         }
 
+        // استرجاع آخر رسالة من جلسة محددة إلى حقل الإدخال
         function restoreSession(sessionId) {
             try {
                 const memory = getMemory();
@@ -1680,24 +2208,27 @@
                 const area = document.getElementById('messagesArea');
                 const infoMsg = document.createElement('div');
                 infoMsg.className = 'message bot';
-                infoMsg.innerHTML = ` تم التبديل إلى المحادثة: <strong>${escapeHtml(session.title)}</strong><span class="msg-time">الآن</span>`;
+                infoMsg.innerHTML = `🔄 تم التبديل إلى المحادثة: <strong>${escapeHtml(session.title)}</strong><span class="msg-time">الآن</span>`;
                 area.appendChild(infoMsg);
                 scrollToBottom();
             } catch (e) { console.warn('فشل استرجاع الجلسة:', e); }
         }
 
+        // تحميل الجلسة الحالية وعرض رسائلها في الشات مع رسالة الترحيب
         function loadCurrentSession() {
             const session = getCurrentSession();
             if (!session) return;
             const area = document.getElementById('messagesArea');
             area.innerHTML = '';
 
+            // إذا كانت الجلسة فارغة، نعرض رسالة الترحيب
             if (session.messages.length === 0) {
                 const welcomeDiv = document.createElement('div');
                 welcomeDiv.className = 'message bot';
                 welcomeDiv.innerHTML = buildWelcomeMessage() + `<span class="msg-time">الآن</span>`;
                 area.appendChild(welcomeDiv);
                 scrollToBottom();
+                // تشغيل تأثير الكتابة
                 const typewriterElement = document.getElementById('typewriterText');
                 if (typewriterElement) {
                     const fullText = 'مرحبا بك في MEN Ai';
@@ -1710,6 +2241,7 @@
                 return;
             }
 
+            // عرض الرسائل المحفوظة
             session.messages.forEach(msg => {
                 const div = document.createElement('div');
                 div.className = `message ${msg.role}`;
@@ -1719,8 +2251,8 @@
             scrollToBottom();
         }
 
+        // دالة بناء رسالة الترحيب
         function buildWelcomeMessage() {
-            const sealSvg = '<svg viewBox="0 0 24 24"><polygon class="facet" points="12,2 21,7 21,17 12,22 3,17 3,7"/><polygon class="facet" points="12,2 12,22"/><polygon class="facet" points="3,7 21,17"/><polygon class="facet" points="21,7 3,17"/></svg>';
             return `
                 <div class="welcome-animation">
                     <div class="welcome-main">
@@ -1736,12 +2268,13 @@
                         <span class="typewriter-cursor" id="typewriterCursor"></span>
                     </div>
                     <div class="welcome-desc">
-                        <span class="seal">${sealSvg}</span> أنا هنا لمساعدتك، اسألني عن أي شيء
+                        <i class="fas fa-circle-notch"></i> أنا هنا لمساعدتك اسألني عن أي شيء!
                     </div>
                 </div>
             `;
         }
 
+        // تأثير الكتابة
         function typeTextEffect(element, text, speed = 60) {
             return new Promise((resolve) => {
                 let index = 0;
@@ -1759,7 +2292,7 @@
         }
 
         // ============================================================
-        //  دوال الردود والمنتجات
+        //  دوال الردود والمنتجات (نفس السابق)
         // ============================================================
         function getReply(category) {
             const list = responses[category]?.responses;
@@ -1822,7 +2355,7 @@
 
         function buildAllProductsRow() {
             if (!products || products.length === 0)
-                return '<p style="color: var(--ivory-dim); padding: 10px 0;">لا توجد منتجات متاحة حالياً.</p>';
+                return '<p style="color: #8a9abb; padding: 10px 0;">لا توجد منتجات متاحة حالياً.</p>';
             let html = '<div class="products-row-wrapper"><div class="products-row">';
             products.forEach(p => { html += buildProductCard(p); });
             html += '</div></div>';
@@ -1856,7 +2389,7 @@
         }
 
         // ============================================================
-        //  استخراج النص من الملفات
+        //  دوال استخراج النص من الملفات (نفس السابق)
         // ============================================================
         async function extractTextFromFile(file) {
             const fileType = file.type;
@@ -1931,7 +2464,7 @@
         });
 
         // ============================================================
-        //  دوال إدارة الملفات المرفقة
+        //  دوال إدارة الملفات المرفقة (مفعلة)
         // ============================================================
         function showAttachedFile(file) {
             attachedFile = file;
@@ -1986,6 +2519,7 @@
         });
         document.getElementById('clearMemoryBtn').addEventListener('click', clearAllSessions);
 
+        // زر محادثة جديدة
         document.getElementById('newSessionBtn').addEventListener('click', function() {
             const newId = createNewSession('محادثة جديدة');
             setCurrentSession(newId);
@@ -1994,13 +2528,13 @@
             const area = document.getElementById('messagesArea');
             const infoMsg = document.createElement('div');
             infoMsg.className = 'message bot';
-            infoMsg.innerHTML = ` تم إنشاء محادثة جديدة. <span class="msg-time">الآن</span>`;
+            infoMsg.innerHTML = `✨ تم إنشاء محادثة جديدة. <span class="msg-time">الآن</span>`;
             area.appendChild(infoMsg);
             scrollToBottom();
         });
 
         // ============================================================
-        //  إعدادات الذاكرة
+        //  إعدادات الذاكرة (مودال الإعدادات)
         // ============================================================
         const settingsBtn = document.getElementById('settingsBtn');
         const settingsModal = document.getElementById('settingsModal');
@@ -2054,6 +2588,7 @@
             }
             saveSettings(newLimit);
             settingsModal.classList.remove('active');
+            // التحقق من الجلسات الحالية وحذف أي جلسة تتجاوز الحد
             const memory = getMemory();
             let changed = false;
             memory.sessions = memory.sessions.filter(session => {
@@ -2093,8 +2628,8 @@
 
             if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
                 const now = new Date();
-                const timeStr = now.toLocaleString('ar-EG', { timeZone: 'Asia/Riyadh', hour12: true });
-                const dateStr = now.toLocaleDateString('ar-EG', { timeZone: 'Asia/Riyadh' });
+                const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
+                const dateStr = now.toLocaleDateString('ar-SA', { timeZone: 'Asia/Riyadh' });
                 const template = getReply('time');
                 return { type: 'text', content: template.replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr) };
             }
@@ -2306,16 +2841,18 @@
                     userContent += `\n[ملف: ${attachedFile.name}]\n${fileText}`;
                 }
 
+                // عرض رسالة المستخدم
                 const userMsg = document.createElement('div');
                 userMsg.className = 'message user';
                 let userDisplay = text || ' أرسل ملفاً';
                 if (attachedFile) {
-                    userDisplay += ` <span style="color:var(--gold-bright);font-size:0.8rem;"> ${attachedFile.name}</span>`;
+                    userDisplay += ` <span style="color:#4a7aff;font-size:0.8rem;"> ${attachedFile.name}</span>`;
                 }
                 userMsg.innerHTML = escapeHtml(userDisplay) + `<span class="msg-time">الآن</span>`;
                 messagesArea.appendChild(userMsg);
                 scrollToBottom();
 
+                // حفظ في الذاكرة (الجلسة الحالية)
                 saveToMemory('user', userContent);
 
                 messageInput.value = '';
@@ -2355,6 +2892,7 @@
                     replyContent = reply.content;
                 }
 
+                // حفظ رد البوت في الذاكرة
                 saveToMemory('bot', replyContent || 'تم عرض المنتج');
 
                 await sendToDiscord(userContent, replyContent);
@@ -2384,7 +2922,7 @@
         async function sendToDiscord(userMessage, botReply) {
             try {
                 const payload = {
-                    content: `**رسالة جديدة من MEN Ai**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('ar-EG', { timeZone: 'Asia/Riyadh' })}`
+                    content: `**رسالة جديدة من MEN Ai**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
                 };
                 await fetch('https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
                     method: 'POST',
@@ -2539,7 +3077,10 @@
             await loadExternalLibraries();
             await Promise.all([loadResponses(), loadProducts()]);
 
+            // تحميل الجلسة الحالية (ستعرض الترحيب إذا كانت فارغة)
             loadCurrentSession();
+
+            // تحميل الذاكرة (للإعدادات)
             loadMemory();
 
             messageInput.disabled = false;
@@ -2547,9 +3088,10 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع دعم المحادثات ورسالة الترحيب');
+            console.log('MEN Ai جاهز مع دعم الجلسات ورسالة الترحيب ✅');
         }
 
+        // بدء التشغيل
         init();
     </script>
 </body>
