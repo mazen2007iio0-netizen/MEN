@@ -1,1430 +1,1433 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <link rel="icon" type="image/png" href="logo.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEN Ai</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>MEN AI | المساعد الذكي الفاخر</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --bg-color: #0b0f19;
+            --sidebar-bg: rgba(15, 23, 42, 0.75);
+            --chat-bg: rgba(17, 24, 39, 0.65);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --bubble-user: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --bubble-ai: rgba(30, 41, 59, 0.8);
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-        body {
             font-family: 'Cairo', sans-serif;
-            background: #000000;
-            color: #f0f4ff;
-            min-height: 100vh;
-            overflow-x: hidden;
         }
-        ::-webkit-scrollbar {
-            width: 6px;
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 40%);
         }
-        ::-webkit-scrollbar-track {
-            background: #000000;
+
+        /* ===== Sidebar ===== */
+        aside {
+            width: 280px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            transition: 0.3s ease;
+            z-index: 10;
+            flex-shrink: 0;
         }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #021ca4, #1a3a9e);
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
             border-radius: 12px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
         }
 
-        .bg-ambient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background:
-                radial-gradient(ellipse at 20% 30%, rgba(2, 28, 164, 0.15) 0%, transparent 55%),
-                radial-gradient(ellipse at 80% 70%, rgba(26, 58, 158, 0.10) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, #000000 0%, #000000 100%);
-            animation: ambientFloat 20s ease-in-out infinite alternate;
-        }
-        @keyframes ambientFloat {
-            0% {
-                transform: scale(1) rotate(0deg);
-            }
-            100% {
-                transform: scale(1.05) rotate(2deg);
-            }
+        .brand-name h2 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
-        .container {
-            width: 92%;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 18px;
+        .brand-name span {
+            font-size: 11px;
+            color: var(--text-muted);
         }
-        :root {
-            --blue-deep: #021ca4;
-            --blue-mid: #1a3a9e;
-            --blue-light: #4a7aff;
-            --blue-glow: rgba(74, 122, 255, 0.2);
-            --card-bg: rgba(10, 16, 32, 0.85);
-            --card-border: rgba(2, 28, 164, 0.25);
-            --radius-xl: 24px;
-            --radius-2xl: 40px;
-            --glow-neon: 0 0 30px rgba(74, 122, 255, 0.15);
+
+        .new-chat-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .new-chat-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .history-title {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            list-style: none;
+        }
+
+        .history-item {
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-item:hover, .history-item.active {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        .history-item .delete-session {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+
+        .history-item .delete-session:hover {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+        }
+
+        .sidebar-footer button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: 0.2s;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+
+        .sidebar-footer button:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        /* ===== Main Chat ===== */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--chat-bg);
+            backdrop-filter: blur(10px);
+            position: relative;
+            min-width: 0;
         }
 
         header {
-            background: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(2, 28, 164, 0.10);
-            padding: 12px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
-        }
-        .header-content {
+            padding: 18px 25px;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 14px;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            background: rgba(11, 15, 25, 0.4);
+            flex-shrink: 0;
         }
 
-        .btn-back {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(2, 28, 164, 0.15);
-            border-radius: 40px;
-            padding: 0 18px;
-            height: 44px;
-            color: #a0b0d4;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            text-decoration: none;
-            font-family: 'Cairo', sans-serif;
-        }
-        .btn-back i {
-            font-size: 1.2rem;
-        }
-        .btn-back .back-text {
+        .header-info h3 {
+            font-size: 16px;
             font-weight: 600;
-            font-size: 0.95rem;
-            white-space: nowrap;
-        }
-        .btn-back:hover {
-            background: rgba(74, 122, 255, 0.1);
-            border-color: var(--blue-light);
-            color: #fff;
-            transform: scale(1.03);
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.1);
-        }
-        .btn-back:active {
-            transform: scale(0.95);
         }
 
-        .logo img {
-            height: 48px;
-            filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(74, 122, 255, 0.3));
-        }
-        .logo h1 {
-            font-size: 2rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 40%, var(--blue-light));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 40px rgba(74, 122, 255, 0.2);
-        }
-        .logo h1 i {
-            color: var(--blue-light);
-            margin-left: 8px;
-            font-size: 1.6rem;
-            filter: drop-shadow(0 0 20px rgba(74, 122, 255, 0.3));
-            animation: sparkle 2s ease-in-out infinite alternate;
-        }
-        @keyframes sparkle {
-            0% {
-                filter: drop-shadow(0 0 10px rgba(74, 122, 255, 0.2));
-                transform: scale(1) rotate(0deg);
-            }
-            100% {
-                filter: drop-shadow(0 0 30px rgba(74, 122, 255, 0.6));
-                transform: scale(1.1) rotate(10deg);
-            }
-        }
-
-        .chat-wrapper {
-            margin: 20px 0;
-            background: var(--card-bg);
-            backdrop-filter: blur(24px);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius-2xl);
-            overflow: hidden;
-            box-shadow: var(--glow-neon);
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 160px);
-            min-height: 500px;
-        }
-
-        .chat-header {
-            padding: 18px 24px;
-            border-bottom: 1px solid rgba(2, 28, 164, 0.1);
+        .header-info p {
+            font-size: 12px;
+            color: #10b981;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 16px;
-            background: rgba(0, 0, 0, 0.4);
+            gap: 5px;
         }
-        .chat-header .bot-info {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .chat-header .bot-avatar {
-            width: 44px;
-            height: 44px;
+
+        .header-info p::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-light));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            color: #fff;
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
-            overflow: hidden;
-        }
-        .chat-header .bot-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0) invert(1);
-        }
-        .chat-header .bot-name {
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .chat-header .bot-name img {
-            height: 28px;
-            filter: brightness(0) invert(1);
+            display: inline-block;
+            box-shadow: 0 0 8px #10b981;
         }
 
-        .messages-area {
+        .header-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .chat-messages {
             flex: 1;
-            padding: 20px 24px;
             overflow-y: auto;
+            padding: 25px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            background: rgba(0, 0, 0, 0.3);
-        }
-        .messages-area::-webkit-scrollbar {
-            width: 4px;
-        }
-        .messages-area::-webkit-scrollbar-thumb {
-            background: var(--blue-deep);
-            border-radius: 12px;
+            gap: 20px;
+            scroll-behavior: smooth;
         }
 
         .message {
-            max-width: 85%;
-            padding: 14px 20px;
-            border-radius: var(--radius-xl);
-            animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            word-wrap: break-word;
-            line-height: 1.7;
-        }
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        .message.user {
-            align-self: flex-end;
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            border-bottom-left-radius: 6px;
-            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
-        }
-        .message.bot {
-            align-self: flex-start;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(2, 28, 164, 0.08);
-            border-bottom-right-radius: 6px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-        .message .msg-time {
-            font-size: 0.65rem;
-            color: #6a708a;
-            margin-top: 6px;
-            display: block;
-            text-align: left;
-        }
-        .message.user .msg-time {
-            text-align: right;
+            display: flex;
+            gap: 15px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
         }
 
-        /* ===== عرض المنتجات والاقتراحات في صف واحد جنباً إلى جنب ===== */
-        .products-row-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding: 6px 0 12px 0;
-            margin: 4px 0;
-            scrollbar-width: thin;
-            scrollbar-color: var(--blue-deep) transparent;
-        }
-        .products-row-wrapper::-webkit-scrollbar {
-            height: 4px;
-        }
-        .products-row-wrapper::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-        }
-        .products-row-wrapper::-webkit-scrollbar-thumb {
-            background: var(--blue-deep);
-            border-radius: 12px;
-        }
-
-        .products-row {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 18px;
-            width: max-content;
-            min-width: 100%;
-            padding: 2px 2px 6px 2px;
-        }
-
-        .products-row .men-product-card {
-            min-width: 260px;
-            max-width: 280px;
-            flex: 0 0 auto;
-            margin: 0;
-            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .products-row .men-product-card:hover {
-            transform: translateY(-6px) scale(1.02);
-        }
-        .products-row .men-product-card .product-image {
-            height: 160px;
-            object-fit: cover;
-        }
-        .products-row .men-product-card .product-content {
-            padding: 14px 16px 16px;
-        }
-        .products-row .men-product-card .product-content h2 {
-            font-size: 1.2rem;
-            margin: 8px 0 4px;
-        }
-        .products-row .men-product-card .product-content p {
-            font-size: 0.8rem;
-            margin: 4px 0 12px;
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .products-row .men-product-card .price {
-            font-size: 1.2rem;
-        }
-        .products-row .men-product-card .btn-product {
-            padding: 6px 14px;
-            font-size: 0.75rem;
-        }
-        .products-row .men-product-card .badge {
-            font-size: 0.7rem;
-            padding: 4px 12px;
-        }
-
-        /* اقتراحات بتصميم مختلف للنصوص متوافقة مع عرض المنتجات الأفقي */
-        .suggestions-row-card {
-            min-width: 240px;
-            max-width: 260px;
-            flex: 0 0 auto;
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid rgba(74, 122, 255, 0.2);
-            border-radius: 20px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 12px;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-        .suggestions-row-card:hover {
-            border-color: var(--blue-light);
-            transform: translateY(-4px);
-            box-shadow: 0 0 25px rgba(74, 122, 255, 0.15);
-        }
-        .suggestions-row-card .sug-badge {
-            font-size: 0.7rem;
-            color: var(--blue-light);
-            background: rgba(74, 122, 255, 0.1);
-            padding: 3px 10px;
-            border-radius: 12px;
-            width: max-content;
-        }
-        .suggestions-row-card p {
-            font-size: 0.9rem;
-            color: #d0dcf5;
-            line-height: 1.5;
-        }
-        .suggestions-row-card .sug-action {
-            font-size: 0.75rem;
-            color: var(--blue-light);
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .welcome-animation {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 6px;
-            width: 100%;
-        }
-        .welcome-main {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            font-size: 2.4rem;
-            font-weight: 900;
-            margin-bottom: 4px;
-        }
-        .welcome-main .letter {
-            display: inline-block;
-            background: linear-gradient(135deg, #ffffff 20%, var(--blue-light));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: bounceGlow 1.8s ease-in-out infinite alternate;
-            text-shadow: 0 0 20px rgba(74, 122, 255, 0.2);
-            transform-origin: center bottom;
-        }
-        @keyframes bounceGlow {
-            0% {
-                transform: translateY(0px) scale(1);
-                filter: drop-shadow(0 0 5px rgba(74, 122, 255, 0.1));
-            }
-            100% {
-                transform: translateY(-12px) scale(1.08);
-                filter: drop-shadow(0 0 25px rgba(74, 122, 255, 0.6));
-            }
-        }
-
-        .typewriter-container {
-            font-size: 1.4rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            min-height: 2.8rem;
-            direction: rtl;
-        }
-        .typewriter-text {
-            display: inline;
-            color: #c0ccf0;
-        }
-        .typewriter-text .highlight {
-            background: linear-gradient(135deg, var(--blue-light), #a0c0ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-weight: 900;
-        }
-        .typewriter-cursor {
-            display: inline-block;
-            width: 3px;
-            height: 1.8rem;
-            background: var(--blue-light);
-            margin-right: 4px;
-            animation: blinkCursor 0.7s step-end infinite;
-            vertical-align: middle;
-        }
-        @keyframes blinkCursor {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        .welcome-desc {
-            font-size: 0.95rem;
-            color: #8a9abb;
-            margin-top: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 1.8s forwards;
-        }
-        .welcome-desc i {
-            color: var(--blue-light);
-            animation: spinSlow 4s linear infinite;
-        }
-        @keyframes spinSlow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(12px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .typing-indicator {
+        .message.user {
             align-self: flex-start;
-            display: none;
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius-xl);
-            border-bottom-right-radius: 6px;
-            border: 1px solid rgba(2, 28, 164, 0.08);
-            gap: 10px;
-            align-items: center;
-            color: #a0b0d4;
-            font-size: 0.95rem;
-        }
-        .typing-indicator .dots {
-            display: flex;
-            gap: 5px;
-        }
-        .typing-indicator .dots span {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--blue-light);
-            display: inline-block;
-            animation: typingBounce 1.4s ease-in-out infinite;
-        }
-        .typing-indicator .dots span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        .typing-indicator .dots span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-        @keyframes typingBounce {
-            0%, 60%, 100% {
-                transform: translateY(0);
-                opacity: 0.4;
-            }
-            30% {
-                transform: translateY(-10px);
-                opacity: 1;
-            }
-        }
-        .typing-indicator i {
-            color: var(--blue-light);
-            animation: spin 1s linear infinite;
-            font-size: 1.1rem;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            flex-direction: row-reverse;
         }
 
-        .suggested-questions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 10px 20px 4px 20px;
-            background: rgba(0, 0, 0, 0.25);
-            border-top: 1px solid rgba(2, 28, 164, 0.08);
-            transition: all 0.3s ease;
-        }
-        .suggested-questions.hidden {
-            display: none;
-        }
-        .suggested-questions .sq-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(74, 122, 255, 0.15);
-            border-radius: 30px;
-            padding: 8px 18px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.85rem;
-            color: #b0c4e8;
-            cursor: pointer;
-            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            white-space: nowrap;
-            backdrop-filter: blur(4px);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .suggested-questions .sq-btn i {
-            font-size: 0.8rem;
-            opacity: 0.6;
-        }
-        .suggested-questions .sq-btn:hover {
-            background: rgba(74, 122, 255, 0.08);
-            border-color: var(--blue-light);
-            color: #fff;
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 4px 20px rgba(74, 122, 255, 0.05);
-        }
-        .suggested-questions .sq-btn:active {
-            transform: scale(0.95);
+        .message.ai {
+            align-self: flex-end;
         }
 
-        .input-area {
-            padding: 12px 20px 16px;
-            border-top: 1px solid rgba(2, 28, 164, 0.08);
+        .msg-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
             display: flex;
-            align-items: flex-end;
-            gap: 8px;
-            background: rgba(0, 0, 0, 0.4);
-            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
         }
-        .input-area .input-wrapper {
-            flex: 1;
-            min-width: 150px;
-            display: flex;
-            align-items: flex-end;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-xl);
-            border: 1.5px solid rgba(2, 28, 164, 0.1);
-            transition: 0.3s;
-            padding: 4px 16px 4px 8px;
-            min-height: 52px;
+
+        .message.user .msg-avatar {
+            background: #3b82f6;
+            color: white;
         }
-        .input-area .input-wrapper:focus-within {
-            border-color: var(--blue-light);
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.05);
+
+        .message.ai .msg-avatar {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
         }
-        .input-area .input-wrapper textarea {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #f0f4ff;
-            font-size: 1rem;
-            font-family: 'Cairo', sans-serif;
-            resize: none;
-            padding: 12px 4px;
-            min-height: 44px;
-            max-height: 150px;
+
+        .msg-content {
+            background: var(--bubble-ai);
+            padding: 14px 18px;
+            border-radius: 16px;
+            font-size: 14px;
             line-height: 1.6;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            word-wrap: break-word;
+            white-space: pre-wrap;
         }
-        .input-area .input-wrapper textarea::placeholder {
-            color: #5a607a;
+
+        .message.user .msg-content {
+            background: var(--bubble-user);
+            color: white;
+            border: none;
         }
-        .input-area .input-wrapper .char-count {
-            font-size: 0.7rem;
-            color: #4a5070;
-            padding: 8px 4px;
+
+        .msg-actions {
+            margin-top: 8px;
+            display: flex;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .msg-actions button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .msg-actions button:hover {
+            color: var(--text-main);
+        }
+
+        /* ===== Suggestions ===== */
+        .suggestions-container {
+            padding: 0 25px 15px 25px;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            flex-shrink: 0;
+        }
+
+        .suggestion-chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text-muted);
+            cursor: pointer;
             white-space: nowrap;
-            direction: ltr;
+            transition: 0.2s;
         }
 
-        .input-area .btn-send {
-            width: 52px;
-            height: 52px;
-            min-width: 52px;
-            border-radius: 50%;
+        .suggestion-chip:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+
+        /* ===== Input Area ===== */
+        .chat-input-area {
+            padding: 20px 25px;
+            background: rgba(11, 15, 25, 0.6);
+            border-top: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .input-wrapper {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            gap: 10px;
+            transition: 0.2s;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .input-wrapper:focus-within {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        .input-wrapper textarea {
+            flex: 1;
+            background: none;
             border: none;
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            color: #fff;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 30px rgba(2, 28, 164, 0.2);
+            color: var(--text-main);
+            font-size: 14px;
+            resize: none;
+            max-height: 120px;
+            padding: 6px;
+            outline: none;
+            min-height: 40px;
+        }
+
+        .input-wrapper textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            overflow: hidden;
-            transform: none;
-        }
-        .input-area .btn-send::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(74, 122, 255, 0.4), transparent);
-            opacity: 0;
-            transition: 0.6s;
-        }
-        .input-area .btn-send:hover::after {
-            opacity: 1;
-        }
-        .input-area .btn-send:hover {
-            transform: scale(1.08);
-            box-shadow: 0 8px 40px rgba(2, 28, 164, 0.4);
-        }
-        .input-area .btn-send:active {
-            transform: scale(0.92);
-        }
-        .input-area .btn-send:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: scale(1);
-        }
-
-        .input-area .btn-voice {
-            width: 52px;
-            height: 52px;
-            min-width: 52px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(2, 28, 164, 0.2);
-            color: #a0b0d4;
-            font-size: 1.4rem;
             cursor: pointer;
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            transition: 0.2s;
             position: relative;
-        }
-        .input-area .btn-voice:hover {
-            background: rgba(74, 122, 255, 0.08);
-            border-color: var(--blue-light);
-            color: #fff;
-            transform: scale(1.05);
-        }
-        .input-area .btn-voice:active {
-            transform: scale(0.92);
         }
 
-        .input-area .btn-voice.recording {
-            background: rgba(255, 50, 50, 0.2);
-            border-color: #ff4444;
-            color: #ff4444;
-            animation: pulseMic 1s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
-        }
-        .input-area .btn-voice.recording::before,
-        .input-area .btn-voice.recording::after {
-            content: '';
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 68, 68, 0.4);
-            animation: ripple 1.5s ease-out infinite;
-            pointer-events: none;
-            z-index: -1;
-        }
-        .input-area .btn-voice.recording::after {
-            animation-delay: 0.75s;
-        }
-        @keyframes ripple {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.8); opacity: 0; }
-        }
-        @keyframes pulseMic {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 68, 68, 0.2); }
-            50% { transform: scale(1.12); box-shadow: 0 0 30px rgba(255, 68, 68, 0.5); }
-        }
-        .input-area .btn-voice:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
+        .action-icon-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
         }
 
-        .input-area .btn-attach {
-            width: 52px;
-            height: 52px;
-            min-width: 52px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(2, 28, 164, 0.2);
-            color: #a0b0d4;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
+        .action-icon-btn.has-file {
+            color: #6366f1;
         }
-        .input-area .btn-attach:hover {
-            background: rgba(74, 122, 255, 0.08);
-            border-color: var(--blue-light);
-            color: #fff;
-            transform: scale(1.05);
-        }
-        .input-area .btn-attach:active {
-            transform: scale(0.92);
-        }
-        .input-area .btn-attach input[type="file"] {
+
+        .action-icon-btn input[type="file"] {
             position: absolute;
             inset: 0;
             opacity: 0;
             cursor: pointer;
-            font-size: 0;
         }
-        .input-area .btn-attach.has-file {
-            border-color: var(--blue-light);
-            color: var(--blue-light);
-            background: rgba(74, 122, 255, 0.1);
+
+        .send-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+        }
+
+        .send-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .waveform {
+            display: none;
+            align-items: center;
+            gap: 3px;
+            padding: 0 10px;
+        }
+
+        .waveform span {
+            width: 3px;
+            height: 15px;
+            background: #ec4899;
+            border-radius: 3px;
+            animation: wave 1s infinite ease-in-out;
+        }
+
+        .waveform span:nth-child(2) { animation-delay: 0.2s; }
+        .waveform span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes wave {
+            0%, 100% { height: 6px; }
+            50% { height: 25px; }
         }
 
         .file-preview {
             display: none;
-            padding: 6px 16px 6px 12px;
-            background: rgba(74, 122, 255, 0.08);
-            border-radius: 20px;
-            border: 1px solid rgba(74, 122, 255, 0.15);
-            font-size: 0.8rem;
-            color: #a0b0d4;
+            font-size: 12px;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.05);
+            padding: 4px 10px;
+            border-radius: 8px;
+            gap: 6px;
             align-items: center;
-            gap: 8px;
             white-space: nowrap;
-            max-width: 200px;
+            max-width: 150px;
             overflow: hidden;
             text-overflow: ellipsis;
-            transition: 0.3s ease;
         }
+
         .file-preview.visible {
             display: inline-flex;
         }
+
         .file-preview .remove-file {
             cursor: pointer;
-            color: #ff6b6b;
-            font-size: 0.9rem;
-            padding: 0 4px;
-            transition: 0.3s;
-        }
-        .file-preview .remove-file:hover {
-            transform: scale(1.2);
-            color: #ff4444;
-        }
-        .file-preview i {
-            color: var(--blue-light);
+            color: #ef4444;
         }
 
+        /* ===== Typing Indicator ===== */
+        .typing-indicator {
+            display: none;
+            align-self: flex-end;
+            padding: 10px 16px;
+            background: var(--bubble-ai);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 13px;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .typing-indicator .dots span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            animation: typingBounce 1.4s infinite;
+        }
+
+        .typing-indicator .dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator .dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-8px); opacity: 1; }
+        }
+
+        /* ===== Modal (الإعدادات) ===== */
         .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.7);
             backdrop-filter: blur(12px);
             z-index: 9999;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
+
         .modal-overlay.active {
             display: flex;
         }
+
         .modal-box {
-            background: rgba(10, 16, 32, 0.95);
-            border: 1px solid rgba(74, 122, 255, 0.2);
-            border-radius: 28px;
-            max-width: 600px;
+            background: #1e293b;
+            border-radius: 20px;
+            max-width: 480px;
             width: 100%;
-            max-height: 80vh;
-            padding: 30px;
-            box-shadow: 0 0 60px rgba(74, 122, 255, 0.1);
-            overflow-y: auto;
-            position: relative;
+            padding: 28px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
         }
+
         .modal-box h3 {
-            color: var(--blue-light);
-            font-size: 1.3rem;
-            margin-bottom: 16px;
+            font-size: 18px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        .modal-box .modal-text {
-            color: #c0ccf0;
-            line-height: 1.8;
-            font-size: 1rem;
-            white-space: pre-wrap;
-            word-break: break-word;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 16px;
-            border-radius: 16px;
-            border: 1px solid rgba(74, 122, 255, 0.05);
-            max-height: 50vh;
-            overflow-y: auto;
+
+        .modal-box h3 i {
+            color: #6366f1;
         }
-        .modal-box .modal-close {
+
+        .settings-group {
+            margin-bottom: 20px;
+        }
+
+        .settings-group label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .settings-group .settings-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .settings-group select,
+        .settings-group input[type="number"] {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 8px 14px;
+            color: var(--text-main);
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+            min-width: 120px;
+        }
+
+        .settings-group select:focus,
+        .settings-group input[type="number"]:focus {
+            border-color: #6366f1;
+        }
+
+        .settings-group select option {
+            background: #1e293b;
+        }
+
+        .settings-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
             margin-top: 20px;
-            padding: 10px 30px;
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            border: none;
-            border-radius: 40px;
-            color: #fff;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: 600;
-        }
-        .modal-box .modal-close:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
-        }
-
-        footer {
-            background: #000000;
-            border-top: 1px solid rgba(2, 28, 164, 0.03);
-            padding: 50px 0 30px;
-            margin-top: 30px;
-        }
-        .footer-flex {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 40px;
-        }
-        .footer-col h4 {
-            color: var(--blue-light);
-            margin-bottom: 18px;
-            font-size: 1.2rem;
-            text-shadow: 0 0 20px rgba(74, 122, 255, 0.1);
-        }
-        .footer-col p {
-            color: #6a708a;
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .footer-col p i {
-            color: #a0b0d4;
-            opacity: 0.7;
-            width: 20px;
-            transition: 0.3s;
-        }
-        .footer-col p:hover i {
-            color: var(--blue-light);
-            transform: scale(1.2);
-        }
-        .social-icons {
-            display: flex;
-            gap: 14px;
-            margin-top: 12px;
-        }
-        .social-icons a {
-            font-size: 1.4rem;
-            color: #6a708a;
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: inline-block;
-        }
-        .social-icons a:hover {
-            color: var(--blue-light);
-            transform: translateY(-6px) scale(1.2);
-            filter: drop-shadow(0 0 20px rgba(74, 122, 255, 0.2));
-        }
-        .copyright {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(2, 28, 164, 0.03);
-            color: #4a5070;
-            font-size: 0.9rem;
-            width: 100%;
-        }
-        .copyright span {
-            color: var(--blue-light);
-        }
-
-        .men-product-card {
-            width: 100%;
-            max-width: 380px;
-            background: rgba(10, 16, 32, 0.95);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(2, 28, 164, 0.3);
-            border-radius: 28px;
-            overflow: hidden;
-            font-family: 'Cairo', sans-serif;
-            color: #f0f4ff;
-            box-shadow: 0 0 40px rgba(2, 28, 164, 0.15), inset 0 1px 0 rgba(74, 122, 255, 0.1);
-            animation: show 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            transition: 0.4s;
-            margin: 6px 0;
-        }
-        .men-product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 0 60px rgba(74, 122, 255, 0.2), inset 0 1px 0 rgba(74, 122, 255, 0.2);
-            border-color: rgba(74, 122, 255, 0.4);
-        }
-        .men-product-card .product-image {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-bottom: 1px solid rgba(2, 28, 164, 0.15);
-            transition: 0.4s;
-        }
-        .men-product-card:hover .product-image {
-            transform: scale(1.02);
-        }
-        .men-product-card .product-content {
-            padding: 24px 22px 22px;
-        }
-        .men-product-card .badge {
-            display: inline-block;
-            background: rgba(74, 122, 255, 0.12);
-            color: var(--blue-light);
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            border: 1px solid rgba(74, 122, 255, 0.08);
-            backdrop-filter: blur(4px);
-        }
-        .men-product-card .product-content h2 {
-            margin: 14px 0 8px;
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #ffffff 30%, var(--blue-light));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .men-product-card .product-content p {
-            color: #a0b0d4;
-            line-height: 1.8;
-            margin: 8px 0 20px;
-            font-size: 0.95rem;
-        }
-        .men-product-card .bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
             flex-wrap: wrap;
         }
-        .men-product-card .price {
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--blue-light);
-            text-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
-        }
-        .men-product-card .price small {
-            font-size: 1rem;
-            color: #6a8ab0;
-            font-weight: 600;
-            margin-right: 4px;
-        }
-        .men-product-card .btn-product {
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            color: #fff;
+
+        .settings-actions button {
+            padding: 8px 20px;
+            border-radius: 10px;
             border: none;
-            padding: 12px 28px;
-            border-radius: 40px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 700;
             cursor: pointer;
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 30px rgba(2, 28, 164, 0.2);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .men-product-card .btn-product i {
-            font-size: 1.1rem;
-        }
-        .men-product-card .btn-product:hover {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 8px 40px rgba(74, 122, 255, 0.3);
-            background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
-        }
-        .men-product-card .btn-product:active {
-            transform: scale(0.95);
-        }
-        @keyframes show {
-            from {
-                opacity: 0;
-                transform: translateY(24px) scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            font-weight: 600;
+            transition: 0.2s;
         }
 
+        .btn-apply {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-apply:hover {
+            opacity: 0.9;
+        }
+
+        .btn-clear {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        .btn-close {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-muted);
+        }
+
+        .btn-close:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* ===== Scrollbar ===== */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* ===== Responsive ===== */
         @media (max-width: 768px) {
-            .chat-wrapper {
-                height: calc(100vh - 140px);
-                min-height: 400px;
-                border-radius: var(--radius-xl);
+            aside {
+                position: fixed;
+                inset: 0;
+                width: 280px;
+                transform: translateX(100%);
+                transition: 0.3s ease;
+                border-left: none;
+                border-right: 1px solid var(--border-color);
+                background: var(--bg-color);
+                z-index: 100;
             }
+
+            aside.open {
+                transform: translateX(0);
+            }
+
+            .menu-toggle {
+                display: flex !important;
+            }
+
             .message {
                 max-width: 90%;
-                padding: 12px 16px;
-                font-size: 0.95rem;
             }
-            .input-area {
-                padding: 10px 14px 14px;
+
+            .suggestions-container {
+                padding: 0 12px 10px 12px;
                 gap: 6px;
             }
-            .input-area .input-wrapper {
-                padding: 2px 12px 2px 6px;
-                min-height: 44px;
+
+            .suggestion-chip {
+                font-size: 11px;
+                padding: 6px 10px;
             }
-            .input-area .input-wrapper textarea {
-                padding: 8px 2px;
-                font-size: 0.95rem;
-                min-height: 36px;
+
+            .chat-input-area {
+                padding: 12px 12px 16px;
             }
-            .input-area .btn-send,
-            .input-area .btn-voice,
-            .input-area .btn-attach {
-                width: 44px;
-                height: 44px;
-                min-width: 44px;
-                font-size: 1.2rem;
+
+            .input-wrapper {
+                padding: 6px 10px;
             }
-            .chat-header {
+
+            header {
                 padding: 12px 16px;
             }
-            .chat-header .bot-avatar {
-                width: 36px;
-                height: 36px;
-                font-size: 1.2rem;
+
+            .chat-messages {
+                padding: 16px;
             }
-            .messages-area {
-                padding: 14px 16px;
-                gap: 10px;
-            }
-            .logo h1 {
-                font-size: 1.4rem;
-            }
-            .logo img {
-                height: 36px;
-            }
-            .btn-back {
-                height: 38px;
-                padding: 0 14px;
-                font-size: 0.9rem;
-            }
-            .btn-back .back-text {
-                font-size: 0.85rem;
-            }
-            .men-product-card {
-                max-width: 100%;
-            }
-            .welcome-main {
-                font-size: 2rem;
-            }
-            .typewriter-container {
-                font-size: 1.2rem;
-            }
-            .suggested-questions {
-                padding: 8px 14px 4px 14px;
-                gap: 6px;
-            }
-            .suggested-questions .sq-btn {
-                font-size: 0.75rem;
-                padding: 6px 14px;
-            }
-            .products-row .men-product-card {
-                min-width: 200px;
-                max-width: 220px;
-            }
-            .file-preview {
-                max-width: 120px;
-                font-size: 0.7rem;
-                padding: 4px 10px 4px 8px;
-            }
-            .modal-box {
-                padding: 20px;
-                margin: 10px;
-            }
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* تنسيق المنتجات داخل الرسائل */
+        .products-grid {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 6px 0;
+        }
+
+        .product-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 14px;
+            min-width: 160px;
+            max-width: 200px;
+            flex-shrink: 0;
+        }
+
+        .product-card h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .product-card p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .product-card .price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #a855f7;
+        }
+
+        .product-card .btn-product {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .product-card .btn-product:hover {
+            opacity: 0.9;
+        }
+
+        /* تنسيق الملفات المرفقة */
+        .file-attachment {
+            background: rgba(99,102,241,0.1);
+            border: 1px solid rgba(99,102,241,0.2);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            color: #a5b4fc;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
         }
     </style>
 </head>
 <body>
-    <div class="bg-ambient"></div>
 
-    <header>
-        <div class="container header-content">
-            <div class="logo">
-                <a href="#" class="btn-back" id="backBtn" title="رجوع">
-                    <i class="fas fa-arrow-right"></i>
-                    <span class="back-text">رجوع</span>
-                </a>
+    <!-- ===== Sidebar ===== -->
+    <aside id="sidebar">
+        <div class="brand">
+            <div class="brand-logo">MEN</div>
+            <div class="brand-name">
+                <h2>MEN AI</h2>
+                <span>نسخة الذكاء الاصطناعي</span>
             </div>
         </div>
-    </header>
 
+        <button class="new-chat-btn" onclick="startNewChat()">
+            <i class="fa-solid fa-plus"></i> محادثة جديدة
+        </button>
+
+        <div class="history-title">سجل المحادثات</div>
+        <ul class="history-list" id="historyList"></ul>
+
+        <div class="sidebar-footer">
+            <button onclick="openSettings()"><i class="fa-solid fa-sliders-h"></i> إعدادات</button>
+            <button onclick="clearAllSessions()"><i class="fa-solid fa-trash-alt"></i> مسح الكل</button>
+        </div>
+    </aside>
+
+    <!-- ===== Main ===== -->
     <main>
-        <div class="container">
-            <div class="chat-wrapper">
-                <div class="chat-header">
-                    <div class="bot-info">
-                        <div class="bot-avatar">
-                            <img src="logo.png" alt="شعار MEN" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <i class="fas fa-wand-sparkles" style="display:none;"></i>
-                        </div>
-                  <div class="chat-header">
-                    <div class="bot-info">
-                        <div class="bot-avatar"><i class="fas fa-wand-sparkles"></i></div>
-                        <div>
-                            <div class="bot-name">MEN Ai</div>
-                        </div>
-                    </div>
+        <header>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="header-info">
+                    <h3 id="currentChatTitle">مساعد MEN AI الذكي</h3>
+                    <p>متصل وجاهز للخدمة الفورية</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="action-icon-btn" onclick="openSettings()" title="الإعدادات"><i class="fa-solid fa-gear"></i></button>
+            </div>
+        </header>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages"></div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" id="typingIndicator">
+            <span>MEN AI يكتب</span>
+            <span class="dots"><span></span><span></span><span></span></span>
+        </div>
+
+        <!-- Suggestions -->
+        <div class="suggestions-container" id="suggestionsContainer">
+            <div class="suggestion-chip" onclick="sendSuggestion('متى تأسس الفريق؟')">📅 متى تأسس الفريق؟</div>
+            <div class="suggestion-chip" onclick="sendSuggestion('كيف اشترك في MEN pass؟')">🎟️ كيف اشترك في MEN pass؟</div>
+            <div class="suggestion-chip" onclick="sendSuggestion('كيف يمكنني التواصل مع الدعم؟')">📞 التواصل مع الدعم</div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="chat-input-area">
+            <div class="input-wrapper">
+                <button class="action-icon-btn" id="attachBtn" title="إرفاق ملف">
+                    <i class="fa-solid fa-paperclip"></i>
+                    <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls">
+                </button>
+
+                <div class="file-preview" id="filePreview">
+                    <i class="fa-solid fa-file"></i>
+                    <span id="fileName">ملف</span>
+                    <span class="remove-file" id="removeFile"><i class="fa-solid fa-times"></i></span>
                 </div>
 
-                <div class="messages-area" id="messagesArea"></div>
+                <textarea id="userInput" placeholder="اكتب رسالتك هنا أو اسأل عن أي شيء..." rows="1"></textarea>
 
-                <div class="typing-indicator" id="typingIndicator">
-                    <i class="fas fa-circle-notch"></i>
-                    <span>جار التفكير</span>
-                    <span class="dots"><span></span><span></span><span></span></span>
+                <div class="waveform" id="voiceWaveform">
+                    <span></span><span></span><span></span>
                 </div>
 
-                <div class="suggested-questions" id="suggestedQuestions">
-                    <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
-                    <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
-                    <button class="sq-btn" data-question="كيف يمكنني التواصل مع الدعم؟"><i class="fas fa-headset"></i> التواصل مع الدعم</button>
-                </div>
+                <button class="action-icon-btn" id="micBtn" title="تسجيل صوتي" onclick="toggleVoiceRecording()">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
 
-                <div class="input-area">
-                    <button class="btn-attach" id="attachBtn" title="إرفاق ملف أو صورة">
-                        <i class="fas fa-paperclip"></i>
-                        <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls">
-                    </button>
-
-                    <div class="file-preview" id="filePreview">
-                        <i class="fas fa-file"></i>
-                        <span id="fileName">ملف</span>
-                        <span class="remove-file" id="removeFile"><i class="fas fa-times"></i></span>
-                    </div>
-
-                    <div class="input-wrapper">
-                        <textarea id="messageInput" rows="1" placeholder="اسألني عن أي شيء..."></textarea>
-                        <span class="char-count" id="charCount">0</span>
-                    </div>
-
-                    <button class="btn-voice" id="voiceBtn" title="تسجيل صوتي">
-                        <i class="fas fa-microphone"></i>
-                    </button>
-                    <button class="btn-send" id="sendBtn" title="إرسال">
-                        <i class="fas fa-arrow-up"></i>
-                    </button>
-                </div>
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
             </div>
         </div>
     </main>
 
-    <div class="modal-overlay" id="extractModal">
+    <!-- ===== Modal: الإعدادات ===== -->
+    <div class="modal-overlay" id="settingsModal">
         <div class="modal-box">
-            <h3><i class="fas fa-file-alt"></i> تحليل الملف والكلمات المفتاحية</h3>
-            <div class="modal-text" id="extractedText">جاري استخراج النص...</div>
-            <button class="modal-close" id="modalClose">إغلاق</button>
+            <h3><i class="fa-solid fa-sliders-h"></i> إعدادات الذاكرة</h3>
+            <div class="settings-group">
+                <label>الحد الأقصى للرسائل في كل محادثة</label>
+                <div class="settings-input">
+                    <select id="memoryLimitSelect">
+                        <option value="12">12 (افتراضي)</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                    </select>
+                    <span style="color:var(--text-muted);font-size:13px;">أو</span>
+                    <input type="number" id="customLimitInput" min="1" max="10000" placeholder="مخصص" style="width:100px;">
+                </div>
+                <p style="color:var(--text-muted);font-size:12px;margin-top:6px;">عند تجاوز العدد في أي محادثة، سيتم حذف المحادثة بالكامل.</p>
+            </div>
+            <div class="settings-actions">
+                <button class="btn-clear" onclick="clearAllSessions()"><i class="fa-solid fa-trash-alt"></i> مسح الذاكرة</button>
+                <button class="btn-apply" onclick="applySettings()">تطبيق الإعدادات</button>
+                <button class="btn-close" onclick="closeSettings()">إغلاق</button>
+            </div>
         </div>
     </div>
 
-    <footer>
-        <div class="container">
-            <div class="footer-flex">
-                <div class="footer-col">
-                    <h4><i class="fas fa-compass" style="margin-left:8px; color:var(--blue-deep);"></i>تواصل معنا</h4>
-                    <p><i class="fas fa-envelope"></i> clan.men.ts@gmail.com</p>
-                    <p><i class="fas fa-phone"></i> 0540367546</p>
-                    <div class="social-icons">
-                        <a href="https://x.com/men_vi5" target="_blank"><i class="fab fa-x-twitter"></i></a>
-                        <a href="https://youtube.com/@clan_men" target="_blank"><i class="fab fa-youtube"></i></a>
-                        <a href="https://discord.gg/UJTZfvGew" target="_blank"><i class="fab fa-discord"></i></a>
-                        <a href="https://www.tiktok.com/@team_men2020" target="_blank"><i class="fab fa-tiktok"></i></a>
-                    </div>
-                </div>
-                <div class="copyright">جميع الحقوق محفوظة © 2020 MEN <span></span></div>
+    <!-- ===== Modal: استخراج النص ===== -->
+    <div class="modal-overlay" id="extractModal">
+        <div class="modal-box">
+            <h3><i class="fa-solid fa-file-alt"></i> النص المستخرج من الملف</h3>
+            <div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:16px;max-height:50vh;overflow-y:auto;white-space:pre-wrap;font-size:14px;color:var(--text-main);" id="extractedText">
+                جاري استخراج النص...
+            </div>
+            <div class="settings-actions" style="margin-top:16px;">
+                <button class="btn-close" onclick="closeExtractModal()">إغلاق</button>
             </div>
         </div>
-    </footer>
+    </div>
 
     <script>
+        // ============================================================
+        //  المتغيرات العامة والإعدادات
+        // ============================================================
+        const MEMORY_KEY = 'menChatMemory';
+        const SETTINGS_KEY = 'menChatSettings';
+        const DEFAULT_LIMIT = 12;
+        let maxMessagesPerSession = loadSettings();
+        let attachedFile = null;
+        let isProcessing = false;
+        let isRecording = false;
+        let recognition = null;
+        let currentSessionId = null;
+
+        // الردود والمنتجات (سيتم تحميلها من ملفات خارجية أو استخدام افتراضية)
         let responses = {};
         let keywordsMap = {};
         let products = [];
 
-        const SUBSCRIPTION_KEYWORDS = [
-            'اشتراك', 'اشترك', 'اشتري', 'شراء', 'طلب', 'طلب منتج',
-            'MEN', 'pro', 'باقة', 'عرض', 'خصم', 'سعر', 'كم سعر',
-            'كيف اشترك', 'اريد اشتراك', 'ابي اشتراك', 'ابغى اشتراك'
-        ];
-
-        let attachedFile = null;
-        let extractedText = '';
-
-        function getReply(category) {
-            const list = responses[category]?.responses;
-            if (!list || list.length === 0) {
-                return getReply('default');
-            }
-            const randomIndex = Math.floor(Math.random() * list.length);
-            return list[randomIndex];
-        }
-
-        function buildKeywordsMap(data) {
-            const map = {};
-            for (const [cat, obj] of Object.entries(data)) {
-                if (obj.keywords && Array.isArray(obj.keywords)) {
-                    map[cat] = obj.keywords.map(k => k.toLowerCase());
+        // ============================================================
+        //  تحميل الإعدادات
+        // ============================================================
+        function loadSettings() {
+            try {
+                const saved = localStorage.getItem(SETTINGS_KEY);
+                if (saved) {
+                    const settings = JSON.parse(saved);
+                    return settings.limit || DEFAULT_LIMIT;
                 }
-            }
-            return map;
+            } catch (e) {}
+            return DEFAULT_LIMIT;
         }
 
-        // استخراج الكلمات المتشابهة وتقديم اقتراحات أفقية (اقتراح واحد أو اثنين بتصميم نص مختلف)
-        function findSuggestionsOrMatches(queryText) {
-            const lower = queryText.trim().toLowerCase();
-            const matchedCategories = [];
+        function saveSettings(limit) {
+            try {
+                localStorage.setItem(SETTINGS_KEY, JSON.stringify({ limit }));
+                maxMessagesPerSession = limit;
+            } catch (e) {}
+        }
 
-            for (const [cat, patterns] of Object.entries(keywordsMap)) {
-                for (const pattern of patterns) {
-                    if (lower.includes(pattern) && !matchedCategories.includes(cat)) {
-                        matchedCategories.push(cat);
+        // ============================================================
+        //  إدارة الذاكرة (الجلسات)
+        // ============================================================
+        function getMemory() {
+            try {
+                const data = localStorage.getItem(MEMORY_KEY);
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    if (parsed.sessions && Array.isArray(parsed.sessions)) {
+                        return parsed;
                     }
                 }
-            }
-
-            if (matchedCategories.length > 0) {
-                let html = '<div class="products-row-wrapper"><div class="products-row">';
-                // جلب اقتراحين كحد أقصى لتصميم النصوص
-                const limit = Math.min(matchedCategories.length, 2);
-                for (let i = 0; i < limit; i++) {
-                    const cat = matchedCategories[i];
-                    const replyText = getReply(cat);
-                    html += `
-                        <div class="suggestions-row-card" onclick="selectSuggestion('${cat}')">
-                            <span class="sug-badge"><i class="fas fa-lightbulb"></i> اقتراح ${i + 1} (${cat})</span>
-                            <p>${replyText}</p>
-                            <div class="sug-action">عرض الإجابة <i class="fas fa-arrow-left"></i></div>
-                        </div>
-                    `;
-                }
-                html += '</div></div>';
-                return { type: 'suggestions', content: html };
-            }
-            return null;
+            } catch (e) {}
+            return { sessions: [], currentSessionId: null };
         }
 
-        window.selectSuggestion = function(category) {
-            const replyText = getReply(category);
-            const botMsg = document.createElement('div');
-            botMsg.className = 'message bot';
-            botMsg.innerHTML = `💡 بناءً على اختيارك للاقتراح:<br><br>${replyText}<span class="msg-time">الآن</span>`;
-            messagesArea.appendChild(botMsg);
-            scrollToBottom();
+        function saveMemory(memory) {
+            try {
+                localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
+            } catch (e) {}
+        }
+
+        function createNewSession(title) {
+            const memory = getMemory();
+            const id = Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 5);
+            const session = {
+                id: id,
+                title: title || 'محادثة جديدة',
+                messages: [],
+                lastUpdated: new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })
+            };
+            memory.sessions.unshift(session);
+            memory.currentSessionId = id;
+            saveMemory(memory);
+            return id;
+        }
+
+        function getCurrentSession() {
+            const memory = getMemory();
+            if (!memory.currentSessionId || !memory.sessions.some(s => s.id === memory.currentSessionId)) {
+                const id = createNewSession('محادثة جديدة');
+                memory.currentSessionId = id;
+                saveMemory(memory);
+            }
+            return memory.sessions.find(s => s.id === memory.currentSessionId);
+        }
+
+        function setCurrentSession(sessionId) {
+            const memory = getMemory();
+            if (memory.sessions.some(s => s.id === sessionId)) {
+                memory.currentSessionId = sessionId;
+                saveMemory(memory);
+                return true;
+            }
+            return false;
+        }
+
+        function saveToMemory(role, content) {
+            try {
+                const memory = getMemory();
+                let session = memory.sessions.find(s => s.id === memory.currentSessionId);
+                if (!session) {
+                    const id = createNewSession('محادثة جديدة');
+                    memory.currentSessionId = id;
+                    session = memory.sessions.find(s => s.id === id);
+                }
+                const timestamp = new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' });
+                session.messages.push({ role, content, timestamp });
+                session.lastUpdated = timestamp;
+                if (role === 'user' && session.messages.length === 1) {
+                    const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
+                    session.title = title || 'محادثة جديدة';
+                }
+                // التحقق من الحد الأقصى
+                if (session.messages.length > maxMessagesPerSession) {
+                    const index = memory.sessions.findIndex(s => s.id === session.id);
+                    if (index !== -1) {
+                        memory.sessions.splice(index, 1);
+                        if (memory.currentSessionId === session.id) {
+                            memory.currentSessionId = null;
+                            const newId = createNewSession('محادثة جديدة');
+                            memory.currentSessionId = newId;
+                        }
+                        saveMemory(memory);
+                        loadCurrentSession();
+                        renderHistory();
+                        return;
+                    }
+                }
+                saveMemory(memory);
+                renderHistory();
+            } catch (e) { console.warn('فشل حفظ الذاكرة:', e); }
+        }
+
+        function deleteSession(sessionId) {
+            if (!confirm('هل تريد حذف هذه المحادثة؟')) return;
+            try {
+                const memory = getMemory();
+                const index = memory.sessions.findIndex(s => s.id === sessionId);
+                if (index !== -1) {
+                    memory.sessions.splice(index, 1);
+                    if (memory.currentSessionId === sessionId) {
+                        memory.currentSessionId = null;
+                        if (memory.sessions.length > 0) {
+                            memory.currentSessionId = memory.sessions[0].id;
+                        } else {
+                            const newId = createNewSession('محادثة جديدة');
+                            memory.currentSessionId = newId;
+                        }
+                    }
+                    saveMemory(memory);
+                    renderHistory();
+                    loadCurrentSession();
+                }
+            } catch (e) { console.warn('فشل حذف الجلسة:', e); }
+        }
+
+        function clearAllSessions() {
+            if (!confirm('هل تريد مسح كل المحادثات المحفوظة؟')) return;
+            try {
+                const memory = { sessions: [], currentSessionId: null };
+                saveMemory(memory);
+                const newId = createNewSession('محادثة جديدة');
+                memory.currentSessionId = newId;
+                saveMemory(memory);
+                renderHistory();
+                loadCurrentSession();
+                closeSettings();
+            } catch (e) { console.warn('فشل مسح الذاكرة:', e); }
+        }
+
+        function restoreSession(sessionId) {
+            try {
+                const memory = getMemory();
+                const session = memory.sessions.find(s => s.id === sessionId);
+                if (!session) return;
+                setCurrentSession(sessionId);
+                loadCurrentSession();
+                // إغلاق السايدبار في الجوال
+                closeSidebar();
+            } catch (e) { console.warn('فشل استرجاع الجلسة:', e); }
+        }
+
+        // ============================================================
+        //  عرض الجلسات في الشريط الجانبي
+        // ============================================================
+        function renderHistory() {
+            const memory = getMemory();
+            const list = document.getElementById('historyList');
+            if (!memory.sessions || memory.sessions.length === 0) {
+                list.innerHTML = '<li style="color:var(--text-muted);padding:10px;font-size:13px;">لا توجد محادثات محفوظة</li>';
+                return;
+            }
+            let html = '';
+            memory.sessions.forEach(session => {
+                const active = session.id === memory.currentSessionId ? 'active' : '';
+                const title = session.title || 'محادثة جديدة';
+                const count = session.messages.length;
+                html += `
+                    <li class="history-item ${active}" data-id="${session.id}">
+                        <span onclick="restoreSession('${session.id}')">${escapeHtml(title)} (${count})</span>
+                        <button class="delete-session" onclick="event.stopPropagation();deleteSession('${session.id}')"><i class="fa-solid fa-times"></i></button>
+                    </li>
+                `;
+            });
+            list.innerHTML = html;
+        }
+
+        // ============================================================
+        //  تحميل الجلسة الحالية وعرضها
+        // ============================================================
+        function loadCurrentSession() {
+            const session = getCurrentSession();
+            if (!session) return;
+            const area = document.getElementById('chatMessages');
+            area.innerHTML = '';
+            document.getElementById('currentChatTitle').textContent = session.title || 'مساعد MEN AI الذكي';
+
+            if (session.messages.length === 0) {
+                // عرض رسالة الترحيب
+                const welcome = document.createElement('div');
+                welcome.className = 'message ai';
+                welcome.innerHTML = `
+                    <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
+                    <div>
+                        <div class="msg-content">
+                            أهلاً بك! أنا <strong>MEN AI</strong>، مساعدك الذكي المطور بأعلى المعايير. كيف يمكنني مساعدتك اليوم؟
+                        </div>
+                        <div class="msg-actions">
+                            <button onclick="copyText(this)"><i class="fa-regular fa-copy"></i> نسخ</button>
+                        </div>
+                    </div>
+                `;
+                area.appendChild(welcome);
+            } else {
+                session.messages.forEach(msg => {
+                    const div = document.createElement('div');
+                    div.className = `message ${msg.role}`;
+                    const avatar = msg.role === 'user' 
+                        ? '<div class="msg-avatar"><i class="fa-solid fa-user"></i></div>'
+                        : '<div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>';
+                    const actions = msg.role === 'ai' ? `
+                        <div class="msg-actions">
+                            <button onclick="copyText(this)"><i class="fa-regular fa-copy"></i> نسخ</button>
+                        </div>
+                    ` : '';
+                    div.innerHTML = `
+                        ${avatar}
+                        <div>
+                            <div class="msg-content">${escapeHtml(msg.content)}</div>
+                            ${actions}
+                            <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">${msg.timestamp || ''}</div>
+                        </div>
+                    `;
+                    area.appendChild(div);
+                });
+            }
+            area.scrollTop = area.scrollHeight;
+            renderHistory();
+        }
+
+        // ============================================================
+        //  دوال الإرسال والردود
+        // ============================================================
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text && !attachedFile) return;
+            if (isProcessing) return;
+
+            isProcessing = true;
+            document.getElementById('sendBtn').disabled = true;
+
+            // إخفاء الأسئلة المقترحة
+            document.getElementById('suggestionsContainer').style.display = 'none';
+
+            // عرض رسالة المستخدم
+            let userContent = text;
+            let displayText = text || '📎 أرسل ملفاً';
+            if (attachedFile) {
+                userContent += `\n[ملف: ${attachedFile.name}]`;
+                displayText += ` <span style="font-size:12px;color:#a5b4fc;">📎 ${attachedFile.name}</span>`;
+            }
+            appendMessage(displayText, 'user');
+            saveToMemory('user', userContent);
+
+            input.value = '';
+            input.style.height = 'auto';
+
+            // معالجة الملف المرفق
+            let fileText = '';
+            if (attachedFile) {
+                // سيتم استخراج النص بشكل غير متزامن
+                extractTextFromFile(attachedFile).then(text => {
+                    fileText = text;
+                    // عرض النص المستخرج في مودال
+                    showExtractedText(fileText);
+                    // متابعة الرد
+                    generateReply(text || fileText, fileText);
+                }).catch(() => {
+                    generateReply(text || 'ملف', '');
+                });
+                // لا نمسح الملف هنا، بل بعد الرد
+            } else {
+                generateReply(text, '');
+            }
+        }
+
+        async function generateReply(userText, fileText) {
+            // إظهار مؤشر الكتابة
+            document.getElementById('typingIndicator').style.display = 'flex';
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+
+            // محاكاة تأخير
+            await delay(600 + Math.random() * 800);
+
+            // إنشاء الرد
+            let reply = await getSmartReply(userText, fileText);
+
+            // إخفاء المؤشر
+            document.getElementById('typingIndicator').style.display = 'none';
+
+            // عرض الرد
+            appendMessage(reply, 'ai');
+            saveToMemory('bot', reply);
+
+            // إرسال إلى Discord
+            sendToDiscord(userText, reply);
+
+            // مسح الملف المرفق
+            if (attachedFile) {
+                attachedFile = null;
+                document.getElementById('filePreview').classList.remove('visible');
+                document.getElementById('attachBtn').classList.remove('has-file');
+                document.getElementById('fileInput').value = '';
+            }
+
+            isProcessing = false;
+            document.getElementById('sendBtn').disabled = false;
+            document.getElementById('userInput').focus();
+        }
+
+        function appendMessage(text, sender) {
+            const area = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = `message ${sender}`;
+            const avatar = sender === 'user' 
+                ? '<div class="msg-avatar"><i class="fa-solid fa-user"></i></div>'
+                : '<div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>';
+            const actions = sender === 'ai' ? `
+                <div class="msg-actions">
+                    <button onclick="copyText(this)"><i class="fa-regular fa-copy"></i> نسخ</button>
+                </div>
+            ` : '';
+            div.innerHTML = `
+                ${avatar}
+                <div>
+                    <div class="msg-content">${escapeHtml(text)}</div>
+                    ${actions}
+                </div>
+            `;
+            area.appendChild(div);
+            area.scrollTop = area.scrollHeight;
+        }
+
+        // ============================================================
+        //  الذكاء الاصطناعي للردود
+        // ============================================================
+        async function getSmartReply(text, fileText) {
+            const lower = text.trim().toLowerCase();
+
+            // العمليات الحسابية
+            const mathResult = evaluateMath(text);
+            if (mathResult !== null) {
+                return `🧮 النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟`;
+            }
+
+            // الوقت
+            if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
+                const now = new Date();
+                const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
+                const dateStr = now.toLocaleDateString('ar-SA', { timeZone: 'Asia/Riyadh' });
+                return `🕒 الوقت الآن ${timeStr} والتاريخ ${dateStr}`;
+            }
+
+            // المنتجات والاشتراكات
+            if (isSubscriptionRequest(text)) {
+                return buildAllProductsRow();
+            }
+
+            // البحث عن منتج
+            const product = findProduct(text);
+            if (product) {
+                return buildProductCard(product);
+            }
+
+            // الفئات المحددة
+            let category = getCategoryForText(text);
+            if (category !== 'default' && responses[category]) {
+                return getReply(category);
+            }
+
+            // إذا كان هناك نص مستخرج من ملف
+            if (fileText && fileText.length > 0) {
+                return `📄 لقد استخرجت النص من ملفك:\n"${fileText.substring(0, 300)}${fileText.length > 300 ? '...' : ''}"\n\nكيف يمكنني مساعدتك بهذا النص؟`;
+            }
+
+            return getReply('default');
+        }
+
+        // ============================================================
+        //  دوال مساعدة (الردود، المنتجات، العمليات الحسابية)
+        // ============================================================
+        function getReply(category) {
+            const list = responses[category]?.responses;
+            if (!list || list.length === 0) return getReply('default');
+            return list[Math.floor(Math.random() * list.length)];
+        }
+
+        function getCategoryForText(text) {
+            const lower = text.trim().toLowerCase();
+            for (const [cat, patterns] of Object.entries(keywordsMap)) {
+                for (const pattern of patterns) {
+                    if (lower.includes(pattern)) return cat;
+                }
+            }
+            return 'default';
         }
 
         function evaluateMath(text) {
-            const mathRegex = /(\d+)\s*([+\-*/])\s*(\d+)/;
-            const match = text.match(mathRegex);
-            if (match) {
-                const a = parseFloat(match[1]);
-                const op = match[2];
-                const b = parseFloat(match[3]);
-                if (isNaN(a) || isNaN(b)) return null;
-                let result;
-                switch (op) {
-                    case '+': result = a + b; break;
-                    case '-': result = a - b; break;
-                    case '*': result = a * b; break;
-                    case '/':
-                        if (b === 0) return 'لا يمكن القسمة على صفر';
-                        result = a / b;
-                        break;
-                    default: return null;
-                }
-                return Number.isInteger(result) ? result : result.toFixed(2);
+            const match = text.match(/(\d+)\s*([+\-*/])\s*(\d+)/);
+            if (!match) return null;
+            const a = parseFloat(match[1]), op = match[2], b = parseFloat(match[3]);
+            if (isNaN(a) || isNaN(b)) return null;
+            let result;
+            switch (op) {
+                case '+': result = a + b; break;
+                case '-': result = a - b; break;
+                case '*': result = a * b; break;
+                case '/': if (b === 0) return 'لا يمكن القسمة على صفر'; result = a / b; break;
+                default: return null;
             }
-            return null;
+            return Number.isInteger(result) ? result : result.toFixed(2);
         }
 
         function findProduct(text) {
             const lower = text.trim().toLowerCase();
+            if (!products || products.length === 0) return null;
             for (const product of products) {
-                if (product.keywords && Array.isArray(product.keywords)) {
-                    for (const keyword of product.keywords) {
-                        if (lower.includes(keyword.toLowerCase())) {
-                            return product;
-                        }
-                    }
-                }
+                if (product.keywords && product.keywords.some(k => lower.includes(k.toLowerCase()))) return product;
                 const name = (product.name || '').toLowerCase();
                 const desc = (product.description || '').toLowerCase();
-                if (name.includes(lower) || lower.includes(name) || desc.includes(lower) || lower.includes(desc)) {
+                if (name.includes(lower) || lower.includes(name) || desc.includes(lower) || lower.includes(desc))
                     return product;
-                }
             }
             return null;
         }
 
         function isSubscriptionRequest(text) {
+            const keywords = ['اشتراك', 'اشترك', 'اشتري', 'شراء', 'طلب', 'منتج', 'باقة', 'عرض', 'سعر', 'كم سعر', 'كيف اشترك'];
             const lower = text.trim().toLowerCase();
-            for (const keyword of SUBSCRIPTION_KEYWORDS) {
-                if (lower.includes(keyword.toLowerCase())) {
-                    return true;
-                }
-            }
-            return false;
+            return keywords.some(k => lower.includes(k));
         }
 
         function buildAllProductsRow() {
-            if (!products || products.length === 0) {
-                return '<p style="color: #8a9abb; padding: 10px 0;">لا توجد منتجات متاحة حالياً.</p>';
-            }
-            let cardsHtml = '<div class="products-row-wrapper"><div class="products-row">';
-            for (const product of products) {
-                cardsHtml += buildProductCard(product);
-            }
-            cardsHtml += '</div></div>';
-            return cardsHtml;
+            if (!products || products.length === 0)
+                return 'لا توجد منتجات متاحة حالياً.';
+            let html = '<div class="products-grid">';
+            products.forEach(p => { html += buildProductCard(p); });
+            html += '</div>';
+            return html;
         }
 
         function buildProductCard(product) {
-            const image = product.image || 'images/default.png';
             const name = product.name || 'منتج';
             const description = product.description || 'لا يوجد وصف';
             const price = product.price || '0';
             const currency = product.currency || 'ر.س';
-            const badge = product.badge || ' منتج';
+            const badge = product.badge || '';
             const link = product.link || '#';
-
             return `
-                <div class="men-product-card">
-                    <img src="${image}" class="product-image" alt="${name}" onerror="this.src='images/default.png'">
-                    <div class="product-content">
-                        <span class="badge">${badge}</span>
-                        <h2>${name}</h2>
-                        <p>${description}</p>
-                        <div class="bottom">
-                            <div class="price">
-                                ${price} <small>${currency}</small>
-                            </div>
-                            <button class="btn-product" onclick="window.location.href='${link}'">
-                                <i class="fas fa-arrow-left"></i> عرض
-                            </button>
-                        </div>
+                <div class="product-card">
+                    ${badge ? `<span style="font-size:11px;color:#a855f7;">${badge}</span>` : ''}
+                    <h4>${name}</h4>
+                    <p>${description}</p>
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span class="price">${price} <span style="font-size:12px;color:var(--text-muted);">${currency}</span></span>
+                        <button class="btn-product" onclick="window.open('${link}','_blank')">عرض</button>
                     </div>
                 </div>
             `;
         }
 
+        // ============================================================
+        //  استخراج النص من الملفات
+        // ============================================================
         async function extractTextFromFile(file) {
             const fileType = file.type;
             const fileName = file.name.toLowerCase();
@@ -1435,19 +1438,11 @@
                     const result = await Tesseract.recognize(imageUrl, 'ara');
                     URL.revokeObjectURL(imageUrl);
                     return result.data.text || 'لم يتم التعرف على أي نص في الصورة.';
-                } catch (error) {
-                    return 'حدث خطأ أثناء معالجة الصورة.';
-                }
+                } catch (e) { return 'حدث خطأ أثناء معالجة الصورة.'; }
             }
-
             if (fileType === 'text/plain' || fileName.endsWith('.txt')) {
-                try {
-                    return await file.text() || 'الملف فارغ.';
-                } catch (error) {
-                    return 'حدث خطأ أثناء قراءة الملف النصي.';
-                }
+                try { return await file.text() || 'الملف فارغ.'; } catch (e) { return 'حدث خطأ أثناء قراءة الملف النصي.'; }
             }
-
             if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
@@ -1456,26 +1451,19 @@
                     for (let i = 1; i <= pdf.numPages; i++) {
                         const page = await pdf.getPage(i);
                         const textContent = await page.getTextContent();
-                        const pageText = textContent.items.map(item => item.str).join(' ');
-                        fullText += pageText + '\n';
+                        fullText += textContent.items.map(item => item.str).join(' ') + '\n';
                     }
                     return fullText || 'لم يتم العثور على نص في ملف PDF.';
-                } catch (error) {
-                    return 'حدث خطأ أثناء قراءة ملف PDF.';
-                }
+                } catch (e) { return 'حدث خطأ أثناء قراءة ملف PDF.'; }
             }
-
-            if (fileType.includes('wordprocessingml') || fileName.endsWith('.docx')) {
+            if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileName.endsWith('.docx')) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
-                    const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
-                    return result.value || 'الملف فارغ.';
-                } catch (error) {
-                    return 'حدث خطأ أثناء قراءة ملف Word.';
-                }
+                    const result = await mammoth.extractRawText({ arrayBuffer });
+                    return result.value || 'الملف فارغ أو لا يحتوي على نص.';
+                } catch (e) { return 'حدث خطأ أثناء قراءة ملف Word.'; }
             }
-
-            if (fileType.includes('sheet') || fileName.endsWith('.xlsx') || fileName.endsWith('.xls') || fileName.endsWith('.csv')) {
+            if (fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
                     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
@@ -1483,435 +1471,422 @@
                     workbook.SheetNames.forEach(sheetName => {
                         const sheet = workbook.Sheets[sheetName];
                         const json = XLSX.utils.sheet_to_json(sheet);
-                        if (json.length > 0) {
+                        if (json.length) {
                             allText += `\n--- ${sheetName} ---\n`;
-                            json.forEach(row => {
-                                allText += Object.values(row).join(' | ') + '\n';
-                            });
+                            json.forEach(row => { allText += Object.values(row).join(' | ') + '\n'; });
                         }
                     });
-                    return allText || 'لم يتم العثور على بيانات.';
-                } catch (error) {
-                    return 'حدث خطأ أثناء قراءة ملف البيانات.';
-                }
+                    return allText || 'لم يتم العثور على بيانات في ملف Excel.';
+                } catch (e) { return 'حدث خطأ أثناء قراءة ملف Excel.'; }
             }
-
+            if (fileType === 'text/csv' || fileName.endsWith('.csv')) {
+                try { return await file.text() || 'الملف فارغ.'; } catch (e) { return 'حدث خطأ أثناء قراءة ملف CSV.'; }
+            }
             return '⚠️ نوع الملف غير مدعوم للاستخراج التلقائي.';
         }
 
-        // قارئ الملفات المحدث: يعرض الكلمة المفتاحية المستخرجة ويجيب على أي شيء نص أو منتج
-        function showExtractedTextWithKeywords(text, fileName) {
-            const modal = document.getElementById('extractModal');
-            const textArea = document.getElementById('extractedText');
-            
-            // استخراج كلمات مفتاحية بسيطة أو أول 200 حرف كملخص
-            const snippet = text.length > 300 ? text.substring(0, 300) + '...' : text;
-            textArea.innerHTML = `<strong>اسم الملف:</strong> ${fileName}\n\n` +
-                                 `<strong>النص المستخلص / الكلمات المفتاحية:</strong>\n${snippet}`;
-            modal.classList.add('active');
+        function showExtractedText(text) {
+            document.getElementById('extractedText').textContent = text || 'لم يتم استخراج أي نص.';
+            document.getElementById('extractModal').classList.add('active');
         }
 
-        document.getElementById('modalClose').addEventListener('click', function() {
+        function closeExtractModal() {
             document.getElementById('extractModal').classList.remove('active');
+        }
+
+        // ============================================================
+        //  إدارة الملفات المرفقة
+        // ============================================================
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            if (this.files && this.files.length > 0) {
+                const file = this.files[0];
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('الملف كبير جداً. الحد الأقصى 10 ميجابايت.');
+                    this.value = '';
+                    return;
+                }
+                attachedFile = file;
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('filePreview').classList.add('visible');
+                document.getElementById('attachBtn').classList.add('has-file');
+            }
         });
 
-        function hideAttachedFile() {
+        document.getElementById('removeFile').addEventListener('click', function() {
             attachedFile = null;
-            extractedText = '';
-            filePreview.classList.remove('visible');
-            attachBtn.classList.remove('has-file');
-            fileInput.value = '';
-        }
-
-        const fileInput = document.getElementById('fileInput');
-        const attachBtn = document.getElementById('attachBtn');
-        const filePreview = document.getElementById('filePreview');
-        const fileNameSpan = document.getElementById('fileName');
-        const removeFileBtn = document.getElementById('removeFile');
-
-        fileInput.addEventListener('change', async function(e) {
-            const file = this.files[0];
-            if (!file) return;
-
-            attachedFile = file;
-            fileNameSpan.textContent = file.name.length > 20 ? file.name.substring(0, 18) + '...' : file.name;
-            filePreview.classList.add('visible');
-            attachBtn.classList.add('has-file');
-
-            const text = await extractTextFromFile(file);
-            extractedText = text;
-
-            showExtractedTextWithKeywords(text, file.name);
-
-            const userMsg = document.createElement('div');
-            userMsg.className = 'message user';
-            userMsg.innerHTML = `📎 <strong>${file.name}</strong> (تم استخراج النص وتحليل الكلمات المفتاحية)` + `<span class="msg-time">الآن</span>`;
-            messagesArea.appendChild(userMsg);
-            scrollToBottom();
-
-            await processExtractedText(text, file.name);
+            document.getElementById('filePreview').classList.remove('visible');
+            document.getElementById('attachBtn').classList.remove('has-file');
+            document.getElementById('fileInput').value = '';
         });
 
-        removeFileBtn.addEventListener('click', function() {
-            hideAttachedFile();
-        });
-
-        async function processExtractedText(text, fileName) {
-            if (isProcessing) return;
-            isProcessing = true;
-            sendBtn.disabled = true;
-            voiceBtn.disabled = true;
-
-            try {
-                typingIndicator.style.display = 'flex';
-                scrollToBottom();
-                await delay(800);
-                typingIndicator.style.display = 'none';
-
-                let reply = await generateSmartReply(text);
-
-                const botMsg = document.createElement('div');
-                botMsg.className = 'message bot';
-                messagesArea.appendChild(botMsg);
-                scrollToBottom();
-
-                let replyContent = '';
-                if (reply.type === 'products' || reply.type === 'product' || reply.type === 'suggestions') {
-                    botMsg.innerHTML = `📄 نتائج التحليل والكلمات المفتاحية من الملف "${fileName}":<br><br>` + reply.content + `<span class="msg-time">الآن</span>`;
-                    replyContent = 'تم عرض محتوى التحليل';
-                } else {
-                    botMsg.innerHTML = `📄 نتائج التحليل من الملف "${fileName}":<br><br>`;
-                    await typeText(botMsg, reply.content, 22);
-                    const timeSpan = document.createElement('span');
-                    timeSpan.className = 'msg-time';
-                    timeSpan.textContent = 'الآن';
-                    botMsg.appendChild(timeSpan);
-                    replyContent = reply.content;
-                }
-
-                await sendToDiscord(`[ملف: ${fileName}]`, replyContent);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                isProcessing = false;
-                sendBtn.disabled = false;
-                voiceBtn.disabled = false;
-                messageInput.focus();
-                scrollToBottom();
+        // ============================================================
+        //  التعرف على الصوت
+        // ============================================================
+        function toggleVoiceRecording() {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
             }
         }
 
-        async function generateSmartReply(text) {
-            const mathResult = evaluateMath(text);
-            if (mathResult !== null) {
-                return { type: 'text', content: `النتيجة الرياضية هي: **${mathResult}**` };
+        function startRecording() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert('المتصفح لا يدعم التعرف على الصوت.');
+                return;
             }
-
-            if (isSubscriptionRequest(text)) {
-                return { type: 'products', content: buildAllProductsRow() };
-            }
-
-            const product = findProduct(text);
-            if (product) {
-                const cardHtml = buildProductCard(product);
-                return {
-                    type: 'product',
-                    content: `<div class="products-row-wrapper"><div class="products-row">${cardHtml}</div></div>`
-                };
-            }
-
-            // فحص الاقتراحات المتعددة والكلمات المتشابهة
-            const suggestions = findSuggestionsOrMatches(text);
-            if (suggestions) {
-                return suggestions;
-            }
-
-            let category = getCategoryForText(text);
-            if (category !== 'default' && responses[category]) {
-                return { type: 'text', content: getReply(category) };
-            }
-
-            return { type: 'text', content: getReply('default') };
-        }
-
-        function getCategoryForText(text) {
-            const lower = text.trim().toLowerCase();
-            for (const [cat, patterns] of Object.entries(keywordsMap)) {
-                for (const pattern of patterns) {
-                    if (lower.includes(pattern)) {
-                        return cat;
-                    }
-                }
-            }
-            return 'default';
-        }
-
-        function buildWelcomeMessage() {
-            return `
-                <div class="welcome-animation">
-                    <div class="welcome-main">
-                        <span class="letter" style="animation-delay: 0s;"></span>
-                        <span class="letter" style="animation-delay: 0.12s;"></span>
-                        <span class="letter" style="animation-delay: 0.24s;"></span>
-                        <span class="letter" style="animation-delay: 0.36s;"></span>
-                    </div>
-                    <div class="typewriter-container">
-                        <span class="typewriter-text" id="typewriterText"></span>
-                        <span class="typewriter-cursor" id="typewriterCursor"></span>
-                    </div>
-                    <div class="welcome-desc">
-                        <i class="fas fa-circle-notch"></i> أنا هنا لمساعدتك في أي نص أو منتج!
-                    </div>
-                </div>
-            `;
-        }
-
-        function typeTextEffect(element, text, speed = 60) {
-            return new Promise((resolve) => {
-                let index = 0;
-                element.textContent = '';
-                const interval = setInterval(() => {
-                    if (index < text.length) {
-                        element.textContent += text.charAt(index);
-                        index++;
-                    } else {
-                        clearInterval(interval);
-                        resolve();
-                    }
-                }, speed);
-            });
-        }
-
-        const messagesArea = document.getElementById('messagesArea');
-        const messageInput = document.getElementById('messageInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const charCount = document.getElementById('charCount');
-        const typingIndicator = document.getElementById('typingIndicator');
-        const backBtn = document.getElementById('backBtn');
-        const suggestedQuestions = document.getElementById('suggestedQuestions');
-        const voiceBtn = document.getElementById('voiceBtn');
-
-        let isProcessing = false;
-        let recognition = null;
-        let isRecording = false;
-
-        function initSpeechRecognition() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) return null;
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const rec = new SpeechRecognition();
-            rec.lang = 'ar-SA';
-            rec.continuous = false;
-            rec.interimResults = true;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'ar-SA';
+            recognition.continuous = false;
+            recognition.interimResults = true;
 
-            rec.onresult = function(event) {
+            recognition.onresult = function(event) {
                 let finalText = '';
                 for (let i = event.resultIndex; i < event.results.length; i++) {
                     if (event.results[i].isFinal) finalText += event.results[i][0].transcript;
                 }
                 if (finalText) {
-                    messageInput.value = finalText;
-                    charCount.textContent = finalText.length;
-                    sendMessage();
+                    document.getElementById('userInput').value = finalText;
+                    document.getElementById('userInput').dispatchEvent(new Event('input'));
+                    if (finalText.trim()) sendMessage();
                 }
             };
-            rec.onend = () => stopRecording();
-            return rec;
-        }
 
-        function startRecording() {
-            if (isRecording) { stopRecording(); return; }
-            if (!recognition) { recognition = initSpeechRecognition(); if (!recognition) return; }
-            recognition.start();
-            isRecording = true;
-            voiceBtn.classList.add('recording');
-            voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
+            recognition.onerror = function(event) {
+                stopRecording();
+                if (event.error !== 'not-allowed') {
+                    alert('حدث خطأ أثناء التسجيل: ' + event.error);
+                }
+            };
+
+            recognition.onend = stopRecording;
+
+            try {
+                recognition.start();
+                isRecording = true;
+                document.getElementById('micBtn').style.color = '#ec4899';
+                document.getElementById('voiceWaveform').style.display = 'flex';
+                document.getElementById('userInput').style.display = 'none';
+            } catch (e) {
+                console.warn(e);
+            }
         }
 
         function stopRecording() {
-            if (recognition) try { recognition.stop(); } catch(e){}
+            if (recognition) {
+                try { recognition.stop(); } catch (e) {}
+            }
             isRecording = false;
-            voiceBtn.classList.remove('recording');
-            voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+            document.getElementById('micBtn').style.color = '';
+            document.getElementById('voiceWaveform').style.display = 'none';
+            document.getElementById('userInput').style.display = 'block';
         }
 
-        voiceBtn.addEventListener('click', (e) => { e.preventDefault(); if (!isProcessing) startRecording(); });
-
-        document.querySelectorAll('.sq-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const question = this.dataset.question;
-                if (question) {
-                    messageInput.value = question;
-                    charCount.textContent = question.length;
-                    sendMessage();
+        // ============================================================
+        //  دوال الإعدادات
+        // ============================================================
+        function openSettings() {
+            const currentLimit = maxMessagesPerSession;
+            const select = document.getElementById('memoryLimitSelect');
+            const options = select.options;
+            let found = false;
+            for (let opt of options) {
+                if (parseInt(opt.value) === currentLimit) {
+                    select.value = opt.value;
+                    found = true;
+                    break;
                 }
-            });
-        });
-
-        backBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (document.referrer) window.history.back();
-            else window.location.href = '/';
-        });
-
-        messageInput.addEventListener('input', function() {
-            charCount.textContent = this.value.length;
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 150) + 'px';
-        });
-
-        messageInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
             }
-        });
+            if (!found) {
+                select.value = '12';
+                document.getElementById('customLimitInput').value = currentLimit;
+            } else {
+                document.getElementById('customLimitInput').value = '';
+            }
+            document.getElementById('settingsModal').classList.add('active');
+            closeSidebar();
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        function applySettings() {
+            let newLimit = parseInt(document.getElementById('memoryLimitSelect').value);
+            if (document.getElementById('memoryLimitSelect').value === 'custom') {
+                const customVal = parseInt(document.getElementById('customLimitInput').value);
+                if (!isNaN(customVal) && customVal > 0) {
+                    newLimit = customVal;
+                } else {
+                    alert('الرجاء إدخال عدد صحيح موجب.');
+                    return;
+                }
+            }
+            if (isNaN(newLimit) || newLimit < 1) {
+                alert('الرجاء إدخال عدد صحيح موجب.');
+                return;
+            }
+            saveSettings(newLimit);
+            closeSettings();
+            // التحقق من الجلسات الحالية
+            const memory = getMemory();
+            let changed = false;
+            memory.sessions = memory.sessions.filter(session => {
+                if (session.messages.length > newLimit) {
+                    changed = true;
+                    return false;
+                }
+                return true;
+            });
+            if (changed) {
+                if (!memory.sessions.some(s => s.id === memory.currentSessionId)) {
+                    memory.currentSessionId = memory.sessions.length > 0 ? memory.sessions[0].id : null;
+                    if (!memory.currentSessionId) {
+                        const newId = createNewSession('محادثة جديدة');
+                        memory.currentSessionId = newId;
+                    }
+                }
+                saveMemory(memory);
+                loadCurrentSession();
+                alert(`تم حذف المحادثات التي تجاوزت الحد الجديد (${newLimit})`);
+            }
+            renderHistory();
+        }
+
+        // ============================================================
+        //  دوال الواجهة
+        // ============================================================
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+        }
+
+        function startNewChat() {
+            const newId = createNewSession('محادثة جديدة');
+            setCurrentSession(newId);
+            loadCurrentSession();
+            document.getElementById('suggestionsContainer').style.display = 'flex';
+            closeSidebar();
+            const area = document.getElementById('chatMessages');
+            const info = document.createElement('div');
+            info.className = 'message ai';
+            info.innerHTML = `
+                <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
+                <div>
+                    <div class="msg-content">✨ تم إنشاء محادثة جديدة. اسألني عن أي شيء!</div>
+                </div>
+            `;
+            area.appendChild(info);
+            area.scrollTop = area.scrollHeight;
+        }
+
+        function sendSuggestion(text) {
+            document.getElementById('userInput').value = text;
+            sendMessage();
+        }
+
+        function copyText(btn) {
+            const content = btn.closest('div').previousElementSibling?.innerText || '';
+            if (content) {
+                navigator.clipboard.writeText(content).then(() => {
+                    const original = btn.innerHTML;
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> تم النسخ';
+                    setTimeout(() => { btn.innerHTML = original; }, 2000);
+                }).catch(() => {});
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
         function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
-        function escapeHtml(text) { const d = document.createElement('div'); d.textContent = text; return d.innerHTML; }
-        function scrollToBottom() { messagesArea.scrollTop = messagesArea.scrollHeight; }
 
-        function typeText(element, text, speed = 20) {
-            return new Promise((resolve) => {
-                let index = 0;
-                element.innerHTML = '';
-                const interval = setInterval(() => {
-                    if (index < text.length) {
-                        element.innerHTML += text.charAt(index);
-                        index++;
-                        scrollToBottom();
-                    } else {
-                        clearInterval(interval);
-                        resolve();
-                    }
-                }, speed);
-            });
-        }
-
+        // ============================================================
+        //  إرسال إلى Discord
+        // ============================================================
         async function sendToDiscord(userMessage, botReply) {
             try {
+                const payload = {
+                    content: `**رسالة جديدة من MEN Ai**\n**المستخدم:** ${userMessage}\n**رد البوت:** ${botReply}\n${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
+                };
                 await fetch('https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content: `**رسالة جديدة**\n**المستخدم:** ${userMessage}\n**الرد:** ${botReply}` })
+                    body: JSON.stringify(payload)
                 });
-            } catch (err) {}
+            } catch (err) { console.warn('فشل إرسال الـ webhook:', err); }
         }
 
-        async function sendMessage() {
-            const text = messageInput.value.trim();
-            if (!text && !attachedFile) return;
-            if (isProcessing) return;
-
-            if (suggestedQuestions) suggestedQuestions.classList.add('hidden');
-
-            isProcessing = true;
-            sendBtn.disabled = true;
-            voiceBtn.disabled = true;
-
-            try {
-                const queryText = attachedFile ? text + '\n' + extractedText : text;
-                const userMsg = document.createElement('div');
-                userMsg.className = 'message user';
-                userMsg.innerHTML = escapeHtml(text || 'إرسال مرفق') + `<span class="msg-time">الآن</span>`;
-                messagesArea.appendChild(userMsg);
-
-                messageInput.value = '';
-                messageInput.style.height = 'auto';
-                charCount.textContent = '0';
-                scrollToBottom();
-
-                typingIndicator.style.display = 'flex';
-                scrollToBottom();
-                await delay(1000);
-                typingIndicator.style.display = 'none';
-
-                const reply = await generateSmartReply(queryText);
-
-                const botMsg = document.createElement('div');
-                botMsg.className = 'message bot';
-                messagesArea.appendChild(botMsg);
-                scrollToBottom();
-
-                let replyContent = '';
-                if (reply.type === 'products' || reply.type === 'product' || reply.type === 'suggestions') {
-                    botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
-                    replyContent = 'عرض المحتوى التفاعلي';
-                } else {
-                    await typeText(botMsg, reply.content, 22);
-                    const timeSpan = document.createElement('span');
-                    timeSpan.className = 'msg-time';
-                    timeSpan.textContent = 'الآن';
-                    botMsg.appendChild(timeSpan);
-                    replyContent = reply.content;
-                }
-
-                if (attachedFile) hideAttachedFile();
-                await sendToDiscord(text, replyContent);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                isProcessing = false;
-                sendBtn.disabled = false;
-                voiceBtn.disabled = false;
-                messageInput.focus();
-                scrollToBottom();
-            }
-        }
-
-        sendBtn.addEventListener('click', sendMessage);
-
+        // ============================================================
+        //  تحميل الردود والمنتجات والمكتبات
+        // ============================================================
         async function loadResponses() {
             try {
                 const response = await fetch('responses.json');
+                if (!response.ok) throw new Error('تعذر تحميل ملف الردود');
                 const data = await response.json();
                 responses = data;
-                keywordsMap = buildKeywordsMap(data);
+                keywordsMap = {};
+                for (const [cat, obj] of Object.entries(data)) {
+                    if (obj.keywords && Array.isArray(obj.keywords)) {
+                        keywordsMap[cat] = obj.keywords.map(k => k.toLowerCase());
+                    }
+                }
+                console.log('تم تحميل الردود بنجاح');
+                return true;
             } catch (error) {
+                console.error('استخدام الردود الافتراضية:', error);
                 responses = {
-                    default: { keywords: ['مرحبا', 'السلام'], responses: ['مرحباً بك! كيف يمكنني مساعدتك؟'] },
-                    time: { keywords: ['وقت', 'الساعة'], responses: ['الوقت الحالي متاح في النظام.'] },
-                    founding: { keywords: ['تأسس', 'تأسيس'], responses: ['تأسس فريق MEN في عام 2020.'] }
+                    default: { keywords: ['مرحبا', 'السلام', 'اهلا', 'كيف'], responses: [
+                            'مرحباً! كيف يمكنني مساعدتك؟',
+                            'أهلاً بك! أنا MEN Ai، اسألني أي شيء.',
+                            'السلام عليكم! كيف يمكنني خدمتك؟'
+                        ] },
+                    time: { keywords: ['وقت', 'الساعة', 'تاريخ', 'الوقت'], responses: [
+                            'الوقت الآن {time} والتاريخ {date}',
+                            'الساعة الآن {time}، والتاريخ {date}'
+                        ] },
+                    founding: { keywords: ['تأسس', 'تأسيس', 'متى', 'منذ', 'تاريخ', 'انشئ', 'تأسس الفريق', 'الفريق'],
+                        responses: [
+                            'تأسس فريق MEN في عام 2020، على يد مجموعة من المطورين والمبدعين.',
+                            'تم تأسيس فريق MEN عام 2020، وكانت البداية مع مجموعة من المتحمسين.'
+                        ] },
+                    pass: { keywords: ['باس', 'اشتراك', 'اشترك', 'كيف اشترك', 'الباس'], responses: [
+                            'للاشتراك في MEN pass، يمكنك زيارة صفحة المتجر على موقعنا الرسمي.',
+                            'اشترك في MEN pass عبر الضغط على زر "عرض المنتج" في بطاقة MEN PASS.'
+                        ] },
+                    pro: { keywords: ['pro', 'مميزات', 'مزايا', 'MEN PRO'], responses: [
+                            'باقة MEN PRO تقدم لك أدوات متطورة، تحليلات ذكية، ودعم فني على مدار الساعة.',
+                            'تمتع بمزايا MEN PRO الحصرية، مثل الوصول المبكر للمميزات الجديدة.'
+                        ] },
+                    support: { keywords: ['دعم', 'تواصل', 'مساعدة', 'الدعم'], responses: [
+                            'يمكنك التواصل مع الدعم عبر البريد الإلكتروني: clan.men.ts@gmail.com',
+                            'للاستفسارات، يمكنك مراسلتنا على البريد الإلكتروني أو عبر حسابات التواصل.'
+                        ] },
+                    download: { keywords: ['تحميل', 'تطبيق', 'app', 'تنزيل'], responses: [
+                            'يمكنك تحميل تطبيق MEN من متجر Google Play أو App Store.',
+                            'احصل على تطبيق MEN من خلال الروابط المتوفرة في موقعنا.'
+                        ] }
                 };
-                keywordsMap = buildKeywordsMap(responses);
+                keywordsMap = {};
+                for (const [cat, obj] of Object.entries(responses)) {
+                    if (obj.keywords && Array.isArray(obj.keywords)) {
+                        keywordsMap[cat] = obj.keywords.map(k => k.toLowerCase());
+                    }
+                }
+                return false;
             }
         }
 
         async function loadProducts() {
             try {
                 const response = await fetch('products.json');
-                products = await response.json();
+                if (!response.ok) throw new Error('تعذر تحميل ملف المنتجات');
+                const data = await response.json();
+                products = data;
+                console.log('تم تحميل المنتجات بنجاح، عددها:', products.length);
+                return true;
             } catch (error) {
-                products = [{
-                    "id": "men-pass",
-                    "name": "MEN PASS",
-                    "description": "اشتراك MEN PASS المميز",
-                    "price": "49",
-                    "currency": "ر.س",
-                    "badge": "⭐ مميز",
-                    "link": "store.html",
-                    "keywords": ["pass", "اشتراك"]
-                }];
+                console.error('استخدام المنتجات الافتراضية:', error);
+                products = [
+                    { id: "men-pass", name: "MEN PASS", description: "اشترك في MEN PASS واحصل على جميع المميزات الحصرية", price: "49", currency: "ر.س", image: "images/pass.png", badge: "⭐ مميز", link: "store.html", keywords: ["pass", "اشتراك", "men pass", "باقة"] },
+                    { id: "men-pro", name: "MEN PRO", description: "باقة احترافية للمطورين مع أدوات متقدمة", price: "99", currency: "ر.س", image: "images/pro.png", badge: "🔥 احترافية", link: "pro.html", keywords: ["pro", "احترافي", "مطور", "أدوات"] },
+                    { id: "men-basic", name: "MEN BASIC", description: "باقة أساسية للمبتدئين", price: "19", currency: "ر.س", image: "images/basic.png", badge: "🚀 أساسية", link: "basic.html", keywords: ["basic", "أساسي", "مبتدئ"] }
+                ];
+                return true;
             }
         }
 
+        function loadExternalLibraries() {
+            return new Promise((resolve) => {
+                let loaded = 0;
+                const total = 4;
+
+                function check() { if (++loaded >= total) resolve(); }
+
+                const tesseract = document.createElement('script');
+                tesseract.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+                tesseract.onload = check;
+                tesseract.onerror = check;
+                document.head.appendChild(tesseract);
+
+                const pdf = document.createElement('script');
+                pdf.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+                pdf.onload = check;
+                pdf.onerror = check;
+                document.head.appendChild(pdf);
+
+                const mammoth = document.createElement('script');
+                mammoth.src = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+                mammoth.onload = check;
+                mammoth.onerror = check;
+                document.head.appendChild(mammoth);
+
+                const xlsx = document.createElement('script');
+                xlsx.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+                xlsx.onload = check;
+                xlsx.onerror = check;
+                document.head.appendChild(xlsx);
+
+                setTimeout(resolve, 8000);
+            });
+        }
+
+        // ============================================================
+        //  التهيئة
+        // ============================================================
         async function init() {
-            await Promise.all([loadResponses(), loadProducts()]);
-            messagesArea.innerHTML = '';
-            const welcomeMsg = document.createElement('div');
-            welcomeMsg.className = 'message bot';
-            welcomeMsg.innerHTML = buildWelcomeMessage() + `<span class="msg-time">الآن</span>`;
-            messagesArea.appendChild(welcomeMsg);
-            scrollToBottom();
+            // تعطيل الإرسال مؤقتاً
+            document.getElementById('sendBtn').disabled = true;
 
-            const typewriterElement = document.getElementById('typewriterText');
-            if (typewriterElement) {
-                const fullText = 'مرحبا بك في MEN Ai';
-                await typeTextEffect(typewriterElement, fullText, 70);
-                typewriterElement.innerHTML = fullText.replace('MEN Ai', '<span class="highlight">MEN Ai</span>');
-                document.getElementById('typewriterCursor').style.display = 'none';
-            }
+            await loadExternalLibraries();
+            await Promise.all([loadResponses(), loadProducts()]);
+
+            // تحميل الجلسة الحالية
+            loadCurrentSession();
+            renderHistory();
+
+            // إظهار الأسئلة المقترحة
+            document.getElementById('suggestionsContainer').style.display = 'flex';
+
+            // تفعيل الإرسال
+            document.getElementById('sendBtn').disabled = false;
+            document.getElementById('userInput').focus();
+
+            console.log('MEN AI جاهز ✅');
         }
 
+        // ============================================================
+        //  أحداث الإدخال
+        // ============================================================
+        document.getElementById('userInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+
+        document.getElementById('userInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // غلق المودال عند الضغط خارجها
+        document.getElementById('settingsModal').addEventListener('click', function(e) {
+            if (e.target === this) closeSettings();
+        });
+        document.getElementById('extractModal').addEventListener('click', function(e) {
+            if (e.target === this) closeExtractModal();
+        });
+
+        // بدء التشغيل
         init();
     </script>
 </body>
