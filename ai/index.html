@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* === جميع الأنماط كما هي، لم تتغير === */
+        /* === جميع الأنماط كما هي، مع إضافة نمط زر البحث === */
         * {
             margin: 0;
             padding: 0;
@@ -100,7 +100,6 @@
             gap: 12px;
         }
 
-        /* === أزرار جديدة فخمة === */
         .btn-back,
         .btn-memory,
         .btn-settings {
@@ -833,6 +832,38 @@
             cursor: pointer;
         }
 
+        /* === زر البحث الجديد === */
+        .input-area .btn-search {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(2, 28, 164, 0.2);
+            color: #a0b0d4;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .input-area .btn-search:hover {
+            background: rgba(74, 122, 255, 0.08);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: scale(1.05);
+        }
+        .input-area .btn-search:active {
+            transform: scale(0.92);
+        }
+        .input-area .btn-search:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
         .file-preview {
             display: none;
             padding: 6px 16px 6px 12px;
@@ -1420,7 +1451,8 @@
             }
             .input-area .btn-send,
             .input-area .btn-voice,
-            .input-area .btn-attach {
+            .input-area .btn-attach,
+            .input-area .btn-search {
                 width: 44px;
                 height: 44px;
                 min-width: 44px;
@@ -1551,7 +1583,8 @@
             }
             .input-area .btn-send,
             .input-area .btn-voice,
-            .input-area .btn-attach {
+            .input-area .btn-attach,
+            .input-area .btn-search {
                 width: 38px;
                 height: 38px;
                 min-width: 38px;
@@ -1753,7 +1786,8 @@
             }
             .input-area .btn-send,
             .input-area .btn-voice,
-            .input-area .btn-attach {
+            .input-area .btn-attach,
+            .input-area .btn-search {
                 width: 32px;
                 height: 32px;
                 min-width: 32px;
@@ -1853,7 +1887,7 @@
                 </div>
 
                 <div class="input-area">
-                    <!-- زر الإرفاق مفعل الآن -->
+                    <!-- زر الإرفاق -->
                     <button class="btn-attach" id="attachBtn" title="إرفاق ملف">
                         <i class="fas fa-paperclip"></i>
                         <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls">
@@ -1873,6 +1907,12 @@
                     <button class="btn-voice" id="voiceBtn" title="تسجيل صوتي">
                         <i class="fas fa-microphone"></i>
                     </button>
+
+                    <!-- زر البحث الجديد -->
+                    <button class="btn-search" id="searchBtn" title="بحث في ORION AI">
+                        <i class="fas fa-search"></i>
+                    </button>
+
                     <button class="btn-send" id="sendBtn" title="إرسال">
                         <i class="fas fa-arrow-up"></i>
                     </button>
@@ -1881,7 +1921,7 @@
         </div>
     </main>
 
-    <!-- مودال الذاكرة - يعرض الجلسات -->
+    <!-- مودال الذاكرة -->
     <div class="modal-overlay" id="memoryModal">
         <div class="modal-box">
             <h3><i class="fas fa-brain"></i> ذاكرة MEN Ai (المحادثات)</h3>
@@ -1970,12 +2010,11 @@
         let extractedText = '';
 
         // ============================================================
-        //  إدارة الذاكرة على شكل جلسات (مثل شات جي بي تي)
+        //  إدارة الذاكرة على شكل جلسات
         // ============================================================
         const MEMORY_KEY = 'menChatMemory';
         const SETTINGS_KEY = 'menChatSettings';
 
-        // الحد الأقصى للرسائل في كل جلسة
         const DEFAULT_LIMIT = 12;
         let maxMessagesPerSession = loadSettings();
 
@@ -1997,7 +2036,6 @@
             } catch (e) {}
         }
 
-        // هيكل التخزين: { sessions: [ { id, title, messages: [ {role, content, timestamp} ], lastUpdated } ], currentSessionId }
         function getMemory() {
             try {
                 const data = localStorage.getItem(MEMORY_KEY);
@@ -2017,7 +2055,6 @@
             } catch (e) {}
         }
 
-        // إنشاء جلسة جديدة
         function createNewSession(title) {
             const memory = getMemory();
             const id = Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 5);
@@ -2025,7 +2062,7 @@
                 id: id,
                 title: title || 'محادثة جديدة',
                 messages: [],
-                lastUpdated: new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })
+                lastUpdated: new Date().toLocaleString('en-GB', { timeZone: 'Asia/Riyadh' })
             };
             memory.sessions.unshift(session);
             memory.currentSessionId = id;
@@ -2033,7 +2070,6 @@
             return id;
         }
 
-        // الحصول على الجلسة الحالية
         function getCurrentSession() {
             const memory = getMemory();
             if (!memory.currentSessionId || !memory.sessions.some(s => s.id === memory.currentSessionId)) {
@@ -2044,7 +2080,6 @@
             return memory.sessions.find(s => s.id === memory.currentSessionId);
         }
 
-        // تعيين جلسة حالية
         function setCurrentSession(sessionId) {
             const memory = getMemory();
             if (memory.sessions.some(s => s.id === sessionId)) {
@@ -2055,7 +2090,21 @@
             return false;
         }
 
-        // حفظ رسالة في الجلسة الحالية
+        // توليد توقيت ميلادي
+        function getFormattedTimestamp() {
+            const now = new Date();
+            return now.toLocaleString('en-GB', {
+                timeZone: 'Asia/Riyadh',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            });
+        }
+
         function saveToMemory(role, content) {
             try {
                 const memory = getMemory();
@@ -2065,14 +2114,13 @@
                     memory.currentSessionId = id;
                     session = memory.sessions.find(s => s.id === id);
                 }
-                const timestamp = new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' });
+                const timestamp = getFormattedTimestamp();
                 session.messages.push({ role, content, timestamp });
                 session.lastUpdated = timestamp;
                 if (role === 'user' && session.messages.length === 1) {
                     const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
                     session.title = title || 'محادثة جديدة';
                 }
-                // التحقق من الحد الأقصى
                 if (session.messages.length > maxMessagesPerSession) {
                     const index = memory.sessions.findIndex(s => s.id === session.id);
                     if (index !== -1) {
@@ -2083,7 +2131,6 @@
                             memory.currentSessionId = newId;
                         }
                         saveMemory(memory);
-                        // إعادة تحميل الجلسة الجديدة
                         loadCurrentSession();
                         return;
                     }
@@ -2092,7 +2139,6 @@
             } catch (e) { console.warn('فشل حفظ الذاكرة:', e); }
         }
 
-        // تحميل كل الجلسات وعرضها في المودال
         function loadMemory() {
             try {
                 const memory = getMemory();
@@ -2104,7 +2150,6 @@
             }
         }
 
-        // عرض قائمة الجلسات
         function renderMemoryList(sessions) {
             const container = document.getElementById('memoryList');
             if (!sessions || sessions.length === 0) {
@@ -2144,7 +2189,6 @@
             });
         }
 
-        // حذف جلسة
         function deleteSession(sessionId) {
             if (!confirm('هل تريد حذف هذه المحادثة؟')) return;
             try {
@@ -2168,7 +2212,6 @@
             } catch (e) { console.warn('فشل حذف الجلسة:', e); }
         }
 
-        // مسح كل الجلسات
         function clearAllSessions() {
             if (!confirm('هل تريد مسح كل المحادثات المحفوظة؟')) return;
             try {
@@ -2184,7 +2227,6 @@
             } catch (e) { console.warn('فشل مسح الذاكرة:', e); }
         }
 
-        // استرجاع آخر رسالة من جلسة محددة إلى حقل الإدخال
         function restoreSession(sessionId) {
             try {
                 const memory = getMemory();
@@ -2214,21 +2256,18 @@
             } catch (e) { console.warn('فشل استرجاع الجلسة:', e); }
         }
 
-        // تحميل الجلسة الحالية وعرض رسائلها في الشات مع رسالة الترحيب
         function loadCurrentSession() {
             const session = getCurrentSession();
             if (!session) return;
             const area = document.getElementById('messagesArea');
             area.innerHTML = '';
 
-            // إذا كانت الجلسة فارغة، نعرض رسالة الترحيب
             if (session.messages.length === 0) {
                 const welcomeDiv = document.createElement('div');
                 welcomeDiv.className = 'message bot';
                 welcomeDiv.innerHTML = buildWelcomeMessage() + `<span class="msg-time">الآن</span>`;
                 area.appendChild(welcomeDiv);
                 scrollToBottom();
-                // تشغيل تأثير الكتابة
                 const typewriterElement = document.getElementById('typewriterText');
                 if (typewriterElement) {
                     const fullText = 'مرحبا بك في MEN Ai';
@@ -2241,7 +2280,6 @@
                 return;
             }
 
-            // عرض الرسائل المحفوظة
             session.messages.forEach(msg => {
                 const div = document.createElement('div');
                 div.className = `message ${msg.role}`;
@@ -2251,7 +2289,6 @@
             scrollToBottom();
         }
 
-        // دالة بناء رسالة الترحيب
         function buildWelcomeMessage() {
             return `
                 <div class="welcome-animation">
@@ -2274,7 +2311,6 @@
             `;
         }
 
-        // تأثير الكتابة
         function typeTextEffect(element, text, speed = 60) {
             return new Promise((resolve) => {
                 let index = 0;
@@ -2292,7 +2328,7 @@
         }
 
         // ============================================================
-        //  دوال الردود والمنتجات (نفس السابق)
+        //  دوال الردود والمنتجات
         // ============================================================
         function getReply(category) {
             const list = responses[category]?.responses;
@@ -2389,7 +2425,7 @@
         }
 
         // ============================================================
-        //  دوال استخراج النص من الملفات (نفس السابق)
+        //  دوال استخراج النص من الملفات
         // ============================================================
         async function extractTextFromFile(file) {
             const fileType = file.type;
@@ -2464,7 +2500,7 @@
         });
 
         // ============================================================
-        //  دوال إدارة الملفات المرفقة (مفعلة)
+        //  دوال إدارة الملفات المرفقة
         // ============================================================
         function showAttachedFile(file) {
             attachedFile = file;
@@ -2519,7 +2555,6 @@
         });
         document.getElementById('clearMemoryBtn').addEventListener('click', clearAllSessions);
 
-        // زر محادثة جديدة
         document.getElementById('newSessionBtn').addEventListener('click', function() {
             const newId = createNewSession('محادثة جديدة');
             setCurrentSession(newId);
@@ -2534,7 +2569,7 @@
         });
 
         // ============================================================
-        //  إعدادات الذاكرة (مودال الإعدادات)
+        //  إعدادات الذاكرة
         // ============================================================
         const settingsBtn = document.getElementById('settingsBtn');
         const settingsModal = document.getElementById('settingsModal');
@@ -2588,7 +2623,6 @@
             }
             saveSettings(newLimit);
             settingsModal.classList.remove('active');
-            // التحقق من الجلسات الحالية وحذف أي جلسة تتجاوز الحد
             const memory = getMemory();
             let changed = false;
             memory.sessions = memory.sessions.filter(session => {
@@ -2616,7 +2650,7 @@
         clearMemorySettingsBtn.addEventListener('click', clearAllSessions);
 
         // ============================================================
-        //  دوال إنشاء الرد الذكي
+        //  دوال إنشاء الرد الذكي (مع تعديل التاريخ للميلادي)
         // ============================================================
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
@@ -2628,8 +2662,20 @@
 
             if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
                 const now = new Date();
-                const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
-                const dateStr = now.toLocaleDateString('ar-SA', { timeZone: 'Asia/Riyadh' });
+                // تنسيق ميلادي
+                const timeStr = now.toLocaleString('en-US', {
+                    timeZone: 'Asia/Riyadh',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true
+                });
+                const dateStr = now.toLocaleDateString('en-US', {
+                    timeZone: 'Asia/Riyadh',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
                 const template = getReply('time');
                 return { type: 'text', content: template.replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr) };
             }
@@ -2695,6 +2741,7 @@
         const backBtn = document.getElementById('backBtn');
         const suggestedQuestions = document.getElementById('suggestedQuestions');
         const voiceBtn = document.getElementById('voiceBtn');
+        const searchBtn = document.getElementById('searchBtn');
 
         let isProcessing = false;
         let recognition = null;
@@ -2815,7 +2862,87 @@
         sendBtn.addEventListener('click', sendMessage);
 
         // ============================================================
-        //  دوال الإرسال الأساسية مع الملفات
+        //  زر البحث (ORION AI)
+        // ============================================================
+        searchBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (isProcessing) return;
+            const text = messageInput.value.trim();
+            if (!text) {
+                alert('الرجاء كتابة نص للبحث.');
+                return;
+            }
+            handleSearch(text);
+        });
+
+        async function handleSearch(query) {
+            if (isProcessing) return;
+            isProcessing = true;
+            searchBtn.disabled = true;
+            sendBtn.disabled = true;
+            voiceBtn.disabled = true;
+
+            try {
+                // عرض سؤال المستخدم مع أيقونة بحث
+                const userMsg = document.createElement('div');
+                userMsg.className = 'message user';
+                userMsg.innerHTML = `🔍 ${escapeHtml(query)}<span class="msg-time">${getFormattedTimestamp()}</span>`;
+                messagesArea.appendChild(userMsg);
+                scrollToBottom();
+
+                // حفظ سؤال البحث في الذاكرة
+                saveToMemory('user', `[بحث] ${query}`);
+
+                // عرض مؤشر البحث
+                typingIndicator.style.display = 'flex';
+                scrollToBottom();
+
+                await delay(1200);
+
+                typingIndicator.style.display = 'none';
+
+                // محاكاة البحث في ORION AI
+                const searchResult = `نتيجة البحث عن "${query}" في ORION AI:
+• تم العثور على ٣ نتائج ذات صلة.
+• الرابط الأول: https://orion.ai/result1
+• الرابط الثاني: https://orion.ai/result2
+• يمكنك زيارة الموقع الرسمي لمزيد من التفاصيل.`;
+
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot';
+                await typeText(botMsg, searchResult, 22);
+                const timeSpan = document.createElement('span');
+                timeSpan.className = 'msg-time';
+                timeSpan.textContent = getFormattedTimestamp();
+                botMsg.appendChild(timeSpan);
+
+                // حفظ نتيجة البحث في الذاكرة
+                saveToMemory('bot', searchResult);
+
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                charCount.textContent = '0';
+
+            } catch (error) {
+                console.error('خطأ في البحث:', error);
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'message bot';
+                errorMsg.innerHTML = 'حدث خطأ أثناء البحث في ORION AI. حاول مرة أخرى.' +
+                    `<span class="msg-time">${getFormattedTimestamp()}</span>`;
+                messagesArea.appendChild(errorMsg);
+                scrollToBottom();
+            } finally {
+                isProcessing = false;
+                searchBtn.disabled = false;
+                sendBtn.disabled = false;
+                voiceBtn.disabled = false;
+                messageInput.focus();
+                scrollToBottom();
+            }
+        }
+
+        // ============================================================
+        //  دوال الإرسال الأساسية مع الملفات (تعديل التوقيت للميلادي)
         // ============================================================
         async function sendMessage() {
             const text = messageInput.value.trim();
@@ -2841,18 +2968,16 @@
                     userContent += `\n[ملف: ${attachedFile.name}]\n${fileText}`;
                 }
 
-                // عرض رسالة المستخدم
                 const userMsg = document.createElement('div');
                 userMsg.className = 'message user';
                 let userDisplay = text || ' أرسل ملفاً';
                 if (attachedFile) {
                     userDisplay += ` <span style="color:#4a7aff;font-size:0.8rem;"> ${attachedFile.name}</span>`;
                 }
-                userMsg.innerHTML = escapeHtml(userDisplay) + `<span class="msg-time">الآن</span>`;
+                userMsg.innerHTML = escapeHtml(userDisplay) + `<span class="msg-time">${getFormattedTimestamp()}</span>`;
                 messagesArea.appendChild(userMsg);
                 scrollToBottom();
 
-                // حفظ في الذاكرة (الجلسة الحالية)
                 saveToMemory('user', userContent);
 
                 messageInput.value = '';
@@ -2880,19 +3005,18 @@
 
                 let replyContent = '';
                 if (reply.type === 'products' || reply.type === 'product') {
-                    botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
+                    botMsg.innerHTML = reply.content + `<span class="msg-time">${getFormattedTimestamp()}</span>`;
                     replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
                     await delay(200);
                 } else {
                     await typeText(botMsg, reply.content, 22);
                     const timeSpan = document.createElement('span');
                     timeSpan.className = 'msg-time';
-                    timeSpan.textContent = 'الآن';
+                    timeSpan.textContent = getFormattedTimestamp();
                     botMsg.appendChild(timeSpan);
                     replyContent = reply.content;
                 }
 
-                // حفظ رد البوت في الذاكرة
                 saveToMemory('bot', replyContent || 'تم عرض المنتج');
 
                 await sendToDiscord(userContent, replyContent);
@@ -2903,7 +3027,8 @@
                 console.error('خطأ في sendMessage:', error);
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'message bot';
-                errorMsg.innerHTML = 'عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.' + `<span class="msg-time">الآن</span>`;
+                errorMsg.innerHTML = 'عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.' +
+                    `<span class="msg-time">${getFormattedTimestamp()}</span>`;
                 messagesArea.appendChild(errorMsg);
                 scrollToBottom();
                 if (attachedFile) hideAttachedFile();
@@ -2922,7 +3047,7 @@
         async function sendToDiscord(userMessage, botReply) {
             try {
                 const payload = {
-                    content: `**رسالة جديدة من MEN Ai**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
+                    content: `**رسالة جديدة من MEN Ai**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('en-GB', { timeZone: 'Asia/Riyadh' })}`
                 };
                 await fetch('https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
                     method: 'POST',
@@ -3073,25 +3198,23 @@
             messageInput.disabled = true;
             sendBtn.disabled = true;
             voiceBtn.disabled = true;
+            searchBtn.disabled = true;
 
             await loadExternalLibraries();
             await Promise.all([loadResponses(), loadProducts()]);
 
-            // تحميل الجلسة الحالية (ستعرض الترحيب إذا كانت فارغة)
             loadCurrentSession();
-
-            // تحميل الذاكرة (للإعدادات)
             loadMemory();
 
             messageInput.disabled = false;
             messageInput.focus();
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
+            searchBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع دعم المحادثات ورسالة الترحيب ');
+            console.log('MEN Ai جاهز مع دعم المحادثات ورسالة الترحيب والبحث في ORION AI');
         }
 
-        // بدء التشغيل
         init();
     </script>
 </body>
