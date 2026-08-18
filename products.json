@@ -63,23 +63,23 @@
   },
   {
     "id": "men-store",
-    "name": "متجر MEN",
-    "description": "تصفح جميع منتجاتنا الرقمية والحصرية. تجد هنا كل ما تحتاجه من أدوات وخدمات.",
-    "price": "0",
+    "name": "لعبة GTA Theft Auto VI",
+    "description": "لعبة GTA I يوجد عرض لمالك MEN PASS بسعر 149.99ريال",
+    "price": "329.99",
     "currency": "ر.س",
-    "image": "images/store.png",
-    "badge": "بطاقة شحن",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg1sjLMQSqCjr7iM4ODrvoU6lphl0RLKJ9uqcVhJ0ulg&s",
+    "badge": "لعبة",
     "link": "/store/",
     "keywords": [
-      "متجر",
-      "منتجات",
-      "شراء",
-      "اشتري",
-      "عرض",
-      "تسوق",
-      "منتجات رقمية",
-      "أدوات",
-      "خدمات"
+      "لعبة",
+      "قراند",
+      "GTA",
+      "حرامي",
+      "سيارت",
+      "لعب",
+      "شرط",
+      "شريط",
+      "فايف"
     ]
   }
 ]
