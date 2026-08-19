@@ -2208,7 +2208,7 @@
                 const area = document.getElementById('messagesArea');
                 const infoMsg = document.createElement('div');
                 infoMsg.className = 'message bot';
-                infoMsg.innerHTML = `🔄 تم التبديل إلى المحادثة: <strong>${escapeHtml(session.title)}</strong><span class="msg-time">الآن</span>`;
+                infoMsg.innerHTML = ` تم التبديل إلى المحادثة: <strong>${escapeHtml(session.title)}</strong><span class="msg-time">الآن</span>`;
                 area.appendChild(infoMsg);
                 scrollToBottom();
             } catch (e) { console.warn('فشل استرجاع الجلسة:', e); }
@@ -2528,7 +2528,7 @@
             const area = document.getElementById('messagesArea');
             const infoMsg = document.createElement('div');
             infoMsg.className = 'message bot';
-            infoMsg.innerHTML = `✨ تم إنشاء محادثة جديدة. <span class="msg-time">الآن</span>`;
+            infoMsg.innerHTML = ` تم إنشاء محادثة جديدة. <span class="msg-time">الآن</span>`;
             area.appendChild(infoMsg);
             scrollToBottom();
         });
