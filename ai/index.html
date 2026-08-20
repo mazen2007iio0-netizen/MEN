@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* === جميع الأنماط كما هي، مع تعديل القائمة المنسدلة لجهة اليمين === */
+        /* === جميع الأنماط كما هي، مع إضافات لأزرار إعادة ونسخ === */
         * {
             margin: 0;
             padding: 0;
@@ -298,6 +298,11 @@
             animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             word-wrap: break-word;
             line-height: 1.7;
+            position: relative;
+            transition: 0.2s;
+        }
+        .message:hover {
+            box-shadow: 0 0 20px rgba(74, 122, 255, 0.05);
         }
         @keyframes fadeUp {
             from {
@@ -332,6 +337,45 @@
         }
         .message.user .msg-time {
             text-align: right;
+        }
+
+        /* === أزرار إعادة ونسخ خاصة برسائل البوت === */
+        .message.bot .bot-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            justify-content: flex-start;
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .message.bot:hover .bot-actions {
+            opacity: 1;
+        }
+        .message.bot .bot-actions button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(74, 122, 255, 0.15);
+            border-radius: 30px;
+            padding: 4px 14px;
+            color: #b0c4e8;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Cairo', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .message.bot .bot-actions button i {
+            font-size: 0.9rem;
+        }
+        .message.bot .bot-actions button:hover {
+            background: rgba(74, 122, 255, 0.12);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: scale(1.05);
+        }
+        .message.bot .bot-actions button:active {
+            transform: scale(0.95);
         }
 
         /* ===== منتجات ===== */
@@ -824,12 +868,12 @@
             background: rgba(74, 122, 255, 0.1);
         }
 
-        /* القائمة المنسدلة - تعديل للجهة اليمنى */
+        /* القائمة المنسدلة - على اليمين */
         .plus-dropdown {
             position: absolute;
             bottom: calc(100% + 12px);
-            right: 0;               /* تم التعديل: بدلاً من left: 0 */
-            left: auto;            /* تم التعديل: إلغاء left */
+            right: 0;
+            left: auto;
             background: rgba(10, 16, 32, 0.98);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(74, 122, 255, 0.2);
@@ -840,7 +884,7 @@
             display: none;
             z-index: 100;
             animation: dropFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            transform-origin: top right; /* لجعل الفتح من أعلى اليمين */
+            transform-origin: top right;
         }
         .plus-dropdown.show {
             display: block;
@@ -1184,7 +1228,7 @@
             transform: scale(0.95);
         }
 
-        /* ===== مودال الإعدادات ===== */
+        /* ===== مودال الإعدادات (تم تحديثه) ===== */
         .settings-group {
             margin: 20px 0;
         }
@@ -1504,7 +1548,7 @@
             }
             .plus-dropdown {
                 min-width: 160px;
-                right: 0;          /* تعديل للجهة اليمنى */
+                right: 0;
                 left: auto;
                 bottom: calc(100% + 8px);
             }
@@ -1619,6 +1663,14 @@
             }
             .memory-item .memory-title {
                 max-width: 120px;
+            }
+            .message.bot .bot-actions {
+                opacity: 1;
+                flex-wrap: wrap;
+            }
+            .message.bot .bot-actions button {
+                font-size: 0.7rem;
+                padding: 2px 10px;
             }
         }
         @media (max-width: 480px) {
@@ -1793,6 +1845,10 @@
                 min-width: 28px;
                 font-size: 0.8rem;
             }
+            .message.bot .bot-actions button {
+                font-size: 0.6rem;
+                padding: 2px 8px;
+            }
         }
         @media (max-width: 360px) {
             .logo h1 {
@@ -1957,7 +2013,7 @@
                     <button class="btn-plus" id="plusBtn" title="خيارات إضافية">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <!-- القائمة المنسدلة - أصبحت على جهة اليمين -->
+                    <!-- القائمة المنسدلة -->
                     <div class="plus-dropdown" id="plusDropdown">
                         <button class="dropdown-item" id="attachOption">
                             <i class="fas fa-paperclip"></i> إرفاق ملف
@@ -1994,7 +2050,7 @@
         </div>
     </main>
 
-    <!-- مودال الذاكرة - يعرض الجلسات -->
+    <!-- مودال الذاكرة -->
     <div class="modal-overlay" id="memoryModal">
         <div class="modal-box">
             <h3><i class="fas fa-brain"></i> ذاكرة MEN Ai (الجلسات)</h3>
@@ -2009,10 +2065,10 @@
         </div>
     </div>
 
-    <!-- مودال الإعدادات -->
+    <!-- مودال الإعدادات (محدث) -->
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-box">
-            <h3><i class="fas fa-sliders-h"></i> إعدادات الذاكرة</h3>
+            <h3><i class="fas fa-sliders-h"></i> إعدادات الذاكرة والتعلم</h3>
             <div class="settings-group">
                 <label>الحد الأقصى للرسائل في كل محادثة</label>
                 <div class="settings-input">
@@ -2023,11 +2079,27 @@
                         <option value="50">50</option>
                         <option value="100">100</option>
                         <option value="200">200</option>
+                        <option value="500">500 (كثير)</option>
+                        <option value="1000">1000 (كثير جداً)</option>
                     </select>
                     <span style="color:#6a708a;font-size:0.9rem;">أو أدخل قيمة مخصصة</span>
                     <input type="number" id="customLimitInput" min="1" max="10000" placeholder="مخصص" style="width:100px;">
                 </div>
                 <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند تجاوز العدد في أي محادثة، سيتم حذف المحادثة بالكامل.</p>
+            </div>
+            <div class="settings-group">
+                <label>تفعيل الردود الإضافية (من products1.json)</label>
+                <button class="btn-apply" id="enableExtraRepliesBtn" style="background:rgba(74,122,255,0.15);border:1px solid rgba(74,122,255,0.3);color:#b0c4e8;padding:8px 20px;border-radius:30px;cursor:pointer;font-family:'Cairo',sans-serif;display:inline-flex;align-items:center;gap:8px;">
+                    <i class="fas fa-toggle-on"></i> تفعيل الردود الإضافية
+                </button>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم دمج الردود من products1.json مع الردود الأساسية.</p>
+            </div>
+            <div class="settings-group">
+                <label>تعلم من محادثتي (آخر رسالتين)</label>
+                <button class="btn-apply" id="learnFromConversationBtn" style="background:rgba(74,122,255,0.15);border:1px solid rgba(74,122,255,0.3);color:#b0c4e8;padding:8px 20px;border-radius:30px;cursor:pointer;font-family:'Cairo',sans-serif;display:inline-flex;align-items:center;gap:8px;">
+                    <i class="fas fa-graduation-cap"></i> تعلم من المحادثة الحالية
+                </button>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم حفظ آخر سؤال وجواب كرد جديد في ذاكرة البوت.</p>
             </div>
             <div class="settings-actions">
                 <button class="btn-clear-settings" id="clearMemorySettingsBtn"><i class="fas fa-trash-alt"></i> مسح الذاكرة</button>
@@ -2072,6 +2144,10 @@
         let responses = {};
         let keywordsMap = {};
         let products = [];
+        let extraReplies = {}; // الردود الإضافية من products1.json
+        let customReplies = {}; // الردود المضافة من المستخدم (التعلم)
+
+        const CUSTOM_REPLIES_KEY = 'menCustomReplies';
 
         const SUBSCRIPTION_KEYWORDS = [
             'اشتراك', 'اشترك', 'اشتري', 'شراء', 'طلب', 'طلب منتج',
@@ -2088,7 +2164,6 @@
         const MEMORY_KEY = 'menChatMemory';
         const SETTINGS_KEY = 'menChatSettings';
 
-        // الحد الأقصى للرسائل في كل جلسة
         const DEFAULT_LIMIT = 12;
         let maxMessagesPerSession = loadSettings();
 
@@ -2110,7 +2185,6 @@
             } catch (e) {}
         }
 
-        // هيكل التخزين: { sessions: [ { id, title, messages: [ {role, content, timestamp} ], lastUpdated } ], currentSessionId }
         function getMemory() {
             try {
                 const data = localStorage.getItem(MEMORY_KEY);
@@ -2130,7 +2204,6 @@
             } catch (e) {}
         }
 
-        // إنشاء جلسة جديدة
         function createNewSession(title) {
             const memory = getMemory();
             const id = Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 5);
@@ -2146,7 +2219,6 @@
             return id;
         }
 
-        // الحصول على الجلسة الحالية
         function getCurrentSession() {
             const memory = getMemory();
             if (!memory.currentSessionId || !memory.sessions.some(s => s.id === memory.currentSessionId)) {
@@ -2157,7 +2229,6 @@
             return memory.sessions.find(s => s.id === memory.currentSessionId);
         }
 
-        // تعيين جلسة حالية
         function setCurrentSession(sessionId) {
             const memory = getMemory();
             if (memory.sessions.some(s => s.id === sessionId)) {
@@ -2168,7 +2239,6 @@
             return false;
         }
 
-        // حفظ رسالة في الجلسة الحالية
         function saveToMemory(role, content) {
             try {
                 const memory = getMemory();
@@ -2185,7 +2255,6 @@
                     const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
                     session.title = title || 'محادثة جديدة';
                 }
-                // التحقق من الحد الأقصى
                 if (session.messages.length > maxMessagesPerSession) {
                     const index = memory.sessions.findIndex(s => s.id === session.id);
                     if (index !== -1) {
@@ -2196,7 +2265,6 @@
                             memory.currentSessionId = newId;
                         }
                         saveMemory(memory);
-                        // إعادة تحميل الجلسة الجديدة
                         loadCurrentSession();
                         return;
                     }
@@ -2205,7 +2273,6 @@
             } catch (e) { console.warn('فشل حفظ الذاكرة:', e); }
         }
 
-        // تحميل كل الجلسات وعرضها في المودال
         function loadMemory() {
             try {
                 const memory = getMemory();
@@ -2217,7 +2284,6 @@
             }
         }
 
-        // عرض قائمة الجلسات
         function renderMemoryList(sessions) {
             const container = document.getElementById('memoryList');
             if (!sessions || sessions.length === 0) {
@@ -2257,7 +2323,6 @@
             });
         }
 
-        // حذف جلسة
         function deleteSession(sessionId) {
             if (!confirm('هل تريد حذف هذه المحادثة؟')) return;
             try {
@@ -2281,7 +2346,6 @@
             } catch (e) { console.warn('فشل حذف الجلسة:', e); }
         }
 
-        // مسح كل الجلسات
         function clearAllSessions() {
             if (!confirm('هل تريد مسح كل المحادثات المحفوظة؟')) return;
             try {
@@ -2297,7 +2361,6 @@
             } catch (e) { console.warn('فشل مسح الذاكرة:', e); }
         }
 
-        // استرجاع آخر رسالة من جلسة محددة إلى حقل الإدخال
         function restoreSession(sessionId) {
             try {
                 const memory = getMemory();
@@ -2327,21 +2390,18 @@
             } catch (e) { console.warn('فشل استرجاع الجلسة:', e); }
         }
 
-        // تحميل الجلسة الحالية وعرض رسائلها في الشات مع رسالة الترحيب
         function loadCurrentSession() {
             const session = getCurrentSession();
             if (!session) return;
             const area = document.getElementById('messagesArea');
             area.innerHTML = '';
 
-            // إذا كانت الجلسة فارغة، نعرض رسالة الترحيب
             if (session.messages.length === 0) {
                 const welcomeDiv = document.createElement('div');
                 welcomeDiv.className = 'message bot';
                 welcomeDiv.innerHTML = buildWelcomeMessage() + `<span class="msg-time">الآن</span>`;
                 area.appendChild(welcomeDiv);
                 scrollToBottom();
-                // تشغيل تأثير الكتابة
                 const typewriterElement = document.getElementById('typewriterText');
                 if (typewriterElement) {
                     const fullText = 'مرحبا بك في MEN Ai';
@@ -2354,17 +2414,47 @@
                 return;
             }
 
-            // عرض الرسائل المحفوظة
             session.messages.forEach(msg => {
                 const div = document.createElement('div');
                 div.className = `message ${msg.role}`;
                 div.innerHTML = escapeHtml(msg.content) + `<span class="msg-time">${msg.timestamp || 'الآن'}</span>`;
+                if (msg.role === 'bot') {
+                    const actions = document.createElement('div');
+                    actions.className = 'bot-actions';
+                    actions.innerHTML = `
+                        <button class="replay-btn" data-content="${escapeHtml(msg.content)}"><i class="fas fa-redo-alt"></i> إعادة</button>
+                        <button class="copy-btn" data-content="${escapeHtml(msg.content)}"><i class="fas fa-copy"></i> نسخ</button>
+                    `;
+                    div.appendChild(actions);
+                }
                 area.appendChild(div);
             });
             scrollToBottom();
+
+            document.querySelectorAll('.replay-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const content = this.dataset.content;
+                    document.getElementById('messageInput').value = content;
+                    document.getElementById('messageInput').dispatchEvent(new Event('input'));
+                    document.getElementById('messageInput').focus();
+                });
+            });
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const content = this.dataset.content;
+                    navigator.clipboard.writeText(content).then(() => {
+                        const orig = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-check"></i> تم';
+                        setTimeout(() => { this.innerHTML = orig; }, 1500);
+                    }).catch(() => {
+                        alert('تعذر نسخ النص');
+                    });
+                });
+            });
         }
 
-        // دالة بناء رسالة الترحيب
         function buildWelcomeMessage() {
             return `
                 <div class="welcome-animation">
@@ -2387,7 +2477,6 @@
             `;
         }
 
-        // تأثير الكتابة
         function typeTextEffect(element, text, speed = 60) {
             return new Promise((resolve) => {
                 let index = 0;
@@ -2405,22 +2494,71 @@
         }
 
         // ============================================================
-        //  دوال الردود والمنتجات (نفس السابق)
+        //  دوال الردود والمنتجات (مع دعم الردود الإضافية والمخصصة)
         // ============================================================
-        function getReply(category) {
-            const list = responses[category]?.responses;
-            if (!list || list.length === 0) return getReply('default');
-            return list[Math.floor(Math.random() * list.length)];
+        // تحميل الردود المخصصة من localStorage
+        function loadCustomReplies() {
+            try {
+                const data = localStorage.getItem(CUSTOM_REPLIES_KEY);
+                if (data) {
+                    customReplies = JSON.parse(data);
+                } else {
+                    customReplies = {};
+                }
+            } catch (e) {
+                customReplies = {};
+            }
         }
 
-        function buildKeywordsMap(data) {
-            const map = {};
-            for (const [cat, obj] of Object.entries(data)) {
+        function saveCustomReplies() {
+            try {
+                localStorage.setItem(CUSTOM_REPLIES_KEY, JSON.stringify(customReplies));
+            } catch (e) {}
+        }
+
+        // دمج الكلمات المفتاحية من الردود المخصصة والإضافية والأساسية
+        function rebuildKeywordsMap() {
+            let map = {};
+            // الأساسية
+            for (const [cat, obj] of Object.entries(responses)) {
                 if (obj.keywords && Array.isArray(obj.keywords)) {
                     map[cat] = obj.keywords.map(k => k.toLowerCase());
                 }
             }
-            return map;
+            // الإضافية
+            for (const [cat, obj] of Object.entries(extraReplies)) {
+                if (obj.keywords && Array.isArray(obj.keywords)) {
+                    if (map[cat]) {
+                        map[cat] = [...map[cat], ...obj.keywords.map(k => k.toLowerCase())];
+                    } else {
+                        map[cat] = obj.keywords.map(k => k.toLowerCase());
+                    }
+                }
+            }
+            // المخصصة
+            for (const [cat, obj] of Object.entries(customReplies)) {
+                if (obj.keywords && Array.isArray(obj.keywords)) {
+                    if (map[cat]) {
+                        map[cat] = [...map[cat], ...obj.keywords.map(k => k.toLowerCase())];
+                    } else {
+                        map[cat] = obj.keywords.map(k => k.toLowerCase());
+                    }
+                }
+            }
+            keywordsMap = map;
+        }
+
+        function getReply(category) {
+            // أولاً: الردود المخصصة
+            let customList = customReplies[category]?.responses || [];
+            // ثانياً: الإضافية
+            let extraList = extraReplies[category]?.responses || [];
+            // ثالثاً: الأساسية
+            let baseList = responses[category]?.responses || [];
+
+            let combined = [...customList, ...extraList, ...baseList];
+            if (combined.length === 0) return getReply('default');
+            return combined[Math.floor(Math.random() * combined.length)];
         }
 
         function getCategoryForText(text) {
@@ -2502,6 +2640,93 @@
         }
 
         // ============================================================
+        //  وظائف التعلم وإدارة الردود
+        // ============================================================
+        // تعلم من المحادثة الحالية (آخر رسالة مستخدم وآخر رد بوت)
+        function learnFromConversation() {
+            const session = getCurrentSession();
+            if (!session || session.messages.length < 2) {
+                alert('لا توجد محادثة كافية للتعلم. يجب أن تحتوي على سؤال وجواب.');
+                return;
+            }
+            // نأخذ آخر رسالتين: مستخدم ثم بوت
+            const msgs = session.messages;
+            let userMsg = null;
+            let botMsg = null;
+            for (let i = msgs.length - 1; i >= 0; i--) {
+                if (msgs[i].role === 'user' && !userMsg) {
+                    userMsg = msgs[i];
+                }
+                if (msgs[i].role === 'bot' && !botMsg) {
+                    botMsg = msgs[i];
+                }
+                if (userMsg && botMsg) break;
+            }
+            if (!userMsg || !botMsg) {
+                alert('تعذر العثور على سؤال وجواب في المحادثة.');
+                return;
+            }
+
+            // نستخرج الكلمات المفتاحية من سؤال المستخدم
+            const userText = userMsg.content;
+            const botText = botMsg.content;
+
+            // نحدد تصنيفاً مناسباً (نستخدم نفس نظام التصنيفات)
+            let category = getCategoryForText(userText);
+            if (category === 'default') {
+                // إذا لم نجد تصنيفاً، نضع تصنيفاً افتراضياً
+                category = 'custom';
+            }
+
+            // نضيف الرد إلى الردود المخصصة
+            if (!customReplies[category]) {
+                customReplies[category] = { keywords: [], responses: [] };
+            }
+            // نضيف كلمات مفتاحية من السؤال (نأخذ أول 3 كلمات مميزة)
+            const words = userText.split(/\s+/).filter(w => w.length > 2);
+            const newKeywords = words.slice(0, 3).map(w => w.toLowerCase());
+            // ندمج الكلمات الجديدة مع الموجودة (نتجنب التكرار)
+            for (let kw of newKeywords) {
+                if (!customReplies[category].keywords.includes(kw)) {
+                    customReplies[category].keywords.push(kw);
+                }
+            }
+            // نضيف الرد إذا لم يكن موجوداً مسبقاً (نتجنب التكرار)
+            if (!customReplies[category].responses.includes(botText)) {
+                customReplies[category].responses.push(botText);
+            }
+
+            saveCustomReplies();
+            rebuildKeywordsMap();
+
+            alert('تم التعلم بنجاح! سأستطيع الآن الإجابة على أسئلة مشابهة.');
+        }
+
+        // تفعيل الردود الإضافية من products1.json
+        async function enableExtraReplies() {
+            try {
+                const response = await fetch('products1.json');
+                if (!response.ok) throw new Error('تعذر تحميل products1.json');
+                const data = await response.json();
+                extraReplies = data;
+                // دمج الكلمات المفتاحية
+                const extraMap = buildKeywordsMap(data);
+                for (const [cat, patterns] of Object.entries(extraMap)) {
+                    if (keywordsMap[cat]) {
+                        keywordsMap[cat] = [...keywordsMap[cat], ...patterns];
+                    } else {
+                        keywordsMap[cat] = patterns;
+                    }
+                }
+                rebuildKeywordsMap(); // إعادة بناء الخريطة الكاملة
+                alert('تم تفعيل الردود الإضافية بنجاح!');
+            } catch (error) {
+                console.error('فشل تحميل products1.json:', error);
+                alert('تعذر تحميل ملف products1.json. تأكد من وجوده في نفس المجلد.');
+            }
+        }
+
+        // ============================================================
         //  دوال استخراج النص من الملفات (نفس السابق)
         // ============================================================
         async function extractTextFromFile(file) {
@@ -2577,7 +2802,7 @@
         });
 
         // ============================================================
-        //  دوال إدارة الملفات المرفقة (مفعلة)
+        //  دوال إدارة الملفات المرفقة
         // ============================================================
         function showAttachedFile(file) {
             attachedFile = file;
@@ -2608,7 +2833,6 @@
                     return;
                 }
                 showAttachedFile(file);
-                // إغلاق القائمة بعد اختيار الملف
                 closeDropdown();
             } else {
                 hideAttachedFile();
@@ -2618,7 +2842,7 @@
         removeFileBtn.addEventListener('click', hideAttachedFile);
 
         // ============================================================
-        //  زر الزايد والقائمة المنسدلة (محاذاة إلى اليمين)
+        //  زر الزايد والقائمة المنسدلة
         // ============================================================
         const plusBtn = document.getElementById('plusBtn');
         const plusDropdown = document.getElementById('plusDropdown');
@@ -2640,21 +2864,18 @@
             toggleDropdown();
         });
 
-        // عند النقر على خيار الإرفاق، نقوم بمحاكاة الضغط على input file
         attachOption.addEventListener('click', function(e) {
             e.stopPropagation();
             document.getElementById('fileInput').click();
             closeDropdown();
         });
 
-        // خيار Do It غير متاح
         doitOption.addEventListener('click', function(e) {
             e.stopPropagation();
             alert('⚠️ خاصية "Do It" غير متاحة حالياً، سيتم تفعيلها في الإصدارات القادمة.');
             closeDropdown();
         });
 
-        // إغلاق القائمة عند النقر خارجها
         document.addEventListener('click', function(e) {
             const target = e.target;
             if (!target.closest('.input-area')) {
@@ -2678,7 +2899,6 @@
         });
         document.getElementById('clearMemoryBtn').addEventListener('click', clearAllSessions);
 
-        // زر محادثة جديدة
         document.getElementById('newSessionBtn').addEventListener('click', function() {
             const newId = createNewSession('محادثة جديدة');
             setCurrentSession(newId);
@@ -2703,6 +2923,8 @@
         const customLimitInput = document.getElementById('customLimitInput');
         const applySettingsBtn = document.getElementById('applySettingsBtn');
         const clearMemorySettingsBtn = document.getElementById('clearMemorySettingsBtn');
+        const enableExtraRepliesBtn = document.getElementById('enableExtraRepliesBtn');
+        const learnFromConversationBtn = document.getElementById('learnFromConversationBtn');
 
         settingsBtn.addEventListener('click', function() {
             const currentLimit = maxMessagesPerSession;
@@ -2749,7 +2971,6 @@
             }
             saveSettings(newLimit);
             settingsModal.classList.remove('active');
-            // التحقق من الجلسات الحالية وحذف أي جلسة تتجاوز الحد
             const memory = getMemory();
             let changed = false;
             memory.sessions = memory.sessions.filter(session => {
@@ -2776,8 +2997,18 @@
 
         clearMemorySettingsBtn.addEventListener('click', clearAllSessions);
 
+        // تفعيل الردود الإضافية
+        enableExtraRepliesBtn.addEventListener('click', function() {
+            enableExtraReplies();
+        });
+
+        // تعلم من المحادثة
+        learnFromConversationBtn.addEventListener('click', function() {
+            learnFromConversation();
+        });
+
         // ============================================================
-        //  دوال إنشاء الرد الذكي
+        //  دوال إنشاء الرد الذكي (مع دعم الردود الإضافية والمخصصة)
         // ============================================================
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
@@ -2805,7 +3036,7 @@
             }
 
             let category = getCategoryForText(text);
-            if (category !== 'default' && responses[category]) {
+            if (category !== 'default') {
                 return { type: 'text', content: getReply(category) };
             }
 
@@ -2846,7 +3077,7 @@
         function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
         // ============================================================
-        //  دوال إرسال الرسائل مع دعم الملفات
+        //  دوال إرسال الرسائل مع دعم الملفات والأزرار
         // ============================================================
         const messagesArea = document.getElementById('messagesArea');
         const messageInput = document.getElementById('messageInput');
@@ -3013,7 +3244,6 @@
                 messagesArea.appendChild(userMsg);
                 scrollToBottom();
 
-                // حفظ في الذاكرة (الجلسة الحالية)
                 saveToMemory('user', userContent);
 
                 messageInput.value = '';
@@ -3043,6 +3273,13 @@
                 if (reply.type === 'products' || reply.type === 'product') {
                     botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
                     replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
+                    const actions = document.createElement('div');
+                    actions.className = 'bot-actions';
+                    actions.innerHTML = `
+                        <button class="replay-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-redo-alt"></i> إعادة</button>
+                        <button class="copy-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-copy"></i> نسخ</button>
+                    `;
+                    botMsg.appendChild(actions);
                     await delay(200);
                 } else {
                     await typeText(botMsg, reply.content, 22);
@@ -3051,9 +3288,38 @@
                     timeSpan.textContent = 'الآن';
                     botMsg.appendChild(timeSpan);
                     replyContent = reply.content;
+                    const actions = document.createElement('div');
+                    actions.className = 'bot-actions';
+                    actions.innerHTML = `
+                        <button class="replay-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-redo-alt"></i> إعادة</button>
+                        <button class="copy-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-copy"></i> نسخ</button>
+                    `;
+                    botMsg.appendChild(actions);
                 }
 
-                // حفظ رد البوت في الذاكرة
+                botMsg.querySelectorAll('.replay-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const content = this.dataset.content;
+                        document.getElementById('messageInput').value = content;
+                        document.getElementById('messageInput').dispatchEvent(new Event('input'));
+                        document.getElementById('messageInput').focus();
+                    });
+                });
+                botMsg.querySelectorAll('.copy-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const content = this.dataset.content;
+                        navigator.clipboard.writeText(content).then(() => {
+                            const orig = this.innerHTML;
+                            this.innerHTML = '<i class="fas fa-check"></i> تم';
+                            setTimeout(() => { this.innerHTML = orig; }, 1500);
+                        }).catch(() => {
+                            alert('تعذر نسخ النص');
+                        });
+                    });
+                });
+
                 saveToMemory('bot', replyContent || 'تم عرض المنتج');
 
                 await sendToDiscord(userContent, replyContent);
@@ -3102,7 +3368,6 @@
                 if (!response.ok) throw new Error('تعذر تحميل ملف الردود');
                 const data = await response.json();
                 responses = data;
-                keywordsMap = buildKeywordsMap(data);
                 console.log('تم تحميل الردود بنجاح');
                 return true;
             } catch (error) {
@@ -3142,7 +3407,6 @@
                             'تطبيق MEN متاح للتحميل على جميع المنصات الرئيسية.'
                         ] }
                 };
-                keywordsMap = buildKeywordsMap(responses);
                 return false;
             }
         }
@@ -3238,10 +3502,13 @@
             await loadExternalLibraries();
             await Promise.all([loadResponses(), loadProducts()]);
 
-            // تحميل الجلسة الحالية (ستعرض الترحيب إذا كانت فارغة)
-            loadCurrentSession();
+            // تحميل الردود المخصصة
+            loadCustomReplies();
 
-            // تحميل الذاكرة (للإعدادات)
+            // بناء خريطة الكلمات المفتاحية الكاملة
+            rebuildKeywordsMap();
+
+            loadCurrentSession();
             loadMemory();
 
             messageInput.disabled = false;
@@ -3249,10 +3516,9 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع دعم الجلسات ورسالة الترحيب ');
+            console.log('MEN Ai جاهز مع دعم التعلم والردود الإضافية');
         }
 
-        // بدء التشغيل
         init();
     </script>
 </body>
