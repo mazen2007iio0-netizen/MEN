@@ -100,7 +100,6 @@
             gap: 12px;
         }
 
-        /* === أزرار جديدة فخمة === */
         .btn-back,
         .btn-memory,
         .btn-settings {
@@ -1228,7 +1227,7 @@
             transform: scale(0.95);
         }
 
-        /* ===== مودال الإعدادات (تم تحديثه) ===== */
+        /* ===== مودال الإعدادات (تم تحديثه - إزالة تفعيل الردود الإضافية) ===== */
         .settings-group {
             margin: 20px 0;
         }
@@ -2065,7 +2064,7 @@
         </div>
     </div>
 
-    <!-- مودال الإعدادات (محدث) -->
+    <!-- مودال الإعدادات (تم إزالة تفعيل الردود الإضافية) -->
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-box">
             <h3><i class="fas fa-sliders-h"></i> إعدادات الذاكرة والتعلم</h3>
@@ -2088,18 +2087,11 @@
                 <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند تجاوز العدد في أي محادثة، سيتم حذف المحادثة بالكامل.</p>
             </div>
             <div class="settings-group">
-                <label>تفعيل الردود الإضافية (من products1.json)</label>
-                <button class="btn-apply" id="enableExtraRepliesBtn" style="background:rgba(74,122,255,0.15);border:1px solid rgba(74,122,255,0.3);color:#b0c4e8;padding:8px 20px;border-radius:30px;cursor:pointer;font-family:'Cairo',sans-serif;display:inline-flex;align-items:center;gap:8px;">
-                    <i class="fas fa-toggle-on"></i> تفعيل الردود الإضافية
-                </button>
-                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم دمج الردود من products1.json مع الردود الأساسية.</p>
-            </div>
-            <div class="settings-group">
-                <label>تعلم من محادثتي (آخر رسالتين)</label>
+                <label>تعلم من محادثتي (آخر سؤال وجواب)</label>
                 <button class="btn-apply" id="learnFromConversationBtn" style="background:rgba(74,122,255,0.15);border:1px solid rgba(74,122,255,0.3);color:#b0c4e8;padding:8px 20px;border-radius:30px;cursor:pointer;font-family:'Cairo',sans-serif;display:inline-flex;align-items:center;gap:8px;">
                     <i class="fas fa-graduation-cap"></i> تعلم من المحادثة الحالية
                 </button>
-                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم حفظ آخر سؤال وجواب كرد جديد في ذاكرة البوت.</p>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم حفظ آخر سؤال وجواب كرد جديد في ذاكرة MEN Ai.</p>
             </div>
             <div class="settings-actions">
                 <button class="btn-clear-settings" id="clearMemorySettingsBtn"><i class="fas fa-trash-alt"></i> مسح الذاكرة</button>
@@ -2144,7 +2136,6 @@
         let responses = {};
         let keywordsMap = {};
         let products = [];
-        let extraReplies = {}; // الردود الإضافية من products1.json
         let customReplies = {}; // الردود المضافة من المستخدم (التعلم)
 
         const CUSTOM_REPLIES_KEY = 'menCustomReplies';
@@ -2494,9 +2485,8 @@
         }
 
         // ============================================================
-        //  دوال الردود والمنتجات (مع دعم الردود الإضافية والمخصصة)
+        //  دوال الردود والمنتجات (مع دعم الردود المخصصة فقط)
         // ============================================================
-        // تحميل الردود المخصصة من localStorage
         function loadCustomReplies() {
             try {
                 const data = localStorage.getItem(CUSTOM_REPLIES_KEY);
@@ -2516,23 +2506,13 @@
             } catch (e) {}
         }
 
-        // دمج الكلمات المفتاحية من الردود المخصصة والإضافية والأساسية
+        // دمج الكلمات المفتاحية من الردود المخصصة والأساسية
         function rebuildKeywordsMap() {
             let map = {};
             // الأساسية
             for (const [cat, obj] of Object.entries(responses)) {
                 if (obj.keywords && Array.isArray(obj.keywords)) {
                     map[cat] = obj.keywords.map(k => k.toLowerCase());
-                }
-            }
-            // الإضافية
-            for (const [cat, obj] of Object.entries(extraReplies)) {
-                if (obj.keywords && Array.isArray(obj.keywords)) {
-                    if (map[cat]) {
-                        map[cat] = [...map[cat], ...obj.keywords.map(k => k.toLowerCase())];
-                    } else {
-                        map[cat] = obj.keywords.map(k => k.toLowerCase());
-                    }
                 }
             }
             // المخصصة
@@ -2551,12 +2531,10 @@
         function getReply(category) {
             // أولاً: الردود المخصصة
             let customList = customReplies[category]?.responses || [];
-            // ثانياً: الإضافية
-            let extraList = extraReplies[category]?.responses || [];
-            // ثالثاً: الأساسية
+            // ثانياً: الأساسية
             let baseList = responses[category]?.responses || [];
 
-            let combined = [...customList, ...extraList, ...baseList];
+            let combined = [...customList, ...baseList];
             if (combined.length === 0) return getReply('default');
             return combined[Math.floor(Math.random() * combined.length)];
         }
@@ -2640,16 +2618,14 @@
         }
 
         // ============================================================
-        //  وظائف التعلم وإدارة الردود
+        //  وظيفة التعلم من المحادثة الحالية
         // ============================================================
-        // تعلم من المحادثة الحالية (آخر رسالة مستخدم وآخر رد بوت)
         function learnFromConversation() {
             const session = getCurrentSession();
             if (!session || session.messages.length < 2) {
                 alert('لا توجد محادثة كافية للتعلم. يجب أن تحتوي على سؤال وجواب.');
                 return;
             }
-            // نأخذ آخر رسالتين: مستخدم ثم بوت
             const msgs = session.messages;
             let userMsg = null;
             let botMsg = null;
@@ -2667,31 +2643,24 @@
                 return;
             }
 
-            // نستخرج الكلمات المفتاحية من سؤال المستخدم
             const userText = userMsg.content;
             const botText = botMsg.content;
 
-            // نحدد تصنيفاً مناسباً (نستخدم نفس نظام التصنيفات)
             let category = getCategoryForText(userText);
             if (category === 'default') {
-                // إذا لم نجد تصنيفاً، نضع تصنيفاً افتراضياً
                 category = 'custom';
             }
 
-            // نضيف الرد إلى الردود المخصصة
             if (!customReplies[category]) {
                 customReplies[category] = { keywords: [], responses: [] };
             }
-            // نضيف كلمات مفتاحية من السؤال (نأخذ أول 3 كلمات مميزة)
             const words = userText.split(/\s+/).filter(w => w.length > 2);
             const newKeywords = words.slice(0, 3).map(w => w.toLowerCase());
-            // ندمج الكلمات الجديدة مع الموجودة (نتجنب التكرار)
             for (let kw of newKeywords) {
                 if (!customReplies[category].keywords.includes(kw)) {
                     customReplies[category].keywords.push(kw);
                 }
             }
-            // نضيف الرد إذا لم يكن موجوداً مسبقاً (نتجنب التكرار)
             if (!customReplies[category].responses.includes(botText)) {
                 customReplies[category].responses.push(botText);
             }
@@ -2702,32 +2671,8 @@
             alert('تم التعلم بنجاح! سأستطيع الآن الإجابة على أسئلة مشابهة.');
         }
 
-        // تفعيل الردود الإضافية من products1.json
-        async function enableExtraReplies() {
-            try {
-                const response = await fetch('products1.json');
-                if (!response.ok) throw new Error('تعذر تحميل products1.json');
-                const data = await response.json();
-                extraReplies = data;
-                // دمج الكلمات المفتاحية
-                const extraMap = buildKeywordsMap(data);
-                for (const [cat, patterns] of Object.entries(extraMap)) {
-                    if (keywordsMap[cat]) {
-                        keywordsMap[cat] = [...keywordsMap[cat], ...patterns];
-                    } else {
-                        keywordsMap[cat] = patterns;
-                    }
-                }
-                rebuildKeywordsMap(); // إعادة بناء الخريطة الكاملة
-                alert('تم تفعيل الردود الإضافية بنجاح!');
-            } catch (error) {
-                console.error('فشل تحميل products1.json:', error);
-                alert('تعذر تحميل ملف products1.json. تأكد من وجوده في نفس المجلد.');
-            }
-        }
-
         // ============================================================
-        //  دوال استخراج النص من الملفات (نفس السابق)
+        //  دوال استخراج النص من الملفات
         // ============================================================
         async function extractTextFromFile(file) {
             const fileType = file.type;
@@ -2783,7 +2728,7 @@
             if (fileType === 'text/csv' || fileName.endsWith('.csv')) {
                 try { return await file.text() || 'الملف فارغ.'; } catch (e) { return 'حدث خطأ أثناء قراءة ملف CSV.'; }
             }
-            return '⚠️ نوع الملف غير مدعوم للاستخراج التلقائي.';
+            return ' نوع الملف غير مدعوم للاستخراج التلقائي.';
         }
 
         // ============================================================
@@ -2923,7 +2868,6 @@
         const customLimitInput = document.getElementById('customLimitInput');
         const applySettingsBtn = document.getElementById('applySettingsBtn');
         const clearMemorySettingsBtn = document.getElementById('clearMemorySettingsBtn');
-        const enableExtraRepliesBtn = document.getElementById('enableExtraRepliesBtn');
         const learnFromConversationBtn = document.getElementById('learnFromConversationBtn');
 
         settingsBtn.addEventListener('click', function() {
@@ -2997,18 +2941,13 @@
 
         clearMemorySettingsBtn.addEventListener('click', clearAllSessions);
 
-        // تفعيل الردود الإضافية
-        enableExtraRepliesBtn.addEventListener('click', function() {
-            enableExtraReplies();
-        });
-
-        // تعلم من المحادثة
+        // زر التعلم من المحادثة
         learnFromConversationBtn.addEventListener('click', function() {
             learnFromConversation();
         });
 
         // ============================================================
-        //  دوال إنشاء الرد الذكي (مع دعم الردود الإضافية والمخصصة)
+        //  دوال إنشاء الرد الذكي (مع دعم الردود المخصصة فقط)
         // ============================================================
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
@@ -3233,7 +3172,6 @@
                     userContent += `\n[ملف: ${attachedFile.name}]\n${fileText}`;
                 }
 
-                // عرض رسالة المستخدم
                 const userMsg = document.createElement('div');
                 userMsg.className = 'message user';
                 let userDisplay = text || ' أرسل ملفاً';
@@ -3502,10 +3440,7 @@
             await loadExternalLibraries();
             await Promise.all([loadResponses(), loadProducts()]);
 
-            // تحميل الردود المخصصة
             loadCustomReplies();
-
-            // بناء خريطة الكلمات المفتاحية الكاملة
             rebuildKeywordsMap();
 
             loadCurrentSession();
@@ -3516,7 +3451,7 @@
             sendBtn.disabled = false;
             voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع دعم التعلم والردود الإضافية');
+            console.log('MEN Ai جاهز مع دعم التعلم (بدون تفعيل الردود الإضافية)');
         }
 
         init();
