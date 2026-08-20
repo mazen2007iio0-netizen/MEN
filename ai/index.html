@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* === جميع الأنماط كما هي، لم تتغير === */
+        /* === جميع الأنماط كما هي، مع إضافات للقائمة المنسدلة === */
         * {
             margin: 0;
             padding: 0;
@@ -625,6 +625,7 @@
             gap: 8px;
             background: rgba(0, 0, 0, 0.4);
             flex-wrap: wrap;
+            position: relative;
         }
         .input-area .input-wrapper {
             flex: 1;
@@ -667,7 +668,7 @@
             direction: ltr;
         }
 
-        /* === أزرار الإدخال الجديدة === */
+        /* === أزرار الإدخال === */
         .input-area .btn-send {
             width: 52px;
             height: 52px;
@@ -789,8 +790,8 @@
             cursor: not-allowed;
         }
 
-        /* === زر الإرفاق (مفعل الآن) === */
-        .input-area .btn-attach {
+        /* === زر الزايد (Plus) والقائمة المنسدلة === */
+        .input-area .btn-plus {
             width: 52px;
             height: 52px;
             min-width: 52px;
@@ -799,40 +800,110 @@
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(2, 28, 164, 0.2);
             color: #a0b0d4;
-            font-size: 1.4rem;
+            font-size: 1.8rem;
             cursor: pointer;
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            overflow: hidden;
-            opacity: 1;
-            pointer-events: auto;
         }
-        .input-area .btn-attach:hover {
+        .input-area .btn-plus:hover {
             background: rgba(74, 122, 255, 0.08);
             border-color: var(--blue-light);
             color: #fff;
-            transform: scale(1.05);
+            transform: scale(1.05) rotate(90deg);
         }
-        .input-area .btn-attach:active {
+        .input-area .btn-plus:active {
             transform: scale(0.92);
         }
-        .input-area .btn-attach.has-file {
+        .input-area .btn-plus.active {
+            transform: rotate(45deg);
             border-color: var(--blue-light);
             color: var(--blue-light);
             background: rgba(74, 122, 255, 0.1);
         }
-        .input-area .btn-attach input[type="file"] {
+
+        /* القائمة المنسدلة */
+        .plus-dropdown {
             position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
+            bottom: calc(100% + 12px);
+            left: 0;
+            background: rgba(10, 16, 32, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(74, 122, 255, 0.2);
+            border-radius: 20px;
+            padding: 8px 0;
+            min-width: 180px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(74, 122, 255, 0.05);
+            display: none;
+            z-index: 100;
+            animation: dropFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .plus-dropdown.show {
+            display: block;
+        }
+        @keyframes dropFade {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
+        .plus-dropdown .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #c0ccf0;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: right;
+            font-family: 'Cairo', sans-serif;
+        }
+        .plus-dropdown .dropdown-item i {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+            color: var(--blue-light);
+            opacity: 0.7;
+        }
+        .plus-dropdown .dropdown-item:hover {
+            background: rgba(74, 122, 255, 0.08);
+            color: #fff;
+        }
+        .plus-dropdown .dropdown-item:hover i {
+            opacity: 1;
+        }
+        .plus-dropdown .dropdown-item:active {
+            transform: scale(0.97);
+        }
+        .plus-dropdown .dropdown-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .plus-dropdown .dropdown-item.disabled:hover {
+            background: transparent;
+            color: #c0ccf0;
+        }
+        .plus-dropdown .dropdown-item.disabled i {
+            opacity: 0.4;
+        }
+        .plus-dropdown .dropdown-divider {
+            height: 1px;
+            background: rgba(74, 122, 255, 0.1);
+            margin: 6px 12px;
+        }
+
+        /* ===== معاينة الملف ===== */
         .file-preview {
             display: none;
             padding: 6px 16px 6px 12px;
@@ -1420,11 +1491,19 @@
             }
             .input-area .btn-send,
             .input-area .btn-voice,
-            .input-area .btn-attach {
+            .input-area .btn-plus {
                 width: 44px;
                 height: 44px;
                 min-width: 44px;
                 font-size: 1.2rem;
+            }
+            .input-area .btn-plus {
+                font-size: 1.6rem;
+            }
+            .plus-dropdown {
+                min-width: 160px;
+                left: 0;
+                right: auto;
             }
             .chat-header {
                 padding: 12px 16px;
@@ -1551,11 +1630,20 @@
             }
             .input-area .btn-send,
             .input-area .btn-voice,
-            .input-area .btn-attach {
+            .input-area .btn-plus {
                 width: 38px;
                 height: 38px;
                 min-width: 38px;
                 font-size: 1rem;
+            }
+            .input-area .btn-plus {
+                font-size: 1.4rem;
+            }
+            .plus-dropdown {
+                min-width: 140px;
+                left: 0;
+                right: auto;
+                bottom: calc(100% + 8px);
             }
             .chat-wrapper {
                 height: calc(100vh - 140px);
@@ -1753,11 +1841,20 @@
             }
             .input-area .btn-send,
             .input-area .btn-voice,
-            .input-area .btn-attach {
+            .input-area .btn-plus {
                 width: 32px;
                 height: 32px;
                 min-width: 32px;
                 font-size: 0.8rem;
+            }
+            .input-area .btn-plus {
+                font-size: 1.2rem;
+            }
+            .plus-dropdown {
+                min-width: 120px;
+                left: 0;
+                right: auto;
+                bottom: calc(100% + 6px);
             }
             .products-row .men-product-card {
                 min-width: 140px;
@@ -1853,17 +1950,30 @@
                 </div>
 
                 <div class="input-area">
-                    <!-- زر الإرفاق مفعل الآن -->
-                    <button class="btn-attach" id="attachBtn" title="إرفاق ملف">
-                        <i class="fas fa-paperclip"></i>
-                        <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls">
+                    <!-- زر الزايد (Plus) -->
+                    <button class="btn-plus" id="plusBtn" title="خيارات إضافية">
+                        <i class="fas fa-plus"></i>
                     </button>
+                    <!-- القائمة المنسدلة -->
+                    <div class="plus-dropdown" id="plusDropdown">
+                        <button class="dropdown-item" id="attachOption">
+                            <i class="fas fa-paperclip"></i> إرفاق ملف
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item disabled" id="doitOption" disabled>
+                            <i class="fas fa-bolt"></i> Do It (قريباً)
+                        </button>
+                    </div>
 
+                    <!-- معاينة الملف -->
                     <div class="file-preview hidden-preview" id="filePreview">
                         <i class="fas fa-file"></i>
                         <span id="fileName">ملف</span>
                         <span class="remove-file" id="removeFile"><i class="fas fa-times"></i></span>
                     </div>
+
+                    <!-- ملف الإدخال المخفي -->
+                    <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls" style="display:none;">
 
                     <div class="input-wrapper">
                         <textarea id="messageInput" rows="1" placeholder="اسألني عن أي شيء..."></textarea>
@@ -2473,7 +2583,6 @@
             nameSpan.textContent = file.name;
             preview.classList.remove('hidden-preview');
             preview.classList.add('visible');
-            document.getElementById('attachBtn').classList.add('has-file');
         }
 
         function hideAttachedFile() {
@@ -2481,7 +2590,6 @@
             extractedText = '';
             document.getElementById('filePreview').classList.remove('visible');
             document.getElementById('filePreview').classList.add('hidden-preview');
-            document.getElementById('attachBtn').classList.remove('has-file');
             document.getElementById('fileInput').value = '';
         }
 
@@ -2497,6 +2605,8 @@
                     return;
                 }
                 showAttachedFile(file);
+                // إغلاق القائمة بعد اختيار الملف
+                closeDropdown();
             } else {
                 hideAttachedFile();
             }
@@ -2505,11 +2615,57 @@
         removeFileBtn.addEventListener('click', hideAttachedFile);
 
         // ============================================================
+        //  زر الزايد والقائمة المنسدلة
+        // ============================================================
+        const plusBtn = document.getElementById('plusBtn');
+        const plusDropdown = document.getElementById('plusDropdown');
+        const attachOption = document.getElementById('attachOption');
+        const doitOption = document.getElementById('doitOption');
+
+        function toggleDropdown() {
+            plusDropdown.classList.toggle('show');
+            plusBtn.classList.toggle('active');
+        }
+
+        function closeDropdown() {
+            plusDropdown.classList.remove('show');
+            plusBtn.classList.remove('active');
+        }
+
+        plusBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleDropdown();
+        });
+
+        // عند النقر على خيار الإرفاق، نقوم بمحاكاة الضغط على input file
+        attachOption.addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('fileInput').click();
+            closeDropdown();
+        });
+
+        // خيار Do It غير متاح
+        doitOption.addEventListener('click', function(e) {
+            e.stopPropagation();
+            alert('⚠️ خاصية "Do It" غير متاحة حالياً، سيتم تفعيلها في الإصدارات القادمة.');
+            closeDropdown();
+        });
+
+        // إغلاق القائمة عند النقر خارجها
+        document.addEventListener('click', function(e) {
+            const target = e.target;
+            if (!target.closest('.input-area')) {
+                closeDropdown();
+            }
+        });
+
+        // ============================================================
         //  ربط أزرار الذاكرة والإعدادات
         // ============================================================
         document.getElementById('memoryBtn').addEventListener('click', function() {
             loadMemory();
             document.getElementById('memoryModal').classList.add('active');
+            closeDropdown();
         });
         document.getElementById('memoryModalClose').addEventListener('click', function() {
             document.getElementById('memoryModal').classList.remove('active');
@@ -2531,6 +2687,7 @@
             infoMsg.innerHTML = ` تم إنشاء محادثة جديدة. <span class="msg-time">الآن</span>`;
             area.appendChild(infoMsg);
             scrollToBottom();
+            closeDropdown();
         });
 
         // ============================================================
@@ -2562,6 +2719,7 @@
                 customLimitInput.value = '';
             }
             settingsModal.classList.add('active');
+            closeDropdown();
         });
 
         settingsModalClose.addEventListener('click', function() {
