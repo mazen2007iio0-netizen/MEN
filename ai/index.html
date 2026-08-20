@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* === جميع الأنماط كما هي، مع إضافات للقائمة المنسدلة === */
+        /* === جميع الأنماط كما هي، مع تعديل القائمة المنسدلة لجهة اليمين === */
         * {
             margin: 0;
             padding: 0;
@@ -790,7 +790,7 @@
             cursor: not-allowed;
         }
 
-        /* === زر الزايد (Plus) والقائمة المنسدلة === */
+        /* === زر الزايد (Plus) === */
         .input-area .btn-plus {
             width: 52px;
             height: 52px;
@@ -824,11 +824,12 @@
             background: rgba(74, 122, 255, 0.1);
         }
 
-        /* القائمة المنسدلة */
+        /* القائمة المنسدلة - تعديل للجهة اليمنى */
         .plus-dropdown {
             position: absolute;
             bottom: calc(100% + 12px);
-            left: 0;
+            right: 0;               /* تم التعديل: بدلاً من left: 0 */
+            left: auto;            /* تم التعديل: إلغاء left */
             background: rgba(10, 16, 32, 0.98);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(74, 122, 255, 0.2);
@@ -839,6 +840,7 @@
             display: none;
             z-index: 100;
             animation: dropFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: top right; /* لجعل الفتح من أعلى اليمين */
         }
         .plus-dropdown.show {
             display: block;
@@ -1502,8 +1504,9 @@
             }
             .plus-dropdown {
                 min-width: 160px;
-                left: 0;
-                right: auto;
+                right: 0;          /* تعديل للجهة اليمنى */
+                left: auto;
+                bottom: calc(100% + 8px);
             }
             .chat-header {
                 padding: 12px 16px;
@@ -1641,9 +1644,9 @@
             }
             .plus-dropdown {
                 min-width: 140px;
-                left: 0;
-                right: auto;
-                bottom: calc(100% + 8px);
+                right: 0;
+                left: auto;
+                bottom: calc(100% + 6px);
             }
             .chat-wrapper {
                 height: calc(100vh - 140px);
@@ -1852,8 +1855,8 @@
             }
             .plus-dropdown {
                 min-width: 120px;
-                left: 0;
-                right: auto;
+                right: 0;
+                left: auto;
                 bottom: calc(100% + 6px);
             }
             .products-row .men-product-card {
@@ -1954,7 +1957,7 @@
                     <button class="btn-plus" id="plusBtn" title="خيارات إضافية">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <!-- القائمة المنسدلة -->
+                    <!-- القائمة المنسدلة - أصبحت على جهة اليمين -->
                     <div class="plus-dropdown" id="plusDropdown">
                         <button class="dropdown-item" id="attachOption">
                             <i class="fas fa-paperclip"></i> إرفاق ملف
@@ -2615,7 +2618,7 @@
         removeFileBtn.addEventListener('click', hideAttachedFile);
 
         // ============================================================
-        //  زر الزايد والقائمة المنسدلة
+        //  زر الزايد والقائمة المنسدلة (محاذاة إلى اليمين)
         // ============================================================
         const plusBtn = document.getElementById('plusBtn');
         const plusDropdown = document.getElementById('plusDropdown');
