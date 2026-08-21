@@ -2094,7 +2094,11 @@
         let purchaseProductData = null;
         let purchaseName = '';
         let purchasePhone = '';
-        let purchaseAgentActive = false; // يتم تفعيله من الزر
+        let purchaseAgentActive = false;
+
+        // متغيرات البحث في المعزز (Boost)
+        let boostMode = true; // افتراضي: مفعّل
+        const BOOST_KEY = 'menBoostMode';
 
         // ============================================================
         //  إدارة الذاكرة والإعدادات
@@ -2130,6 +2134,53 @@
             } catch (e) {}
         }
 
+        // ============================================================
+        //  إدارة وضع المعزز (Boost) – التفعيل الافتراضي
+        // ============================================================
+        function loadBoostMode() {
+            try {
+                const saved = localStorage.getItem(BOOST_KEY);
+                if (saved !== null) {
+                    boostMode = JSON.parse(saved);
+                } else {
+                    boostMode = true; // افتراضي
+                    localStorage.setItem(BOOST_KEY, JSON.stringify(boostMode));
+                }
+            } catch (e) {
+                boostMode = true;
+            }
+            return boostMode;
+        }
+
+        function saveBoostMode(mode) {
+            try {
+                localStorage.setItem(BOOST_KEY, JSON.stringify(mode));
+                boostMode = mode;
+            } catch (e) {}
+        }
+
+        // تبديل وضع المعزز مع رسالة تأكيد
+        function toggleBoostMode() {
+            boostMode = !boostMode;
+            saveBoostMode(boostMode);
+            const status = boostMode ? '✅ تم تفعيل البحث في المعزز' : '❌ تم إلغاء تفعيل البحث في المعزز';
+            // عرض رسالة في الدردشة
+            const area = document.getElementById('messagesArea');
+            const infoMsg = document.createElement('div');
+            infoMsg.className = 'message bot';
+            infoMsg.innerHTML = status + `<span class="msg-time">الآن</span>`;
+            area.appendChild(infoMsg);
+            scrollToBottom();
+            // تحديث نص الزر في القائمة المنسدلة (اختياري)
+            const boostItem = document.getElementById('searchBoostOption');
+            if (boostItem) {
+                boostItem.innerHTML = `<i class="fas fa-search"></i> ${boostMode ? '🔍 البحث في المعزز (مفعّل)' : '🔍 البحث في المعزز (ملغى)'}`;
+            }
+        }
+
+        // ============================================================
+        //  دوال الذاكرة (الجلسات)
+        // ============================================================
         function getMemory() {
             try {
                 const data = localStorage.getItem(MEMORY_KEY);
@@ -2429,7 +2480,7 @@
         }
 
         // ============================================================
-        //  دوال الردود والمنتجات
+        //  دوال الردود والمنتجات (مع دعم المعزز)
         // ============================================================
         function loadCustomReplies() {
             try {
@@ -2469,11 +2520,50 @@
             keywordsMap = map;
         }
 
-        function getReply(category) {
-            let customList = customReplies[category]?.responses || [];
-            let baseList = responses[category]?.responses || [];
+        // إنشاء نسخة معدلة من الردود مع علامة (Boosted)
+        function buildBoostResponses() {
+            const boosted = {};
+            for (const [cat, obj] of Object.entries(responses)) {
+                boosted[cat] = {
+                    keywords: obj.keywords ? [...obj.keywords] : [],
+                    responses: obj.responses ? obj.responses.map(r => r + ' (Boosted)') : []
+                };
+            }
+            // إضافة ردود مخصصة مع (Boosted) أيضاً
+            for (const [cat, obj] of Object.entries(customReplies)) {
+                if (!boosted[cat]) {
+                    boosted[cat] = { keywords: [], responses: [] };
+                }
+                if (obj.keywords) {
+                    boosted[cat].keywords = [...new Set([...boosted[cat].keywords, ...obj.keywords])];
+                }
+                if (obj.responses) {
+                    boosted[cat].responses = [...boosted[cat].responses, ...obj.responses.map(r => r + ' (Boosted)')];
+                }
+            }
+            return boosted;
+        }
+
+        let boostResponses = {};
+
+        function refreshBoostResponses() {
+            boostResponses = buildBoostResponses();
+        }
+
+        function getReply(category, boost = false) {
+            let source = boost ? boostResponses : responses;
+            let customSource = boost ? boostResponses : customReplies;
+
+            let customList = customSource[category]?.responses || [];
+            let baseList = source[category]?.responses || [];
             let combined = [...customList, ...baseList];
-            if (combined.length === 0) return getReply('default');
+            if (combined.length === 0) {
+                let defaultList = boost ? boostResponses['default']?.responses || [] : responses['default']?.responses || [];
+                if (defaultList.length === 0) {
+                    return boost ? 'عذراً، لا يوجد رد متاح (Boosted).' : 'عذراً، لا يوجد رد متاح.';
+                }
+                return defaultList[Math.floor(Math.random() * defaultList.length)];
+            }
             return combined[Math.floor(Math.random() * combined.length)];
         }
 
@@ -2825,10 +2915,10 @@
             closeAllDropdowns();
         });
 
-        // زر البحث في المعزز
+        // زر البحث في المعزز – يعمل كـ toggle مع تحديث النص
         document.getElementById('searchBoostOption').addEventListener('click', function(e) {
             e.stopPropagation();
-            alert('🔍 البحث في المعزز سيمكنك من الوصول إلى قاعدة بيانات ضخمة جداً.');
+            toggleBoostMode();
             closeAllDropdowns();
         });
 
@@ -2995,12 +3085,13 @@
 
             saveCustomReplies();
             rebuildKeywordsMap();
+            refreshBoostResponses(); // تحديث نسخة المعزز
 
             alert('تم التعلم بنجاح! سأستطيع الآن الإجابة على أسئلة مشابهة.');
         }
 
         // ============================================================
-        //  دوال إنشاء الرد الذكي
+        //  دوال إنشاء الرد الذكي (مع دعم المعزز)
         // ============================================================
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
@@ -3023,7 +3114,6 @@
             if (autoAgentEnabled && (lower.includes('اشتري') || lower.includes('طلب') || lower.includes('ابي') || lower
                     .includes('ابغى') || lower.includes('اريد') || lower.includes('أريد') || lower.includes('عطني'))) {
                 const startMsg = startPurchaseAgent();
-                // نتعامل مع الخطوة الأولى مباشرة
                 const reply = handlePurchaseStep(text);
                 if (reply) {
                     return { type: 'text', content: reply };
@@ -3034,7 +3124,8 @@
             // 4. العمليات الحسابية
             const mathResult = evaluateMath(text);
             if (mathResult !== null) {
-                return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
+                const boostSuffix = boostMode ? ' (Boosted)' : '';
+                return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟${boostSuffix}` };
             }
 
             // 5. الوقت والتاريخ
@@ -3042,7 +3133,7 @@
                 const now = new Date();
                 const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
                 const dateStr = now.toLocaleDateString('ar-SA', { timeZone: 'Asia/Riyadh' });
-                const template = getReply('time');
+                const template = getReply('time', boostMode);
                 return { type: 'text', content: template.replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr) };
             }
 
@@ -3052,13 +3143,13 @@
                 return { type: 'product', content: `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(product)}</div></div>` };
             }
 
-            // 7. الردود العامة
+            // 7. الردود العامة (مع أو بدون معزز)
             let category = getCategoryForText(text);
             if (category !== 'default') {
-                return { type: 'text', content: getReply(category) };
+                return { type: 'text', content: getReply(category, boostMode) };
             }
 
-            return { type: 'text', content: getReply('default') };
+            return { type: 'text', content: getReply('default', boostMode) };
         }
 
         // ============================================================
@@ -3433,6 +3524,16 @@
 
             loadCustomReplies();
             rebuildKeywordsMap();
+            refreshBoostResponses();
+
+            // تحميل وضع المعزز من localStorage (افتراضي true)
+            loadBoostMode();
+
+            // تحديث نص زر المعزز في القائمة المنسدلة
+            const boostItem = document.getElementById('searchBoostOption');
+            if (boostItem) {
+                boostItem.innerHTML = `<i class="fas fa-search"></i> ${boostMode ? '🔍 البحث في المعزز (مفعّل)' : '🔍 البحث في المعزز (ملغى)'}`;
+            }
 
             const settings = loadSettings();
             maxMessagesPerSession = settings.limit || 6;
@@ -3448,6 +3549,7 @@
 
             console.log('✅ MEN Ai جاهز مع وكيل الشراء (من الزر) وعرض المنتجات.');
             console.log(`الحد الأقصى للرسائل: ${maxMessagesPerSession}, التعزيز التلقائي: ${autoBoostEnabled}, الوكيل التلقائي: ${autoAgentEnabled}`);
+            console.log(`وضع المعزز: ${boostMode ? 'مفعّل' : 'ملغى'}`);
         }
 
         init();
