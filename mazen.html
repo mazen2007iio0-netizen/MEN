@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+        /* كل الأنماط كما هي، وسنضيف نمط زر المعزز الجديد */
         * {
             margin: 0;
             padding: 0;
@@ -723,6 +724,48 @@
             opacity: 0.4;
             cursor: not-allowed;
             transform: scale(1);
+        }
+        /* زر المعزز الجديد */
+        .input-area .btn-boost {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            border: 2px solid rgba(74, 122, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: #a0b0d4;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+        .input-area .btn-boost:hover {
+            transform: scale(1.08);
+            border-color: var(--blue-light);
+        }
+        .input-area .btn-boost.active {
+            background: rgba(74, 122, 255, 0.2);
+            border-color: var(--blue-light);
+            color: #fff;
+            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
+        }
+        .input-area .btn-boost:active {
+            transform: scale(0.92);
+        }
+        .input-area .btn-boost i {
+            font-size: 1.2rem;
+        }
+        .input-area .btn-boost .boost-label {
+            font-size: 0.6rem;
+            display: block;
+            line-height: 1;
+            margin-top: 2px;
         }
         .input-area .btn-plus {
             width: 52px;
@@ -1471,7 +1514,8 @@
                 min-height: 36px;
             }
             .input-area .btn-send,
-            .input-area .btn-plus {
+            .input-area .btn-plus,
+            .input-area .btn-boost {
                 width: 44px;
                 height: 44px;
                 min-width: 44px;
@@ -1479,6 +1523,9 @@
             }
             .input-area .btn-plus {
                 font-size: 1.6rem;
+            }
+            .input-area .btn-boost .boost-label {
+                font-size: 0.5rem;
             }
             .plus-dropdown {
                 min-width: 170px;
@@ -1618,7 +1665,8 @@
                 min-height: 32px;
             }
             .input-area .btn-send,
-            .input-area .btn-plus {
+            .input-area .btn-plus,
+            .input-area .btn-boost {
                 width: 38px;
                 height: 38px;
                 min-width: 38px;
@@ -1626,6 +1674,9 @@
             }
             .input-area .btn-plus {
                 font-size: 1.4rem;
+            }
+            .input-area .btn-boost .boost-label {
+                font-size: 0.4rem;
             }
             .plus-dropdown {
                 min-width: 150px;
@@ -1832,7 +1883,8 @@
                 padding: 3px 8px;
             }
             .input-area .btn-send,
-            .input-area .btn-plus {
+            .input-area .btn-plus,
+            .input-area .btn-boost {
                 width: 32px;
                 height: 32px;
                 min-width: 32px;
@@ -1840,6 +1892,9 @@
             }
             .input-area .btn-plus {
                 font-size: 1.2rem;
+            }
+            .input-area .btn-boost .boost-label {
+                font-size: 0.4rem;
             }
             .plus-dropdown {
                 min-width: 130px;
@@ -1955,6 +2010,11 @@
                             </button>
                         </div>
                     </div>
+                    <!-- زر المعزز الجديد (مستقل) -->
+                    <button class="btn-boost active" id="boostToggleBtn" title="تفعيل/إلغاء المعزز">
+                        <i class="fas fa-bolt"></i>
+                        <span class="boost-label">معزز</span>
+                    </button>
                     <div class="file-preview hidden-preview" id="filePreview">
                         <i class="fas fa-file"></i>
                         <span id="fileName">ملف</span>
@@ -2090,14 +2150,14 @@
         let extractedText = '';
 
         // متغيرات وكيل الشراء
-        let purchaseStep = null; // null | 'ask_name' | 'ask_phone' | 'ask_product' | 'done'
+        let purchaseStep = null;
         let purchaseProductData = null;
         let purchaseName = '';
         let purchasePhone = '';
         let purchaseAgentActive = false;
 
-        // متغيرات البحث في المعزز (Boost)
-        let boostMode = true; // افتراضي: مفعّل
+        // متغيرات البحث في المعزز (Boost) – مفعّل افتراضياً
+        let boostMode = true;
         const BOOST_KEY = 'menBoostMode';
 
         // ============================================================
@@ -2135,7 +2195,7 @@
         }
 
         // ============================================================
-        //  إدارة وضع المعزز (Boost) – التفعيل الافتراضي
+        //  إدارة وضع المعزز (Boost) – مع زر منفصل
         // ============================================================
         function loadBoostMode() {
             try {
@@ -2143,7 +2203,7 @@
                 if (saved !== null) {
                     boostMode = JSON.parse(saved);
                 } else {
-                    boostMode = true; // افتراضي
+                    boostMode = true;
                     localStorage.setItem(BOOST_KEY, JSON.stringify(boostMode));
                 }
             } catch (e) {
@@ -2159,22 +2219,37 @@
             } catch (e) {}
         }
 
-        // تبديل وضع المعزز مع رسالة تأكيد
+        // تبديل وضع المعزز مع تحديث الزر
         function toggleBoostMode() {
             boostMode = !boostMode;
             saveBoostMode(boostMode);
-            const status = boostMode ? '✅ تم تفعيل البحث في المعزز' : '❌ تم إلغاء تفعيل البحث في المعزز';
+            updateBoostButton();
             // عرض رسالة في الدردشة
+            const status = boostMode ? '✅ تم تفعيل البحث في المعزز' : '❌ تم إلغاء تفعيل البحث في المعزز';
             const area = document.getElementById('messagesArea');
             const infoMsg = document.createElement('div');
             infoMsg.className = 'message bot';
             infoMsg.innerHTML = status + `<span class="msg-time">الآن</span>`;
             area.appendChild(infoMsg);
             scrollToBottom();
-            // تحديث نص الزر في القائمة المنسدلة (اختياري)
+            // تحديث نص زر المعزز في القائمة المنسدلة أيضاً
             const boostItem = document.getElementById('searchBoostOption');
             if (boostItem) {
                 boostItem.innerHTML = `<i class="fas fa-search"></i> ${boostMode ? '🔍 البحث في المعزز (مفعّل)' : '🔍 البحث في المعزز (ملغى)'}`;
+            }
+        }
+
+        function updateBoostButton() {
+            const btn = document.getElementById('boostToggleBtn');
+            if (!btn) return;
+            if (boostMode) {
+                btn.classList.add('active');
+                btn.innerHTML = `<i class="fas fa-bolt"></i><span class="boost-label">معزز</span>`;
+                btn.title = 'إلغاء تفعيل المعزز';
+            } else {
+                btn.classList.remove('active');
+                btn.innerHTML = `<i class="fas fa-bolt" style="opacity:0.4;"></i><span class="boost-label" style="opacity:0.4;">معزز</span>`;
+                btn.title = 'تفعيل المعزز';
             }
         }
 
@@ -2520,7 +2595,6 @@
             keywordsMap = map;
         }
 
-        // إنشاء نسخة معدلة من الردود مع علامة (Boosted)
         function buildBoostResponses() {
             const boosted = {};
             for (const [cat, obj] of Object.entries(responses)) {
@@ -2529,7 +2603,6 @@
                     responses: obj.responses ? obj.responses.map(r => r + ' (Boosted)') : []
                 };
             }
-            // إضافة ردود مخصصة مع (Boosted) أيضاً
             for (const [cat, obj] of Object.entries(customReplies)) {
                 if (!boosted[cat]) {
                     boosted[cat] = { keywords: [], responses: [] };
@@ -2915,8 +2988,15 @@
             closeAllDropdowns();
         });
 
-        // زر البحث في المعزز – يعمل كـ toggle مع تحديث النص
+        // زر البحث في المعزز من القائمة – يستخدم نفس دالة التبديل
         document.getElementById('searchBoostOption').addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleBoostMode();
+            closeAllDropdowns();
+        });
+
+        // زر المعزز المستقل
+        document.getElementById('boostToggleBtn').addEventListener('click', function(e) {
             e.stopPropagation();
             toggleBoostMode();
             closeAllDropdowns();
@@ -3085,7 +3165,7 @@
 
             saveCustomReplies();
             rebuildKeywordsMap();
-            refreshBoostResponses(); // تحديث نسخة المعزز
+            refreshBoostResponses();
 
             alert('تم التعلم بنجاح! سأستطيع الآن الإجابة على أسئلة مشابهة.');
         }
@@ -3096,13 +3176,11 @@
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
 
-            // 1. عرض المنتجات إذا طلبها المستخدم
             if (lower.includes('عرض المنتجات') || lower.includes('المنتجات') || lower.includes('قائمة المنتجات') || lower.includes(
                     'اشتري')) {
                 return { type: 'products', content: buildAllProductsRow() };
             }
 
-            // 2. إذا كان الوكيل مفعلاً من الزر
             if (purchaseAgentActive) {
                 const reply = handlePurchaseStep(text);
                 if (reply) {
@@ -3110,7 +3188,6 @@
                 }
             }
 
-            // 3. إذا كان الوكيل التلقائي مفعلاً ونية الشراء موجودة
             if (autoAgentEnabled && (lower.includes('اشتري') || lower.includes('طلب') || lower.includes('ابي') || lower
                     .includes('ابغى') || lower.includes('اريد') || lower.includes('أريد') || lower.includes('عطني'))) {
                 const startMsg = startPurchaseAgent();
@@ -3121,14 +3198,12 @@
                 return { type: 'text', content: startMsg };
             }
 
-            // 4. العمليات الحسابية
             const mathResult = evaluateMath(text);
             if (mathResult !== null) {
                 const boostSuffix = boostMode ? ' (Boosted)' : '';
                 return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟${boostSuffix}` };
             }
 
-            // 5. الوقت والتاريخ
             if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
                 const now = new Date();
                 const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
@@ -3137,13 +3212,11 @@
                 return { type: 'text', content: template.replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr) };
             }
 
-            // 6. البحث عن منتج محدد (دون تفعيل الوكيل)
             const product = findProduct(text);
             if (product) {
                 return { type: 'product', content: `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(product)}</div></div>` };
             }
 
-            // 7. الردود العامة (مع أو بدون معزز)
             let category = getCategoryForText(text);
             if (category !== 'default') {
                 return { type: 'text', content: getReply(category, boostMode) };
@@ -3526,10 +3599,10 @@
             rebuildKeywordsMap();
             refreshBoostResponses();
 
-            // تحميل وضع المعزز من localStorage (افتراضي true)
+            // تحميل وضع المعزز وتحديث الزر
             loadBoostMode();
+            updateBoostButton();
 
-            // تحديث نص زر المعزز في القائمة المنسدلة
             const boostItem = document.getElementById('searchBoostOption');
             if (boostItem) {
                 boostItem.innerHTML = `<i class="fas fa-search"></i> ${boostMode ? '🔍 البحث في المعزز (مفعّل)' : '🔍 البحث في المعزز (ملغى)'}`;
@@ -3547,7 +3620,7 @@
             messageInput.focus();
             sendBtn.disabled = false;
 
-            console.log('✅ MEN Ai جاهز مع وكيل الشراء (من الزر) وعرض المنتجات.');
+            console.log('✅ MEN Ai جاهز مع زر المعزز المستقل.');
             console.log(`الحد الأقصى للرسائل: ${maxMessagesPerSession}, التعزيز التلقائي: ${autoBoostEnabled}, الوكيل التلقائي: ${autoAgentEnabled}`);
             console.log(`وضع المعزز: ${boostMode ? 'مفعّل' : 'ملغى'}`);
         }
