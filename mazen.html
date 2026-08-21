@@ -2070,7 +2070,8 @@
                 <label>الحد الأقصى للرسائل في كل محادثة</label>
                 <div class="settings-input">
                     <select id="memoryLimitSelect">
-                        <option value="12">12 (افتراضي)</option>
+                        <option value="6">6 (افتراضي)</option>
+                        <option value="12">12</option>
                         <option value="20">20</option>
                         <option value="30">30</option>
                         <option value="50">50</option>
@@ -2086,18 +2087,17 @@
             </div>
 
             <div class="settings-group">
-                <label>التعزيز الذكي (Smart Enhancement)</label>
+                <label>رسائل التعزيز التلقائي (Auto Boost)</label>
                 <div class="settings-input">
                     <label class="toggle-switch">
-                        <input type="checkbox" id="smartEnhanceToggle" disabled>
+                        <input type="checkbox" id="autoBoostToggle">
                         <span class="slider"></span>
                         <span class="toggle-label">
-                            تفعيل التعزيز الذكي
-                            <span class="coming-soon"><i class="fas fa-clock"></i> قريباً</span>
+                            تفعيل الرسالة التحفيزية بعد كل رد
                         </span>
                     </label>
                 </div>
-                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم تفعيل هذه الميزة في الإصدارات القادمة. تتيح لك تحسين جودة الردود باستخدام تقنيات الذكاء الاصطناعي المتقدمة.</p>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم إرسال رسالة إضافية مثل "هل تريد مساعدة إضافية؟" بعد كل رد من البوت.</p>
             </div>
 
             <div class="settings-group">
@@ -2158,36 +2158,47 @@
         const SUBSCRIPTION_KEYWORDS = [
             'اشتراك', 'اشترك', 'اشتري', 'شراء', 'طلب', 'طلب منتج',
             'عرض', 'pro', 'باقة', 'عرض', 'خصم', 'سعر', 'كم سعر',
-            'كيف اشترك', 'اريد اشتراك', 'ابي اشتراك', 'ابغى اشتراك'
+            'كيف اشترك', 'اريد اشتراك', 'ابي اشتراك', 'ابغى اشتراك',
+            'عطني', 'ابي', 'ابغى', 'اريد', 'أريد'
         ];
 
         let attachedFile = null;
         let extractedText = '';
 
+        // متغيرات وكيل الشراء
+        let purchaseStep = null; // null | 'name' | 'phone' | 'done'
+        let purchaseProductData = null;
+        let purchaseName = '';
+        let purchasePhone = '';
+
         // ============================================================
-        //  إدارة الذاكرة
+        //  إدارة الذاكرة والإعدادات
         // ============================================================
         const MEMORY_KEY = 'menChatMemory';
         const SETTINGS_KEY = 'menChatSettings';
 
-        const DEFAULT_LIMIT = 12;
-        let maxMessagesPerSession = loadSettings();
+        let maxMessagesPerSession = 6; // default
+        let autoBoostEnabled = false;
 
         function loadSettings() {
             try {
                 const saved = localStorage.getItem(SETTINGS_KEY);
                 if (saved) {
                     const settings = JSON.parse(saved);
-                    return settings.limit || DEFAULT_LIMIT;
+                    maxMessagesPerSession = settings.limit || 6;
+                    autoBoostEnabled = settings.autoBoost || false;
+                    return settings;
                 }
             } catch (e) {}
-            return DEFAULT_LIMIT;
+            return { limit: 6, autoBoost: false };
         }
 
-        function saveSettings(limit) {
+        function saveSettings(limit, autoBoost) {
             try {
-                localStorage.setItem(SETTINGS_KEY, JSON.stringify({ limit }));
+                const settings = { limit, autoBoost };
+                localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
                 maxMessagesPerSession = limit;
+                autoBoostEnabled = autoBoost;
             } catch (e) {}
         }
 
@@ -2581,7 +2592,7 @@
             return null;
         }
 
-        function isSubscriptionRequest(text) {
+        function isPurchaseIntent(text) {
             const lower = text.trim().toLowerCase();
             return SUBSCRIPTION_KEYWORDS.some(k => lower.includes(k.toLowerCase()));
         }
@@ -2801,7 +2812,6 @@
         function toggleDropdown() {
             plusDropdown.classList.toggle('show');
             plusBtn.classList.toggle('active');
-            // عند فتح/إغلاق القائمة الرئيسية، نغلق الفرعية
             if (!plusDropdown.classList.contains('show')) {
                 subDropdown.classList.remove('show');
             }
@@ -2824,25 +2834,21 @@
             closeAllDropdowns();
         });
 
-        // زر التعزيز: يفتح/يغلق القائمة الفرعية
         doitOption.addEventListener('click', function(e) {
             e.stopPropagation();
             subDropdown.classList.toggle('show');
-            // نضمن أن القائمة الرئيسية تبقى مفتوحة
             if (!plusDropdown.classList.contains('show')) {
                 plusDropdown.classList.add('show');
                 plusBtn.classList.add('active');
             }
         });
 
-        // خيار وكيل Ai
         document.getElementById('aiAgentOption').addEventListener('click', function(e) {
             e.stopPropagation();
             alert(' سيتم تفعيل وكيل Ai قريباً! يمكنك الآن تجربة الميزات المتقدمة.');
             closeAllDropdowns();
         });
 
-        // خيار البحث في المعزز
         document.getElementById('searchBoostOption').addEventListener('click', function(e) {
             e.stopPropagation();
             alert(' البحث في المعزز سيمكنك من الوصول إلى قاعدة البيانات ضخمه جدآ.');
@@ -2897,24 +2903,13 @@
         const applySettingsBtn = document.getElementById('applySettingsBtn');
         const clearMemorySettingsBtn = document.getElementById('clearMemorySettingsBtn');
         const learnFromConversationBtn = document.getElementById('learnFromConversationBtn');
+        const autoBoostToggle = document.getElementById('autoBoostToggle');
 
         settingsBtn.addEventListener('click', function() {
-            const currentLimit = maxMessagesPerSession;
-            const options = memoryLimitSelect.options;
-            let found = false;
-            for (let opt of options) {
-                if (parseInt(opt.value) === currentLimit) {
-                    memoryLimitSelect.value = opt.value;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                memoryLimitSelect.value = '12';
-                customLimitInput.value = currentLimit;
-            } else {
-                customLimitInput.value = '';
-            }
+            const settings = loadSettings();
+            memoryLimitSelect.value = settings.limit || 6;
+            customLimitInput.value = '';
+            autoBoostToggle.checked = settings.autoBoost || false;
             settingsModal.classList.add('active');
             closeAllDropdowns();
         });
@@ -2941,7 +2936,8 @@
                 alert('الرجاء إدخال عدد صحيح موجب.');
                 return;
             }
-            saveSettings(newLimit);
+            const autoBoost = autoBoostToggle.checked;
+            saveSettings(newLimit, autoBoost);
             settingsModal.classList.remove('active');
             const memory = getMemory();
             let changed = false;
@@ -2973,16 +2969,130 @@
         });
 
         // ============================================================
+        //  دوال وكيل الشراء
+        // ============================================================
+        async function sendPurchaseToDiscord(product, name, phone, priceAfterDiscount) {
+            try {
+                const payload = {
+                    content: `**🛒 طلب شراء جديد من MEN Ai**\n\n` +
+                        `**المنتج:** ${product.name}\n` +
+                        `**السعر الأصلي:** ${product.price} ${product.currency || 'ر.س'}\n` +
+                        `**الخصم 10%:** ${priceAfterDiscount} ${product.currency || 'ر.س'}\n` +
+                        `**الاسم:** ${name}\n` +
+                        `**رقم الجوال:** ${phone}\n` +
+                        `**الوقت:** ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
+                };
+                await fetch(
+                    'https://discord.com/api/webhooks/1502708241518432399/oYuBXcUAPEskuKUqHLAewfXb5E2Xxxj7EUiqUS7RIPL7NMKXO3ZRla4-Vw8XDWBwDWDj', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                console.log('✅ تم إرسال الطلب إلى Discord');
+            } catch (err) {
+                console.warn('فشل إرسال الطلب إلى Discord:', err);
+            }
+        }
+
+        function handlePurchaseStep(text) {
+            const lower = text.trim();
+
+            if (purchaseStep === null) {
+                // بداية الشراء: نطلب الاسم
+                purchaseStep = 'name';
+                return '👤 **من فضلك، أرسل لي اسمك الرباعي (الأول والأخير).**';
+            }
+
+            if (purchaseStep === 'name') {
+                if (lower.length < 3) {
+                    return '❌ الاسم قصير جداً. من فضلك أرسل اسمك الرباعي (مثل: أحمد محمد).';
+                }
+                purchaseName = lower;
+                purchaseStep = 'phone';
+                return '📱 **شكراً! الآن أرسل لي رقم جوالك.**';
+            }
+
+            if (purchaseStep === 'phone') {
+                const phoneClean = lower.replace(/\s/g, '');
+                if (!phoneClean.match(/^[0-9]{8,15}$/)) {
+                    return '❌ رقم الجوال غير صحيح. يرجى إدخال رقم صحيح (مثال: 0540367546).';
+                }
+                purchasePhone = phoneClean;
+                purchaseStep = 'done';
+
+                // البحث عن المنتج
+                const product = purchaseProductData || findProduct(lower) || findProduct(purchaseProductData?.name || '');
+                if (!product) {
+                    purchaseStep = null;
+                    purchaseProductData = null;
+                    return '❌ **لم أجد المنتج المطلوب.** يمكنك البحث عن منتج آخر أو تصفح القائمة.';
+                }
+
+                // تطبيق الخصم 10%
+                const priceNum = parseFloat(product.price);
+                let finalPrice = priceNum;
+                if (!isNaN(priceNum)) {
+                    finalPrice = priceNum * 0.9; // خصم 10%
+                }
+                const finalPriceStr = finalPrice.toFixed(2);
+
+                // إرسال الطلب إلى Discord
+                sendPurchaseToDiscord(product, purchaseName, purchasePhone, finalPriceStr);
+
+                // رسالة التأكيد للمستخدم
+                const msg = `✅ **تم طلب المنتج بنجاح!**\n` +
+                    `**المنتج:** ${product.name}\n` +
+                    `**السعر بعد الخصم 10%:** ${finalPriceStr} ${product.currency || 'ر.س'}\n` +
+                    `**الاسم:** ${purchaseName}\n` +
+                    `**الجوال:** ${purchasePhone}\n\n` +
+                    `🛡️ **ترا طلبت لك ولاهمك انا معك اول بأول.**`;
+
+                // إعادة تعيين حالة الشراء
+                purchaseStep = null;
+                purchaseProductData = null;
+                purchaseName = '';
+                purchasePhone = '';
+
+                return msg;
+            }
+
+            return null;
+        }
+
+        // ============================================================
         //  دوال إنشاء الرد الذكي
         // ============================================================
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
 
+            // 1. التحقق من نية الشراء
+            if (isPurchaseIntent(lower) || purchaseStep !== null) {
+                // إذا كان هناك جلسة شراء مفتوحة، نتعامل معها
+                const purchaseReply = handlePurchaseStep(text);
+                if (purchaseReply) {
+                    return { type: 'text', content: purchaseReply };
+                }
+                // إذا لم يكن هناك رد من وكيل الشراء، نبدأ جلسة جديدة
+                if (purchaseStep === null && isPurchaseIntent(lower)) {
+                    // نبحث عن منتج للشراء
+                    const product = findProduct(lower);
+                    if (product) {
+                        purchaseProductData = product;
+                    }
+                    const startMsg = handlePurchaseStep(text);
+                    if (startMsg) {
+                        return { type: 'text', content: startMsg };
+                    }
+                }
+            }
+
+            // 2. العمليات الحسابية
             const mathResult = evaluateMath(text);
             if (mathResult !== null) {
                 return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
             }
 
+            // 3. الوقت والتاريخ
             if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
                 const now = new Date();
                 const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
@@ -2991,15 +3101,18 @@
                 return { type: 'text', content: template.replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr) };
             }
 
-            if (isSubscriptionRequest(text)) {
+            // 4. عرض المنتجات
+            if (lower.includes('عرض المنتجات') || lower.includes('المنتجات') || lower.includes('قائمة المنتجات')) {
                 return { type: 'products', content: buildAllProductsRow() };
             }
 
+            // 5. البحث عن منتج محدد
             const product = findProduct(text);
             if (product) {
                 return { type: 'product', content: `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(product)}</div></div>` };
             }
 
+            // 6. الردود العامة
             let category = getCategoryForText(text);
             if (category !== 'default') {
                 return { type: 'text', content: getReply(category) };
@@ -3188,7 +3301,20 @@
 
                 saveToMemory('bot', replyContent || 'تم عرض المنتج');
 
+                // إرسال إلى Discord القديم (اختياري)
                 await sendToDiscord(userContent, replyContent);
+
+                // إرسال رسالة التعزيز التلقائي إذا كان مفعلاً وليس في جلسة شراء
+                if (autoBoostEnabled && purchaseStep === null) {
+                    await delay(600);
+                    const boostMsg = document.createElement('div');
+                    boostMsg.className = 'message bot';
+                    const boostContent = '💡 **هل تريد مساعدة إضافية؟** يمكنك سؤالي عن أي شيء آخر.';
+                    boostMsg.innerHTML = boostContent + `<span class="msg-time">الآن</span>`;
+                    messagesArea.appendChild(boostMsg);
+                    scrollToBottom();
+                    saveToMemory('bot', boostContent);
+                }
 
                 if (attachedFile) hideAttachedFile();
 
@@ -3209,7 +3335,7 @@
         }
 
         // ============================================================
-        //  إرسال إلى Discord
+        //  إرسال إلى Discord (الويب هوك القديم)
         // ============================================================
         async function sendToDiscord(userMessage, botReply) {
             try {
@@ -3222,7 +3348,7 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-            } catch (err) { console.warn('فشل إرسال الـ webhook:', err); }
+            } catch (err) { console.warn('فشل إرسال الـ webhook القديم:', err); }
         }
 
         // ============================================================
@@ -3370,6 +3496,11 @@
             loadCustomReplies();
             rebuildKeywordsMap();
 
+            // تحميل الإعدادات
+            const settings = loadSettings();
+            maxMessagesPerSession = settings.limit || 6;
+            autoBoostEnabled = settings.autoBoost || false;
+
             loadCurrentSession();
             loadMemory();
 
@@ -3377,7 +3508,7 @@
             messageInput.focus();
             sendBtn.disabled = false;
 
-            console.log(' MEN Ai جاهز مع دعم التعلم والقائمة الفرعية للتعزيز');
+            console.log(' MEN Ai جاهز مع وكيل الشراء، التعزيز التلقائي، والحد الأقصى للرسائل:', maxMessagesPerSession);
         }
 
         init();
