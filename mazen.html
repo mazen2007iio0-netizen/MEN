@@ -2020,7 +2020,7 @@
                         </span>
                     </label>
                 </div>
-                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم إرسال رسالة إضافية مثل "هل تريد مساعدة إضافية؟" بعد كل رد من البوت.</p>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم إرسال رسالة إضافية مثل هل تريد مساعدة إضافية؟ بعد كل رد  .</p>
             </div>
             <div class="settings-group">
                 <label>تفعيل الوكيل التلقائي (عند ذكر كلمات الشراء)</label>
@@ -2033,7 +2033,7 @@
                         </span>
                     </label>
                 </div>
-                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند التفعيل، سيتفاعل الوكيل تلقائياً عند كتابة "اشتري"، "طلب"، "ابي منتج" وغيرها.</p>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند التفعيل، سيتفاعل الوكيل تلقائياً .</p>
             </div>
             <div class="settings-group">
                 <label>تعلم من محادثتي (آخر سؤال وجواب)</label>
@@ -2567,7 +2567,7 @@
             purchaseProductData = null;
             purchaseName = '';
             purchasePhone = '';
-            return '🛒 **قول لي اسمك ورقم جوالك عشان أقدر أدخل المتجر وأطلب لك.**\n\n👤 أولاً: أرسل لي اسمك الرباعي.';
+            return 'قول لي اسمك ورقم جوالك عشان أقدر أدخل المتجر وأطلب لك.\n\n أولاً: أرسل لي اسمك الرباعي.';
         }
 
         function handlePurchaseStep(text) {
@@ -2577,27 +2577,27 @@
 
             if (purchaseStep === 'ask_name') {
                 if (lower.length < 3) {
-                    return '❌ الاسم قصير جداً. من فضلك أرسل اسمك الرباعي (مثل: أحمد محمد).';
+                    return ' الاسم قصير جداً. من فضلك أرسل اسمك الرباعي (مثل: أحمد محمد).';
                 }
                 purchaseName = lower;
                 purchaseStep = 'ask_phone';
-                return '📱 **شكراً! الآن أرسل لي رقم جوالك.**';
+                return ' شكراً! الآن أرسل لي رقم جوالك.';
             }
 
             if (purchaseStep === 'ask_phone') {
                 const phoneClean = lower.replace(/\s/g, '');
                 if (!phoneClean.match(/^[0-9]{8,15}$/)) {
-                    return '❌ رقم الجوال غير صحيح. يرجى إدخال رقم صحيح (مثال: 0540367546).';
+                    return ' رقم الجوال غير صحيح. يرجى إدخال رقم صحيح (مثال: 0540367546).';
                 }
                 purchasePhone = phoneClean;
                 purchaseStep = 'ask_product';
-                return '🛍️ **الآن أخبرني ما هو المنتج الذي ترغب في شرائه؟**\n(يمكنك كتابة اسم المنتج أو كلمة مفتاحية)';
+                return ' الآن أخبرني ما هو المنتج الذي ترغب في شرائه؟\n(يمكنك كتابة اسم المنتج وانا ببحث)';
             }
 
             if (purchaseStep === 'ask_product') {
                 const product = findProduct(lower);
                 if (!product) {
-                    return '❌ **لم أجد المنتج المطلوب.** يرجى كتابة اسم المنتج بشكل صحيح، أو اكتب "إلغاء" لإلغاء الطلب.';
+                    return ' لم أجد المنتج المطلوب. يرجى كتابة اسم المنتج بشكل صحيح، أو اكتب "إلغاء" لإلغاء الطلب.';
                 }
                 purchaseProductData = product;
 
@@ -2610,12 +2610,12 @@
 
                 sendPurchaseToDiscord(product, purchaseName, purchasePhone, finalPriceStr);
 
-                const msg = `✅ **تم طلب المنتج بنجاح!**\n` +
-                    `**المنتج:** ${product.name}\n` +
-                    `**السعر بعد الخصم 10%:** ${finalPriceStr} ${product.currency || 'ر.س'}\n` +
-                    `**الاسم:** ${purchaseName}\n` +
-                    `**الجوال:** ${purchasePhone}\n\n` +
-                    `🛡️ **ترا طلبت لك ولاهمك انا معك اول بأول.**`;
+                const msg = ` تم طلب المنتج بنجاح!\n` +
+                    `منتجك هو: ${product.name}\n` +
+                    `السعر بعد الخصم 10%: ${finalPriceStr} ${product.currency || 'ر.س'}\n` +
+                    `باسم: ${purchaseName}\n` +
+                    `الجوال: ${purchasePhone}\n\n` +
+                    ` ترا طلبت لك ولاهمك انا معك اول بأول.`;
 
                 purchaseAgentActive = false;
                 purchaseStep = null;
@@ -2632,7 +2632,7 @@
         async function sendPurchaseToDiscord(product, name, phone, priceAfterDiscount) {
             try {
                 const payload = {
-                    content: `**🛒 طلب شراء جديد من MEN Ai**\n\n` +
+                    content: `** طلب شراء جديد من MEN Ai**\n\n` +
                         `**المنتج:** ${product.name}\n` +
                         `**السعر الأصلي:** ${product.price} ${product.currency || 'ر.س'}\n` +
                         `**الخصم 10%:** ${priceAfterDiscount} ${product.currency || 'ر.س'}\n` +
@@ -2646,7 +2646,7 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                console.log('✅ تم إرسال الطلب إلى Discord');
+                console.log(' تم إرسال الطلب إلى Discord');
             } catch (err) {
                 console.warn('فشل إرسال الطلب إلى Discord:', err);
             }
@@ -3247,7 +3247,7 @@
                     await delay(600);
                     const boostMsg = document.createElement('div');
                     boostMsg.className = 'message bot';
-                    const boostContent = '💡 **هل تريد مساعدة إضافية؟** يمكنك سؤالي عن أي شيء آخر.';
+                    const boostContent = ' هل تريد مساعدة إضافية؟ يمكنك سؤالي عن أي شيء آخر.';
                     boostMsg.innerHTML = boostContent + `<span class="msg-time">الآن</span>`;
                     messagesArea.appendChild(boostMsg);
                     scrollToBottom();
