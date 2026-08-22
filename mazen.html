@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* كل الأنماط كما هي، وسنضيف نمط زر المعزز الجديد */
         * {
             margin: 0;
             padding: 0;
@@ -724,48 +723,6 @@
             opacity: 0.4;
             cursor: not-allowed;
             transform: scale(1);
-        }
-        /* زر المعزز الجديد */
-        .input-area .btn-boost {
-            width: 52px;
-            height: 52px;
-            min-width: 52px;
-            border-radius: 50%;
-            border: 2px solid rgba(74, 122, 255, 0.2);
-            background: rgba(255, 255, 255, 0.05);
-            color: #a0b0d4;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 700;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        }
-        .input-area .btn-boost:hover {
-            transform: scale(1.08);
-            border-color: var(--blue-light);
-        }
-        .input-area .btn-boost.active {
-            background: rgba(74, 122, 255, 0.2);
-            border-color: var(--blue-light);
-            color: #fff;
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
-        }
-        .input-area .btn-boost:active {
-            transform: scale(0.92);
-        }
-        .input-area .btn-boost i {
-            font-size: 1.2rem;
-        }
-        .input-area .btn-boost .boost-label {
-            font-size: 0.6rem;
-            display: block;
-            line-height: 1;
-            margin-top: 2px;
         }
         .input-area .btn-plus {
             width: 52px;
@@ -1514,8 +1471,7 @@
                 min-height: 36px;
             }
             .input-area .btn-send,
-            .input-area .btn-plus,
-            .input-area .btn-boost {
+            .input-area .btn-plus {
                 width: 44px;
                 height: 44px;
                 min-width: 44px;
@@ -1523,9 +1479,6 @@
             }
             .input-area .btn-plus {
                 font-size: 1.6rem;
-            }
-            .input-area .btn-boost .boost-label {
-                font-size: 0.5rem;
             }
             .plus-dropdown {
                 min-width: 170px;
@@ -1665,8 +1618,7 @@
                 min-height: 32px;
             }
             .input-area .btn-send,
-            .input-area .btn-plus,
-            .input-area .btn-boost {
+            .input-area .btn-plus {
                 width: 38px;
                 height: 38px;
                 min-width: 38px;
@@ -1674,9 +1626,6 @@
             }
             .input-area .btn-plus {
                 font-size: 1.4rem;
-            }
-            .input-area .btn-boost .boost-label {
-                font-size: 0.4rem;
             }
             .plus-dropdown {
                 min-width: 150px;
@@ -1883,8 +1832,7 @@
                 padding: 3px 8px;
             }
             .input-area .btn-send,
-            .input-area .btn-plus,
-            .input-area .btn-boost {
+            .input-area .btn-plus {
                 width: 32px;
                 height: 32px;
                 min-width: 32px;
@@ -1892,9 +1840,6 @@
             }
             .input-area .btn-plus {
                 font-size: 1.2rem;
-            }
-            .input-area .btn-boost .boost-label {
-                font-size: 0.4rem;
             }
             .plus-dropdown {
                 min-width: 130px;
@@ -2010,11 +1955,6 @@
                             </button>
                         </div>
                     </div>
-                    <!-- زر المعزز الجديد (مستقل) -->
-                    <button class="btn-boost active" id="boostToggleBtn" title="تفعيل/إلغاء المعزز">
-                        <i class="fas fa-bolt"></i>
-                        <span class="boost-label">معزز</span>
-                    </button>
                     <div class="file-preview hidden-preview" id="filePreview">
                         <i class="fas fa-file"></i>
                         <span id="fileName">ملف</span>
@@ -2080,7 +2020,7 @@
                         </span>
                     </label>
                 </div>
-                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم إرسال رسالة إضافية مثل هل تريد مساعدة إضافية؟ بعد كل رد  .</p>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم إرسال رسالة إضافية مثل "هل تريد مساعدة إضافية؟" بعد كل رد من البوت.</p>
             </div>
             <div class="settings-group">
                 <label>تفعيل الوكيل التلقائي (عند ذكر كلمات الشراء)</label>
@@ -2093,7 +2033,7 @@
                         </span>
                     </label>
                 </div>
-                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند التفعيل، سيتفاعل الوكيل تلقائياً .</p>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند التفعيل، سيتفاعل الوكيل تلقائياً عند كتابة "اشتري"، "طلب"، "ابي منتج" وغيرها.</p>
             </div>
             <div class="settings-group">
                 <label>تعلم من محادثتي (آخر سؤال وجواب)</label>
@@ -2150,15 +2090,11 @@
         let extractedText = '';
 
         // متغيرات وكيل الشراء
-        let purchaseStep = null;
+        let purchaseStep = null; // null | 'ask_name' | 'ask_phone' | 'ask_product' | 'done'
         let purchaseProductData = null;
         let purchaseName = '';
         let purchasePhone = '';
-        let purchaseAgentActive = false;
-
-        // متغيرات البحث في المعزز (Boost) – مفعّل افتراضياً
-        let boostMode = true;
-        const BOOST_KEY = 'menBoostMode';
+        let purchaseAgentActive = false; // يتم تفعيله من الزر
 
         // ============================================================
         //  إدارة الذاكرة والإعدادات
@@ -2194,68 +2130,6 @@
             } catch (e) {}
         }
 
-        // ============================================================
-        //  إدارة وضع المعزز (Boost) – مع زر منفصل
-        // ============================================================
-        function loadBoostMode() {
-            try {
-                const saved = localStorage.getItem(BOOST_KEY);
-                if (saved !== null) {
-                    boostMode = JSON.parse(saved);
-                } else {
-                    boostMode = true;
-                    localStorage.setItem(BOOST_KEY, JSON.stringify(boostMode));
-                }
-            } catch (e) {
-                boostMode = true;
-            }
-            return boostMode;
-        }
-
-        function saveBoostMode(mode) {
-            try {
-                localStorage.setItem(BOOST_KEY, JSON.stringify(mode));
-                boostMode = mode;
-            } catch (e) {}
-        }
-
-        // تبديل وضع المعزز مع تحديث الزر
-        function toggleBoostMode() {
-            boostMode = !boostMode;
-            saveBoostMode(boostMode);
-            updateBoostButton();
-            // عرض رسالة في الدردشة
-            const status = boostMode ? '✅ تم تفعيل البحث في المعزز' : '❌ تم إلغاء تفعيل البحث في المعزز';
-            const area = document.getElementById('messagesArea');
-            const infoMsg = document.createElement('div');
-            infoMsg.className = 'message bot';
-            infoMsg.innerHTML = status + `<span class="msg-time">الآن</span>`;
-            area.appendChild(infoMsg);
-            scrollToBottom();
-            // تحديث نص زر المعزز في القائمة المنسدلة أيضاً
-            const boostItem = document.getElementById('searchBoostOption');
-            if (boostItem) {
-                boostItem.innerHTML = `<i class="fas fa-search"></i> ${boostMode ? '🔍 البحث في المعزز (مفعّل)' : '🔍 البحث في المعزز (ملغى)'}`;
-            }
-        }
-
-        function updateBoostButton() {
-            const btn = document.getElementById('boostToggleBtn');
-            if (!btn) return;
-            if (boostMode) {
-                btn.classList.add('active');
-                btn.innerHTML = `<i class="fas fa-bolt"></i><span class="boost-label">معزز</span>`;
-                btn.title = 'إلغاء تفعيل المعزز';
-            } else {
-                btn.classList.remove('active');
-                btn.innerHTML = `<i class="fas fa-bolt" style="opacity:0.4;"></i><span class="boost-label" style="opacity:0.4;">معزز</span>`;
-                btn.title = 'تفعيل المعزز';
-            }
-        }
-
-        // ============================================================
-        //  دوال الذاكرة (الجلسات)
-        // ============================================================
         function getMemory() {
             try {
                 const data = localStorage.getItem(MEMORY_KEY);
@@ -2555,7 +2429,7 @@
         }
 
         // ============================================================
-        //  دوال الردود والمنتجات (مع دعم المعزز)
+        //  دوال الردود والمنتجات
         // ============================================================
         function loadCustomReplies() {
             try {
@@ -2595,48 +2469,11 @@
             keywordsMap = map;
         }
 
-        function buildBoostResponses() {
-            const boosted = {};
-            for (const [cat, obj] of Object.entries(responses)) {
-                boosted[cat] = {
-                    keywords: obj.keywords ? [...obj.keywords] : [],
-                    responses: obj.responses ? obj.responses.map(r => r + ' (Boosted)') : []
-                };
-            }
-            for (const [cat, obj] of Object.entries(customReplies)) {
-                if (!boosted[cat]) {
-                    boosted[cat] = { keywords: [], responses: [] };
-                }
-                if (obj.keywords) {
-                    boosted[cat].keywords = [...new Set([...boosted[cat].keywords, ...obj.keywords])];
-                }
-                if (obj.responses) {
-                    boosted[cat].responses = [...boosted[cat].responses, ...obj.responses.map(r => r + ' (Boosted)')];
-                }
-            }
-            return boosted;
-        }
-
-        let boostResponses = {};
-
-        function refreshBoostResponses() {
-            boostResponses = buildBoostResponses();
-        }
-
-        function getReply(category, boost = false) {
-            let source = boost ? boostResponses : responses;
-            let customSource = boost ? boostResponses : customReplies;
-
-            let customList = customSource[category]?.responses || [];
-            let baseList = source[category]?.responses || [];
+        function getReply(category) {
+            let customList = customReplies[category]?.responses || [];
+            let baseList = responses[category]?.responses || [];
             let combined = [...customList, ...baseList];
-            if (combined.length === 0) {
-                let defaultList = boost ? boostResponses['default']?.responses || [] : responses['default']?.responses || [];
-                if (defaultList.length === 0) {
-                    return boost ? 'عذراً، لا يوجد رد متاح (Boosted).' : 'عذراً، لا يوجد رد متاح.';
-                }
-                return defaultList[Math.floor(Math.random() * defaultList.length)];
-            }
+            if (combined.length === 0) return getReply('default');
             return combined[Math.floor(Math.random() * combined.length)];
         }
 
@@ -2730,7 +2567,7 @@
             purchaseProductData = null;
             purchaseName = '';
             purchasePhone = '';
-            return 'قول لي اسمك ورقم جوالك عشان أقدر أدخل المتجر وأطلب لك.\n\n أولاً: أرسل لي اسمك الرباعي.';
+            return '🛒 **قول لي اسمك ورقم جوالك عشان أقدر أدخل المتجر وأطلب لك.**\n\n👤 أولاً: أرسل لي اسمك الرباعي.';
         }
 
         function handlePurchaseStep(text) {
@@ -2740,27 +2577,27 @@
 
             if (purchaseStep === 'ask_name') {
                 if (lower.length < 3) {
-                    return ' الاسم قصير جداً. من فضلك أرسل اسمك الرباعي (مثل: أحمد محمد).';
+                    return '❌ الاسم قصير جداً. من فضلك أرسل اسمك الرباعي (مثل: أحمد محمد).';
                 }
                 purchaseName = lower;
                 purchaseStep = 'ask_phone';
-                return ' شكراً! الآن أرسل لي رقم جوالك.';
+                return '📱 **شكراً! الآن أرسل لي رقم جوالك.**';
             }
 
             if (purchaseStep === 'ask_phone') {
                 const phoneClean = lower.replace(/\s/g, '');
                 if (!phoneClean.match(/^[0-9]{8,15}$/)) {
-                    return ' رقم الجوال غير صحيح. يرجى إدخال رقم صحيح (مثال: 0540367546).';
+                    return '❌ رقم الجوال غير صحيح. يرجى إدخال رقم صحيح (مثال: 0540367546).';
                 }
                 purchasePhone = phoneClean;
                 purchaseStep = 'ask_product';
-                return ' الآن أخبرني ما هو المنتج الذي ترغب في شرائه؟\n(يمكنك كتابة اسم المنتج وانا ببحث)';
+                return '🛍️ **الآن أخبرني ما هو المنتج الذي ترغب في شرائه؟**\n(يمكنك كتابة اسم المنتج أو كلمة مفتاحية)';
             }
 
             if (purchaseStep === 'ask_product') {
                 const product = findProduct(lower);
                 if (!product) {
-                    return ' لم أجد المنتج المطلوب. يرجى كتابة اسم المنتج بشكل صحيح، أو اكتب "إلغاء" لإلغاء الطلب.';
+                    return '❌ **لم أجد المنتج المطلوب.** يرجى كتابة اسم المنتج بشكل صحيح، أو اكتب "إلغاء" لإلغاء الطلب.';
                 }
                 purchaseProductData = product;
 
@@ -2773,12 +2610,12 @@
 
                 sendPurchaseToDiscord(product, purchaseName, purchasePhone, finalPriceStr);
 
-                const msg = ` تم طلب المنتج بنجاح!\n` +
-                    `منتجك هو: ${product.name}\n` +
-                    `السعر بعد الخصم 10%: ${finalPriceStr} ${product.currency || 'ر.س'}\n` +
-                    `باسم: ${purchaseName}\n` +
-                    `الجوال: ${purchasePhone}\n\n` +
-                    ` ترا طلبت لك ولاهمك انا معك اول بأول.`;
+                const msg = `✅ **تم طلب المنتج بنجاح!**\n` +
+                    `**المنتج:** ${product.name}\n` +
+                    `**السعر بعد الخصم 10%:** ${finalPriceStr} ${product.currency || 'ر.س'}\n` +
+                    `**الاسم:** ${purchaseName}\n` +
+                    `**الجوال:** ${purchasePhone}\n\n` +
+                    `🛡️ **ترا طلبت لك ولاهمك انا معك اول بأول.**`;
 
                 purchaseAgentActive = false;
                 purchaseStep = null;
@@ -2795,7 +2632,7 @@
         async function sendPurchaseToDiscord(product, name, phone, priceAfterDiscount) {
             try {
                 const payload = {
-                    content: `** طلب شراء جديد من MEN Ai**\n\n` +
+                    content: `**🛒 طلب شراء جديد من MEN Ai**\n\n` +
                         `**المنتج:** ${product.name}\n` +
                         `**السعر الأصلي:** ${product.price} ${product.currency || 'ر.س'}\n` +
                         `**الخصم 10%:** ${priceAfterDiscount} ${product.currency || 'ر.س'}\n` +
@@ -2809,7 +2646,7 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                console.log(' تم إرسال الطلب إلى Discord');
+                console.log('✅ تم إرسال الطلب إلى Discord');
             } catch (err) {
                 console.warn('فشل إرسال الطلب إلى Discord:', err);
             }
@@ -2988,17 +2825,10 @@
             closeAllDropdowns();
         });
 
-        // زر البحث في المعزز من القائمة – يستخدم نفس دالة التبديل
+        // زر البحث في المعزز
         document.getElementById('searchBoostOption').addEventListener('click', function(e) {
             e.stopPropagation();
-            toggleBoostMode();
-            closeAllDropdowns();
-        });
-
-        // زر المعزز المستقل
-        document.getElementById('boostToggleBtn').addEventListener('click', function(e) {
-            e.stopPropagation();
-            toggleBoostMode();
+            alert('🔍 البحث في المعزز سيمكنك من الوصول إلى قاعدة بيانات ضخمة جداً.');
             closeAllDropdowns();
         });
 
@@ -3165,22 +2995,23 @@
 
             saveCustomReplies();
             rebuildKeywordsMap();
-            refreshBoostResponses();
 
             alert('تم التعلم بنجاح! سأستطيع الآن الإجابة على أسئلة مشابهة.');
         }
 
         // ============================================================
-        //  دوال إنشاء الرد الذكي (مع دعم المعزز)
+        //  دوال إنشاء الرد الذكي
         // ============================================================
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
 
+            // 1. عرض المنتجات إذا طلبها المستخدم
             if (lower.includes('عرض المنتجات') || lower.includes('المنتجات') || lower.includes('قائمة المنتجات') || lower.includes(
                     'اشتري')) {
                 return { type: 'products', content: buildAllProductsRow() };
             }
 
+            // 2. إذا كان الوكيل مفعلاً من الزر
             if (purchaseAgentActive) {
                 const reply = handlePurchaseStep(text);
                 if (reply) {
@@ -3188,9 +3019,11 @@
                 }
             }
 
+            // 3. إذا كان الوكيل التلقائي مفعلاً ونية الشراء موجودة
             if (autoAgentEnabled && (lower.includes('اشتري') || lower.includes('طلب') || lower.includes('ابي') || lower
                     .includes('ابغى') || lower.includes('اريد') || lower.includes('أريد') || lower.includes('عطني'))) {
                 const startMsg = startPurchaseAgent();
+                // نتعامل مع الخطوة الأولى مباشرة
                 const reply = handlePurchaseStep(text);
                 if (reply) {
                     return { type: 'text', content: reply };
@@ -3198,31 +3031,34 @@
                 return { type: 'text', content: startMsg };
             }
 
+            // 4. العمليات الحسابية
             const mathResult = evaluateMath(text);
             if (mathResult !== null) {
-                const boostSuffix = boostMode ? ' (Boosted)' : '';
-                return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟${boostSuffix}` };
+                return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
             }
 
+            // 5. الوقت والتاريخ
             if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
                 const now = new Date();
                 const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
                 const dateStr = now.toLocaleDateString('ar-SA', { timeZone: 'Asia/Riyadh' });
-                const template = getReply('time', boostMode);
+                const template = getReply('time');
                 return { type: 'text', content: template.replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr) };
             }
 
+            // 6. البحث عن منتج محدد (دون تفعيل الوكيل)
             const product = findProduct(text);
             if (product) {
                 return { type: 'product', content: `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(product)}</div></div>` };
             }
 
+            // 7. الردود العامة
             let category = getCategoryForText(text);
             if (category !== 'default') {
-                return { type: 'text', content: getReply(category, boostMode) };
+                return { type: 'text', content: getReply(category) };
             }
 
-            return { type: 'text', content: getReply('default', boostMode) };
+            return { type: 'text', content: getReply('default') };
         }
 
         // ============================================================
@@ -3411,7 +3247,7 @@
                     await delay(600);
                     const boostMsg = document.createElement('div');
                     boostMsg.className = 'message bot';
-                    const boostContent = ' هل تريد مساعدة إضافية؟ يمكنك سؤالي عن أي شيء آخر.';
+                    const boostContent = '💡 **هل تريد مساعدة إضافية؟** يمكنك سؤالي عن أي شيء آخر.';
                     boostMsg.innerHTML = boostContent + `<span class="msg-time">الآن</span>`;
                     messagesArea.appendChild(boostMsg);
                     scrollToBottom();
@@ -3597,16 +3433,6 @@
 
             loadCustomReplies();
             rebuildKeywordsMap();
-            refreshBoostResponses();
-
-            // تحميل وضع المعزز وتحديث الزر
-            loadBoostMode();
-            updateBoostButton();
-
-            const boostItem = document.getElementById('searchBoostOption');
-            if (boostItem) {
-                boostItem.innerHTML = `<i class="fas fa-search"></i> ${boostMode ? '🔍 البحث في المعزز (مفعّل)' : '🔍 البحث في المعزز (ملغى)'}`;
-            }
 
             const settings = loadSettings();
             maxMessagesPerSession = settings.limit || 6;
@@ -3620,9 +3446,8 @@
             messageInput.focus();
             sendBtn.disabled = false;
 
-            console.log('✅ MEN Ai جاهز مع زر المعزز المستقل.');
+            console.log('✅ MEN Ai جاهز مع وكيل الشراء (من الزر) وعرض المنتجات.');
             console.log(`الحد الأقصى للرسائل: ${maxMessagesPerSession}, التعزيز التلقائي: ${autoBoostEnabled}, الوكيل التلقائي: ${autoAgentEnabled}`);
-            console.log(`وضع المعزز: ${boostMode ? 'مفعّل' : 'ملغى'}`);
         }
 
         init();
