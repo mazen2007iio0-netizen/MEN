@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -9,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+        /* جميع الأنماط كما هي (تم حذفها للاختصار، لكنها موجودة في الكود الكامل) */
         * {
             margin: 0;
             padding: 0;
@@ -2070,11 +2070,6 @@
     </footer>
     <script>
         // ============================================================
-        //  إعدادات البوت (غيّر اسم المستخدم)
-        // ============================================================
-        const BOT_USERNAME = "MEN_Shop_Bot"; // ⬅️ ضع اسم المستخدم لبوتك هنا
-
-        // ============================================================
         //  المتغيرات العامة
         // ============================================================
         let responses = {};
@@ -2086,6 +2081,13 @@
 
         let attachedFile = null;
         let extractedText = '';
+
+        // متغيرات وكيل الشراء (داخلي)
+        let purchaseStep = null; // null | 'ask_name' | 'ask_phone' | 'ask_product' | 'done'
+        let purchaseProductData = null;
+        let purchaseName = '';
+        let purchasePhone = '';
+        let purchaseAgentActive = false; // يتم تفعيله من الزر أو تلقائياً
 
         // ============================================================
         //  إدارة الذاكرة والإعدادات
@@ -2550,6 +2552,100 @@
         }
 
         // ============================================================
+        //  دوال وكيل الشراء (داخلي)
+        // ============================================================
+        function startPurchaseAgent() {
+            purchaseAgentActive = true;
+            purchaseStep = 'ask_name';
+            purchaseProductData = null;
+            purchaseName = '';
+            purchasePhone = '';
+            return '🛒 **قول لي اسمك ورقم جوالك عشان أقدر أدخل المتجر وأطلب لك.**\n\n👤 أولاً: أرسل لي اسمك الرباعي.';
+        }
+
+        function handlePurchaseStep(text) {
+            if (!purchaseAgentActive) return null;
+
+            const lower = text.trim();
+
+            if (purchaseStep === 'ask_name') {
+                if (lower.length < 3) {
+                    return '❌ الاسم قصير جداً. من فضلك أرسل اسمك الرباعي (مثل: أحمد محمد).';
+                }
+                purchaseName = lower;
+                purchaseStep = 'ask_phone';
+                return '📱 **شكراً! الآن أرسل لي رقم جوالك.**';
+            }
+
+            if (purchaseStep === 'ask_phone') {
+                const phoneClean = lower.replace(/\s/g, '');
+                if (!phoneClean.match(/^[0-9]{8,15}$/)) {
+                    return '❌ رقم الجوال غير صحيح. يرجى إدخال رقم صحيح (مثال: 0540367546).';
+                }
+                purchasePhone = phoneClean;
+                purchaseStep = 'ask_product';
+                return '🛍️ **الآن أخبرني ما هو المنتج الذي ترغب في شرائه؟**\n(يمكنك كتابة اسم المنتج أو كلمة مفتاحية)';
+            }
+
+            if (purchaseStep === 'ask_product') {
+                const product = findProduct(lower);
+                if (!product) {
+                    return '❌ **لم أجد المنتج المطلوب.** يرجى كتابة اسم المنتج بشكل صحيح، أو اكتب "إلغاء" لإلغاء الطلب.';
+                }
+                purchaseProductData = product;
+
+                const priceNum = parseFloat(product.price);
+                let finalPrice = priceNum;
+                if (!isNaN(priceNum)) {
+                    finalPrice = priceNum * 0.9;
+                }
+                const finalPriceStr = finalPrice.toFixed(2);
+
+                sendPurchaseToDiscord(product, purchaseName, purchasePhone, finalPriceStr);
+
+                const msg = `✅ **تم طلب المنتج بنجاح!**\n` +
+                    `**المنتج:** ${product.name}\n` +
+                    `**السعر بعد الخصم 10%:** ${finalPriceStr} ${product.currency || 'ر.س'}\n` +
+                    `**الاسم:** ${purchaseName}\n` +
+                    `**الجوال:** ${purchasePhone}\n\n` +
+                    `🛡️ **ترا طلبت لك ولاهمك انا معك اول بأول.**`;
+
+                purchaseAgentActive = false;
+                purchaseStep = null;
+                purchaseProductData = null;
+                purchaseName = '';
+                purchasePhone = '';
+
+                return msg;
+            }
+
+            return null;
+        }
+
+        async function sendPurchaseToDiscord(product, name, phone, priceAfterDiscount) {
+            try {
+                const payload = {
+                    content: `**🛒 طلب شراء جديد من MEN Ai**\n\n` +
+                        `**المنتج:** ${product.name}\n` +
+                        `**السعر الأصلي:** ${product.price} ${product.currency || 'ر.س'}\n` +
+                        `**الخصم 10%:** ${priceAfterDiscount} ${product.currency || 'ر.س'}\n` +
+                        `**الاسم:** ${name}\n` +
+                        `**رقم الجوال:** ${phone}\n` +
+                        `**الوقت:** ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
+                };
+                await fetch(
+                    'https://discord.com/api/webhooks/1502708241518432399/oYuBXcUAPEskuKUqHLAewfXb5E2Xxxj7EUiqUS7RIPL7NMKXO3ZRla4-Vw8XDWBwDWDj', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                console.log('✅ تم إرسال الطلب إلى Discord');
+            } catch (err) {
+                console.warn('فشل إرسال الطلب إلى Discord:', err);
+            }
+        }
+
+        // ============================================================
         //  دوال استخراج النص من الملفات
         // ============================================================
         async function extractTextFromFile(file) {
@@ -2709,13 +2805,16 @@
             }
         });
 
-        // ============================================================
-        //  ربط زر الوكيل بفتح تلجرام
-        // ============================================================
+        // زر وكيل MEN Ai (يفعّل الوكيل داخلياً)
         document.getElementById('aiAgentOption').addEventListener('click', function(e) {
             e.stopPropagation();
-            const url = `https://t.me/${BOT_USERNAME}?start=shop`;
-            window.open(url, '_blank');
+            const startMsg = startPurchaseAgent();
+            const botMsg = document.createElement('div');
+            botMsg.className = 'message bot';
+            botMsg.innerHTML = startMsg + `<span class="msg-time">الآن</span>`;
+            document.getElementById('messagesArea').appendChild(botMsg);
+            scrollToBottom();
+            saveToMemory('bot', startMsg);
             closeAllDropdowns();
         });
 
@@ -2900,28 +2999,39 @@
             const lower = text.trim().toLowerCase();
 
             // 1. عرض المنتجات إذا طلبها المستخدم
-            if (lower.includes('عرض المنتجات') || lower.includes('المنتجات') || lower.includes('قائمة المنتجات') || lower.includes(
-                    'اشتري')) {
-                return { type: 'products', content: buildAllRows() };
+            if (lower.includes('عرض المنتجات') || lower.includes('المنتجات') || lower.includes('قائمة المنتجات')) {
+                return { type: 'products', content: buildAllProductsRow() };
             }
 
-            // 2. إذا كان الوكيل التلقائي مفعلاً، نوجه المستخدم إلى البوت
+            // 2. إذا كان الوكيل مفعلاً (من الزر أو التلقائي)، نتعامل مع خطواته
+            if (purchaseAgentActive) {
+                const reply = handlePurchaseStep(text);
+                if (reply) {
+                    return { type: 'text', content: reply };
+                }
+            }
+
+            // 3. إذا كان الوكيل التلقائي مفعلاً ونية الشراء موجودة
             if (autoAgentEnabled && (lower.includes('اشتري') || lower.includes('طلب') || lower.includes('ابي') || lower
                     .includes('ابغى') || lower.includes('اريد') || lower.includes('أريد') || lower.includes('عطني'))) {
-                const url = `https://t.me/${BOT_USERNAME}?start=shop`;
-                return {
-                    type: 'text',
-                    content: `🛒 **لطلب المنتج، يرجى التواصل مع وكيلنا عبر تلجرام:**\n[اضغط هنا للذهاب إلى البوت](${url})\n\nيمكنك أيضاً كتابة "عرض المنتجات" لرؤية القائمة.`
-                };
+                if (!purchaseAgentActive) {
+                    const startMsg = startPurchaseAgent();
+                    // نتعامل مع الخطوة الأولى مباشرة
+                    const reply = handlePurchaseStep(text);
+                    if (reply) {
+                        return { type: 'text', content: reply };
+                    }
+                    return { type: 'text', content: startMsg };
+                }
             }
 
-            // 3. العمليات الحسابية
+            // 4. العمليات الحسابية
             const mathResult = evaluateMath(text);
             if (mathResult !== null) {
                 return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
             }
 
-            // 4. الوقت والتاريخ
+            // 5. الوقت والتاريخ
             if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
                 const now = new Date();
                 const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
@@ -2930,13 +3040,13 @@
                 return { type: 'text', content: template.replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr) };
             }
 
-            // 5. البحث عن منتج محدد
+            // 6. البحث عن منتج محدد (دون تفعيل الوكيل)
             const product = findProduct(text);
             if (product) {
                 return { type: 'product', content: `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(product)}</div></div>` };
             }
 
-            // 6. الردود العامة
+            // 7. الردود العامة
             let category = getCategoryForText(text);
             if (category !== 'default') {
                 return { type: 'text', content: getReply(category) };
@@ -3127,7 +3237,7 @@
 
                 await sendToDiscord(userContent, replyContent);
 
-                if (autoBoostEnabled) {
+                if (autoBoostEnabled && purchaseAgentActive === false) {
                     await delay(600);
                     const boostMsg = document.createElement('div');
                     boostMsg.className = 'message bot';
@@ -3306,13 +3416,6 @@
         }
 
         // ============================================================
-        //  دالة مساعدة بناءً على الطلب
-        // ============================================================
-        function buildAllRows() {
-            return buildAllProductsRow();
-        }
-
-        // ============================================================
         //  التهيئة الرئيسية
         // ============================================================
         async function init() {
@@ -3337,7 +3440,7 @@
             messageInput.focus();
             sendBtn.disabled = false;
 
-            console.log('✅ MEN Ai جاهز مع وكيل تلجرام.');
+            console.log('✅ MEN Ai جاهز مع وكيل شراء داخلي.');
             console.log(`الحد الأقصى للرسائل: ${maxMessagesPerSession}, التعزيز التلقائي: ${autoBoostEnabled}, الوكيل التلقائي: ${autoAgentEnabled}`);
         }
 
