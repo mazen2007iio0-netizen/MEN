@@ -4,11 +4,10 @@
     <link rel="icon" type="image/png" href="logo1.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEN Ai</title>
+    <title>MEN AI تجريبي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* === جميع الأنماط كما هي، مع إضافات لأزرار إعادة ونسخ === */
         * {
             margin: 0;
             padding: 0;
@@ -31,7 +30,6 @@
             background: linear-gradient(180deg, #021ca4, #1a3a9e);
             border-radius: 12px;
         }
-
         .bg-ambient {
             position: fixed;
             top: 0;
@@ -39,10 +37,7 @@
             width: 100%;
             height: 100%;
             z-index: -2;
-            background:
-                radial-gradient(ellipse at 20% 30%, rgba(2, 28, 164, 0.15) 0%, transparent 55%),
-                radial-gradient(ellipse at 80% 70%, rgba(26, 58, 158, 0.10) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, #000000 0%, #000000 100%);
+            background: radial-gradient(ellipse at 20% 30%, rgba(2, 28, 164, 0.15) 0%, transparent 55%), radial-gradient(ellipse at 80% 70%, rgba(26, 58, 158, 0.10) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, #000000 0%, #000000 100%);
             animation: ambientFloat 20s ease-in-out infinite alternate;
         }
         @keyframes ambientFloat {
@@ -53,7 +48,6 @@
                 transform: scale(1.05) rotate(2deg);
             }
         }
-
         .container {
             width: 92%;
             max-width: 1100px;
@@ -71,7 +65,6 @@
             --radius-2xl: 40px;
             --glow-neon: 0 0 30px rgba(74, 122, 255, 0.15);
         }
-
         header {
             background: rgba(0, 0, 0, 0.92);
             backdrop-filter: blur(24px);
@@ -94,12 +87,6 @@
             align-items: center;
             gap: 12px;
         }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
         .btn-back,
         .btn-memory,
         .btn-settings {
@@ -183,8 +170,12 @@
             animation: spinSettings 2s linear infinite;
         }
         @keyframes spinSettings {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
         @keyframes pulseBrain {
             0%,
@@ -195,7 +186,6 @@
                 transform: scale(1.2) rotate(-5deg);
             }
         }
-
         .logo img {
             height: 48px;
             filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(74, 122, 255, 0.3));
@@ -226,7 +216,6 @@
                 transform: scale(1.1) rotate(10deg);
             }
         }
-
         .chat-wrapper {
             margin: 0 0 20px;
             background: var(--card-bg);
@@ -240,7 +229,6 @@
             height: calc(100vh - 200px);
             min-height: 500px;
         }
-
         .chat-header {
             padding: 18px 24px;
             border-bottom: 1px solid rgba(2, 28, 164, 0.1);
@@ -272,7 +260,6 @@
             font-size: 1.2rem;
             color: #fff;
         }
-
         .messages-area {
             flex: 1;
             padding: 20px 24px;
@@ -289,7 +276,6 @@
             background: var(--blue-deep);
             border-radius: 12px;
         }
-
         .message {
             max-width: 85%;
             padding: 14px 20px;
@@ -337,8 +323,6 @@
         .message.user .msg-time {
             text-align: right;
         }
-
-        /* === أزرار إعادة ونسخ خاصة برسائل البوت === */
         .message.bot .bot-actions {
             display: flex;
             gap: 8px;
@@ -376,8 +360,6 @@
         .message.bot .bot-actions button:active {
             transform: scale(0.95);
         }
-
-        /* ===== منتجات ===== */
         .products-row-wrapper {
             width: 100%;
             overflow-x: auto;
@@ -398,7 +380,6 @@
             background: var(--blue-deep);
             border-radius: 12px;
         }
-
         .products-row {
             display: flex;
             flex-wrap: nowrap;
@@ -407,7 +388,6 @@
             min-width: 100%;
             padding: 2px 2px 6px 2px;
         }
-
         .products-row .men-product-card {
             min-width: 260px;
             max-width: 280px;
@@ -449,8 +429,6 @@
             font-size: 0.7rem;
             padding: 4px 12px;
         }
-
-        /* ===== الترحيب ===== */
         .welcome-animation {
             display: flex;
             flex-direction: column;
@@ -486,7 +464,6 @@
                 filter: drop-shadow(0 0 25px rgba(74, 122, 255, 0.6));
             }
         }
-
         .typewriter-container {
             font-size: 1.4rem;
             font-weight: 700;
@@ -525,7 +502,6 @@
                 opacity: 0;
             }
         }
-
         .welcome-desc {
             font-size: 0.95rem;
             color: #8a9abb;
@@ -558,7 +534,6 @@
                 transform: translateY(0);
             }
         }
-
         .typing-indicator {
             align-self: flex-start;
             display: none;
@@ -615,7 +590,6 @@
                 transform: rotate(360deg);
             }
         }
-
         .suggested-questions {
             display: flex;
             flex-wrap: wrap;
@@ -658,8 +632,6 @@
         .suggested-questions .sq-btn:active {
             transform: scale(0.95);
         }
-
-        /* ===== منطقة الإدخال ===== */
         .input-area {
             padding: 12px 20px 16px;
             border-top: 1px solid rgba(2, 28, 164, 0.08);
@@ -710,8 +682,6 @@
             white-space: nowrap;
             direction: ltr;
         }
-
-        /* === أزرار الإدخال === */
         .input-area .btn-send {
             width: 52px;
             height: 52px;
@@ -754,86 +724,6 @@
             cursor: not-allowed;
             transform: scale(1);
         }
-
-        .input-area .btn-voice {
-            width: 52px;
-            height: 52px;
-            min-width: 52px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(2, 28, 164, 0.2);
-            color: #a0b0d4;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        .input-area .btn-voice:hover {
-            background: rgba(74, 122, 255, 0.08);
-            border-color: var(--blue-light);
-            color: #fff;
-            transform: scale(1.05);
-        }
-        .input-area .btn-voice:active {
-            transform: scale(0.92);
-        }
-
-        .input-area .btn-voice.recording {
-            background: rgba(255, 50, 50, 0.2);
-            border-color: #ff4444;
-            color: #ff4444;
-            animation: pulseMic 1s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
-        }
-        .input-area .btn-voice.recording::before,
-        .input-area .btn-voice.recording::after {
-            content: '';
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 68, 68, 0.4);
-            animation: ripple 1.5s ease-out infinite;
-            pointer-events: none;
-            z-index: -1;
-        }
-        .input-area .btn-voice.recording::after {
-            animation-delay: 0.75s;
-        }
-        @keyframes ripple {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.8);
-                opacity: 0;
-            }
-        }
-        @keyframes pulseMic {
-            0%,
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 10px rgba(255, 68, 68, 0.2);
-            }
-            50% {
-                transform: scale(1.12);
-                box-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
-            }
-        }
-        .input-area .btn-voice:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        /* === زر الزايد (Plus) === */
         .input-area .btn-plus {
             width: 52px;
             height: 52px;
@@ -866,8 +756,6 @@
             color: var(--blue-light);
             background: rgba(74, 122, 255, 0.1);
         }
-
-        /* القائمة المنسدلة - على اليمين */
         .plus-dropdown {
             position: absolute;
             bottom: calc(100% + 12px);
@@ -878,7 +766,7 @@
             border: 1px solid rgba(74, 122, 255, 0.2);
             border-radius: 20px;
             padding: 8px 0;
-            min-width: 180px;
+            min-width: 190px;
             box-shadow: 0 10px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(74, 122, 255, 0.05);
             display: none;
             z-index: 100;
@@ -898,7 +786,6 @@
                 transform: translateY(0) scale(1);
             }
         }
-
         .plus-dropdown .dropdown-item {
             display: flex;
             align-items: center;
@@ -931,24 +818,34 @@
         .plus-dropdown .dropdown-item:active {
             transform: scale(0.97);
         }
-        .plus-dropdown .dropdown-item.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .sub-dropdown {
+            display: none;
+            margin-top: 4px;
+            margin-right: 10px;
+            border-right: 2px solid rgba(74, 122, 255, 0.25);
+            padding-right: 6px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
         }
-        .plus-dropdown .dropdown-item.disabled:hover {
-            background: transparent;
-            color: #c0ccf0;
+        .sub-dropdown.show {
+            display: block;
+            animation: dropFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .plus-dropdown .dropdown-item.disabled i {
-            opacity: 0.4;
+        .sub-dropdown .dropdown-item {
+            font-size: 0.85rem;
+            padding: 10px 16px 10px 12px;
+            border-radius: 10px;
+        }
+        .sub-dropdown .dropdown-item i {
+            font-size: 1rem;
+            width: 20px;
         }
         .plus-dropdown .dropdown-divider {
             height: 1px;
             background: rgba(74, 122, 255, 0.1);
             margin: 6px 12px;
         }
-
-        /* ===== معاينة الملف ===== */
         .file-preview {
             display: none;
             padding: 6px 16px 6px 12px;
@@ -985,8 +882,6 @@
         .file-preview i {
             color: var(--blue-light);
         }
-
-        /* ===== مودال الذاكرة الفخم ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -1012,7 +907,6 @@
                 transform: scale(1) translateY(0);
             }
         }
-
         .modal-box {
             background: radial-gradient(ellipse at 50% 0%, rgba(10, 16, 32, 0.98), #0a0f1f);
             border: 1px solid rgba(74, 122, 255, 0.2);
@@ -1063,8 +957,6 @@
         .modal-box .modal-close:active {
             transform: scale(0.95);
         }
-
-        /* قائمة الجلسات في الذاكرة */
         .memory-list {
             display: flex;
             flex-direction: column;
@@ -1081,7 +973,6 @@
             background: var(--blue-deep);
             border-radius: 12px;
         }
-
         .memory-item {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(74, 122, 255, 0.08);
@@ -1176,7 +1067,6 @@
             font-size: 1.1rem;
             opacity: 0.7;
         }
-
         .memory-actions {
             display: flex;
             justify-content: flex-end;
@@ -1226,8 +1116,6 @@
         .memory-actions .btn-new-session:active {
             transform: scale(0.95);
         }
-
-        /* ===== مودال الإعدادات (تم تحديثه - إزالة تفعيل الردود الإضافية) ===== */
         .settings-group {
             margin: 20px 0;
         }
@@ -1264,6 +1152,62 @@
         }
         .settings-group select option {
             background: #0a0f1f;
+        }
+        .toggle-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            color: #b0c4e8;
+            font-size: 0.95rem;
+        }
+        .toggle-switch input {
+            display: none;
+        }
+        .toggle-switch .slider {
+            width: 50px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            position: relative;
+            transition: 0.4s;
+            border: 1px solid rgba(74, 122, 255, 0.15);
+            flex-shrink: 0;
+        }
+        .toggle-switch .slider::before {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: #6a708a;
+            border-radius: 50%;
+            top: 2px;
+            left: 3px;
+            transition: 0.4s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .toggle-switch input:checked+.slider {
+            background: rgba(74, 122, 255, 0.25);
+            border-color: var(--blue-light);
+        }
+        .toggle-switch input:checked+.slider::before {
+            transform: translateX(22px);
+            background: var(--blue-light);
+            box-shadow: 0 0 20px rgba(74, 122, 255, 0.3);
+        }
+        .toggle-switch .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .toggle-switch .toggle-label .coming-soon {
+            font-size: 0.7rem;
+            color: #ff6b6b;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 2px 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 0, 0, 0.15);
         }
         .settings-actions {
             display: flex;
@@ -1310,8 +1254,6 @@
             background: rgba(255, 0, 0, 0.15);
             transform: scale(1.02);
         }
-
-        /* ===== مودال استخراج النص ===== */
         .modal-text {
             background: rgba(0, 0, 0, 0.4);
             border-radius: 16px;
@@ -1325,8 +1267,6 @@
             white-space: pre-wrap;
             word-wrap: break-word;
         }
-
-        /* ===== footer ===== */
         footer {
             background: #000000;
             border-top: 1px solid rgba(2, 28, 164, 0.03);
@@ -1390,8 +1330,6 @@
         .copyright span {
             color: var(--blue-light);
         }
-
-        /* ===== بطاقات المنتجات ===== */
         .men-product-card {
             width: 100%;
             max-width: 380px;
@@ -1508,8 +1446,6 @@
                 transform: translateY(0) scale(1);
             }
         }
-
-        /* ===== التجاوب ===== */
         @media (max-width: 768px) {
             .chat-wrapper {
                 height: calc(100vh - 160px);
@@ -1535,7 +1471,6 @@
                 min-height: 36px;
             }
             .input-area .btn-send,
-            .input-area .btn-voice,
             .input-area .btn-plus {
                 width: 44px;
                 height: 44px;
@@ -1546,7 +1481,7 @@
                 font-size: 1.6rem;
             }
             .plus-dropdown {
-                min-width: 160px;
+                min-width: 170px;
                 right: 0;
                 left: auto;
                 bottom: calc(100% + 8px);
@@ -1683,7 +1618,6 @@
                 min-height: 32px;
             }
             .input-area .btn-send,
-            .input-area .btn-voice,
             .input-area .btn-plus {
                 width: 38px;
                 height: 38px;
@@ -1694,7 +1628,7 @@
                 font-size: 1.4rem;
             }
             .plus-dropdown {
-                min-width: 140px;
+                min-width: 150px;
                 right: 0;
                 left: auto;
                 bottom: calc(100% + 6px);
@@ -1898,7 +1832,6 @@
                 padding: 3px 8px;
             }
             .input-area .btn-send,
-            .input-area .btn-voice,
             .input-area .btn-plus {
                 width: 32px;
                 height: 32px;
@@ -1909,7 +1842,7 @@
                 font-size: 1.2rem;
             }
             .plus-dropdown {
-                min-width: 120px;
+                min-width: 130px;
                 right: 0;
                 left: auto;
                 bottom: calc(100% + 6px);
@@ -1961,7 +1894,6 @@
 </head>
 <body>
     <div class="bg-ambient"></div>
-
     <header>
         <div class="container header-content">
             <div class="header-left">
@@ -1980,7 +1912,6 @@
             </div>
         </div>
     </header>
-
     <main>
         <div class="container">
             <div class="chat-wrapper">
@@ -1992,55 +1923,48 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="messages-area" id="messagesArea"></div>
-
                 <div class="typing-indicator" id="typingIndicator">
                     <i class="fas fa-circle-notch"></i>
                     <span>جار التفكير</span>
                     <span class="dots"><span></span><span></span><span></span></span>
                 </div>
-
                 <div class="suggested-questions" id="suggestedQuestions">
                     <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
-                    <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
+                    <button class="sq-btn" data-question=" MEN pass"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
                     <button class="sq-btn" data-question="كيف يمكنني التواصل مع الدعم؟"><i class="fas fa-headset"></i> التواصل مع الدعم</button>
                 </div>
-
                 <div class="input-area">
-                    <!-- زر الزايد (Plus) -->
                     <button class="btn-plus" id="plusBtn" title="خيارات إضافية">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <!-- القائمة المنسدلة -->
                     <div class="plus-dropdown" id="plusDropdown">
                         <button class="dropdown-item" id="attachOption">
                             <i class="fas fa-paperclip"></i> إرفاق ملف
                         </button>
                         <div class="dropdown-divider"></div>
-                        <button class="dropdown-item disabled" id="doitOption" disabled>
-                            <i class="fas fa-network-wired"></i>  التعزيز (قريباً)
+                        <button class="dropdown-item" id="doitOption">
+                            <i class="fas fa-network-wired"></i> التعزيز
                         </button>
+                        <div class="sub-dropdown" id="subDropdown">
+                            <button class="dropdown-item sub-item" id="aiAgentOption">
+                                <i class="fas fa-hand-sparkles"></i> وكيل MEN Ai
+                            </button>
+                            <button class="dropdown-item sub-item" id="searchBoostOption">
+                                <i class="fas fa-search"></i> البحث في المعزز
+                            </button>
+                        </div>
                     </div>
-
-                    <!-- معاينة الملف -->
                     <div class="file-preview hidden-preview" id="filePreview">
                         <i class="fas fa-file"></i>
                         <span id="fileName">ملف</span>
                         <span class="remove-file" id="removeFile"><i class="fas fa-times"></i></span>
                     </div>
-
-                    <!-- ملف الإدخال المخفي -->
                     <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls" style="display:none;">
-
                     <div class="input-wrapper">
                         <textarea id="messageInput" rows="1" placeholder="اسألني عن أي شيء..."></textarea>
                         <span class="char-count" id="charCount">0</span>
                     </div>
-
-                    <button class="btn-voice" id="voiceBtn" title="تسجيل صوتي">
-                        <i class="fas fa-microphone"></i>
-                    </button>
                     <button class="btn-send" id="sendBtn" title="إرسال">
                         <i class="fas fa-arrow-up"></i>
                     </button>
@@ -2048,7 +1972,6 @@
             </div>
         </div>
     </main>
-
     <!-- مودال الذاكرة -->
     <div class="modal-overlay" id="memoryModal">
         <div class="modal-box">
@@ -2063,8 +1986,7 @@
             </div>
         </div>
     </div>
-
-    <!-- مودال الإعدادات (تم إزالة تفعيل الردود الإضافية) -->
+    <!-- مودال الإعدادات -->
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-box">
             <h3><i class="fas fa-sliders-h"></i> إعدادات الذاكرة والتعلم</h3>
@@ -2072,7 +1994,8 @@
                 <label>الحد الأقصى للرسائل في كل محادثة</label>
                 <div class="settings-input">
                     <select id="memoryLimitSelect">
-                        <option value="12">12 (افتراضي)</option>
+                        <option value="6">6 (افتراضي)</option>
+                        <option value="12">12</option>
                         <option value="20">20</option>
                         <option value="30">30</option>
                         <option value="50">50</option>
@@ -2087,11 +2010,37 @@
                 <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند تجاوز العدد في أي محادثة، سيتم حذف المحادثة بالكامل.</p>
             </div>
             <div class="settings-group">
+                <label>رسائل التعزيز التلقائي (Auto Boost)</label>
+                <div class="settings-input">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoBoostToggle">
+                        <span class="slider"></span>
+                        <span class="toggle-label">
+                            تفعيل الرسالة التحفيزية بعد كل رد
+                        </span>
+                    </label>
+                </div>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم إرسال رسالة إضافية مثل هل تريد مساعدة إضافية؟ بعد كل رد  .</p>
+            </div>
+            <div class="settings-group">
+                <label>تفعيل الوكيل التلقائي (عند ذكر كلمات الشراء)</label>
+                <div class="settings-input">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoAgentToggle">
+                        <span class="slider"></span>
+                        <span class="toggle-label">
+                            تفعيل الوكيل التلقائي
+                        </span>
+                    </label>
+                </div>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند التفعيل، سيتفاعل الوكيل تلقائياً .</p>
+            </div>
+            <div class="settings-group">
                 <label>تعلم من محادثتي (آخر سؤال وجواب)</label>
                 <button class="btn-apply" id="learnFromConversationBtn" style="background:rgba(74,122,255,0.15);border:1px solid rgba(74,122,255,0.3);color:#b0c4e8;padding:8px 20px;border-radius:30px;cursor:pointer;font-family:'Cairo',sans-serif;display:inline-flex;align-items:center;gap:8px;">
                     <i class="fas fa-graduation-cap"></i> تعلم من المحادثة الحالية
                 </button>
-                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم حفظ آخر سؤال وجواب كرد جديد في ذاكرة البوت.</p>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم حفظ آخر سؤال وجواب كرد جديد في ذاكرة MEN Ai.</p>
             </div>
             <div class="settings-actions">
                 <button class="btn-clear-settings" id="clearMemorySettingsBtn"><i class="fas fa-trash-alt"></i> مسح الذاكرة</button>
@@ -2100,7 +2049,6 @@
             <button class="modal-close" id="settingsModalClose" style="margin-top:10px;">إغلاق</button>
         </div>
     </div>
-
     <!-- مودال استخراج النص -->
     <div class="modal-overlay" id="extractModal">
         <div class="modal-box">
@@ -2109,7 +2057,6 @@
             <button class="modal-close" id="modalClose">إغلاق</button>
         </div>
     </div>
-
     <footer>
         <div class="container">
             <div class="footer-flex">
@@ -2128,7 +2075,6 @@
             </div>
         </div>
     </footer>
-
     <script>
         // ============================================================
         //  المتغيرات العامة
@@ -2136,46 +2082,105 @@
         let responses = {};
         let keywordsMap = {};
         let products = [];
-        let customReplies = {}; // الردود المضافة من المستخدم (التعلم)
+        let customReplies = {};
 
         const CUSTOM_REPLIES_KEY = 'menCustomReplies';
-
-        const SUBSCRIPTION_KEYWORDS = [
-            'اشتراك', 'اشترك', 'اشتري', 'شراء', 'طلب', 'طلب منتج',
-            'عرض', 'pro', 'باقة', 'عرض', 'خصم', 'سعر', 'كم سعر',
-            'كيف اشترك', 'اريد اشتراك', 'ابي اشتراك', 'ابغى اشتراك'
-        ];
 
         let attachedFile = null;
         let extractedText = '';
 
+        // متغيرات وكيل الشراء
+        let purchaseStep = null; // null | 'ask_name' | 'ask_phone' | 'ask_product' | 'done'
+        let purchaseProductData = null;
+        let purchaseName = '';
+        let purchasePhone = '';
+        let purchaseAgentActive = false;
+
+        // متغيرات البحث في المعزز (Boost)
+        let boostMode = true; // افتراضي: مفعّل
+        const BOOST_KEY = 'menBoostMode';
+
         // ============================================================
-        //  إدارة الذاكرة على شكل جلسات (مثل شات جي بي تي)
+        //  إدارة الذاكرة والإعدادات
         // ============================================================
         const MEMORY_KEY = 'menChatMemory';
         const SETTINGS_KEY = 'menChatSettings';
 
-        const DEFAULT_LIMIT = 12;
-        let maxMessagesPerSession = loadSettings();
+        let maxMessagesPerSession = 6;
+        let autoBoostEnabled = false;
+        let autoAgentEnabled = false;
 
         function loadSettings() {
             try {
                 const saved = localStorage.getItem(SETTINGS_KEY);
                 if (saved) {
                     const settings = JSON.parse(saved);
-                    return settings.limit || DEFAULT_LIMIT;
+                    maxMessagesPerSession = settings.limit || 6;
+                    autoBoostEnabled = settings.autoBoost || false;
+                    autoAgentEnabled = settings.autoAgent || false;
+                    return settings;
                 }
             } catch (e) {}
-            return DEFAULT_LIMIT;
+            return { limit: 6, autoBoost: false, autoAgent: false };
         }
 
-        function saveSettings(limit) {
+        function saveSettings(limit, autoBoost, autoAgent) {
             try {
-                localStorage.setItem(SETTINGS_KEY, JSON.stringify({ limit }));
+                const settings = { limit, autoBoost, autoAgent };
+                localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
                 maxMessagesPerSession = limit;
+                autoBoostEnabled = autoBoost;
+                autoAgentEnabled = autoAgent;
             } catch (e) {}
         }
 
+        // ============================================================
+        //  إدارة وضع المعزز (Boost) – التفعيل الافتراضي
+        // ============================================================
+        function loadBoostMode() {
+            try {
+                const saved = localStorage.getItem(BOOST_KEY);
+                if (saved !== null) {
+                    boostMode = JSON.parse(saved);
+                } else {
+                    boostMode = true; // افتراضي
+                    localStorage.setItem(BOOST_KEY, JSON.stringify(boostMode));
+                }
+            } catch (e) {
+                boostMode = true;
+            }
+            return boostMode;
+        }
+
+        function saveBoostMode(mode) {
+            try {
+                localStorage.setItem(BOOST_KEY, JSON.stringify(mode));
+                boostMode = mode;
+            } catch (e) {}
+        }
+
+        // تبديل وضع المعزز مع رسالة تأكيد
+        function toggleBoostMode() {
+            boostMode = !boostMode;
+            saveBoostMode(boostMode);
+            const status = boostMode ? '✅ تم تفعيل البحث في المعزز' : '❌ تم إلغاء تفعيل البحث في المعزز';
+            // عرض رسالة في الدردشة
+            const area = document.getElementById('messagesArea');
+            const infoMsg = document.createElement('div');
+            infoMsg.className = 'message bot';
+            infoMsg.innerHTML = status + `<span class="msg-time">الآن</span>`;
+            area.appendChild(infoMsg);
+            scrollToBottom();
+            // تحديث نص الزر في القائمة المنسدلة (اختياري)
+            const boostItem = document.getElementById('searchBoostOption');
+            if (boostItem) {
+                boostItem.innerHTML = `<i class="fas fa-search"></i> ${boostMode ? '🔍 البحث في المعزز (مفعّل)' : '🔍 البحث في المعزز (ملغى)'}`;
+            }
+        }
+
+        // ============================================================
+        //  دوال الذاكرة (الجلسات)
+        // ============================================================
         function getMemory() {
             try {
                 const data = localStorage.getItem(MEMORY_KEY);
@@ -2413,7 +2418,6 @@
                     const actions = document.createElement('div');
                     actions.className = 'bot-actions';
                     actions.innerHTML = `
-                        <button class="replay-btn" data-content="${escapeHtml(msg.content)}"><i class="fas fa-redo-alt"></i> إعادة</button>
                         <button class="copy-btn" data-content="${escapeHtml(msg.content)}"><i class="fas fa-copy"></i> نسخ</button>
                     `;
                     div.appendChild(actions);
@@ -2422,15 +2426,6 @@
             });
             scrollToBottom();
 
-            document.querySelectorAll('.replay-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const content = this.dataset.content;
-                    document.getElementById('messageInput').value = content;
-                    document.getElementById('messageInput').dispatchEvent(new Event('input'));
-                    document.getElementById('messageInput').focus();
-                });
-            });
             document.querySelectorAll('.copy-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -2485,7 +2480,7 @@
         }
 
         // ============================================================
-        //  دوال الردود والمنتجات (مع دعم الردود المخصصة فقط)
+        //  دوال الردود والمنتجات (مع دعم المعزز)
         // ============================================================
         function loadCustomReplies() {
             try {
@@ -2506,16 +2501,13 @@
             } catch (e) {}
         }
 
-        // دمج الكلمات المفتاحية من الردود المخصصة والأساسية
         function rebuildKeywordsMap() {
             let map = {};
-            // الأساسية
             for (const [cat, obj] of Object.entries(responses)) {
                 if (obj.keywords && Array.isArray(obj.keywords)) {
                     map[cat] = obj.keywords.map(k => k.toLowerCase());
                 }
             }
-            // المخصصة
             for (const [cat, obj] of Object.entries(customReplies)) {
                 if (obj.keywords && Array.isArray(obj.keywords)) {
                     if (map[cat]) {
@@ -2528,14 +2520,50 @@
             keywordsMap = map;
         }
 
-        function getReply(category) {
-            // أولاً: الردود المخصصة
-            let customList = customReplies[category]?.responses || [];
-            // ثانياً: الأساسية
-            let baseList = responses[category]?.responses || [];
+        // إنشاء نسخة معدلة من الردود مع علامة (Boosted)
+        function buildBoostResponses() {
+            const boosted = {};
+            for (const [cat, obj] of Object.entries(responses)) {
+                boosted[cat] = {
+                    keywords: obj.keywords ? [...obj.keywords] : [],
+                    responses: obj.responses ? obj.responses.map(r => r + ' (Boosted)') : []
+                };
+            }
+            // إضافة ردود مخصصة مع (Boosted) أيضاً
+            for (const [cat, obj] of Object.entries(customReplies)) {
+                if (!boosted[cat]) {
+                    boosted[cat] = { keywords: [], responses: [] };
+                }
+                if (obj.keywords) {
+                    boosted[cat].keywords = [...new Set([...boosted[cat].keywords, ...obj.keywords])];
+                }
+                if (obj.responses) {
+                    boosted[cat].responses = [...boosted[cat].responses, ...obj.responses.map(r => r + ' (Boosted)')];
+                }
+            }
+            return boosted;
+        }
 
+        let boostResponses = {};
+
+        function refreshBoostResponses() {
+            boostResponses = buildBoostResponses();
+        }
+
+        function getReply(category, boost = false) {
+            let source = boost ? boostResponses : responses;
+            let customSource = boost ? boostResponses : customReplies;
+
+            let customList = customSource[category]?.responses || [];
+            let baseList = source[category]?.responses || [];
             let combined = [...customList, ...baseList];
-            if (combined.length === 0) return getReply('default');
+            if (combined.length === 0) {
+                let defaultList = boost ? boostResponses['default']?.responses || [] : responses['default']?.responses || [];
+                if (defaultList.length === 0) {
+                    return boost ? 'عذراً، لا يوجد رد متاح (Boosted).' : 'عذراً، لا يوجد رد متاح.';
+                }
+                return defaultList[Math.floor(Math.random() * defaultList.length)];
+            }
             return combined[Math.floor(Math.random() * combined.length)];
         }
 
@@ -2552,14 +2580,19 @@
         function evaluateMath(text) {
             const match = text.match(/(\d+)\s*([+\-*/])\s*(\d+)/);
             if (!match) return null;
-            const a = parseFloat(match[1]), op = match[2], b = parseFloat(match[3]);
+            const a = parseFloat(match[1]),
+                op = match[2],
+                b = parseFloat(match[3]);
             if (isNaN(a) || isNaN(b)) return null;
             let result;
             switch (op) {
                 case '+': result = a + b; break;
                 case '-': result = a - b; break;
                 case '*': result = a * b; break;
-                case '/': if (b === 0) return 'لا يمكن القسمة على صفر'; result = a / b; break;
+                case '/':
+                    if (b === 0) return 'لا يمكن القسمة على صفر';
+                    result = a / b;
+                    break;
                 default: return null;
             }
             return Number.isInteger(result) ? result : result.toFixed(2);
@@ -2577,11 +2610,9 @@
             return null;
         }
 
-        function isSubscriptionRequest(text) {
-            const lower = text.trim().toLowerCase();
-            return SUBSCRIPTION_KEYWORDS.some(k => lower.includes(k.toLowerCase()));
-        }
-
+        // ============================================================
+        //  دوال المنتجات وعرضها
+        // ============================================================
         function buildAllProductsRow() {
             if (!products || products.length === 0)
                 return '<p style="color: #8a9abb; padding: 10px 0;">لا توجد منتجات متاحة حالياً.</p>';
@@ -2618,57 +2649,97 @@
         }
 
         // ============================================================
-        //  وظيفة التعلم من المحادثة الحالية
+        //  دوال وكيل الشراء
         // ============================================================
-        function learnFromConversation() {
-            const session = getCurrentSession();
-            if (!session || session.messages.length < 2) {
-                alert('لا توجد محادثة كافية للتعلم. يجب أن تحتوي على سؤال وجواب.');
-                return;
-            }
-            const msgs = session.messages;
-            let userMsg = null;
-            let botMsg = null;
-            for (let i = msgs.length - 1; i >= 0; i--) {
-                if (msgs[i].role === 'user' && !userMsg) {
-                    userMsg = msgs[i];
+        function startPurchaseAgent() {
+            purchaseAgentActive = true;
+            purchaseStep = 'ask_name';
+            purchaseProductData = null;
+            purchaseName = '';
+            purchasePhone = '';
+            return 'قول لي اسمك ورقم جوالك عشان أقدر أدخل المتجر وأطلب لك.\n\n أولاً: أرسل لي اسمك الرباعي.';
+        }
+
+        function handlePurchaseStep(text) {
+            if (!purchaseAgentActive) return null;
+
+            const lower = text.trim();
+
+            if (purchaseStep === 'ask_name') {
+                if (lower.length < 3) {
+                    return ' الاسم قصير جداً. من فضلك أرسل اسمك الرباعي (مثل: أحمد محمد).';
                 }
-                if (msgs[i].role === 'bot' && !botMsg) {
-                    botMsg = msgs[i];
+                purchaseName = lower;
+                purchaseStep = 'ask_phone';
+                return ' شكراً! الآن أرسل لي رقم جوالك.';
+            }
+
+            if (purchaseStep === 'ask_phone') {
+                const phoneClean = lower.replace(/\s/g, '');
+                if (!phoneClean.match(/^[0-9]{8,15}$/)) {
+                    return ' رقم الجوال غير صحيح. يرجى إدخال رقم صحيح (مثال: 0540367546).';
                 }
-                if (userMsg && botMsg) break;
-            }
-            if (!userMsg || !botMsg) {
-                alert('تعذر العثور على سؤال وجواب في المحادثة.');
-                return;
+                purchasePhone = phoneClean;
+                purchaseStep = 'ask_product';
+                return ' الآن أخبرني ما هو المنتج الذي ترغب في شرائه؟\n(يمكنك كتابة اسم المنتج وانا ببحث)';
             }
 
-            const userText = userMsg.content;
-            const botText = botMsg.content;
-
-            let category = getCategoryForText(userText);
-            if (category === 'default') {
-                category = 'custom';
-            }
-
-            if (!customReplies[category]) {
-                customReplies[category] = { keywords: [], responses: [] };
-            }
-            const words = userText.split(/\s+/).filter(w => w.length > 2);
-            const newKeywords = words.slice(0, 3).map(w => w.toLowerCase());
-            for (let kw of newKeywords) {
-                if (!customReplies[category].keywords.includes(kw)) {
-                    customReplies[category].keywords.push(kw);
+            if (purchaseStep === 'ask_product') {
+                const product = findProduct(lower);
+                if (!product) {
+                    return ' لم أجد المنتج المطلوب. يرجى كتابة اسم المنتج بشكل صحيح، أو اكتب "إلغاء" لإلغاء الطلب.';
                 }
-            }
-            if (!customReplies[category].responses.includes(botText)) {
-                customReplies[category].responses.push(botText);
+                purchaseProductData = product;
+
+                const priceNum = parseFloat(product.price);
+                let finalPrice = priceNum;
+                if (!isNaN(priceNum)) {
+                    finalPrice = priceNum * 0.9;
+                }
+                const finalPriceStr = finalPrice.toFixed(2);
+
+                sendPurchaseToDiscord(product, purchaseName, purchasePhone, finalPriceStr);
+
+                const msg = ` تم طلب المنتج بنجاح!\n` +
+                    `منتجك هو: ${product.name}\n` +
+                    `السعر بعد الخصم 10%: ${finalPriceStr} ${product.currency || 'ر.س'}\n` +
+                    `باسم: ${purchaseName}\n` +
+                    `الجوال: ${purchasePhone}\n\n` +
+                    ` ترا طلبت لك ولاهمك انا معك اول بأول.`;
+
+                purchaseAgentActive = false;
+                purchaseStep = null;
+                purchaseProductData = null;
+                purchaseName = '';
+                purchasePhone = '';
+
+                return msg;
             }
 
-            saveCustomReplies();
-            rebuildKeywordsMap();
+            return null;
+        }
 
-            alert('تم التعلم بنجاح! سأستطيع الآن الإجابة على أسئلة مشابهة.');
+        async function sendPurchaseToDiscord(product, name, phone, priceAfterDiscount) {
+            try {
+                const payload = {
+                    content: `** طلب شراء جديد من MEN Ai**\n\n` +
+                        `**المنتج:** ${product.name}\n` +
+                        `**السعر الأصلي:** ${product.price} ${product.currency || 'ر.س'}\n` +
+                        `**الخصم 10%:** ${priceAfterDiscount} ${product.currency || 'ر.س'}\n` +
+                        `**الاسم:** ${name}\n` +
+                        `**رقم الجوال:** ${phone}\n` +
+                        `**الوقت:** ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
+                };
+                await fetch(
+                    'https://discord.com/api/webhooks/1502708241518432399/oYuBXcUAPEskuKUqHLAewfXb5E2Xxxj7EUiqUS7RIPL7NMKXO3ZRla4-Vw8XDWBwDWDj', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                console.log(' تم إرسال الطلب إلى Discord');
+            } catch (err) {
+                console.warn('فشل إرسال الطلب إلى Discord:', err);
+            }
         }
 
         // ============================================================
@@ -2702,14 +2773,16 @@
                     return fullText || 'لم يتم العثور على نص في ملف PDF.';
                 } catch (e) { return 'حدث خطأ أثناء قراءة ملف PDF.'; }
             }
-            if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileName.endsWith('.docx')) {
+            if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileName.endsWith(
+                    '.docx')) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
                     const result = await mammoth.extractRawText({ arrayBuffer });
                     return result.value || 'الملف فارغ أو لا يحتوي على نص.';
                 } catch (e) { return 'حدث خطأ أثناء قراءة ملف Word.'; }
             }
-            if (fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+            if (fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || fileName.endsWith(
+                    '.xlsx') || fileName.endsWith('.xls')) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
                     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
@@ -2728,7 +2801,7 @@
             if (fileType === 'text/csv' || fileName.endsWith('.csv')) {
                 try { return await file.text() || 'الملف فارغ.'; } catch (e) { return 'حدث خطأ أثناء قراءة ملف CSV.'; }
             }
-            return '⚠️ نوع الملف غير مدعوم للاستخراج التلقائي.';
+            return ' نوع الملف غير مدعوم للاستخراج التلقائي.';
         }
 
         // ============================================================
@@ -2778,7 +2851,7 @@
                     return;
                 }
                 showAttachedFile(file);
-                closeDropdown();
+                closeAllDropdowns();
             } else {
                 hideAttachedFile();
             }
@@ -2787,21 +2860,26 @@
         removeFileBtn.addEventListener('click', hideAttachedFile);
 
         // ============================================================
-        //  زر الزايد والقائمة المنسدلة
+        //  زر الزايد والقائمة المنسدلة + القائمة الفرعية
         // ============================================================
         const plusBtn = document.getElementById('plusBtn');
         const plusDropdown = document.getElementById('plusDropdown');
         const attachOption = document.getElementById('attachOption');
         const doitOption = document.getElementById('doitOption');
+        const subDropdown = document.getElementById('subDropdown');
 
         function toggleDropdown() {
             plusDropdown.classList.toggle('show');
             plusBtn.classList.toggle('active');
+            if (!plusDropdown.classList.contains('show')) {
+                subDropdown.classList.remove('show');
+            }
         }
 
-        function closeDropdown() {
+        function closeAllDropdowns() {
             plusDropdown.classList.remove('show');
             plusBtn.classList.remove('active');
+            subDropdown.classList.remove('show');
         }
 
         plusBtn.addEventListener('click', function(e) {
@@ -2812,19 +2890,42 @@
         attachOption.addEventListener('click', function(e) {
             e.stopPropagation();
             document.getElementById('fileInput').click();
-            closeDropdown();
+            closeAllDropdowns();
         });
 
         doitOption.addEventListener('click', function(e) {
             e.stopPropagation();
-            alert('⚠️ خاصية "Do It" غير متاحة حالياً، سيتم تفعيلها في الإصدارات القادمة.');
-            closeDropdown();
+            subDropdown.classList.toggle('show');
+            if (!plusDropdown.classList.contains('show')) {
+                plusDropdown.classList.add('show');
+                plusBtn.classList.add('active');
+            }
+        });
+
+        // زر وكيل MEN Ai
+        document.getElementById('aiAgentOption').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const startMsg = startPurchaseAgent();
+            const botMsg = document.createElement('div');
+            botMsg.className = 'message bot';
+            botMsg.innerHTML = startMsg + `<span class="msg-time">الآن</span>`;
+            document.getElementById('messagesArea').appendChild(botMsg);
+            scrollToBottom();
+            saveToMemory('bot', startMsg);
+            closeAllDropdowns();
+        });
+
+        // زر البحث في المعزز – يعمل كـ toggle مع تحديث النص
+        document.getElementById('searchBoostOption').addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleBoostMode();
+            closeAllDropdowns();
         });
 
         document.addEventListener('click', function(e) {
             const target = e.target;
             if (!target.closest('.input-area')) {
-                closeDropdown();
+                closeAllDropdowns();
             }
         });
 
@@ -2834,7 +2935,7 @@
         document.getElementById('memoryBtn').addEventListener('click', function() {
             loadMemory();
             document.getElementById('memoryModal').classList.add('active');
-            closeDropdown();
+            closeAllDropdowns();
         });
         document.getElementById('memoryModalClose').addEventListener('click', function() {
             document.getElementById('memoryModal').classList.remove('active');
@@ -2855,11 +2956,11 @@
             infoMsg.innerHTML = ` تم إنشاء محادثة جديدة. <span class="msg-time">الآن</span>`;
             area.appendChild(infoMsg);
             scrollToBottom();
-            closeDropdown();
+            closeAllDropdowns();
         });
 
         // ============================================================
-        //  إعدادات الذاكرة (مودال الإعدادات)
+        //  إعدادات الذاكرة
         // ============================================================
         const settingsBtn = document.getElementById('settingsBtn');
         const settingsModal = document.getElementById('settingsModal');
@@ -2869,26 +2970,17 @@
         const applySettingsBtn = document.getElementById('applySettingsBtn');
         const clearMemorySettingsBtn = document.getElementById('clearMemorySettingsBtn');
         const learnFromConversationBtn = document.getElementById('learnFromConversationBtn');
+        const autoBoostToggle = document.getElementById('autoBoostToggle');
+        const autoAgentToggle = document.getElementById('autoAgentToggle');
 
         settingsBtn.addEventListener('click', function() {
-            const currentLimit = maxMessagesPerSession;
-            const options = memoryLimitSelect.options;
-            let found = false;
-            for (let opt of options) {
-                if (parseInt(opt.value) === currentLimit) {
-                    memoryLimitSelect.value = opt.value;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                memoryLimitSelect.value = '12';
-                customLimitInput.value = currentLimit;
-            } else {
-                customLimitInput.value = '';
-            }
+            const settings = loadSettings();
+            memoryLimitSelect.value = settings.limit || 6;
+            customLimitInput.value = '';
+            autoBoostToggle.checked = settings.autoBoost || false;
+            autoAgentToggle.checked = settings.autoAgent || false;
             settingsModal.classList.add('active');
-            closeDropdown();
+            closeAllDropdowns();
         });
 
         settingsModalClose.addEventListener('click', function() {
@@ -2913,7 +3005,9 @@
                 alert('الرجاء إدخال عدد صحيح موجب.');
                 return;
             }
-            saveSettings(newLimit);
+            const autoBoost = autoBoostToggle.checked;
+            const autoAgent = autoAgentToggle.checked;
+            saveSettings(newLimit, autoBoost, autoAgent);
             settingsModal.classList.remove('active');
             const memory = getMemory();
             let changed = false;
@@ -2940,46 +3034,122 @@
         });
 
         clearMemorySettingsBtn.addEventListener('click', clearAllSessions);
-
-        // زر التعلم من المحادثة
         learnFromConversationBtn.addEventListener('click', function() {
             learnFromConversation();
         });
 
+        function learnFromConversation() {
+            const session = getCurrentSession();
+            if (!session || session.messages.length < 2) {
+                alert('لا توجد محادثة كافية للتعلم. يجب أن تحتوي على سؤال وجواب.');
+                return;
+            }
+            const msgs = session.messages;
+            let userMsg = null;
+            let botMsg = null;
+            for (let i = msgs.length - 1; i >= 0; i--) {
+                if (msgs[i].role === 'user' && !userMsg) {
+                    userMsg = msgs[i];
+                }
+                if (msgs[i].role === 'bot' && !botMsg) {
+                    botMsg = msgs[i];
+                }
+                if (userMsg && botMsg) break;
+            }
+            if (!userMsg || !botMsg) {
+                alert('تعذر العثور على سؤال وجواب في المحادثة.');
+                return;
+            }
+
+            const userText = userMsg.content;
+            const botText = botMsg.content;
+
+            let category = getCategoryForText(userText);
+            if (category === 'default') {
+                category = 'custom';
+            }
+
+            if (!customReplies[category]) {
+                customReplies[category] = { keywords: [], responses: [] };
+            }
+            const words = userText.split(/\s+/).filter(w => w.length > 2);
+            const newKeywords = words.slice(0, 3).map(w => w.toLowerCase());
+            for (let kw of newKeywords) {
+                if (!customReplies[category].keywords.includes(kw)) {
+                    customReplies[category].keywords.push(kw);
+                }
+            }
+            if (!customReplies[category].responses.includes(botText)) {
+                customReplies[category].responses.push(botText);
+            }
+
+            saveCustomReplies();
+            rebuildKeywordsMap();
+            refreshBoostResponses(); // تحديث نسخة المعزز
+
+            alert('تم التعلم بنجاح! سأستطيع الآن الإجابة على أسئلة مشابهة.');
+        }
+
         // ============================================================
-        //  دوال إنشاء الرد الذكي (مع دعم الردود المخصصة فقط)
+        //  دوال إنشاء الرد الذكي (مع دعم المعزز)
         // ============================================================
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
 
-            const mathResult = evaluateMath(text);
-            if (mathResult !== null) {
-                return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
+            // 1. عرض المنتجات إذا طلبها المستخدم
+            if (lower.includes('عرض المنتجات') || lower.includes('المنتجات') || lower.includes('قائمة المنتجات') || lower.includes(
+                    'اشتري')) {
+                return { type: 'products', content: buildAllProductsRow() };
             }
 
+            // 2. إذا كان الوكيل مفعلاً من الزر
+            if (purchaseAgentActive) {
+                const reply = handlePurchaseStep(text);
+                if (reply) {
+                    return { type: 'text', content: reply };
+                }
+            }
+
+            // 3. إذا كان الوكيل التلقائي مفعلاً ونية الشراء موجودة
+            if (autoAgentEnabled && (lower.includes('اشتري') || lower.includes('طلب') || lower.includes('ابي') || lower
+                    .includes('ابغى') || lower.includes('اريد') || lower.includes('أريد') || lower.includes('عطني'))) {
+                const startMsg = startPurchaseAgent();
+                const reply = handlePurchaseStep(text);
+                if (reply) {
+                    return { type: 'text', content: reply };
+                }
+                return { type: 'text', content: startMsg };
+            }
+
+            // 4. العمليات الحسابية
+            const mathResult = evaluateMath(text);
+            if (mathResult !== null) {
+                const boostSuffix = boostMode ? ' (Boosted)' : '';
+                return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟${boostSuffix}` };
+            }
+
+            // 5. الوقت والتاريخ
             if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
                 const now = new Date();
                 const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
                 const dateStr = now.toLocaleDateString('ar-SA', { timeZone: 'Asia/Riyadh' });
-                const template = getReply('time');
+                const template = getReply('time', boostMode);
                 return { type: 'text', content: template.replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr) };
             }
 
-            if (isSubscriptionRequest(text)) {
-                return { type: 'products', content: buildAllProductsRow() };
-            }
-
+            // 6. البحث عن منتج محدد (دون تفعيل الوكيل)
             const product = findProduct(text);
             if (product) {
                 return { type: 'product', content: `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(product)}</div></div>` };
             }
 
+            // 7. الردود العامة (مع أو بدون معزز)
             let category = getCategoryForText(text);
             if (category !== 'default') {
-                return { type: 'text', content: getReply(category) };
+                return { type: 'text', content: getReply(category, boostMode) };
             }
 
-            return { type: 'text', content: getReply('default') };
+            return { type: 'text', content: getReply('default', boostMode) };
         }
 
         // ============================================================
@@ -3016,7 +3186,7 @@
         function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
         // ============================================================
-        //  دوال إرسال الرسائل مع دعم الملفات والأزرار
+        //  دوال إرسال الرسائل مع دعم الملفات
         // ============================================================
         const messagesArea = document.getElementById('messagesArea');
         const messageInput = document.getElementById('messageInput');
@@ -3025,90 +3195,9 @@
         const typingIndicator = document.getElementById('typingIndicator');
         const backBtn = document.getElementById('backBtn');
         const suggestedQuestions = document.getElementById('suggestedQuestions');
-        const voiceBtn = document.getElementById('voiceBtn');
 
         let isProcessing = false;
-        let recognition = null;
-        let isRecording = false;
 
-        // ============================================================
-        //  التعرف على الصوت
-        // ============================================================
-        function initSpeechRecognition() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                voiceBtn.style.display = 'none';
-                return null;
-            }
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const rec = new SpeechRecognition();
-            rec.lang = 'ar-SA';
-            rec.continuous = false;
-            rec.interimResults = true;
-            rec.maxAlternatives = 1;
-
-            rec.onresult = function(event) {
-                let finalText = '';
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    if (event.results[i].isFinal) finalText += event.results[i][0].transcript;
-                }
-                if (finalText) {
-                    messageInput.value = finalText;
-                    charCount.textContent = finalText.length;
-                    if (finalText.trim()) sendMessage();
-                }
-            };
-
-            rec.onerror = function(event) {
-                stopRecording();
-                if (event.error !== 'not-allowed') {
-                    const errorMsg = document.createElement('div');
-                    errorMsg.className = 'message bot';
-                    errorMsg.innerHTML = 'عذراً، لم أتمكن من التعرف على صوتك. حاول مرة أخرى.' +
-                        `<span class="msg-time">الآن</span>`;
-                    messagesArea.appendChild(errorMsg);
-                    scrollToBottom();
-                }
-            };
-
-            rec.onend = stopRecording;
-            return rec;
-        }
-
-        function startRecording() {
-            if (isRecording) { stopRecording(); return; }
-            if (!recognition) {
-                recognition = initSpeechRecognition();
-                if (!recognition) return;
-            }
-            try {
-                recognition.start();
-                isRecording = true;
-                voiceBtn.classList.add('recording');
-                voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
-            } catch (e) {
-                if (e.message && e.message.includes('already started')) {
-                    stopRecording();
-                    setTimeout(() => startRecording(), 300);
-                }
-            }
-        }
-
-        function stopRecording() {
-            if (recognition) try { recognition.stop(); } catch (e) {}
-            isRecording = false;
-            voiceBtn.classList.remove('recording');
-            voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-        }
-
-        voiceBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (isProcessing) return;
-            startRecording();
-        });
-
-        // ============================================================
-        //  الأزرار المساعدة
-        // ============================================================
         document.querySelectorAll('.sq-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const question = this.dataset.question;
@@ -3126,9 +3215,6 @@
             else window.location.href = '/';
         });
 
-        // ============================================================
-        //  أحداث الإدخال والإرسال
-        // ============================================================
         messageInput.addEventListener('input', function() {
             const len = this.value.length;
             charCount.textContent = len > 0 ? len : '0';
@@ -3145,9 +3231,6 @@
 
         sendBtn.addEventListener('click', sendMessage);
 
-        // ============================================================
-        //  دوال الإرسال الأساسية مع الملفات
-        // ============================================================
         async function sendMessage() {
             const text = messageInput.value.trim();
 
@@ -3158,7 +3241,6 @@
 
             isProcessing = true;
             sendBtn.disabled = true;
-            voiceBtn.disabled = true;
 
             try {
                 let fileText = '';
@@ -3198,7 +3280,8 @@
                 let reply = await generateSmartReply(text || fileText || 'ملف');
                 if (attachedFile && fileText && fileText.length > 0) {
                     if (reply.type === 'text') {
-                        reply.content = ` لقد استخرجت النص من ملفك:\n"${fileText.substring(0, 200)}${fileText.length > 200 ? '...' : ''}"\n\n${reply.content}`;
+                        reply.content =
+                            ` لقد استخرجت النص من ملفك:\n"${fileText.substring(0, 200)}${fileText.length > 200 ? '...' : ''}"\n\n${reply.content}`;
                     }
                 }
 
@@ -3214,7 +3297,6 @@
                     const actions = document.createElement('div');
                     actions.className = 'bot-actions';
                     actions.innerHTML = `
-                        <button class="replay-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-redo-alt"></i> إعادة</button>
                         <button class="copy-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-copy"></i> نسخ</button>
                     `;
                     botMsg.appendChild(actions);
@@ -3229,21 +3311,11 @@
                     const actions = document.createElement('div');
                     actions.className = 'bot-actions';
                     actions.innerHTML = `
-                        <button class="replay-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-redo-alt"></i> إعادة</button>
                         <button class="copy-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-copy"></i> نسخ</button>
                     `;
                     botMsg.appendChild(actions);
                 }
 
-                botMsg.querySelectorAll('.replay-btn').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const content = this.dataset.content;
-                        document.getElementById('messageInput').value = content;
-                        document.getElementById('messageInput').dispatchEvent(new Event('input'));
-                        document.getElementById('messageInput').focus();
-                    });
-                });
                 botMsg.querySelectorAll('.copy-btn').forEach(btn => {
                     btn.addEventListener('click', function(e) {
                         e.stopPropagation();
@@ -3262,6 +3334,17 @@
 
                 await sendToDiscord(userContent, replyContent);
 
+                if (autoBoostEnabled && purchaseAgentActive === false && autoAgentEnabled === false) {
+                    await delay(600);
+                    const boostMsg = document.createElement('div');
+                    boostMsg.className = 'message bot';
+                    const boostContent = ' هل تريد مساعدة إضافية؟ يمكنك سؤالي عن أي شيء آخر.';
+                    boostMsg.innerHTML = boostContent + `<span class="msg-time">الآن</span>`;
+                    messagesArea.appendChild(boostMsg);
+                    scrollToBottom();
+                    saveToMemory('bot', boostContent);
+                }
+
                 if (attachedFile) hideAttachedFile();
 
             } catch (error) {
@@ -3275,26 +3358,26 @@
             } finally {
                 isProcessing = false;
                 sendBtn.disabled = false;
-                voiceBtn.disabled = false;
                 messageInput.focus();
                 scrollToBottom();
             }
         }
 
         // ============================================================
-        //  إرسال إلى Discord
+        //  إرسال إلى Discord (الويب هوك القديم)
         // ============================================================
         async function sendToDiscord(userMessage, botReply) {
             try {
                 const payload = {
                     content: `**رسالة جديدة من MEN Ai**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
                 };
-                await fetch('https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-            } catch (err) { console.warn('فشل إرسال الـ webhook:', err); }
+                await fetch(
+                    'https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+            } catch (err) { console.warn('فشل إرسال الـ webhook القديم:', err); }
         }
 
         // ============================================================
@@ -3435,13 +3518,27 @@
         async function init() {
             messageInput.disabled = true;
             sendBtn.disabled = true;
-            voiceBtn.disabled = true;
 
             await loadExternalLibraries();
             await Promise.all([loadResponses(), loadProducts()]);
 
             loadCustomReplies();
             rebuildKeywordsMap();
+            refreshBoostResponses();
+
+            // تحميل وضع المعزز من localStorage (افتراضي true)
+            loadBoostMode();
+
+            // تحديث نص زر المعزز في القائمة المنسدلة
+            const boostItem = document.getElementById('searchBoostOption');
+            if (boostItem) {
+                boostItem.innerHTML = `<i class="fas fa-search"></i> ${boostMode ? '🔍 البحث في المعزز (مفعّل)' : '🔍 البحث في المعزز (ملغى)'}`;
+            }
+
+            const settings = loadSettings();
+            maxMessagesPerSession = settings.limit || 6;
+            autoBoostEnabled = settings.autoBoost || false;
+            autoAgentEnabled = settings.autoAgent || false;
 
             loadCurrentSession();
             loadMemory();
@@ -3449,9 +3546,10 @@
             messageInput.disabled = false;
             messageInput.focus();
             sendBtn.disabled = false;
-            voiceBtn.disabled = false;
 
-            console.log('MEN Ai جاهز مع دعم التعلم (بدون تفعيل الردود الإضافية)');
+            console.log('✅ MEN Ai جاهز مع وكيل الشراء (من الزر) وعرض المنتجات.');
+            console.log(`الحد الأقصى للرسائل: ${maxMessagesPerSession}, التعزيز التلقائي: ${autoBoostEnabled}, الوكيل التلقائي: ${autoAgentEnabled}`);
+            console.log(`وضع المعزز: ${boostMode ? 'مفعّل' : 'ملغى'}`);
         }
 
         init();
