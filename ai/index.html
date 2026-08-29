@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+        /* كل الأنماط كما هي دون تغيير */
         * {
             margin: 0;
             padding: 0;
@@ -3407,7 +3408,7 @@
         }
 
         // ============================================================
-        //  اقتراحات متحركة في حقل الإدخال (تتغير كل 7 ثوانٍ)
+        //  اقتراحات متحركة في حقل الإدخال (تظهر تدريجياً وتتغير كل 7 ثوانٍ)
         // ============================================================
         const suggestions = [
             "اسأل عن المنتجات...",
@@ -3418,13 +3419,77 @@
             "متى تأسس الفريق؟"
         ];
         let suggestionIndex = 0;
-        let placeholderInterval;
+        let placeholderInterval = null;
+        let typingInterval = null; // مؤقت الكتابة التدريجية
+        let isTyping = false;
+        let currentSuggestion = '';
+        let charIndex = 0;
 
-        function rotatePlaceholder() {
+        // دالة لبدء كتابة الاقتراح الحالي بشكل تدريجي
+        function startTypingSuggestion() {
             const input = document.getElementById('messageInput');
-            if (document.activeElement === input) return;
-            input.placeholder = suggestions[suggestionIndex];
-            suggestionIndex = (suggestionIndex + 1) % suggestions.length;
+            if (document.activeElement === input) {
+                // إذا كان الحقل في حالة تركيز، لا نكتب شيئاً
+                return;
+            }
+            // نمسح أي مؤقت كتابة سابق
+            if (typingInterval) {
+                clearInterval(typingInterval);
+                typingInterval = null;
+            }
+            // نأخذ الاقتراح الحالي
+            currentSuggestion = suggestions[suggestionIndex];
+            charIndex = 0;
+            input.placeholder = ''; // نبدأ فارغاً
+            isTyping = true;
+
+            // نبدأ كتابة حرف حرف كل 50 مللي ثانية
+            typingInterval = setInterval(() => {
+                if (charIndex < currentSuggestion.length) {
+                    input.placeholder += currentSuggestion.charAt(charIndex);
+                    charIndex++;
+                } else {
+                    // انتهت الكتابة
+                    clearInterval(typingInterval);
+                    typingInterval = null;
+                    isTyping = false;
+                    // بعد الانتهاء، ننتظر 7 ثوانٍ ثم ننتقل للاقتراح التالي
+                    clearTimeout(placeholderInterval); // نلغي أي مؤقت سابق
+                    placeholderInterval = setTimeout(() => {
+                        // ننتقل للاقتراح التالي
+                        suggestionIndex = (suggestionIndex + 1) % suggestions.length;
+                        startTypingSuggestion(); // نبدأ كتابة الاقتراح الجديد
+                    }, 7000); // 7 ثوانٍ
+                }
+            }, 50); // سرعة الكتابة (50 مللي لكل حرف)
+        }
+
+        // دالة لإيقاف الكتابة التدريجية
+        function stopTypingSuggestion() {
+            if (typingInterval) {
+                clearInterval(typingInterval);
+                typingInterval = null;
+            }
+            if (placeholderInterval) {
+                clearTimeout(placeholderInterval);
+                placeholderInterval = null;
+            }
+            isTyping = false;
+        }
+
+        // دالة لإعادة تشغيل الاقتراحات بعد فقدان التركيز
+        function restartTyping() {
+            stopTypingSuggestion();
+            // نبدأ من الاقتراح التالي بعد ثانيتين
+            setTimeout(() => {
+                // نتأكد أن الحقل لا يزال غير مركز
+                const input = document.getElementById('messageInput');
+                if (document.activeElement !== input) {
+                    // ننتقل للاقتراح التالي
+                    suggestionIndex = (suggestionIndex + 1) % suggestions.length;
+                    startTypingSuggestion();
+                }
+            }, 2000);
         }
 
         // ============================================================
@@ -3452,28 +3517,44 @@
             messageInput.focus();
             sendBtn.disabled = false;
 
-            // بدء تدوير الاقتراحات بعد ثانية، مع تغيير كل 7 ثوانٍ
+            // بدء كتابة الاقتراح الأول بعد ثانية
             setTimeout(() => {
-                rotatePlaceholder();
-                placeholderInterval = setInterval(rotatePlaceholder, 7000); // 7 ثوانٍ
+                startTypingSuggestion();
             }, 1000);
 
-            // إيقاف التدوير عند التركيز
+            // عند التركيز على الحقل، نوقف الكتابة التدريجية ونخفي الـ placeholder
             messageInput.addEventListener('focus', function() {
-                clearInterval(placeholderInterval);
+                stopTypingSuggestion();
+                this.placeholder = ''; // نمسح النص المكتوب
             });
 
-            // استئناف التدوير بعد فقدان التركيز
+            // عند فقدان التركيز، نستأنف الكتابة بعد 2 ثانية
             messageInput.addEventListener('blur', function() {
-                clearInterval(placeholderInterval);
-                setTimeout(() => {
-                    placeholderInterval = setInterval(rotatePlaceholder, 7000);
-                }, 2000);
+                if (this.value.trim() === '') {
+                    // فقط إذا كان الحقل فارغاً
+                    restartTyping();
+                } else {
+                    // إذا كان هناك نص مكتوب، لا نعرض اقتراحات
+                    stopTypingSuggestion();
+                    this.placeholder = '';
+                }
+            });
+
+            // إذا قام المستخدم بكتابة أي حرف، نوقف الكتابة التدريجية ونخفي الاقتراح
+            messageInput.addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    stopTypingSuggestion();
+                    this.placeholder = '';
+                } else {
+                    // إذا مسح كل النص، نستأنف الكتابة بعد 2 ثانية
+                    restartTyping();
+                }
             });
 
             console.log(' MEN Ai جاهز (الوكيل والبحث في المعزز معطلان مؤقتاً – قريباً)');
             console.log(`الحد الأقصى للرسائل: ${maxMessagesPerSession}, التعزيز التلقائي: ${autoBoostEnabled}, الوكيل التلقائي: ${autoAgentEnabled}`);
             console.log('تم تحميل mdr.json ودمجه مع الردود الأساسية.');
+            console.log('اقتراحات الإدخال تظهر تدريجياً وتتغير كل 7 ثوانٍ.');
         }
 
         init();
