@@ -3407,7 +3407,7 @@
         }
 
         // ============================================================
-        //  اقتراحات متحركة في حقل الإدخال
+        //  اقتراحات متحركة في حقل الإدخال (تتغير كل 7 ثوانٍ)
         // ============================================================
         const suggestions = [
             "اسأل عن المنتجات...",
@@ -3452,10 +3452,10 @@
             messageInput.focus();
             sendBtn.disabled = false;
 
-            // بدء تدوير الاقتراحات بعد ثانية
+            // بدء تدوير الاقتراحات بعد ثانية، مع تغيير كل 7 ثوانٍ
             setTimeout(() => {
                 rotatePlaceholder();
-                placeholderInterval = setInterval(rotatePlaceholder, 4000);
+                placeholderInterval = setInterval(rotatePlaceholder, 7000); // 7 ثوانٍ
             }, 1000);
 
             // إيقاف التدوير عند التركيز
@@ -3467,7 +3467,7 @@
             messageInput.addEventListener('blur', function() {
                 clearInterval(placeholderInterval);
                 setTimeout(() => {
-                    placeholderInterval = setInterval(rotatePlaceholder, 4000);
+                    placeholderInterval = setInterval(rotatePlaceholder, 7000);
                 }, 2000);
             });
 
