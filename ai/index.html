@@ -4,7 +4,7 @@
     <link rel="icon" type="image/png" href="logo1.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEN AI </title>
+    <title>MEN AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -674,6 +674,7 @@
         }
         .input-area .input-wrapper textarea::placeholder {
             color: #5a607a;
+            transition: opacity 0.3s;
         }
         .input-area .input-wrapper .char-count {
             font-size: 0.7rem;
@@ -1972,12 +1973,10 @@
                             <i class="fas fa-network-wired"></i> التعزيز
                         </button>
                         <div class="sub-dropdown" id="subDropdown">
-                            <!-- وكيل MEN Ai (قريباً) -->
                             <button class="dropdown-item sub-item disabled-item" id="aiAgentOption">
                                 <i class="fas fa-hand-sparkles"></i> وكيل MEN Ai
                                 <span class="coming-soon-badge">قريباً</span>
                             </button>
-                            <!-- البحث في المعزز (قريباً) -->
                             <button class="dropdown-item sub-item disabled-item" id="searchBoostOption">
                                 <i class="fas fa-search"></i> البحث في المعزز
                                 <span class="coming-soon-badge">قريباً</span>
@@ -1991,7 +1990,7 @@
                     </div>
                     <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls" style="display:none;">
                     <div class="input-wrapper">
-                        <textarea id="messageInput" rows="1" placeholder="اسألني عن أي شيء..."></textarea>
+                        <textarea id="messageInput" rows="1"></textarea>
                         <span class="char-count" id="charCount">0</span>
                     </div>
                     <button class="btn-send" id="sendBtn" title="إرسال">
@@ -2109,26 +2108,24 @@
         //  المتغيرات العامة
         // ============================================================
         let responses = {};
-        let mdrResponses = {};       // سيتم تحميلها من mdr.json
+        let mdrResponses = {}; // سيتم تحميلها من mdr.json
         let keywordsMap = {};
         let products = [];
         let customReplies = {};
 
         const CUSTOM_REPLIES_KEY = 'menCustomReplies';
-        const MDR_MERGE_STRATEGY = 'merge'; // أو 'override' حسب الرغبة
+        const MDR_MERGE_STRATEGY = 'merge';
 
         let attachedFile = null;
         let extractedText = '';
 
-        // متغيرات وكيل الشراء (تم تعطيلها مؤقتاً)
         let purchaseStep = null;
         let purchaseProductData = null;
         let purchaseName = '';
         let purchasePhone = '';
         let purchaseAgentActive = false;
 
-        // متغيرات البحث في المعزز (تم تعطيلها مؤقتاً)
-        let boostMode = true; // لا يستخدم حالياً
+        let boostMode = true;
         const BOOST_KEY = 'menBoostMode';
 
         // ============================================================
@@ -2488,15 +2485,9 @@
             } catch (e) {}
         }
 
-        // دمج الردود من مصادر متعددة (responses.json + mdr.json + custom)
         function mergeReplies() {
-            // نبدأ بنسخة من responses الأساسية
             let merged = JSON.parse(JSON.stringify(responses));
-
-            // إذا كانت استراتيجية الدمج هي 'override'، نستبدل الفئات الموجودة في mdr
-            // وإلا ندمج القوائم
             if (MDR_MERGE_STRATEGY === 'override') {
-                // استبدال كامل
                 for (const [cat, obj] of Object.entries(mdrResponses)) {
                     if (obj.keywords || obj.responses) {
                         merged[cat] = {
@@ -2506,7 +2497,6 @@
                     }
                 }
             } else {
-                // دمج (merge)
                 for (const [cat, obj] of Object.entries(mdrResponses)) {
                     if (!merged[cat]) {
                         merged[cat] = { keywords: [], responses: [] };
@@ -2519,8 +2509,6 @@
                     }
                 }
             }
-
-            // إضافة الردود المخصصة (customReplies) – ندمجها أيضاً
             for (const [cat, obj] of Object.entries(customReplies)) {
                 if (!merged[cat]) {
                     merged[cat] = { keywords: [], responses: [] };
@@ -2532,11 +2520,9 @@
                     merged[cat].responses = [...new Set([...merged[cat].responses, ...obj.responses])];
                 }
             }
-
             return merged;
         }
 
-        // إعادة بناء خريطة الكلمات المفتاحية من الردود المدمجة
         function rebuildKeywordsMap() {
             const merged = mergeReplies();
             let map = {};
@@ -2548,7 +2534,6 @@
             keywordsMap = map;
         }
 
-        // الحصول على رد من الفئة المحددة من المصادر المدمجة
         function getReply(category, boost = false) {
             const merged = mergeReplies();
             let catObj = merged[category] || merged['default'];
@@ -2822,9 +2807,6 @@
             }
         });
 
-        // ============================================================
-        //  ربط أزرار "قريباً" – تعطيل الوظائف مع رسالة
-        // ============================================================
         document.getElementById('aiAgentOption').addEventListener('click', function(e) {
             e.stopPropagation();
             alert(' ميزة وكيل MEN Ai ستكون متاحة قريباً.');
@@ -3010,29 +2992,24 @@
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
 
-            // 1. عرض المنتجات إذا طلبها المستخدم
             if (lower.includes('عرض المنتجات') || lower.includes('المنتجات') || lower.includes('قائمة المنتجات') || lower.includes(
                     'اشتري')) {
                 return { type: 'products', content: buildAllProductsRow() };
             }
 
-            // 2. الوكيل معطل – نعرض رسالة "قريباً" إذا حاول المستخدم تفعيله
             if (lower.includes('وكيل') || lower.includes('تفعيل الوكيل') || lower.includes('شراء') && lower.includes('وكيل')) {
                 return { type: 'text', content: ' ميزة وكيل MEN Ai ستكون متاحة قريباً.' };
             }
 
-            // 3. البحث في المعزز معطل
             if (lower.includes('معزز') || lower.includes('boost') || lower.includes('تعزيز')) {
                 return { type: 'text', content: ' ميزة البحث في المعزز ستكون متاحة قريباً.' };
             }
 
-            // 4. العمليات الحسابية
             const mathResult = evaluateMath(text);
             if (mathResult !== null) {
                 return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
             }
 
-            // 5. الوقت والتاريخ
             if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
                 const now = new Date();
                 const timeStr = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
@@ -3041,13 +3018,11 @@
                 return { type: 'text', content: template.replace(/\{time\}/g, timeStr).replace(/\{date\}/g, dateStr) };
             }
 
-            // 6. البحث عن منتج محدد
             const product = findProduct(text);
             if (product) {
                 return { type: 'product', content: `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(product)}</div></div>` };
             }
 
-            // 7. الردود العامة
             let category = getCategoryForText(text);
             if (category !== 'default') {
                 return { type: 'text', content: getReply(category, false) };
@@ -3336,7 +3311,6 @@
             }
         }
 
-        // تحميل mdr.json
         async function loadMdrResponses() {
             try {
                 const response = await fetch('mdr.json');
@@ -3433,6 +3407,27 @@
         }
 
         // ============================================================
+        //  اقتراحات متحركة في حقل الإدخال
+        // ============================================================
+        const suggestions = [
+            "اسأل عن المنتجات...",
+            "كيف الحال؟",
+            "أجواء العلا...",
+            "عرض الأسعار",
+            "تواصل مع الدعم",
+            "متى تأسس الفريق؟"
+        ];
+        let suggestionIndex = 0;
+        let placeholderInterval;
+
+        function rotatePlaceholder() {
+            const input = document.getElementById('messageInput');
+            if (document.activeElement === input) return;
+            input.placeholder = suggestions[suggestionIndex];
+            suggestionIndex = (suggestionIndex + 1) % suggestions.length;
+        }
+
+        // ============================================================
         //  التهيئة الرئيسية
         // ============================================================
         async function init() {
@@ -3456,6 +3451,25 @@
             messageInput.disabled = false;
             messageInput.focus();
             sendBtn.disabled = false;
+
+            // بدء تدوير الاقتراحات بعد ثانية
+            setTimeout(() => {
+                rotatePlaceholder();
+                placeholderInterval = setInterval(rotatePlaceholder, 4000);
+            }, 1000);
+
+            // إيقاف التدوير عند التركيز
+            messageInput.addEventListener('focus', function() {
+                clearInterval(placeholderInterval);
+            });
+
+            // استئناف التدوير بعد فقدان التركيز
+            messageInput.addEventListener('blur', function() {
+                clearInterval(placeholderInterval);
+                setTimeout(() => {
+                    placeholderInterval = setInterval(rotatePlaceholder, 4000);
+                }, 2000);
+            });
 
             console.log(' MEN Ai جاهز (الوكيل والبحث في المعزز معطلان مؤقتاً – قريباً)');
             console.log(`الحد الأقصى للرسائل: ${maxMessagesPerSession}, التعزيز التلقائي: ${autoBoostEnabled}, الوكيل التلقائي: ${autoAgentEnabled}`);
