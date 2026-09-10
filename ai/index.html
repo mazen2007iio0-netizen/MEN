@@ -794,6 +794,7 @@
         .code-response .code-text {
             line-height: 1.8; color: #e0e8ff;
             margin: 0; font-size: 0.95rem;
+            min-height: 1.5rem;
         }
         .code-block {
             background: #060a14;
@@ -801,6 +802,7 @@
             border-radius: 16px; margin: 6px 0;
             overflow: hidden; direction: ltr; text-align: left;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(74, 122, 255, 0.08);
+            animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .code-header {
             display: flex; justify-content: space-between;
@@ -847,6 +849,7 @@
             font-size: 0.85rem; line-height: 1.7;
             overflow-x: auto; white-space: pre;
             margin: 0; tab-size: 4; background: transparent;
+            min-height: 1.5rem;
         }
         .code-content::-webkit-scrollbar { height: 6px; }
         .code-content::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 12px; }
@@ -1159,6 +1162,14 @@
     </footer>
     <script>
         // ============================================================
+        //  إعدادات سرعة الكتابة (تحكم من مكان واحد)
+        // ============================================================
+        const TYPING_SPEED = 70;        // سرعة كتابة النص العربي (ms لكل حرف)
+        const CODE_TEXT_SPEED = 60;     // سرعة كتابة شرح الكود
+        const CODE_BLOCK_SPEED = 8;     // سرعة كتابة الكود نفسه (سريع لأن الكود طويل)
+        const WELCOME_SPEED = 70;       // سرعة رسالة الترحيب
+
+        // ============================================================
         //  المتغيرات العامة
         // ============================================================
         let responses = {};
@@ -1435,7 +1446,7 @@
                 const typewriterElement = document.getElementById('typewriterText');
                 if (typewriterElement) {
                     const fullText = 'مرحبا بك في MEN Ai';
-                    typeTextEffect(typewriterElement, fullText, 70).then(() => {
+                    typeTextEffect(typewriterElement, fullText, WELCOME_SPEED).then(() => {
                         typewriterElement.innerHTML = fullText.replace('MEN Ai', '<span class="highlight">MEN Ai</span>');
                         const cursor = document.getElementById('typewriterCursor');
                         if (cursor) cursor.style.display = 'none';
@@ -1659,7 +1670,7 @@
         function buildCodeHtml(text, code, language) {
             let html = `<div class="code-response">`;
             if (text) {
-                html += `<p class="code-text">${escapeHtml(text)}</p>`;
+                html += `<p class="code-text"></p>`;
             }
             if (code) {
                 html += `
@@ -2107,7 +2118,31 @@
                 element.innerHTML = '';
                 const interval = setInterval(() => {
                     if (index < text.length) {
-                        element.innerHTML += text.charAt(index);
+                        // نحافظ على الأسطر الجديدة
+                        const ch = text.charAt(index);
+                        if (ch === '\n') {
+                            element.innerHTML += '<br>';
+                        } else {
+                            element.innerHTML += ch;
+                        }
+                        index++;
+                        scrollToBottom();
+                    } else {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                }, speed);
+            });
+        }
+
+        // كتابة النص داخل عنصر مع حفظ المسافات والأسطر
+        function typeTextInto(element, text, speed) {
+            return new Promise((resolve) => {
+                let index = 0;
+                element.textContent = '';
+                const interval = setInterval(() => {
+                    if (index < text.length) {
+                        element.textContent += text.charAt(index);
                         index++;
                         scrollToBottom();
                     } else {
@@ -2245,39 +2280,97 @@
                     botMsg.appendChild(actions);
                     await delay(200);
                 } else if (reply.type === 'code') {
+                    // 🐢 عرض تدريجي لردود الأكواد: أولاً النص، ثم كتلة الكود، ثم الكود نفسه
                     const codeReply = reply.content;
-                    botMsg.innerHTML = buildCodeHtml(codeReply.text, codeReply.code, codeReply.language)
-                        + `<span class="msg-time">الآن</span>`;
 
-                    const preEl = botMsg.querySelector('.code-content');
-                    if (preEl) preEl.textContent = codeReply.code || '';
+                    // نبني هيكل الرد (بدون النص وبدون الكود بعد)
+                    botMsg.innerHTML = buildCodeHtml('', '', codeReply.language);
 
-                    const codeCopyBtn = botMsg.querySelector('.code-copy-btn');
-                    if (codeCopyBtn) {
-                        codeCopyBtn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const codeBlock = this.closest('.code-block');
-                            const code = codeBlock.querySelector('.code-content').textContent;
-                            navigator.clipboard.writeText(code).then(() => {
-                                const orig = this.innerHTML;
-                                this.classList.add('copied');
-                                this.innerHTML = '<i class="fas fa-check"></i> تم النسخ';
-                                setTimeout(() => {
-                                    this.classList.remove('copied');
-                                    this.innerHTML = orig;
-                                }, 1500);
-                            }).catch(() => { alert('تعذر نسخ الكود'); });
-                        });
+                    // نضيف عنصر النص لو موجود
+                    const codeContainer = botMsg.querySelector('.code-response');
+                    if (codeReply.text) {
+                        const textEl = document.createElement('p');
+                        textEl.className = 'code-text';
+                        codeContainer.insertBefore(textEl, codeContainer.firstChild);
+                        // نكتب النص بشويش
+                        await typeTextInto(textEl, codeReply.text, CODE_TEXT_SPEED);
                     }
 
+                    // ننتظر شوي قبل ما نضيف الكود
+                    await delay(250);
+
+                    // نضيف كتلة الكود
+                    if (codeReply.code) {
+                        const codeBlockHtml = `
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-lang"><i class="fas fa-code"></i> ${escapeHtml(codeReply.language || 'code')}</span>
+                                    <button class="code-copy-btn" type="button">
+                                        <i class="fas fa-copy"></i> نسخ الكود
+                                    </button>
+                                </div>
+                                <pre class="code-content"></pre>
+                            </div>
+                        `;
+                        codeContainer.insertAdjacentHTML('beforeend', codeBlockHtml);
+
+                        const preEl = codeContainer.querySelector('.code-content');
+                        if (preEl) {
+                            // نكتب الكود حرف حرف (بسرعة أعلى لأنه طويل)
+                            const codeStr = codeReply.code;
+                            await new Promise((resolve) => {
+                                let ci = 0;
+                                preEl.textContent = '';
+                                const codeInterval = setInterval(() => {
+                                    if (ci < codeStr.length) {
+                                        preEl.textContent += codeStr.charAt(ci);
+                                        ci++;
+                                        if (ci % 8 === 0) scrollToBottom();
+                                    } else {
+                                        clearInterval(codeInterval);
+                                        resolve();
+                                    }
+                                }, CODE_BLOCK_SPEED);
+                            });
+                        }
+
+                        // ربط زر نسخ الكود
+                        const codeCopyBtn = codeContainer.querySelector('.code-copy-btn');
+                        if (codeCopyBtn) {
+                            codeCopyBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                const codeBlock = this.closest('.code-block');
+                                const code = codeBlock.querySelector('.code-content').textContent;
+                                navigator.clipboard.writeText(code).then(() => {
+                                    const orig = this.innerHTML;
+                                    this.classList.add('copied');
+                                    this.innerHTML = '<i class="fas fa-check"></i> تم النسخ';
+                                    setTimeout(() => {
+                                        this.classList.remove('copied');
+                                        this.innerHTML = orig;
+                                    }, 1500);
+                                }).catch(() => { alert('تعذر نسخ الكود'); });
+                            });
+                        }
+                    }
+
+                    // وقت الرسالة
+                    const timeSpan = document.createElement('span');
+                    timeSpan.className = 'msg-time';
+                    timeSpan.textContent = 'الآن';
+                    botMsg.appendChild(timeSpan);
+
+                    // محتوى للنسخ (النص + الكود بصيغة Markdown)
                     replyContent = `${codeReply.text || ''}\n\n\`\`\`${codeReply.language || ''}\n${codeReply.code || ''}\n\`\`\``;
+
                     const actions = document.createElement('div');
                     actions.className = 'bot-actions';
                     actions.innerHTML = `<button class="copy-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-copy"></i> نسخ الرد</button>`;
                     botMsg.appendChild(actions);
                     await delay(200);
                 } else {
-                    await typeText(botMsg, reply.content, 22);
+                    // 🐢 النص العادي: كتابة بطيئة (TYPING_SPEED)
+                    await typeText(botMsg, reply.content, TYPING_SPEED);
                     const timeSpan = document.createElement('span');
                     timeSpan.className = 'msg-time';
                     timeSpan.textContent = 'الآن';
@@ -2633,9 +2726,9 @@
                 }
             });
 
-            console.log(' MEN Ai جاهز');
-            console.log(`الحد الأقصى للرسائل: ${maxMessagesPerSession}, التعزيز التلقائي: ${autoBoostEnabled}, الوكيل التلقائي: ${autoAgentEnabled}`);
-            console.log('تم تحميل mdr.json و cod.json.');
+            console.log(' MEN Ai جاهز (كتابة بطيئة)');
+            console.log(`الحد الأقصى للرسائل: ${maxMessagesPerSession}, التعزيز التلقائي: ${autoBoostEnabled}`);
+            console.log(`سرعات الكتابة - نص: ${TYPING_SPEED}ms | شرح كود: ${CODE_TEXT_SPEED}ms | كود: ${CODE_BLOCK_SPEED}ms`);
         }
 
         init();
