@@ -1,1 +1,162 @@
-
+{
+    "python": {
+        "keywords": ["بايثون", "python", "باثيون"],
+        "responses": [
+            {
+                "text": "Python هي لغة برمجة عالية المستوى، سهلة التعلم وقوية. إليك مثال بسيط:",
+                "code": "# برنامج ترحيبي\nname = input(\"ما اسمك؟ \")\nprint(f\"مرحباً {name}!\")\n\n# حلقة تكرارية\nfor i in range(5):\n    print(f\"العدد: {i}\")",
+                "language": "python"
+            },
+            {
+                "text": "هذا مثال على الدوال في Python:",
+                "code": "def greet(name):\n    \"\"\"دالة ترحيب\"\"\"\n    return f\"أهلاً بك يا {name}\"\n\nresult = greet(\"MEN\")\nprint(result)",
+                "language": "python"
+            }
+        ]
+    },
+    "javascript": {
+        "keywords": ["جافاسكربت", "javascript", "js", "جافا سكربت"],
+        "responses": [
+            {
+                "text": "JavaScript هي لغة برمجة الويب الأساسية. إليك مثالاً:",
+                "code": "// دالة ترحيب\nfunction greet(name) {\n    return `مرحباً ${name}!`;\n}\n\n// حلقة على مصفوفة\nconst fruits = [\"تفاح\", \"موز\", \"برتقال\"];\nfruits.forEach(fruit => {\n    console.log(fruit);\n});\n\nconsole.log(greet(\"MEN\"));",
+                "language": "javascript"
+            },
+            {
+                "text": "مثال على التعامل مع DOM في JavaScript:",
+                "code": "// إضافة حدث عند النقر\nconst button = document.querySelector('#myBtn');\nbutton.addEventListener('click', () => {\n    alert('تم النقر!');\n});\n\n// جلب البيانات من API\nasync function fetchData() {\n    const res = await fetch('https://api.example.com/data');\n    const data = await res.json();\n    console.log(data);\n}",
+                "language": "javascript"
+            }
+        ]
+    },
+    "html": {
+        "keywords": ["html", "اتش تي ام ال", "لغة الترميز"],
+        "responses": [
+            {
+                "text": "HTML هي لغة ترميز صفحات الويب. إليك هيكل صفحة أساسية:",
+                "code": "<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>صفحتي</title>\n</head>\n<body>\n    <h1>مرحباً بالعالم</h1>\n    <p>هذه فقرة نصية</p>\n    <a href=\"https://example.com\">رابط</a>\n</body>\n</html>",
+                "language": "html"
+            }
+        ]
+    },
+    "css": {
+        "keywords": ["css", "سي اس اس", "تنسيق"],
+        "responses": [
+            {
+                "text": "CSS تُستخدم لتنسيق صفحات الويب. إليك مثال:",
+                "code": "body {\n    font-family: 'Cairo', sans-serif;\n    background: #0a0f1f;\n    color: #fff;\n}\n\n.button {\n    padding: 12px 24px;\n    border-radius: 30px;\n    background: linear-gradient(135deg, #021ca4, #4a7aff);\n    transition: 0.3s;\n}\n\n.button:hover {\n    transform: scale(1.05);\n}",
+                "language": "css"
+            }
+        ]
+    },
+    "java": {
+        "keywords": ["java", "جافا"],
+        "responses": [
+            {
+                "text": "Java هي لغة برمجة كائنية التوجه. إليك مثال:",
+                "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"مرحباً بالعالم\");\n        \n        for (int i = 0; i < 5; i++) {\n            System.out.println(\"العدد: \" + i);\n        }\n    }\n}",
+                "language": "java"
+            }
+        ]
+    },
+    "cpp": {
+        "keywords": ["c++", "cpp", "سي بلس بلس"],
+        "responses": [
+            {
+                "text": "C++ هي لغة قوية للأداء العالي. مثال:",
+                "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"مرحباً بالعالم\" << endl;\n    \n    for (int i = 0; i < 5; i++) {\n        cout << \"العدد: \" << i << endl;\n    }\n    return 0;\n}",
+                "language": "cpp"
+            }
+        ]
+    },
+    "csharp": {
+        "keywords": ["c#", "csharp", "سي شارب"],
+        "responses": [
+            {
+                "text": "C# لغة من مايكروسوفت للبرمجة الكائنية. مثال:",
+                "code": "using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine(\"مرحباً بالعالم\");\n        \n        for (int i = 0; i < 5; i++) {\n            Console.WriteLine($\"العدد: {i}\");\n        }\n    }\n}",
+                "language": "csharp"
+            }
+        ]
+    },
+    "php": {
+        "keywords": ["php", "بي اتش بي"],
+        "responses": [
+            {
+                "text": "PHP لغة برمجة ويب من جهة الخادم. مثال:",
+                "code": "<?php\n$name = \"MEN\";\necho \"مرحباً $name!<br>\";\n\nfor ($i = 0; $i < 5; $i++) {\n    echo \"العدد: $i<br>\";\n}\n?>",
+                "language": "php"
+            }
+        ]
+    },
+    "sql": {
+        "keywords": ["sql", "قواعد البيانات", "database"],
+        "responses": [
+            {
+                "text": "SQL لغة التعامل مع قواعد البيانات. إليك أمثلة:",
+                "code": "-- إنشاء جدول\nCREATE TABLE users (\n    id INT PRIMARY KEY AUTO_INCREMENT,\n    name VARCHAR(100),\n    email VARCHAR(150)\n);\n\n-- إدخال بيانات\nINSERT INTO users (name, email) \nVALUES ('أحمد', 'ahmed@example.com');\n\n-- استعلام\nSELECT * FROM users WHERE name LIKE 'أ%';",
+                "language": "sql"
+            }
+        ]
+    },
+    "typescript": {
+        "keywords": ["typescript", "ts", "تايب سكربت"],
+        "responses": [
+            {
+                "text": "TypeScript هي JavaScript مع أنواع. مثال:",
+                "code": "interface User {\n    name: string;\n    age: number;\n}\n\nfunction greet(user: User): string {\n    return `مرحباً ${user.name}، عمرك ${user.age}`;\n}\n\nconst user: User = { name: \"MEN\", age: 5 };\nconsole.log(greet(user));",
+                "language": "typescript"
+            }
+        ]
+    },
+    "go": {
+        "keywords": ["go", "golang", "جو"],
+        "responses": [
+            {
+                "text": "Go لغة من جوجل. مثال:",
+                "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"مرحباً بالعالم\")\n    \n    for i := 0; i < 5; i++ {\n        fmt.Printf(\"العدد: %d\\n\", i)\n    }\n}",
+                "language": "go"
+            }
+        ]
+    },
+    "rust": {
+        "keywords": ["rust", "رست"],
+        "responses": [
+            {
+                "text": "Rust لغة آمنة وعالية الأداء. مثال:",
+                "code": "fn main() {\n    println!(\"مرحباً بالعالم\");\n    \n    for i in 0..5 {\n        println!(\"العدد: {}\", i);\n    }\n}",
+                "language": "rust"
+            }
+        ]
+    },
+    "kotlin": {
+        "keywords": ["kotlin", "كوتلن"],
+        "responses": [
+            {
+                "text": "Kotlin لغة حديثة لتطوير Android. مثال:",
+                "code": "fun main() {\n    println(\"مرحباً بالعالم\")\n    \n    for (i in 0..4) {\n        println(\"العدد: $i\")\n    }\n}",
+                "language": "kotlin"
+            }
+        ]
+    },
+    "swift": {
+        "keywords": ["swift", "سويفت"],
+        "responses": [
+            {
+                "text": "Swift لغة Apple لتطوير iOS. مثال:",
+                "code": "import Foundation\n\nlet name = \"MEN\"\nprint(\"مرحباً \\(name)!\")\n\nfor i in 0..<5 {\n    print(\"العدد: \\(i)\")\n}",
+                "language": "swift"
+            }
+        ]
+    },
+    "ruby": {
+        "keywords": ["ruby", "روبي"],
+        "responses": [
+            {
+                "text": "Ruby لغة برمجة ديناميكية. مثال:",
+                "code": "name = \"MEN\"\nputs \"مرحباً #{name}!\"\n\n5.times do |i|\n  puts \"العدد: #{i}\"\nend",
+                "language": "ruby"
+            }
+        ]
+    }
+}
