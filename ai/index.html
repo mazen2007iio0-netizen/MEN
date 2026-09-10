@@ -8,12 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* كل الأنماط كما هي دون تغيير */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Cairo', sans-serif;
             background: #000000;
@@ -21,40 +16,24 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #000000;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000000; }
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(180deg, #021ca4, #1a3a9e);
             border-radius: 12px;
         }
         .bg-ambient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background: radial-gradient(ellipse at 20% 30%, rgba(2, 28, 164, 0.15) 0%, transparent 55%), radial-gradient(ellipse at 80% 70%, rgba(26, 58, 158, 0.10) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, #000000 0%, #000000 100%);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background: radial-gradient(ellipse at 20% 30%, rgba(2, 28, 164, 0.15) 0%, transparent 55%),
+                        radial-gradient(ellipse at 80% 70%, rgba(26, 58, 158, 0.10) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, #000000 0%, #000000 100%);
             animation: ambientFloat 20s ease-in-out infinite alternate;
         }
         @keyframes ambientFloat {
-            0% {
-                transform: scale(1) rotate(0deg);
-            }
-            100% {
-                transform: scale(1.05) rotate(2deg);
-            }
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.05) rotate(2deg); }
         }
-        .container {
-            width: 92%;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 18px;
-        }
+        .container { width: 92%; max-width: 1100px; margin: 0 auto; padding: 0 18px; }
         :root {
             --blue-deep: #021ca4;
             --blue-mid: #1a3a9e;
@@ -70,235 +49,112 @@
             background: rgba(0, 0, 0, 0.92);
             backdrop-filter: blur(24px);
             border-bottom: 1px solid rgba(2, 28, 164, 0.10);
-            padding: 12px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            padding: 12px 0; position: sticky; top: 0; z-index: 1000;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
         }
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 14px;
-        }
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .btn-back,
-        .btn-memory,
-        .btn-settings {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+        .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .btn-back, .btn-memory, .btn-settings {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(74, 122, 255, 0.15);
-            border-radius: 40px;
-            padding: 0 20px;
-            height: 44px;
-            color: #b0c4e8;
-            font-size: 1rem;
-            cursor: pointer;
+            border-radius: 40px; padding: 0 20px; height: 44px;
+            color: #b0c4e8; font-size: 1rem; cursor: pointer;
             transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            text-decoration: none;
-            font-family: 'Cairo', sans-serif;
+            text-decoration: none; font-family: 'Cairo', sans-serif;
             backdrop-filter: blur(8px);
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
-        .btn-back::before,
-        .btn-memory::before,
-        .btn-settings::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 40px;
-            padding: 2px;
+        .btn-back::before, .btn-memory::before, .btn-settings::before {
+            content: ''; position: absolute; inset: 0; border-radius: 40px; padding: 2px;
             background: linear-gradient(135deg, rgba(74, 122, 255, 0.2), transparent, rgba(74, 122, 255, 0.2));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: 0.6s;
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            opacity: 0; transition: 0.6s;
         }
-        .btn-back:hover::before,
-        .btn-memory:hover::before,
-        .btn-settings:hover::before {
-            opacity: 1;
+        .btn-back:hover::before, .btn-memory:hover::before, .btn-settings:hover::before { opacity: 1; }
+        .btn-back i, .btn-memory i, .btn-settings i { font-size: 1.2rem; transition: 0.3s; }
+        .btn-back .back-text, .btn-memory .memory-text, .btn-settings .settings-text {
+            font-weight: 600; font-size: 0.95rem; white-space: nowrap;
         }
-        .btn-back i,
-        .btn-memory i,
-        .btn-settings i {
-            font-size: 1.2rem;
-            transition: 0.3s;
-        }
-        .btn-back .back-text,
-        .btn-memory .memory-text,
-        .btn-settings .settings-text {
-            font-weight: 600;
-            font-size: 0.95rem;
-            white-space: nowrap;
-        }
-        .btn-back:hover,
-        .btn-memory:hover,
-        .btn-settings:hover {
+        .btn-back:hover, .btn-memory:hover, .btn-settings:hover {
             background: rgba(74, 122, 255, 0.08);
-            border-color: var(--blue-light);
-            color: #fff;
+            border-color: var(--blue-light); color: #fff;
             transform: translateY(-2px) scale(1.03);
             box-shadow: 0 8px 30px rgba(74, 122, 255, 0.15);
         }
-        .btn-back:active,
-        .btn-memory:active,
-        .btn-settings:active {
-            transform: scale(0.95);
-        }
-        .btn-memory i {
-            color: var(--blue-light);
-        }
-        .btn-memory:hover i {
-            animation: pulseBrain 1.2s ease-in-out infinite;
-        }
-        .btn-settings i {
-            color: #a0b0d4;
-        }
-        .btn-settings:hover i {
-            animation: spinSettings 2s linear infinite;
-        }
-        @keyframes spinSettings {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
+        .btn-back:active, .btn-memory:active, .btn-settings:active { transform: scale(0.95); }
+        .btn-memory i { color: var(--blue-light); }
+        .btn-memory:hover i { animation: pulseBrain 1.2s ease-in-out infinite; }
+        .btn-settings i { color: #a0b0d4; }
+        .btn-settings:hover i { animation: spinSettings 2s linear infinite; }
+        @keyframes spinSettings { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes pulseBrain {
-            0%,
-            100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.2) rotate(-5deg);
-            }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2) rotate(-5deg); }
         }
         .logo img {
             height: 48px;
             filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(74, 122, 255, 0.3));
         }
         .logo h1 {
-            font-size: 2rem;
-            font-weight: 900;
+            font-size: 2rem; font-weight: 900;
             background: linear-gradient(135deg, #ffffff 40%, var(--blue-light));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
             text-shadow: 0 0 40px rgba(74, 122, 255, 0.2);
         }
         .logo h1 i {
-            color: var(--blue-light);
-            margin-left: 8px;
-            font-size: 1.6rem;
+            color: var(--blue-light); margin-left: 8px; font-size: 1.6rem;
             filter: drop-shadow(0 0 20px rgba(74, 122, 255, 0.3));
             animation: sparkle 2s ease-in-out infinite alternate;
         }
         @keyframes sparkle {
-            0% {
-                filter: drop-shadow(0 0 10px rgba(74, 122, 255, 0.2));
-                transform: scale(1) rotate(0deg);
-            }
-            100% {
-                filter: drop-shadow(0 0 30px rgba(74, 122, 255, 0.6));
-                transform: scale(1.1) rotate(10deg);
-            }
+            0% { filter: drop-shadow(0 0 10px rgba(74, 122, 255, 0.2)); transform: scale(1) rotate(0deg); }
+            100% { filter: drop-shadow(0 0 30px rgba(74, 122, 255, 0.6)); transform: scale(1.1) rotate(10deg); }
         }
         .chat-wrapper {
             margin: 0 0 20px;
-            background: var(--card-bg);
-            backdrop-filter: blur(24px);
+            background: var(--card-bg); backdrop-filter: blur(24px);
             border: 1px solid var(--card-border);
-            border-radius: var(--radius-2xl);
-            overflow: hidden;
+            border-radius: var(--radius-2xl); overflow: hidden;
             box-shadow: var(--glow-neon);
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 200px);
-            min-height: 500px;
+            display: flex; flex-direction: column;
+            height: calc(100vh - 200px); min-height: 500px;
         }
         .chat-header {
             padding: 18px 24px;
             border-bottom: 1px solid rgba(2, 28, 164, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
             background: rgba(0, 0, 0, 0.4);
         }
-        .chat-header .bot-info {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
+        .chat-header .bot-info { display: flex; align-items: center; gap: 14px; }
         .chat-header .bot-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
+            width: 44px; height: 44px; border-radius: 50%;
             background: linear-gradient(135deg, var(--blue-deep), var(--blue-light));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; color: #fff;
             box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
         }
-        .chat-header .bot-name {
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: #fff;
-        }
+        .chat-header .bot-name { font-weight: 700; font-size: 1.2rem; color: #fff; }
         .messages-area {
-            flex: 1;
-            padding: 20px 24px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            flex: 1; padding: 20px 24px; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 12px;
             background: rgba(0, 0, 0, 0.3);
         }
-        .messages-area::-webkit-scrollbar {
-            width: 4px;
-        }
-        .messages-area::-webkit-scrollbar-thumb {
-            background: var(--blue-deep);
-            border-radius: 12px;
-        }
+        .messages-area::-webkit-scrollbar { width: 4px; }
+        .messages-area::-webkit-scrollbar-thumb { background: var(--blue-deep); border-radius: 12px; }
         .message {
-            max-width: 85%;
-            padding: 14px 20px;
+            max-width: 85%; padding: 14px 20px;
             border-radius: var(--radius-xl);
             animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            word-wrap: break-word;
-            line-height: 1.7;
-            position: relative;
-            transition: 0.2s;
+            word-wrap: break-word; line-height: 1.7;
+            position: relative; transition: 0.2s;
         }
-        .message:hover {
-            box-shadow: 0 0 20px rgba(74, 122, 255, 0.05);
-        }
+        .message:hover { box-shadow: 0 0 20px rgba(74, 122, 255, 0.05); }
         @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(20px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         .message.user {
             align-self: flex-end;
@@ -315,699 +171,349 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
         .message .msg-time {
-            font-size: 0.65rem;
-            color: #6a708a;
-            margin-top: 6px;
-            display: block;
-            text-align: left;
+            font-size: 0.65rem; color: #6a708a; margin-top: 6px;
+            display: block; text-align: left;
         }
-        .message.user .msg-time {
-            text-align: right;
-        }
+        .message.user .msg-time { text-align: right; }
         .message.bot .bot-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-            justify-content: flex-start;
-            opacity: 0;
-            transition: 0.3s;
+            display: flex; gap: 8px; margin-top: 8px;
+            justify-content: flex-start; opacity: 0; transition: 0.3s;
         }
-        .message.bot:hover .bot-actions {
-            opacity: 1;
-        }
+        .message.bot:hover .bot-actions { opacity: 1; }
         .message.bot .bot-actions button {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(74, 122, 255, 0.15);
-            border-radius: 30px;
-            padding: 4px 14px;
-            color: #b0c4e8;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: 'Cairo', sans-serif;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            border-radius: 30px; padding: 4px 14px;
+            color: #b0c4e8; font-size: 0.8rem; cursor: pointer;
+            transition: 0.3s; font-family: 'Cairo', sans-serif;
+            display: inline-flex; align-items: center; gap: 6px;
         }
-        .message.bot .bot-actions button i {
-            font-size: 0.9rem;
-        }
+        .message.bot .bot-actions button i { font-size: 0.9rem; }
         .message.bot .bot-actions button:hover {
             background: rgba(74, 122, 255, 0.12);
-            border-color: var(--blue-light);
-            color: #fff;
-            transform: scale(1.05);
+            border-color: var(--blue-light); color: #fff; transform: scale(1.05);
         }
-        .message.bot .bot-actions button:active {
-            transform: scale(0.95);
-        }
+        .message.bot .bot-actions button:active { transform: scale(0.95); }
         .products-row-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding: 6px 0 12px 0;
-            margin: 4px 0;
-            scrollbar-width: thin;
-            scrollbar-color: var(--blue-deep) transparent;
+            width: 100%; overflow-x: auto; overflow-y: hidden;
+            padding: 6px 0 12px 0; margin: 4px 0;
+            scrollbar-width: thin; scrollbar-color: var(--blue-deep) transparent;
         }
-        .products-row-wrapper::-webkit-scrollbar {
-            height: 4px;
-        }
-        .products-row-wrapper::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-        }
-        .products-row-wrapper::-webkit-scrollbar-thumb {
-            background: var(--blue-deep);
-            border-radius: 12px;
-        }
+        .products-row-wrapper::-webkit-scrollbar { height: 4px; }
+        .products-row-wrapper::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 12px; }
+        .products-row-wrapper::-webkit-scrollbar-thumb { background: var(--blue-deep); border-radius: 12px; }
         .products-row {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 18px;
-            width: max-content;
-            min-width: 100%;
-            padding: 2px 2px 6px 2px;
+            display: flex; flex-wrap: nowrap; gap: 18px;
+            width: max-content; min-width: 100%; padding: 2px 2px 6px 2px;
         }
         .products-row .men-product-card {
-            min-width: 260px;
-            max-width: 280px;
-            flex: 0 0 auto;
-            margin: 0;
+            min-width: 260px; max-width: 280px; flex: 0 0 auto; margin: 0;
             transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .products-row .men-product-card:hover {
-            transform: translateY(-6px) scale(1.02);
-        }
-        .products-row .men-product-card .product-image {
-            height: 160px;
-            object-fit: cover;
-        }
-        .products-row .men-product-card .product-content {
-            padding: 14px 16px 16px;
-        }
-        .products-row .men-product-card .product-content h2 {
-            font-size: 1.2rem;
-            margin: 8px 0 4px;
-        }
+        .products-row .men-product-card:hover { transform: translateY(-6px) scale(1.02); }
+        .products-row .men-product-card .product-image { height: 160px; object-fit: cover; }
+        .products-row .men-product-card .product-content { padding: 14px 16px 16px; }
+        .products-row .men-product-card .product-content h2 { font-size: 1.2rem; margin: 8px 0 4px; }
         .products-row .men-product-card .product-content p {
-            font-size: 0.8rem;
-            margin: 4px 0 12px;
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-size: 0.8rem; margin: 4px 0 12px; line-height: 1.5;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
-        .products-row .men-product-card .price {
-            font-size: 1.2rem;
-        }
-        .products-row .men-product-card .btn-product {
-            padding: 6px 14px;
-            font-size: 0.75rem;
-        }
-        .products-row .men-product-card .badge {
-            font-size: 0.7rem;
-            padding: 4px 12px;
-        }
+        .products-row .men-product-card .price { font-size: 1.2rem; }
+        .products-row .men-product-card .btn-product { padding: 6px 14px; font-size: 0.75rem; }
+        .products-row .men-product-card .badge { font-size: 0.7rem; padding: 4px 12px; }
         .welcome-animation {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 6px;
-            width: 100%;
+            display: flex; flex-direction: column; align-items: flex-start;
+            gap: 6px; width: 100%;
         }
         .welcome-main {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            font-size: 2.4rem;
-            font-weight: 900;
-            margin-bottom: 4px;
+            display: flex; flex-wrap: wrap; gap: 4px;
+            font-size: 2.4rem; font-weight: 900; margin-bottom: 4px;
         }
         .welcome-main .letter {
             display: inline-block;
             background: linear-gradient(135deg, #ffffff 20%, var(--blue-light));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
             animation: bounceGlow 1.8s ease-in-out infinite alternate;
             text-shadow: 0 0 20px rgba(74, 122, 255, 0.2);
             transform-origin: center bottom;
         }
         @keyframes bounceGlow {
-            0% {
-                transform: translateY(0px) scale(1);
-                filter: drop-shadow(0 0 5px rgba(74, 122, 255, 0.1));
-            }
-            100% {
-                transform: translateY(-12px) scale(1.08);
-                filter: drop-shadow(0 0 25px rgba(74, 122, 255, 0.6));
-            }
+            0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 5px rgba(74, 122, 255, 0.1)); }
+            100% { transform: translateY(-12px) scale(1.08); filter: drop-shadow(0 0 25px rgba(74, 122, 255, 0.6)); }
         }
         .typewriter-container {
-            font-size: 1.4rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            min-height: 2.8rem;
-            direction: rtl;
+            font-size: 1.4rem; font-weight: 700;
+            display: flex; align-items: center; gap: 2px;
+            min-height: 2.8rem; direction: rtl;
         }
-        .typewriter-text {
-            display: inline;
-            color: #c0ccf0;
-        }
+        .typewriter-text { display: inline; color: #c0ccf0; }
         .typewriter-text .highlight {
             background: linear-gradient(135deg, var(--blue-light), #a0c0ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-weight: 900;
+            -webkit-background-clip: text; background-clip: text;
+            color: transparent; font-weight: 900;
         }
         .typewriter-cursor {
-            display: inline-block;
-            width: 3px;
-            height: 1.8rem;
-            background: var(--blue-light);
-            margin-right: 4px;
-            animation: blinkCursor 0.7s step-end infinite;
-            vertical-align: middle;
+            display: inline-block; width: 3px; height: 1.8rem;
+            background: var(--blue-light); margin-right: 4px;
+            animation: blinkCursor 0.7s step-end infinite; vertical-align: middle;
         }
-        @keyframes blinkCursor {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0;
-            }
-        }
+        @keyframes blinkCursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         .welcome-desc {
-            font-size: 0.95rem;
-            color: #8a9abb;
-            margin-top: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 1.8s forwards;
+            font-size: 0.95rem; color: #8a9abb; margin-top: 6px;
+            display: flex; align-items: center; gap: 8px;
+            opacity: 0; animation: fadeInUp 1s ease-out 1.8s forwards;
         }
-        .welcome-desc i {
-            color: var(--blue-light);
-            animation: spinSlow 4s linear infinite;
-        }
-        @keyframes spinSlow {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
+        .welcome-desc i { color: var(--blue-light); animation: spinSlow 4s linear infinite; }
+        @keyframes spinSlow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .typing-indicator {
-            align-self: flex-start;
-            display: none;
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.05);
+            align-self: flex-start; display: none;
+            padding: 10px 20px; background: rgba(255, 255, 255, 0.05);
             border-radius: var(--radius-xl);
             border-bottom-right-radius: 6px;
             border: 1px solid rgba(2, 28, 164, 0.08);
-            gap: 10px;
-            align-items: center;
-            color: #a0b0d4;
-            font-size: 0.95rem;
+            gap: 10px; align-items: center; color: #a0b0d4; font-size: 0.95rem;
         }
-        .typing-indicator .dots {
-            display: flex;
-            gap: 5px;
-        }
+        .typing-indicator .dots { display: flex; gap: 5px; }
         .typing-indicator .dots span {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--blue-light);
-            display: inline-block;
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--blue-light); display: inline-block;
             animation: typingBounce 1.4s ease-in-out infinite;
         }
-        .typing-indicator .dots span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        .typing-indicator .dots span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
+        .typing-indicator .dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator .dots span:nth-child(3) { animation-delay: 0.4s; }
         @keyframes typingBounce {
-            0%,
-            60%,
-            100% {
-                transform: translateY(0);
-                opacity: 0.4;
-            }
-            30% {
-                transform: translateY(-10px);
-                opacity: 1;
-            }
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-10px); opacity: 1; }
         }
         .typing-indicator i {
-            color: var(--blue-light);
-            animation: spin 1s linear infinite;
-            font-size: 1.1rem;
+            color: var(--blue-light); animation: spin 1s linear infinite; font-size: 1.1rem;
         }
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .suggested-questions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
+            display: flex; flex-wrap: wrap; gap: 8px;
             padding: 10px 20px 4px 20px;
             background: rgba(0, 0, 0, 0.25);
             border-top: 1px solid rgba(2, 28, 164, 0.08);
             transition: all 0.3s ease;
         }
-        .suggested-questions.hidden {
-            display: none;
-        }
+        .suggested-questions.hidden { display: none; }
         .suggested-questions .sq-btn {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(74, 122, 255, 0.15);
-            border-radius: 30px;
-            padding: 8px 18px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.85rem;
-            color: #b0c4e8;
-            cursor: pointer;
+            border-radius: 30px; padding: 8px 18px;
+            font-family: 'Cairo', sans-serif; font-size: 0.85rem;
+            color: #b0c4e8; cursor: pointer;
             transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            white-space: nowrap;
-            backdrop-filter: blur(4px);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            white-space: nowrap; backdrop-filter: blur(4px);
+            display: inline-flex; align-items: center; gap: 6px;
         }
-        .suggested-questions .sq-btn i {
-            font-size: 0.8rem;
-            opacity: 0.6;
-        }
+        .suggested-questions .sq-btn i { font-size: 0.8rem; opacity: 0.6; }
         .suggested-questions .sq-btn:hover {
             background: rgba(74, 122, 255, 0.08);
-            border-color: var(--blue-light);
-            color: #fff;
+            border-color: var(--blue-light); color: #fff;
             transform: translateY(-2px) scale(1.02);
             box-shadow: 0 4px 20px rgba(74, 122, 255, 0.05);
         }
-        .suggested-questions .sq-btn:active {
-            transform: scale(0.95);
-        }
+        .suggested-questions .sq-btn:active { transform: scale(0.95); }
         .input-area {
             padding: 12px 20px 16px;
             border-top: 1px solid rgba(2, 28, 164, 0.08);
-            display: flex;
-            align-items: flex-end;
-            gap: 8px;
-            background: rgba(0, 0, 0, 0.4);
-            flex-wrap: wrap;
-            position: relative;
+            display: flex; align-items: flex-end; gap: 8px;
+            background: rgba(0, 0, 0, 0.4); flex-wrap: wrap; position: relative;
         }
         .input-area .input-wrapper {
-            flex: 1;
-            min-width: 150px;
-            display: flex;
-            align-items: flex-end;
+            flex: 1; min-width: 150px; display: flex; align-items: flex-end;
             background: rgba(255, 255, 255, 0.03);
             border-radius: var(--radius-xl);
             border: 1.5px solid rgba(2, 28, 164, 0.1);
-            transition: 0.3s;
-            padding: 4px 16px 4px 8px;
-            min-height: 52px;
+            transition: 0.3s; padding: 4px 16px 4px 8px; min-height: 52px;
         }
         .input-area .input-wrapper:focus-within {
             border-color: var(--blue-light);
             box-shadow: 0 0 30px rgba(74, 122, 255, 0.05);
         }
         .input-area .input-wrapper textarea {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #f0f4ff;
-            font-size: 1rem;
-            font-family: 'Cairo', sans-serif;
-            resize: none;
-            padding: 12px 4px;
-            min-height: 44px;
-            max-height: 150px;
+            flex: 1; background: transparent; border: none; outline: none;
+            color: #f0f4ff; font-size: 1rem; font-family: 'Cairo', sans-serif;
+            resize: none; padding: 12px 4px; min-height: 44px; max-height: 150px;
             line-height: 1.6;
         }
         .input-area .input-wrapper textarea::placeholder {
-            color: #5a607a;
-            transition: opacity 0.3s;
+            color: #5a607a; transition: opacity 0.3s;
         }
         .input-area .input-wrapper .char-count {
-            font-size: 0.7rem;
-            color: #4a5070;
-            padding: 8px 4px;
-            white-space: nowrap;
-            direction: ltr;
+            font-size: 0.7rem; color: #4a5070; padding: 8px 4px;
+            white-space: nowrap; direction: ltr;
         }
         .input-area .btn-send {
-            width: 52px;
-            height: 52px;
-            min-width: 52px;
-            border-radius: 50%;
-            border: none;
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            color: #fff;
-            font-size: 1.4rem;
-            cursor: pointer;
+            width: 52px; height: 52px; min-width: 52px; border-radius: 50%;
+            border: none; background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            color: #fff; font-size: 1.4rem; cursor: pointer;
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             box-shadow: 0 4px 30px rgba(2, 28, 164, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
         }
         .input-area .btn-send::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 50%;
+            content: ''; position: absolute; inset: -2px; border-radius: 50%;
             background: linear-gradient(135deg, rgba(74, 122, 255, 0.4), transparent);
-            opacity: 0;
-            transition: 0.6s;
+            opacity: 0; transition: 0.6s;
         }
-        .input-area .btn-send:hover::after {
-            opacity: 1;
-        }
+        .input-area .btn-send:hover::after { opacity: 1; }
         .input-area .btn-send:hover {
             transform: scale(1.08);
             box-shadow: 0 8px 40px rgba(2, 28, 164, 0.4);
         }
-        .input-area .btn-send:active {
-            transform: scale(0.92);
-        }
-        .input-area .btn-send:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: scale(1);
-        }
+        .input-area .btn-send:active { transform: scale(0.92); }
+        .input-area .btn-send:disabled { opacity: 0.4; cursor: not-allowed; transform: scale(1); }
         .input-area .btn-plus {
-            width: 52px;
-            height: 52px;
-            min-width: 52px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255, 255, 255, 0.06);
+            width: 52px; height: 52px; min-width: 52px; border-radius: 50%;
+            border: none; background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(2, 28, 164, 0.2);
-            color: #a0b0d4;
-            font-size: 1.8rem;
-            cursor: pointer;
+            color: #a0b0d4; font-size: 1.8rem; cursor: pointer;
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             position: relative;
         }
         .input-area .btn-plus:hover {
             background: rgba(74, 122, 255, 0.08);
-            border-color: var(--blue-light);
-            color: #fff;
+            border-color: var(--blue-light); color: #fff;
             transform: scale(1.05) rotate(90deg);
         }
-        .input-area .btn-plus:active {
-            transform: scale(0.92);
-        }
+        .input-area .btn-plus:active { transform: scale(0.92); }
         .input-area .btn-plus.active {
             transform: rotate(45deg);
-            border-color: var(--blue-light);
-            color: var(--blue-light);
+            border-color: var(--blue-light); color: var(--blue-light);
             background: rgba(74, 122, 255, 0.1);
         }
         .plus-dropdown {
-            position: absolute;
-            bottom: calc(100% + 12px);
-            right: 0;
-            left: auto;
-            background: rgba(10, 16, 32, 0.98);
-            backdrop-filter: blur(20px);
+            position: absolute; bottom: calc(100% + 12px); right: 0; left: auto;
+            background: rgba(10, 16, 32, 0.98); backdrop-filter: blur(20px);
             border: 1px solid rgba(74, 122, 255, 0.2);
-            border-radius: 20px;
-            padding: 8px 0;
-            min-width: 190px;
+            border-radius: 20px; padding: 8px 0; min-width: 190px;
             box-shadow: 0 10px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(74, 122, 255, 0.05);
-            display: none;
-            z-index: 100;
+            display: none; z-index: 100;
             animation: dropFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             transform-origin: top right;
         }
-        .plus-dropdown.show {
-            display: block;
-        }
+        .plus-dropdown.show { display: block; }
         @keyframes dropFade {
-            from {
-                opacity: 0;
-                transform: translateY(10px) scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(10px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         .plus-dropdown .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            color: #c0ccf0;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: 0.3s;
-            border: none;
-            background: transparent;
-            width: 100%;
-            text-align: right;
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 20px; color: #c0ccf0; font-size: 0.95rem;
+            cursor: pointer; transition: 0.3s; border: none;
+            background: transparent; width: 100%; text-align: right;
             font-family: 'Cairo', sans-serif;
         }
         .plus-dropdown .dropdown-item i {
-            font-size: 1.2rem;
-            width: 24px;
-            text-align: center;
-            color: var(--blue-light);
-            opacity: 0.7;
+            font-size: 1.2rem; width: 24px; text-align: center;
+            color: var(--blue-light); opacity: 0.7;
         }
         .plus-dropdown .dropdown-item:hover {
-            background: rgba(74, 122, 255, 0.08);
-            color: #fff;
+            background: rgba(74, 122, 255, 0.08); color: #fff;
         }
-        .plus-dropdown .dropdown-item:hover i {
-            opacity: 1;
-        }
-        .plus-dropdown .dropdown-item:active {
-            transform: scale(0.97);
-        }
+        .plus-dropdown .dropdown-item:hover i { opacity: 1; }
+        .plus-dropdown .dropdown-item:active { transform: scale(0.97); }
         .sub-dropdown {
-            display: none;
-            margin-top: 4px;
-            margin-right: 10px;
+            display: none; margin-top: 4px; margin-right: 10px;
             border-right: 2px solid rgba(74, 122, 255, 0.25);
-            padding-right: 6px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            overflow: hidden;
+            padding-right: 6px; background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px; overflow: hidden;
         }
-        .sub-dropdown.show {
-            display: block;
-            animation: dropFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .sub-dropdown .dropdown-item {
-            font-size: 0.85rem;
-            padding: 10px 16px 10px 12px;
-            border-radius: 10px;
-        }
-        .sub-dropdown .dropdown-item i {
-            font-size: 1rem;
-            width: 20px;
-        }
+        .sub-dropdown.show { display: block; animation: dropFade 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .sub-dropdown .dropdown-item { font-size: 0.85rem; padding: 10px 16px 10px 12px; border-radius: 10px; }
+        .sub-dropdown .dropdown-item i { font-size: 1rem; width: 20px; }
         .plus-dropdown .dropdown-divider {
-            height: 1px;
-            background: rgba(74, 122, 255, 0.1);
-            margin: 6px 12px;
+            height: 1px; background: rgba(74, 122, 255, 0.1); margin: 6px 12px;
         }
         .file-preview {
-            display: none;
-            padding: 6px 16px 6px 12px;
+            display: none; padding: 6px 16px 6px 12px;
             background: rgba(74, 122, 255, 0.08);
-            border-radius: 20px;
-            border: 1px solid rgba(74, 122, 255, 0.15);
-            font-size: 0.8rem;
-            color: #a0b0d4;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            transition: 0.3s ease;
+            border-radius: 20px; border: 1px solid rgba(74, 122, 255, 0.15);
+            font-size: 0.8rem; color: #a0b0d4; align-items: center; gap: 8px;
+            white-space: nowrap; max-width: 200px; overflow: hidden;
+            text-overflow: ellipsis; transition: 0.3s ease;
         }
-        .file-preview.visible {
-            display: inline-flex;
-        }
-        .file-preview.hidden-preview {
-            display: none !important;
-        }
+        .file-preview.visible { display: inline-flex; }
+        .file-preview.hidden-preview { display: none !important; }
         .file-preview .remove-file {
-            cursor: pointer;
-            color: #ff6b6b;
-            font-size: 0.9rem;
-            padding: 0 4px;
-            transition: 0.3s;
+            cursor: pointer; color: #ff6b6b; font-size: 0.9rem;
+            padding: 0 4px; transition: 0.3s;
         }
-        .file-preview .remove-file:hover {
-            transform: scale(1.2);
-            color: #ff4444;
-        }
-        .file-preview i {
-            color: var(--blue-light);
-        }
+        .file-preview .remove-file:hover { transform: scale(1.2); color: #ff4444; }
+        .file-preview i { color: var(--blue-light); }
         .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(16px);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            animation: modalFade 0.4s ease;
+            display: none; position: fixed; inset: 0;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(16px);
+            z-index: 9999; justify-content: center; align-items: center;
+            padding: 20px; animation: modalFade 0.4s ease;
         }
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
         @keyframes modalFade {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
         .modal-box {
             background: radial-gradient(ellipse at 50% 0%, rgba(10, 16, 32, 0.98), #0a0f1f);
             border: 1px solid rgba(74, 122, 255, 0.2);
-            border-radius: 32px;
-            max-width: 700px;
-            width: 100%;
-            max-height: 85vh;
-            padding: 30px 28px;
+            border-radius: 32px; max-width: 700px; width: 100%;
+            max-height: 85vh; padding: 30px 28px;
             box-shadow: 0 0 80px rgba(74, 122, 255, 0.1), inset 0 1px 0 rgba(74, 122, 255, 0.1);
-            overflow-y: auto;
-            position: relative;
+            overflow-y: auto; position: relative;
         }
         .modal-box h3 {
-            color: #fff;
-            font-size: 1.6rem;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            color: #fff; font-size: 1.6rem; margin-bottom: 18px;
+            display: flex; align-items: center; gap: 12px;
             background: linear-gradient(135deg, #fff, var(--blue-light));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
         }
         .modal-box h3 i {
-            font-size: 1.8rem;
-            color: var(--blue-light);
+            font-size: 1.8rem; color: var(--blue-light);
             filter: drop-shadow(0 0 20px rgba(74, 122, 255, 0.3));
         }
         .modal-box .modal-close {
-            margin-top: 20px;
-            padding: 10px 32px;
+            margin-top: 20px; padding: 10px 32px;
             background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            border: none;
-            border-radius: 40px;
-            color: #fff;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: 600;
+            border: none; border-radius: 40px; color: #fff;
+            font-family: 'Cairo', sans-serif; font-size: 1rem;
+            cursor: pointer; transition: 0.3s; font-weight: 600;
             box-shadow: 0 4px 30px rgba(2, 28, 164, 0.2);
         }
-        .modal-box .modal-close:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 40px rgba(74, 122, 255, 0.2);
-        }
-        .modal-box .modal-close:active {
-            transform: scale(0.95);
-        }
+        .modal-box .modal-close:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(74, 122, 255, 0.2); }
+        .modal-box .modal-close:active { transform: scale(0.95); }
         .memory-list {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin: 12px 0 22px;
-            max-height: 55vh;
-            overflow-y: auto;
-            padding-left: 4px;
+            display: flex; flex-direction: column; gap: 14px;
+            margin: 12px 0 22px; max-height: 55vh;
+            overflow-y: auto; padding-left: 4px;
         }
-        .memory-list::-webkit-scrollbar {
-            width: 4px;
-        }
-        .memory-list::-webkit-scrollbar-thumb {
-            background: var(--blue-deep);
-            border-radius: 12px;
-        }
+        .memory-list::-webkit-scrollbar { width: 4px; }
+        .memory-list::-webkit-scrollbar-thumb { background: var(--blue-deep); border-radius: 12px; }
         .memory-item {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(74, 122, 255, 0.08);
-            border-radius: 20px;
-            padding: 16px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 14px;
-            cursor: pointer;
+            border-radius: 20px; padding: 16px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 14px; cursor: pointer;
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             backdrop-filter: blur(4px);
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
         .memory-item::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 20px;
-            padding: 1px;
+            content: ''; position: absolute; inset: 0; border-radius: 20px; padding: 1px;
             background: linear-gradient(135deg, rgba(74, 122, 255, 0.15), transparent, rgba(74, 122, 255, 0.15));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            opacity: 0;
-            transition: 0.6s;
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            pointer-events: none; opacity: 0; transition: 0.6s;
         }
-        .memory-item:hover::before {
-            opacity: 1;
-        }
+        .memory-item:hover::before { opacity: 1; }
         .memory-item:hover {
             background: rgba(74, 122, 255, 0.05);
             border-color: rgba(74, 122, 255, 0.2);
@@ -1015,80 +521,44 @@
             box-shadow: 0 8px 30px rgba(74, 122, 255, 0.05);
         }
         .memory-item .memory-content {
-            flex: 1;
-            min-width: 0;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: baseline;
-            gap: 6px 10px;
+            flex: 1; min-width: 0; display: flex;
+            flex-wrap: wrap; align-items: baseline; gap: 6px 10px;
         }
         .memory-item .memory-title {
-            color: #d0dcf5;
-            font-size: 1rem;
-            font-weight: 700;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            color: #d0dcf5; font-size: 1rem; font-weight: 700;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
             max-width: 200px;
         }
-        .memory-item .memory-count {
-            color: #6a708a;
-            font-size: 0.8rem;
-        }
+        .memory-item .memory-count { color: #6a708a; font-size: 0.8rem; }
         .memory-item .memory-time {
-            color: #6a708a;
-            font-size: 0.7rem;
-            white-space: nowrap;
-            opacity: 0.7;
-            margin-right: auto;
+            color: #6a708a; font-size: 0.7rem; white-space: nowrap;
+            opacity: 0.7; margin-right: auto;
         }
         .memory-item .memory-delete {
-            color: #ff6b6b;
-            background: rgba(255, 0, 0, 0.08);
-            border: none;
-            border-radius: 50%;
-            width: 34px;
-            height: 34px;
-            min-width: 34px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            flex-shrink: 0;
+            color: #ff6b6b; background: rgba(255, 0, 0, 0.08);
+            border: none; border-radius: 50%; width: 34px; height: 34px;
+            min-width: 34px; display: flex; align-items: center;
+            justify-content: center; font-size: 1rem;
+            cursor: pointer; transition: 0.3s; flex-shrink: 0;
         }
         .memory-item .memory-delete:hover {
-            background: rgba(255, 0, 0, 0.2);
-            transform: scale(1.1) rotate(-5deg);
+            background: rgba(255, 0, 0, 0.2); transform: scale(1.1) rotate(-5deg);
         }
         .memory-empty {
-            color: #6a708a;
-            text-align: center;
-            padding: 40px 0;
-            font-size: 1.1rem;
-            opacity: 0.7;
+            color: #6a708a; text-align: center;
+            padding: 40px 0; font-size: 1.1rem; opacity: 0.7;
         }
         .memory-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-top: 12px;
-            flex-wrap: wrap;
+            display: flex; justify-content: flex-end; gap: 12px;
+            margin-top: 12px; flex-wrap: wrap;
         }
         .memory-actions .btn-clear {
             background: rgba(255, 0, 0, 0.08);
             border: 1px solid rgba(255, 0, 0, 0.15);
-            border-radius: 30px;
-            padding: 8px 22px;
-            color: #ff6b6b;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            border-radius: 30px; padding: 8px 22px;
+            color: #ff6b6b; font-family: 'Cairo', sans-serif;
+            font-size: 0.9rem; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
         }
         .memory-actions .btn-clear:hover {
             background: rgba(255, 0, 0, 0.15);
@@ -1097,221 +567,125 @@
         }
         .memory-actions .btn-new-session {
             background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            border: none;
-            border-radius: 30px;
-            padding: 8px 22px;
-            color: #fff;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
+            border: none; border-radius: 30px; padding: 8px 22px;
+            color: #fff; font-family: 'Cairo', sans-serif;
+            font-size: 0.9rem; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
+            font-weight: 600; box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
         }
         .memory-actions .btn-new-session:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
+            transform: scale(1.05); box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
         }
-        .memory-actions .btn-new-session:active {
-            transform: scale(0.95);
-        }
-        .settings-group {
-            margin: 20px 0;
-        }
+        .memory-actions .btn-new-session:active { transform: scale(0.95); }
+        .settings-group { margin: 20px 0; }
         .settings-group label {
-            display: block;
-            color: #b0c4e8;
-            font-size: 1rem;
-            margin-bottom: 8px;
-            font-weight: 600;
+            display: block; color: #b0c4e8; font-size: 1rem;
+            margin-bottom: 8px; font-weight: 600;
         }
         .settings-group .settings-input {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
         }
-        .settings-group select,
-        .settings-group input[type="number"] {
+        .settings-group select, .settings-group input[type="number"] {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(74, 122, 255, 0.2);
-            border-radius: 30px;
-            padding: 10px 18px;
-            color: #f0f4ff;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
-            min-width: 120px;
+            border-radius: 30px; padding: 10px 18px;
+            color: #f0f4ff; font-family: 'Cairo', sans-serif;
+            font-size: 1rem; outline: none; transition: 0.3s; min-width: 120px;
         }
-        .settings-group select:focus,
-        .settings-group input[type="number"]:focus {
+        .settings-group select:focus, .settings-group input[type="number"]:focus {
             border-color: var(--blue-light);
             box-shadow: 0 0 20px rgba(74, 122, 255, 0.05);
         }
-        .settings-group select option {
-            background: #0a0f1f;
-        }
+        .settings-group select option { background: #0a0f1f; }
         .toggle-switch {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            font-family: 'Cairo', sans-serif;
-            color: #b0c4e8;
-            font-size: 0.95rem;
+            display: inline-flex; align-items: center; gap: 12px;
+            cursor: pointer; font-family: 'Cairo', sans-serif;
+            color: #b0c4e8; font-size: 0.95rem;
         }
-        .toggle-switch input {
-            display: none;
-        }
+        .toggle-switch input { display: none; }
         .toggle-switch .slider {
-            width: 50px;
-            height: 28px;
+            width: 50px; height: 28px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            position: relative;
-            transition: 0.4s;
-            border: 1px solid rgba(74, 122, 255, 0.15);
+            border-radius: 30px; position: relative;
+            transition: 0.4s; border: 1px solid rgba(74, 122, 255, 0.15);
             flex-shrink: 0;
         }
         .toggle-switch .slider::before {
-            content: '';
-            position: absolute;
-            width: 22px;
-            height: 22px;
-            background: #6a708a;
-            border-radius: 50%;
-            top: 2px;
-            left: 3px;
-            transition: 0.4s;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            content: ''; position: absolute; width: 22px; height: 22px;
+            background: #6a708a; border-radius: 50%; top: 2px; left: 3px;
+            transition: 0.4s; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
         .toggle-switch input:checked+.slider {
-            background: rgba(74, 122, 255, 0.25);
-            border-color: var(--blue-light);
+            background: rgba(74, 122, 255, 0.25); border-color: var(--blue-light);
         }
         .toggle-switch input:checked+.slider::before {
-            transform: translateX(22px);
-            background: var(--blue-light);
+            transform: translateX(22px); background: var(--blue-light);
             box-shadow: 0 0 20px rgba(74, 122, 255, 0.3);
         }
         .toggle-switch .toggle-label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            display: flex; align-items: center; gap: 6px;
         }
         .toggle-switch .toggle-label .coming-soon {
-            font-size: 0.7rem;
-            color: #ff6b6b;
+            font-size: 0.7rem; color: #ff6b6b;
             background: rgba(255, 0, 0, 0.1);
-            padding: 2px 8px;
-            border-radius: 12px;
+            padding: 2px 8px; border-radius: 12px;
             border: 1px solid rgba(255, 0, 0, 0.15);
         }
         .settings-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            margin-top: 20px;
-            flex-wrap: wrap;
+            display: flex; gap: 12px; justify-content: flex-end;
+            margin-top: 20px; flex-wrap: wrap;
         }
         .settings-actions .btn-apply {
             background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            border: none;
-            border-radius: 40px;
-            padding: 10px 30px;
-            color: #fff;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: 600;
-            box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
+            border: none; border-radius: 40px; padding: 10px 30px;
+            color: #fff; font-family: 'Cairo', sans-serif;
+            font-size: 1rem; cursor: pointer; transition: 0.3s;
+            font-weight: 600; box-shadow: 0 4px 20px rgba(2, 28, 164, 0.2);
         }
-        .settings-actions .btn-apply:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
-        }
-        .settings-actions .btn-apply:active {
-            transform: scale(0.95);
-        }
+        .settings-actions .btn-apply:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(74, 122, 255, 0.2); }
+        .settings-actions .btn-apply:active { transform: scale(0.95); }
         .settings-actions .btn-clear-settings {
             background: rgba(255, 0, 0, 0.08);
             border: 1px solid rgba(255, 0, 0, 0.15);
-            border-radius: 40px;
-            padding: 10px 24px;
-            color: #ff6b6b;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            border-radius: 40px; padding: 10px 24px;
+            color: #ff6b6b; font-family: 'Cairo', sans-serif;
+            font-size: 1rem; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
         }
         .settings-actions .btn-clear-settings:hover {
-            background: rgba(255, 0, 0, 0.15);
-            transform: scale(1.02);
+            background: rgba(255, 0, 0, 0.15); transform: scale(1.02);
         }
         .modal-text {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 16px;
-            padding: 18px 20px;
-            color: #c0ccf0;
-            font-size: 0.95rem;
-            line-height: 1.8;
-            max-height: 50vh;
-            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.4); border-radius: 16px;
+            padding: 18px 20px; color: #c0ccf0; font-size: 0.95rem;
+            line-height: 1.8; max-height: 50vh; overflow-y: auto;
             border: 1px solid rgba(74, 122, 255, 0.08);
-            white-space: pre-wrap;
-            word-wrap: break-word;
+            white-space: pre-wrap; word-wrap: break-word;
         }
         footer {
             background: #000000;
             border-top: 1px solid rgba(2, 28, 164, 0.03);
-            padding: 50px 0 30px;
-            margin-top: 30px;
+            padding: 50px 0 30px; margin-top: 30px;
         }
         .footer-flex {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 40px;
+            display: flex; flex-wrap: wrap;
+            justify-content: space-between; gap: 40px;
         }
         .footer-col h4 {
-            color: var(--blue-light);
-            margin-bottom: 18px;
-            font-size: 1.2rem;
-            text-shadow: 0 0 20px rgba(74, 122, 255, 0.1);
+            color: var(--blue-light); margin-bottom: 18px;
+            font-size: 1.2rem; text-shadow: 0 0 20px rgba(74, 122, 255, 0.1);
         }
         .footer-col p {
-            color: #6a708a;
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            color: #6a708a; margin: 10px 0;
+            display: flex; align-items: center; gap: 10px;
         }
         .footer-col p i {
-            color: #a0b0d4;
-            opacity: 0.7;
-            width: 20px;
-            transition: 0.3s;
+            color: #a0b0d4; opacity: 0.7; width: 20px; transition: 0.3s;
         }
-        .footer-col p:hover i {
-            color: var(--blue-light);
-            transform: scale(1.2);
-        }
-        .social-icons {
-            display: flex;
-            gap: 14px;
-            margin-top: 12px;
-        }
+        .footer-col p:hover i { color: var(--blue-light); transform: scale(1.2); }
+        .social-icons { display: flex; gap: 14px; margin-top: 12px; }
         .social-icons a {
-            font-size: 1.4rem;
-            color: #6a708a;
+            font-size: 1.4rem; color: #6a708a;
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: inline-block;
         }
@@ -1321,31 +695,21 @@
             filter: drop-shadow(0 0 20px rgba(74, 122, 255, 0.2));
         }
         .copyright {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
+            text-align: center; margin-top: 40px; padding-top: 20px;
             border-top: 1px solid rgba(2, 28, 164, 0.03);
-            color: #4a5070;
-            font-size: 0.9rem;
-            width: 100%;
+            color: #4a5070; font-size: 0.9rem; width: 100%;
         }
-        .copyright span {
-            color: var(--blue-light);
-        }
+        .copyright span { color: var(--blue-light); }
         .men-product-card {
-            width: 100%;
-            max-width: 380px;
+            width: 100%; max-width: 380px;
             background: rgba(10, 16, 32, 0.95);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(2, 28, 164, 0.3);
-            border-radius: 28px;
-            overflow: hidden;
-            font-family: 'Cairo', sans-serif;
-            color: #f0f4ff;
+            border-radius: 28px; overflow: hidden;
+            font-family: 'Cairo', sans-serif; color: #f0f4ff;
             box-shadow: 0 0 40px rgba(2, 28, 164, 0.15), inset 0 1px 0 rgba(74, 122, 255, 0.1);
             animation: show 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            transition: 0.4s;
-            margin: 6px 0;
+            transition: 0.4s; margin: 6px 0;
         }
         .men-product-card:hover {
             transform: translateY(-4px);
@@ -1353,569 +717,263 @@
             border-color: rgba(74, 122, 255, 0.4);
         }
         .men-product-card .product-image {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
+            width: 100%; height: 220px; object-fit: cover;
             border-bottom: 1px solid rgba(2, 28, 164, 0.15);
             transition: 0.4s;
         }
-        .men-product-card:hover .product-image {
-            transform: scale(1.02);
-        }
-        .men-product-card .product-content {
-            padding: 24px 22px 22px;
-        }
+        .men-product-card:hover .product-image { transform: scale(1.02); }
+        .men-product-card .product-content { padding: 24px 22px 22px; }
         .men-product-card .badge {
             display: inline-block;
             background: rgba(74, 122, 255, 0.12);
-            color: var(--blue-light);
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            color: var(--blue-light); padding: 6px 16px;
+            border-radius: 40px; font-size: 0.8rem; font-weight: 600;
             letter-spacing: 0.3px;
             border: 1px solid rgba(74, 122, 255, 0.08);
             backdrop-filter: blur(4px);
         }
         .men-product-card .product-content h2 {
-            margin: 14px 0 8px;
-            font-size: 1.8rem;
-            font-weight: 800;
+            margin: 14px 0 8px; font-size: 1.8rem; font-weight: 800;
             background: linear-gradient(135deg, #ffffff 30%, var(--blue-light));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
         }
         .men-product-card .product-content p {
-            color: #a0b0d4;
-            line-height: 1.8;
-            margin: 8px 0 20px;
-            font-size: 0.95rem;
+            color: #a0b0d4; line-height: 1.8;
+            margin: 8px 0 20px; font-size: 0.95rem;
         }
         .men-product-card .bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            display: flex; justify-content: space-between;
+            align-items: center; gap: 12px; flex-wrap: wrap;
         }
         .men-product-card .price {
-            font-size: 2rem;
-            font-weight: 900;
+            font-size: 2rem; font-weight: 900;
             color: var(--blue-light);
             text-shadow: 0 0 30px rgba(74, 122, 255, 0.2);
         }
         .men-product-card .price small {
-            font-size: 1rem;
-            color: #6a8ab0;
-            font-weight: 600;
-            margin-right: 4px;
+            font-size: 1rem; color: #6a8ab0;
+            font-weight: 600; margin-right: 4px;
         }
         .men-product-card .btn-product {
             background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            color: #fff;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 40px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
+            color: #fff; border: none; padding: 12px 28px;
+            border-radius: 40px; font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem; font-weight: 700; cursor: pointer;
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             box-shadow: 0 4px 30px rgba(2, 28, 164, 0.2);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            display: inline-flex; align-items: center; gap: 8px;
         }
-        .men-product-card .btn-product i {
-            font-size: 1.1rem;
-        }
+        .men-product-card .btn-product i { font-size: 1.1rem; }
         .men-product-card .btn-product:hover {
             transform: translateY(-2px) scale(1.03);
             box-shadow: 0 8px 40px rgba(74, 122, 255, 0.3);
             background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
         }
-        .men-product-card .btn-product:active {
-            transform: scale(0.95);
-        }
+        .men-product-card .btn-product:active { transform: scale(0.95); }
         @keyframes show {
-            from {
-                opacity: 0;
-                transform: translateY(24px) scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(24px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        /* تنسيق خاص لعناصر "قريباً" */
         .coming-soon-badge {
             background: rgba(255, 180, 0, 0.15);
-            color: #ffb800;
-            font-size: 0.7rem;
-            padding: 2px 10px;
-            border-radius: 30px;
+            color: #ffb800; font-size: 0.7rem;
+            padding: 2px 10px; border-radius: 30px;
             border: 1px solid rgba(255, 180, 0, 0.2);
-            margin-right: 6px;
+            margin-right: 6px; font-weight: 600;
+            letter-spacing: 0.3px; white-space: nowrap;
+        }
+        .dropdown-item.disabled-item { opacity: 0.6; cursor: not-allowed; }
+        .dropdown-item.disabled-item:hover { background: transparent; color: #c0ccf0; }
+        .dropdown-item.disabled-item:hover i { opacity: 0.7; }
+
+        /* ========== تنسيق ردود لغات البرمجة ========== */
+        .code-response {
+            display: flex; flex-direction: column;
+            gap: 10px; width: 100%;
+        }
+        .code-response .code-text {
+            line-height: 1.8; color: #e0e8ff;
+            margin: 0; font-size: 0.95rem;
+        }
+        .code-block {
+            background: #060a14;
+            border: 1px solid rgba(74, 122, 255, 0.25);
+            border-radius: 16px; margin: 6px 0;
+            overflow: hidden; direction: ltr; text-align: left;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(74, 122, 255, 0.08);
+        }
+        .code-header {
+            display: flex; justify-content: space-between;
+            align-items: center; padding: 10px 16px;
+            background: linear-gradient(135deg, rgba(2, 28, 164, 0.25), rgba(74, 122, 255, 0.08));
+            border-bottom: 1px solid rgba(74, 122, 255, 0.15);
+            gap: 10px; flex-wrap: wrap;
+        }
+        .code-lang {
+            color: #4a7aff; font-size: 0.8rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.8px;
+            display: flex; align-items: center; gap: 8px;
+            font-family: 'Courier New', monospace;
+        }
+        .code-lang i {
+            font-size: 0.9rem;
+            filter: drop-shadow(0 0 8px rgba(74, 122, 255, 0.4));
+        }
+        .code-copy-btn {
+            background: rgba(74, 122, 255, 0.1);
+            border: 1px solid rgba(74, 122, 255, 0.25);
+            border-radius: 20px; padding: 5px 14px;
+            color: #b0c4e8; font-size: 0.75rem;
+            cursor: pointer; font-family: 'Cairo', sans-serif;
+            display: inline-flex; align-items: center; gap: 6px;
+            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             font-weight: 600;
-            letter-spacing: 0.3px;
-            white-space: nowrap;
         }
-        .dropdown-item.disabled-item {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .code-copy-btn:hover {
+            background: rgba(74, 122, 255, 0.25);
+            border-color: var(--blue-light); color: #fff;
+            transform: scale(1.05);
         }
-        .dropdown-item.disabled-item:hover {
-            background: transparent;
-            color: #c0ccf0;
+        .code-copy-btn:active { transform: scale(0.95); }
+        .code-copy-btn.copied {
+            background: rgba(0, 200, 100, 0.15);
+            border-color: rgba(0, 200, 100, 0.4);
+            color: #00c864;
         }
-        .dropdown-item.disabled-item:hover i {
-            opacity: 0.7;
+        .code-copy-btn i { font-size: 0.85rem; }
+        .code-content {
+            padding: 16px 20px; color: #d0dcf5;
+            font-family: 'Courier New', 'Consolas', monospace;
+            font-size: 0.85rem; line-height: 1.7;
+            overflow-x: auto; white-space: pre;
+            margin: 0; tab-size: 4; background: transparent;
         }
+        .code-content::-webkit-scrollbar { height: 6px; }
+        .code-content::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 12px; }
+        .code-content::-webkit-scrollbar-thumb { background: var(--blue-deep); border-radius: 12px; }
 
         @media (max-width: 768px) {
-            .chat-wrapper {
-                height: calc(100vh - 160px);
-                min-height: 400px;
-                border-radius: var(--radius-xl);
-            }
-            .message {
-                max-width: 90%;
-                padding: 12px 16px;
-                font-size: 0.95rem;
-            }
-            .input-area {
-                padding: 10px 14px 14px;
-                gap: 6px;
-            }
-            .input-area .input-wrapper {
-                padding: 2px 12px 2px 6px;
-                min-height: 44px;
-            }
-            .input-area .input-wrapper textarea {
-                padding: 8px 2px;
-                font-size: 0.95rem;
-                min-height: 36px;
-            }
-            .input-area .btn-send,
-            .input-area .btn-plus {
-                width: 44px;
-                height: 44px;
-                min-width: 44px;
-                font-size: 1.2rem;
-            }
-            .input-area .btn-plus {
-                font-size: 1.6rem;
-            }
-            .plus-dropdown {
-                min-width: 170px;
-                right: 0;
-                left: auto;
-                bottom: calc(100% + 8px);
-            }
-            .chat-header {
-                padding: 12px 16px;
-            }
-            .chat-header .bot-avatar {
-                width: 36px;
-                height: 36px;
-                font-size: 1.2rem;
-            }
-            .messages-area {
-                padding: 14px 16px;
-                gap: 10px;
-            }
-            .logo h1 {
-                font-size: 1.4rem;
-            }
-            .logo h1 i {
-                font-size: 1rem;
-            }
-            .logo img {
-                height: 36px;
-            }
-            .btn-back,
-            .btn-memory,
-            .btn-settings {
-                height: 38px;
-                padding: 0 14px;
-                font-size: 0.9rem;
-            }
-            .btn-back i,
-            .btn-memory i,
-            .btn-settings i {
-                font-size: 1rem;
-            }
-            .btn-back .back-text,
-            .btn-memory .memory-text,
-            .btn-settings .settings-text {
-                font-size: 0.85rem;
-            }
-            .men-product-card {
-                max-width: 100%;
-            }
-            .men-product-card .product-image {
-                height: 170px;
-            }
-            .men-product-card .product-content {
-                padding: 18px 16px 16px;
-            }
-            .men-product-card .product-content h2 {
-                font-size: 1.5rem;
-            }
-            .men-product-card .price {
-                font-size: 1.6rem;
-            }
-            .men-product-card .btn-product {
-                padding: 10px 20px;
-                font-size: 0.85rem;
-            }
-            .welcome-main {
-                font-size: 2rem;
-            }
-            .typewriter-container {
-                font-size: 1.2rem;
-            }
-            .typewriter-cursor {
-                height: 1.4rem;
-            }
-            .suggested-questions {
-                padding: 8px 14px 4px 14px;
-                gap: 6px;
-            }
-            .suggested-questions .sq-btn {
-                font-size: 0.75rem;
-                padding: 6px 14px;
-            }
-            .products-row .men-product-card {
-                min-width: 200px;
-                max-width: 220px;
-            }
-            .products-row .men-product-card .product-image {
-                height: 130px;
-            }
-            .products-row .men-product-card .product-content h2 {
-                font-size: 1rem;
-            }
-            .products-row .men-product-card .price {
-                font-size: 1rem;
-            }
-            .products-row .men-product-card .btn-product {
-                padding: 4px 10px;
-                font-size: 0.65rem;
-            }
-            .file-preview {
-                max-width: 120px;
-                font-size: 0.7rem;
-                padding: 4px 10px 4px 8px;
-            }
-            .modal-box {
-                padding: 20px;
-                margin: 10px;
-            }
-            .memory-item {
-                padding: 12px 16px;
-                flex-wrap: wrap;
-            }
-            .memory-item .memory-time {
-                margin-right: 0;
-                width: 100%;
-                text-align: left;
-            }
-            .memory-item .memory-title {
-                max-width: 120px;
-            }
-            .message.bot .bot-actions {
-                opacity: 1;
-                flex-wrap: wrap;
-            }
-            .message.bot .bot-actions button {
-                font-size: 0.7rem;
-                padding: 2px 10px;
-            }
+            .chat-wrapper { height: calc(100vh - 160px); min-height: 400px; border-radius: var(--radius-xl); }
+            .message { max-width: 90%; padding: 12px 16px; font-size: 0.95rem; }
+            .input-area { padding: 10px 14px 14px; gap: 6px; }
+            .input-area .input-wrapper { padding: 2px 12px 2px 6px; min-height: 44px; }
+            .input-area .input-wrapper textarea { padding: 8px 2px; font-size: 0.95rem; min-height: 36px; }
+            .input-area .btn-send, .input-area .btn-plus { width: 44px; height: 44px; min-width: 44px; font-size: 1.2rem; }
+            .input-area .btn-plus { font-size: 1.6rem; }
+            .plus-dropdown { min-width: 170px; right: 0; left: auto; bottom: calc(100% + 8px); }
+            .chat-header { padding: 12px 16px; }
+            .chat-header .bot-avatar { width: 36px; height: 36px; font-size: 1.2rem; }
+            .messages-area { padding: 14px 16px; gap: 10px; }
+            .logo h1 { font-size: 1.4rem; }
+            .logo h1 i { font-size: 1rem; }
+            .logo img { height: 36px; }
+            .btn-back, .btn-memory, .btn-settings { height: 38px; padding: 0 14px; font-size: 0.9rem; }
+            .btn-back i, .btn-memory i, .btn-settings i { font-size: 1rem; }
+            .btn-back .back-text, .btn-memory .memory-text, .btn-settings .settings-text { font-size: 0.85rem; }
+            .men-product-card { max-width: 100%; }
+            .men-product-card .product-image { height: 170px; }
+            .men-product-card .product-content { padding: 18px 16px 16px; }
+            .men-product-card .product-content h2 { font-size: 1.5rem; }
+            .men-product-card .price { font-size: 1.6rem; }
+            .men-product-card .btn-product { padding: 10px 20px; font-size: 0.85rem; }
+            .welcome-main { font-size: 2rem; }
+            .typewriter-container { font-size: 1.2rem; }
+            .typewriter-cursor { height: 1.4rem; }
+            .suggested-questions { padding: 8px 14px 4px 14px; gap: 6px; }
+            .suggested-questions .sq-btn { font-size: 0.75rem; padding: 6px 14px; }
+            .products-row .men-product-card { min-width: 200px; max-width: 220px; }
+            .products-row .men-product-card .product-image { height: 130px; }
+            .products-row .men-product-card .product-content h2 { font-size: 1rem; }
+            .products-row .men-product-card .price { font-size: 1rem; }
+            .products-row .men-product-card .btn-product { padding: 4px 10px; font-size: 0.65rem; }
+            .file-preview { max-width: 120px; font-size: 0.7rem; padding: 4px 10px 4px 8px; }
+            .modal-box { padding: 20px; margin: 10px; }
+            .memory-item { padding: 12px 16px; flex-wrap: wrap; }
+            .memory-item .memory-time { margin-right: 0; width: 100%; text-align: left; }
+            .memory-item .memory-title { max-width: 120px; }
+            .message.bot .bot-actions { opacity: 1; flex-wrap: wrap; }
+            .message.bot .bot-actions button { font-size: 0.7rem; padding: 2px 10px; }
+            .code-content { font-size: 0.75rem; padding: 12px 14px; }
+            .code-lang { font-size: 0.7rem; }
+            .code-copy-btn { font-size: 0.7rem; padding: 4px 10px; }
         }
         @media (max-width: 480px) {
-            .message {
-                max-width: 95%;
-                padding: 10px 14px;
-                font-size: 0.9rem;
-            }
-            .input-area .input-wrapper textarea {
-                font-size: 0.85rem;
-                min-height: 32px;
-            }
-            .input-area .btn-send,
-            .input-area .btn-plus {
-                width: 38px;
-                height: 38px;
-                min-width: 38px;
-                font-size: 1rem;
-            }
-            .input-area .btn-plus {
-                font-size: 1.4rem;
-            }
-            .plus-dropdown {
-                min-width: 150px;
-                right: 0;
-                left: auto;
-                bottom: calc(100% + 6px);
-            }
-            .chat-wrapper {
-                height: calc(100vh - 140px);
-                min-height: 350px;
-                border-radius: 18px;
-            }
-            .messages-area {
-                padding: 10px 12px;
-                gap: 8px;
-            }
-            .container {
-                width: 96%;
-                padding: 0 10px;
-            }
-            .logo h1 {
-                font-size: 1.1rem;
-            }
-            .logo h1 i {
-                font-size: 0.9rem;
-            }
-            .logo img {
-                height: 30px;
-            }
-            .btn-back,
-            .btn-memory,
-            .btn-settings {
-                height: 34px;
-                padding: 0 10px;
-                font-size: 0.8rem;
-            }
-            .btn-back i,
-            .btn-memory i,
-            .btn-settings i {
-                font-size: 0.9rem;
-            }
-            .btn-back .back-text,
-            .btn-memory .memory-text,
-            .btn-settings .settings-text {
-                font-size: 0.75rem;
-            }
-            .men-product-card .product-image {
-                height: 140px;
-            }
-            .men-product-card .product-content {
-                padding: 14px 12px 12px;
-            }
-            .men-product-card .product-content h2 {
-                font-size: 1.3rem;
-            }
-            .men-product-card .price {
-                font-size: 1.4rem;
-            }
-            .men-product-card .btn-product {
-                padding: 8px 16px;
-                font-size: 0.8rem;
-            }
-            .welcome-main {
-                font-size: 1.6rem;
-                gap: 2px;
-            }
-            .typewriter-container {
-                font-size: 1rem;
-            }
-            .typewriter-cursor {
-                height: 1.2rem;
-            }
-            .welcome-desc {
-                font-size: 0.8rem;
-            }
-            .suggested-questions {
-                padding: 6px 10px 2px 10px;
-                gap: 4px;
-            }
-            .suggested-questions .sq-btn {
-                font-size: 0.65rem;
-                padding: 4px 10px;
-            }
-            .products-row .men-product-card {
-                min-width: 160px;
-                max-width: 180px;
-            }
-            .products-row .men-product-card .product-image {
-                height: 110px;
-            }
-            .products-row .men-product-card .product-content {
-                padding: 10px 10px 12px;
-            }
-            .products-row .men-product-card .product-content h2 {
-                font-size: 0.9rem;
-                margin: 4px 0 2px;
-            }
-            .products-row .men-product-card .product-content p {
-                font-size: 0.7rem;
-                -webkit-line-clamp: 1;
-            }
-            .products-row .men-product-card .price {
-                font-size: 0.9rem;
-            }
-            .products-row .men-product-card .btn-product {
-                padding: 4px 8px;
-                font-size: 0.6rem;
-            }
-            .products-row .men-product-card .badge {
-                font-size: 0.6rem;
-                padding: 2px 8px;
-            }
-            .products-row {
-                gap: 10px;
-            }
-            .file-preview {
-                max-width: 80px;
-                font-size: 0.6rem;
-                padding: 3px 6px 3px 4px;
-            }
-            .file-preview i {
-                font-size: 0.7rem;
-            }
-            .modal-box {
-                padding: 16px;
-            }
-            .modal-box h3 {
-                font-size: 1.1rem;
-            }
-            .modal-box .modal-text {
-                font-size: 0.9rem;
-                padding: 12px;
-            }
-            .memory-item {
-                padding: 10px 12px;
-            }
-            .memory-item .memory-title {
-                font-size: 0.9rem;
-                max-width: 100px;
-            }
-            .memory-item .memory-count {
-                font-size: 0.7rem;
-            }
-            .memory-item .memory-time {
-                font-size: 0.6rem;
-            }
-            .memory-item .memory-delete {
-                width: 28px;
-                height: 28px;
-                min-width: 28px;
-                font-size: 0.8rem;
-            }
-            .message.bot .bot-actions button {
-                font-size: 0.6rem;
-                padding: 2px 8px;
-            }
+            .message { max-width: 95%; padding: 10px 14px; font-size: 0.9rem; }
+            .input-area .input-wrapper textarea { font-size: 0.85rem; min-height: 32px; }
+            .input-area .btn-send, .input-area .btn-plus { width: 38px; height: 38px; min-width: 38px; font-size: 1rem; }
+            .input-area .btn-plus { font-size: 1.4rem; }
+            .plus-dropdown { min-width: 150px; right: 0; left: auto; bottom: calc(100% + 6px); }
+            .chat-wrapper { height: calc(100vh - 140px); min-height: 350px; border-radius: 18px; }
+            .messages-area { padding: 10px 12px; gap: 8px; }
+            .container { width: 96%; padding: 0 10px; }
+            .logo h1 { font-size: 1.1rem; }
+            .logo h1 i { font-size: 0.9rem; }
+            .logo img { height: 30px; }
+            .btn-back, .btn-memory, .btn-settings { height: 34px; padding: 0 10px; font-size: 0.8rem; }
+            .btn-back i, .btn-memory i, .btn-settings i { font-size: 0.9rem; }
+            .btn-back .back-text, .btn-memory .memory-text, .btn-settings .settings-text { font-size: 0.75rem; }
+            .men-product-card .product-image { height: 140px; }
+            .men-product-card .product-content { padding: 14px 12px 12px; }
+            .men-product-card .product-content h2 { font-size: 1.3rem; }
+            .men-product-card .price { font-size: 1.4rem; }
+            .men-product-card .btn-product { padding: 8px 16px; font-size: 0.8rem; }
+            .welcome-main { font-size: 1.6rem; gap: 2px; }
+            .typewriter-container { font-size: 1rem; }
+            .typewriter-cursor { height: 1.2rem; }
+            .welcome-desc { font-size: 0.8rem; }
+            .suggested-questions { padding: 6px 10px 2px 10px; gap: 4px; }
+            .suggested-questions .sq-btn { font-size: 0.65rem; padding: 4px 10px; }
+            .products-row .men-product-card { min-width: 160px; max-width: 180px; }
+            .products-row .men-product-card .product-image { height: 110px; }
+            .products-row .men-product-card .product-content { padding: 10px 10px 12px; }
+            .products-row .men-product-card .product-content h2 { font-size: 0.9rem; margin: 4px 0 2px; }
+            .products-row .men-product-card .product-content p { font-size: 0.7rem; -webkit-line-clamp: 1; }
+            .products-row .men-product-card .price { font-size: 0.9rem; }
+            .products-row .men-product-card .btn-product { padding: 4px 8px; font-size: 0.6rem; }
+            .products-row .men-product-card .badge { font-size: 0.6rem; padding: 2px 8px; }
+            .products-row { gap: 10px; }
+            .file-preview { max-width: 80px; font-size: 0.6rem; padding: 3px 6px 3px 4px; }
+            .file-preview i { font-size: 0.7rem; }
+            .modal-box { padding: 16px; }
+            .modal-box h3 { font-size: 1.1rem; }
+            .modal-box .modal-text { font-size: 0.9rem; padding: 12px; }
+            .memory-item { padding: 10px 12px; }
+            .memory-item .memory-title { font-size: 0.9rem; max-width: 100px; }
+            .memory-item .memory-count { font-size: 0.7rem; }
+            .memory-item .memory-time { font-size: 0.6rem; }
+            .memory-item .memory-delete { width: 28px; height: 28px; min-width: 28px; font-size: 0.8rem; }
+            .message.bot .bot-actions button { font-size: 0.6rem; padding: 2px 8px; }
+            .code-content { font-size: 0.7rem; padding: 10px 12px; }
+            .code-header { padding: 8px 12px; }
         }
         @media (max-width: 360px) {
-            .logo h1 {
-                font-size: 0.9rem;
-            }
-            .logo h1 i {
-                font-size: 0.8rem;
-            }
-            .logo img {
-                height: 26px;
-            }
-            .btn-back,
-            .btn-memory,
-            .btn-settings {
-                height: 30px;
-                padding: 0 8px;
-                font-size: 0.7rem;
-            }
-            .btn-back i,
-            .btn-memory i,
-            .btn-settings i {
-                font-size: 0.8rem;
-            }
-            .btn-back .back-text,
-            .btn-memory .memory-text,
-            .btn-settings .settings-text {
-                font-size: 0.7rem;
-            }
-            .chat-header .bot-name {
-                font-size: 0.9rem;
-            }
-            .chat-header .bot-avatar {
-                width: 30px;
-                height: 30px;
-                font-size: 1rem;
-            }
-            .welcome-main {
-                font-size: 1.2rem;
-            }
-            .typewriter-container {
-                font-size: 0.8rem;
-            }
-            .typewriter-cursor {
-                height: 1rem;
-            }
-            .suggested-questions .sq-btn {
-                font-size: 0.6rem;
-                padding: 3px 8px;
-            }
-            .input-area .btn-send,
-            .input-area .btn-plus {
-                width: 32px;
-                height: 32px;
-                min-width: 32px;
-                font-size: 0.8rem;
-            }
-            .input-area .btn-plus {
-                font-size: 1.2rem;
-            }
-            .plus-dropdown {
-                min-width: 130px;
-                right: 0;
-                left: auto;
-                bottom: calc(100% + 6px);
-            }
-            .products-row .men-product-card {
-                min-width: 140px;
-                max-width: 150px;
-            }
-            .products-row .men-product-card .product-image {
-                height: 90px;
-            }
-            .products-row .men-product-card .product-content {
-                padding: 8px 8px 10px;
-            }
-            .products-row .men-product-card .product-content h2 {
-                font-size: 0.8rem;
-            }
-            .products-row .men-product-card .product-content p {
-                display: none;
-            }
-            .products-row .men-product-card .price {
-                font-size: 0.8rem;
-            }
-            .products-row .men-product-card .btn-product {
-                padding: 2px 6px;
-                font-size: 0.5rem;
-            }
-            .products-row .men-product-card .badge {
-                font-size: 0.5rem;
-                padding: 2px 6px;
-            }
-            .products-row {
-                gap: 8px;
-            }
-            .file-preview {
-                max-width: 60px;
-                font-size: 0.5rem;
-                padding: 2px 4px;
-                gap: 4px;
-            }
-            .file-preview i {
-                font-size: 0.6rem;
-            }
-            .file-preview .remove-file {
-                font-size: 0.7rem;
-            }
+            .logo h1 { font-size: 0.9rem; }
+            .logo h1 i { font-size: 0.8rem; }
+            .logo img { height: 26px; }
+            .btn-back, .btn-memory, .btn-settings { height: 30px; padding: 0 8px; font-size: 0.7rem; }
+            .btn-back i, .btn-memory i, .btn-settings i { font-size: 0.8rem; }
+            .btn-back .back-text, .btn-memory .memory-text, .btn-settings .settings-text { font-size: 0.7rem; }
+            .chat-header .bot-name { font-size: 0.9rem; }
+            .chat-header .bot-avatar { width: 30px; height: 30px; font-size: 1rem; }
+            .welcome-main { font-size: 1.2rem; }
+            .typewriter-container { font-size: 0.8rem; }
+            .typewriter-cursor { height: 1rem; }
+            .suggested-questions .sq-btn { font-size: 0.6rem; padding: 3px 8px; }
+            .input-area .btn-send, .input-area .btn-plus { width: 32px; height: 32px; min-width: 32px; font-size: 0.8rem; }
+            .input-area .btn-plus { font-size: 1.2rem; }
+            .plus-dropdown { min-width: 130px; right: 0; left: auto; bottom: calc(100% + 6px); }
+            .products-row .men-product-card { min-width: 140px; max-width: 150px; }
+            .products-row .men-product-card .product-image { height: 90px; }
+            .products-row .men-product-card .product-content { padding: 8px 8px 10px; }
+            .products-row .men-product-card .product-content h2 { font-size: 0.8rem; }
+            .products-row .men-product-card .product-content p { display: none; }
+            .products-row .men-product-card .price { font-size: 0.8rem; }
+            .products-row .men-product-card .btn-product { padding: 2px 6px; font-size: 0.5rem; }
+            .products-row .men-product-card .badge { font-size: 0.5rem; padding: 2px 6px; }
+            .products-row { gap: 8px; }
+            .file-preview { max-width: 60px; font-size: 0.5rem; padding: 2px 4px; gap: 4px; }
+            .file-preview i { font-size: 0.6rem; }
+            .file-preview .remove-file { font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -1958,7 +1016,9 @@
                 </div>
                 <div class="suggested-questions" id="suggestedQuestions">
                     <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
-                    <button class="sq-btn" data-question=" MEN pass"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
+                    <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
+                    <button class="sq-btn" data-question="اعطني كود بايثون"><i class="fas fa-code"></i> كود Python</button>
+                    <button class="sq-btn" data-question="مثال على جافاسكربت"><i class="fas fa-bolt"></i> كود JavaScript</button>
                     <button class="sq-btn" data-question="كيف يمكنني التواصل مع الدعم؟"><i class="fas fa-headset"></i> التواصل مع الدعم</button>
                 </div>
                 <div class="input-area">
@@ -2001,7 +1061,6 @@
             </div>
         </div>
     </main>
-    <!-- مودال الذاكرة -->
     <div class="modal-overlay" id="memoryModal">
         <div class="modal-box">
             <h3><i class="fas fa-brain"></i> ذاكرة MEN Ai (الجلسات)</h3>
@@ -2015,10 +1074,9 @@
             </div>
         </div>
     </div>
-    <!-- مودال الإعدادات -->
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-box">
-            <h3><i class="fas fa-sliders-h"></i> الإعدادات  </h3>
+            <h3><i class="fas fa-sliders-h"></i> الإعدادات</h3>
             <div class="settings-group">
                 <label>الحد الأقصى للرسائل في كل محادثة</label>
                 <div class="settings-input">
@@ -2044,12 +1102,10 @@
                     <label class="toggle-switch">
                         <input type="checkbox" id="autoBoostToggle">
                         <span class="slider"></span>
-                        <span class="toggle-label">
-                            تفعيل الرسالة التحفيزية بعد كل رد
-                        </span>
+                        <span class="toggle-label">تفعيل الرسالة التحفيزية بعد كل رد</span>
                     </label>
                 </div>
-                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم إرسال رسالة إضافية مثل هل تريد مساعدة إضافية؟ بعد كل رد  .</p>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">سيتم إرسال رسالة إضافية مثل "هل تريد مساعدة إضافية؟" بعد كل رد.</p>
             </div>
             <div class="settings-group">
                 <label>تفعيل الوكيل التلقائي (عند ذكر كلمات الشراء)</label>
@@ -2057,12 +1113,10 @@
                     <label class="toggle-switch">
                         <input type="checkbox" id="autoAgentToggle">
                         <span class="slider"></span>
-                        <span class="toggle-label">
-                            تفعيل الوكيل التلقائي
-                        </span>
+                        <span class="toggle-label">تفعيل الوكيل التلقائي</span>
                     </label>
                 </div>
-                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند التفعيل، سيتفاعل الوكيل تلقائياً .</p>
+                <p style="color:#6a708a;font-size:0.8rem;margin-top:6px;">عند التفعيل، سيتفاعل الوكيل تلقائياً.</p>
             </div>
             <div class="settings-group">
                 <label>تعلم من محادثتي (آخر سؤال وجواب)</label>
@@ -2078,7 +1132,6 @@
             <button class="modal-close" id="settingsModalClose" style="margin-top:10px;">إغلاق</button>
         </div>
     </div>
-    <!-- مودال استخراج النص -->
     <div class="modal-overlay" id="extractModal">
         <div class="modal-box">
             <h3><i class="fas fa-file-alt"></i> النص المستخرج من الملف</h3>
@@ -2109,7 +1162,8 @@
         //  المتغيرات العامة
         // ============================================================
         let responses = {};
-        let mdrResponses = {}; // سيتم تحميلها من mdr.json
+        let mdrResponses = {};
+        let codResponses = {};
         let keywordsMap = {};
         let products = [];
         let customReplies = {};
@@ -2129,9 +1183,6 @@
         let boostMode = true;
         const BOOST_KEY = 'menBoostMode';
 
-        // ============================================================
-        //  إدارة الذاكرة والإعدادات
-        // ============================================================
         const MEMORY_KEY = 'menChatMemory';
         const SETTINGS_KEY = 'menChatSettings';
 
@@ -2180,9 +1231,7 @@
         }
 
         function saveMemory(memory) {
-            try {
-                localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
-            } catch (e) {}
+            try { localStorage.setItem(MEMORY_KEY, JSON.stringify(memory)); } catch (e) {}
         }
 
         function createNewSession(title) {
@@ -2268,7 +1317,7 @@
         function renderMemoryList(sessions) {
             const container = document.getElementById('memoryList');
             if (!sessions || sessions.length === 0) {
-                container.innerHTML = '<div class="memory-empty"> لا توجد محادثات محفوظة بعد.</div>';
+                container.innerHTML = '<div class="memory-empty">لا توجد محادثات محفوظة بعد.</div>';
                 return;
             }
             let html = '';
@@ -2365,7 +1414,7 @@
                 const area = document.getElementById('messagesArea');
                 const infoMsg = document.createElement('div');
                 infoMsg.className = 'message bot';
-                infoMsg.innerHTML = ` تم التبديل إلى المحادثة: <strong>${escapeHtml(session.title)}</strong><span class="msg-time">الآن</span>`;
+                infoMsg.innerHTML = `تم التبديل إلى المحادثة: <strong>${escapeHtml(session.title)}</strong><span class="msg-time">الآن</span>`;
                 area.appendChild(infoMsg);
                 scrollToBottom();
             } catch (e) { console.warn('فشل استرجاع الجلسة:', e); }
@@ -2402,9 +1451,7 @@
                 if (msg.role === 'bot') {
                     const actions = document.createElement('div');
                     actions.className = 'bot-actions';
-                    actions.innerHTML = `
-                        <button class="copy-btn" data-content="${escapeHtml(msg.content)}"><i class="fas fa-copy"></i> نسخ</button>
-                    `;
+                    actions.innerHTML = `<button class="copy-btn" data-content="${escapeHtml(msg.content)}"><i class="fas fa-copy"></i> نسخ</button>`;
                     div.appendChild(actions);
                 }
                 area.appendChild(div);
@@ -2419,9 +1466,7 @@
                         const orig = this.innerHTML;
                         this.innerHTML = '<i class="fas fa-check"></i> تم';
                         setTimeout(() => { this.innerHTML = orig; }, 1500);
-                    }).catch(() => {
-                        alert('تعذر نسخ النص');
-                    });
+                    }).catch(() => { alert('تعذر نسخ النص'); });
                 });
             });
         }
@@ -2465,7 +1510,7 @@
         }
 
         // ============================================================
-        //  دوال الردود والمنتجات (مع دعم mdr.json)
+        //  دوال الردود والمنتجات
         // ============================================================
         function loadCustomReplies() {
             try {
@@ -2475,15 +1520,11 @@
                 } else {
                     customReplies = {};
                 }
-            } catch (e) {
-                customReplies = {};
-            }
+            } catch (e) { customReplies = {}; }
         }
 
         function saveCustomReplies() {
-            try {
-                localStorage.setItem(CUSTOM_REPLIES_KEY, JSON.stringify(customReplies));
-            } catch (e) {}
+            try { localStorage.setItem(CUSTOM_REPLIES_KEY, JSON.stringify(customReplies)); } catch (e) {}
         }
 
         function mergeReplies() {
@@ -2565,9 +1606,7 @@
         function evaluateMath(text) {
             const match = text.match(/(\d+)\s*([+\-*/])\s*(\d+)/);
             if (!match) return null;
-            const a = parseFloat(match[1]),
-                op = match[2],
-                b = parseFloat(match[3]);
+            const a = parseFloat(match[1]), op = match[2], b = parseFloat(match[3]);
             if (isNaN(a) || isNaN(b)) return null;
             let result;
             switch (op) {
@@ -2596,6 +1635,50 @@
         }
 
         // ============================================================
+        //  دوال لغات البرمجة (cod.json)
+        // ============================================================
+        function findCodeCategory(text) {
+            const lower = text.trim().toLowerCase();
+            for (const [cat, obj] of Object.entries(codResponses)) {
+                if (obj.keywords && Array.isArray(obj.keywords)) {
+                    for (const kw of obj.keywords) {
+                        if (lower.includes(kw.toLowerCase())) {
+                            return obj;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        function getCodeResponse(obj) {
+            if (!obj || !obj.responses || obj.responses.length === 0) return null;
+            return obj.responses[Math.floor(Math.random() * obj.responses.length)];
+        }
+
+        function buildCodeHtml(text, code, language) {
+            let html = `<div class="code-response">`;
+            if (text) {
+                html += `<p class="code-text">${escapeHtml(text)}</p>`;
+            }
+            if (code) {
+                html += `
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang"><i class="fas fa-code"></i> ${escapeHtml(language || 'code')}</span>
+                            <button class="code-copy-btn" type="button">
+                                <i class="fas fa-copy"></i> نسخ الكود
+                            </button>
+                        </div>
+                        <pre class="code-content"></pre>
+                    </div>
+                `;
+            }
+            html += `</div>`;
+            return html;
+        }
+
+        // ============================================================
         //  دوال المنتجات وعرضها
         // ============================================================
         function buildAllProductsRow() {
@@ -2613,7 +1696,7 @@
             const description = product.description || 'لا يوجد وصف';
             const price = product.price || '0';
             const currency = product.currency || 'ر.س';
-            const badge = product.badge || ' منتج';
+            const badge = product.badge || 'منتج';
             const link = product.link || '#';
             return `
                 <div class="men-product-card">
@@ -2634,22 +1717,14 @@
         }
 
         // ============================================================
-        //  دوال وكيل الشراء (معطلة حالياً – تعرض "قريباً")
+        //  وكيل الشراء (معطل مؤقتاً)
         // ============================================================
-        function startPurchaseAgent() {
-            return '⏳ ميزة وكيل MEN Ai ستكون متاحة قريباً.';
-        }
-
-        function handlePurchaseStep(text) {
-            return null;
-        }
-
-        async function sendPurchaseToDiscord(product, name, phone, priceAfterDiscount) {
-            // معطل
-        }
+        function startPurchaseAgent() { return '⏳ ميزة وكيل MEN Ai ستكون متاحة قريباً.'; }
+        function handlePurchaseStep(text) { return null; }
+        async function sendPurchaseToDiscord(product, name, phone, priceAfterDiscount) {}
 
         // ============================================================
-        //  دوال استخراج النص من الملفات
+        //  استخراج النص من الملفات
         // ============================================================
         async function extractTextFromFile(file) {
             const fileType = file.type;
@@ -2679,16 +1754,14 @@
                     return fullText || 'لم يتم العثور على نص في ملف PDF.';
                 } catch (e) { return 'حدث خطأ أثناء قراءة ملف PDF.'; }
             }
-            if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileName.endsWith(
-                    '.docx')) {
+            if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileName.endsWith('.docx')) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
                     const result = await mammoth.extractRawText({ arrayBuffer });
                     return result.value || 'الملف فارغ أو لا يحتوي على نص.';
                 } catch (e) { return 'حدث خطأ أثناء قراءة ملف Word.'; }
             }
-            if (fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || fileName.endsWith(
-                    '.xlsx') || fileName.endsWith('.xls')) {
+            if (fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
                     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
@@ -2707,12 +1780,9 @@
             if (fileType === 'text/csv' || fileName.endsWith('.csv')) {
                 try { return await file.text() || 'الملف فارغ.'; } catch (e) { return 'حدث خطأ أثناء قراءة ملف CSV.'; }
             }
-            return ' نوع الملف غير مدعوم للاستخراج التلقائي.';
+            return 'نوع الملف غير مدعوم للاستخراج التلقائي.';
         }
 
-        // ============================================================
-        //  دوال المودالات
-        // ============================================================
         function showExtractedText(text) {
             document.getElementById('extractedText').textContent = text || 'لم يتم استخراج أي نص.';
             document.getElementById('extractModal').classList.add('active');
@@ -2726,7 +1796,7 @@
         });
 
         // ============================================================
-        //  دوال إدارة الملفات المرفقة
+        //  إدارة الملفات المرفقة
         // ============================================================
         function showAttachedFile(file) {
             attachedFile = file;
@@ -2766,7 +1836,7 @@
         removeFileBtn.addEventListener('click', hideAttachedFile);
 
         // ============================================================
-        //  زر الزايد والقائمة المنسدلة + القائمة الفرعية
+        //  زر الزايد والقائمة المنسدلة
         // ============================================================
         const plusBtn = document.getElementById('plusBtn');
         const plusDropdown = document.getElementById('plusDropdown');
@@ -2810,13 +1880,13 @@
 
         document.getElementById('aiAgentOption').addEventListener('click', function(e) {
             e.stopPropagation();
-            alert(' ميزة وكيل MEN Ai ستكون متاحة قريباً.');
+            alert('ميزة وكيل MEN Ai ستكون متاحة قريباً.');
             closeAllDropdowns();
         });
 
         document.getElementById('searchBoostOption').addEventListener('click', function(e) {
             e.stopPropagation();
-            alert(' ميزة البحث في المعزز ستكون متاحة قريباً.');
+            alert('ميزة البحث في المعزز ستكون متاحة قريباً.');
             closeAllDropdowns();
         });
 
@@ -2828,7 +1898,7 @@
         });
 
         // ============================================================
-        //  ربط أزرار الذاكرة والإعدادات
+        //  أزرار الذاكرة والإعدادات
         // ============================================================
         document.getElementById('memoryBtn').addEventListener('click', function() {
             loadMemory();
@@ -2851,7 +1921,7 @@
             const area = document.getElementById('messagesArea');
             const infoMsg = document.createElement('div');
             infoMsg.className = 'message bot';
-            infoMsg.innerHTML = ` تم إنشاء محادثة جديدة. <span class="msg-time">الآن</span>`;
+            infoMsg.innerHTML = `تم إنشاء محادثة جديدة. <span class="msg-time">الآن</span>`;
             area.appendChild(infoMsg);
             scrollToBottom();
             closeAllDropdowns();
@@ -2943,30 +2013,20 @@
                 return;
             }
             const msgs = session.messages;
-            let userMsg = null;
-            let botMsg = null;
+            let userMsg = null, botMsg = null;
             for (let i = msgs.length - 1; i >= 0; i--) {
-                if (msgs[i].role === 'user' && !userMsg) {
-                    userMsg = msgs[i];
-                }
-                if (msgs[i].role === 'bot' && !botMsg) {
-                    botMsg = msgs[i];
-                }
+                if (msgs[i].role === 'user' && !userMsg) userMsg = msgs[i];
+                if (msgs[i].role === 'bot' && !botMsg) botMsg = msgs[i];
                 if (userMsg && botMsg) break;
             }
             if (!userMsg || !botMsg) {
                 alert('تعذر العثور على سؤال وجواب في المحادثة.');
                 return;
             }
-
             const userText = userMsg.content;
             const botText = botMsg.content;
-
             let category = getCategoryForText(userText);
-            if (category === 'default') {
-                category = 'custom';
-            }
-
+            if (category === 'default') category = 'custom';
             if (!customReplies[category]) {
                 customReplies[category] = { keywords: [], responses: [] };
             }
@@ -2980,35 +2040,41 @@
             if (!customReplies[category].responses.includes(botText)) {
                 customReplies[category].responses.push(botText);
             }
-
             saveCustomReplies();
             rebuildKeywordsMap();
-
             alert('تم التعلم بنجاح! سأستطيع الآن الإجابة على أسئلة مشابهة.');
         }
 
         // ============================================================
-        //  دوال إنشاء الرد الذكي (مع تعطيل الوكيل والبحث في المعزز)
+        //  الرد الذكي
         // ============================================================
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
 
-            if (lower.includes('عرض المنتجات') || lower.includes('المنتجات') || lower.includes('قائمة المنتجات') || lower.includes(
-                    'اشتري')) {
+            // أولوية عالية: البحث عن لغات البرمجة
+            const codeObj = findCodeCategory(text);
+            if (codeObj) {
+                const codeReply = getCodeResponse(codeObj);
+                if (codeReply) {
+                    return { type: 'code', content: codeReply };
+                }
+            }
+
+            if (lower.includes('عرض المنتجات') || lower.includes('المنتجات') || lower.includes('قائمة المنتجات') || lower.includes('اشتري')) {
                 return { type: 'products', content: buildAllProductsRow() };
             }
 
-            if (lower.includes('وكيل') || lower.includes('تفعيل الوكيل') || lower.includes('شراء') && lower.includes('وكيل')) {
-                return { type: 'text', content: ' ميزة وكيل MEN Ai ستكون متاحة قريباً.' };
+            if (lower.includes('وكيل') || lower.includes('تفعيل الوكيل') || (lower.includes('شراء') && lower.includes('وكيل'))) {
+                return { type: 'text', content: '⏳ ميزة وكيل MEN Ai ستكون متاحة قريباً.' };
             }
 
             if (lower.includes('معزز') || lower.includes('boost') || lower.includes('تعزيز')) {
-                return { type: 'text', content: ' ميزة البحث في المعزز ستكون متاحة قريباً.' };
+                return { type: 'text', content: '⏳ ميزة البحث في المعزز ستكون متاحة قريباً.' };
             }
 
             const mathResult = evaluateMath(text);
             if (mathResult !== null) {
-                return { type: 'text', content: ` النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
+                return { type: 'text', content: `النتيجة هي: **${mathResult}**\nهل تريد حل مسألة أخرى؟` };
             }
 
             if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
@@ -3066,7 +2132,7 @@
         function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
         // ============================================================
-        //  دوال إرسال الرسائل مع دعم الملفات
+        //  إرسال الرسائل
         // ============================================================
         const messagesArea = document.getElementById('messagesArea');
         const messageInput = document.getElementById('messageInput');
@@ -3136,9 +2202,9 @@
 
                 const userMsg = document.createElement('div');
                 userMsg.className = 'message user';
-                let userDisplay = text || ' أرسل ملفاً';
+                let userDisplay = text || '📎 أرسل ملفاً';
                 if (attachedFile) {
-                    userDisplay += ` <span style="color:#4a7aff;font-size:0.8rem;"> ${attachedFile.name}</span>`;
+                    userDisplay += ` <span style="color:#4a7aff;font-size:0.8rem;">📎 ${attachedFile.name}</span>`;
                 }
                 userMsg.innerHTML = escapeHtml(userDisplay) + `<span class="msg-time">الآن</span>`;
                 messagesArea.appendChild(userMsg);
@@ -3160,8 +2226,7 @@
                 let reply = await generateSmartReply(text || fileText || 'ملف');
                 if (attachedFile && fileText && fileText.length > 0) {
                     if (reply.type === 'text') {
-                        reply.content =
-                            ` لقد استخرجت النص من ملفك:\n"${fileText.substring(0, 200)}${fileText.length > 200 ? '...' : ''}"\n\n${reply.content}`;
+                        reply.content = `📄 لقد استخرجت النص من ملفك:\n"${fileText.substring(0, 200)}${fileText.length > 200 ? '...' : ''}"\n\n${reply.content}`;
                     }
                 }
 
@@ -3176,9 +2241,39 @@
                     replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
                     const actions = document.createElement('div');
                     actions.className = 'bot-actions';
-                    actions.innerHTML = `
-                        <button class="copy-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-copy"></i> نسخ</button>
-                    `;
+                    actions.innerHTML = `<button class="copy-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-copy"></i> نسخ</button>`;
+                    botMsg.appendChild(actions);
+                    await delay(200);
+                } else if (reply.type === 'code') {
+                    const codeReply = reply.content;
+                    botMsg.innerHTML = buildCodeHtml(codeReply.text, codeReply.code, codeReply.language)
+                        + `<span class="msg-time">الآن</span>`;
+
+                    const preEl = botMsg.querySelector('.code-content');
+                    if (preEl) preEl.textContent = codeReply.code || '';
+
+                    const codeCopyBtn = botMsg.querySelector('.code-copy-btn');
+                    if (codeCopyBtn) {
+                        codeCopyBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const codeBlock = this.closest('.code-block');
+                            const code = codeBlock.querySelector('.code-content').textContent;
+                            navigator.clipboard.writeText(code).then(() => {
+                                const orig = this.innerHTML;
+                                this.classList.add('copied');
+                                this.innerHTML = '<i class="fas fa-check"></i> تم النسخ';
+                                setTimeout(() => {
+                                    this.classList.remove('copied');
+                                    this.innerHTML = orig;
+                                }, 1500);
+                            }).catch(() => { alert('تعذر نسخ الكود'); });
+                        });
+                    }
+
+                    replyContent = `${codeReply.text || ''}\n\n\`\`\`${codeReply.language || ''}\n${codeReply.code || ''}\n\`\`\``;
+                    const actions = document.createElement('div');
+                    actions.className = 'bot-actions';
+                    actions.innerHTML = `<button class="copy-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-copy"></i> نسخ الرد</button>`;
                     botMsg.appendChild(actions);
                     await delay(200);
                 } else {
@@ -3190,9 +2285,7 @@
                     replyContent = reply.content;
                     const actions = document.createElement('div');
                     actions.className = 'bot-actions';
-                    actions.innerHTML = `
-                        <button class="copy-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-copy"></i> نسخ</button>
-                    `;
+                    actions.innerHTML = `<button class="copy-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-copy"></i> نسخ</button>`;
                     botMsg.appendChild(actions);
                 }
 
@@ -3204,9 +2297,7 @@
                             const orig = this.innerHTML;
                             this.innerHTML = '<i class="fas fa-check"></i> تم';
                             setTimeout(() => { this.innerHTML = orig; }, 1500);
-                        }).catch(() => {
-                            alert('تعذر نسخ النص');
-                        });
+                        }).catch(() => { alert('تعذر نسخ النص'); });
                     });
                 });
 
@@ -3218,7 +2309,7 @@
                     await delay(600);
                     const boostMsg = document.createElement('div');
                     boostMsg.className = 'message bot';
-                    const boostContent = ' هل تريد مساعدة إضافية؟ يمكنك سؤالي عن أي شيء آخر.';
+                    const boostContent = '💡 هل تريد مساعدة إضافية؟ يمكنك سؤالي عن أي شيء آخر.';
                     boostMsg.innerHTML = boostContent + `<span class="msg-time">الآن</span>`;
                     messagesArea.appendChild(boostMsg);
                     scrollToBottom();
@@ -3244,24 +2335,23 @@
         }
 
         // ============================================================
-        //  إرسال إلى Discord (الويب هوك القديم)
+        //  Discord Webhook
         // ============================================================
         async function sendToDiscord(userMessage, botReply) {
             try {
                 const payload = {
-                    content: `**رسالة جديدة من MEN Ai**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
+                    content: `**رسالة جديدة من MEN Ai**\n👤 **المستخدم:** ${userMessage}\n🤖 **رد البوت:** ${botReply}\n⏰ ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
                 };
-                await fetch(
-                    'https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-            } catch (err) { console.warn('فشل إرسال الـ webhook القديم:', err); }
+                await fetch('https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) { console.warn('فشل إرسال الـ webhook:', err); }
         }
 
         // ============================================================
-        //  تحميل الردود والمنتجات والمكتبات الخارجية + mdr.json
+        //  تحميل البيانات
         // ============================================================
         async function loadResponses() {
             try {
@@ -3327,6 +2417,21 @@
             }
         }
 
+        async function loadCodResponses() {
+            try {
+                const response = await fetch('cod.json');
+                if (!response.ok) throw new Error('تعذر تحميل ملف cod.json');
+                const data = await response.json();
+                codResponses = data;
+                console.log('تم تحميل cod.json بنجاح، عدد اللغات:', Object.keys(codResponses).length);
+                return true;
+            } catch (error) {
+                console.warn('لم يتم العثور على cod.json، سيتم تعطيل ردود البرمجة.', error);
+                codResponses = {};
+                return false;
+            }
+        }
+
         async function loadProducts() {
             try {
                 const response = await fetch('products.json');
@@ -3376,7 +2481,6 @@
             return new Promise((resolve) => {
                 let loaded = 0;
                 const total = 4;
-
                 function check() { if (++loaded >= total) resolve(); }
 
                 const tesseract = document.createElement('script');
@@ -3408,64 +2512,54 @@
         }
 
         // ============================================================
-        //  اقتراحات متحركة في حقل الإدخال (تظهر تدريجياً وتتغير كل 7 ثوانٍ)
+        //  الاقتراحات المتحركة في حقل الإدخال
         // ============================================================
         const suggestions = [
             "اسأل عن المنتجات...؟",
             "اسأل MEN Ai",
             "أسألني عن أي شي ؟",
-            "كيف أجواء مدينة العلا...؟",
+            "اعطني كود بايثون...",
+            "مثال على جافاسكربت...",
             "عرض اسعار المتجر؟",
             "تواصل مع الدعم الفني؟",
             "متى تأسس الفريق؟"
         ];
         let suggestionIndex = 0;
         let placeholderInterval = null;
-        let typingInterval = null; // مؤقت الكتابة التدريجية
+        let typingInterval = null;
         let isTyping = false;
         let currentSuggestion = '';
         let charIndex = 0;
 
-        // دالة لبدء كتابة الاقتراح الحالي بشكل تدريجي
         function startTypingSuggestion() {
             const input = document.getElementById('messageInput');
-            if (document.activeElement === input) {
-                // إذا كان الحقل في حالة تركيز، لا نكتب شيئاً
-                return;
-            }
-            // نمسح أي مؤقت كتابة سابق
+            if (document.activeElement === input) return;
             if (typingInterval) {
                 clearInterval(typingInterval);
                 typingInterval = null;
             }
-            // نأخذ الاقتراح الحالي
             currentSuggestion = suggestions[suggestionIndex];
             charIndex = 0;
-            input.placeholder = ''; // نبدأ فارغاً
+            input.placeholder = '';
             isTyping = true;
 
-            // نبدأ كتابة حرف حرف كل 50 مللي ثانية
             typingInterval = setInterval(() => {
                 if (charIndex < currentSuggestion.length) {
                     input.placeholder += currentSuggestion.charAt(charIndex);
                     charIndex++;
                 } else {
-                    // انتهت الكتابة
                     clearInterval(typingInterval);
                     typingInterval = null;
                     isTyping = false;
-                    // بعد الانتهاء، ننتظر 7 ثوانٍ ثم ننتقل للاقتراح التالي
-                    clearTimeout(placeholderInterval); // نلغي أي مؤقت سابق
+                    clearTimeout(placeholderInterval);
                     placeholderInterval = setTimeout(() => {
-                        // ننتقل للاقتراح التالي
                         suggestionIndex = (suggestionIndex + 1) % suggestions.length;
-                        startTypingSuggestion(); // نبدأ كتابة الاقتراح الجديد
-                    }, 7000); // 7 ثوانٍ
+                        startTypingSuggestion();
+                    }, 7000);
                 }
-            }, 50); // سرعة الكتابة (50 مللي لكل حرف)
+            }, 50);
         }
 
-        // دالة لإيقاف الكتابة التدريجية
         function stopTypingSuggestion() {
             if (typingInterval) {
                 clearInterval(typingInterval);
@@ -3478,15 +2572,11 @@
             isTyping = false;
         }
 
-        // دالة لإعادة تشغيل الاقتراحات بعد فقدان التركيز
         function restartTyping() {
             stopTypingSuggestion();
-            // نبدأ من الاقتراح التالي بعد ثانيتين
             setTimeout(() => {
-                // نتأكد أن الحقل لا يزال غير مركز
                 const input = document.getElementById('messageInput');
                 if (document.activeElement !== input) {
-                    // ننتقل للاقتراح التالي
                     suggestionIndex = (suggestionIndex + 1) % suggestions.length;
                     startTypingSuggestion();
                 }
@@ -3501,7 +2591,7 @@
             sendBtn.disabled = true;
 
             await loadExternalLibraries();
-            await Promise.all([loadResponses(), loadMdrResponses(), loadProducts()]);
+            await Promise.all([loadResponses(), loadMdrResponses(), loadCodResponses(), loadProducts()]);
 
             loadCustomReplies();
             rebuildKeywordsMap();
@@ -3518,44 +2608,34 @@
             messageInput.focus();
             sendBtn.disabled = false;
 
-            // بدء كتابة الاقتراح الأول بعد ثانية
-            setTimeout(() => {
-                startTypingSuggestion();
-            }, 1000);
+            setTimeout(() => { startTypingSuggestion(); }, 1000);
 
-            // عند التركيز على الحقل، نوقف الكتابة التدريجية ونخفي الـ placeholder
             messageInput.addEventListener('focus', function() {
                 stopTypingSuggestion();
-                this.placeholder = ''; // نمسح النص المكتوب
+                this.placeholder = '';
             });
 
-            // عند فقدان التركيز، نستأنف الكتابة بعد 2 ثانية
             messageInput.addEventListener('blur', function() {
                 if (this.value.trim() === '') {
-                    // فقط إذا كان الحقل فارغاً
                     restartTyping();
                 } else {
-                    // إذا كان هناك نص مكتوب، لا نعرض اقتراحات
                     stopTypingSuggestion();
                     this.placeholder = '';
                 }
             });
 
-            // إذا قام المستخدم بكتابة أي حرف، نوقف الكتابة التدريجية ونخفي الاقتراح
             messageInput.addEventListener('input', function() {
                 if (this.value.length > 0) {
                     stopTypingSuggestion();
                     this.placeholder = '';
                 } else {
-                    // إذا مسح كل النص، نستأنف الكتابة بعد 2 ثانية
                     restartTyping();
                 }
             });
 
-            console.log(' MEN Ai جاهز (الوكيل والبحث في المعزز معطلان مؤقتاً – قريباً)');
+            console.log(' MEN Ai جاهز');
             console.log(`الحد الأقصى للرسائل: ${maxMessagesPerSession}, التعزيز التلقائي: ${autoBoostEnabled}, الوكيل التلقائي: ${autoAgentEnabled}`);
-            console.log('تم تحميل mdr.json ودمجه مع الردود الأساسية.');
-            console.log('اقتراحات الإدخال تظهر تدريجياً وتتغير كل 7 ثوانٍ.');
+            console.log('تم تحميل mdr.json و cod.json.');
         }
 
         init();
