@@ -1289,7 +1289,10 @@
             return false;
         }
 
-        function saveToMemory(role, content) {
+        // ============================================================
+        //  ✅ حفظ الرسائل مع نوعها وبياناتها الإضافية
+        // ============================================================
+        function saveToMemory(role, content, type = 'text', meta = null) {
             try {
                 const memory = getMemory();
                 let session = memory.sessions.find(s => s.id === memory.currentSessionId);
@@ -1299,7 +1302,7 @@
                     session = memory.sessions.find(s => s.id === id);
                 }
                 const timestamp = new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' });
-                session.messages.push({ role, content, timestamp });
+                session.messages.push({ role, content, type, meta, timestamp });
                 session.lastUpdated = timestamp;
                 if (role === 'user' && session.messages.length === 1) {
                     const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
@@ -1440,6 +1443,9 @@
             } catch (e) { console.warn('فشل استرجاع الجلسة:', e); }
         }
 
+        // ============================================================
+        //  ✅ عرض الجلسة حسب نوع كل رسالة (نص / منتج / كود)
+        // ============================================================
         function loadCurrentSession() {
             const session = getCurrentSession();
             if (!session) return;
@@ -1467,7 +1473,49 @@
             session.messages.forEach(msg => {
                 const div = document.createElement('div');
                 div.className = `message ${msg.role}`;
-                div.innerHTML = escapeHtml(msg.content) + `<span class="msg-time">${msg.timestamp || 'الآن'}</span>`;
+                const timeHtml = `<span class="msg-time">${msg.timestamp || 'الآن'}</span>`;
+
+                if (msg.role === 'bot' && msg.type === 'products') {
+                    // ✅ عرض كل المنتجات عند الاسترجاع
+                    div.innerHTML = buildAllProductsRow() + timeHtml;
+
+                } else if (msg.role === 'bot' && msg.type === 'product' && msg.meta) {
+                    // ✅ عرض منتج واحد عند الاسترجاع
+                    div.innerHTML = `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(msg.meta)}</div></div>` + timeHtml;
+
+                } else if (msg.role === 'bot' && msg.type === 'code' && msg.meta) {
+                    // ✅ عرض رد الكود مع تلوينه عند الاسترجاع
+                    const codeReply = msg.meta;
+                    div.innerHTML = buildCodeHtml(codeReply.text || '', codeReply.code || '', codeReply.language || 'code') + timeHtml;
+
+                    const textEl = div.querySelector('.code-text');
+                    if (textEl) textEl.textContent = codeReply.text || '';
+
+                    const preEl = div.querySelector('.code-content');
+                    if (preEl && codeReply.code) {
+                        try { preEl.innerHTML = highlightCode(codeReply.code, codeReply.language); }
+                        catch (e) { preEl.textContent = codeReply.code; }
+                    }
+
+                    const codeCopyBtn = div.querySelector('.code-copy-btn');
+                    if (codeCopyBtn) {
+                        codeCopyBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const code = this.closest('.code-block').querySelector('.code-content').textContent;
+                            navigator.clipboard.writeText(code).then(() => {
+                                const orig = this.innerHTML;
+                                this.classList.add('copied');
+                                this.innerHTML = '<i class="fas fa-check"></i> تم النسخ';
+                                setTimeout(() => { this.classList.remove('copied'); this.innerHTML = orig; }, 1500);
+                            }).catch(() => { alert('تعذر نسخ الكود'); });
+                        });
+                    }
+
+                } else {
+                    // رسالة نصية عادية
+                    div.innerHTML = escapeHtml(msg.content) + timeHtml;
+                }
+
                 if (msg.role === 'bot') {
                     const actions = document.createElement('div');
                     actions.className = 'bot-actions';
@@ -1723,13 +1771,11 @@
             if (!code) return '';
             const lang = (language || 'javascript').toLowerCase();
 
-            // 1) نجيب HTML escape
             let text = code
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
 
-            // 2) نخزّن النصوص والتعليقات في markers مؤقتة
             const stash = [];
             const STASH_OPEN = '\uE000q';
             const STASH_CLOSE = 'q\uE001';
@@ -1739,13 +1785,11 @@
                 return id;
             };
 
-            // نصوص (strings)
             text = text.replace(
                 /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/g,
                 (m) => stashIt('<span class="tok-string">' + m + '</span>')
             );
 
-            // تعليقات (comments) حسب اللغة
             if (lang === 'python' || lang === 'ruby') {
                 text = text.replace(/(#[^\n]*)/g, (m) => stashIt('<span class="tok-comment">' + m + '</span>'));
             } else if (lang === 'sql') {
@@ -1757,10 +1801,8 @@
                 text = text.replace(/(\/\*[\s\S]*?\*\/)/g, (m) => stashIt('<span class="tok-comment">' + m + '</span>'));
             }
 
-            // 3) الأرقام
             text = text.replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="tok-number">$1</span>');
 
-            // 4) الكلمات المفتاحية
             const kw = CODE_KEYWORDS[lang] || CODE_KEYWORDS.javascript;
             if (kw && kw.length) {
                 const escapedKw = kw
@@ -1770,13 +1812,11 @@
                 text = text.replace(kwRegex, '<span class="tok-keyword">$1</span>');
             }
 
-            // 5) أسماء الدوال (كلمة متبوعة بـ قوس)
             text = text.replace(
                 /\b([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g,
                 (m, name) => '<span class="tok-function">' + name + '</span>('
             );
 
-            // 6) نرجّع النصوص والتعليقات
             text = text.replace(/\uE000q(\d+)q\uE001/g, (_, i) => stash[parseInt(i)] || '');
 
             return text;
@@ -2155,7 +2195,6 @@
         async function generateSmartReply(text) {
             const lower = text.trim().toLowerCase();
 
-            // أولوية عالية: البحث عن لغات البرمجة
             const codeObj = findCodeCategory(text);
             if (codeObj) {
                 const codeReply = getCodeResponse(codeObj);
@@ -2191,7 +2230,12 @@
 
             const product = findProduct(text);
             if (product) {
-                return { type: 'product', content: `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(product)}</div></div>` };
+                // ✅ نرجّع بيانات المنتج لحفظها لاحقاً
+                return {
+                    type: 'product',
+                    content: `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(product)}</div></div>`,
+                    product: product
+                };
             }
 
             let category = getCategoryForText(text);
@@ -2336,7 +2380,7 @@
                 messagesArea.appendChild(userMsg);
                 scrollToBottom();
 
-                saveToMemory('user', userContent);
+                saveToMemory('user', userContent, 'text');
 
                 messageInput.value = '';
                 messageInput.style.height = 'auto';
@@ -2417,7 +2461,6 @@
                                 }, CODE_BLOCK_SPEED);
                             });
 
-                            //  بعد اكتمال الكتابة: لوّن الكود
                             try {
                                 preEl.innerHTML = highlightCode(codeStr, codeReply.language);
                                 scrollToBottom();
@@ -2482,7 +2525,16 @@
                     });
                 });
 
-                saveToMemory('bot', replyContent || 'تم عرض المنتج');
+                // ✅ حفظ حسب نوع الرد
+                if (reply.type === 'products') {
+                    saveToMemory('bot', 'تم عرض المنتجات', 'products');
+                } else if (reply.type === 'product') {
+                    saveToMemory('bot', 'تم عرض المنتج', 'product', reply.product);
+                } else if (reply.type === 'code') {
+                    saveToMemory('bot', replyContent, 'code', reply.content);
+                } else {
+                    saveToMemory('bot', replyContent, 'text');
+                }
 
                 await sendToDiscord(userContent, replyContent);
 
@@ -2494,7 +2546,7 @@
                     boostMsg.innerHTML = boostContent + `<span class="msg-time">الآن</span>`;
                     messagesArea.appendChild(boostMsg);
                     scrollToBottom();
-                    saveToMemory('bot', boostContent);
+                    saveToMemory('bot', boostContent, 'text');
                 }
 
                 if (attachedFile) hideAttachedFile();
