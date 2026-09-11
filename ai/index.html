@@ -855,6 +855,17 @@
         .code-content::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 12px; }
         .code-content::-webkit-scrollbar-thumb { background: var(--blue-deep); border-radius: 12px; }
 
+        /* ========== تلوين عناصر الكود (Syntax Highlighting) ========== */
+        .code-content .tok-keyword { color: #569cd6; font-weight: 700; }
+        .code-content .tok-string { color: #ce9178; }
+        .code-content .tok-comment { color: #6a9955; font-style: italic; }
+        .code-content .tok-number { color: #b5cea8; }
+        .code-content .tok-function { color: #dcdcaa; }
+        .code-content .tok-builtin { color: #4ec9b0; }
+        .code-content .tok-operator { color: #d4d4d4; }
+        .code-content .tok-class { color: #4ec9b0; font-weight: 600; }
+        .code-content .tok-constant { color: #569cd6; }
+
         @media (max-width: 768px) {
             .chat-wrapper { height: calc(100vh - 160px); min-height: 400px; border-radius: var(--radius-xl); }
             .message { max-width: 90%; padding: 12px 16px; font-size: 0.95rem; }
@@ -1688,6 +1699,90 @@
         }
 
         // ============================================================
+        //  مُلوّن الأكواد البرمجية (Syntax Highlighter)
+        // ============================================================
+        const CODE_KEYWORDS = {
+            python: ['def','class','if','elif','else','for','while','return','import','from','as','try','except','finally','with','lambda','yield','global','nonlocal','pass','break','continue','raise','assert','del','in','is','not','and','or','None','True','False','async','await','self','print','input','len','range','str','int','float','list','dict','set','tuple','bool'],
+            javascript: ['function','const','let','var','if','else','for','while','return','class','extends','new','this','try','catch','finally','throw','async','await','import','export','from','default','switch','case','break','continue','typeof','instanceof','null','undefined','true','false','delete','in','of','do','yield','super','static','get','set','NaN','Infinity','console','document','window','Math','JSON','Array','Object','String','Number','Promise','Map','Set'],
+            typescript: ['function','const','let','var','if','else','for','while','return','class','extends','implements','interface','type','enum','new','this','try','catch','finally','throw','async','await','import','export','from','default','switch','case','break','continue','typeof','instanceof','null','undefined','true','false','public','private','protected','readonly','static','as','any','string','number','boolean','void','never','unknown','keyof','infer'],
+            java: ['public','private','protected','class','interface','extends','implements','static','final','void','int','double','float','long','short','byte','char','boolean','String','if','else','for','while','do','switch','case','break','continue','return','new','this','super','try','catch','finally','throw','throws','import','package','null','true','false','abstract','synchronized','volatile','transient','native','enum','assert','instanceof','System','Math','List','ArrayList','Map','HashMap'],
+            cpp: ['int','float','double','char','bool','void','long','short','unsigned','signed','const','static','class','struct','public','private','protected','if','else','for','while','do','switch','case','break','continue','return','new','delete','this','try','catch','throw','namespace','using','include','template','typename','virtual','nullptr','true','false','auto','constexpr','inline','friend','operator','sizeof','typedef','union','extern','cout','cin','endl','std','vector','string'],
+            csharp: ['using','namespace','class','interface','struct','enum','public','private','protected','internal','static','readonly','const','void','int','double','float','string','bool','char','var','new','this','base','if','else','for','foreach','while','do','switch','case','break','continue','return','try','catch','finally','throw','async','await','null','true','false','abstract','sealed','override','virtual','partial','get','set','Console','List','Dictionary','Task','String','Int32'],
+            php: ['function','class','interface','extends','implements','public','private','protected','static','const','if','else','elseif','for','foreach','while','do','switch','case','break','continue','return','new','this','try','catch','finally','throw','echo','print','require','include','null','true','false','namespace','use','as','array','isset','empty','unset','die','exit','global','static'],
+            sql: ['select','from','where','insert','into','values','update','set','delete','create','table','alter','drop','index','join','inner','left','right','outer','on','group','by','order','having','limit','offset','as','and','or','not','null','primary','key','foreign','references','int','varchar','text','date','datetime','decimal','count','sum','avg','min','max','distinct','union','all','case','when','then','else','end','like','between','is','auto_increment','default','constraint'],
+            go: ['package','import','func','var','const','type','struct','interface','map','chan','go','defer','if','else','for','range','switch','case','break','continue','return','new','make','nil','true','false','int','string','bool','float64','byte','rune','uint','int64','error','select','fallthrough'],
+            rust: ['fn','let','mut','const','static','struct','enum','impl','trait','pub','use','mod','crate','self','Self','super','if','else','match','for','while','loop','break','continue','return','as','in','ref','move','where','unsafe','async','await','true','false','Some','None','Ok','Err','String','Vec','Option','Result','i32','i64','u32','u64','f64','usize'],
+            kotlin: ['fun','val','var','class','interface','object','data','enum','sealed','if','else','when','for','while','do','break','continue','return','try','catch','finally','throw','new','this','super','import','package','as','in','is','null','true','false','private','public','protected','internal','open','override','abstract','companion','object'],
+            swift: ['func','var','let','class','struct','enum','protocol','extension','if','else','guard','for','while','repeat','switch','case','break','continue','return','try','catch','throw','import','as','in','is','nil','true','false','self','Self','init','deinit','public','private','internal','static','override','final','lazy','weak','unowned','String','Int','Double','Bool','Array','Dictionary','Optional'],
+            ruby: ['def','class','module','if','elsif','else','unless','while','until','for','do','end','begin','rescue','ensure','raise','return','yield','require','require_relative','include','extend','attr_accessor','attr_reader','attr_writer','puts','print','nil','true','false','self','new','then','case','when','break','next','redo','retry'],
+            html: ['DOCTYPE','html','head','body','title','meta','link','script','style','div','span','p','a','img','ul','ol','li','h1','h2','h3','h4','h5','h6','form','input','button','select','option','textarea','table','tr','td','th','thead','tbody','header','footer','nav','main','section','article','aside','class','id','href','src','alt','type','name','value','placeholder'],
+            css: ['body','html','div','span','p','a','img','ul','ol','li','h1','h2','h3','header','footer','nav','main','section','article','class','id','color','background','margin','padding','border','font','display','flex','grid','width','height','position','top','left','right','bottom','transition','transform','animation','opacity','z-index','content','before','after','hover','active','focus']
+        };
+
+        function highlightCode(code, language) {
+            if (!code) return '';
+            const lang = (language || 'javascript').toLowerCase();
+
+            // 1) نجيب HTML escape
+            let text = code
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            // 2) نخزّن النصوص والتعليقات في markers مؤقتة
+            const stash = [];
+            const STASH_OPEN = '\uE000q';
+            const STASH_CLOSE = 'q\uE001';
+            const stashIt = (html) => {
+                const id = STASH_OPEN + stash.length + STASH_CLOSE;
+                stash.push(html);
+                return id;
+            };
+
+            // نصوص (strings)
+            text = text.replace(
+                /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/g,
+                (m) => stashIt('<span class="tok-string">' + m + '</span>')
+            );
+
+            // تعليقات (comments) حسب اللغة
+            if (lang === 'python' || lang === 'ruby') {
+                text = text.replace(/(#[^\n]*)/g, (m) => stashIt('<span class="tok-comment">' + m + '</span>'));
+            } else if (lang === 'sql') {
+                text = text.replace(/(--[^\n]*)/g, (m) => stashIt('<span class="tok-comment">' + m + '</span>'));
+            } else if (lang === 'html') {
+                text = text.replace(/(&lt;!--[\s\S]*?--&gt;)/g, (m) => stashIt('<span class="tok-comment">' + m + '</span>'));
+            } else {
+                text = text.replace(/(\/\/[^\n]*)/g, (m) => stashIt('<span class="tok-comment">' + m + '</span>'));
+                text = text.replace(/(\/\*[\s\S]*?\*\/)/g, (m) => stashIt('<span class="tok-comment">' + m + '</span>'));
+            }
+
+            // 3) الأرقام
+            text = text.replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="tok-number">$1</span>');
+
+            // 4) الكلمات المفتاحية
+            const kw = CODE_KEYWORDS[lang] || CODE_KEYWORDS.javascript;
+            if (kw && kw.length) {
+                const escapedKw = kw
+                    .map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+                    .sort((a, b) => b.length - a.length);
+                const kwRegex = new RegExp('\\b(' + escapedKw.join('|') + ')\\b', lang === 'sql' ? 'gi' : 'g');
+                text = text.replace(kwRegex, '<span class="tok-keyword">$1</span>');
+            }
+
+            // 5) أسماء الدوال (كلمة متبوعة بـ قوس)
+            text = text.replace(
+                /\b([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g,
+                (m, name) => '<span class="tok-function">' + name + '</span>('
+            );
+
+            // 6) نرجّع النصوص والتعليقات
+            text = text.replace(/\uE000q(\d+)q\uE001/g, (_, i) => stash[parseInt(i)] || '');
+
+            return text;
+        }
+
+        // ============================================================
         //  دوال المنتجات وعرضها
         // ============================================================
         function buildAllProductsRow() {
@@ -2116,7 +2211,6 @@
                 element.innerHTML = '';
                 const interval = setInterval(() => {
                     if (index < text.length) {
-                        // نحافظ على الأسطر الجديدة
                         const ch = text.charAt(index);
                         if (ch === '\n') {
                             element.innerHTML += '<br>';
@@ -2133,7 +2227,6 @@
             });
         }
 
-        // كتابة النص داخل عنصر مع حفظ المسافات والأسطر
         function typeTextInto(element, text, speed) {
             return new Promise((resolve) => {
                 let index = 0;
@@ -2235,9 +2328,9 @@
 
                 const userMsg = document.createElement('div');
                 userMsg.className = 'message user';
-                let userDisplay = text || '📎 أرسل ملفاً';
+                let userDisplay = text || ' أرسل ملفاً';
                 if (attachedFile) {
-                    userDisplay += ` <span style="color:#4a7aff;font-size:0.8rem;">📎 ${attachedFile.name}</span>`;
+                    userDisplay += ` <span style="color:#4a7aff;font-size:0.8rem;"> ${attachedFile.name}</span>`;
                 }
                 userMsg.innerHTML = escapeHtml(userDisplay) + `<span class="msg-time">الآن</span>`;
                 messagesArea.appendChild(userMsg);
@@ -2259,7 +2352,7 @@
                 let reply = await generateSmartReply(text || fileText || 'ملف');
                 if (attachedFile && fileText && fileText.length > 0) {
                     if (reply.type === 'text') {
-                        reply.content = `📄 لقد استخرجت النص من ملفك:\n"${fileText.substring(0, 200)}${fileText.length > 200 ? '...' : ''}"\n\n${reply.content}`;
+                        reply.content = ` لقد استخرجت النص من ملفك:\n"${fileText.substring(0, 200)}${fileText.length > 200 ? '...' : ''}"\n\n${reply.content}`;
                     }
                 }
 
@@ -2278,26 +2371,20 @@
                     botMsg.appendChild(actions);
                     await delay(200);
                 } else if (reply.type === 'code') {
-                    // 🐢 عرض تدريجي لردود الأكواد: أولاً النص، ثم كتلة الكود، ثم الكود نفسه
                     const codeReply = reply.content;
 
-                    // نبني هيكل الرد (بدون النص وبدون الكود بعد)
                     botMsg.innerHTML = buildCodeHtml('', '', codeReply.language);
 
-                    // نضيف عنصر النص لو موجود
                     const codeContainer = botMsg.querySelector('.code-response');
                     if (codeReply.text) {
                         const textEl = document.createElement('p');
                         textEl.className = 'code-text';
                         codeContainer.insertBefore(textEl, codeContainer.firstChild);
-                        // نكتب النص بشويش
                         await typeTextInto(textEl, codeReply.text, CODE_TEXT_SPEED);
                     }
 
-                    // ننتظر شوي قبل ما نضيف الكود
                     await delay(250);
 
-                    // نضيف كتلة الكود
                     if (codeReply.code) {
                         const codeBlockHtml = `
                             <div class="code-block">
@@ -2314,7 +2401,6 @@
 
                         const preEl = codeContainer.querySelector('.code-content');
                         if (preEl) {
-                            // نكتب الكود حرف حرف (بسرعة أعلى لأنه طويل)
                             const codeStr = codeReply.code;
                             await new Promise((resolve) => {
                                 let ci = 0;
@@ -2330,9 +2416,16 @@
                                     }
                                 }, CODE_BLOCK_SPEED);
                             });
+
+                            //  بعد اكتمال الكتابة: لوّن الكود
+                            try {
+                                preEl.innerHTML = highlightCode(codeStr, codeReply.language);
+                                scrollToBottom();
+                            } catch (err) {
+                                console.warn('فشل تلوين الكود:', err);
+                            }
                         }
 
-                        // ربط زر نسخ الكود
                         const codeCopyBtn = codeContainer.querySelector('.code-copy-btn');
                         if (codeCopyBtn) {
                             codeCopyBtn.addEventListener('click', function(e) {
@@ -2352,13 +2445,11 @@
                         }
                     }
 
-                    // وقت الرسالة
                     const timeSpan = document.createElement('span');
                     timeSpan.className = 'msg-time';
                     timeSpan.textContent = 'الآن';
                     botMsg.appendChild(timeSpan);
 
-                    // محتوى للنسخ (النص + الكود بصيغة Markdown)
                     replyContent = `${codeReply.text || ''}\n\n\`\`\`${codeReply.language || ''}\n${codeReply.code || ''}\n\`\`\``;
 
                     const actions = document.createElement('div');
@@ -2367,7 +2458,6 @@
                     botMsg.appendChild(actions);
                     await delay(200);
                 } else {
-                    // 🐢 النص العادي: كتابة بطيئة (TYPING_SPEED)
                     await typeText(botMsg, reply.content, TYPING_SPEED);
                     const timeSpan = document.createElement('span');
                     timeSpan.className = 'msg-time';
@@ -2400,7 +2490,7 @@
                     await delay(600);
                     const boostMsg = document.createElement('div');
                     boostMsg.className = 'message bot';
-                    const boostContent = '💡 هل تريد مساعدة إضافية؟ يمكنك سؤالي عن أي شيء آخر.';
+                    const boostContent = ' هل تريد مساعدة إضافية؟ يمكنك سؤالي عن أي شيء آخر.';
                     boostMsg.innerHTML = boostContent + `<span class="msg-time">الآن</span>`;
                     messagesArea.appendChild(boostMsg);
                     scrollToBottom();
@@ -2431,7 +2521,7 @@
         async function sendToDiscord(userMessage, botReply) {
             try {
                 const payload = {
-                    content: `**رسالة جديدة من MEN Ai**\n👤 **المستخدم:** ${userMessage}\n🤖 **رد البوت:** ${botReply}\n⏰ ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
+                    content: `**رسالة جديدة من MEN Ai**\n **المستخدم:** ${userMessage}\n **رد البوت:** ${botReply}\n ${new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })}`
                 };
                 await fetch('https://discord.com/api/webhooks/1525837076250099733/dFhKcri1KEHTTUXY6zSWd6Duup-NeWCJQ2GtXlx2R2RF9N3RhkrjIWGYt-NPY_kNhHR9', {
                     method: 'POST',
@@ -2540,7 +2630,7 @@
                     "price": "49",
                     "currency": "ر.س",
                     "image": "images/pass.png",
-                    "badge": "⭐ مميز",
+                    "badge": " مميز",
                     "link": "store.html",
                     "keywords": ["pass", "اشتراك", "men pass", "باقة"]
                 }, {
@@ -2550,7 +2640,7 @@
                     "price": "99",
                     "currency": "ر.س",
                     "image": "images/pro.png",
-                    "badge": "🔥 احترافية",
+                    "badge": " احترافية",
                     "link": "pro.html",
                     "keywords": ["pro", "احترافي", "مطور", "أدوات"]
                 }, {
@@ -2560,7 +2650,7 @@
                     "price": "19",
                     "currency": "ر.س",
                     "image": "images/basic.png",
-                    "badge": "🚀 أساسية",
+                    "badge": " أساسية",
                     "link": "basic.html",
                     "keywords": ["basic", "أساسي", "مبتدئ"]
                 }];
@@ -2724,7 +2814,7 @@
                 }
             });
 
-            console.log(' MEN Ai جاهز (كتابة بطيئة)');
+            console.log(' MEN Ai جاهز ');
             console.log(`الحد الأقصى للرسائل: ${maxMessagesPerSession}, التعزيز التلقائي: ${autoBoostEnabled}`);
             console.log(`سرعات الكتابة - نص: ${TYPING_SPEED}ms | شرح كود: ${CODE_TEXT_SPEED}ms | كود: ${CODE_BLOCK_SPEED}ms`);
         }
