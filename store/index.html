@@ -1887,8 +1887,8 @@
         </div>
     </div>
 
-    <!-- ===== AI MODAL (لم يُستخدم — التوجيه إلى men2020.company/ai) ===== -->
-    <div id="aiModal" class="ai-modal-overlay" style="display:none !important;">
+    <!-- ===== AI MODAL ===== -->
+    <div id="aiModal" class="ai-modal-overlay">
         <div class="ai-modal">
             <div class="modal-close" id="aiModalClose"><i class="fas fa-times"></i></div>
             <h3><i class="fas fa-wand-sparkles"></i> MEN Ai</h3>
@@ -1979,13 +1979,15 @@
             { author: "منى الشمري", stars: 5, text: "اشتراك MEN Pass ممتاز ويستحق التجربة!" }
         ];
 
-        // ===== CAROUSEL ADS =====
+        // ===== CAROUSEL ADS (بطاقة معركة + عروض) =====
         const ads = [
             { 
                 img: "https://www.socialcreator.com/srv/imgs/ti_imgs/201887_332160.png",
                 title: "عروض الـPass", 
                 desc: "MEN Pass " 
             },
+            
+            
         ];
 
         // ============================================================
@@ -2001,9 +2003,6 @@
         let currentSort = 'default';
         let carouselIndex = 0;
         let carouselInterval = null;
-
-        // رابط صفحة الذكاء الاصطناعي
-        const AI_PAGE_URL = 'https://men2020.company/ai/';
 
         // ============================================================
         // UTILITIES
@@ -2318,22 +2317,202 @@
         }
 
         // ============================================================
-        // AI → Redirect to https://men2020.company/ai/
+        // AI
         // ============================================================
-        function goToAI(productId) {
-            if (productId) {
-                window.location.href = AI_PAGE_URL + '?product=' + encodeURIComponent(productId);
-            } else {
-                window.location.href = AI_PAGE_URL;
+        function getAIResponse(text) {
+            const lower = text.toLowerCase();
+            if (lower.includes('pass') || lower.includes('باس') || lower.includes('الاشتراك') || lower.includes('اشتراك') ||
+                lower.includes('العضوية') || lower.includes('الـ pass')) {
+                const passProduct = productsArray.find(p => p.id === 5);
+                if (passProduct) {
+                    lastViewedProductId = passProduct.id;
+                    return getProductAdvice(passProduct.id) +
+                        `\n\n🛒 لشراء اشتراك MEN Pass، يمكنك:\n1. إضافته مباشرة إلى السلة بالضغط على زر "إضافة" أعلاه.\n2. أو كتابة "أضف اشتراك MEN Pass" وسأقوم بإضافته لك.\n3. أو الذهاب إلى المتجر والبحث عنه.`;
+                }
             }
+            if (lower.includes('مرحب') || lower.includes('سلام') || lower.includes('اهلا') || lower.includes('hi') ||
+                lower.includes('hello')) {
+                return `👋 أهلاً وسهلاً! أنا مساعد MEN الذكي.\n\nأستطيع مساعدتك في:\n• عرض المنتجات والبحث عنها.\n• مقارنة المنتجات.\n• نصائح الشراء.\n• تتبع الطلبات.\n• العروض والكوبونات.\n• إدارة السلة والمفضلة.\n• 🎫 اشتراك MEN Pass - اسألني عنه!\n\n📌 اكتب ما تريده بالعربية، وسأفهمك.`;
+            }
+            if (lower.includes('شكر') || lower.includes('thank')) return '🙏 الشكر لك! أنا هنا لخدمتك دائماً. هل تحتاج مساعدة أخرى؟ 😊';
+            if (lower.includes('سلتي') || lower.includes('ماذا في السلة') || lower.includes('show cart') || lower.includes(
+                    'my cart')) {
+                return getCartSummaryHTML();
+            }
+            if (lower.includes('عرض') || lower.includes('خصم') || lower.includes('كوبون') || lower.includes('offer') ||
+                lower.includes('discount') || lower.includes('coupon')) {
+                return getPersonalizedOffers();
+            }
+            if (lower.includes('عرض المنتجات') || lower.includes('جميع المنتجات') || lower.includes('كل المنتجات') || lower
+                .includes('show products')) {
+                let list = productsArray.map(p =>
+                    `- ${p.name} (${p.price} ر.س) - ${p.category} ${p.popular ? '🔥' : ''}`).join('\n');
+                return `📦 جميع منتجاتنا:\n\n${list}\n\n📌 اختر منتجاً واكتب اسمه للحصول على تفاصيل أكثر.`;
+            }
+
+            const searchResult = findClosestMatch(text);
+            if (searchResult.products.length > 0) {
+                if (searchResult.products.length === 1 || searchResult.exact) {
+                    const p = searchResult.products[0];
+                    lastViewedProductId = p.id;
+                    return getProductAdvice(p.id) + `\n\n🛒 هل تريد إضافته للسلة؟ اكتب "أضف ${p.name}"`;
+                } else {
+                    let list = searchResult.products.map(p => `- ${p.name} (${p.price} ر.س) - ${p.category}`)
+                        .join('\n');
+                    return `🔎 نتائج البحث عن "${text}":\n\n${list}\n\n📌 اختر واحداً واكتب اسمه للحصول على تفاصيل أكثر.`;
+                }
+            }
+
+            if (lower.includes('أضف') || lower.includes('add')) {
+                let target = null;
+                const keywords = text.split(/[\s,،]+/).filter(w => w.length > 1);
+                for (let kw of keywords) {
+                    const found = productsArray.find(p => p.name.toLowerCase().includes(kw));
+                    if (found) { target = found; break; }
+                }
+                if (!target && lastViewedProductId) target = productsArray.find(p => p.id === lastViewedProductId);
+                if (target) {
+                    addToCart(target);
+                    return `✅ تمت إضافة ${target.name} إلى السلة!\n\n${getProductAdvice(target.id)}`;
+                } else return "⚠️ لم أتمكن من تحديد المنتج. اكتب اسم المنتج بدقة.";
+            }
+
+            if (lower.includes('مساعدة') || lower.includes('help')) {
+                return `❓ المساعدة السريعة:\n\n• عرض المنتجات - لعرض الكل.\n• ابحث عن [اسم] - للبحث عن منتج.\n• قارن بين [اسم1] و [اسم2] - للمقارنة.\n• أضف [اسم] - للإضافة للسلة.\n• سلتي - لعرض محتويات السلة.\n• عروض - للاطلاع على العروض.\n• 🎫 اشتراك MEN Pass - اسألني عنه.\n\n🌍 يمكنك الكتابة بالعربية.`;
+            }
+
+            const fallback = productsArray.slice(0, 3);
+            return `🧐 لم أفهم تماماً، لكن يمكنك:\n\n• اكتب اسم منتج معين (مثل: تيشيرت، ستور، روبلوكس، اشتراك MEN Pass).\n• اطلب مساعدة: "مساعدة".\n• اسأل عن العروض: "عروض".\n\n🔹 منتجات قد تهمك:\n${fallback.map(p => `- ${p.name} (${p.price} ر.س)`).join('\n')}`;
+        }
+
+        function getCartSummaryHTML() {
+            if (cartItems.length === 0) return "🛒 سلتك فارغة حالياً.";
+            let html = "🧾 محتويات سلتك:\n\n";
+            let total = 0;
+            cartItems.forEach(p => {
+                const subtotal = parseFloat(p.price) * p.quantity;
+                total += subtotal;
+                html += `- ${p.name} × ${p.quantity} = ${subtotal.toFixed(2)} ر.س\n`;
+            });
+            html += `\n💰 الإجمالي: ${total.toFixed(2)} ر.س`;
+            if (discountApplied && discountPercent > 0) {
+                const disc = total * (discountPercent / 100);
+                html += ` (خصم ${discountPercent}% = -${disc.toFixed(2)} ر.س) → ${(total - disc).toFixed(2)} ر.س`;
+            }
+            return html;
+        }
+
+        function getProductAdvice(productId) {
+            const p = productsArray.find(pr => pr.id === productId);
+            if (!p) return "⚠️ المنتج غير موجود.";
+            let advice =
+                `🔍 نصيحة حول ${p.name}\n\n⭐ التقييم: ${p.rating}/5\n📂 التصنيف: ${p.category}\n💰 السعر: ${p.price} ر.س\n📝 الوصف: ${p.description}\n✨ المميزات:\n`;
+            p.features.forEach(f => advice += `  ✅ ${f}\n`);
+            if (p.cons && p.cons.length) {
+                advice += `⚠️ العيوب:\n`;
+                p.cons.forEach(c => advice += `  ❌ ${c}\n`);
+            }
+            advice += `🛠️ طريقة الاستخدام: ${p.usage}\n🛡️ الضمان: ${p.warranty}\n🏷️ الوسوم: ${p.tags.join('، ')}\n`;
+            if (p.popular) advice += `🔥 هذا المنتج الأكثر مبيعاً!\n`;
+            advice += `\n💡 هل تريد إضافته إلى السلة؟ اكتب "أضف ${p.name}"`;
+            return advice;
+        }
+
+        function getPersonalizedOffers() {
+            const all = productsArray.filter(p => p.popular).slice(0, 3);
+            if (all.length === 0) return "🎁 لا توجد عروض حالياً، تابعنا للمزيد.";
+            return `🎁 عروض خاصة لك:\n${all.map(p => `- ${p.name} بسعر ${p.price} ر.س (${p.category})`).join('\n')}\n\n🔖 استخدم كود (MEN1) لخصم إضافي 10% على الإلكترونيات.`;
+        }
+
+        function findClosestMatch(query) {
+            const words = query.split(/[\s,،]+/).filter(w => w.length > 1);
+            let candidates = productsArray,
+                result = [];
+            for (let p of candidates) {
+                let bestSim = 0;
+                for (let kw of words) {
+                    let sim = similarity(kw, p.name);
+                    if (sim > bestSim) bestSim = sim;
+                    for (let tag of p.tags) { let s = similarity(kw, tag); if (s > bestSim) bestSim = s; }
+                }
+                if (bestSim > 0.2) result.push({ product: p, sim: bestSim });
+            }
+            result.sort((a, b) => b.sim - a.sim);
+            const unique = [];
+            const ids = new Set();
+            for (let r of result) { if (!ids.has(r.product.id)) { ids.add(r.product.id);
+                    unique.push(r); } }
+            return { products: unique.map(r => r.product), exact: unique.length > 0 && unique[0].sim > 0.8 };
+        }
+
+        function similarity(s1, s2) {
+            if (!s1 || !s2) return 0;
+            const a = s1.toLowerCase().trim(),
+                b = s2.toLowerCase().trim();
+            if (a === b) return 1;
+            let longer = a.length >= b.length ? a : b;
+            let shorter = a.length < b.length ? a : b;
+            if (longer.length === 0) return 0;
+            let cost = 0;
+            for (let i = 0; i < shorter.length; i++) { if (longer[i] !== shorter[i]) cost++; }
+            return (longer.length - cost) / longer.length;
+        }
+
+        function sendAIMessage(text) {
+            const chatBox = document.getElementById('aiChatBox');
+            if (!chatBox) return;
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'ai-message user';
+            userMsg.textContent = text;
+            chatBox.appendChild(userMsg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            const thinkingEl = document.createElement('div');
+            thinkingEl.className = 'ai-message thinking';
+            thinkingEl.innerHTML = `<span class="spinner"></span> جاري البحث...`;
+            chatBox.appendChild(thinkingEl);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            setTimeout(() => {
+                if (thinkingEl.parentNode) thinkingEl.remove();
+                const reply = getAIResponse(text);
+                const botMsg = document.createElement('div');
+                botMsg.className = 'ai-message bot';
+                chatBox.appendChild(botMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                function typeMessage(element, fullText, index = 0) {
+                    if (index >= fullText.length) {
+                        element.querySelectorAll('.btn-add-from-chat').forEach(btn => {
+                            btn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                const id = parseInt(this.dataset.id);
+                                const product = productsArray.find(p => p.id === id);
+                                if (product) addToCart(product);
+                            });
+                        });
+                        return;
+                    }
+                    element.innerHTML = fullText.substring(0, index + 1);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                    setTimeout(() => typeMessage(element, fullText, index + 1), 40);
+                }
+                typeMessage(botMsg, reply);
+            }, 800);
         }
 
         function openAIForProduct(productId) {
-            goToAI(productId);
+            const product = productsArray.find(p => p.id === productId);
+            if (!product) return;
+            lastViewedProductId = product.id;
+            document.getElementById('aiModal').classList.add('active');
+            sendAIMessage(`ابحث عن ${product.name}`);
         }
 
         function openAIChat() {
-            goToAI();
+            document.getElementById('aiModal').classList.add('active');
+            setTimeout(() => document.getElementById('aiUserInput').focus(), 300);
         }
 
         // ============================================================
@@ -2390,8 +2569,10 @@
             </div>
           `).join('');
 
+            // Product click -> detail modal
             grid.querySelectorAll('.product-item').forEach(el => {
                 el.addEventListener('click', function(e) {
+                    // منع الفتح إذا تم الضغط على زر
                     if (e.target.closest('.btn-ai-search') || e.target.closest('.add-to-cart')) return;
                     const id = parseInt(this.dataset.id);
                     openProductDetail(id);
@@ -2457,7 +2638,7 @@
             renderReviews();
             updateCartUI();
 
-            // Carousel controls
+            // Carousel controls - auto play with pause on hover
             document.getElementById('heroCarousel').addEventListener('mouseenter', stopCarousel);
             document.getElementById('heroCarousel').addEventListener('mouseleave', startCarousel);
 
@@ -2569,10 +2750,33 @@
                 }
             });
 
-            // AI button → redirect to https://men2020.company/ai/
+            // AI Modal
+            const aiModal = document.getElementById('aiModal');
             document.getElementById('aiAssistantBtn').addEventListener('click', openAIChat);
+            document.getElementById('aiModalClose').addEventListener('click', () => aiModal.classList.remove('active'));
+            aiModal.addEventListener('click', (e) => { if (e.target === aiModal) aiModal.classList.remove('active'); });
+            document.getElementById('aiSendBtn').addEventListener('click', () => {
+                const input = document.getElementById('aiUserInput');
+                const text = input.value.trim();
+                if (text) { sendAIMessage(text);
+                    input.value = ''; }
+            });
+            document.getElementById('aiUserInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const input = document.getElementById('aiUserInput');
+                    const text = input.value.trim();
+                    if (text) { sendAIMessage(text);
+                        input.value = ''; }
+                }
+            });
+            document.querySelectorAll('.ai-quick-btns .qbtn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const query = this.dataset.query;
+                    if (query) sendAIMessage(query);
+                });
+            });
 
-            // FAB → redirect to https://men2020.company/ai/
+            // FAB
             document.getElementById('fabOpenChat').addEventListener('click', openAIChat);
 
             // Reviews Carousel
