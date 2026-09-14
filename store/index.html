@@ -1887,7 +1887,7 @@
         </div>
     </div>
 
-    <!-- ===== AI MODAL (لم يُستخدم بعد الآن — يتم التوجيه إلى /ai/) ===== -->
+    <!-- ===== AI MODAL (لم يُستخدم — التوجيه إلى men2020.company/ai) ===== -->
     <div id="aiModal" class="ai-modal-overlay" style="display:none !important;">
         <div class="ai-modal">
             <div class="modal-close" id="aiModalClose"><i class="fas fa-times"></i></div>
@@ -2003,7 +2003,7 @@
         let carouselInterval = null;
 
         // رابط صفحة الذكاء الاصطناعي
-        const AI_PAGE_URL = '/ai/';
+        const AI_PAGE_URL = 'https://men2020.company/ai/';
 
         // ============================================================
         // UTILITIES
@@ -2318,7 +2318,7 @@
         }
 
         // ============================================================
-        // AI → Redirect to /ai/
+        // AI → Redirect to https://men2020.company/ai/
         // ============================================================
         function goToAI(productId) {
             if (productId) {
@@ -2390,7 +2390,6 @@
             </div>
           `).join('');
 
-            // Product click -> detail modal
             grid.querySelectorAll('.product-item').forEach(el => {
                 el.addEventListener('click', function(e) {
                     if (e.target.closest('.btn-ai-search') || e.target.closest('.add-to-cart')) return;
@@ -2570,10 +2569,10 @@
                 }
             });
 
-            // AI button → redirect to /ai/
+            // AI button → redirect to https://men2020.company/ai/
             document.getElementById('aiAssistantBtn').addEventListener('click', openAIChat);
 
-            // FAB → redirect to /ai/
+            // FAB → redirect to https://men2020.company/ai/
             document.getElementById('fabOpenChat').addEventListener('click', openAIChat);
 
             // Reviews Carousel
