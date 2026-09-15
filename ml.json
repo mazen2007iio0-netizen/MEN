@@ -1,1 +1,179 @@
+{
+  "settings": {
+    "banner": {
+      "title": "عروض Pass",
+      "text": "خصم يصل إلى 10% على جميع التشكيلات الجديدة",
+      "code": "MEN1",
+      "icon": "fas fa-tags"
+    },
+    "discountCodes": [
+      { "code": "MEN1",      "percent": 10 },
+      { "code": "SUMMER10",  "percent": 10 },
+      { "code": "MEN20",     "percent": 20 }
+    ],
+    "carouselInterval": 5000
+  },
 
+  "ads": [
+    {
+      "img": "https://www.socialcreator.com/srv/imgs/ti_imgs/201887_332160.png",
+      "title": "عروض الـPass",
+      "desc": "MEN Pass"
+    }
+  ],
+
+  "reviews": [
+    { "author": "أحمد السالم",    "stars": 5, "text": "المتجر رائع جداً والمنتجات أصلية." },
+    { "author": "نورة العتيبي",   "stars": 4, "text": "خدمة سريعة ومنتجات جيدة." },
+    { "author": "خالد الحربي",    "stars": 5, "text": "أفضل تيشيرتات في السوق." },
+    { "author": "سارة الغامدي",   "stars": 4, "text": "الشحن سريع والدعم متعاون." },
+    { "author": "فيصل المالكي",   "stars": 3, "text": "منتج جيد لكن السعر مرتفع قليلاً." },
+    { "author": "منى الشمري",     "stars": 5, "text": "اشتراك MEN Pass ممتاز ويستحق التجربة!" }
+  ],
+
+  "products": [
+    {
+      "id": 5,
+      "name": "اشتراك MEN Pass",
+      "price": "7.50",
+      "originalPrice": "10.00",
+      "discount": 25,
+      "offerLabel": "عرض خاص",
+      "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/200908_328971.png",
+      "category": "اشتراكات",
+      "rating": 5.0,
+      "features": ["ألعاب حصرية", "محتوى فيديو حصري", "بثوث للمشتركين", "بدون إعلانات", "دعم فني 24/7"],
+      "cons": ["الاشتراك شهري قابل للتجديد"],
+      "description": "اشتراك MEN Pass يمنحك وصولاً غير محدود إلى محتوى حصري من ألعاب وفيديوهات وبثوث، بدون أي إعلانات مزعجة.",
+      "tags": ["اشتراك", "عضوية", "حصرية", "ألعاب", "فيديوهات", "بثوث"],
+      "usage": "بعد الشراء، سيتم إرسال تفاصيل الدخول إلى بريدك الإلكتروني خلال 24 ساعة.",
+      "warranty": "ضمان استرداد خلال 3 أيام في حال عدم الرضا",
+      "popular": true
+    },
+    {
+      "id": 6,
+      "name": "بطاقة المعركة",
+      "price": "34.99",
+      "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/201133_332160.png",
+      "category": "بطاقات شحن",
+      "rating": 4.7,
+      "features": ["شحن منافس", "دخول بــجوائز", "لعب وكسب"],
+      "cons": ["قد يكون التأخر في الرد جائز"],
+      "description": "بطاقة المعركة + السحب على جوائز.",
+      "tags": ["العاب", "هدية", "رقمي", "جوائز"],
+      "usage": "يتم الشحن فورا او ارساله ك هديه.",
+      "warranty": "ضمان الاستبدال في حال عدم صلاحية الكود",
+      "popular": false
+    },
+    {
+      "id": 7,
+      "name": "Grand Theft Auto VI",
+      "price": "279.99",
+      "originalPrice": "329.99",
+      "discount": 15,
+      "image": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1818/9f51f0ccdb65bd29c36a0907a738c2902a712f03e2fd6470.png",
+      "category": "لعبة",
+      "rating": 5.0,
+      "features": ["شحن منافس", "دخول بــجوائز", "لعب وكسب"],
+      "cons": ["قد يكون التأخر في الرد جائز"],
+      "description": "لعبة رقمية + السحب على جوائز.",
+      "tags": ["العاب", "هدية", "رقمي", "جوائز"],
+      "usage": "يتم الارسال فورا او ارساله ك هديه.",
+      "warranty": "ضمان الاستبدال في حال عدم صلاحية الكود",
+      "popular": true
+    },
+    {
+      "id": 8,
+      "name": "سماعة اكسترايك مي",
+      "price": "119.99",
+      "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/202379_332160.png",
+      "category": "مستلزمات الألعاب",
+      "rating": 4.7,
+      "features": ["سلكي", "مؤثرات ضوئية", "سماعة للألعاب"],
+      "cons": ["قد يكون التأخر في الرد جائز"],
+      "description": "سماعة اكسترايك مي للألعاب.",
+      "tags": ["العاب", "هدية", "سماعة", "جوائز"],
+      "usage": "يتم الارسال فورا او ارساله ك هديه.",
+      "warranty": "ضمان الاستبدال في حال عدم التشغيل",
+      "popular": false
+    },
+    {
+      "id": 9,
+      "name": "كنترول سوني 5",
+      "price": "349",
+      "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/202380_332160.png",
+      "category": "مستلزمات الألعاب",
+      "rating": 4.8,
+      "features": ["لاسلكي", "مؤثرات ضوئية", "بلون اسود"],
+      "cons": ["قد يكون التأخر في الرد جائز"],
+      "description": "كنترول 5 من شركة سوني.",
+      "tags": ["العاب", "هدية", "كنترول", "جوائز"],
+      "usage": "يتم الارسال فورا او ارساله ك هديه.",
+      "warranty": "ضمان الاستبدال في حال عدم التشغيل",
+      "popular": false
+    },
+    {
+      "id": 1,
+      "name": "تيشيرت الجديد",
+      "price": "79.99",
+      "originalPrice": "99.99",
+      "discount": 20,
+      "offerLabel": "تخفيض",
+      "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png",
+      "category": "ملابس",
+      "rating": 4.8,
+      "features": ["قطني ناعم", "مقاس مرن", "تصميم عصري"],
+      "cons": ["قد يكون مقاسه غير دقيق"],
+      "description": "تيشيرت قطني مريح بتصميم عصري يناسب جميع الأوقات.",
+      "tags": ["سفر", "هدية", "أسود", "صيفي"],
+      "usage": "يمكن ارتداؤه مع جينز أو شورت.",
+      "warranty": "ضمان 30 يوم ضد عيوب الصناعة",
+      "popular": false
+    },
+    {
+      "id": 3,
+      "name": "روبلوكس 20 ريال",
+      "price": "19.90",
+      "image": "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
+      "category": "بطاقات شحن",
+      "rating": 4.6,
+      "features": ["سعر مناسب", "شحن فوري"],
+      "cons": ["لا يمكن استخدامه في حسابات غير سعودية"],
+      "description": "بطاقة روبلوكس بقيمة 20 ريال.",
+      "tags": ["ألعاب", "هدية", "رقمي"],
+      "usage": "أدخل الكود في موقع روبلوكس.",
+      "warranty": "ضمان الاستبدال في حال عدم صلاحية الكود",
+      "popular": false
+    },
+    {
+      "id": 4,
+      "name": "ببجي 5 $",
+      "price": "19.90",
+      "image": "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp",
+      "category": "بطاقات شحن",
+      "rating": 4.4,
+      "features": ["شحن فوري", "يدعم ببجي موبايل"],
+      "cons": ["غير متوفر لجميع المناطق"],
+      "description": "بطاقة ببجي بقيمة 5 دولارات.",
+      "tags": ["ألعاب", "هدية", "رقمي"],
+      "usage": "ادخل الكود في متجر اللعبة.",
+      "warranty": "ضمان استبدال الكود في حال العطل",
+      "popular": false
+    },
+    {
+      "id": 2,
+      "name": "ستور سوني 10$",
+      "price": "39.35",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10",
+      "category": "بطاقات شحن",
+      "rating": 4.7,
+      "features": ["شحن فوري", "متوافق مع PlayStation Network"],
+      "cons": ["يستخدم في حساب سوني فقط"],
+      "description": "بطاقة شحن بقيمة 10$ لحساب سوني (PlayStation).",
+      "tags": ["سوني", "ستور", "رقمي", "هدية", "ألعاب"],
+      "usage": "أدخل الكود في متجر PlayStation لإضافة الرصيد.",
+      "warranty": "ضمان استبدال الكود إذا لم يعمل خلال 24 ساعة",
+      "popular": false
+    }
+  ]
+}
