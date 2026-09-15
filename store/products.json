@@ -8,7 +8,7 @@
     },
     "discountCodes": [
       { "code": "MEN1",      "percent": 10 },
-      { "code": "SUMMER10",  "percent": 10 },
+      { "code": "rrr",  "percent": 10 },
       { "code": "MEN20",     "percent": 20 }
     ],
     "carouselInterval": 5000
@@ -85,7 +85,10 @@
     {
       "id": 8,
       "name": "سماعة اكسترايك مي",
-      "price": "119.99",
+      "price": "96",
+      "originalPrice": "119.99",
+      "discount": 25,
+      "offerLabel": "عرض اليوم الوطني",
       "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/202379_332160.png",
       "category": "مستلزمات الألعاب",
       "rating": 4.7,
