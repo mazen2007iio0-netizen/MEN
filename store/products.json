@@ -23,12 +23,10 @@
   ],
 
   "reviews": [
-    { "author": "أحمد السالم",    "stars": 5, "text": "المتجر رائع جداً والمنتجات أصلية." },
-    { "author": "نورة العتيبي",   "stars": 4, "text": "خدمة سريعة ومنتجات جيدة." },
-    { "author": "خالد الحربي",    "stars": 5, "text": "أفضل تيشيرتات في السوق." },
-    { "author": "سارة الغامدي",   "stars": 4, "text": "الشحن سريع والدعم متعاون." },
-    { "author": "فيصل المالكي",   "stars": 3, "text": "منتج جيد لكن السعر مرتفع قليلاً." },
-    { "author": "منى الشمري",     "stars": 5, "text": "اشتراك MEN Pass ممتاز ويستحق التجربة!" }
+    { "author": "أحمد السالم",    "stars": 5, "text": "المتجر رائع جداً ." },
+    { "author": "نورة العتيبي",   "stars": 4, "text": "خدمة سريعة  ." },
+    { "author": "خالد الحربي",    "stars": 5, "text": "أفضل تيشيرتات  ." },
+    { "author": "منى الشمري",     "stars": 5, "text": " MEN Pass ممتاز  !" }
   ],
 
   "products": [
@@ -37,7 +35,7 @@
       "name": "اشتراك MEN Pass",
       "price": "7.50",
       "originalPrice": "10.00",
-      "discount": 25,
+      "discount": 25
       "offerLabel": "عرض خاص",
       "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/200908_328971.png",
       "category": "اشتراكات",
