@@ -1458,25 +1458,48 @@
     let currentModalProductId = null;
 
     // ============================================================
-    // LOAD DATA
+    // LOAD DATA — يجرب عدة مسارات تلقائياً
     // ============================================================
     async function loadStoreData() {
-        try {
-            const res = await fetch('products.json', { cache: 'no-store' });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            const data = await res.json();
-            productsArray = data.products || [];
-            reviewsData = data.reviews || [];
-            ads = data.ads || [];
-            if (data.settings) {
-                storeSettings = { ...storeSettings, ...data.settings };
-                if (data.settings.banner) storeSettings.banner = { ...storeSettings.banner, ...data.settings.banner };
+        // مسارات محتملة لملف products.json (جرّب بالترتيب)
+        const paths = [
+            'store/products.json',        // الحالة: index.html في الجذر و products.json داخل store
+            './store/products.json',
+            'products.json',              // الحالة: كلاهما بنفس المجلد
+            './products.json',
+            '../store/products.json',     // الحالة: index.html داخل مجلد فرعي و store في الأعلى
+            '/store/products.json'
+        ];
+
+        for (const path of paths) {
+            try {
+                const res = await fetch(path, { cache: 'no-store' });
+                if (!res.ok) continue;
+                const data = await res.json();
+
+                productsArray = data.products || [];
+                reviewsData = data.reviews || [];
+                ads = data.ads || [];
+
+                if (data.settings) {
+                    storeSettings = { ...storeSettings, ...data.settings };
+                    if (data.settings.banner) {
+                        storeSettings.banner = { ...storeSettings.banner, ...data.settings.banner };
+                    }
+                }
+
+                console.log('✅ تم تحميل البيانات بنجاح من:', path);
+                console.log('📦 عدد المنتجات:', productsArray.length);
+                return true;
+            } catch (err) {
+                // جرّب المسار التالي
+                continue;
             }
-            return true;
-        } catch (err) {
-            console.error('❌ فشل تحميل products.json:', err);
-            return false;
         }
+
+        console.error('❌ فشل تحميل products.json من جميع المسارات المتاحة');
+        console.error('📁 المسارات المُجرّبة:', paths);
+        return false;
     }
 
     function showLoadError() {
@@ -1486,8 +1509,12 @@
             <div class="load-error" style="grid-column:1/-1;">
                 <i class="fas fa-triangle-exclamation"></i>
                 تعذّر تحميل ملف <strong>products.json</strong><br>
-                تأكد من أن الملف موجود بجانب الصفحة،<br>
-                وأنك تشغّل الصفحة عبر سيرفر محلي (Live Server) وليس بفتح الملف مباشرة.
+                تم تجربة المسارات التالية:<br>
+                <code style="font-size:0.8rem; color:#b0b8d0;">store/products.json , ./store/products.json , products.json , ./products.json , ../store/products.json</code><br><br>
+                تأكد من:<br>
+                1️⃣ أن ملف <strong>products.json</strong> موجود داخل مجلد <strong>store</strong><br>
+                2️⃣ أنك تشغّل الصفحة عبر <strong>Live Server</strong> وليس بفتح الملف مباشرة<br>
+                3️⃣ افتح Console (F12) لمعرفة الخطأ بالتفصيل
             </div>`;
     }
 
