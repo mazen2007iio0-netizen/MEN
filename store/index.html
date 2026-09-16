@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MEN Store </title>
+    <title>MEN Store</title>
     <link rel="icon" type="image/png" href="logo.png" />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200..900&family=Cairo:wght@300..900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -82,21 +82,29 @@
 
         h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 
-        /* ===== RIYAL SYMBOL (جديد) ===== */
+        /* ===== RIYAL ICON (الشعار الجديد) ===== */
         .riyal-icon {
             display: inline-block;
-            width: 0.85em;
-            height: 0.85em;
-            vertical-align: -0.05em;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2.2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+            width: 0.9em;
+            height: 0.9em;
+            vertical-align: -0.08em;
             flex-shrink: 0;
+            transition: transform 0.2s ease, filter 0.2s ease;
         }
-        .riyal-icon.small { width: 0.72em; height: 0.72em; }
-        .riyal-icon.large { width: 1em; height: 1em; }
+        .riyal-icon.small {
+            width: 0.75em;
+            height: 0.75em;
+            vertical-align: -0.05em;
+        }
+        .riyal-icon.large {
+            width: 1.1em;
+            height: 1.1em;
+            vertical-align: -0.12em;
+        }
+        .riyal-icon:hover {
+            transform: scale(1.1);
+            filter: brightness(1.3);
+        }
 
         .price-line {
             display: inline-flex;
@@ -110,7 +118,7 @@
         }
         .price-line .riyal-icon {
             color: var(--blue-bright);
-            filter: drop-shadow(0 0 6px rgba(74,122,255,0.3));
+            filter: drop-shadow(0 0 8px rgba(74, 122, 255, 0.4));
         }
 
         /* ===== HEADER ===== */
@@ -2208,7 +2216,7 @@
                     <p><i class="fas fa-medal"></i> منتجات أصلية 100%</p>
                 </div>
             </div>
-            <div class="copyright">جميع الحقوق محفوظة © 2020 <span>MEN Store</span> — صُنع بشغف</div>
+            <div class="copyright">جميع الحقوق محفوظة © 2020 <span>MEN </span></div>
         </div>
     </footer>
 
@@ -2276,14 +2284,13 @@
 
     <script>
     // ============================================================
-    // SVG ICON — ريال سعودي (الرمز الجديد)
+    // RIYAL ICON — الشعار الجديد من الرابط
     // ============================================================
-    const RIYAL_SVG = `<svg class="riyal-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="ريال سعودي"><path d="M6.5 3.5 V20.5 M6.5 3.5 H14 M6.5 11.5 H12.5 M17.5 3.5 V20.5 M14.5 20.5 H20.5"/></svg>`;
-    const RIYAL_SVG_SMALL = RIYAL_SVG.replace('class="riyal-icon"', 'class="riyal-icon small"');
-
+    const RIYAL_IMG_URL = "https://www.socialcreator.com/srv/imgs/ti_imgs/200732_328971.png";
+    
     function riyal(size = '') {
-        if (size === 'small') return RIYAL_SVG_SMALL;
-        return RIYAL_SVG;
+        const cls = size ? `riyal-icon ${size}` : 'riyal-icon';
+        return `<img src="${RIYAL_IMG_URL}" class="${cls}" alt="ر.س" loading="lazy" style="filter: brightness(0) invert(1);">`;
     }
 
     // ============================================================
@@ -2409,7 +2416,6 @@
         document.getElementById('storePage').classList.add('active');
         document.getElementById('productPage').classList.remove('active');
         currentProductPageId = null;
-        // clean hash
         if (location.hash.startsWith('#product-')) {
             history.replaceState(null, '', location.pathname + location.search);
         }
@@ -2425,24 +2431,19 @@
         pageQty = 1;
         document.getElementById('pageQtyValue').textContent = '1';
 
-        // Update hash
         history.replaceState(null, '', '#product-' + p.id);
 
-        // Breadcrumb
         document.getElementById('breadcrumbCat').textContent = p.category;
         document.getElementById('breadcrumbName').textContent = p.name;
 
-        // Main image
         document.getElementById('pageProductImg').src = p.image;
         document.getElementById('pageProductImg').alt = p.name;
 
-        // Badges
         const badges = [];
         if (p.discount) badges.push(`<span class="product-discount-badge"><i class="fas fa-bolt"></i> خصم ${p.discount}%</span>`);
         if (p.popular) badges.push(`<span class="product-popular-badge"><i class="fas fa-fire"></i> الأكثر مبيعاً</span>`);
         document.getElementById('galleryBadges').innerHTML = badges.join('');
 
-        // Thumbs (نستخدم نفس الصورة 4 مرات + effect)
         const thumbs = [p.image, p.image, p.image, p.image];
         document.getElementById('galleryThumbs').innerHTML = thumbs.map((t, i) =>
             `<div class="gallery-thumb ${i === 0 ? 'active' : ''}" data-img="${t}"><img src="${t}" alt="${p.name}"></div>`
@@ -2455,18 +2456,13 @@
             });
         });
 
-        // Category
         document.getElementById('pageProductCat').innerHTML = `<i class="fas fa-tag"></i> <span>${p.category}</span>`;
-
-        // Title
         document.getElementById('pageProductName').textContent = p.name;
 
-        // Rating
         const stars = Math.round(parseFloat(p.rating)) || 5;
         document.getElementById('pageStars').textContent = '★'.repeat(stars) + '☆'.repeat(5 - stars);
         document.getElementById('pageRating').textContent = p.rating;
 
-        // Price
         let priceHTML = `<span class="current"><span class="num">${p.price}</span> ${riyal()}</span>`;
         if (p.originalPrice) {
             priceHTML += `<span class="old-price">${p.originalPrice}</span>`;
@@ -2475,19 +2471,14 @@
         }
         document.getElementById('pageProductPrice').innerHTML = priceHTML;
 
-        // Desc
         document.getElementById('pageProductDesc').textContent = p.description;
-
-        // Info blocks
         document.getElementById('pageUsage').textContent = p.usage || 'غير محدد';
         document.getElementById('pageWarranty').textContent = p.warranty || 'غير محدد';
 
-        // Features
         document.getElementById('pageFeatures').innerHTML =
             (p.features || []).map(f => `<li><i class="fas fa-circle-check"></i> <span>${f}</span></li>`).join('') ||
             '<li style="color:#6a708a; border-right-color:transparent;"><i class="fas fa-minus" style="color:#6a708a;"></i> <span>لا توجد مميزات مضافة</span></li>';
 
-        // Cons
         if (p.cons && p.cons.length) {
             document.getElementById('pageCons').innerHTML =
                 p.cons.map(c => `<li><i class="fas fa-circle-exclamation"></i> <span>${c}</span></li>`).join('');
@@ -2496,10 +2487,8 @@
                 '<li style="color:#6a708a; border-right-color:transparent;"><i class="fas fa-circle-check" style="color:#4caf50;"></i> <span>لا توجد عيوب ملحوظة</span></li>';
         }
 
-        // Tags
         document.getElementById('pageTags').innerHTML = (p.tags || []).map(t => `<span>#${t}</span>`).join('');
 
-        // Related products
         const related = productsArray
             .filter(x => x.id !== p.id && (x.category === p.category || (x.tags || []).some(t => (p.tags || []).includes(t))))
             .slice(0, 4);
@@ -2507,7 +2496,6 @@
         document.getElementById('relatedGrid').innerHTML = finalRelated.map(productCardHTML).join('');
         bindProductCards(document.getElementById('relatedGrid'));
 
-        // Hide store, show product
         document.getElementById('storePage').classList.remove('active');
         document.getElementById('productPage').classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3017,7 +3005,6 @@
         renderReviews();
         updateCartUI();
 
-        // Logo / nav → go home
         document.getElementById('headerLogo').addEventListener('click', () => {
             showStorePage();
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3036,7 +3023,6 @@
             });
         });
 
-        // Back button
         document.getElementById('backToStoreBtn').addEventListener('click', () => {
             showStorePage();
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3048,16 +3034,14 @@
             el.addEventListener('click', () => showStorePage());
         });
 
-        // Hero carousel hover
         const heroCarousel = document.getElementById('heroCarousel');
         if (heroCarousel) {
             heroCarousel.addEventListener('mouseenter', stopCarousel);
             heroCarousel.addEventListener('mouseleave', startCarousel);
         }
 
-        // Search
         document.getElementById('storeSearchInput')?.addEventListener('input', (e) => {
-            if (currentProductPageId) return; // search only on store page
+            if (currentProductPageId) return;
             const term = e.target.value.toLowerCase().trim();
             const grid = document.getElementById('storeProductsGrid');
             if (!grid) return;
@@ -3075,7 +3059,6 @@
             bindProductCards(grid);
         });
 
-        // Filter
         document.querySelectorAll('.filter-tags button').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.filter-tags button').forEach(b => b.classList.remove('active'));
@@ -3085,19 +3068,16 @@
             });
         });
 
-        // Sort
         document.getElementById('sortSelect').addEventListener('change', function() {
             currentSort = this.value;
             renderStore(currentFilter, currentSort);
         });
 
-        // Header Cart
         document.getElementById('headerCartBtn').addEventListener('click', () => {
             updateCartUI();
             document.getElementById('cartModal').classList.add('active');
         });
 
-        // Cart Modal
         document.getElementById('cartModalClose').addEventListener('click', () => {
             document.getElementById('cartModal').classList.remove('active');
         });
@@ -3117,7 +3097,6 @@
             );
         });
 
-        // Product page qty picker
         document.getElementById('pageQtyMinus').addEventListener('click', () => {
             if (pageQty > 1) { pageQty--; document.getElementById('pageQtyValue').textContent = pageQty; }
         });
@@ -3126,7 +3105,6 @@
             document.getElementById('pageQtyValue').textContent = pageQty;
         });
 
-        // Product page add to cart
         document.getElementById('pageAddToCart').addEventListener('click', () => {
             if (!currentProductPageId) return;
             const p = productsArray.find(x => x.id === currentProductPageId);
@@ -3136,7 +3114,6 @@
             if (currentProductPageId) openAIForProduct(currentProductPageId);
         });
 
-        // Gallery zoom (lightbox)
         const lightbox = document.getElementById('lightbox');
         document.getElementById('zoomBtn').addEventListener('click', () => {
             const src = document.getElementById('pageProductImg').src;
@@ -3150,7 +3127,6 @@
         });
         document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('active'));
 
-        // AI Modal
         const aiModal = document.getElementById('aiModal');
         document.getElementById('aiAssistantBtn').addEventListener('click', openAIChat);
         document.getElementById('aiModalClose').addEventListener('click', () => aiModal.classList.remove('active'));
@@ -3173,10 +3149,8 @@
             });
         });
 
-        // FAB
         document.getElementById('fabOpenChat').addEventListener('click', openAIChat);
 
-        // Reviews Carousel
         document.getElementById('prevReviewBtn').addEventListener('click', () => {
             if (currentReviewIndex > 0) { currentReviewIndex--; updateCarousel(); }
         });
@@ -3191,21 +3165,18 @@
         });
         window.addEventListener('resize', () => { updateCarousel(); });
 
-        // Header scroll
         window.addEventListener('scroll', () => {
             const header = document.getElementById('mainHeader');
             if (window.scrollY > 30) header.classList.add('scrolled');
             else header.classList.remove('scrolled');
         });
 
-        // ESC to close modals
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 document.querySelectorAll('.modal-overlay.active, .lightbox.active').forEach(m => m.classList.remove('active'));
             }
         });
 
-        // Handle deep-link (hash)
         handleInitialHash();
         window.addEventListener('hashchange', () => {
             if (location.hash.startsWith('#product-')) {
@@ -3220,7 +3191,6 @@
             }
         });
 
-        // Back/forward button
         window.addEventListener('popstate', () => {
             if (location.hash.startsWith('#product-')) {
                 const id = parseInt(location.hash.replace('#product-', ''));
