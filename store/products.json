@@ -4,12 +4,13 @@
       "title": "عروض Pass",
       "text": "خصم يصل إلى 10% على جميع التشكيلات الجديدة",
       "code": "MEN1",
-      "icon": "fas fa-tags"
+      "icon": "fas fa-tags",
+      "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/201887_332160.png"
     },
     "discountCodes": [
-      { "code": "MEN1",      "percent": 10 },
-      { "code": "rrr",  "percent": 10 },
-      { "code": "MEN20",     "percent": 20 }
+      { "code": "MEN1",  "percent": 10, "products": [] },
+      { "code": "rrr",   "percent": 10, "products": [5, 7, 9] },
+      { "code": "MEN20", "percent": 20, "products": [8, 9] }
     ],
     "carouselInterval": 5000
   },
@@ -23,12 +24,12 @@
   ],
 
   "reviews": [
-    { "author": "أحمد السالم",    "stars": 5, "text": "المتجر رائع جداً  ." },
-    { "author": "نورة العتيبي",   "stars": 4, "text": "خدمة سريعة  ." },
-    { "author": "خالد الحربي",    "stars": 5, "text": "أفضل تيشيرتات  ." },
-    { "author": "سارة الغامدي",   "stars": 4, "text": "الشحن سريع  ." },
-    { "author": "فيصل المالكي",   "stars": 3, "text": "منتج جيد    ." },
-    { "author": "منى الشمري",     "stars": 5, "text": " MEN Pass ممتاز  !" }
+    { "author": "أحمد السالم",  "stars": 5, "text": "المتجر رائع جداً ." },
+    { "author": "نورة العتيبي", "stars": 4, "text": "خدمة سريعة ." },
+    { "author": "خالد الحربي",  "stars": 5, "text": "أفضل تيشيرتات ." },
+    { "author": "سارة الغامدي", "stars": 4, "text": "الشحن سريع ." },
+    { "author": "فيصل المالكي", "stars": 3, "text": "منتج جيد ." },
+    { "author": "منى الشمري",   "stars": 5, "text": "MEN Pass ممتاز !" }
   ],
 
   "products": [
@@ -40,6 +41,12 @@
       "discount": 25,
       "offerLabel": "عرض خاص",
       "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/200908_328971.png",
+      "images": [
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/200908_328971.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/201887_332160.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/200908_328971.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/201887_332160.png"
+      ],
       "category": "اشتراكات",
       "rating": 5.0,
       "features": ["ألعاب حصرية", "محتوى فيديو حصري", "بثوث للمشتركين", "بدون إعلانات", "دعم فني 24/7"],
@@ -55,6 +62,12 @@
       "name": "بطاقة المعركة",
       "price": "34.99",
       "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/201133_332160.png",
+      "images": [
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/201133_332160.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/201133_332160.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/201133_332160.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/201133_332160.png"
+      ],
       "category": "بطاقات شحن",
       "rating": 4.7,
       "features": ["شحن منافس", "دخول بــجوائز", "لعب وكسب"],
@@ -72,6 +85,12 @@
       "originalPrice": "329.99",
       "discount": 15,
       "image": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1818/9f51f0ccdb65bd29c36a0907a738c2902a712f03e2fd6470.png",
+      "images": [
+        "https://image.api.playstation.com/vulcan/ap/rnd/202606/1818/9f51f0ccdb65bd29c36a0907a738c2902a712f03e2fd6470.png",
+        "https://image.api.playstation.com/vulcan/ap/rnd/202606/1818/9f51f0ccdb65bd29c36a0907a738c2902a712f03e2fd6470.png",
+        "https://image.api.playstation.com/vulcan/ap/rnd/202606/1818/9f51f0ccdb65bd29c36a0907a738c2902a712f03e2fd6470.png",
+        "https://image.api.playstation.com/vulcan/ap/rnd/202606/1818/9f51f0ccdb65bd29c36a0907a738c2902a712f03e2fd6470.png"
+      ],
       "category": "لعبة",
       "rating": 5.0,
       "features": ["شحن منافس", "دخول بــجوائز", "لعب وكسب"],
@@ -90,6 +109,12 @@
       "discount": 25,
       "offerLabel": "عرض اليوم الوطني",
       "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/202379_332160.png",
+      "images": [
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/202379_332160.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/202379_332160.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/202379_332160.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/202379_332160.png"
+      ],
       "category": "مستلزمات الألعاب",
       "rating": 4.7,
       "features": ["سلكي", "مؤثرات ضوئية", "سماعة للألعاب"],
@@ -105,6 +130,12 @@
       "name": "كنترول سوني 5",
       "price": "349",
       "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/202380_332160.png",
+      "images": [
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/202380_332160.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/202380_332160.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/202380_332160.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/202380_332160.png"
+      ],
       "category": "مستلزمات الألعاب",
       "rating": 4.8,
       "features": ["لاسلكي", "مؤثرات ضوئية", "بلون اسود"],
@@ -123,6 +154,12 @@
       "discount": 20,
       "offerLabel": "تخفيض",
       "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png",
+      "images": [
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png",
+        "https://www.socialcreator.com/srv/imgs/ti_imgs/200219_328971.png"
+      ],
       "category": "ملابس",
       "rating": 4.8,
       "features": ["قطني ناعم", "مقاس مرن", "تصميم عصري"],
@@ -138,6 +175,12 @@
       "name": "روبلوكس 20 ريال",
       "price": "19.90",
       "image": "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
+      "images": [
+        "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
+        "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
+        "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
+        "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp"
+      ],
       "category": "بطاقات شحن",
       "rating": 4.6,
       "features": ["سعر مناسب", "شحن فوري"],
@@ -153,6 +196,12 @@
       "name": "ببجي 5 $",
       "price": "19.90",
       "image": "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp",
+      "images": [
+        "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp",
+        "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp",
+        "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp",
+        "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6899c5e171d44_1754908129.webp"
+      ],
       "category": "بطاقات شحن",
       "rating": 4.4,
       "features": ["شحن فوري", "يدعم ببجي موبايل"],
@@ -168,6 +217,12 @@
       "name": "ستور سوني 10$",
       "price": "39.35",
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10",
+      "images": [
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTsrK5qUSCg_hp6XwfDeGRuAxv4jKXs7EQnirlneHBpw&s=10"
+      ],
       "category": "بطاقات شحن",
       "rating": 4.7,
       "features": ["شحن فوري", "متوافق مع PlayStation Network"],
