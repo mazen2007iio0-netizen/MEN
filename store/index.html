@@ -930,7 +930,7 @@ function showProductPage(productId){
     if(p.originalPrice){
         priceHTML+=`<span class="old-price">${p.originalPrice}</span>`;
         const diff=parseFloat(p.originalPrice)-parseFloat(p.price);
-        if(diff>0)priceHTML+=`<span class="save-badge"><i class="fas fa-piggy-bank"></i> وفّر ${diff.toFixed(2)} ر.س</span>`;
+        if(diff>0)priceHTML+=`<span class="save-badge"><i class="fas fa-sack-dollar"></i> وفّر ${diff.toFixed(2)} ر.س</span>`;
     }
     $('pageProductPrice').innerHTML=priceHTML;
     $('pageProductDesc').textContent=p.description||'';
@@ -1045,7 +1045,7 @@ function updateCartUI(){
 }
 
 async function sendCartRequest(userName,userPhone){
-    if(cartItems.length===0){showToast("🛒 السلة فارغة","error");return;}
+    if(cartItems.length===0){showToast(" السلة فارغة","error");return;}
     if(!userName||!userPhone){showToast("أدخل الاسم ورقم الجوال","error");return;}
     let productList=cartItems.map((p,i)=>`${i+1}. ${p.name} (x${p.quantity}) - ${(parseFloat(p.price)*p.quantity).toFixed(2)} ر.س`).join('\n');
     let total=cartItems.reduce((s,p)=>s+parseFloat(p.price)*p.quantity,0);
