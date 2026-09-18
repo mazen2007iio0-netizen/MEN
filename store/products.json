@@ -60,7 +60,8 @@
     {
       "id": 6,
       "name": "بطاقة المعركة",
-      "price": "34.99",
+      "price": "9.99",
+      "originalPrice": "34.99", 
       "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/201133_332160.png",
       "images": [
         "https://www.socialcreator.com/srv/imgs/ti_imgs/201133_332160.png",
