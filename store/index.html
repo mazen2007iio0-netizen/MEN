@@ -1079,15 +1079,15 @@ async function sendCartRequest(userName,userPhone){
     }
     const discountAmount=discountableAmount*(discountPercent/100);
     const finalTotal=total-discountAmount;
-    const embed={title:"🛒 طلب جديد من متجر MEN",color:0x4a7aff,fields:[
-        {name:"👤 العميل",value:userName,inline:true},
-        {name:"📱 الجوال",value:userPhone,inline:true},
-        {name:"📦 القطع",value:cartItems.reduce((s,p)=>s+p.quantity,0).toString(),inline:true},
-        {name:"💰 الإجمالي",value:`${total.toFixed(2)} ر.س`,inline:true},
-        ...(discountApplied&&discountPercent>0?[{name:"🎁 الخصم",value:`-${discountAmount.toFixed(2)} ر.س (${discountPercent}%)`,inline:true}]:[]),
-        {name:"✅ النهائي",value:`${finalTotal.toFixed(2)} ر.س`,inline:true},
-        {name:"🛍️ المنتجات",value:productList.substring(0,1000),inline:false},
-        {name:"🕐 الوقت",value:new Date().toLocaleString('ar-SA'),inline:true}
+    const embed={title:" طلب جديد من متجر MEN",color:0x4a7aff,fields:[
+        {name:" العميل",value:userName,inline:true},
+        {name:"الجوال",value:userPhone,inline:true},
+        {name:"القطع",value:cartItems.reduce((s,p)=>s+p.quantity,0).toString(),inline:true},
+        {name:" الإجمالي",value:`${total.toFixed(2)} ر.س`,inline:true},
+        ...(discountApplied&&discountPercent>0?[{name:" الخصم",value:`-${discountAmount.toFixed(2)} ر.س (${discountPercent}%)`,inline:true}]:[]),
+        {name:" النهائي",value:`${finalTotal.toFixed(2)} ر.س`,inline:true},
+        {name:" المنتجات",value:productList.substring(0,1000),inline:false},
+        {name:" الوقت",value:new Date().toLocaleString('ar-SA'),inline:true}
     ],thumbnail:{url:cartItems[0]?.image||''},timestamp:new Date().toISOString()};
     try{
         await fetch("https://discord.com/api/webhooks/1551181006957187132/bao_udMdzNVWgCktPc7DIHDL1tVD4BUZDmM0l7aDhyL-T8okYuJ0xQ2NpfQtnAuvsRFI",{
