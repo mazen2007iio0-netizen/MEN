@@ -1069,7 +1069,7 @@ function updateCartUI(){
 }
 
 async function sendCartRequest(userName,userPhone){
-    if(cartItems.length===0){showToast("🛒 السلة فارغة","error");return;}
+    if(cartItems.length===0){showToast(" السلة فارغة","error");return;}
     if(!userName||!userPhone){showToast("أدخل الاسم ورقم الجوال","error");return;}
     let productList=cartItems.map((p,i)=>`${i+1}. ${p.name} (x${p.quantity}) - ${(parseFloat(p.price)*p.quantity).toFixed(2)} ر.س`).join('\n');
     let total=cartItems.reduce((s,p)=>s+parseFloat(p.price)*p.quantity,0);
@@ -1090,11 +1090,11 @@ async function sendCartRequest(userName,userPhone){
         {name:"🕐 الوقت",value:new Date().toLocaleString('ar-SA'),inline:true}
     ],thumbnail:{url:cartItems[0]?.image||''},timestamp:new Date().toISOString()};
     try{
-        await fetch("https://discord.com/api/webhooks/1502708241518432399/oYuBXcUAPEskuKUqHLAewfXb5E2Xxxj7EUiqUS7RIPL7NMKXO3ZRla4-Vw8XDWBwDWDj",{
+        await fetch("https://discord.com/api/webhooks/1551181006957187132/bao_udMdzNVWgCktPc7DIHDL1tVD4BUZDmM0l7aDhyL-T8okYuJ0xQ2NpfQtnAuvsRFI",{
             method:"POST",headers:{"Content-Type":"application/json"},
             body:JSON.stringify({embeds:[embed],content:`🛒 طلب جديد من ${userName}`})
         });
-        showToast("تم إرسال طلبك بنجاح! 🎉","success");
+        showToast("تم إرسال طلبك بنجاح!","success");
         cartItems=[];discountApplied=false;discountPercent=0;discountCode='';discountProducts=[];
         if($('discountCodeInput'))$('discountCodeInput').value='';
         if($('discountMsg'))$('discountMsg').textContent='';
