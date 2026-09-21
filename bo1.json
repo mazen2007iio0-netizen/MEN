@@ -92,7 +92,7 @@
     "discord": "mazen_x",
     "userId": "U2022",
     "points": "73",
-    "category": "رئيس مجلس المشروع",
+    "category": "رئيس مجلس الإدارة",
     "avatar": "https://www.socialcreator.com/srv/imgs/ti_imgs/197914_309202.png",
     "activities": ["إدارة المشاريع"],
     "monthEarn": "0 ر.س",
@@ -104,6 +104,7 @@
     "absences": 1,
     "leaves": 6,
     "meetings": [
+      { "type": "اجتماع", "title": "اجتماع إداري", "date": "2026-09-22", "status": "قادم" },
       { "type": "اجتماع", "title": "اجتماع إداري", "date": "2026-09-17", "status": "حضر" },
       { "type": "اجتماع", "title": "اجتماع المشروع", "date": "2026-01-05", "status": "حضر" },
       { "type": "دورة", "title": "دورة إدارة المشاريع", "date": "2026-01-25", "status": "حضر" },
@@ -182,7 +183,7 @@
     "discord": "hss0328",
     "userId": "U2027",
     "points": "48",
-    "category": "إداري + مسؤول السيرفر",
+    "category": "مدير الإدارة العامة",
     "avatar": "https://avatars.hsoubcdn.com/479059248596cd015640fa202e463cf3?s=256",
     "activities": ["إدارة المشاريع"],
     "monthEarn": "0 ر.س",
@@ -194,6 +195,7 @@
     "absences": 18,
     "leaves": 0,
     "meetings": [
+      { "type": "اجتماع", "title": "اجتماع إداري", "date": "2026-09-22", "status": "قادم" },
       { "type": "اجتماع", "title": "اجتماع إداري", "date": "2026-09-17", "status": "غاب" },
       { "type": "اجتماع", "title": "اجتماع السيرفر", "date": "2026-06-18", "status": "حضر" },
       { "type": "اجتماع", "title": "اجتماع متابعة السيرفر", "date": "2026-07-07", "status": "غاب" }
