@@ -23,8 +23,8 @@
   //  الإعدادات العامة
   // ════════════════════════════════════════════════════════
   const CONFIG_ENDPOINT = '/api/config';
-  const SUPABASE_CDN = 'https://xoqwzluyxynqpdpmidts.supabase.co';
-  const STORAGE_KEY = 'sb_publishable_rQvBPw08M9Q3bWTDfFseTQ_6SU3aN96';
+  const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_rQvBPw08M9Q3bWTDfFseTQ_6SU3aN96';
 
   // ════════════════════════════════════════════════════════
   //  الحالة
