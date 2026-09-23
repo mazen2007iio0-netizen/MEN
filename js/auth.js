@@ -492,7 +492,7 @@
     try {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      showMsg('✅ تم تسجيل الدخول بنجاح', 'success');
+      showMsg(' تم تسجيل الدخول بنجاح', 'success');
       setTimeout(() => { closeAuth(); updateHeader(data.user); }, 700);
     } catch (err) {
       showMsg('⚠️ ' + toArabicError(err), 'error');
@@ -528,9 +528,9 @@
       if (error) throw error;
 
       if (data.user && !data.session) {
-        showMsg('✅ تم إنشاء الحساب! تحقق من بريدك لتأكيد الحساب', 'success');
+        showMsg(' تم إنشاء الحساب! تحقق من بريدك لتأكيد الحساب', 'success');
       } else {
-        showMsg('✅ تم إنشاء الحساب وتسجيل الدخول بنجاح', 'success');
+        showMsg(' تم إنشاء الحساب وتسجيل الدخول بنجاح', 'success');
         setTimeout(() => { closeAuth(); updateHeader(data.user); }, 1000);
       }
     } catch (err) {
@@ -552,7 +552,7 @@
         redirectTo: window.location.origin + window.location.pathname + '?reset=1'
       });
       if (error) throw error;
-      showMsg('✅ تم إرسال رابط الإعادة إلى بريدك', 'success');
+      showMsg(' تم إرسال رابط الإعادة إلى بريدك', 'success');
     } catch (err) {
       showMsg('⚠️ ' + toArabicError(err), 'error');
     } finally {
@@ -669,7 +669,7 @@
     supabase.auth.updateUser({ password: newPass }).then(({ error }) => {
       setLoading(false);
       if (error) return alert('خطأ: ' + toArabicError(error));
-      alert('✅ تم تحديث كلمة المرور بنجاح');
+      alert(' تم تحديث كلمة المرور بنجاح');
       if (window.history.replaceState) {
         window.history.replaceState(null, '', window.location.pathname);
       }
@@ -809,11 +809,11 @@
       watchAuthState();
       bindHeaderButtons();
 
-      console.log('[MEN Auth] ✅ النظام جاهز — جلسة موحدة عبر MEN');
+      console.log('[MEN Auth]  النظام جاهز — جلسة موحدة عبر MEN');
     } catch (err) {
-      console.error('[MEN Auth] ❌ فشل التهيئة:', err);
+      console.error('[MEN Auth]  فشل التهيئة:', err);
       setTimeout(() => {
-        toast('فشل تهيئة نظام الحساب — تحقق من إعدادات Vercel', 'error');
+        toast('فشل تهيئة الحساب  ', 'error');
       }, 500);
     }
   }
