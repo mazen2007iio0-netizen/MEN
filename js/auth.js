@@ -9,7 +9,7 @@
 // 🔑 إعدادات Supabase — اتركها فاضية للوضع المحلي
 // ═══════════════════════════════════════════════════════════
 const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_rQvBPw08M9Q3bWTDfFseTQ_6SU3aN96';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
 // ═══════════════════════════════════════════════════════════
 
 const CASHBACK_RATE = 0.02;
