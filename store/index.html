@@ -38,78 +38,28 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .header-nav a:hover{color:#fff;background:rgba(74,122,255,.1)}
 .header-cart-btn{position:relative;background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid));border:none;border-radius:60px;padding:11px 22px 11px 18px;font-weight:700;color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:var(--transition);font-size:.9rem;box-shadow:0 4px 20px rgba(2,28,164,.3);font-family:'Cairo',sans-serif}
 .header-cart-btn:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(74,122,255,.5)}
-/* ✅ شارة السلة شفافة والرقم أبيض */
 .header-cart-btn .cart-badge{background:transparent;color:#fff;border-radius:0;padding:0 4px;font-size:.9rem;font-weight:800;min-width:18px;text-align:center;line-height:1.5;text-shadow:0 0 12px rgba(255,255,255,.45)}
 .menu-toggle{display:none;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);color:var(--blue-bright);width:40px;height:40px;border-radius:12px;cursor:pointer;font-size:1rem;align-items:center;justify-content:center}
 
 /* ===== BANNER ===== */
-.store-banner{
-    position:relative;width:100%;margin:22px 0 22px;min-height:270px;
-    border-radius:var(--radius-3xl);overflow:hidden;isolation:isolate;
-    display:flex;align-items:center;
-    background:linear-gradient(135deg,rgba(2,28,164,.42),rgba(74,122,255,.12) 55%,rgba(6,8,18,.92));
-    border:1px solid rgba(74,122,255,.18);
-    box-shadow:0 26px 70px -26px rgba(2,28,164,.75),inset 0 1px 0 rgba(255,255,255,.07);
-}
-.store-banner::before{
-    content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
-    background:radial-gradient(circle at 12% 18%,rgba(74,122,255,.35),transparent 45%),
-               radial-gradient(circle at 88% 88%,rgba(245,179,66,.16),transparent 45%);
-}
-.store-banner .banner-bg{
-    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-    z-index:0;display:none;filter:brightness(.72) saturate(1.15);
-}
+.store-banner{position:relative;width:100%;margin:22px 0 22px;min-height:270px;border-radius:var(--radius-3xl);overflow:hidden;isolation:isolate;display:flex;align-items:center;background:linear-gradient(135deg,rgba(2,28,164,.42),rgba(74,122,255,.12) 55%,rgba(6,8,18,.92));border:1px solid rgba(74,122,255,.18);box-shadow:0 26px 70px -26px rgba(2,28,164,.75),inset 0 1px 0 rgba(255,255,255,.07)}
+.store-banner::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(circle at 12% 18%,rgba(74,122,255,.35),transparent 45%),radial-gradient(circle at 88% 88%,rgba(245,179,66,.16),transparent 45%)}
+.store-banner .banner-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:none;filter:brightness(.72) saturate(1.15)}
 .store-banner.has-image .banner-bg{display:block}
-.store-banner .banner-overlay{
-    position:absolute;inset:0;z-index:1;display:none;
-    background:linear-gradient(to left,rgba(6,8,18,.95) 0%,rgba(2,28,164,.62) 50%,rgba(6,8,18,.88) 100%);
-}
+.store-banner .banner-overlay{position:absolute;inset:0;z-index:1;display:none;background:linear-gradient(to left,rgba(6,8,18,.95) 0%,rgba(2,28,164,.62) 50%,rgba(6,8,18,.88) 100%)}
 .store-banner.has-image .banner-overlay{display:block}
-.banner-inner{
-    position:relative;z-index:3;width:100%;padding:34px 40px;
-    display:flex;align-items:center;justify-content:space-between;
-    flex-wrap:wrap;gap:22px;
-}
+.banner-inner{position:relative;z-index:3;width:100%;padding:34px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:22px}
 .banner-content{flex:1;min-width:240px}
-.banner-content h2{
-    font-size:clamp(1.25rem,2.4vw,2.05rem);color:#fff;margin-bottom:10px;
-    display:flex;align-items:center;gap:14px;line-height:1.35;
-    text-shadow:0 4px 22px rgba(0,0,0,.55);letter-spacing:-.5px;
-}
-.banner-content h2 .banner-icon-wrap{
-    width:50px;height:50px;flex-shrink:0;border-radius:16px;
-    background:linear-gradient(135deg,var(--blue-deep),var(--blue-light));
-    display:flex;align-items:center;justify-content:center;
-    font-size:1.25rem;color:#fff;box-shadow:0 8px 26px rgba(2,28,164,.6);
-}
-.banner-content p{
-    color:#cdd6ea;font-size:clamp(.88rem,1.4vw,1.05rem);
-    line-height:1.9;max-width:640px;text-shadow:0 2px 12px rgba(0,0,0,.5);
-}
-.banner-code-btn{
-    position:relative;display:inline-flex;align-items:center;gap:10px;
-    background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid));
-    color:#fff;padding:15px 32px;border-radius:60px;font-weight:800;
-    text-decoration:none;font-size:1.05rem;letter-spacing:1px;
-    transition:var(--transition);box-shadow:0 8px 36px rgba(2,28,164,.5);
-    border:1px solid rgba(255,255,255,.12);cursor:pointer;white-space:nowrap;
-}
+.banner-content h2{font-size:clamp(1.25rem,2.4vw,2.05rem);color:#fff;margin-bottom:10px;display:flex;align-items:center;gap:14px;line-height:1.35;text-shadow:0 4px 22px rgba(0,0,0,.55);letter-spacing:-.5px}
+.banner-content h2 .banner-icon-wrap{width:50px;height:50px;flex-shrink:0;border-radius:16px;background:linear-gradient(135deg,var(--blue-deep),var(--blue-light));display:flex;align-items:center;justify-content:center;font-size:1.25rem;color:#fff;box-shadow:0 8px 26px rgba(2,28,164,.6)}
+.banner-content p{color:#cdd6ea;font-size:clamp(.88rem,1.4vw,1.05rem);line-height:1.9;max-width:640px;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.banner-code-btn{position:relative;display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid));color:#fff;padding:15px 32px;border-radius:60px;font-weight:800;text-decoration:none;font-size:1.05rem;letter-spacing:1px;transition:var(--transition);box-shadow:0 8px 36px rgba(2,28,164,.5);border:1px solid rgba(255,255,255,.12);cursor:pointer;white-space:nowrap}
 .banner-code-btn:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 16px 55px rgba(74,122,255,.7)}
-.banner-code-btn::after{
-    content:'اضغط للنسخ';position:absolute;top:-10px;left:-8px;
-    background:var(--gold);color:#060812;font-size:.62rem;font-weight:800;
-    padding:3px 10px;border-radius:20px;
-}
+.banner-code-btn::after{content:'اضغط للنسخ';position:absolute;top:-10px;left:-8px;background:var(--gold);color:#060812;font-size:.62rem;font-weight:800;padding:3px 10px;border-radius:20px}
 
 /* ===== TRUST STRIP ===== */
 .trust-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 28px}
-.trust-item{
-    display:flex;align-items:center;justify-content:center;gap:10px;
-    background:rgba(10,16,32,.55);border:1px solid rgba(74,122,255,.1);
-    border-radius:18px;padding:14px 12px;font-size:.85rem;font-weight:700;
-    color:#c3cbe4;transition:var(--transition-fast);backdrop-filter:blur(12px);
-}
+.trust-item{display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(10,16,32,.55);border:1px solid rgba(74,122,255,.1);border-radius:18px;padding:14px 12px;font-size:.85rem;font-weight:700;color:#c3cbe4;transition:var(--transition-fast);backdrop-filter:blur(12px)}
 .trust-item i{color:var(--blue-bright);font-size:1rem}
 .trust-item:hover{background:rgba(74,122,255,.1);border-color:rgba(74,122,255,.3);transform:translateY(-3px)}
 
@@ -151,7 +101,6 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .product-badges{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:6px;align-items:flex-end;z-index:2}
 .product-discount-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#ff4d4d,#d90429);color:#fff;font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:30px;box-shadow:0 4px 16px rgba(217,4,41,.5)}
 .product-popular-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#f5b342,#f5a623);color:#060812;font-size:.68rem;font-weight:800;padding:4px 10px;border-radius:30px}
-/* ✅ شارة خيشة الفلوس (التوفير) */
 .product-savings-badge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;font-size:.7rem;font-weight:800;padding:4px 10px;border-radius:30px;box-shadow:0 4px 16px rgba(76,175,80,.45);white-space:nowrap;border:1px solid rgba(255,255,255,.18)}
 .product-savings-badge i{font-size:.78rem;line-height:1}
 .product-info{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
@@ -304,7 +253,6 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .cart-items-list{margin-bottom:6px;max-height:320px;overflow-y:auto;padding-left:6px}
 .cart-item{display:flex;align-items:center;gap:12px;background:rgba(74,122,255,.04);border:1px solid rgba(74,122,255,.08);border-radius:18px;padding:12px 14px;margin-bottom:10px;flex-wrap:wrap;transition:var(--transition-fast);position:relative}
 .cart-item.discounted{border-color:rgba(76,175,80,.4);background:rgba(76,175,80,.05)}
-/* ✅ شارة الخصم بخيشة الفلوس */
 .cart-item.discounted::after{content:'\f81d  خصم';font-family:'Font Awesome 6 Free','Cairo',sans-serif;font-weight:900;position:absolute;top:-8px;left:10px;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;font-size:.62rem;font-weight:800;padding:3px 10px;border-radius:20px;line-height:1.4}
 .cart-item img{width:56px;height:56px;object-fit:cover;border-radius:12px;flex-shrink:0}
 .cart-item .item-details{flex:1;min-width:120px}
@@ -405,6 +353,17 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
 .menu-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:2400;opacity:0;pointer-events:none;transition:opacity .3s}
 .menu-backdrop.active{opacity:1;pointer-events:auto}
 
+/* ===== MEN AUTH BUTTONS IN HEADER ===== */
+.men-header-auth-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:60px;font-weight:700;font-size:.85rem;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .4s cubic-bezier(.16,1,.3,1);border:none;white-space:nowrap;line-height:1;text-decoration:none}
+.men-header-auth-btn.login{background:linear-gradient(135deg,#021ca4,#1a3a9e);color:#fff;box-shadow:0 4px 20px rgba(2,28,164,.35)}
+.men-header-auth-btn.login:hover{transform:translateY(-3px);box-shadow:0 8px 36px rgba(74,122,255,.55)}
+.men-header-auth-btn.account{background:rgba(74,122,255,.08);border:1.5px solid rgba(74,122,255,.3);color:#4a7aff;display:none}
+.men-header-auth-btn.account:hover{background:rgba(74,122,255,.16);transform:translateY(-3px);box-shadow:0 8px 30px rgba(74,122,255,.15)}
+.men-header-avatar{width:34px;height:34px;border-radius:50%;object-fit:cover;display:none;border:2px solid #4a7aff;cursor:pointer;transition:all .3s;flex-shrink:0}
+.men-header-avatar:hover{transform:scale(1.08);box-shadow:0 0 20px rgba(74,122,255,.5)}
+@media (max-width:992px){.men-header-auth-btn .men-btn-label{display:none}.men-header-auth-btn{padding:9px 14px;gap:6px}}
+@media (max-width:480px){.men-header-auth-btn{padding:8px 12px;font-size:.78rem}.men-header-avatar{width:30px;height:30px}}
+
 /* RESPONSIVE */
 @media (max-width:1200px){
     .shop-grid,.related-grid{grid-template-columns:repeat(3,1fr)}
@@ -498,6 +457,14 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
                 <a data-nav="faq">الأسئلة الشائعة</a>
                 <a data-nav="contact">تواصل</a>
             </nav>
+            <!-- ✅ أزرار حساب MEN الموحد -->
+            <button id="menLoginBtn" class="men-header-auth-btn login">
+                <i class="fas fa-fingerprint"></i> <span class="men-btn-label">دخول</span>
+            </button>
+            <button id="menAccountBtn" class="men-header-auth-btn account">
+                <i class="fas fa-user-circle"></i> <span class="men-btn-label">حسابي</span>
+            </button>
+            <img id="menHeaderAvatar" class="men-header-avatar" src="" alt="الحساب">
             <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
             <button class="header-cart-btn" id="headerCartBtn">
                 <i class="fas fa-shopping-bag"></i><span class="cart-badge" id="headerCartBadge">0</span>
@@ -514,6 +481,12 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
     <a data-nav="about"><i class="fas fa-circle-info"></i> من نحن</a>
     <a data-nav="faq"><i class="fas fa-circle-question"></i> الأسئلة الشائعة</a>
     <a data-nav="contact"><i class="fas fa-envelope"></i> تواصل معنا</a>
+    <a id="menMobileLogin" style="margin-top:15px; background:linear-gradient(135deg,#021ca4,#1a3a9e); color:#fff;">
+        <i class="fas fa-fingerprint"></i> تسجيل الدخول
+    </a>
+    <a id="menMobileAccount" style="display:none; background:rgba(74,122,255,.12); color:#4a7aff;">
+        <i class="fas fa-user-circle"></i> حسابي
+    </a>
 </div>
 
 <main>
@@ -755,7 +728,7 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
                 <p>نستخدم تقنيات تشفير حديثة (HTTPS / SSL) لحماية بياناتك أثناء النقل.</p>
                 <h2><i class="fas fa-envelope-open-text"></i> حقوقك</h2>
                 <ul><li>الوصول إلى بياناتك الشخصية.</li><li>تصحيح أو حذف بياناتك.</li></ul>
-                <div class="contact-cta"><p>لأي استفسار تواصل معنا على <a href="mailto:clan.men.ts@gmail.com">0530367546</a>.</p></div>
+                <div class="contact-cta"><p>لأي استفسار تواصل معنا على <a href="mailto:clan.men.ts@gmail.com">clan.men.ts@gmail.com</a>.</p></div>
             </div>
         </div>
     </div>
@@ -896,7 +869,6 @@ function discountBadgeHTML(p){
     if(!label)return '';
     return `<span class="product-discount-badge"><i class="fas fa-bolt"></i> ${label}</span>`;
 }
-/* ✅ حساب مبلغ التوفير */
 function savingsAmount(p){
     const price=parseFloat(p.price)||0;
     const orig=parseFloat(p.originalPrice);
@@ -904,11 +876,9 @@ function savingsAmount(p){
     if(p.discount){const o=price/(1-(p.discount/100));if(o>price)return Math.round((o-price)*100)/100;}
     return 0;
 }
-/* ✅ هل المنتج عليه عرض/توفير؟ */
 function hasOffer(p){
     return !!(p.discount||p.offerLabel||(parseFloat(p.originalPrice)>parseFloat(p.price)));
 }
-/* ✅ شارة خيشة الفلوس */
 function savingsBadgeHTML(p){
     if(!hasOffer(p))return '';
     const s=savingsAmount(p);
@@ -930,7 +900,6 @@ function showProductPage(productId){
     const badges=[];
     if(p.discount)badges.push(`<span class="product-discount-badge"><i class="fas fa-bolt"></i> خصم ${p.discount}%</span>`);
     if(p.popular)badges.push(`<span class="product-popular-badge"><i class="fas fa-fire"></i> الأكثر مبيعاً</span>`);
-    /* ✅ نضيف شارة خيشة الفلوس */
     $('galleryBadges').innerHTML=badges.join('')+savingsBadgeHTML(p);
 
     const imgs = Array.isArray(p.images) && p.images.length ? p.images : [p.image, p.image, p.image, p.image];
@@ -953,7 +922,6 @@ function showProductPage(productId){
     if(p.originalPrice){
         priceHTML+=`<span class="old-price">${p.originalPrice}</span>`;
         const diff=parseFloat(p.originalPrice)-parseFloat(p.price);
-        /* ✅ شارة التوفير بأيقونة خيشة الفلوس */
         if(diff>0)priceHTML+=`<span class="save-badge"><i class="fas fa-sack-dollar"></i> وفّر ${diff.toFixed(2)} ر.س</span>`;
     }
     $('pageProductPrice').innerHTML=priceHTML;
@@ -1265,6 +1233,39 @@ function handleNavClick(target){
     showStorePage();
 }
 
+// ===== ربط أزرار الحساب بالهيدر والقائمة الجوال =====
+function bindAuthButtons(){
+    const loginBtn=$('menLoginBtn');
+    const accountBtn=$('menAccountBtn');
+    const mobileLogin=$('menMobileLogin');
+    const mobileAccount=$('menMobileAccount');
+
+    if(loginBtn) loginBtn.addEventListener('click', () => window.MEN_AUTH?.open('login'));
+    if(accountBtn) accountBtn.addEventListener('click', () => window.MEN_AUTH?.openAccount());
+    if(mobileLogin) mobileLogin.addEventListener('click', () => {
+        closeMobileMenu();
+        window.MEN_AUTH?.open('login');
+    });
+    if(mobileAccount) mobileAccount.addEventListener('click', () => {
+        closeMobileMenu();
+        window.MEN_AUTH?.openAccount();
+    });
+}
+
+// ===== مزامنة القائمة الجوال مع حالة الجلسة =====
+function syncMobileAuthUI(user){
+    const mobileLogin=$('menMobileLogin');
+    const mobileAccount=$('menMobileAccount');
+    if(!mobileLogin||!mobileAccount)return;
+    if(user){
+        mobileLogin.style.display='none';
+        mobileAccount.style.display='flex';
+    }else{
+        mobileLogin.style.display='flex';
+        mobileAccount.style.display='none';
+    }
+}
+
 async function init(){
     const ok=await loadStoreData();if(!ok){showLoadError();return;}
     applyStoreSettings();renderStore('all','default');renderReviews();updateCartUI();bindFaq();
@@ -1339,6 +1340,18 @@ async function init(){
         }
     });
 
+    // اربط أزرار الحساب
+    bindAuthButtons();
+
+    // مزامنة القائمة الجوال
+    if(window.MEN_SUPABASE){
+        const { data:{ session } } = await window.MEN_SUPABASE.auth.getSession();
+        syncMobileAuthUI(session?.user || null);
+        window.MEN_SUPABASE.auth.onAuthStateChange((event, s) => {
+            syncMobileAuthUI(s?.user || null);
+        });
+    }
+
     handleInitialHash();
     window.addEventListener('hashchange',handleHashChange);
     window.addEventListener('popstate',handleHashChange);
@@ -1356,5 +1369,11 @@ function handleInitialHash(){
 }
 document.addEventListener('DOMContentLoaded',init);
 </script>
+
+<!-- ============================================================
+     ✅ نظام الحساب الموحد — MEN UNIFIED AUTH
+     سطر واحد فقط — js/auth.js يتولى كل شيء تلقائياً
+     ============================================================ -->
+<script src="/js/auth.js"></script>
 </body>
 </html>
