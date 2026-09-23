@@ -364,7 +364,7 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
 @media (max-width:992px){.men-header-auth-btn .men-btn-label{display:none}.men-header-auth-btn{padding:9px 14px;gap:6px}}
 @media (max-width:480px){.men-header-auth-btn{padding:8px 12px;font-size:.78rem}.men-header-avatar{width:30px;height:30px}}
 
-/* ===== MEN AUTH MODALS ===== */
+/* AUTH MODALS */
 .auth-modal-box{width:100%;max-width:460px;padding:40px 34px}
 .auth-modal-box h3{text-align:center;font-size:1.6rem;margin-bottom:6px;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px}
 .auth-modal-box h3 i{color:#4a7aff}
@@ -381,6 +381,7 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
 .auth-switch a{color:#4a7aff;font-weight:700;cursor:pointer;text-decoration:none;margin-right:6px}
 .auth-switch a:hover{color:#6a9aff;text-decoration:underline}
 
+/* ACCOUNT MODAL */
 .account-modal-box{width:100%;max-width:520px;padding:0;overflow:hidden}
 .account-hero{position:relative;padding:44px 30px 26px;background:linear-gradient(135deg,rgba(2,28,164,.5),rgba(74,122,255,.15));border-bottom:1px solid rgba(74,122,255,.12);text-align:center}
 .account-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(74,122,255,.35),transparent 65%);pointer-events:none}
@@ -388,13 +389,15 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
 .account-name{font-size:1.45rem;font-weight:800;color:#fff;margin-bottom:4px;position:relative;z-index:1;letter-spacing:-.5px}
 .account-email{color:#a8b0cc;font-size:.88rem;position:relative;z-index:1}
 .account-body{padding:24px 26px 28px}
-.cashback-card{position:relative;background:linear-gradient(135deg,#021ca4 0%,#1a3a9e 50%,#4a7aff 100%);border-radius:22px;padding:22px 26px;color:#fff;margin-bottom:20px;overflow:hidden;box-shadow:0 14px 44px rgba(2,28,164,.5);border:1px solid rgba(255,255,255,.1)}
-.cashback-card::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%);border-radius:50%;pointer-events:none}
-.cashback-card::after{content:'\f555';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;bottom:-14px;left:8px;font-size:5rem;color:rgba(255,255,255,.08);pointer-events:none}
+
+/* CASHBACK CARD — الأزرق الغامق بهوية الموقع */
+.cashback-card{position:relative;background:linear-gradient(135deg,#021ca4 0%,#041580 55%,#021ca4 100%);border-radius:22px;padding:22px 26px;color:#fff;margin-bottom:20px;overflow:hidden;box-shadow:0 14px 44px rgba(2,28,164,.6);border:1px solid rgba(74,122,255,.25)}
+.cashback-card::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:radial-gradient(circle,rgba(74,122,255,.25),transparent 70%);border-radius:50%;pointer-events:none}
 .cashback-card .cash-label{font-size:.82rem;opacity:.92;margin-bottom:6px;display:flex;align-items:center;gap:8px;font-weight:700;position:relative;z-index:1}
 .cashback-card .cash-amount{font-size:2.4rem;font-weight:900;letter-spacing:-1.5px;display:flex;align-items:baseline;gap:8px;line-height:1.1;position:relative;z-index:1}
 .cashback-card .cash-amount small{font-size:.95rem;font-weight:600;opacity:.92}
-.cashback-card .cash-note{font-size:.76rem;opacity:.9;margin-top:10px;display:flex;align-items:center;gap:8px;position:relative;z-index:1;background:rgba(0,0,0,.18);padding:6px 12px;border-radius:20px;width:fit-content}
+.cashback-card .cash-note{font-size:.76rem;opacity:.9;margin-top:10px;display:flex;align-items:center;gap:8px;position:relative;z-index:1;background:rgba(0,0,0,.25);padding:6px 12px;border-radius:20px;width:fit-content;border:1px solid rgba(74,122,255,.2)}
+
 .account-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
 .account-info-item{background:rgba(74,122,255,.05);border:1px solid rgba(74,122,255,.1);border-radius:16px;padding:14px 16px;transition:all .3s}
 .account-info-item:hover{background:rgba(74,122,255,.09);border-color:rgba(74,122,255,.2)}
@@ -497,7 +500,7 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
     <div class="container header-content">
         <a class="logo" id="headerLogo">
             <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN">
-            <div class="logo-text"><span class="brand"></span><span class="tagline"></span></div>
+            <div class="logo-text"><span class="brand">MEN</span><span class="tagline">Store</span></div>
         </a>
         <div class="header-actions">
             <nav class="header-nav" id="headerNav">
@@ -1109,7 +1112,7 @@ async function sendCartRequest(userName,userPhone){
         });
         showToast("تم إرسال طلبك بنجاح!","success");
 
-        // 🎁 كاش باك 2% + حفظ الطلب في الحساب
+        // 🎁 كاش باك 2% + حفظ الطلب
         if (window.MEN_AUTH) {
             const u = window.MEN_AUTH.getCurrentUser();
             if (u) {
@@ -1427,9 +1430,6 @@ function handleInitialHash(){
 document.addEventListener('DOMContentLoaded',init);
 </script>
 
-<!-- ============================================================
-     MEN UNIFIED AUTH v2 — نظام الحساب الموحد + الكاش باك
-     ============================================================ -->
 <script>
 (function(){
 'use strict';
