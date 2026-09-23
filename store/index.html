@@ -41,7 +41,7 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .header-cart-btn .cart-badge{background:transparent;color:#fff;border-radius:0;padding:0 4px;font-size:.9rem;font-weight:800;min-width:18px;text-align:center;line-height:1.5;text-shadow:0 0 12px rgba(255,255,255,.45)}
 .menu-toggle{display:none;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);color:var(--blue-bright);width:40px;height:40px;border-radius:12px;cursor:pointer;font-size:1rem;align-items:center;justify-content:center}
 
-/* ===== BANNER ===== */
+/* BANNER */
 .store-banner{position:relative;width:100%;margin:22px 0 22px;min-height:270px;border-radius:var(--radius-3xl);overflow:hidden;isolation:isolate;display:flex;align-items:center;background:linear-gradient(135deg,rgba(2,28,164,.42),rgba(74,122,255,.12) 55%,rgba(6,8,18,.92));border:1px solid rgba(74,122,255,.18);box-shadow:0 26px 70px -26px rgba(2,28,164,.75),inset 0 1px 0 rgba(255,255,255,.07)}
 .store-banner::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(circle at 12% 18%,rgba(74,122,255,.35),transparent 45%),radial-gradient(circle at 88% 88%,rgba(245,179,66,.16),transparent 45%)}
 .store-banner .banner-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:none;filter:brightness(.72) saturate(1.15)}
@@ -57,7 +57,7 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .banner-code-btn:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 16px 55px rgba(74,122,255,.7)}
 .banner-code-btn::after{content:'اضغط للنسخ';position:absolute;top:-10px;left:-8px;background:var(--gold);color:#060812;font-size:.62rem;font-weight:800;padding:3px 10px;border-radius:20px}
 
-/* ===== TRUST STRIP ===== */
+/* TRUST */
 .trust-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 28px}
 .trust-item{display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(10,16,32,.55);border:1px solid rgba(74,122,255,.1);border-radius:18px;padding:14px 12px;font-size:.85rem;font-weight:700;color:#c3cbe4;transition:var(--transition-fast);backdrop-filter:blur(12px)}
 .trust-item i{color:var(--blue-bright);font-size:1rem}
@@ -212,7 +212,7 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .related-section{margin-top:60px;padding-top:40px;border-top:1px solid rgba(74,122,255,.08)}
 .related-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 
-/* STATIC PAGES */
+/* STATIC */
 .static-page{padding:20px 0 60px}
 .static-page-header{text-align:center;margin-bottom:40px}
 .static-page-header h1{font-size:2.8rem;font-weight:900;background:linear-gradient(135deg,#fff,var(--blue-bright));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:10px;letter-spacing:-1px}
@@ -353,7 +353,7 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
 .menu-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:2400;opacity:0;pointer-events:none;transition:opacity .3s}
 .menu-backdrop.active{opacity:1;pointer-events:auto}
 
-/* ===== MEN AUTH BUTTONS IN HEADER ===== */
+/* AUTH HEADER BUTTONS */
 .men-header-auth-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:60px;font-weight:700;font-size:.85rem;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .4s cubic-bezier(.16,1,.3,1);border:none;white-space:nowrap;line-height:1;text-decoration:none}
 .men-header-auth-btn.login{background:linear-gradient(135deg,#021ca4,#1a3a9e);color:#fff;box-shadow:0 4px 20px rgba(2,28,164,.35)}
 .men-header-auth-btn.login:hover{transform:translateY(-3px);box-shadow:0 8px 36px rgba(74,122,255,.55)}
@@ -363,6 +363,50 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
 .men-header-avatar:hover{transform:scale(1.08);box-shadow:0 0 20px rgba(74,122,255,.5)}
 @media (max-width:992px){.men-header-auth-btn .men-btn-label{display:none}.men-header-auth-btn{padding:9px 14px;gap:6px}}
 @media (max-width:480px){.men-header-auth-btn{padding:8px 12px;font-size:.78rem}.men-header-avatar{width:30px;height:30px}}
+
+/* ===== MEN AUTH MODALS ===== */
+.auth-modal-box{width:100%;max-width:460px;padding:40px 34px}
+.auth-modal-box h3{text-align:center;font-size:1.6rem;margin-bottom:6px;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px}
+.auth-modal-box h3 i{color:#4a7aff}
+.auth-subtitle{text-align:center;color:#8a92b0;font-size:.9rem;margin-bottom:24px}
+.auth-input-group{margin-bottom:12px;position:relative}
+.auth-input-group i{position:absolute;right:20px;top:50%;transform:translateY(-50%);color:#4a7aff;font-size:.9rem;pointer-events:none}
+.auth-input-group input{width:100%;padding:14px 48px 14px 20px;border-radius:60px;background:rgba(0,0,0,.3);border:1px solid rgba(74,122,255,.12);color:#f0f4ff;font-family:'Cairo',sans-serif;font-size:.92rem;outline:none;transition:all .3s}
+.auth-input-group input:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.12)}
+.auth-input-group input::placeholder{color:#5a607a}
+.auth-error{color:#ff6b6b;font-size:.82rem;text-align:center;margin:8px 0 2px;min-height:18px;font-weight:600}
+.auth-submit-btn{width:100%;padding:15px;border-radius:60px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-weight:800;font-size:1rem;cursor:pointer;font-family:'Cairo',sans-serif;margin-top:6px;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px}
+.auth-submit-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(74,122,255,.5)}
+.auth-switch{text-align:center;margin-top:18px;color:#8a92b0;font-size:.88rem}
+.auth-switch a{color:#4a7aff;font-weight:700;cursor:pointer;text-decoration:none;margin-right:6px}
+.auth-switch a:hover{color:#6a9aff;text-decoration:underline}
+
+.account-modal-box{width:100%;max-width:520px;padding:0;overflow:hidden}
+.account-hero{position:relative;padding:44px 30px 26px;background:linear-gradient(135deg,rgba(2,28,164,.5),rgba(74,122,255,.15));border-bottom:1px solid rgba(74,122,255,.12);text-align:center}
+.account-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(74,122,255,.35),transparent 65%);pointer-events:none}
+.account-avatar{width:96px;height:96px;border-radius:50%;border:3px solid #4a7aff;object-fit:cover;box-shadow:0 0 34px rgba(74,122,255,.55);margin-bottom:14px;position:relative;z-index:1;background:#0a0e1a}
+.account-name{font-size:1.45rem;font-weight:800;color:#fff;margin-bottom:4px;position:relative;z-index:1;letter-spacing:-.5px}
+.account-email{color:#a8b0cc;font-size:.88rem;position:relative;z-index:1}
+.account-body{padding:24px 26px 28px}
+.cashback-card{position:relative;background:linear-gradient(135deg,#021ca4 0%,#1a3a9e 50%,#4a7aff 100%);border-radius:22px;padding:22px 26px;color:#fff;margin-bottom:20px;overflow:hidden;box-shadow:0 14px 44px rgba(2,28,164,.5);border:1px solid rgba(255,255,255,.1)}
+.cashback-card::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%);border-radius:50%;pointer-events:none}
+.cashback-card::after{content:'\f555';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;bottom:-14px;left:8px;font-size:5rem;color:rgba(255,255,255,.08);pointer-events:none}
+.cashback-card .cash-label{font-size:.82rem;opacity:.92;margin-bottom:6px;display:flex;align-items:center;gap:8px;font-weight:700;position:relative;z-index:1}
+.cashback-card .cash-amount{font-size:2.4rem;font-weight:900;letter-spacing:-1.5px;display:flex;align-items:baseline;gap:8px;line-height:1.1;position:relative;z-index:1}
+.cashback-card .cash-amount small{font-size:.95rem;font-weight:600;opacity:.92}
+.cashback-card .cash-note{font-size:.76rem;opacity:.9;margin-top:10px;display:flex;align-items:center;gap:8px;position:relative;z-index:1;background:rgba(0,0,0,.18);padding:6px 12px;border-radius:20px;width:fit-content}
+.account-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.account-info-item{background:rgba(74,122,255,.05);border:1px solid rgba(74,122,255,.1);border-radius:16px;padding:14px 16px;transition:all .3s}
+.account-info-item:hover{background:rgba(74,122,255,.09);border-color:rgba(74,122,255,.2)}
+.account-info-item .lbl{font-size:.68rem;color:#8a92b0;text-transform:uppercase;letter-spacing:1.5px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.account-info-item .lbl i{color:#4a7aff;font-size:.8rem}
+.account-info-item .val{color:#fff;font-weight:700;font-size:.95rem;word-break:break-all}
+.account-actions{display:flex;gap:10px;flex-wrap:wrap}
+.account-btn{flex:1;padding:13px 16px;border-radius:60px;border:none;font-family:'Cairo',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s;min-width:130px}
+.account-btn.primary{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff}
+.account-btn.primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(74,122,255,.5)}
+.account-btn.danger{background:rgba(217,4,41,.1);border:1px solid rgba(217,4,41,.25);color:#ff6b6b}
+.account-btn.danger:hover{background:rgba(217,4,41,.2);transform:translateY(-2px)}
 
 /* RESPONSIVE */
 @media (max-width:1200px){
@@ -413,6 +457,12 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
     .trust-item{font-size:.78rem;padding:12px 10px}
     .static-page-header h1{font-size:1.6rem}
     .static-content{padding:24px 20px}
+    .account-info-grid{grid-template-columns:1fr}
+    .auth-modal-box{padding:30px 22px}
+    .account-modal-box{max-height:92vh;overflow-y:auto}
+    .account-hero{padding:36px 22px 22px}
+    .account-body{padding:20px 20px 24px}
+    .cashback-card .cash-amount{font-size:2rem}
 }
 @media (max-width:480px){
     .shop-grid{grid-template-columns:1fr 1fr;gap:10px}
@@ -447,7 +497,7 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
     <div class="container header-content">
         <a class="logo" id="headerLogo">
             <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN">
-            <div class="logo-text"><span class="brand"></span><span class="tagline"></span></div>
+            <div class="logo-text"><span class="brand">MEN</span><span class="tagline">Store</span></div>
         </a>
         <div class="header-actions">
             <nav class="header-nav" id="headerNav">
@@ -457,7 +507,6 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
                 <a data-nav="faq">الأسئلة الشائعة</a>
                 <a data-nav="contact">تواصل</a>
             </nav>
-            <!-- ✅ أزرار حساب MEN الموحد -->
             <button id="menLoginBtn" class="men-header-auth-btn login">
                 <i class="fas fa-fingerprint"></i> <span class="men-btn-label">دخول</span>
             </button>
@@ -641,7 +690,6 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
     </div>
 </div>
 
-<!-- ABOUT -->
 <div id="aboutPage" class="page-view">
     <div class="container">
         <div class="breadcrumb"><a data-nav="home">الرئيسية</a><span class="sep"><i class="fas fa-chevron-left"></i></span><span class="current">من نحن</span></div>
@@ -671,7 +719,6 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
     </div>
 </div>
 
-<!-- FAQ -->
 <div id="faqPage" class="page-view">
     <div class="container">
         <div class="breadcrumb"><a data-nav="home">الرئيسية</a><span class="sep"><i class="fas fa-chevron-left"></i></span><span class="current">الأسئلة الشائعة</span></div>
@@ -684,12 +731,12 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
                 <div class="faq-item"><div class="faq-question"><span><i class="fas fa-circle-question" style="color:var(--blue-bright);margin-left:8px;"></i> ما هي طرق الدفع المتاحة؟</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>مدى، Apple Pay، STC Pay، التحويل البنكي .</p></div></div>
                 <div class="faq-item"><div class="faq-question"><span><i class="fas fa-circle-question" style="color:var(--blue-bright);margin-left:8px;"></i> هل المنتجات أصلية؟</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>نعم، جميع منتجاتنا أصلية 100% ومضمونة من المصدر مباشرة.</p></div></div>
                 <div class="faq-item"><div class="faq-question"><span><i class="fas fa-circle-question" style="color:var(--blue-bright);margin-left:8px;"></i> كيف أستخدم كود الخصم؟</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>افتح السلة، أدخل الكود في خانة "كود الخصم"، ثم اضغط "تطبيق". بعض الأكواد تشتغل على منتجات محددة فقط.</p></div></div>
+                <div class="faq-item"><div class="faq-question"><span><i class="fas fa-circle-question" style="color:var(--blue-bright);margin-left:8px;"></i> كيف أحصل على الكاش باك؟</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>سجّل حساباً جديداً، وأي طلب تكتمل فيه تحصل تلقائياً على 2% من قيمة الطلب في رصيدك.</p></div></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- TERMS -->
 <div id="termsPage" class="page-view">
     <div class="container">
         <div class="breadcrumb"><a data-nav="home">الرئيسية</a><span class="sep"><i class="fas fa-chevron-left"></i></span><span class="current">الشروط والأحكام</span></div>
@@ -712,7 +759,6 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
     </div>
 </div>
 
-<!-- PRIVACY -->
 <div id="privacyPage" class="page-view">
     <div class="container">
         <div class="breadcrumb"><a data-nav="home">الرئيسية</a><span class="sep"><i class="fas fa-chevron-left"></i></span><span class="current">سياسة الخصوصية</span></div>
@@ -733,7 +779,6 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
         </div>
     </div>
 </div>
-
 </main>
 
 <footer id="contact-section">
@@ -1063,6 +1108,22 @@ async function sendCartRequest(userName,userPhone){
             body:JSON.stringify({embeds:[embed],content:`🛒 طلب جديد من ${userName}`})
         });
         showToast("تم إرسال طلبك بنجاح!","success");
+
+        // 🎁 كاش باك 2% + حفظ الطلب في الحساب
+        if (window.MEN_AUTH) {
+            const u = window.MEN_AUTH.getCurrentUser();
+            if (u) {
+                const rate = window.MEN_AUTH.CASHBACK_RATE || 0.02;
+                const cashback = finalTotal * rate;
+                window.MEN_AUTH.addCashback(cashback);
+                window.MEN_AUTH.addOrder({
+                    total: finalTotal,
+                    items: cartItems.map(p => ({ name: p.name, qty: p.quantity, price: p.price }))
+                });
+                setTimeout(() => showToast(`🎁 حصلت على ${cashback.toFixed(2)} ر.س كاش باك!`, "success"), 700);
+            }
+        }
+
         cartItems=[];discountApplied=false;discountPercent=0;discountCode='';discountProducts=[];
         if($('discountCodeInput'))$('discountCodeInput').value='';
         if($('discountMsg'))$('discountMsg').textContent='';
@@ -1233,7 +1294,6 @@ function handleNavClick(target){
     showStorePage();
 }
 
-// ===== ربط أزرار الحساب بالهيدر والقائمة الجوال =====
 function bindAuthButtons(){
     const loginBtn=$('menLoginBtn');
     const accountBtn=$('menAccountBtn');
@@ -1252,7 +1312,6 @@ function bindAuthButtons(){
     });
 }
 
-// ===== مزامنة القائمة الجوال مع حالة الجلسة =====
 function syncMobileAuthUI(user){
     const mobileLogin=$('menMobileLogin');
     const mobileAccount=$('menMobileAccount');
@@ -1340,10 +1399,8 @@ async function init(){
         }
     });
 
-    // اربط أزرار الحساب
     bindAuthButtons();
 
-    // مزامنة القائمة الجوال
     if(window.MEN_SUPABASE){
         const { data:{ session } } = await window.MEN_SUPABASE.auth.getSession();
         syncMobileAuthUI(session?.user || null);
@@ -1371,9 +1428,332 @@ document.addEventListener('DOMContentLoaded',init);
 </script>
 
 <!-- ============================================================
-     ✅ نظام الحساب الموحد — MEN UNIFIED AUTH
-     سطر واحد فقط — js/auth.js يتولى كل شيء تلقائياً
+     MEN UNIFIED AUTH v2 — نظام الحساب الموحد + الكاش باك
      ============================================================ -->
-<script src="/js/auth.js"></script>
+<script>
+(function(){
+'use strict';
+
+const STORAGE_KEY = 'men_users_v2';
+const SESSION_KEY = 'men_session_v2';
+const CASHBACK_RATE = 0.02;
+
+function getUsers(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')}catch{return {}}}
+function saveUsers(u){localStorage.setItem(STORAGE_KEY,JSON.stringify(u))}
+function getSession(){try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}catch{return null}}
+function setSession(s){s?localStorage.setItem(SESSION_KEY,JSON.stringify(s)):localStorage.removeItem(SESSION_KEY)}
+
+function hash(str){let h=0;for(let i=0;i<str.length;i++){h=(h<<5)-h+str.charCodeAt(i);h|=0}return 'h'+Math.abs(h).toString(36)+'_'+str.length}
+
+function getCurrentUser(){
+  const s=getSession(); if(!s) return null;
+  const u=getUsers()[s.email]; if(!u) return null;
+  return {name:u.name,email:u.email,phone:u.phone,cashback:u.cashback||0,createdAt:u.createdAt,orders:u.orders||[]};
+}
+
+function signup(name,email,phone,password){
+  name=(name||'').trim(); email=(email||'').toLowerCase().trim(); phone=(phone||'').trim(); password=password||'';
+  if(!name||!email||!phone||!password) throw new Error('الرجاء إكمال جميع الحقول');
+  if(name.length<3) throw new Error('الاسم يجب أن يكون 3 أحرف على الأقل');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('البريد الإلكتروني غير صحيح');
+  const phoneClean = phone.replace(/[\s\-]/g,'');
+  if(!/^(?:\+?966|0)?5\d{8}$/.test(phoneClean)) throw new Error('رقم الجوال غير صحيح (مثال: 05XXXXXXXX)');
+  if(password.length<6) throw new Error('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+  const users=getUsers();
+  if(users[email]) throw new Error('هذا البريد مسجّل مسبقاً');
+  users[email]={name,email,phone,password:hash(password),cashback:0,orders:[],createdAt:new Date().toISOString()};
+  saveUsers(users);
+  setSession({email,loginAt:Date.now()});
+  notifyChange();
+  return getCurrentUser();
+}
+
+function login(email,password){
+  email=(email||'').toLowerCase().trim(); password=password||'';
+  if(!email||!password) throw new Error('الرجاء إكمال جميع الحقول');
+  const users=getUsers(); const u=users[email];
+  if(!u) throw new Error('لا يوجد حساب بهذا البريد');
+  if(u.password!==hash(password)) throw new Error('كلمة المرور غير صحيحة');
+  setSession({email,loginAt:Date.now()});
+  notifyChange();
+  return getCurrentUser();
+}
+
+function logout(){setSession(null);notifyChange();}
+
+function addCashback(amount){
+  const s=getSession(); if(!s||!amount) return;
+  const users=getUsers(); const u=users[s.email]; if(!u) return;
+  u.cashback=(u.cashback||0)+Number(amount);
+  saveUsers(users);
+  notifyChange();
+}
+
+function addOrder(orderData){
+  const s=getSession(); if(!s) return;
+  const users=getUsers(); const u=users[s.email]; if(!u) return;
+  u.orders=u.orders||[];
+  u.orders.unshift({...orderData,date:new Date().toISOString()});
+  if(u.orders.length>20) u.orders=u.orders.slice(0,20);
+  saveUsers(users);
+}
+
+function generateAvatar(name){
+  const initial = (name||'?').trim().charAt(0).toUpperCase();
+  const c=document.createElement('canvas'); c.width=c.height=120;
+  const ctx=c.getContext('2d');
+  const g=ctx.createLinearGradient(0,0,120,120);
+  g.addColorStop(0,'#021ca4'); g.addColorStop(1,'#4a7aff');
+  ctx.fillStyle=g; ctx.fillRect(0,0,120,120);
+  ctx.fillStyle='#fff';
+  ctx.font='bold 58px Cairo, Arial, sans-serif';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(initial,60,64);
+  return c.toDataURL();
+}
+
+function toast(msg,type){
+  if(typeof window.showToast==='function') window.showToast(msg,type||'info');
+}
+
+const listeners=[];
+function notifyChange(){
+  const u=getCurrentUser();
+  updateHeader(u);
+  listeners.forEach(fn=>{try{fn(u)}catch(e){}});
+}
+
+function updateHeader(user){
+  const lb=document.getElementById('menLoginBtn');
+  const ab=document.getElementById('menAccountBtn');
+  const av=document.getElementById('menHeaderAvatar');
+  const mL=document.getElementById('menMobileLogin');
+  const mA=document.getElementById('menMobileAccount');
+  if(user){
+    if(lb) lb.style.display='none';
+    if(ab){ab.style.display='inline-flex';const t=ab.querySelector('.men-btn-label');if(t)t.textContent=(user.name||'حسابي').split(' ')[0];}
+    if(av){av.src=generateAvatar(user.name||user.email);av.style.display='block';av.onclick=openAccount;av.title='حسابي';}
+    if(mL) mL.style.display='none';
+    if(mA) mA.style.display='flex';
+  }else{
+    if(lb) lb.style.display='inline-flex';
+    if(ab) ab.style.display='none';
+    if(av) av.style.display='none';
+    if(mL) mL.style.display='flex';
+    if(mA) mA.style.display='none';
+  }
+}
+
+let authMode='login';
+
+function injectModals(){
+  if(document.getElementById('menAuthModal')) return;
+
+  const auth=document.createElement('div');
+  auth.id='menAuthModal'; auth.className='modal-overlay';
+  auth.innerHTML=`
+    <div class="modal-box auth-modal-box">
+      <div class="modal-close" id="menAuthClose"><i class="fas fa-times"></i></div>
+      <h3><i class="fas fa-fingerprint"></i><span id="menAuthTitle">تسجيل الدخول</span></h3>
+      <p class="auth-subtitle" id="menAuthSub">مرحباً بعودتك إلى MEN Store</p>
+      <div id="menSignupFields" style="display:none">
+        <div class="auth-input-group"><input type="text" id="menAuthName" placeholder="الاسم الكامل" autocomplete="name"><i class="fas fa-user"></i></div>
+        <div class="auth-input-group"><input type="tel" id="menAuthPhone" placeholder="05XXXXXXXX" autocomplete="tel"><i class="fas fa-phone"></i></div>
+      </div>
+      <div class="auth-input-group"><input type="email" id="menAuthEmail" placeholder="البريد الإلكتروني" autocomplete="email"><i class="fas fa-envelope"></i></div>
+      <div class="auth-input-group"><input type="password" id="menAuthPassword" placeholder="كلمة المرور" autocomplete="current-password"><i class="fas fa-lock"></i></div>
+      <div class="auth-error" id="menAuthErr"></div>
+      <button class="auth-submit-btn" id="menAuthSubmit"><i class="fas fa-fingerprint"></i><span>دخول</span></button>
+      <div class="auth-switch"><span id="menAuthSwitchTxt">ليس لديك حساب؟</span><a id="menAuthSwitchBtn">إنشاء حساب</a></div>
+    </div>`;
+  document.body.appendChild(auth);
+
+  const acc=document.createElement('div');
+  acc.id='menAccountModal'; acc.className='modal-overlay';
+  acc.innerHTML=`
+    <div class="modal-box account-modal-box">
+      <div class="modal-close" id="menAccClose"><i class="fas fa-times"></i></div>
+      <div class="account-hero">
+        <img class="account-avatar" id="menAccAvatar" src="" alt="">
+        <div class="account-name" id="menAccName">—</div>
+        <div class="account-email" id="menAccEmail">—</div>
+      </div>
+      <div class="account-body">
+        <div class="cashback-card">
+          <div class="cash-label"><i class="fas fa-wallet"></i> رصيد الكاش باك</div>
+          <div class="cash-amount"><span id="menCashVal">0.00</span><small>ر.س</small></div>
+          <div class="cash-note"><i class="fas fa-gift"></i> تكسب ${(CASHBACK_RATE*100).toFixed(0)}% على كل طلب</div>
+        </div>
+        <div class="account-info-grid">
+          <div class="account-info-item"><div class="lbl"><i class="fas fa-user"></i> الاسم</div><div class="val" id="menInfoName">—</div></div>
+          <div class="account-info-item"><div class="lbl"><i class="fas fa-phone"></i> الجوال</div><div class="val" id="menInfoPhone">—</div></div>
+          <div class="account-info-item"><div class="lbl"><i class="fas fa-envelope"></i> البريد</div><div class="val" id="menInfoEmail">—</div></div>
+          <div class="account-info-item"><div class="lbl"><i class="fas fa-calendar"></i> عضو منذ</div><div class="val" id="menInfoDate">—</div></div>
+        </div>
+        <div class="account-actions">
+          <button class="account-btn primary" id="menUseInfo"><i class="fas fa-bolt"></i> استخدام بياناتي في الطلب</button>
+          <button class="account-btn danger" id="menLogout"><i class="fas fa-right-from-bracket"></i> خروج</button>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(acc);
+
+  document.getElementById('menAuthClose').onclick=()=>auth.classList.remove('active');
+  auth.addEventListener('click',e=>{if(e.target===auth)auth.classList.remove('active')});
+  document.getElementById('menAuthSwitchBtn').onclick=()=>{
+    authMode=authMode==='login'?'signup':'login';
+    refreshAuthUI(); document.getElementById('menAuthErr').textContent='';
+  };
+  document.getElementById('menAuthSubmit').onclick=handleAuthSubmit;
+  ['menAuthName','menAuthPhone','menAuthEmail','menAuthPassword'].forEach(id=>{
+    const el=document.getElementById(id);
+    el&&el.addEventListener('keydown',e=>{if(e.key==='Enter')handleAuthSubmit();});
+  });
+
+  document.getElementById('menAccClose').onclick=()=>acc.classList.remove('active');
+  acc.addEventListener('click',e=>{if(e.target===acc)acc.classList.remove('active')});
+  document.getElementById('menLogout').onclick=()=>{
+    if(confirm('هل تريد تسجيل الخروج؟')){logout();acc.classList.remove('active');toast('تم تسجيل الخروج','info');}
+  };
+  document.getElementById('menUseInfo').onclick=()=>{
+    const u=getCurrentUser(); if(!u) return;
+    const n=document.getElementById('cartUserName'), p=document.getElementById('cartUserPhone');
+    if(n) n.value=u.name||'';
+    if(p) p.value=u.phone||'';
+    acc.classList.remove('active');
+    document.getElementById('cartModal')?.classList.add('active');
+    toast('تم تعبئة بياناتك تلقائياً ✓','success');
+  };
+}
+
+function refreshAuthUI(){
+  const t=document.getElementById('menAuthTitle');
+  const s=document.getElementById('menAuthSub');
+  const f=document.getElementById('menSignupFields');
+  const b=document.getElementById('menAuthSubmit');
+  const st=document.getElementById('menAuthSwitchTxt');
+  const sb=document.getElementById('menAuthSwitchBtn');
+  if(authMode==='signup'){
+    t.textContent='إنشاء حساب جديد';
+    s.textContent='انضم لعائلة MEN واحصل على كاش باك 2%';
+    f.style.display='block';
+    b.innerHTML='<i class="fas fa-user-plus"></i><span>إنشاء الحساب</span>';
+    st.textContent='لديك حساب؟';
+    sb.textContent='تسجيل الدخول';
+  }else{
+    t.textContent='تسجيل الدخول';
+    s.textContent='مرحباً بعودتك إلى MEN Store';
+    f.style.display='none';
+    b.innerHTML='<i class="fas fa-fingerprint"></i><span>دخول</span>';
+    st.textContent='ليس لديك حساب؟';
+    sb.textContent='إنشاء حساب';
+  }
+}
+
+function openAuth(mode){
+  authMode=mode||'login';
+  refreshAuthUI();
+  document.getElementById('menAuthErr').textContent='';
+  document.getElementById('menAuthModal').classList.add('active');
+  setTimeout(()=>{
+    const f=authMode==='signup'?'menAuthName':'menAuthEmail';
+    document.getElementById(f)?.focus();
+  },250);
+}
+
+function openAccount(){
+  const u=getCurrentUser();
+  if(!u){openAuth('login');return;}
+  document.getElementById('menAccAvatar').src=generateAvatar(u.name||u.email);
+  document.getElementById('menAccName').textContent=u.name||'—';
+  document.getElementById('menAccEmail').textContent=u.email||'—';
+  document.getElementById('menInfoName').textContent=u.name||'—';
+  document.getElementById('menInfoPhone').textContent=u.phone||'—';
+  document.getElementById('menInfoEmail').textContent=u.email||'—';
+  document.getElementById('menInfoDate').textContent=u.createdAt?new Date(u.createdAt).toLocaleDateString('ar-SA'):'—';
+  animateCash(u.cashback||0);
+  document.getElementById('menAccountModal').classList.add('active');
+}
+
+function animateCash(target){
+  const el=document.getElementById('menCashVal'); if(!el) return;
+  const start=0,dur=900,t0=performance.now();
+  (function step(t){
+    const p=Math.min((t-t0)/dur,1);
+    const e=1-Math.pow(1-p,3);
+    el.textContent=(start+(target-start)*e).toFixed(2);
+    if(p<1) requestAnimationFrame(step);
+  })(t0);
+}
+
+function handleAuthSubmit(){
+  const err=document.getElementById('menAuthErr');
+  err.textContent='';
+  const name=document.getElementById('menAuthName')?.value||'';
+  const phone=document.getElementById('menAuthPhone')?.value||'';
+  const email=document.getElementById('menAuthEmail')?.value||'';
+  const pass=document.getElementById('menAuthPassword')?.value||'';
+  try{
+    if(authMode==='signup'){
+      const u=signup(name,email,phone,pass);
+      toast(`أهلاً ${u.name}! تم إنشاء حسابك 🎉`,'success');
+    }else{
+      const u=login(email,pass);
+      toast(`أهلاً بعودتك ${u.name}! 👋`,'success');
+    }
+    document.getElementById('menAuthModal').classList.remove('active');
+    ['menAuthName','menAuthPhone','menAuthEmail','menAuthPassword'].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.value='';
+    });
+  }catch(e){err.textContent=e.message;}
+}
+
+function hookCartAutoFill(){
+  const btn=document.getElementById('headerCartBtn');
+  if(!btn) return;
+  btn.addEventListener('click',()=>{
+    const u=getCurrentUser(); if(!u) return;
+    setTimeout(()=>{
+      const n=document.getElementById('cartUserName'), p=document.getElementById('cartUserPhone');
+      if(n && !n.value) n.value=u.name||'';
+      if(p && !p.value) p.value=u.phone||'';
+    },80);
+  });
+}
+
+window.MEN_AUTH={
+  open:openAuth,
+  openAccount,
+  getCurrentUser,
+  logout,
+  addCashback,
+  addOrder,
+  onChange:fn=>listeners.push(fn),
+  CASHBACK_RATE
+};
+
+window.MEN_SUPABASE={
+  auth:{
+    getSession:async()=>{
+      const u=getCurrentUser();
+      return {data:{session:u?{user:{email:u.email,user_metadata:{name:u.name,phone:u.phone}}}:null}};
+    },
+    onAuthStateChange:cb=>{
+      listeners.push(u=>cb('SIGNED_IN',u?{user:{email:u.email}}:null));
+      return {data:{subscription:{unsubscribe:()=>{}}}};
+    }
+  }
+};
+
+function init(){
+  injectModals();
+  updateHeader(getCurrentUser());
+  hookCartAutoFill();
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+else init();
+
+})();
+</script>
 </body>
 </html>
