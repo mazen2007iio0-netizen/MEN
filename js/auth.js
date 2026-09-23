@@ -9,7 +9,7 @@
 // 🔑 إعدادات Supabase
 // ═══════════════════════════════════════════════════════════
 const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';   // ← ضع رابط مشروعك
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';   // ← ضع anon key
+const SUPABASE_KEY = 'sb_publishable_rQvBPw08M9Q3bWTDfFseTQ_6SU3aN96';   // ← ضع anon key
 // ═══════════════════════════════════════════════════════════
 
 const CASHBACK_RATE = 0.02;
@@ -19,10 +19,10 @@ let sb = null;
 if(USE_SUPABASE){
   try{
     sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    console.log(' Supabase mode');
-  }catch(e){ console.error(' خطأ Supabase:', e.message); }
+    console.log('✅ Supabase mode');
+  }catch(e){ console.error('❌ خطأ Supabase:', e.message); }
 }else{
-  console.log(' LocalStorage mode');
+  console.log('📦 LocalStorage mode');
 }
 
 window.sb = sb;
@@ -90,7 +90,7 @@ async function loadProfile(){
         
         if(created) {
           currentProfile = created;
-          console.log(' تم إنشاء profile جديد');
+          console.log('✅ تم إنشاء profile جديد');
         } else {
           // fallback أخير — استخدم metadata فقط
           currentProfile = {
@@ -100,7 +100,7 @@ async function loadProfile(){
             cashback: 0,
             created_at: currentUser.created_at
           };
-          if(cErr) console.warn(' إنشاء profile فشل:', cErr.message);
+          if(cErr) console.warn('⚠️ إنشاء profile فشل:', cErr.message);
         }
       }
     }catch(e){
