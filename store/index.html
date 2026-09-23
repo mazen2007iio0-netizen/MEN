@@ -22,7 +22,6 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em}
 .bg-ambient{position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 15% 20%,rgba(2,28,164,.18) 0%,transparent 50%),radial-gradient(ellipse at 85% 80%,rgba(74,122,255,.12) 0%,transparent 45%),radial-gradient(ellipse at 50% 50%,#060812 0%,#030510 100%)}
 .bg-ambient::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(74,122,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(74,122,255,.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);pointer-events:none}
 
-/* HEADER */
 header{background:rgba(6,8,18,.75);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border-bottom:1px solid rgba(74,122,255,.08);padding:12px 0;position:sticky;top:0;z-index:1000;transition:var(--transition)}
 header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5);border-bottom-color:rgba(74,122,255,.15)}
 .header-content{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
@@ -41,7 +40,6 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .header-cart-btn .cart-badge{background:transparent;color:#fff;border-radius:0;padding:0 4px;font-size:.9rem;font-weight:800;min-width:18px;text-align:center;line-height:1.5;text-shadow:0 0 12px rgba(255,255,255,.45)}
 .menu-toggle{display:none;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);color:var(--blue-bright);width:40px;height:40px;border-radius:12px;cursor:pointer;font-size:1rem;align-items:center;justify-content:center}
 
-/* BANNER */
 .store-banner{position:relative;width:100%;margin:22px 0 22px;min-height:270px;border-radius:var(--radius-3xl);overflow:hidden;isolation:isolate;display:flex;align-items:center;background:linear-gradient(135deg,rgba(2,28,164,.42),rgba(74,122,255,.12) 55%,rgba(6,8,18,.92));border:1px solid rgba(74,122,255,.18);box-shadow:0 26px 70px -26px rgba(2,28,164,.75),inset 0 1px 0 rgba(255,255,255,.07)}
 .store-banner::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(circle at 12% 18%,rgba(74,122,255,.35),transparent 45%),radial-gradient(circle at 88% 88%,rgba(245,179,66,.16),transparent 45%)}
 .store-banner .banner-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:none;filter:brightness(.72) saturate(1.15)}
@@ -57,13 +55,11 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .banner-code-btn:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 16px 55px rgba(74,122,255,.7)}
 .banner-code-btn::after{content:'اضغط للنسخ';position:absolute;top:-10px;left:-8px;background:var(--gold);color:#060812;font-size:.62rem;font-weight:800;padding:3px 10px;border-radius:20px}
 
-/* TRUST */
 .trust-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 28px}
 .trust-item{display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(10,16,32,.55);border:1px solid rgba(74,122,255,.1);border-radius:18px;padding:14px 12px;font-size:.85rem;font-weight:700;color:#c3cbe4;transition:var(--transition-fast);backdrop-filter:blur(12px)}
 .trust-item i{color:var(--blue-bright);font-size:1rem}
 .trust-item:hover{background:rgba(74,122,255,.1);border-color:rgba(74,122,255,.3);transform:translateY(-3px)}
 
-/* SEARCH */
 .search-cart-wrapper{display:flex;flex-direction:column;gap:16px;margin:30px 0}
 .cart-ai-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .search-wrapper{position:relative;flex:1;min-width:200px}
@@ -72,7 +68,6 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .search-wrapper input::placeholder{color:#5a607a}
 .search-wrapper .search-icon{position:absolute;left:24px;top:50%;transform:translateY(-50%);color:var(--blue-bright);font-size:1.05rem;pointer-events:none}
 
-/* SORT */
 .sort-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:rgba(10,16,32,.5);backdrop-filter:blur(12px);border-radius:60px;padding:8px 14px 8px 24px;border:1px solid rgba(74,122,255,.08);margin-bottom:28px}
 .sort-bar label{color:#b0b8d0;font-weight:500;font-size:.88rem;display:flex;align-items:center;gap:8px}
 .sort-bar label i{color:var(--blue-bright)}
@@ -83,13 +78,11 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .sort-bar .filter-tags button.active{background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid));color:#fff;box-shadow:0 4px 16px rgba(2,28,164,.4)}
 .sort-bar .filter-tags button:hover:not(.active){background:rgba(74,122,255,.08);color:#fff}
 
-/* SECTION LABEL */
 .section-label{display:flex;align-items:center;gap:16px;margin-bottom:24px}
 .section-label .line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(74,122,255,.3),transparent)}
 .section-label h3{font-size:1.9rem;font-weight:800;background:linear-gradient(135deg,#fff,var(--blue-bright));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap;letter-spacing:-.5px}
 .section-label .icon-badge{background:rgba(74,122,255,.1);border:1px solid rgba(74,122,255,.2);border-radius:60px;padding:6px 16px;color:var(--blue-bright);font-size:.82rem;font-weight:700;display:inline-flex;align-items:center;gap:8px}
 
-/* PRODUCTS */
 .shop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin:30px 0}
 .product-item{position:relative;background:var(--card-bg);backdrop-filter:blur(16px);border:1px solid var(--card-border);border-radius:var(--radius-xl);overflow:hidden;transition:var(--transition);display:flex;flex-direction:column;height:100%;cursor:pointer}
 .product-item:hover{transform:translateY(-8px);box-shadow:0 30px 60px -20px rgba(2,28,164,.4);border-color:rgba(74,122,255,.3)}
@@ -122,7 +115,6 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .load-error{text-align:center;padding:60px 20px;color:#ff8a8a;background:rgba(217,4,41,.06);border:1px dashed rgba(217,4,41,.3);border-radius:28px;margin:40px 0;font-weight:600;line-height:2}
 .load-error i{font-size:2.4rem;margin-bottom:12px;display:block}
 
-/* REVIEWS */
 .reviews-section{margin:70px 0 30px}
 .reviews-carousel-wrapper{position:relative;display:flex;align-items:center;gap:14px;margin-top:25px}
 .reviews-carousel{overflow:hidden;flex:1;border-radius:var(--radius-xl);padding:4px}
@@ -138,7 +130,6 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .carousel-btn:hover:not(:disabled){background:rgba(74,122,255,.2);transform:scale(1.08)}
 .carousel-btn:disabled{opacity:.2;cursor:not-allowed}
 
-/* PAGES */
 .page-view{display:none;animation:pageIn .5s cubic-bezier(.16,1,.3,1)}
 .page-view.active{display:block}
 @keyframes pageIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -150,7 +141,6 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .back-btn{display:inline-flex;align-items:center;gap:10px;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);border-radius:60px;padding:10px 22px;color:var(--blue-bright);font-weight:700;cursor:pointer;transition:var(--transition-fast);font-family:'Cairo',sans-serif;font-size:.9rem;margin:12px 0 26px}
 .back-btn:hover{background:rgba(74,122,255,.18);transform:translateX(4px)}
 
-/* PRODUCT PAGE */
 .product-page-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:50px;margin-bottom:60px;align-items:start}
 .gallery-main{position:relative;border-radius:var(--radius-2xl);overflow:hidden;background:linear-gradient(135deg,#0a0e1a,#0e1428);border:1px solid rgba(74,122,255,.12);aspect-ratio:1/1;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
 .gallery-main img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.16,1,.3,1)}
@@ -212,7 +202,6 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .related-section{margin-top:60px;padding-top:40px;border-top:1px solid rgba(74,122,255,.08)}
 .related-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 
-/* STATIC */
 .static-page{padding:20px 0 60px}
 .static-page-header{text-align:center;margin-bottom:40px}
 .static-page-header h1{font-size:2.8rem;font-weight:900;background:linear-gradient(135deg,#fff,var(--blue-bright));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:10px;letter-spacing:-1px}
@@ -240,7 +229,6 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .faq-answer{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;padding:0 22px;color:#b0b8d0}
 .faq-item.open .faq-answer{max-height:400px;padding:0 22px 20px}
 
-/* MODALS */
 .modal-overlay{position:fixed;inset:0;background:rgba(2,4,12,.85);backdrop-filter:blur(20px);z-index:3000;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.active{display:flex}
 .modal-box{background:linear-gradient(145deg,rgba(14,20,38,.98),rgba(8,12,24,.98));backdrop-filter:blur(30px);border:1px solid rgba(74,122,255,.15);border-radius:var(--radius-2xl);position:relative;box-shadow:0 40px 100px rgba(0,0,0,.7);animation:modalIn .4s cubic-bezier(.16,1,.3,1);max-height:92vh;overflow-y:auto}
@@ -306,7 +294,6 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .ai-input-row input:focus{border-color:var(--blue-light)}
 .ai-input-row button{background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid));border:none;border-radius:50%;width:46px;height:46px;min-width:46px;color:#fff;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
-/* FAB */
 .ai-fab{position:fixed;left:24px;bottom:24px;z-index:9999}
 .ai-fab .fab-btn{width:62px;height:62px;border:none;border-radius:50%;background:linear-gradient(135deg,var(--blue-deep),var(--blue-light));color:#fff;font-size:24px;cursor:pointer;display:flex;justify-content:center;align-items:center;box-shadow:0 8px 32px rgba(74,122,255,.5);animation:fabPulse 2.5s infinite}
 @keyframes fabPulse{0%,100%{box-shadow:0 8px 32px rgba(74,122,255,.5),0 0 0 0 rgba(74,122,255,.4)}70%{box-shadow:0 8px 32px rgba(74,122,255,.5),0 0 0 20px rgba(74,122,255,0)}}
@@ -314,7 +301,6 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .ai-fab .fab-label{position:absolute;left:76px;top:50%;transform:translateY(-50%);background:rgba(10,16,32,.95);color:#fff;padding:8px 16px;border-radius:20px;font-size:13px;white-space:nowrap;opacity:0;pointer-events:none;transition:var(--transition-fast);border:1px solid rgba(74,122,255,.15);font-weight:700}
 .ai-fab:hover .fab-label{opacity:1}
 
-/* FOOTER */
 footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top:1px solid rgba(74,122,255,.08);padding:60px 0 30px;margin-top:90px}
 .footer-flex{display:flex;flex-wrap:wrap;justify-content:space-between;gap:40px}
 .footer-col{flex:1;min-width:220px}
@@ -333,7 +319,6 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
 .copyright{text-align:center;margin-top:44px;padding-top:24px;border-top:1px solid rgba(74,122,255,.06);color:#4a5070;font-size:.85rem;width:100%}
 .copyright span{color:var(--blue-bright);font-weight:700}
 
-/* TOAST */
 .toast-notification{position:fixed;top:24px;left:50%;transform:translateX(-50%);background:rgba(10,16,32,.95);backdrop-filter:blur(20px);border:1px solid rgba(74,122,255,.2);border-radius:60px;padding:13px 26px;color:#f0f4ff;z-index:99999;display:flex;align-items:center;gap:10px;font-weight:700;box-shadow:0 12px 44px rgba(0,0,0,.5);animation:toastSlide .5s cubic-bezier(.16,1,.3,1);font-size:.9rem;max-width:92vw}
 .toast-notification i{color:var(--blue-bright);font-size:1.1rem}
 @keyframes toastSlide{from{opacity:0;transform:translateX(-50%) translateY(-20px) scale(.95)}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
@@ -343,7 +328,6 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
 .lightbox .lightbox-close{position:absolute;top:20px;right:20px;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
 .lightbox .lightbox-close:hover{background:rgba(217,4,41,.7);transform:rotate(90deg)}
 
-/* MOBILE MENU */
 .mobile-menu{position:fixed;top:0;right:-100%;width:280px;height:100vh;background:rgba(8,12,24,.98);backdrop-filter:blur(30px);z-index:2500;border-left:1px solid rgba(74,122,255,.15);transition:right .4s cubic-bezier(.16,1,.3,1);padding:80px 24px 30px;overflow-y:auto}
 .mobile-menu.open{right:0}
 .mobile-menu-close{position:absolute;top:20px;left:20px;width:38px;height:38px;border-radius:50%;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);color:#8a92b0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem}
@@ -353,21 +337,13 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
 .menu-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:2400;opacity:0;pointer-events:none;transition:opacity .3s}
 .menu-backdrop.active{opacity:1;pointer-events:auto}
 
-/* AUTH HEADER BUTTONS */
 .men-header-auth-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:60px;font-weight:700;font-size:.85rem;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .4s cubic-bezier(.16,1,.3,1);border:none;white-space:nowrap;line-height:1;text-decoration:none}
 .men-header-auth-btn.login{background:linear-gradient(135deg,#021ca4,#1a3a9e);color:#fff;box-shadow:0 4px 20px rgba(2,28,164,.35)}
 .men-header-auth-btn.login:hover{transform:translateY(-3px);box-shadow:0 8px 36px rgba(74,122,255,.55)}
-
-/* AVATAR ONLY ACCOUNT BUTTON */
 .men-header-avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;display:none;border:2px solid #4a7aff;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);flex-shrink:0;box-shadow:0 0 0 3px rgba(74,122,255,.12)}
 .men-header-avatar:hover{transform:scale(1.08) rotate(-3deg);box-shadow:0 0 0 3px rgba(74,122,255,.25),0 0 24px rgba(74,122,255,.6)}
+@media (max-width:480px){.men-header-auth-btn{padding:8px 12px;font-size:.78rem}.men-header-avatar{width:36px;height:36px}}
 
-@media (max-width:480px){
-    .men-header-auth-btn{padding:8px 12px;font-size:.78rem}
-    .men-header-avatar{width:36px;height:36px}
-}
-
-/* AUTH MODALS */
 .auth-modal-box{width:100%;max-width:460px;padding:40px 34px}
 .auth-modal-box h3{text-align:center;font-size:1.6rem;margin-bottom:6px;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px}
 .auth-modal-box h3 i{color:#4a7aff}
@@ -380,11 +356,11 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
 .auth-error{color:#ff6b6b;font-size:.82rem;text-align:center;margin:8px 0 2px;min-height:18px;font-weight:600}
 .auth-submit-btn{width:100%;padding:15px;border-radius:60px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-weight:800;font-size:1rem;cursor:pointer;font-family:'Cairo',sans-serif;margin-top:6px;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px}
 .auth-submit-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(74,122,255,.5)}
+.auth-submit-btn:disabled{opacity:.6;cursor:not-allowed}
 .auth-switch{text-align:center;margin-top:18px;color:#8a92b0;font-size:.88rem}
 .auth-switch a{color:#4a7aff;font-weight:700;cursor:pointer;text-decoration:none;margin-right:6px}
 .auth-switch a:hover{color:#6a9aff;text-decoration:underline}
 
-/* ACCOUNT MODAL */
 .account-modal-box{width:100%;max-width:520px;padding:0;overflow:hidden}
 .account-hero{position:relative;padding:44px 30px 26px;background:linear-gradient(135deg,rgba(2,28,164,.5),rgba(74,122,255,.15));border-bottom:1px solid rgba(74,122,255,.12);text-align:center}
 .account-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(74,122,255,.35),transparent 65%);pointer-events:none}
@@ -393,14 +369,12 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
 .account-email{color:#a8b0cc;font-size:.88rem;position:relative;z-index:1}
 .account-body{padding:24px 26px 28px}
 
-/* CASHBACK CARD */
 .cashback-card{position:relative;background:linear-gradient(135deg,#021ca4 0%,#041580 55%,#021ca4 100%);border-radius:22px;padding:22px 26px;color:#fff;margin-bottom:20px;overflow:hidden;box-shadow:0 14px 44px rgba(2,28,164,.6);border:1px solid rgba(74,122,255,.25)}
 .cashback-card::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:radial-gradient(circle,rgba(74,122,255,.25),transparent 70%);border-radius:50%;pointer-events:none}
 .cashback-card .cash-label{font-size:.82rem;opacity:.92;margin-bottom:6px;display:flex;align-items:center;gap:8px;font-weight:700;position:relative;z-index:1}
 .cashback-card .cash-amount{font-size:2.4rem;font-weight:900;letter-spacing:-1.5px;display:flex;align-items:baseline;gap:8px;line-height:1.1;position:relative;z-index:1}
 .cashback-card .cash-amount small{font-size:.95rem;font-weight:600;opacity:.92}
 .cashback-card .cash-note{font-size:.76rem;opacity:.9;margin-top:10px;display:flex;align-items:center;gap:8px;position:relative;z-index:1;background:rgba(0,0,0,.25);padding:6px 12px;border-radius:20px;width:fit-content;border:1px solid rgba(74,122,255,.2)}
-
 .account-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
 .account-info-item{background:rgba(74,122,255,.05);border:1px solid rgba(74,122,255,.1);border-radius:16px;padding:14px 16px;transition:all .3s}
 .account-info-item:hover{background:rgba(74,122,255,.09);border-color:rgba(74,122,255,.2)}
@@ -414,85 +388,42 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
 .account-btn.danger{background:rgba(217,4,41,.1);border:1px solid rgba(217,4,41,.25);color:#ff6b6b}
 .account-btn.danger:hover{background:rgba(217,4,41,.2);transform:translateY(-2px)}
 
-/* RESPONSIVE */
-@media (max-width:1200px){
-    .shop-grid,.related-grid{grid-template-columns:repeat(3,1fr)}
-    .header-nav{display:none}
-    .menu-toggle{display:flex}
-}
-@media (max-width:992px){
-    .shop-grid,.related-grid{grid-template-columns:repeat(2,1fr)}
-    .product-page-grid{grid-template-columns:1fr;gap:30px}
-    .product-page-title{font-size:2rem}
-    .product-page-price .current{font-size:2.4rem}
-    .banner-content h2{font-size:1.5rem}
-    .banner-content p{font-size:.95rem}
-    .store-banner{min-height:250px}
-    .banner-inner{padding:28px 24px}
-}
+@media (max-width:1200px){.shop-grid,.related-grid{grid-template-columns:repeat(3,1fr)}.header-nav{display:none}.menu-toggle{display:flex}}
+@media (max-width:992px){.shop-grid,.related-grid{grid-template-columns:repeat(2,1fr)}.product-page-grid{grid-template-columns:1fr;gap:30px}.product-page-title{font-size:2rem}.product-page-price .current{font-size:2.4rem}.banner-content h2{font-size:1.5rem}.banner-content p{font-size:.95rem}.store-banner{min-height:250px}.banner-inner{padding:28px 24px}}
 @media (max-width:768px){
-    .container{width:96%;padding:0 14px}
-    .logo img{height:38px}
-    .logo-text .brand{font-size:1.3rem}
-    .header-cart-btn{padding:9px 16px 9px 14px;font-size:.8rem;gap:6px}
-    .shop-grid{grid-template-columns:repeat(2,1fr);gap:14px}
-    .product-info{padding:14px 14px 16px}
-    .product-name{font-size:.92rem}
-    .product-price .current{font-size:1.4rem}
-    .product-actions .btn-cart,.product-actions .btn-ai-search{font-size:.75rem;padding:9px 10px}
-    .review-card{min-width:260px;padding:20px}
-    .carousel-btn{width:38px;height:38px;font-size:.9rem}
-    .ai-modal-box{height:520px;padding:20px 18px}
-    .cart-modal-box{padding:28px 22px}
-    .footer-flex{flex-direction:column;gap:28px}
-    .sort-bar{flex-direction:column;align-items:stretch;border-radius:24px;padding:14px 16px;gap:12px}
-    .sort-bar .filter-tags{justify-content:center}
-    .section-label h3{font-size:1.5rem}
-    .product-page-title{font-size:1.6rem}
-    .product-page-price .current{font-size:2rem}
-    .info-blocks{grid-template-columns:1fr}
-    .buy-box{padding:20px}
-    .buy-box-actions{grid-template-columns:1fr}
-    .related-grid{grid-template-columns:repeat(2,1fr);gap:12px}
-    .banner-inner{padding:26px 22px;flex-direction:column;text-align:center}
-    .banner-content h2{font-size:1.25rem;justify-content:center}
-    .banner-content p{font-size:.88rem}
-    .banner-code-btn{padding:13px 24px;font-size:.92rem}
-    .store-banner{min-height:230px}
-    .trust-strip{grid-template-columns:repeat(2,1fr);gap:10px}
-    .trust-item{font-size:.78rem;padding:12px 10px}
-    .static-page-header h1{font-size:1.6rem}
-    .static-content{padding:24px 20px}
-    .account-info-grid{grid-template-columns:1fr}
-    .auth-modal-box{padding:30px 22px}
-    .account-modal-box{max-height:92vh;overflow-y:auto}
-    .account-hero{padding:36px 22px 22px}
-    .account-body{padding:20px 20px 24px}
-    .cashback-card .cash-amount{font-size:2rem}
+  .container{width:96%;padding:0 14px}.logo img{height:38px}.logo-text .brand{font-size:1.3rem}
+  .header-cart-btn{padding:9px 16px 9px 14px;font-size:.8rem;gap:6px}
+  .shop-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .product-info{padding:14px 14px 16px}.product-name{font-size:.92rem}.product-price .current{font-size:1.4rem}
+  .product-actions .btn-cart,.product-actions .btn-ai-search{font-size:.75rem;padding:9px 10px}
+  .review-card{min-width:260px;padding:20px}.carousel-btn{width:38px;height:38px;font-size:.9rem}
+  .ai-modal-box{height:520px;padding:20px 18px}.cart-modal-box{padding:28px 22px}
+  .footer-flex{flex-direction:column;gap:28px}
+  .sort-bar{flex-direction:column;align-items:stretch;border-radius:24px;padding:14px 16px;gap:12px}
+  .sort-bar .filter-tags{justify-content:center}.section-label h3{font-size:1.5rem}
+  .product-page-title{font-size:1.6rem}.product-page-price .current{font-size:2rem}
+  .info-blocks{grid-template-columns:1fr}.buy-box{padding:20px}.buy-box-actions{grid-template-columns:1fr}
+  .related-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .banner-inner{padding:26px 22px;flex-direction:column;text-align:center}
+  .banner-content h2{font-size:1.25rem;justify-content:center}.banner-content p{font-size:.88rem}
+  .banner-code-btn{padding:13px 24px;font-size:.92rem}.store-banner{min-height:230px}
+  .trust-strip{grid-template-columns:repeat(2,1fr);gap:10px}.trust-item{font-size:.78rem;padding:12px 10px}
+  .static-page-header h1{font-size:1.6rem}.static-content{padding:24px 20px}
+  .account-info-grid{grid-template-columns:1fr}.auth-modal-box{padding:30px 22px}
+  .account-modal-box{max-height:92vh;overflow-y:auto}.account-hero{padding:36px 22px 22px}.account-body{padding:20px 20px 24px}
+  .cashback-card .cash-amount{font-size:2rem}
 }
 @media (max-width:480px){
-    .shop-grid{grid-template-columns:1fr 1fr;gap:10px}
-    .product-info{padding:12px 12px 14px}
-    .product-name{font-size:.82rem;margin-bottom:6px}
-    .product-price .current{font-size:1.15rem}
-    .product-actions .btn-cart,.product-actions .btn-ai-search{font-size:.68rem;padding:8px 6px;gap:4px}
-    .product-badges{top:8px;right:8px}
-    .product-discount-badge,.product-popular-badge,.product-savings-badge{font-size:.58rem;padding:3px 8px}
-    .review-card{min-width:220px;padding:16px}
-    .ai-modal-box{height:480px;padding:16px 14px}
-    .cart-modal-box{padding:22px 16px}
-    .cart-item{padding:10px;gap:8px}
-    .cart-item img{width:44px;height:44px}
-    .product-page-title{font-size:1.35rem}
-    .product-page-price .current{font-size:1.7rem}
-    .related-grid{grid-template-columns:1fr 1fr;gap:10px}
-    .banner-content h2{font-size:1.05rem;gap:10px}
-    .banner-content h2 .banner-icon-wrap{width:38px;height:38px;font-size:1rem;border-radius:12px}
-    .banner-code-btn{padding:11px 18px;font-size:.82rem}
-    .store-banner{min-height:190px}
-    .trust-item{font-size:.72rem}
-    .static-page-header h1{font-size:1.3rem}
-    .static-content{padding:18px 16px}
+  .shop-grid{grid-template-columns:1fr 1fr;gap:10px}.product-info{padding:12px 12px 14px}.product-name{font-size:.82rem;margin-bottom:6px}
+  .product-price .current{font-size:1.15rem}.product-actions .btn-cart,.product-actions .btn-ai-search{font-size:.68rem;padding:8px 6px;gap:4px}
+  .product-badges{top:8px;right:8px}.product-discount-badge,.product-popular-badge,.product-savings-badge{font-size:.58rem;padding:3px 8px}
+  .review-card{min-width:220px;padding:16px}.ai-modal-box{height:480px;padding:16px 14px}.cart-modal-box{padding:22px 16px}
+  .cart-item{padding:10px;gap:8px}.cart-item img{width:44px;height:44px}
+  .product-page-title{font-size:1.35rem}.product-page-price .current{font-size:1.7rem}
+  .related-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .banner-content h2{font-size:1.05rem;gap:10px}.banner-content h2 .banner-icon-wrap{width:38px;height:38px;font-size:1rem;border-radius:12px}
+  .banner-code-btn{padding:11px 18px;font-size:.82rem}.store-banner{min-height:190px}.trust-item{font-size:.72rem}
+  .static-page-header h1{font-size:1.3rem}.static-content{padding:18px 16px}
 }
 </style>
 </head>
@@ -729,12 +660,11 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
         <div class="static-page">
             <div class="static-page-header"><h1>الأسئلة الشائعة</h1><p>كل ما تحتاج معرفته عن خدماتنا</p><div class="divider"></div></div>
             <div class="static-content">
-                <div class="faq-item"><div class="faq-question"><span><i class="fas fa-circle-question" style="color:var(--blue-bright);margin-left:8px;"></i> كيف أشتري من المتجر؟</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>اختر المنتج، اضغط "إضافة إلى السلة"، ثم افتح السلة، أدخل اسمك ورقم جوالك، وأكد الطلب.</p></div></div>
+                <div class="faq-item"><div class="faq-question"><span><i class="fas fa-circle-question" style="color:var(--blue-bright);margin-left:8px;"></i> كيف أشتري من المتجر؟</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>اختر المنتج، اضغط "إضافة إلى السلة"، ثم افتح السلة، تأكد من تسجيل دخولك، وأكد الطلب.</p></div></div>
                 <div class="faq-item"><div class="faq-question"><span><i class="fas fa-circle-question" style="color:var(--blue-bright);margin-left:8px;"></i> كم يستغرق التسليم؟</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>التسليم فوري — عادة خلال 5 دقائق من تأكيد الطلب.</p></div></div>
-                <div class="faq-item"><div class="faq-question"><span><i class="fas fa-circle-question" style="color:var(--blue-bright);margin-left:8px;"></i> ما هي طرق الدفع المتاحة؟</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>مدى، Apple Pay، STC Pay، التحويل البنكي .</p></div></div>
+                <div class="faq-item"><div class="faq-question"><span><i class="fas fa-circle-question" style="color:var(--blue-bright);margin-left:8px;"></i> ما هي طرق الدفع المتاحة؟</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>مدى، Apple Pay، STC Pay، التحويل البنكي.</p></div></div>
                 <div class="faq-item"><div class="faq-question"><span><i class="fas fa-circle-question" style="color:var(--blue-bright);margin-left:8px;"></i> هل المنتجات أصلية؟</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>نعم، جميع منتجاتنا أصلية 100% ومضمونة من المصدر مباشرة.</p></div></div>
-                <div class="faq-item"><div class="faq-question"><span><i class="fas fa-circle-question" style="color:var(--blue-bright);margin-left:8px;"></i> كيف أستخدم كود الخصم؟</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>افتح السلة، أدخل الكود في خانة "كود الخصم"، ثم اضغط "تطبيق". بعض الأكواد تشتغل على منتجات محددة فقط.</p></div></div>
-                <div class="faq-item"><div class="faq-question"><span><i class="fas fa-circle-question" style="color:var(--blue-bright);margin-left:8px;"></i> كيف أحصل على الكاش باك؟</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>سجّل حساباً جديداً، وأي طلب تكتمل فيه تحصل تلقائياً على 2% من قيمة الطلب في رصيدك.</p></div></div>
+                <div class="faq-item"><div class="faq-question"><span><i class="fas fa-circle-question" style="color:var(--blue-bright);margin-left:8px;"></i> كيف أحصل على الكاش باك؟</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>سجّل حساباً جديداً، وأي طلب تكتمل فيه تحصل تلقائياً على 2% من قيمة الطلب في رصيدك. يمكنك استخدام الرصيد في الطلبات القادمة.</p></div></div>
             </div>
         </div>
     </div>
@@ -828,9 +758,16 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
             <button class="btn-apply" id="applyDiscountBtn">تطبيق</button>
         </div>
         <div id="discountMsg" class="discount-msg"></div>
+
+        <div id="cashbackUseRow" style="display:none;margin:14px 0;padding:14px 18px;background:rgba(76,175,80,.06);border:1px solid rgba(76,175,80,.25);border-radius:16px;">
+            <label style="display:flex;align-items:center;gap:12px;cursor:pointer;color:#e0e6f4;font-weight:700;font-size:.9rem;">
+                <input type="checkbox" id="useCashbackToggle" style="width:18px;height:18px;accent-color:#4caf50;cursor:pointer;">
+                <span><i class="fas fa-wallet" style="color:#4caf50;"></i> استخدام الكاش باك — المتاح: <strong id="cashbackAvail" style="color:#4caf50;">0.00</strong> ر.س</span>
+            </label>
+        </div>
+
         <div class="cart-total-display"><span>الإجمالي</span><span class="total-price" id="cartTotalPrice">0.00</span></div>
-        <div class="input-field"><label for="cartUserName"><i class="fas fa-user"></i> الاسم الكامل</label><input type="text" id="cartUserName" placeholder="أدخل اسمك الكريم"></div>
-        <div class="input-field"><label for="cartUserPhone"><i class="fas fa-phone"></i> رقم الجوال</label><input type="tel" id="cartUserPhone" placeholder="05XXXXXXXX"></div>
+        <div id="cartBreakdown" style="font-size:.82rem;color:#8a92b0;text-align:left;margin-top:8px;line-height:1.9;font-weight:600;"></div>
         <button class="btn-submit" id="cartSubmitBtn"><i class="fas fa-check-circle"></i> تأكيد الطلب</button>
     </div>
 </div>
@@ -865,6 +802,9 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
     <span class="fab-label">تحدث مع MEN Ai</span>
 </div>
 
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- السكربت الأول — المتجر والمنتجات والسلة -->
+<!-- ═══════════════════════════════════════════════════════════ -->
 <script>
 const RIYAL_IMG_URL = "https://www.socialcreator.com/srv/imgs/ti_imgs/200732_328971.png";
 function riyal(size=''){const cls=size?`riyal-icon ${size}`:'riyal-icon';return `<img src="${RIYAL_IMG_URL}" class="${cls}" alt="ر.س" loading="lazy" style="filter: brightness(0) invert(1);">`;}
@@ -876,17 +816,18 @@ let productsArray=[],reviewsData=[],ads=[];
 let storeSettings={banner:{title:"عروض خاصة",text:"",code:"MEN1",icon:"fas fa-tags",image:""},discountCodes:[{code:"MEN1",percent:10,products:[]}],carouselInterval:5500};
 let cartItems=[];
 let discountApplied=false,discountPercent=0,discountCode='',discountProducts=[];
+let useCashback=false;
 let lastViewedProductId=null,currentReviewIndex=0,currentFilter='all',currentSort='default';
 let currentProductPageId=null,pageQty=1;
 const STATIC_PAGES=['about','faq','terms','privacy'];
 
 async function loadStoreData(){
-    const paths=['store/products.json','./store/products.json','products.json','./products.json','../store/products.json','/store/products.json'];
+    const paths=['store/products.json','./store/products.json','products.json','./products.json'];
     for(const path of paths){
         try{const res=await fetch(path,{cache:'no-store'});if(!res.ok)continue;const data=await res.json();
             productsArray=data.products||[];reviewsData=data.reviews||[];ads=data.ads||[];
             if(data.settings){storeSettings={...storeSettings,...data.settings};if(data.settings.banner)storeSettings.banner={...storeSettings.banner,...data.settings.banner};}
-            console.log(' تحميل ناجح من:',path,'| منتجات:',productsArray.length);return true;
+            return true;
         }catch(err){continue;}
     }
     return false;
@@ -910,6 +851,7 @@ function showToast(msg,type="info"){
     const icon=type==='success'?'<i class="fas fa-circle-check"></i>':(type==='error'?'<i class="fas fa-circle-xmark"></i>':'<i class="fas fa-circle-info"></i>');
     t.innerHTML=`${icon} <span>${msg}</span>`;document.body.appendChild(t);setTimeout(()=>t.remove(),4000);
 }
+window.showToast = showToast;
 function oldPriceHTML(p){return p.originalPrice?`<span class="old-price">${p.originalPrice}</span>`:'';}
 function discountBadgeHTML(p){
     if(!p.discount&&!p.offerLabel)return '';
@@ -924,9 +866,7 @@ function savingsAmount(p){
     if(p.discount){const o=price/(1-(p.discount/100));if(o>price)return Math.round((o-price)*100)/100;}
     return 0;
 }
-function hasOffer(p){
-    return !!(p.discount||p.offerLabel||(parseFloat(p.originalPrice)>parseFloat(p.price)));
-}
+function hasOffer(p){return !!(p.discount||p.offerLabel||(parseFloat(p.originalPrice)>parseFloat(p.price)));}
 function savingsBadgeHTML(p){
     if(!hasOffer(p))return '';
     const s=savingsAmount(p);
@@ -997,7 +937,7 @@ function addToCart(product,qty=1){
 }
 function removeFromCart(id){
     cartItems=cartItems.filter(p=>p.id!==id);
-    if(cartItems.length===0){discountApplied=false;discountPercent=0;discountCode='';discountProducts=[];if($('discountCodeInput'))$('discountCodeInput').value='';if($('discountMsg'))$('discountMsg').textContent='';}
+    if(cartItems.length===0){discountApplied=false;discountPercent=0;discountCode='';discountProducts=[];useCashback=false;if($('useCashbackToggle'))$('useCashbackToggle').checked=false;if($('discountCodeInput'))$('discountCodeInput').value='';if($('discountMsg'))$('discountMsg').textContent='';}
     updateCartUI();
     if(cartItems.length===0)showToast("السلة فارغة الآن","info");
 }
@@ -1019,7 +959,7 @@ function applyDiscount(){
             msg.className='discount-msg';
         }else{
             const names=discountProducts.map(id=>productsArray.find(p=>p.id===id)?.name).filter(Boolean);
-            msg.textContent=` خصم ${discountPercent}% مطبق على ${names.length} منتج: ${names.slice(0,2).join(', ')}${names.length>2?'...':''}`;
+            msg.textContent=` خصم ${discountPercent}% مطبق على ${names.length} منتج`;
             msg.className='discount-msg info';
         }
         updateCartUI();
@@ -1036,6 +976,7 @@ function updateCartUI(){
     const totalItems=cartItems.reduce((s,p)=>s+p.quantity,0);
     if($('headerCartBadge'))$('headerCartBadge').textContent=totalItems;
     const list=$('cartItemsList'),totalDisplay=$('cartTotalPrice');
+    const breakdown=$('cartBreakdown');
 
     let total=0,discountableAmount=0;
     cartItems.forEach(p=>{
@@ -1046,19 +987,47 @@ function updateCartUI(){
     });
     let discountAmount=0;
     if(discountApplied&&discountPercent>0)discountAmount=discountableAmount*(discountPercent/100);
-    const finalTotal=total-discountAmount;
+    const afterDiscount=Math.max(0,total-discountAmount);
 
-    if(totalDisplay){
-        if(discountApplied&&discountPercent>0&&cartItems.length>0){
-            totalDisplay.innerHTML=`<span class="num">${finalTotal.toFixed(2)}</span> ${riyal()} <span style="font-size:.75rem;color:#4caf50;font-weight:700;">-${discountPercent}%</span>`;
+    const cu = window.MEN_AUTH ? window.MEN_AUTH.getCurrentUser() : null;
+    const cashbackAvailable = cu ? Number(cu.cashback||0) : 0;
+    const row=$('cashbackUseRow');
+    if(row){
+        if(cu && cashbackAvailable>0 && cartItems.length>0){
+            row.style.display='block';
+            if($('cashbackAvail'))$('cashbackAvail').textContent=cashbackAvailable.toFixed(2);
         }else{
-            totalDisplay.innerHTML=`<span class="num">${total.toFixed(2)}</span> ${riyal()}`;
+            row.style.display='none';
+            useCashback=false;
+            const t=$('useCashbackToggle'); if(t) t.checked=false;
         }
     }
+    let cashbackUsed=0;
+    if(useCashback && cu && cashbackAvailable>0 && cartItems.length>0){
+        cashbackUsed=Math.min(cashbackAvailable,afterDiscount);
+    }
+    const finalTotal=Math.max(0,afterDiscount-cashbackUsed);
+
+    if(totalDisplay){
+        totalDisplay.innerHTML=`<span class="num">${finalTotal.toFixed(2)}</span> ${riyal()}`;
+    }
+    if(breakdown){
+        if(cartItems.length===0){breakdown.innerHTML='';}
+        else{
+            let b=[];
+            b.push(`المجموع: ${total.toFixed(2)} ر.س`);
+            if(discountAmount>0) b.push(`<span style="color:#4caf50;">خصم (${discountPercent}%): -${discountAmount.toFixed(2)} ر.س</span>`);
+            if(cashbackUsed>0) b.push(`<span style="color:#4caf50;">كاش باك مستخدم: -${cashbackUsed.toFixed(2)} ر.س</span>`);
+            breakdown.innerHTML=b.join('<br>');
+        }
+    }
+
     if(!list)return;
     if(cartItems.length===0){
         list.innerHTML=`<div class="cart-empty"><i class="fas fa-shopping-basket"></i>سلتك فارغة — أضف منتجات من المتجر</div>`;
         discountApplied=false;discountPercent=0;discountCode='';discountProducts=[];
+        useCashback=false;
+        if($('useCashbackToggle'))$('useCashbackToggle').checked=false;
         if($('discountCodeInput'))$('discountCodeInput').value='';
         if($('discountMsg')){const m=$('discountMsg');m.textContent='';m.className='discount-msg';}
     }else{
@@ -1083,10 +1052,19 @@ function updateCartUI(){
         list.querySelectorAll('.btn-cart-remove').forEach(b=>b.addEventListener('click',function(){removeFromCart(parseInt(this.dataset.id));}));
     }
 }
+window.updateCartUI = updateCartUI;
 
-async function sendCartRequest(userName,userPhone){
+async function sendCartRequest(){
     if(cartItems.length===0){showToast(" السلة فارغة","error");return;}
-    if(!userName||!userPhone){showToast("أدخل الاسم ورقم الجوال","error");return;}
+
+    const user = window.MEN_AUTH ? window.MEN_AUTH.getCurrentUser() : null;
+    if(!user){
+        showToast("يجب تسجيل الدخول لإتمام الطلب","error");
+        $('cartModal').classList.remove('active');
+        setTimeout(()=>window.MEN_AUTH?.open('login'),300);
+        return;
+    }
+
     let productList=cartItems.map((p,i)=>`${i+1}. ${p.name} (x${p.quantity}) - ${(parseFloat(p.price)*p.quantity).toFixed(2)} ر.س`).join('\n');
     let total=cartItems.reduce((s,p)=>s+parseFloat(p.price)*p.quantity,0);
     let discountableAmount=0;
@@ -1094,46 +1072,52 @@ async function sendCartRequest(userName,userPhone){
         cartItems.forEach(p=>{if(discountProducts.length===0||discountProducts.includes(p.id))discountableAmount+=parseFloat(p.price)*p.quantity;});
     }
     const discountAmount=discountableAmount*(discountPercent/100);
-    const finalTotal=total-discountAmount;
+    const afterDiscount=Math.max(0,total-discountAmount);
+
+    const cashbackAvailable=Number(user.cashback||0);
+    const cashbackUsed=(useCashback&&cashbackAvailable>0)?Math.min(cashbackAvailable,afterDiscount):0;
+    const finalTotal=Math.max(0,afterDiscount-cashbackUsed);
+
     const embed={title:" طلب جديد من متجر MEN",color:0x4a7aff,fields:[
-        {name:" العميل",value:userName,inline:true},
-        {name:"الجوال",value:userPhone,inline:true},
-        {name:"القطع",value:cartItems.reduce((s,p)=>s+p.quantity,0).toString(),inline:true},
+        {name:" العميل",value:user.name||'—',inline:true},
+        {name:"الجوال",value:user.phone||'—',inline:true},
+        {name:" القطع",value:cartItems.reduce((s,p)=>s+p.quantity,0).toString(),inline:true},
         {name:" الإجمالي",value:`${total.toFixed(2)} ر.س`,inline:true},
         ...(discountApplied&&discountPercent>0?[{name:" الخصم",value:`-${discountAmount.toFixed(2)} ر.س (${discountPercent}%)`,inline:true}]:[]),
+        ...(cashbackUsed>0?[{name:" كاش باك مستخدم",value:`-${cashbackUsed.toFixed(2)} ر.س`,inline:true}]:[]),
         {name:" النهائي",value:`${finalTotal.toFixed(2)} ر.س`,inline:true},
         {name:" المنتجات",value:productList.substring(0,1000),inline:false},
         {name:" الوقت",value:new Date().toLocaleString('ar-SA'),inline:true}
     ],thumbnail:{url:cartItems[0]?.image||''},timestamp:new Date().toISOString()};
+
     try{
         await fetch("https://discord.com/api/webhooks/1551181006957187132/bao_udMdzNVWgCktPc7DIHDL1tVD4BUZDmM0l7aDhyL-T8okYuJ0xQ2NpfQtnAuvsRFI",{
             method:"POST",headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({embeds:[embed],content:` طلب جديد من ${userName}`})
+            body:JSON.stringify({embeds:[embed],content:` طلب جديد من ${user.name}`})
         });
         showToast("تم إرسال طلبك بنجاح!","success");
 
-        // 🎁 كاش باك 2% + حفظ الطلب
         if (window.MEN_AUTH) {
-            const u = window.MEN_AUTH.getCurrentUser();
-            if (u) {
-                const rate = window.MEN_AUTH.CASHBACK_RATE || 0.02;
-                const cashback = finalTotal * rate;
-                window.MEN_AUTH.addCashback(cashback);
-                window.MEN_AUTH.addOrder({
-                    total: finalTotal,
-                    items: cartItems.map(p => ({ name: p.name, qty: p.quantity, price: p.price }))
-                });
-                setTimeout(() => showToast(` حصلت على ${cashback.toFixed(2)} ر.س كاش باك!`, "success"), 700);
-            }
+            if(cashbackUsed>0) await window.MEN_AUTH.deductCashback(cashbackUsed);
+            const cashback = finalTotal * (window.MEN_AUTH.CASHBACK_RATE||0.02);
+            if(cashback>0) await window.MEN_AUTH.addCashback(cashback);
+            await window.MEN_AUTH.addOrder({
+                total: finalTotal,
+                items: cartItems.map(p => ({ name: p.name, qty: p.quantity, price: p.price }))
+            });
+            if(cashback>0) setTimeout(()=>showToast(`💰 حصلت على ${cashback.toFixed(2)} ر.س كاش باك!`,"success"),800);
         }
 
         cartItems=[];discountApplied=false;discountPercent=0;discountCode='';discountProducts=[];
+        useCashback=false;
+        if($('useCashbackToggle'))$('useCashbackToggle').checked=false;
         if($('discountCodeInput'))$('discountCodeInput').value='';
         if($('discountMsg'))$('discountMsg').textContent='';
-        if($('cartUserName'))$('cartUserName').value='';
-        if($('cartUserPhone'))$('cartUserPhone').value='';
         updateCartUI();$('cartModal').classList.remove('active');
-    }catch(e){showToast("فشل الإرسال، حاول مرة أخرى","error");}
+    }catch(e){
+        console.error(e);
+        showToast("فشل الإرسال، حاول مرة أخرى","error");
+    }
 }
 
 function getAIResponse(text){
@@ -1360,7 +1344,8 @@ async function init(){
     on('cartModal','click',(e)=>{if(e.target===$('cartModal'))$('cartModal').classList.remove('active');});
     on('applyDiscountBtn','click',applyDiscount);
     on('discountCodeInput','keydown',(e)=>{if(e.key==='Enter')applyDiscount();});
-    on('cartSubmitBtn','click',()=>sendCartRequest(($('cartUserName')?.value||'').trim(),($('cartUserPhone')?.value||'').trim()));
+    on('useCashbackToggle','change',function(){useCashback=this.checked;updateCartUI();});
+    on('cartSubmitBtn','click',()=>sendCartRequest());
 
     on('pageQtyMinus','click',()=>{if(pageQty>1){pageQty--;$('pageQtyValue').textContent=pageQty;}});
     on('pageQtyPlus','click',()=>{pageQty++;$('pageQtyValue').textContent=pageQty;});
@@ -1403,8 +1388,6 @@ async function init(){
     bindAuthButtons();
 
     if(window.MEN_SUPABASE){
-        const { data:{ session } } = await window.MEN_SUPABASE.auth.getSession();
-        syncMobileAuthUI(session?.user || null);
         window.MEN_SUPABASE.auth.onAuthStateChange((event, s) => {
             syncMobileAuthUI(s?.user || null);
         });
@@ -1428,74 +1411,148 @@ function handleInitialHash(){
 document.addEventListener('DOMContentLoaded',init);
 </script>
 
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- السكربت الثاني — Supabase والحسابات والكاش باك -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
 'use strict';
 
-const STORAGE_KEY = 'men_users_v2';
-const SESSION_KEY = 'men_session_v2';
+// ═══════════════════════════════════════════════════════════
+// 🔑 ضع بيانات Supabase هنا — غيّر السطرين فقط
+// ═══════════════════════════════════════════════════════════
+const SUPABASE_URL = 'https://xxxxx.supabase.co';   // ← ضع رابط مشروعك
+const SUPABASE_KEY = 'eyJhbGciOi...';                // ← ضع anon key
+// ═══════════════════════════════════════════════════════════
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.sb = sb;
 const CASHBACK_RATE = 0.02;
 
-function getUsers(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')}catch{return {}}}
-function saveUsers(u){localStorage.setItem(STORAGE_KEY,JSON.stringify(u))}
-function getSession(){try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}catch{return null}}
-function setSession(s){s?localStorage.setItem(SESSION_KEY,JSON.stringify(s)):localStorage.removeItem(SESSION_KEY)}
+let currentUser = null;
+let currentProfile = null;
+let authMode = 'login';
+const listeners = [];
 
-function hash(str){let h=0;for(let i=0;i<str.length;i++){h=(h<<5)-h+str.charCodeAt(i);h|=0}return 'h'+Math.abs(h).toString(36)+'_'+str.length}
-
-function getCurrentUser(){
-  const s=getSession(); if(!s) return null;
-  const u=getUsers()[s.email]; if(!u) return null;
-  return {name:u.name,email:u.email,phone:u.phone,cashback:u.cashback||0,createdAt:u.createdAt,orders:u.orders||[]};
-}
-
-function signup(name,email,phone,password){
-  name=(name||'').trim(); email=(email||'').toLowerCase().trim(); phone=(phone||'').trim(); password=password||'';
+/* ═══════════ تسجيل جديد ═══════════ */
+async function signup(name, email, phone, password){
+  name=(name||'').trim(); email=(email||'').toLowerCase().trim();
+  phone=(phone||'').trim(); password=password||'';
   if(!name||!email||!phone||!password) throw new Error('الرجاء إكمال جميع الحقول');
   if(name.length<3) throw new Error('الاسم يجب أن يكون 3 أحرف على الأقل');
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('البريد الإلكتروني غير صحيح');
   const phoneClean = phone.replace(/[\s\-]/g,'');
-  if(!/^(?:\+?966|0)?5\d{8}$/.test(phoneClean)) throw new Error('رقم الجوال غير صحيح (مثال: 05XXXXXXXX)');
-  if(password.length<6) throw new Error('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
-  const users=getUsers();
-  if(users[email]) throw new Error('هذا البريد مسجّل مسبقاً');
-  users[email]={name,email,phone,password:hash(password),cashback:0,orders:[],createdAt:new Date().toISOString()};
-  saveUsers(users);
-  setSession({email,loginAt:Date.now()});
+  if(!/^(?:\+?966|0)?5\d{8}$/.test(phoneClean)) throw new Error('رقم الجوال غير صحيح (05XXXXXXXX)');
+  if(password.length<6) throw new Error('كلمة المرور 6 أحرف على الأقل');
+
+  // تحقق من الجوال
+  try{
+    const { data: existPhone } = await sb.rpc('find_email_by_phone', { p_phone: phoneClean });
+    if(existPhone) throw new Error('رقم الجوال مسجّل مسبقاً');
+  }catch(e){ if(e.message.includes('مسجّل')) throw e; }
+
+  const { data, error } = await sb.auth.signUp({
+    email, password,
+    options: { data: { name, phone: phoneClean } }
+  });
+  if(error) throw new Error(error.message);
+  currentUser = data.user;
+  await loadProfile();
+  updateHeader();
+  return currentProfile;
+}
+
+/* ═══════════ تسجيل دخول ═══════════ */
+async function login(identifier, password){
+  identifier=(identifier||'').trim();
+  if(!identifier||!password) throw new Error('الرجاء إكمال الحقول');
+
+  let email = identifier;
+  if(!identifier.includes('@')){
+    const phoneClean = identifier.replace(/[\s\-]/g,'');
+    const { data, error } = await sb.rpc('find_email_by_phone', { p_phone: phoneClean });
+    if(error || !data) throw new Error('رقم الجوال غير مسجّل');
+    email = data;
+  }
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if(error) throw new Error('بيانات الدخول غير صحيحة');
+  currentUser = data.user;
+  await loadProfile();
+  updateHeader();
+  return currentProfile;
+}
+
+/* ═══════════ خروج ═══════════ */
+async function logout(){
+  await sb.auth.signOut();
+  currentUser = null; currentProfile = null;
+  updateHeader();
+}
+
+/* ═══════════ جلب البروفايل ═══════════ */
+async function loadProfile(){
+  if(!currentUser) return;
+  const { data, error } = await sb
+    .from('profiles').select('*').eq('id', currentUser.id).single();
+  if(!error) currentProfile = data;
+}
+
+/* ═══════════ كاش باك ═══════════ */
+async function addCashback(amount){
+  if(!currentUser || !amount) return;
+  const { error } = await sb.rpc('add_cashback', {
+    target_user_id: currentUser.id, amount: Number(amount)
+  });
+  if(error) console.error(error);
+  await loadProfile();
   notifyChange();
-  return getCurrentUser();
 }
 
-function login(email,password){
-  email=(email||'').toLowerCase().trim(); password=password||'';
-  if(!email||!password) throw new Error('الرجاء إكمال جميع الحقول');
-  const users=getUsers(); const u=users[email];
-  if(!u) throw new Error('لا يوجد حساب بهذا البريد');
-  if(u.password!==hash(password)) throw new Error('كلمة المرور غير صحيحة');
-  setSession({email,loginAt:Date.now()});
-  notifyChange();
-  return getCurrentUser();
-}
-
-function logout(){setSession(null);notifyChange();}
-
-function addCashback(amount){
-  const s=getSession(); if(!s||!amount) return;
-  const users=getUsers(); const u=users[s.email]; if(!u) return;
-  u.cashback=(u.cashback||0)+Number(amount);
-  saveUsers(users);
+async function deductCashback(amount){
+  if(!currentUser || !amount) return;
+  const { error } = await sb.rpc('deduct_cashback', {
+    target_user_id: currentUser.id, amount: Number(amount)
+  });
+  if(error) console.error(error);
+  await loadProfile();
   notifyChange();
 }
 
-function addOrder(orderData){
-  const s=getSession(); if(!s) return;
-  const users=getUsers(); const u=users[s.email]; if(!u) return;
-  u.orders=u.orders||[];
-  u.orders.unshift({...orderData,date:new Date().toISOString()});
-  if(u.orders.length>20) u.orders=u.orders.slice(0,20);
-  saveUsers(users);
+/* ═══════════ الطلبات ═══════════ */
+async function addOrder(orderData){
+  if(!currentUser) return;
+  await sb.from('orders').insert({
+    user_id: currentUser.id,
+    total: orderData.total,
+    items: orderData.items
+  });
 }
 
+/* ═══════════ التحقق من الأدمن ═══════════ */
+async function isAdmin(){
+  if(!currentUser) return false;
+  const { data, error } = await sb.from('admins')
+    .select('user_id').eq('user_id', currentUser.id).maybeSingle();
+  return !error && !!data;
+}
+
+/* ═══════════ تعديل الكاش باك (أدمن) ═══════════ */
+async function adminSetCashback(targetUserId, amount){
+  const { error } = await sb.rpc('admin_set_cashback', {
+    target_user_id: targetUserId, new_amount: Number(amount)
+  });
+  if(error) throw new Error(error.message);
+}
+
+async function adminGetAllUsers(){
+  const { data, error } = await sb.rpc('admin_get_all_users');
+  if(error) throw new Error(error.message);
+  return data || [];
+}
+
+/* ═══════════ تحديث الواجهة ═══════════ */
 function generateAvatar(name){
   const initial = (name||'?').trim().charAt(0).toUpperCase();
   const c=document.createElement('canvas'); c.width=c.height=120;
@@ -1510,25 +1567,14 @@ function generateAvatar(name){
   return c.toDataURL();
 }
 
-function toast(msg,type){
-  if(typeof window.showToast==='function') window.showToast(msg,type||'info');
-}
-
-const listeners=[];
-function notifyChange(){
-  const u=getCurrentUser();
-  updateHeader(u);
-  listeners.forEach(fn=>{try{fn(u)}catch(e){}});
-}
-
-function updateHeader(user){
+function updateHeader(){
   const lb=document.getElementById('menLoginBtn');
   const av=document.getElementById('menHeaderAvatar');
   const mL=document.getElementById('menMobileLogin');
   const mA=document.getElementById('menMobileAccount');
-  if(user){
+  if(currentUser){
     if(lb) lb.style.display='none';
-    if(av){av.src=generateAvatar(user.name||user.email);av.style.display='block';av.onclick=openAccount;av.title='حسابي';}
+    if(av){ av.src=generateAvatar(currentProfile?.name||currentUser.email); av.style.display='block'; av.onclick=openAccount; av.title='حسابي'; }
     if(mL) mL.style.display='none';
     if(mA) mA.style.display='flex';
   }else{
@@ -1537,10 +1583,46 @@ function updateHeader(user){
     if(mL) mL.style.display='flex';
     if(mA) mA.style.display='none';
   }
+  if(typeof window.updateCartUI==='function') window.updateCartUI();
 }
 
-let authMode='login';
+function notifyChange(){
+  updateHeader();
+  listeners.forEach(fn => { try{ fn(getCurrentUser()); }catch(e){} });
+}
 
+/* ═══════════ فتح الحساب ═══════════ */
+async function openAccount(){
+  if(!currentUser){ openAuth('login'); return; }
+  document.getElementById('menAccAvatar').src = generateAvatar(currentProfile?.name||currentUser.email);
+  document.getElementById('menAccName').textContent = currentProfile?.name||'—';
+  document.getElementById('menAccEmail').textContent = currentUser.email||'—';
+  document.getElementById('menInfoName').textContent = currentProfile?.name||'—';
+  document.getElementById('menInfoPhone').textContent = currentProfile?.phone||'—';
+  document.getElementById('menInfoEmail').textContent = currentUser.email||'—';
+  document.getElementById('menInfoDate').textContent = currentProfile?.created_at
+    ? new Date(currentProfile.created_at).toLocaleDateString('ar-SA') : '—';
+  animateCash(Number(currentProfile?.cashback||0));
+
+  const ad = await isAdmin();
+  const devBtn = document.getElementById('menDevOpenBtn');
+  if(devBtn) devBtn.style.display = ad ? 'inline-flex' : 'none';
+
+  document.getElementById('menAccountModal').classList.add('active');
+}
+
+function animateCash(target){
+  const el=document.getElementById('menCashVal'); if(!el) return;
+  const start=0, dur=900, t0=performance.now();
+  (function step(t){
+    const p=Math.min((t-t0)/dur,1);
+    const e=1-Math.pow(1-p,3);
+    el.textContent=(start+(target-start)*e).toFixed(2);
+    if(p<1) requestAnimationFrame(step);
+  })(t0);
+}
+
+/* ═══════════ نوافذ التسجيل ═══════════ */
 function injectModals(){
   if(document.getElementById('menAuthModal')) return;
 
@@ -1555,7 +1637,7 @@ function injectModals(){
         <div class="auth-input-group"><input type="text" id="menAuthName" placeholder="الاسم الكامل" autocomplete="name"><i class="fas fa-user"></i></div>
         <div class="auth-input-group"><input type="tel" id="menAuthPhone" placeholder="05XXXXXXXX" autocomplete="tel"><i class="fas fa-phone"></i></div>
       </div>
-      <div class="auth-input-group"><input type="email" id="menAuthEmail" placeholder="البريد الإلكتروني" autocomplete="email"><i class="fas fa-envelope"></i></div>
+      <div class="auth-input-group"><input type="text" id="menAuthEmail" placeholder="البريد الإلكتروني أو رقم الجوال" autocomplete="username"><i class="fas fa-envelope"></i></div>
       <div class="auth-input-group"><input type="password" id="menAuthPassword" placeholder="كلمة المرور" autocomplete="current-password"><i class="fas fa-lock"></i></div>
       <div class="auth-error" id="menAuthErr"></div>
       <button class="auth-submit-btn" id="menAuthSubmit"><i class="fas fa-fingerprint"></i><span>دخول</span></button>
@@ -1576,7 +1658,7 @@ function injectModals(){
       <div class="account-body">
         <div class="cashback-card">
           <div class="cash-label"><i class="fas fa-wallet"></i> رصيد الكاش باك</div>
-          <div class="cash-amount"><span id="menCashVal">100</span><small>ر.س</small></div>
+          <div class="cash-amount"><span id="menCashVal">0</span><small>ر.س</small></div>
           <div class="cash-note"><i class="fas fa-gift"></i> تكسب ${(CASHBACK_RATE*100).toFixed(0)}% على كل طلب</div>
         </div>
         <div class="account-info-grid">
@@ -1586,8 +1668,10 @@ function injectModals(){
           <div class="account-info-item"><div class="lbl"><i class="fas fa-calendar"></i> عضو منذ</div><div class="val" id="menInfoDate">—</div></div>
         </div>
         <div class="account-actions">
-          <button class="account-btn primary" id="menUseInfo"><i class="fas fa-bolt"></i> المطابقة</button>
-          <button class="account-btn danger" id="menLogout"><i class="fas fa-right-from-bracket"></i> خروج</button>
+          <button class="account-btn danger" id="menLogout" style="flex:1;"><i class="fas fa-right-from-bracket"></i> تسجيل الخروج</button>
+          <button class="account-btn" id="menDevOpenBtn" style="display:none;background:linear-gradient(135deg,#b71c1c,#d90429);color:#fff;flex:1;">
+            <i class="fas fa-user-shield"></i> لوحة المطور
+          </button>
         </div>
       </div>
     </div>`;
@@ -1595,30 +1679,25 @@ function injectModals(){
 
   document.getElementById('menAuthClose').onclick=()=>auth.classList.remove('active');
   auth.addEventListener('click',e=>{if(e.target===auth)auth.classList.remove('active')});
-  document.getElementById('menAuthSwitchBtn').onclick=()=>{
-    authMode=authMode==='login'?'signup':'login';
-    refreshAuthUI(); document.getElementById('menAuthErr').textContent='';
-  };
-  document.getElementById('menAuthSubmit').onclick=handleAuthSubmit;
-  ['menAuthName','menAuthPhone','menAuthEmail','menAuthPassword'].forEach(id=>{
-    const el=document.getElementById(id);
-    el&&el.addEventListener('keydown',e=>{if(e.key==='Enter')handleAuthSubmit();});
-  });
-
   document.getElementById('menAccClose').onclick=()=>acc.classList.remove('active');
   acc.addEventListener('click',e=>{if(e.target===acc)acc.classList.remove('active')});
-  document.getElementById('menLogout').onclick=()=>{
-    if(confirm('هل تريد تسجيل الخروج؟')){logout();acc.classList.remove('active');toast('تم تسجيل الخروج','info');}
+
+  document.getElementById('menAuthSwitchBtn').onclick=()=>{
+    authMode = authMode==='login'?'signup':'login';
+    refreshAuthUI();
+    document.getElementById('menAuthErr').textContent='';
   };
-  document.getElementById('menUseInfo').onclick=()=>{
-    const u=getCurrentUser(); if(!u) return;
-    const n=document.getElementById('cartUserName'), p=document.getElementById('cartUserPhone');
-    if(n) n.value=u.name||'';
-    if(p) p.value=u.phone||'';
-    acc.classList.remove('active');
-    document.getElementById('cartModal')?.classList.add('active');
-    toast('تم تعبئة بياناتك تلقائياً ✓','success');
+
+  document.getElementById('menAuthSubmit').onclick=handleAuthSubmit;
+  ['menAuthName','menAuthPhone','menAuthEmail','menAuthPassword'].forEach(id=>{
+    document.getElementById(id)?.addEventListener('keydown',e=>{if(e.key==='Enter')handleAuthSubmit();});
+  });
+
+  document.getElementById('menLogout').onclick=async ()=>{
+    if(confirm('هل تريد تسجيل الخروج؟')){ await logout(); acc.classList.remove('active'); toast('تم تسجيل الخروج','info'); }
   };
+
+  document.getElementById('menDevOpenBtn').onclick=openDevPanel;
 }
 
 function refreshAuthUI(){
@@ -1627,125 +1706,238 @@ function refreshAuthUI(){
   const f=document.getElementById('menSignupFields');
   const b=document.getElementById('menAuthSubmit');
   const st=document.getElementById('menAuthSwitchTxt');
-  const sb=document.getElementById('menAuthSwitchBtn');
+  const sb2=document.getElementById('menAuthSwitchBtn');
+  const emailInp=document.getElementById('menAuthEmail');
   if(authMode==='signup'){
     t.textContent='إنشاء حساب جديد';
     s.textContent='انضم لعائلة MEN واحصل على كاش باك 2%';
     f.style.display='block';
     b.innerHTML='<i class="fas fa-user-plus"></i><span>إنشاء الحساب</span>';
     st.textContent='لديك حساب؟';
-    sb.textContent='تسجيل الدخول';
+    sb2.textContent='تسجيل الدخول';
+    if(emailInp) emailInp.placeholder='البريد الإلكتروني';
   }else{
     t.textContent='تسجيل الدخول';
     s.textContent='مرحباً بعودتك إلى MEN Store';
     f.style.display='none';
     b.innerHTML='<i class="fas fa-fingerprint"></i><span>دخول</span>';
     st.textContent='ليس لديك حساب؟';
-    sb.textContent='إنشاء حساب';
+    sb2.textContent='إنشاء حساب';
+    if(emailInp) emailInp.placeholder='البريد الإلكتروني أو رقم الجوال';
   }
 }
 
 function openAuth(mode){
-  authMode=mode||'login';
+  authMode = mode||'login';
   refreshAuthUI();
   document.getElementById('menAuthErr').textContent='';
   document.getElementById('menAuthModal').classList.add('active');
   setTimeout(()=>{
-    const f=authMode==='signup'?'menAuthName':'menAuthEmail';
+    const f = authMode==='signup'?'menAuthName':'menAuthEmail';
     document.getElementById(f)?.focus();
   },250);
 }
 
-function openAccount(){
-  const u=getCurrentUser();
-  if(!u){openAuth('login');return;}
-  document.getElementById('menAccAvatar').src=generateAvatar(u.name||u.email);
-  document.getElementById('menAccName').textContent=u.name||'—';
-  document.getElementById('menAccEmail').textContent=u.email||'—';
-  document.getElementById('menInfoName').textContent=u.name||'—';
-  document.getElementById('menInfoPhone').textContent=u.phone||'—';
-  document.getElementById('menInfoEmail').textContent=u.email||'—';
-  document.getElementById('menInfoDate').textContent=u.createdAt?new Date(u.createdAt).toLocaleDateString('ar-SA'):'—';
-  animateCash(u.cashback||0);
-  document.getElementById('menAccountModal').classList.add('active');
-}
-
-function animateCash(target){
-  const el=document.getElementById('menCashVal'); if(!el) return;
-  const start=0,dur=900,t0=performance.now();
-  (function step(t){
-    const p=Math.min((t-t0)/dur,1);
-    const e=1-Math.pow(1-p,3);
-    el.textContent=(start+(target-start)*e).toFixed(2);
-    if(p<1) requestAnimationFrame(step);
-  })(t0);
-}
-
-function handleAuthSubmit(){
+async function handleAuthSubmit(){
   const err=document.getElementById('menAuthErr');
+  const btn=document.getElementById('menAuthSubmit');
   err.textContent='';
   const name=document.getElementById('menAuthName')?.value||'';
   const phone=document.getElementById('menAuthPhone')?.value||'';
   const email=document.getElementById('menAuthEmail')?.value||'';
   const pass=document.getElementById('menAuthPassword')?.value||'';
+  btn.disabled=true;
   try{
     if(authMode==='signup'){
-      const u=signup(name,email,phone,pass);
-      toast(`أهلاً ${u.name}! تم إنشاء حسابك 🎉`,'success');
+      const u=await signup(name,email,phone,pass);
+      toast(`أهلاً ${u?.name||''}! تم إنشاء حسابك 🎉`,'success');
     }else{
-      const u=login(email,pass);
-      toast(`أهلاً بعودتك ${u.name}! 👋`,'success');
+      const u=await login(email,pass);
+      toast(`أهلاً بعودتك ${u?.name||''}! 👋`,'success');
     }
     document.getElementById('menAuthModal').classList.remove('active');
     ['menAuthName','menAuthPhone','menAuthEmail','menAuthPassword'].forEach(id=>{
       const el=document.getElementById(id); if(el) el.value='';
     });
-  }catch(e){err.textContent=e.message;}
+  }catch(e){ err.textContent=e.message; }
+  finally{ btn.disabled=false; }
 }
 
-function hookCartAutoFill(){
-  const btn=document.getElementById('headerCartBtn');
-  if(!btn) return;
-  btn.addEventListener('click',()=>{
-    const u=getCurrentUser(); if(!u) return;
-    setTimeout(()=>{
-      const n=document.getElementById('cartUserName'), p=document.getElementById('cartUserPhone');
-      if(n && !n.value) n.value=u.name||'';
-      if(p && !p.value) p.value=u.phone||'';
-    },80);
+/* ═══════════ لوحة المطور ═══════════ */
+async function openDevPanel(){
+  if(!await isAdmin()){ toast('غير مصرح','error'); return; }
+
+  if(!document.getElementById('menDevPanel')){
+    const panel=document.createElement('div');
+    panel.id='menDevPanel'; panel.className='modal-overlay';
+    panel.innerHTML=`
+      <div class="modal-box" style="max-width:620px;padding:32px 28px;">
+        <div class="modal-close" id="menDevClose"><i class="fas fa-times"></i></div>
+        <h3 style="color:#fff;display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:1.4rem;">
+          <i class="fas fa-user-shield" style="color:#d90429;"></i> لوحة المطور
+        </h3>
+        <p style="color:#8a92b0;font-size:.85rem;margin-bottom:18px;">إدارة المستخدمين وأرصدة الكاش باك</p>
+
+        <div class="input-field">
+          <label><i class="fas fa-search"></i> بحث سريع</label>
+          <input type="text" id="menDevSearch" placeholder="ابحث بالاسم أو البريد أو الجوال...">
+        </div>
+
+        <div style="margin-top:12px;padding:10px;background:rgba(74,122,255,.04);border:1px solid rgba(74,122,255,.1);border-radius:14px;max-height:380px;overflow-y:auto;">
+          <div id="menDevUsersList">
+            <div style="text-align:center;color:#8a92b0;padding:20px;">
+              <i class="fas fa-spinner fa-spin"></i> جاري التحميل...
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-top:14px;">
+          <button id="menDevRefresh" style="background:rgba(74,122,255,.1);border:1px solid rgba(74,122,255,.2);color:#4a7aff;padding:8px 20px;border-radius:20px;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:700;font-size:.82rem;">
+            <i class="fas fa-rotate"></i> تحديث القائمة
+          </button>
+        </div>
+      </div>`;
+    document.body.appendChild(panel);
+
+    document.getElementById('menDevClose').onclick=()=>panel.classList.remove('active');
+    panel.addEventListener('click',e=>{if(e.target===panel)panel.classList.remove('active')});
+    document.getElementById('menDevRefresh').onclick=loadDevUsers;
+    document.getElementById('menDevSearch').addEventListener('input',filterDevUsers);
+  }
+
+  document.getElementById('menDevPanel').classList.add('active');
+  loadDevUsers();
+}
+
+let devUsersCache = [];
+
+async function loadDevUsers(){
+  const list=document.getElementById('menDevUsersList');
+  if(!list) return;
+  list.innerHTML='<div style="text-align:center;color:#8a92b0;padding:20px;"><i class="fas fa-spinner fa-spin"></i> جاري التحميل...</div>';
+  try{
+    devUsersCache = await adminGetAllUsers();
+    renderDevUsers(devUsersCache);
+  }catch(e){
+    list.innerHTML=`<div style="text-align:center;color:#ff6b6b;padding:20px;">${e.message}</div>`;
+  }
+}
+
+function filterDevUsers(){
+  const q=(document.getElementById('menDevSearch').value||'').trim().toLowerCase();
+  if(!q){ renderDevUsers(devUsersCache); return; }
+  const filtered = devUsersCache.filter(u =>
+    (u.name||'').toLowerCase().includes(q) ||
+    (u.email||'').toLowerCase().includes(q) ||
+    (u.phone||'').includes(q)
+  );
+  renderDevUsers(filtered);
+}
+
+function renderDevUsers(users){
+  const list=document.getElementById('menDevUsersList');
+  if(!list) return;
+  if(!users.length){
+    list.innerHTML='<div style="text-align:center;color:#8a92b0;padding:20px;">لا يوجد مستخدمون</div>';
+    return;
+  }
+  list.innerHTML = users.map(u => `
+    <div style="padding:12px;border-bottom:1px solid rgba(74,122,255,.08);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:150px;overflow:hidden;">
+        <div style="color:#fff;font-weight:700;font-size:.9rem;">${u.name||'—'}</div>
+        <div style="color:#8a92b0;font-size:.72rem;">${u.email||''}</div>
+        <div style="color:#8a92b0;font-size:.72rem;"><i class="fas fa-phone"></i> ${u.phone||'—'}</div>
+      </div>
+      <div style="text-align:center;min-width:90px;">
+        <div style="color:#4caf50;font-weight:800;font-size:1rem;">${Number(u.cashback||0).toFixed(2)}</div>
+        <div style="color:#8a92b0;font-size:.68rem;">ر.س</div>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button onclick="window.MEN_DEV_EDIT('${u.id}','${(u.name||'').replace(/'/g,"\\'")}',${Number(u.cashback||0)})"
+          style="background:linear-gradient(135deg,#021ca4,#4a7aff);border:none;color:#fff;padding:7px 14px;border-radius:20px;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:700;font-size:.75rem;">
+          <i class="fas fa-pen"></i> تعديل
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.MEN_DEV_EDIT = async function(userId, userName, currentCash){
+  const v = prompt(`💰 الرصيد الجديد لـ "${userName}" (ر.س):`, Number(currentCash).toFixed(2));
+  if(v===null) return;
+  const n = parseFloat(v);
+  if(isNaN(n) || n<0){ toast('قيمة غير صحيحة','error'); return; }
+  try{
+    await adminSetCashback(userId, n);
+    toast(`✅ تم تحديث رصيد ${userName} إلى ${n.toFixed(2)} ر.س`, 'success');
+    loadDevUsers();
+  }catch(e){
+    toast(e.message, 'error');
+  }
+};
+
+/* ═══════════ Toast ═══════════ */
+function toast(msg,type){
+  if(typeof window.showToast==='function') window.showToast(msg,type||'info');
+}
+
+/* ═══════════ تشغيل ═══════════ */
+function init(){
+  injectModals();
+  sb.auth.getSession().then(async ({data:{session}}) => {
+    if(session){
+      currentUser = session.user;
+      await loadProfile();
+    }
+    updateHeader();
+  });
+
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if(session){
+      currentUser = session.user;
+      await loadProfile();
+    } else {
+      currentUser = null; currentProfile = null;
+    }
+    notifyChange();
   });
 }
 
-window.MEN_AUTH={
-  open:openAuth,
+window.MEN_AUTH = {
+  open: openAuth,
   openAccount,
-  getCurrentUser,
+  getCurrentUser: () => currentUser ? {
+    id: currentUser.id,
+    name: currentProfile?.name,
+    email: currentUser.email,
+    phone: currentProfile?.phone,
+    cashback: Number(currentProfile?.cashback||0),
+    createdAt: currentProfile?.created_at
+  } : null,
   logout,
   addCashback,
+  deductCashback,
+  adminSetCashback,
+  isAdmin,
   addOrder,
-  onChange:fn=>listeners.push(fn),
-  CASHBACK_RATE
+  onChange: fn => listeners.push(fn),
+  CASHBACK_RATE,
+  sb
 };
 
-window.MEN_SUPABASE={
-  auth:{
-    getSession:async()=>{
-      const u=getCurrentUser();
-      return {data:{session:u?{user:{email:u.email,user_metadata:{name:u.name,phone:u.phone}}}:null}};
+window.MEN_SUPABASE = {
+  auth: {
+    getSession: async () => {
+      const { data } = await sb.auth.getSession();
+      return { data: { session: data.session } };
     },
-    onAuthStateChange:cb=>{
-      listeners.push(u=>cb('SIGNED_IN',u?{user:{email:u.email}}:null));
-      return {data:{subscription:{unsubscribe:()=>{}}}};
+    onAuthStateChange: (cb) => {
+      sb.auth.onAuthStateChange((event, session) => cb(event, session));
     }
   }
 };
 
-function init(){
-  injectModals();
-  updateHeader(getCurrentUser());
-  hookCartAutoFill();
-}
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
 else init();
 
 })();
