@@ -1,15 +1,15 @@
 /* ═══════════════════════════════════════════════════════════
    MEN Store — Auth (Supabase + LocalStorage Fallback)
-   يعمل تلقائياً: Supabase إذا مضبوط، LocalStorage إذا لا
+   نسخة محدثة — تحل مشكلة الاسم والجوال
    ═══════════════════════════════════════════════════════════ */
 (function(){
 'use strict';
 
 // ═══════════════════════════════════════════════════════════
-// 🔑 إعدادات Supabase — اتركها فارغة إذا ما بغيت تستخدم Supabase
+// 🔑 إعدادات Supabase
 // ═══════════════════════════════════════════════════════════
-const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';   // ← مثال: 'https://xxxxx.supabase.co'
-const SUPABASE_KEY = 'sb_publishable_rQvBPw08M9Q3bWTDfFseTQ_6SU3aN96';   // ← مثال: 'eyJhbGciOi...'
+const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';   // ← ضع رابط مشروعك
+const SUPABASE_KEY = 'sb_publishable_rQvBPw08M9Q3bWTDfFseTQ_6SU3aN96';   // ← ضع anon key
 // ═══════════════════════════════════════════════════════════
 
 const CASHBACK_RATE = 0.02;
@@ -20,11 +20,9 @@ if(USE_SUPABASE){
   try{
     sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     console.log('✅ Supabase mode');
-  }catch(e){
-    console.error('❌ خطأ Supabase:', e.message);
-  }
+  }catch(e){ console.error('❌ خطأ Supabase:', e.message); }
 }else{
-  console.log('📦 LocalStorage mode (Supabase غير مضبوط)');
+  console.log('📦 LocalStorage mode');
 }
 
 window.sb = sb;
@@ -36,7 +34,7 @@ let currentProfile = null;
 let authMode = 'login';
 const listeners = [];
 
-/* ═══════════ تخزين محلي (fallback) ═══════════ */
+/* ═══════════ Local Storage Helpers ═══════════ */
 const LS_USERS = 'men_users_local';
 const LS_SESSION = 'men_session_local';
 
@@ -45,6 +43,83 @@ function lsSaveUsers(u){ localStorage.setItem(LS_USERS, JSON.stringify(u)); }
 function lsGetSession(){ try{return JSON.parse(localStorage.getItem(LS_SESSION)||'null')}catch{return null} }
 function lsSetSession(s){ s ? localStorage.setItem(LS_SESSION, JSON.stringify(s)) : localStorage.removeItem(LS_SESSION); }
 function simpleHash(str){ let h=0; for(let i=0;i<str.length;i++){h=((h<<5)-h)+str.charCodeAt(i);h|=0;} return 'h'+Math.abs(h).toString(36); }
+
+/* ═══════════ 🔑 الدالة الأساسية: جلب بيانات المستخدم ═══════════ */
+function getCurrentUser(){
+  if(!currentUser) return null;
+  const meta = currentUser.user_metadata || {};
+  return {
+    id: currentUser.id || currentUser.email,
+    name: currentProfile?.name || meta.name || '',
+    email: currentUser.email || '',
+    phone: currentProfile?.phone || meta.phone || '',
+    cashback: Number(currentProfile?.cashback || 0),
+    createdAt: currentProfile?.created_at || currentProfile?.createdAt || currentUser.created_at
+  };
+}
+
+/* ═══════════ جلب البروفايل مع fallback قوي ═══════════ */
+async function loadProfile(){
+  if(!currentUser) return;
+  
+  if(USE_SUPABASE){
+    try{
+      const { data, error } = await sb
+        .from('profiles')
+        .select('*')
+        .eq('id', currentUser.id)
+        .maybeSingle();
+      
+      if(data) {
+        currentProfile = data;
+        return;
+      }
+      
+      // ⚠️ Profile ما موجود — ننشئه من user_metadata
+      if(error || !data){
+        const meta = currentUser.user_metadata || {};
+        const { data: created, error: cErr } = await sb
+          .from('profiles')
+          .insert({
+            id: currentUser.id,
+            name: meta.name || 'مستخدم',
+            phone: meta.phone || ''
+          })
+          .select()
+          .single();
+        
+        if(created) {
+          currentProfile = created;
+          console.log('✅ تم إنشاء profile جديد');
+        } else {
+          // fallback أخير — استخدم metadata فقط
+          currentProfile = {
+            id: currentUser.id,
+            name: meta.name || '',
+            phone: meta.phone || '',
+            cashback: 0,
+            created_at: currentUser.created_at
+          };
+          if(cErr) console.warn('⚠️ إنشاء profile فشل:', cErr.message);
+        }
+      }
+    }catch(e){
+      console.error('خطأ loadProfile:', e);
+      const meta = currentUser.user_metadata || {};
+      currentProfile = {
+        id: currentUser.id,
+        name: meta.name || '',
+        phone: meta.phone || '',
+        cashback: 0,
+        created_at: currentUser.created_at
+      };
+    }
+  }else{
+    const users = lsGetUsers();
+    const u = users[currentUser.email];
+    if(u) currentProfile = {...u, id: u.email};
+  }
+}
 
 /* ═══════════ تسجيل جديد ═══════════ */
 async function signup(name, email, phone, password){
@@ -68,7 +143,11 @@ async function signup(name, email, phone, password){
       options: { data: { name, phone: phoneClean } }
     });
     if(error) throw new Error(error.message);
+    
     currentUser = data.user;
+    
+    // ⏱️ انتظر شوي عشان الـ trigger يشتغل
+    await new Promise(r => setTimeout(r, 600));
     await loadProfile();
   }else{
     const users = lsGetUsers();
@@ -87,7 +166,7 @@ async function signup(name, email, phone, password){
     lsSaveUsers(users);
     lsSetSession({email});
     currentProfile = {...users[email], id: email};
-    currentUser = {id: email, email};
+    currentUser = {id: email, email, user_metadata: {name, phone: phoneClean}};
   }
   updateHeader();
   return getCurrentUser();
@@ -124,7 +203,7 @@ async function login(identifier, password){
     if(u.password !== simpleHash(password)) throw new Error('كلمة المرور غير صحيحة');
     lsSetSession({email: u.email});
     currentProfile = {...u, id: u.email};
-    currentUser = {id: u.email, email: u.email};
+    currentUser = {id: u.email, email: u.email, user_metadata: {name: u.name, phone: u.phone}};
   }
   updateHeader();
   return getCurrentUser();
@@ -136,19 +215,6 @@ async function logout(){
   else{ lsSetSession(null); }
   currentUser = null; currentProfile = null;
   updateHeader();
-}
-
-/* ═══════════ جلب البروفايل ═══════════ */
-async function loadProfile(){
-  if(!currentUser) return;
-  if(USE_SUPABASE){
-    const { data, error } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
-    if(!error) currentProfile = data;
-  }else{
-    const users = lsGetUsers();
-    const u = users[currentUser.email];
-    if(u) currentProfile = {...u, id: u.email};
-  }
 }
 
 /* ═══════════ كاش باك ═══════════ */
@@ -205,7 +271,6 @@ async function isAdmin(){
     const { data, error } = await sb.from('admins').select('user_id').eq('user_id', currentUser.id).maybeSingle();
     return !error && !!data;
   }
-  // في وضع Local: أول مستخدم يسجّل = أدمن
   const users = lsGetUsers();
   const emails = Object.keys(users).sort((a,b)=>{
     const ta = new Date(users[a].createdAt||0).getTime();
@@ -215,7 +280,6 @@ async function isAdmin(){
   return emails[0] === currentUser.email;
 }
 
-/* ═══════════ تعديل الكاش باك (أدمن) ═══════════ */
 async function adminSetCashback(targetUserId, amount){
   if(USE_SUPABASE){
     const { error } = await sb.rpc('admin_set_cashback', { target_user_id: targetUserId, new_amount: Number(amount) });
@@ -244,12 +308,8 @@ async function adminGetAllUsers(){
   }
   const users = lsGetUsers();
   return Object.values(users).map(u => ({
-    id: u.email,
-    name: u.name,
-    email: u.email,
-    phone: u.phone,
-    cashback: u.cashback||0,
-    created_at: u.createdAt
+    id: u.email, name: u.name, email: u.email, phone: u.phone,
+    cashback: u.cashback||0, created_at: u.createdAt
   }));
 }
 
@@ -275,9 +335,10 @@ function updateHeader(){
   const mL=document.getElementById('menMobileLogin');
   const mA=document.getElementById('menMobileAccount');
   if(currentUser){
+    const u = getCurrentUser();
     if(lb) lb.style.display='none';
     if(av){
-      av.src=generateAvatar(currentProfile?.name||currentUser.email);
+      av.src=generateAvatar(u.name || u.email);
       av.style.display='block';
       av.onclick=openAccount;
       av.title='حسابي';
@@ -298,31 +359,23 @@ function notifyChange(){
   listeners.forEach(fn => { try{ fn(getCurrentUser()); }catch(e){} });
 }
 
-function getCurrentUser(){
-  if(!currentUser) return null;
-  return {
-    id: currentUser.id,
-    name: currentProfile?.name,
-    email: currentUser.email,
-    phone: currentProfile?.phone,
-    cashback: Number(currentProfile?.cashback||0),
-    createdAt: currentProfile?.createdAt || currentProfile?.created_at
-  };
-}
-
 /* ═══════════ فتح الحساب ═══════════ */
 async function openAccount(){
   if(!currentUser){ openAuth('login'); return; }
-  document.getElementById('menAccAvatar').src = generateAvatar(currentProfile?.name||currentUser.email);
-  document.getElementById('menAccName').textContent = currentProfile?.name||'—';
-  document.getElementById('menAccEmail').textContent = currentUser.email||'—';
-  document.getElementById('menInfoName').textContent = currentProfile?.name||'—';
-  document.getElementById('menInfoPhone').textContent = currentProfile?.phone||'—';
-  document.getElementById('menInfoEmail').textContent = currentUser.email||'—';
-  const created = currentProfile?.created_at || currentProfile?.createdAt;
-  document.getElementById('menInfoDate').textContent = created
-    ? new Date(created).toLocaleDateString('ar-SA') : '—';
-  animateCash(Number(currentProfile?.cashback||0));
+  
+  // أعد جلب البروفايل قبل العرض
+  await loadProfile();
+  
+  const u = getCurrentUser();
+  document.getElementById('menAccAvatar').src = generateAvatar(u.name || u.email);
+  document.getElementById('menAccName').textContent = u.name || '—';
+  document.getElementById('menAccEmail').textContent = u.email || '—';
+  document.getElementById('menInfoName').textContent = u.name || '—';
+  document.getElementById('menInfoPhone').textContent = u.phone || '—';
+  document.getElementById('menInfoEmail').textContent = u.email || '—';
+  document.getElementById('menInfoDate').textContent = u.createdAt
+    ? new Date(u.createdAt).toLocaleDateString('ar-SA') : '—';
+  animateCash(u.cashback || 0);
 
   const ad = await isAdmin();
   const devBtn = document.getElementById('menDevOpenBtn');
@@ -497,13 +550,13 @@ async function openDevPanel(){
         <h3 style="color:#fff;display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:1.4rem;">
           <i class="fas fa-user-shield" style="color:#d90429;"></i> لوحة المطور
         </h3>
-        <p style="color:#8a92b0;font-size:.85rem;margin-bottom:18px;">إدارة المستخدمين وأرصدة الكاش باك — الوضع: <b style="color:#4a7aff;">${USE_SUPABASE?'Supabase':'محلي'}</b></p>
+        <p style="color:#8a92b0;font-size:.85rem;margin-bottom:18px;">الوضع: <b style="color:#4a7aff;">${USE_SUPABASE?'Supabase':'محلي'}</b></p>
         <div class="input-field">
           <label><i class="fas fa-search"></i> بحث</label>
-          <input type="text" id="menDevSearch" placeholder="ابحث بالاسم أو البريد أو الجوال...">
+          <input type="text" id="menDevSearch" placeholder="ابحث...">
         </div>
         <div style="margin-top:12px;padding:10px;background:rgba(74,122,255,.04);border:1px solid rgba(74,122,255,.1);border-radius:14px;max-height:380px;overflow-y:auto;">
-          <div id="menDevUsersList"><div style="text-align:center;color:#8a92b0;padding:20px;"><i class="fas fa-spinner fa-spin"></i> جاري التحميل...</div></div>
+          <div id="menDevUsersList"><div style="text-align:center;color:#8a92b0;padding:20px;"><i class="fas fa-spinner fa-spin"></i> تحميل...</div></div>
         </div>
         <div style="text-align:center;margin-top:14px;">
           <button id="menDevRefresh" type="button" style="background:rgba(74,122,255,.1);border:1px solid rgba(74,122,255,.2);color:#4a7aff;padding:8px 20px;border-radius:20px;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:700;font-size:.82rem;">
@@ -526,7 +579,7 @@ let devUsersCache = [];
 async function loadDevUsers(){
   const list=document.getElementById('menDevUsersList');
   if(!list) return;
-  list.innerHTML='<div style="text-align:center;color:#8a92b0;padding:20px;"><i class="fas fa-spinner fa-spin"></i> جاري التحميل...</div>';
+  list.innerHTML='<div style="text-align:center;color:#8a92b0;padding:20px;"><i class="fas fa-spinner fa-spin"></i> تحميل...</div>';
   try{
     devUsersCache = await adminGetAllUsers();
     renderDevUsers(devUsersCache);
@@ -583,9 +636,7 @@ window.MEN_DEV_EDIT = async function(userId, userName, currentCash){
     await adminSetCashback(userId, n);
     toast(`✅ تم تحديث رصيد ${userName} إلى ${n.toFixed(2)} ر.س`, 'success');
     loadDevUsers();
-  }catch(e){
-    toast(e.message, 'error');
-  }
+  }catch(e){ toast(e.message, 'error'); }
 };
 
 /* ═══════════ Toast ═══════════ */
@@ -607,7 +658,8 @@ window.MEN_AUTH = {
   onChange: fn => listeners.push(fn),
   CASHBACK_RATE,
   sb,
-  mode: USE_SUPABASE ? 'supabase' : 'local'
+  mode: USE_SUPABASE ? 'supabase' : 'local',
+  reload: async () => { await loadProfile(); notifyChange(); }
 };
 
 window.MEN_SUPABASE = {
@@ -623,8 +675,6 @@ window.MEN_SUPABASE = {
     onAuthStateChange: (cb) => {
       if(USE_SUPABASE){
         sb.auth.onAuthStateChange((event, session) => cb(event, session));
-      }else{
-        // لا يوجد رصد في الوضع المحلي
       }
     }
   }
@@ -641,6 +691,7 @@ async function initAuth(){
       if(session){
         currentUser = session.user;
         await loadProfile();
+        console.log('👤 مستخدم مسجل:', getCurrentUser());
       }
       updateHeader();
       sb.auth.onAuthStateChange(async (event, session) => {
@@ -657,14 +708,14 @@ async function initAuth(){
       updateHeader();
     }
   }else{
-    // استرجاع الجلسة المحلية
     const s = lsGetSession();
     if(s && s.email){
       const users = lsGetUsers();
       const u = users[s.email];
       if(u){
-        currentUser = {id: u.email, email: u.email};
+        currentUser = {id: u.email, email: u.email, user_metadata: {name: u.name, phone: u.phone}};
         currentProfile = {...u, id: u.email};
+        console.log('👤 مستخدم مسجل:', getCurrentUser());
       }
     }
     updateHeader();
