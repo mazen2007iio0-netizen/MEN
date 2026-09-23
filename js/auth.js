@@ -8,7 +8,7 @@
 // ═══════════════════════════════════════════════════════════
 // 🔑 إعدادات Supabase — اتركها فارغة إذا ما بغيت تستخدم Supabase
 // ═══════════════════════════════════════════════════════════
-const SUPABASE_URL = 'SUPABASE_URL';   // ← مثال: 'https://xxxxx.supabase.co'
+const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';   // ← مثال: 'https://xxxxx.supabase.co'
 const SUPABASE_KEY = 'sb_publishable_rQvBPw08M9Q3bWTDfFseTQ_6SU3aN96';   // ← مثال: 'eyJhbGciOi...'
 // ═══════════════════════════════════════════════════════════
 
