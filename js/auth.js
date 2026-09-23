@@ -19,10 +19,10 @@ let sb = null;
 if(USE_SUPABASE){
   try{
     sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    console.log('✅ Supabase mode');
-  }catch(e){ console.error('❌ خطأ Supabase:', e.message); }
+    console.log(' Supabase mode');
+  }catch(e){ console.error(' خطأ Supabase:', e.message); }
 }else{
-  console.log('📦 LocalStorage mode');
+  console.log(' LocalStorage mode');
 }
 
 window.sb = sb;
@@ -90,7 +90,7 @@ async function loadProfile(){
         
         if(created) {
           currentProfile = created;
-          console.log('✅ تم إنشاء profile جديد');
+          console.log(' تم إنشاء profile جديد');
         } else {
           // fallback أخير — استخدم metadata فقط
           currentProfile = {
@@ -100,7 +100,7 @@ async function loadProfile(){
             cashback: 0,
             created_at: currentUser.created_at
           };
-          if(cErr) console.warn('⚠️ إنشاء profile فشل:', cErr.message);
+          if(cErr) console.warn(' إنشاء profile فشل:', cErr.message);
         }
       }
     }catch(e){
