@@ -1,15 +1,15 @@
 /* ═══════════════════════════════════════════════════════════
    MEN Store — Auth (Supabase + LocalStorage Fallback)
-   نسخة محدثة — تعمل تلقائياً في الوضعين
+   نسخة محدثة — تحل مشكلة الاسم والجوال
    ═══════════════════════════════════════════════════════════ */
 (function(){
 'use strict';
 
 // ═══════════════════════════════════════════════════════════
-// 🔑 إعدادات Supabase — اتركها فاضية للوضع المحلي
+// 🔑 إعدادات Supabase
 // ═══════════════════════════════════════════════════════════
-const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
+const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';   // ← ضع رابط مشروعك
+const SUPABASE_KEY = 'sb_publishable_rQvBPw08M9Q3bWTDfFseTQ_6SU3aN96';   // ← ضع anon key
 // ═══════════════════════════════════════════════════════════
 
 const CASHBACK_RATE = 0.02;
@@ -20,10 +20,7 @@ if(USE_SUPABASE){
   try{
     sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     console.log('✅ Supabase mode');
-  }catch(e){
-    console.error('❌ خطأ Supabase:', e.message);
-    sb = null;
-  }
+  }catch(e){ console.error('❌ خطأ Supabase:', e.message); }
 }else{
   console.log('📦 LocalStorage mode');
 }
@@ -64,44 +61,47 @@ function getCurrentUser(){
 /* ═══════════ جلب البروفايل مع fallback قوي ═══════════ */
 async function loadProfile(){
   if(!currentUser) return;
-
-  if(USE_SUPABASE && sb){
+  
+  if(USE_SUPABASE){
     try{
-      const { data } = await sb
+      const { data, error } = await sb
         .from('profiles')
         .select('*')
         .eq('id', currentUser.id)
         .maybeSingle();
-
+      
       if(data) {
         currentProfile = data;
         return;
       }
-
-      // Profile ما موجود — ننشئه من user_metadata
-      const meta = currentUser.user_metadata || {};
-      const { data: created, error: cErr } = await sb
-        .from('profiles')
-        .insert({
-          id: currentUser.id,
-          name: meta.name || 'مستخدم',
-          phone: meta.phone || ''
-        })
-        .select()
-        .single();
-
-      if(created) {
-        currentProfile = created;
-        console.log('✅ تم إنشاء profile جديد');
-      } else {
-        currentProfile = {
-          id: currentUser.id,
-          name: meta.name || '',
-          phone: meta.phone || '',
-          cashback: 0,
-          created_at: currentUser.created_at
-        };
-        if(cErr) console.warn('⚠️ إنشاء profile فشل:', cErr.message);
+      
+      // ⚠️ Profile ما موجود — ننشئه من user_metadata
+      if(error || !data){
+        const meta = currentUser.user_metadata || {};
+        const { data: created, error: cErr } = await sb
+          .from('profiles')
+          .insert({
+            id: currentUser.id,
+            name: meta.name || 'مستخدم',
+            phone: meta.phone || ''
+          })
+          .select()
+          .single();
+        
+        if(created) {
+          currentProfile = created;
+          console.log('✅ تم إنشاء profile جديد');
+        } else {
+          // fallback أخير — استخدم metadata فقط
+          currentProfile = {
+            id: currentUser.id,
+            name: meta.name || '',
+            phone: meta.phone || '',
+            cashback: 0,
+            created_at: currentUser.created_at
+          };
+          if(cErr) console.warn('⚠️ إنشاء profile فشل:', cErr.message);
+        }
       }
     }catch(e){
       console.error('خطأ loadProfile:', e);
@@ -132,7 +132,7 @@ async function signup(name, email, phone, password){
   if(!/^(?:\+?966|0)?5\d{8}$/.test(phoneClean)) throw new Error('رقم الجوال غير صحيح (05XXXXXXXX)');
   if(password.length<6) throw new Error('كلمة المرور 6 أحرف على الأقل');
 
-  if(USE_SUPABASE && sb){
+  if(USE_SUPABASE){
     try{
       const { data: existPhone } = await sb.rpc('find_email_by_phone', { p_phone: phoneClean });
       if(existPhone) throw new Error('رقم الجوال مسجّل مسبقاً');
@@ -143,8 +143,10 @@ async function signup(name, email, phone, password){
       options: { data: { name, phone: phoneClean } }
     });
     if(error) throw new Error(error.message);
-
+    
     currentUser = data.user;
+    
+    // ⏱️ انتظر شوي عشان الـ trigger يشتغل
     await new Promise(r => setTimeout(r, 600));
     await loadProfile();
   }else{
@@ -175,7 +177,7 @@ async function login(identifier, password){
   identifier=(identifier||'').trim();
   if(!identifier||!password) throw new Error('الرجاء إكمال الحقول');
 
-  if(USE_SUPABASE && sb){
+  if(USE_SUPABASE){
     let email = identifier;
     if(!identifier.includes('@')){
       const phoneClean = identifier.replace(/[\s\-]/g,'');
@@ -209,7 +211,7 @@ async function login(identifier, password){
 
 /* ═══════════ خروج ═══════════ */
 async function logout(){
-  if(USE_SUPABASE && sb){ try{ await sb.auth.signOut(); }catch(e){} }
+  if(USE_SUPABASE){ try{ await sb.auth.signOut(); }catch(e){} }
   else{ lsSetSession(null); }
   currentUser = null; currentProfile = null;
   updateHeader();
@@ -218,7 +220,7 @@ async function logout(){
 /* ═══════════ كاش باك ═══════════ */
 async function addCashback(amount){
   if(!currentUser || !amount) return;
-  if(USE_SUPABASE && sb){
+  if(USE_SUPABASE){
     const { error } = await sb.rpc('add_cashback', { target_user_id: currentUser.id, amount: Number(amount) });
     if(error) console.error(error);
     await loadProfile();
@@ -232,7 +234,7 @@ async function addCashback(amount){
 
 async function deductCashback(amount){
   if(!currentUser || !amount) return;
-  if(USE_SUPABASE && sb){
+  if(USE_SUPABASE){
     const { error } = await sb.rpc('deduct_cashback', { target_user_id: currentUser.id, amount: Number(amount) });
     if(error) console.error(error);
     await loadProfile();
@@ -247,7 +249,7 @@ async function deductCashback(amount){
 /* ═══════════ الطلبات ═══════════ */
 async function addOrder(orderData){
   if(!currentUser) return;
-  if(USE_SUPABASE && sb){
+  if(USE_SUPABASE){
     try{ await sb.from('orders').insert({ user_id: currentUser.id, total: orderData.total, items: orderData.items }); }catch(e){}
   }else{
     const users = lsGetUsers();
@@ -265,7 +267,7 @@ async function addOrder(orderData){
 /* ═══════════ التحقق من الأدمن ═══════════ */
 async function isAdmin(){
   if(!currentUser) return false;
-  if(USE_SUPABASE && sb){
+  if(USE_SUPABASE){
     const { data, error } = await sb.from('admins').select('user_id').eq('user_id', currentUser.id).maybeSingle();
     return !error && !!data;
   }
@@ -279,7 +281,7 @@ async function isAdmin(){
 }
 
 async function adminSetCashback(targetUserId, amount){
-  if(USE_SUPABASE && sb){
+  if(USE_SUPABASE){
     const { error } = await sb.rpc('admin_set_cashback', { target_user_id: targetUserId, new_amount: Number(amount) });
     if(error) throw new Error(error.message);
   }else{
@@ -299,7 +301,7 @@ async function adminSetCashback(targetUserId, amount){
 }
 
 async function adminGetAllUsers(){
-  if(USE_SUPABASE && sb){
+  if(USE_SUPABASE){
     const { data, error } = await sb.rpc('admin_get_all_users');
     if(error) throw new Error(error.message);
     return data || [];
@@ -360,9 +362,10 @@ function notifyChange(){
 /* ═══════════ فتح الحساب ═══════════ */
 async function openAccount(){
   if(!currentUser){ openAuth('login'); return; }
-
+  
+  // أعد جلب البروفايل قبل العرض
   await loadProfile();
-
+  
   const u = getCurrentUser();
   document.getElementById('menAccAvatar').src = generateAvatar(u.name || u.email);
   document.getElementById('menAccName').textContent = u.name || '—';
@@ -662,7 +665,7 @@ window.MEN_AUTH = {
 window.MEN_SUPABASE = {
   auth: {
     getSession: async () => {
-      if(USE_SUPABASE && sb){
+      if(USE_SUPABASE){
         const { data } = await sb.auth.getSession();
         return { data: { session: data.session } };
       }
@@ -670,7 +673,7 @@ window.MEN_SUPABASE = {
       return { data: { session: s ? { user: { email: s.email } } : null } };
     },
     onAuthStateChange: (cb) => {
-      if(USE_SUPABASE && sb){
+      if(USE_SUPABASE){
         sb.auth.onAuthStateChange((event, session) => cb(event, session));
       }
     }
@@ -682,7 +685,7 @@ async function initAuth(){
   injectModals();
   console.log('🚀 auth.js يعمل — الوضع:', USE_SUPABASE ? 'Supabase' : 'LocalStorage');
 
-  if(USE_SUPABASE && sb){
+  if(USE_SUPABASE){
     try{
       const { data:{session} } = await sb.auth.getSession();
       if(session){
