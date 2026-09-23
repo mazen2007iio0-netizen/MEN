@@ -1108,7 +1108,7 @@ async function sendCartRequest(userName,userPhone){
     try{
         await fetch("https://discord.com/api/webhooks/1551181006957187132/bao_udMdzNVWgCktPc7DIHDL1tVD4BUZDmM0l7aDhyL-T8okYuJ0xQ2NpfQtnAuvsRFI",{
             method:"POST",headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({embeds:[embed],content:`🛒 طلب جديد من ${userName}`})
+            body:JSON.stringify({embeds:[embed],content:` طلب جديد من ${userName}`})
         });
         showToast("تم إرسال طلبك بنجاح!","success");
 
@@ -1123,7 +1123,7 @@ async function sendCartRequest(userName,userPhone){
                     total: finalTotal,
                     items: cartItems.map(p => ({ name: p.name, qty: p.quantity, price: p.price }))
                 });
-                setTimeout(() => showToast(`🎁 حصلت على ${cashback.toFixed(2)} ر.س كاش باك!`, "success"), 700);
+                setTimeout(() => showToast(` حصلت على ${cashback.toFixed(2)} ر.س كاش باك!`, "success"), 700);
             }
         }
 
@@ -1139,7 +1139,7 @@ async function sendCartRequest(userName,userPhone){
 function getAIResponse(text){
     const lower=text.toLowerCase();
     if(lower.includes('مرحب')||lower.includes('سلام')||lower.includes('اهلا')||lower.includes('hi'))return `👋 أهلاً بك في MEN Store!\n\nاسألني عن أي منتج أو عرض.`;
-    if(lower.includes('شكر'))return '🙏 الشكر لك!';
+    if(lower.includes('شكر'))return ' الشكر لك!';
     if(lower.includes('سلتي'))return getCartSummaryHTML();
     if(lower.includes('عرض')||lower.includes('خصم')||lower.includes('كوبون'))return getPersonalizedOffers();
     if(lower.includes('عرض المنتجات')||lower.includes('كل المنتجات'))return `📦 جميع المنتجات (${productsArray.length}):\n\n${productsArray.map(p=>`• ${p.name} — ${p.price} ر.س`).join('\n')}`;
@@ -1576,7 +1576,7 @@ function injectModals(){
       <div class="account-body">
         <div class="cashback-card">
           <div class="cash-label"><i class="fas fa-wallet"></i> رصيد الكاش باك</div>
-          <div class="cash-amount"><span id="menCashVal">0.00</span><small>ر.س</small></div>
+          <div class="cash-amount"><span id="menCashVal">100</span><small>ر.س</small></div>
           <div class="cash-note"><i class="fas fa-gift"></i> تكسب ${(CASHBACK_RATE*100).toFixed(0)}% على كل طلب</div>
         </div>
         <div class="account-info-grid">
@@ -1586,7 +1586,7 @@ function injectModals(){
           <div class="account-info-item"><div class="lbl"><i class="fas fa-calendar"></i> عضو منذ</div><div class="val" id="menInfoDate">—</div></div>
         </div>
         <div class="account-actions">
-          <button class="account-btn primary" id="menUseInfo"><i class="fas fa-bolt"></i> استخدام بياناتي في الطلب</button>
+          <button class="account-btn primary" id="menUseInfo"><i class="fas fa-bolt"></i> المطابقة</button>
           <button class="account-btn danger" id="menLogout"><i class="fas fa-right-from-bracket"></i> خروج</button>
         </div>
       </div>
