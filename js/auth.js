@@ -494,7 +494,7 @@
       showMsg('تم تسجيل الدخول بنجاح', 'success');
       setTimeout(() => { closeAuth(); updateHeader(data.user); }, 700);
     } catch (err) {
-      showMsg('⚠️ ' + toArabicError(err), 'error');
+      showMsg(' ' + toArabicError(err), 'error');
     } finally {
       setLoading(false);
     }
@@ -533,7 +533,7 @@
         setTimeout(() => { closeAuth(); updateHeader(data.user); }, 1000);
       }
     } catch (err) {
-      showMsg('⚠️ ' + toArabicError(err), 'error');
+      showMsg(' ' + toArabicError(err), 'error');
     } finally {
       setLoading(false);
     }
@@ -553,7 +553,7 @@
       if (error) throw error;
       showMsg('تم إرسال رابط الإعادة إلى بريدك', 'success');
     } catch (err) {
-      showMsg('⚠️ ' + toArabicError(err), 'error');
+      showMsg(' ' + toArabicError(err), 'error');
     } finally {
       setLoading(false);
     }
@@ -761,8 +761,8 @@
       currentUser = session?.user || null;
       updateHeader(currentUser);
 
-      if (event === 'SIGNED_IN') console.log('[MEN Auth] ✅ signed in:', currentUser?.email);
-      if (event === 'SIGNED_OUT') console.log('[MEN Auth] 👋 signed out');
+      if (event === 'SIGNED_IN') console.log('[MEN Auth]  signed in:', currentUser?.email);
+      if (event === 'SIGNED_OUT') console.log('[MEN Auth]  signed out');
       if (event === 'PASSWORD_RECOVERY') handlePasswordRecovery();
     });
   }
