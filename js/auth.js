@@ -74,7 +74,7 @@
         <div class="modal-box auth-modal-box">
           <div class="modal-close" data-close-auth><i class="fas fa-times"></i></div>
           <h3><i class="fas fa-fingerprint"></i> <span id="menAuthTitle">تسجيل الدخول</span></h3>
-          <p class="auth-subtitle" id="menAuthSubtitle">حياك يافلان ما عرفناك سجل ابي اتذكرك</p>
+          <p class="auth-subtitle" id="menAuthSubtitle">سجل الان و اكسب كاش باك 2%</p>
           <div class="auth-input-group">
             <i class="fas fa-envelope"></i>
             <input type="email" id="menAuthEmail" placeholder="البريد الإلكتروني" autocomplete="email">
