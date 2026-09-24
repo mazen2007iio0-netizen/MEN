@@ -1,5 +1,5 @@
 /* ============================================================
-   ✨ MEN Store — Auth v5 (Clean & Organized)
+   ✨ MEN Store — Auth v6 (Full Screen)
    ============================================================ */
 (function () {
   'use strict';
@@ -26,7 +26,7 @@
   });
   window.MEN_SUPABASE = sb;
 
-  console.log('%c✨ MEN AUTH v5', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
+  console.log('%c✨ MEN AUTH v6', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
   const CASHBACK_RATE = 0.02;
   let currentUser = null;
@@ -35,61 +35,98 @@
   const $ = id => document.getElementById(id);
 
   // ═══════════════════════════════════════════════════════════
-  // 🎨 CSS
+  // 🎨 CSS — Full Screen
   // ═══════════════════════════════════════════════════════════
   function injectCSS() {
     if ($('menAuthStyles')) return;
     const s = document.createElement('style');
     s.id = 'menAuthStyles';
     s.textContent = `
-      /* ═══════════════ MODAL SHELL ═══════════════ */
-      .men-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;font-family:'Cairo','Outfit',sans-serif;overflow-y:auto}
-      .men-modal.active{display:flex}
-      .men-backdrop{position:absolute;inset:0;background:rgba(2,4,12,.9);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);animation:menFade .35s ease}
-      @keyframes menFade{from{opacity:0}to{opacity:1}}
-      .men-modal::before,.men-modal::after{content:'';position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:1}
-      .men-modal::before{width:420px;height:420px;background:radial-gradient(circle,rgba(74,122,255,.55),transparent 70%);top:-120px;left:-120px;animation:menOrb1 14s ease-in-out infinite}
-      .men-modal::after{width:380px;height:380px;background:radial-gradient(circle,rgba(245,179,66,.35),transparent 70%);bottom:-120px;right:-120px;animation:menOrb2 16s ease-in-out infinite}
-      @keyframes menOrb1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(80px,60px) scale(1.2)}}
-      @keyframes menOrb2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-60px,-40px) scale(1.15)}}
+      /* ═══════════════ FULLSCREEN OVERLAY ═══════════════ */
+      .men-screen{position:fixed;inset:0;z-index:9999;display:none;font-family:'Cairo','Outfit',sans-serif;background:#060812;overflow-y:auto;overflow-x:hidden}
+      .men-screen.active{display:block;animation:menFadeIn .35s ease}
+      @keyframes menFadeIn{from{opacity:0}to{opacity:1}}
 
-      /* ═══════════════ CARD ═══════════════ */
-      .men-card{position:relative;z-index:5;width:100%;max-width:440px;background:linear-gradient(160deg,rgba(16,22,42,.98),rgba(8,12,24,1));border:1px solid rgba(74,122,255,.16);border-radius:28px;padding:0;box-shadow:0 40px 120px rgba(0,0,0,.85),0 0 80px rgba(74,122,255,.12);animation:menCardIn .5s cubic-bezier(.16,1,.3,1);overflow:hidden;margin:auto}
-      .men-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#4a7aff,#f5b342,#4a7aff,transparent);background-size:200% 100%;animation:menShimmer 3.5s linear infinite}
-      @keyframes menShimmer{to{background-position:-200% 0}}
-      @keyframes menCardIn{from{opacity:0;transform:translateY(30px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
-      .men-card.men-shake{animation:menShake .5s cubic-bezier(.36,.07,.19,.97)}
-      @keyframes menShake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
+      /* ═══ Ambient Background ═══ */
+      .men-screen-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+        radial-gradient(ellipse at 15% 20%,rgba(2,28,164,.35) 0%,transparent 55%),
+        radial-gradient(ellipse at 85% 80%,rgba(74,122,255,.25) 0%,transparent 50%),
+        radial-gradient(ellipse at 50% 50%,#060812 0%,#030510 100%)}
+      .men-screen-bg::after{content:'';position:absolute;inset:0;background-image:
+        linear-gradient(rgba(74,122,255,.04) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(74,122,255,.04) 1px,transparent 1px);
+        background-size:60px 60px;
+        mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);
+        -webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%)}
 
-      /* ═══════════════ HEADER SECTION ═══════════════ */
-      .men-head{position:relative;padding:34px 34px 22px;text-align:center;background:linear-gradient(180deg,rgba(74,122,255,.08),transparent);border-bottom:1px solid rgba(74,122,255,.08)}
-      .men-close{position:absolute;top:18px;left:20px;width:36px;height:36px;border-radius:50%;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);color:#8a92b0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .3s cubic-bezier(.16,1,.3,1);z-index:10}
+      /* ═══ Floating Orbs ═══ */
+      .men-orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:1;opacity:.55}
+      .men-orb.o1{width:500px;height:500px;background:radial-gradient(circle,#4a7aff,transparent 70%);top:-150px;left:-150px;animation:menOrb1 15s ease-in-out infinite}
+      .men-orb.o2{width:450px;height:450px;background:radial-gradient(circle,#f5b342,transparent 70%);bottom:-150px;right:-150px;animation:menOrb2 18s ease-in-out infinite}
+      .men-orb.o3{width:350px;height:350px;background:radial-gradient(circle,#4a7aff,transparent 70%);top:40%;right:10%;animation:menOrb1 20s ease-in-out infinite reverse;opacity:.3}
+      @keyframes menOrb1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(100px,80px) scale(1.2)}}
+      @keyframes menOrb2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-80px,-60px) scale(1.15)}}
+
+      /* ═══════════════ LAYOUT ═══════════════ */
+      .men-layout{position:relative;z-index:10;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:stretch}
+
+      /* ═══ LEFT PANEL (Brand Showcase) ═══ */
+      .men-showcase{position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:60px 70px;background:linear-gradient(160deg,rgba(2,28,164,.35) 0%,rgba(6,8,18,.9) 100%);border-left:1px solid rgba(74,122,255,.08);overflow:hidden}
+      .men-showcase::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(74,122,255,.25),transparent 55%);pointer-events:none}
+      .men-showcase-top{position:relative;z-index:2}
+      .men-logo-row{display:flex;align-items:center;gap:14px}
+      .men-logo-icon{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;box-shadow:0 15px 40px -10px rgba(74,122,255,.9),inset 0 1px 0 rgba(255,255,255,.2)}
+      .men-logo-text{line-height:1.1}
+      .men-logo-text .main{font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.5px}
+      .men-logo-text .sub{font-size:.7rem;color:#6a7290;letter-spacing:3px;text-transform:uppercase;font-weight:700;margin-top:2px}
+
+      .men-showcase-center{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center;padding:50px 0}
+      .men-showcase-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.3);border-radius:60px;padding:8px 18px;font-size:.8rem;color:#6a9aff;font-weight:800;margin-bottom:24px;width:fit-content}
+      .men-showcase-badge i{font-size:.85rem}
+      .men-showcase-title{font-size:clamp(2rem,3.5vw,3rem);font-weight:900;color:#fff;letter-spacing:-1.5px;line-height:1.15;margin-bottom:18px}
+      .men-showcase-title span{background:linear-gradient(135deg,#6a9aff,#4a7aff);-webkit-background-clip:text;background-clip:text;color:transparent}
+      .men-showcase-desc{color:#a8b0cc;font-size:1rem;line-height:1.9;max-width:480px;margin-bottom:32px;font-weight:500}
+      .men-features{display:flex;flex-direction:column;gap:14px}
+      .men-feature{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(14,20,38,.5);border:1px solid rgba(74,122,255,.1);border-radius:16px;backdrop-filter:blur(10px);transition:all .35s cubic-bezier(.16,1,.3,1);width:fit-content}
+      .men-feature:hover{background:rgba(74,122,255,.1);border-color:rgba(74,122,255,.3);transform:translateX(-6px)}
+      .men-feature-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,rgba(74,122,255,.2),rgba(74,122,255,.08));border:1px solid rgba(74,122,255,.25);display:flex;align-items:center;justify-content:center;color:#6a9aff;font-size:1rem;flex-shrink:0}
+      .men-feature-text .t{color:#fff;font-weight:800;font-size:.9rem}
+      .men-feature-text .s{color:#8a92b0;font-size:.78rem;font-weight:500;margin-top:2px}
+
+      .men-showcase-bottom{position:relative;z-index:2;color:#6a7290;font-size:.8rem;font-weight:600}
+      .men-showcase-bottom .stats{display:flex;gap:30px;margin-bottom:20px}
+      .men-showcase-bottom .stat .n{color:#fff;font-size:1.5rem;font-weight:900;letter-spacing:-.5px}
+      .men-showcase-bottom .stat .l{color:#8a92b0;font-size:.75rem;font-weight:600;margin-top:2px}
+
+      /* ═══ RIGHT PANEL (Form) ═══ */
+      .men-form-panel{position:relative;display:flex;flex-direction:column;padding:50px 60px;background:linear-gradient(180deg,rgba(6,8,18,.6),rgba(6,8,18,.95));backdrop-filter:blur(20px)}
+      .men-panel-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:auto}
+
+      .men-close{width:42px;height:42px;border-radius:50%;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);color:#8a92b0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .35s cubic-bezier(.16,1,.3,1)}
       .men-close:hover{background:rgba(217,4,41,.15);border-color:rgba(217,4,41,.3);color:#ff6b6b;transform:rotate(180deg) scale(1.08)}
-      .men-brand{display:inline-flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px}
-      .men-brand-icon{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 12px 32px -8px rgba(74,122,255,.8),inset 0 1px 0 rgba(255,255,255,.2)}
-      .men-brand-text{text-align:right}
-      .men-brand-text .main{font-size:1.15rem;font-weight:900;color:#fff;letter-spacing:-.3px;line-height:1.1}
-      .men-brand-text .sub{font-size:.68rem;color:#6a7290;letter-spacing:2px;text-transform:uppercase;font-weight:700}
-      .men-head-title{font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:-.5px;line-height:1.3}
-      .men-head-sub{color:#8a92b0;font-size:.85rem;font-weight:600;line-height:1.6}
 
-      /* ═══════════════ TABS (Segmented) ═══════════════ */
-      .men-tabs{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:4px;background:rgba(0,0,0,.28);border:1px solid rgba(74,122,255,.1);border-radius:16px;padding:4px;margin:20px 24px 4px}
-      .men-tab{position:relative;padding:12px 16px;border-radius:12px;background:transparent;border:none;color:#8a92b0;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);z-index:2;display:flex;align-items:center;justify-content:center;gap:8px}
+      .men-form-inner{max-width:440px;width:100%;margin:auto;padding:30px 0}
+
+      .men-welcome{margin-bottom:32px;text-align:right}
+      .men-welcome h2{font-size:1.9rem;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:8px;line-height:1.2}
+      .men-welcome p{color:#8a92b0;font-size:.92rem;font-weight:600;line-height:1.7}
+
+      /* ═══ TABS ═══ */
+      .men-tabs{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:4px;background:rgba(0,0,0,.35);border:1px solid rgba(74,122,255,.1);border-radius:16px;padding:4px;margin-bottom:26px}
+      .men-tab{position:relative;padding:13px 16px;border-radius:12px;background:transparent;border:none;color:#8a92b0;font-family:'Cairo',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);z-index:2;display:flex;align-items:center;justify-content:center;gap:8px}
       .men-tab:hover:not(.active){color:#c3cbe4}
       .men-tab.active{color:#fff}
-      .men-tabs-indicator{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);background:linear-gradient(135deg,#021ca4,#4a7aff);border-radius:12px;box-shadow:0 6px 18px -4px rgba(74,122,255,.7),inset 0 1px 0 rgba(255,255,255,.2);transition:transform .4s cubic-bezier(.34,1.4,.64,1);z-index:1}
-      .men-tabs[data-mode="signup"] .men-tabs-indicator{transform:translateX(calc(-100% - 4px))}
+      .men-tabs-indicator{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);background:linear-gradient(135deg,#021ca4,#4a7aff);border-radius:12px;box-shadow:0 6px 18px -4px rgba(74,122,255,.7);transition:transform .4s cubic-bezier(.34,1.4,.64,1);z-index:1}
+      .men-tabs[data-mode="signup"] .men-tabs-indicator{transform:translateX(calc(100% + 4px))}
 
-      /* ═══════════════ FORM ═══════════════ */
-      .men-body{padding:24px 30px 30px}
-      .men-form{display:flex;flex-direction:column;gap:14px}
-      .men-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+      /* ═══ FORM ═══ */
+      .men-form{display:flex;flex-direction:column;gap:16px}
+      .men-row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
       .men-field{position:relative}
-      .men-field .men-label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;padding-right:4px}
+      .men-label{display:block;font-size:.74rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:9px;padding-right:4px}
       .men-input-wrap{position:relative;display:flex;align-items:center}
-      .men-input-wrap input{width:100%;height:52px;padding:0 46px 0 16px;background:rgba(0,0,0,.32);border:1.5px solid rgba(74,122,255,.1);border-radius:14px;color:#fff;font-size:.92rem;outline:none;font-family:'Cairo',sans-serif;font-weight:600;transition:all .3s cubic-bezier(.16,1,.3,1)}
+      .men-input-wrap input{width:100%;height:54px;padding:0 48px 0 16px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.1);border-radius:14px;color:#fff;font-size:.94rem;outline:none;font-family:'Cairo',sans-serif;font-weight:600;transition:all .3s cubic-bezier(.16,1,.3,1)}
       .men-input-wrap input::placeholder{color:#4a5070;font-weight:500}
       .men-input-wrap input:hover{border-color:rgba(74,122,255,.2)}
       .men-input-wrap input:focus{border-color:#4a7aff;background:rgba(74,122,255,.06);box-shadow:0 0 0 4px rgba(74,122,255,.12)}
@@ -98,9 +135,9 @@
       .men-input-wrap .men-eye{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#5a607a;font-size:.9rem;cursor:pointer;padding:8px;border-radius:50%;background:transparent;border:none;transition:all .3s}
       .men-input-wrap .men-eye:hover{color:#4a7aff;background:rgba(74,122,255,.1)}
 
-      /* ═══════════════ STRENGTH ═══════════════ */
-      .men-strength{height:0;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);margin-top:0;padding-right:4px}
-      .men-strength.show{height:28px;margin-top:4px}
+      /* ═══ STRENGTH ═══ */
+      .men-strength{height:0;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);padding-right:4px}
+      .men-strength.show{height:28px;margin-top:6px}
       .men-strength-row{display:flex;align-items:center;gap:10px}
       .men-strength-bars{flex:1;display:flex;gap:4px}
       .men-strength-bar{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;position:relative}
@@ -109,14 +146,14 @@
       .men-strength.s2 .men-strength-bar:nth-child(-n+2)::after{transform:scaleX(1);background:linear-gradient(90deg,#f5b342,#ffb700)}
       .men-strength.s3 .men-strength-bar:nth-child(-n+3)::after{transform:scaleX(1);background:linear-gradient(90deg,#4a7aff,#6a9aff)}
       .men-strength.s4 .men-strength-bar::after{transform:scaleX(1);background:linear-gradient(90deg,#4caf50,#66bb6a)}
-      .men-strength-label{font-size:.7rem;font-weight:800;white-space:nowrap;min-width:56px;text-align:left;letter-spacing:.3px}
+      .men-strength-label{font-size:.72rem;font-weight:800;white-space:nowrap;min-width:56px;text-align:left;letter-spacing:.3px}
       .men-strength.s1 .men-strength-label{color:#ff4d4d}
       .men-strength.s2 .men-strength-label{color:#ffb700}
       .men-strength.s3 .men-strength-label{color:#6a9aff}
       .men-strength.s4 .men-strength-label{color:#4caf50}
 
-      /* ═══════════════ OPTIONS ═══════════════ */
-      .men-opts{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:2px;font-size:.82rem;flex-wrap:wrap}
+      /* ═══ OPTIONS ═══ */
+      .men-opts{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:2px;font-size:.84rem;flex-wrap:wrap}
       .men-remember{display:inline-flex;align-items:center;gap:9px;color:#8a92b0;font-weight:600;cursor:pointer;user-select:none;transition:color .3s}
       .men-remember:hover{color:#c3cbe4}
       .men-remember input{display:none}
@@ -124,17 +161,17 @@
       .men-remember input:checked ~ .men-check{background:linear-gradient(135deg,#021ca4,#4a7aff);border-color:transparent;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
       .men-check::after{content:'\\f00c';font-family:'Font Awesome 6 Free';font-weight:900;font-size:.58rem;color:#fff;opacity:0;transform:scale(0);transition:all .3s cubic-bezier(.34,1.56,.64,1)}
       .men-remember input:checked ~ .men-check::after{opacity:1;transform:scale(1)}
-      .men-forgot{color:#6a9aff;font-weight:700;cursor:pointer;text-decoration:none;font-size:.82rem;transition:all .3s;white-space:nowrap}
+      .men-forgot{color:#6a9aff;font-weight:700;cursor:pointer;text-decoration:none;font-size:.84rem;transition:all .3s;white-space:nowrap}
       .men-forgot:hover{color:#4a7aff;text-shadow:0 0 16px rgba(74,122,255,.6)}
 
-      /* ═══════════════ ERROR ═══════════════ */
-      .men-error{max-height:0;overflow:hidden;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.2);border-radius:12px;color:#ff8a8a;font-size:.82rem;font-weight:700;text-align:center;transition:all .35s cubic-bezier(.16,1,.3,1);display:flex;align-items:center;justify-content:center;gap:8px;padding:0 16px}
-      .men-error.show{max-height:70px;padding:11px 16px;margin-top:4px}
+      /* ═══ ERROR ═══ */
+      .men-error{max-height:0;overflow:hidden;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.2);border-radius:12px;color:#ff8a8a;font-size:.84rem;font-weight:700;text-align:center;transition:all .35s cubic-bezier(.16,1,.3,1);display:flex;align-items:center;justify-content:center;gap:8px;padding:0 16px}
+      .men-error.show{max-height:70px;padding:12px 16px;margin-top:4px}
 
-      /* ═══════════════ SUBMIT ═══════════════ */
-      .men-submit{position:relative;width:100%;height:54px;border:none;border-radius:14px;background:linear-gradient(135deg,#021ca4 0%,#4a7aff 100%);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.98rem;cursor:pointer;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);box-shadow:0 14px 34px -12px rgba(74,122,255,.8);display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:.3px;margin-top:6px}
+      /* ═══ SUBMIT ═══ */
+      .men-submit{position:relative;width:100%;height:56px;border:none;border-radius:14px;background:linear-gradient(135deg,#021ca4 0%,#4a7aff 100%);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);box-shadow:0 14px 34px -12px rgba(74,122,255,.8);display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:.3px;margin-top:6px}
       .men-submit::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#4a7aff,#021ca4);opacity:0;transition:opacity .35s}
-      .men-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 20px 44px -12px rgba(74,122,255,1)}
+      .men-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 22px 50px -12px rgba(74,122,255,1)}
       .men-submit:hover:not(:disabled)::before{opacity:1}
       .men-submit:active:not(:disabled){transform:translateY(0) scale(.98)}
       .men-submit:disabled{cursor:not-allowed;opacity:.85}
@@ -144,49 +181,47 @@
       .men-submit.loading .men-btn-icon{display:none}
       @keyframes menSpin{to{transform:rotate(360deg)}}
 
-      /* ═══════════════ TERMS ═══════════════ */
-      .men-terms{font-size:.72rem;color:#6a7290;text-align:center;line-height:1.7;margin-top:4px;font-weight:500}
+      /* ═══ TERMS ═══ */
+      .men-terms{font-size:.75rem;color:#6a7290;text-align:center;line-height:1.7;margin-top:2px;font-weight:500}
       .men-terms a{color:#6a9aff;text-decoration:none;font-weight:700;cursor:pointer}
       .men-terms a:hover{color:#4a7aff;text-decoration:underline}
 
-      /* ═══════════════ DIVIDER ═══════════════ */
-      .men-divider{display:flex;align-items:center;gap:12px;margin:6px 0;color:#4a5070;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px}
-      .men-divider::before,.men-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(74,122,255,.15),transparent)}
+      /* ═══ DIVIDER ═══ */
+      .men-divider{display:flex;align-items:center;gap:14px;margin:4px 0;color:#4a5070;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px}
+      .men-divider::before,.men-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(74,122,255,.2),transparent)}
 
-      /* ═══════════════ SOCIALS ═══════════════ */
-      .men-socials{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-      .men-social-btn{height:48px;border-radius:14px;background:rgba(74,122,255,.06);border:1.5px solid rgba(74,122,255,.12);color:#c3cbe4;font-family:'Cairo',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .3s cubic-bezier(.16,1,.3,1)}
+      /* ═══ SOCIAL ═══ */
+      .men-social-btn{width:100%;height:50px;border-radius:14px;background:rgba(74,122,255,.06);border:1.5px solid rgba(74,122,255,.12);color:#c3cbe4;font-family:'Cairo',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .3s cubic-bezier(.16,1,.3,1)}
       .men-social-btn:hover{background:rgba(74,122,255,.12);border-color:rgba(74,122,255,.3);transform:translateY(-2px);color:#fff}
-      .men-social-btn i{font-size:1rem}
-      .men-social-btn.disabled{opacity:.45;cursor:not-allowed}
-      .men-social-btn.disabled:hover{transform:none;background:rgba(74,122,255,.06);border-color:rgba(74,122,255,.12)}
+      .men-social-btn i{font-size:1.05rem}
 
-      /* ═══════════════ SUCCESS ═══════════════ */
-      .men-success-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(16,22,42,.99),rgba(8,12,24,1));z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;opacity:0;transition:opacity .35s;border-radius:28px}
+      /* ═══ SUCCESS ═══ */
+      .men-success-overlay{position:fixed;inset:0;background:linear-gradient(160deg,rgba(6,8,18,.99),rgba(2,4,12,1));z-index:10000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;opacity:0;transition:opacity .35s}
       .men-success-overlay.show{display:flex;opacity:1}
-      .men-check-circle{width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,#4caf50,#66bb6a);display:flex;align-items:center;justify-content:center;color:#fff;font-size:36px;animation:menCheckPop .6s cubic-bezier(.34,1.56,.64,1);box-shadow:0 20px 50px -10px rgba(76,175,80,.7)}
+      .men-check-circle{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#4caf50,#66bb6a);display:flex;align-items:center;justify-content:center;color:#fff;font-size:44px;animation:menCheckPop .6s cubic-bezier(.34,1.56,.64,1);box-shadow:0 25px 60px -15px rgba(76,175,80,.8)}
       @keyframes menCheckPop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.15) rotate(8deg)}100%{transform:scale(1) rotate(0);opacity:1}}
-      .men-success-overlay p{color:#4caf50;font-weight:800;font-size:1.05rem;letter-spacing:.3px}
+      .men-success-overlay p{color:#4caf50;font-weight:800;font-size:1.3rem;letter-spacing:.3px}
 
-      /* ═══════════════ CONFETTI ═══════════════ */
-      .men-confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10000}
+      /* ═══ CONFETTI ═══ */
+      .men-confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10001}
       .men-confetti-piece{position:absolute;width:10px;height:10px;border-radius:2px;animation:menConfettiFall 3s linear forwards}
       @keyframes menConfettiFall{0%{transform:translateY(-100vh) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 
-      /* ═══════════════ MOBILE ═══════════════ */
+      /* ═══════════════ RESPONSIVE ═══════════════ */
+      @media (max-width:992px){
+        .men-layout{grid-template-columns:1fr}
+        .men-showcase{display:none}
+        .men-form-panel{padding:30px 24px;min-height:100vh}
+        .men-form-inner{max-width:480px;padding:20px 0}
+      }
       @media (max-width:480px){
-        .men-card{max-width:100%;border-radius:22px}
-        .men-head{padding:26px 22px 18px}
-        .men-brand-icon{width:46px;height:46px;font-size:19px;border-radius:14px}
-        .men-brand-text .main{font-size:1rem}
-        .men-head-title{font-size:1.2rem}
-        .men-head-sub{font-size:.8rem}
-        .men-tabs{margin:16px 18px 2px}
-        .men-tab{padding:11px 12px;font-size:.82rem}
-        .men-body{padding:20px 22px 24px}
-        .men-row2{grid-template-columns:1fr;gap:14px}
-        .men-input-wrap input{height:50px;font-size:.88rem}
-        .men-submit{height:52px;font-size:.92rem}
+        .men-form-panel{padding:24px 18px}
+        .men-welcome h2{font-size:1.5rem}
+        .men-welcome p{font-size:.85rem}
+        .men-row2{grid-template-columns:1fr;gap:16px}
+        .men-input-wrap input{height:52px;font-size:.9rem}
+        .men-submit{height:54px}
+        .men-tab{font-size:.84rem;padding:12px 12px}
       }
 
       /* ═══════════════ ACCOUNT PAGE (نفس نسخة v4) ═══════════════ */
@@ -329,138 +364,188 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🖼️ بناء الـ Modal
+  // 🖼️ بناء الـ Screen
   // ═══════════════════════════════════════════════════════════
   function injectModals() {
-    if ($('menAuthModal')) return;
+    if ($('menAuthScreen')) return;
     const wrap = document.createElement('div');
     wrap.innerHTML = `
-      <div id="menAuthModal" class="men-modal">
-        <div class="men-backdrop" data-close></div>
-        <div class="men-card" id="menAuthCard">
+      <div id="menAuthScreen" class="men-screen">
+        <!-- Background -->
+        <div class="men-screen-bg"></div>
+        <div class="men-orb o1"></div>
+        <div class="men-orb o2"></div>
+        <div class="men-orb o3"></div>
 
-          <!-- ═══ HEADER ═══ -->
-          <div class="men-head">
-            <button class="men-close" data-close type="button"><i class="fas fa-times"></i></button>
-            <div class="men-brand">
-              <div class="men-brand-icon"><i class="fas fa-gamepad"></i></div>
-              <div class="men-brand-text">
-                <div class="main">MEN Store</div>
-                <div class="sub">Premium Gaming</div>
+        <div class="men-layout">
+          <!-- ═══ LEFT: BRAND SHOWCASE ═══ -->
+          <div class="men-showcase">
+            <div class="men-showcase-top">
+              <div class="men-logo-row">
+                <div class="men-logo-icon"><i class="fas fa-gamepad"></i></div>
+                <div class="men-logo-text">
+                  <div class="main">MEN Store</div>
+                  <div class="sub">Premium Gaming</div>
+                </div>
               </div>
             </div>
-            <h2 class="men-head-title" id="menHeadTitle">أهلاً بعودتك 👋</h2>
-            <p class="men-head-sub" id="menHeadSub">سجّل دخولك للمتابعة والاستمتاع بالعروض</p>
-          </div>
 
-          <!-- ═══ TABS ═══ -->
-          <div class="men-tabs" id="menTabs" data-mode="login">
-            <div class="men-tabs-indicator"></div>
-            <button class="men-tab active" data-tab="login" type="button"><i class="fas fa-right-to-bracket"></i> دخول</button>
-            <button class="men-tab" data-tab="signup" type="button"><i class="fas fa-user-plus"></i> حساب جديد</button>
-          </div>
-
-          <!-- ═══ BODY ═══ -->
-          <div class="men-body">
-            <form class="men-form" id="menForm" onsubmit="return false;">
-
-              <!-- Fields for signup only -->
-              <div class="men-row2" id="menRow2Fields" style="display:none">
-                <div class="men-field">
-                  <label class="men-label" for="menAuthName">الاسم الكامل</label>
-                  <div class="men-input-wrap">
-                    <input type="text" id="menAuthName" placeholder="محمد أحمد" autocomplete="name" dir="rtl">
-                    <i class="fas fa-user men-icon"></i>
+            <div class="men-showcase-center">
+              <div class="men-showcase-badge"><i class="fas fa-star"></i> متجرك الأول للألعاب</div>
+              <h1 class="men-showcase-title">كل ما تحتاجه<br>في <span>عالم الجيمنق</span></h1>
+              <p class="men-showcase-desc">
+                انضم إلى أكثر من 5000 لاعب يستمتعون بأفضل الأسعار، التسليم الفوري، والكاش باك على كل طلب.
+              </p>
+              <div class="men-features">
+                <div class="men-feature">
+                  <div class="men-feature-icon"><i class="fas fa-bolt"></i></div>
+                  <div class="men-feature-text">
+                    <div class="t">تسليم فوري</div>
+                    <div class="s">استلم طلبك خلال 5 دقائق</div>
                   </div>
                 </div>
-                <div class="men-field">
-                  <label class="men-label" for="menAuthPhone">رقم الجوال</label>
-                  <div class="men-input-wrap">
-                    <input type="tel" id="menAuthPhone" placeholder="05xxxxxxxx" autocomplete="tel" dir="ltr" style="text-align:right">
-                    <i class="fas fa-phone men-icon"></i>
+                <div class="men-feature">
+                  <div class="men-feature-icon"><i class="fas fa-gift"></i></div>
+                  <div class="men-feature-text">
+                    <div class="t">كاش باك 2%</div>
+                    <div class="s">على كل عملية شراء</div>
+                  </div>
+                </div>
+                <div class="men-feature">
+                  <div class="men-feature-icon"><i class="fas fa-shield-halved"></i></div>
+                  <div class="men-feature-text">
+                    <div class="t">منتجات أصلية 100%</div>
+                    <div class="s">ضمان الجودة والأصالة</div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <!-- Email -->
-              <div class="men-field">
-                <label class="men-label" for="menAuthEmail">البريد الإلكتروني</label>
-                <div class="men-input-wrap">
-                  <input type="email" id="menAuthEmail" placeholder="you@example.com" autocomplete="email" dir="ltr" style="text-align:right">
-                  <i class="fas fa-envelope men-icon"></i>
-                </div>
+            <div class="men-showcase-bottom">
+              <div class="stats">
+                <div class="stat"><div class="n">+5000</div><div class="l">عميل سعيد</div></div>
+                <div class="stat"><div class="n">24/7</div><div class="l">دعم فني</div></div>
+                <div class="stat"><div class="n">7 سنوات</div><div class="l">خبرة</div></div>
+              </div>
+              <div>© 2020 MEN Store — جميع الحقوق محفوظة</div>
+            </div>
+          </div>
+
+          <!-- ═══ RIGHT: FORM ═══ -->
+          <div class="men-form-panel">
+            <div class="men-panel-top">
+              <div></div>
+              <button class="men-close" data-close type="button"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="men-form-inner">
+              <div class="men-welcome">
+                <h2 id="menHeadTitle">أهلاً بعودتك 👋</h2>
+                <p id="menHeadSub">سجّل دخولك للمتابعة والاستمتاع بالعروض الحصرية</p>
               </div>
 
-              <!-- Password -->
-              <div class="men-field">
-                <label class="men-label" for="menAuthPassword">كلمة المرور</label>
-                <div class="men-input-wrap">
-                  <input type="password" id="menAuthPassword" placeholder="••••••••" autocomplete="current-password" dir="ltr" style="text-align:right">
-                  <i class="fas fa-lock men-icon"></i>
-                  <button class="men-eye" id="menTogglePass" type="button" title="إظهار/إخفاء"><i class="fas fa-eye"></i></button>
-                </div>
-                <div class="men-strength" id="menStrength">
-                  <div class="men-strength-row">
-                    <div class="men-strength-bars">
-                      <div class="men-strength-bar"></div>
-                      <div class="men-strength-bar"></div>
-                      <div class="men-strength-bar"></div>
-                      <div class="men-strength-bar"></div>
+              <!-- Tabs -->
+              <div class="men-tabs" id="menTabs" data-mode="login">
+                <div class="men-tabs-indicator"></div>
+                <button class="men-tab active" data-tab="login" type="button"><i class="fas fa-right-to-bracket"></i> دخول</button>
+                <button class="men-tab" data-tab="signup" type="button"><i class="fas fa-user-plus"></i> حساب جديد</button>
+              </div>
+
+              <form class="men-form" id="menForm" onsubmit="return false;">
+                <!-- Name + Phone (signup only) -->
+                <div class="men-row2" id="menRow2Fields" style="display:none">
+                  <div class="men-field">
+                    <label class="men-label" for="menAuthName">الاسم الكامل</label>
+                    <div class="men-input-wrap">
+                      <input type="text" id="menAuthName" placeholder="محمد أحمد" autocomplete="name" dir="rtl">
+                      <i class="fas fa-user men-icon"></i>
                     </div>
-                    <span class="men-strength-label" id="menStrengthLabel"></span>
+                  </div>
+                  <div class="men-field">
+                    <label class="men-label" for="menAuthPhone">رقم الجوال</label>
+                    <div class="men-input-wrap">
+                      <input type="tel" id="menAuthPhone" placeholder="05xxxxxxxx" autocomplete="tel" dir="ltr" style="text-align:right">
+                      <i class="fas fa-phone men-icon"></i>
+                    </div>
                   </div>
                 </div>
+
+                <!-- Email -->
+                <div class="men-field">
+                  <label class="men-label" for="menAuthEmail">البريد الإلكتروني</label>
+                  <div class="men-input-wrap">
+                    <input type="email" id="menAuthEmail" placeholder="you@example.com" autocomplete="email" dir="ltr" style="text-align:right">
+                    <i class="fas fa-envelope men-icon"></i>
+                  </div>
+                </div>
+
+                <!-- Password -->
+                <div class="men-field">
+                  <label class="men-label" for="menAuthPassword">كلمة المرور</label>
+                  <div class="men-input-wrap">
+                    <input type="password" id="menAuthPassword" placeholder="••••••••" autocomplete="current-password" dir="ltr" style="text-align:right">
+                    <i class="fas fa-lock men-icon"></i>
+                    <button class="men-eye" id="menTogglePass" type="button" title="إظهار/إخفاء"><i class="fas fa-eye"></i></button>
+                  </div>
+                  <div class="men-strength" id="menStrength">
+                    <div class="men-strength-row">
+                      <div class="men-strength-bars">
+                        <div class="men-strength-bar"></div>
+                        <div class="men-strength-bar"></div>
+                        <div class="men-strength-bar"></div>
+                        <div class="men-strength-bar"></div>
+                      </div>
+                      <span class="men-strength-label" id="menStrengthLabel"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Options -->
+                <div class="men-opts" id="menOptsRow">
+                  <label class="men-remember">
+                    <input type="checkbox" id="menRemember" checked>
+                    <span class="men-check"></span>
+                    <span>تذكرني</span>
+                  </label>
+                  <a class="men-forgot" id="menForgotBtn">نسيت كلمة المرور؟</a>
+                </div>
+
+                <!-- Terms -->
+                <div class="men-terms" id="menTermsText" style="display:none">
+                  بإنشاء حساب، أنت توافق على <a>الشروط والأحكام</a> و <a>سياسة الخصوصية</a>
+                </div>
+
+                <!-- Error -->
+                <div class="men-error" id="menError">
+                  <i class="fas fa-circle-exclamation"></i>
+                  <span id="menErrorText"></span>
+                </div>
+
+                <!-- Submit -->
+                <button class="men-submit" id="menSubmit" type="button">
+                  <i class="fas fa-arrow-left men-btn-icon"></i>
+                  <span class="men-spinner"></span>
+                  <span id="menSubmitText">تسجيل الدخول</span>
+                </button>
+              </form>
+
+              <!-- Divider -->
+              <div class="men-divider" id="menDivider" style="margin-top:20px">أو</div>
+
+              <!-- Social (Google only) -->
+              <div style="margin-top:20px">
+                <button class="men-social-btn" type="button" data-social="google">
+                  <i class="fab fa-google"></i> المتابعة باستخدام Google
+                </button>
               </div>
-
-              <!-- Options (login only) -->
-              <div class="men-opts" id="menOptsRow">
-                <label class="men-remember">
-                  <input type="checkbox" id="menRemember" checked>
-                  <span class="men-check"></span>
-                  <span>تذكرني</span>
-                </label>
-                <a class="men-forgot" id="menForgotBtn">نسيت كلمة المرور؟</a>
-              </div>
-
-              <!-- Terms (signup only) -->
-              <div class="men-terms" id="menTermsText" style="display:none">
-                بإنشاء حساب، أنت توافق على <a>الشروط والأحكام</a> و <a>سياسة الخصوصية</a>
-              </div>
-
-              <!-- Error -->
-              <div class="men-error" id="menError">
-                <i class="fas fa-circle-exclamation"></i>
-                <span id="menErrorText"></span>
-              </div>
-
-              <!-- Submit -->
-              <button class="men-submit" id="menSubmit" type="button">
-                <i class="fas fa-arrow-left men-btn-icon"></i>
-                <span class="men-spinner"></span>
-                <span id="menSubmitText">تسجيل الدخول</span>
-              </button>
-
-            </form>
-
-            <!-- Divider -->
-            <div class="men-divider" id="menDivider">أو</div>
-
-            <!-- Socials -->
-            <div class="men-socials">
-              <button class="men-social-btn disabled" type="button" data-social="google" title="قريباً">
-                <i class="fab fa-google"></i> Google
-              </button>
-              <button class="men-social-btn disabled" type="button" data-social="discord" title="قريباً">
-                <i class="fab fa-discord"></i> Discord
-              </button>
             </div>
           </div>
+        </div>
 
-          <!-- Success overlay -->
-          <div class="men-success-overlay" id="menSuccessOverlay">
-            <div class="men-check-circle"><i class="fas fa-check"></i></div>
-            <p id="menSuccessText">تم بنجاح!</p>
-          </div>
+        <!-- Success overlay -->
+        <div class="men-success-overlay" id="menSuccessOverlay">
+          <div class="men-check-circle"><i class="fas fa-check"></i></div>
+          <p id="menSuccessText">تم بنجاح!</p>
         </div>
       </div>
     `;
@@ -468,10 +553,8 @@
 
     // Bind events
     wrap.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeAuth));
-
-    wrap.querySelectorAll('[data-tab]').forEach(btn => {
-      btn.addEventListener('click', () => switchMode(btn.dataset.tab));
-    });
+    wrap.querySelectorAll('[data-tab]').forEach(btn =>
+      btn.addEventListener('click', () => switchMode(btn.dataset.tab)));
 
     $('menTogglePass').addEventListener('click', togglePassword);
     $('menAuthPassword').addEventListener('input', updateStrength);
@@ -485,12 +568,12 @@
 
     wrap.querySelectorAll('[data-social]').forEach(b => {
       b.addEventListener('click', () => {
-        if (window.showToast) window.showToast('🔜 قريباً — قيد التطوير', 'info');
+        if (window.showToast) window.showToast('🔜 Google قيد التطوير', 'info');
       });
     });
   }
 
-  // ═══ Mode Switch ═══
+  // ═══ Mode ═══
   function switchMode(mode) {
     authMode = mode === 'signup' ? 'signup' : 'login';
     renderMode();
@@ -498,39 +581,24 @@
 
   function renderMode() {
     const login = authMode === 'login';
-
-    // Tab indicator
     $('menTabs').dataset.mode = authMode;
     document.querySelectorAll('[data-tab]').forEach(b =>
       b.classList.toggle('active', b.dataset.tab === authMode));
 
-    // Header
     $('menHeadTitle').textContent = login ? 'أهلاً بعودتك 👋' : 'انضم إلينا 🎉';
     $('menHeadSub').textContent = login
-      ? 'سجّل دخولك للمتابعة والاستمتاع بالعروض'
+      ? 'سجّل دخولك للمتابعة والاستمتاع بالعروض الحصرية'
       : 'أنشئ حسابك واحصل على كاش باك 2% على كل طلب';
 
-    // Fields
     $('menRow2Fields').style.display = login ? 'none' : 'grid';
     $('menOptsRow').style.display = login ? 'flex' : 'none';
     $('menTermsText').style.display = login ? 'none' : 'block';
     $('menDivider').style.display = login ? 'flex' : 'none';
+    document.querySelector('[data-social="google"]').style.display = login ? 'flex' : 'none';
 
-    // Submit text
     $('menSubmitText').textContent = login ? 'تسجيل الدخول' : 'إنشاء الحساب';
-
-    // Strength bar
-    $('menStrength').classList.remove('show', 's1', 's2', 's3', 's4');
-
-    // Autocomplete
     $('menAuthPassword').autocomplete = login ? 'current-password' : 'new-password';
-
-    // Reset form animations
-    const card = $('menAuthCard');
-    card.style.animation = 'none';
-    void card.offsetWidth;
-    card.style.animation = 'menCardIn .5s cubic-bezier(.16,1,.3,1)';
-
+    $('menStrength').classList.remove('show', 's1', 's2', 's3', 's4');
     clearError();
   }
 
@@ -541,7 +609,6 @@
     else { inp.type = 'password'; ico.className = 'fas fa-eye'; }
   }
 
-  // ═══ Strength ═══
   function updateStrength() {
     const p = $('menAuthPassword').value;
     const el = $('menStrength');
@@ -558,14 +625,9 @@
     $('menStrengthLabel').textContent = labels[Math.max(1, score)];
   }
 
-  // ═══ Error ═══
   function showError(msg) {
     $('menErrorText').textContent = msg;
     $('menError').classList.add('show');
-    const card = $('menAuthCard');
-    card.classList.remove('men-shake');
-    void card.offsetWidth;
-    card.classList.add('men-shake');
   }
   function clearError() { $('menError').classList.remove('show'); }
 
@@ -576,11 +638,13 @@
     injectAccountPage();
     authMode = mode === 'signup' ? 'signup' : 'login';
     renderMode();
-    $('menAuthModal').classList.add('active');
-    setTimeout(() => $('menAuthEmail')?.focus(), 250);
+    $('menAuthScreen').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => $('menAuthEmail')?.focus(), 300);
   }
   function closeAuth() {
-    $('menAuthModal')?.classList.remove('active');
+    $('menAuthScreen')?.classList.remove('active');
+    document.body.style.overflow = '';
     clearError();
   }
 
@@ -590,7 +654,6 @@
     const password = $('menAuthPassword').value;
     const name = $('menAuthName').value.trim();
     const phone = $('menAuthPhone').value.trim();
-
     clearError();
 
     if (authMode === 'signup') {
@@ -600,25 +663,22 @@
         return showError('رقم الجوال غير صحيح (مثال: 05xxxxxxxx)');
     }
     if (!email) return showError('الرجاء إدخال البريد الإلكتروني');
-    if (!email.includes('@') || !email.includes('.')) return showError('صيغة البريد الإلكتروني غير صحيحة');
+    if (!email.includes('@') || !email.includes('.')) return showError('صيغة البريد غير صحيحة');
     if (!password) return showError('الرجاء إدخال كلمة المرور');
     if (authMode === 'signup' && password.length < 6) return showError('كلمة المرور 6 أحرف على الأقل');
 
     const btn = $('menSubmit');
-    const originalText = $('menSubmitText').textContent;
     btn.disabled = true;
     btn.classList.add('loading');
 
     try {
       if (authMode === 'login') {
-        console.log('🔐 محاولة دخول:', email);
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        console.log('✅ دخول ناجح:', data.user?.email);
+        console.log('✅ دخول:', data.user?.email);
         await showSuccess('مرحباً بك! 👋');
         launchConfetti();
       } else {
-        console.log('📝 إنشاء حساب:', email);
         const { data, error } = await sb.auth.signUp({
           email, password,
           options: { data: { name, phone, cashback: 0, orders: [] } }
@@ -642,9 +702,9 @@
       else if (m.includes('already registered') || m.includes('already been registered'))
         showError('📧 البريد مسجل بالفعل — انتقل لتسجيل الدخول');
       else if (m.includes('password'))
-        showError('🔒 كلمة المرور ضعيفة — استخدم 6 أحرف على الأقل');
+        showError('🔒 كلمة المرور ضعيفة');
       else if (m.includes('too many'))
-        showError('⏳ محاولات كثيرة — انتظر دقيقة وحاول مجدداً');
+        showError('⏳ محاولات كثيرة — انتظر دقيقة');
       else
         showError(err.message || 'حدث خطأ غير متوقع');
     } finally {
@@ -666,7 +726,6 @@
     });
   }
 
-  // ═══ Forgot ═══
   async function handleForgot() {
     const email = $('menAuthEmail').value.trim().toLowerCase();
     if (!email || !email.includes('@')) {
@@ -682,12 +741,12 @@
       if (window.showToast) window.showToast('📧 أرسلنا رابط استعادة كلمة المرور', 'success');
       clearError();
     } catch (err) {
-      showError(err.message || 'فشل إرسال الرابط');
+      showError(err.message || 'فشل الإرسال');
     }
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 👤 ACCOUNT PAGE (نفس نسخة v4)
+  // 👤 ACCOUNT PAGE
   // ═══════════════════════════════════════════════════════════
   function injectAccountPage() {
     if ($('menAccountPage')) return;
@@ -829,7 +888,6 @@
     const orders = Array.isArray(meta.orders) ? meta.orders : [];
     const cashback = Number(meta.cashback || 0);
     const totalSpent = orders.reduce((s, o) => s + Number(o.total || 0), 0);
-
     const avatar = meta.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.email || 'M')}&background=021ca4&color=fff&bold=true&size=300`;
     const name = meta.name || user.email?.split('@')[0] || 'مستخدم';
     const since = user.created_at ? new Date(user.created_at).toLocaleDateString('ar-SA', { year: 'numeric', month: 'long' }) : '—';
@@ -968,7 +1026,6 @@
     if (window.showToast) window.showToast('تم تسجيل الخروج 👋', 'info');
   }
 
-  // ═══ Sync UI ═══
   function syncUI(user) {
     currentUser = user;
     const loginBtn = $('menLoginBtn');
