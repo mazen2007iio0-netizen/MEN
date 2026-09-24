@@ -6,7 +6,7 @@
 
   // ════════ 1) إعدادات Supabase ════════
   const SUPABASE_URL      = 'https://xoqwzluyxynqpdpmidts.supabase.co';   // ← ضع رابط مشروعك
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';          // ← ضع الـ anon key
+  const SUPABASE_ANON_KEY = '';          // ← ضع الـ anon key
 
   // ════════ 2) إنشاء العميل ════════
   let sb = null;
@@ -74,7 +74,7 @@
         <div class="modal-box auth-modal-box">
           <div class="modal-close" data-close-auth><i class="fas fa-times"></i></div>
           <h3><i class="fas fa-fingerprint"></i> <span id="menAuthTitle">تسجيل الدخول</span></h3>
-          <p class="auth-subtitle" id="menAuthSubtitle">أدخل بياناتك للمتابعة</p>
+          <p class="auth-subtitle" id="menAuthSubtitle">حياك يافلان ما عرفناك سجل ابي اتذكرك</p>
           <div class="auth-input-group">
             <i class="fas fa-envelope"></i>
             <input type="email" id="menAuthEmail" placeholder="البريد الإلكتروني" autocomplete="email">
