@@ -8,8 +8,8 @@
 // ═══════════════════════════════════════════════════════════
 // 🔑 إعدادات Supabase
 // ═══════════════════════════════════════════════════════════
-const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';   // ← ضع رابط مشروعك
-const SUPABASE_KEY = 'sb_publishable_rQvBPw08M9Q3bWTDfFseTQ_6SU3aN96';   // ← ضع anon key
+const SUPABASE_URL = 'https://wziuzllafxjpiwcputwn.supabase.co';   // ← ضع رابط مشروعك
+const SUPABASE_KEY = 'sb_publishable_-hfOM3tm4QjXKbjJL-6VtQ_Al9ou1IE';   // ← ضع anon key
 // ═══════════════════════════════════════════════════════════
 
 const CASHBACK_RATE = 0.02;
