@@ -942,7 +942,7 @@ function updateCartUI(){
     const afterDiscount=Math.max(0,total-discountAmount);
 
     const cu = window.MEN_AUTH ? window.MEN_AUTH.getCurrentUser() : null;
-    const cashbackAvailable = cu ? Number(cu.cashback||0) : 0;
+    const cashbackAvailable = cu ? Number(cu.user_metadata?.cashback||0) : 0;
     const row=$('cashbackUseRow');
     if(row){
         if(cu && cashbackAvailable>0 && cartItems.length>0){
@@ -1026,13 +1026,13 @@ async function sendCartRequest(){
     const discountAmount=discountableAmount*(discountPercent/100);
     const afterDiscount=Math.max(0,total-discountAmount);
 
-    const cashbackAvailable=Number(user.cashback||0);
+    const cashbackAvailable=Number(user.user_metadata?.cashback||0);
     const cashbackUsed=(useCashback&&cashbackAvailable>0)?Math.min(cashbackAvailable,afterDiscount):0;
     const finalTotal=Math.max(0,afterDiscount-cashbackUsed);
 
     const embed={title:"🛒 طلب جديد من متجر MEN",color:0x4a7aff,fields:[
-        {name:"👤 العميل",value:user.name||'—',inline:true},
-        {name:"📱 الجوال",value:user.phone||'—',inline:true},
+        {name:"👤 العميل",value:user.user_metadata?.name||user.email||'—',inline:true},
+        {name:"📱 الجوال",value:user.user_metadata?.phone||'—',inline:true},
         {name:"📦 القطع",value:cartItems.reduce((s,p)=>s+p.quantity,0).toString(),inline:true},
         {name:"💰 الإجمالي",value:`${total.toFixed(2)} ر.س`,inline:true},
         ...(discountApplied&&discountPercent>0?[{name:"🎁 الخصم",value:`-${discountAmount.toFixed(2)} ر.س (${discountPercent}%)`,inline:true}]:[]),
@@ -1045,7 +1045,7 @@ async function sendCartRequest(){
     try{
         await fetch("https://discord.com/api/webhooks/1551181006957187132/bao_udMdzNVWgCktPc7DIHDL1tVD4BUZDmM0l7aDhyL-T8okYuJ0xQ2NpfQtnAuvsRFI",{
             method:"POST",headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({embeds:[embed],content:`🛒 طلب جديد من ${user.name}`})
+            body:JSON.stringify({embeds:[embed],content:`🛒 طلب جديد من ${user.user_metadata?.name||user.email}`})
         });
         showToast("تم إرسال طلبك بنجاح!","success");
 
@@ -1225,6 +1225,31 @@ function handleNavClick(target){
     showStorePage();
 }
 
+/* ════════ دالة مزامنة الواجهة بعد تسجيل الدخول ════════ */
+function syncAuthUI(user){
+    // قائمة الجوال
+    const mobileLogin=$('menMobileLogin');
+    const mobileAccount=$('menMobileAccount');
+    if(mobileLogin) mobileLogin.style.display = user ? 'none' : 'flex';
+    if(mobileAccount) mobileAccount.style.display = user ? 'flex' : 'none';
+
+    // الهيدر (ديسكتوب)
+    const loginBtn = $('menLoginBtn');
+    const avatar   = $('menHeaderAvatar');
+    if(user){
+        if(loginBtn) loginBtn.style.display = 'none';
+        if(avatar){
+            const pic = user.user_metadata?.avatar_url
+                     || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.email||'MEN')}&background=021ca4&color=fff&bold=true`;
+            avatar.src = pic;
+            avatar.style.display = 'block';
+        }
+    }else{
+        if(loginBtn) loginBtn.style.display = 'inline-flex';
+        if(avatar) avatar.style.display = 'none';
+    }
+}
+
 function bindAuthButtons(){
     const loginBtn=$('menLoginBtn');
     const mobileLogin=$('menMobileLogin');
@@ -1232,14 +1257,6 @@ function bindAuthButtons(){
     if(loginBtn) loginBtn.addEventListener('click', () => window.MEN_AUTH?.open('login'));
     if(mobileLogin) mobileLogin.addEventListener('click', () => {closeMobileMenu();window.MEN_AUTH?.open('login');});
     if(mobileAccount) mobileAccount.addEventListener('click', () => {closeMobileMenu();window.MEN_AUTH?.openAccount();});
-}
-
-function syncMobileAuthUI(user){
-    const mobileLogin=$('menMobileLogin');
-    const mobileAccount=$('menMobileAccount');
-    if(!mobileLogin||!mobileAccount)return;
-    if(user){mobileLogin.style.display='none';mobileAccount.style.display='flex';}
-    else{mobileLogin.style.display='flex';mobileAccount.style.display='none';}
 }
 
 async function init(){
@@ -1323,9 +1340,10 @@ async function init(){
 
     bindAuthButtons();
 
+    // (auth.js يقوم بالاستماع تلقائياً — لكن نتحقق هنا أيضاً كضمان)
     if(window.MEN_SUPABASE && window.MEN_SUPABASE.auth){
-        window.MEN_SUPABASE.auth.onAuthStateChange((event, s) => {
-            syncMobileAuthUI(s?.user || null);
+        window.MEN_SUPABASE.auth.getSession().then(({data})=>{
+            syncAuthUI(data?.session?.user || null);
         });
     }
 
@@ -1345,9 +1363,12 @@ function handleInitialHash(){
     else if(STATIC_PAGES.includes(h.replace('#','')))showStaticPage(h.replace('#',''));
 }
 document.addEventListener('DOMContentLoaded',init);
+
+// تصدير الدالة لاستخدامها من auth.js
+window.syncAuthUI = syncAuthUI;
 </script>
 
-<!-- ═══════ Supabase SDK (اختياري) ═══════ -->
+<!-- ═══════ Supabase SDK ═══════ -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <!-- ═══════ Auth Script ═══════ -->
