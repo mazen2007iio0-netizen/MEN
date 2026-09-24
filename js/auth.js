@@ -6,7 +6,7 @@
 
   // ════════ 1) إعدادات Supabase ════════
   const SUPABASE_URL      = 'https://xoqwzluyxynqpdpmidts.supabase.co';   // ← ضع رابط مشروعك
-  const SUPABASE_ANON_KEY = '';          // ← ضع الـ anon key
+  const SUPABASE_ANON_KEY = 'sb_publishable_rQvBPw08M9Q3bWTDfFseTQ_6SU3aN96';          // ← ضع الـ anon key
 
   // ════════ 2) إنشاء العميل ════════
   let sb = null;
