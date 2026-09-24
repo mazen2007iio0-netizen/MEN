@@ -1,52 +1,99 @@
 /* ============================================================
-   MEN Store — Auth + Account System (js/auth.js)
+   MEN Store — Auth + Account System (js/auth.js) — v2
    ============================================================ */
 (function () {
   'use strict';
 
-  // ════════ 1) إعدادات Supabase ════════
-  const SUPABASE_URL      = 'https://xoqwzluyxynqpdpmidts.supabase.co';   // ← ضع رابط مشروعك
-  const SUPABASE_ANON_KEY = 'sb_publishable_rQvBPw08M9Q3bWTDfFseTQ_6SU3aN96';          // ← ضع الـ anon key
+  // ═══════════════════════════════════════════════════════════
+  // ⚠️⚠️⚠️  ضع مفاتيح مشروعك هنا  ⚠️⚠️⚠️
+  // ═══════════════════════════════════════════════════════════
+  //   1) ادخل: https://supabase.com/dashboard
+  //   2) اختر مشروعك → Settings → API
+  //   3) انسخ "Project URL"     → الصقه في SUPABASE_URL
+  //   4) انسخ "anon public"     → الصقه في SUPABASE_ANON_KEY
+  // ═══════════════════════════════════════════════════════════
 
-  // ════════ 2) إنشاء العميل ════════
-  let sb = null;
-  if (window.supabase && window.supabase.createClient) {
-    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        storageKey: 'men-auth-token',
-        storage: window.localStorage,
-        flowType: 'pkce'
-      }
-    });
-    window.MEN_SUPABASE = sb;
-  } else {
-    console.error('[MEN_AUTH] Supabase SDK غير محمّل!');
+  const SUPABASE_URL      = 'https://xoqwzluyxynqpdpmidts.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_rQvBPw08M9Q3bWTDfFseTQ_6SU3aN96';
+
+  // ═══════════════════════════════════════════════════════════
+
+  // ═══ فحص المفاتيح ═══
+  const isPlaceholder = (val) =>
+      !val
+   || val.includes('YOUR-PROJECT')
+   || val.includes('YOUR-ANON-KEY')
+   || val.includes('...')
+   || !val.startsWith('http') && !val.startsWith('eyJ');
+
+  const credsReady = SUPABASE_URL.startsWith('https://')
+                  && SUPABASE_URL.includes('.supabase.co')
+                  && SUPABASE_ANON_KEY.startsWith('eyJ')
+                  && SUPABASE_ANON_KEY.length > 100;
+
+  if (!credsReady) {
+    console.error(
+      '%c⛔ MEN AUTH — لم يتم إعداد مفاتيح Supabase!',
+      'background:#d90429;color:#fff;padding:6px 12px;border-radius:6px;font-weight:bold;font-size:14px'
+    );
+    console.error('رجاءً افتح js/auth.js وبدّل السطرين:');
+    console.error("  const SUPABASE_URL      = '...' ← رابط مشروعك");
+    console.error("  const SUPABASE_ANON_KEY = '...' ← المفتاح العام");
+    console.error('من: Supabase Dashboard → Settings → API');
+    // نستمر لكن بوضع معطّل — يظهر تنبيه في الواجهة
+    window.MEN_AUTH = {
+      CASHBACK_RATE: 0.02,
+      open: () => alert('⚠️ لم يتم إعداد Supabase بعد.\nافتح js/auth.js وضع مفاتيح مشروعك.'),
+      openAccount: () => alert('⚠️ لم يتم إعداد Supabase بعد.'),
+      logout: () => {},
+      getCurrentUser: () => null,
+      addCashback: async () => {},
+      deductCashback: async () => {},
+      addOrder: async () => {}
+    };
+    return;
   }
 
-  // ════════ 3) ثوابت ════════
+  // ═══ إنشاء العميل ═══
+  if (!window.supabase || !window.supabase.createClient) {
+    console.error('[MEN_AUTH] ⛔ Supabase SDK غير محمّل! تأكد من وجود <script src=".../supabase-js@2"> قبل auth.js');
+    return;
+  }
+
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      storageKey: 'men-auth-token',
+      storage: window.localStorage,
+      flowType: 'pkce'
+    }
+  });
+  window.MEN_SUPABASE = sb;
+
+  console.log('%c✅ MEN AUTH — متصل بـ Supabase',
+    'background:#4caf50;color:#fff;padding:4px 10px;border-radius:4px;font-weight:bold');
+  console.log('   URL:', SUPABASE_URL);
+
   const CASHBACK_RATE = 0.02;
   let currentUser = null;
   let authMode = 'login';
-
   const $ = id => document.getElementById(id);
 
-  // ════════ 4) الأفاتار ════════
+  // ═══ الأفاتار ═══
   function avatarFor(user) {
     return user?.user_metadata?.avatar_url
-        || user?.user_metadata?.picture
         || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.email || 'MEN')}&background=021ca4&color=fff&bold=true`;
   }
 
-  // ════════ 5) مزامنة الواجهة ════════
+  // ═══ مزامنة الواجهة ═══
   function syncUI(user) {
     currentUser = user;
 
-    // الهيدر
     const loginBtn = $('menLoginBtn');
     const avatar   = $('menHeaderAvatar');
+
     if (user) {
       if (loginBtn) loginBtn.style.display = 'none';
       if (avatar) { avatar.src = avatarFor(user); avatar.style.display = 'block'; }
@@ -55,17 +102,17 @@
       if (avatar) avatar.style.display = 'none';
     }
 
-    // قائمة الجوال
     const mLogin   = $('menMobileLogin');
     const mAccount = $('menMobileAccount');
     if (mLogin)   mLogin.style.display   = user ? 'none' : 'flex';
     if (mAccount) mAccount.style.display = user ? 'flex' : 'none';
 
-    // تحديث السلة
     if (typeof window.updateCartUI === 'function') window.updateCartUI();
+
+    console.log(user ? '🔐 مسجل دخول: ' + user.email : '🔓 غير مسجل');
   }
 
-  // ════════ 6) بناء المودالات ════════
+  // ═══ بناء المودالات ═══
   function injectModals() {
     if ($('menAuthModal')) return;
     const wrap = document.createElement('div');
@@ -74,14 +121,14 @@
         <div class="modal-box auth-modal-box">
           <div class="modal-close" data-close-auth><i class="fas fa-times"></i></div>
           <h3><i class="fas fa-fingerprint"></i> <span id="menAuthTitle">تسجيل الدخول</span></h3>
-          <p class="auth-subtitle" id="menAuthSubtitle">سجل الان و اكسب كاش باك 2%</p>
+          <p class="auth-subtitle" id="menAuthSubtitle">أدخل بياناتك للمتابعة</p>
           <div class="auth-input-group">
             <i class="fas fa-envelope"></i>
-            <input type="email" id="menAuthEmail" placeholder="البريد الإلكتروني" autocomplete="email">
+            <input type="email" id="menAuthEmail" placeholder="البريد الإلكتروني" autocomplete="email" dir="ltr">
           </div>
           <div class="auth-input-group">
             <i class="fas fa-lock"></i>
-            <input type="password" id="menAuthPassword" placeholder="كلمة المرور" autocomplete="current-password">
+            <input type="password" id="menAuthPassword" placeholder="كلمة المرور" autocomplete="current-password" dir="ltr">
           </div>
           <div class="auth-input-group" id="menNameGroup" style="display:none;">
             <i class="fas fa-user"></i>
@@ -89,7 +136,7 @@
           </div>
           <div class="auth-input-group" id="menPhoneGroup" style="display:none;">
             <i class="fas fa-phone"></i>
-            <input type="tel" id="menAuthPhone" placeholder="رقم الجوال" autocomplete="tel">
+            <input type="tel" id="menAuthPhone" placeholder="رقم الجوال" autocomplete="tel" dir="ltr">
           </div>
           <div class="auth-error" id="menAuthError"></div>
           <button class="auth-submit-btn" id="menAuthSubmit" type="button">
@@ -157,11 +204,10 @@
     });
     $('menAuthSubmit').addEventListener('click', handleSubmit);
     $('menAuthPassword').addEventListener('keydown', e => { if (e.key === 'Enter') handleSubmit(); });
+    $('menAuthEmail').addEventListener('keydown', e => { if (e.key === 'Enter') $('menAuthPassword').focus(); });
 
     $('menAccountLogout').addEventListener('click', logout);
-    $('menAccountShop').addEventListener('click', () => {
-      $('menAccountModal').classList.remove('active');
-    });
+    $('menAccountShop').addEventListener('click', () => $('menAccountModal').classList.remove('active'));
 
     const av = $('menHeaderAvatar');
     if (av) av.addEventListener('click', openAccount);
@@ -179,7 +225,6 @@
     $('menAuthError').textContent = '';
   }
 
-  // ════════ 7) فتح المودالات ════════
   function open(mode) {
     injectModals();
     authMode = mode === 'signup' ? 'signup' : 'login';
@@ -193,10 +238,8 @@
     injectModals();
     fillAccountUI(currentUser);
     $('menAccountModal').classList.add('active');
-    if (sb) {
-      const { data } = await sb.auth.getUser();
-      if (data?.user) fillAccountUI(data.user);
-    }
+    const { data } = await sb.auth.getUser();
+    if (data?.user) { currentUser = data.user; fillAccountUI(data.user); }
   }
 
   function fillAccountUI(user) {
@@ -206,81 +249,92 @@
     $('menAccountEmail').textContent = user.email || '—';
     $('menAccountPhone').textContent = meta.phone || '—';
     $('menAccountCashback').textContent = Number(meta.cashback || 0).toFixed(2);
-    $('menAccountOrders').textContent   = (meta.orders || []).length;
+    $('menAccountOrders').textContent   = Array.isArray(meta.orders) ? meta.orders.length : 0;
   }
 
-  // ════════ 8) تسجيل الدخول / التسجيل ════════
+  // ═══ تسجيل الدخول / التسجيل ═══
   async function handleSubmit() {
-    if (!sb) return showErr('خدمة المصادقة غير مفعّلة');
-
-    const email    = $('menAuthEmail').value.trim();
+    const email    = $('menAuthEmail').value.trim().toLowerCase();
     const password = $('menAuthPassword').value;
     const name     = $('menAuthName').value.trim();
     const phone    = $('menAuthPhone').value.trim();
 
+    showErr('');
+
     if (!email || !password) return showErr('الرجاء إدخال البريد وكلمة المرور');
+    if (!email.includes('@')) return showErr('صيغة البريد الإلكتروني غير صحيحة');
     if (authMode === 'signup' && password.length < 6) return showErr('كلمة المرور 6 أحرف على الأقل');
 
     const btn = $('menAuthSubmit');
     btn.disabled = true;
+    const origText = $('menAuthSubmitText').textContent;
+    $('menAuthSubmitText').textContent = 'جاري...';
 
     try {
       if (authMode === 'login') {
+        console.log('🔐 محاولة دخول:', email);
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        console.log('✅ تسجيل دخول ناجح:', data.user?.email);
+
+        if (error) {
+          console.error('❌ فشل الدخول:', error);
+          const m = (error.message || '').toLowerCase();
+
+          if (m.includes('email not confirmed'))
+            showErr('⚠️ بريدك غير مؤكد. افتح بريدك واضغط رابط التأكيد.');
+          else if (m.includes('invalid login'))
+            showErr('❌ البريد أو كلمة المرور خطأ. تأكد جيداً أو استخدم "نسيت كلمة المرور".');
+          else if (m.includes('too many requests'))
+            showErr('⏳ محاولات كثيرة. انتظر دقيقة.');
+          else
+            showErr(error.message);
+          return;
+        }
+
+        console.log('✅ نجح الدخول:', data.user?.email);
+
       } else {
+        console.log('📝 محاولة تسجيل:', email);
         const { data, error } = await sb.auth.signUp({
           email, password,
           options: { data: { name, phone, cashback: 0, orders: [] } }
         });
         if (error) throw error;
+
         if (!data.session) {
-          showErr('تم إنشاء الحساب! تحقق من بريدك لتأكيد التسجيل.');
-          btn.disabled = false;
+          showErr('📧 تم إنشاء الحساب! افتح بريدك واضغط رابط التأكيد ثم سجّل دخول.');
           return;
         }
-        console.log('✅ تم إنشاء الحساب:', data.user?.email);
+        console.log('✅ تم التسجيل والدخول:', data.user?.email);
       }
 
       $('menAuthModal').classList.remove('active');
       if (typeof window.showToast === 'function')
-        window.showToast(authMode === 'login' ? 'مرحباً بك! 👋' : 'تم إنشاء حسابك بنجاح 🎉', 'success');
+        window.showToast(authMode === 'login' ? 'مرحباً بك! 👋' : 'تم إنشاء حسابك 🎉', 'success');
 
     } catch (err) {
-      console.error('[MEN_AUTH] Error:', err);
-      const msg = (err.message || '').toLowerCase();
-      if (msg.includes('invalid login'))          showErr('البريد أو كلمة المرور غير صحيحة');
-      else if (msg.includes('already registered')) showErr('البريد مسجل بالفعل، جرّب تسجيل الدخول');
-      else if (msg.includes('password'))           showErr('كلمة المرور ضعيفة');
-      else                                          showErr(err.message || 'حدث خطأ، حاول مجدداً');
+      console.error('[MEN_AUTH]', err);
+      showErr(err.message || 'حدث خطأ');
     } finally {
       btn.disabled = false;
+      $('menAuthSubmitText').textContent = origText;
     }
   }
 
-  function showErr(msg) {
-    const el = $('menAuthError');
-    if (el) el.textContent = msg;
-  }
+  function showErr(msg) { const el = $('menAuthError'); if (el) el.textContent = msg; }
 
-  // ════════ 9) تسجيل الخروج ════════
   async function logout() {
-    if (!sb) return;
     await sb.auth.signOut();
     $('menAccountModal').classList.remove('active');
-    if (typeof window.showToast === 'function')
-      window.showToast('تم تسجيل الخروج', 'info');
+    if (typeof window.showToast === 'function') window.showToast('تم تسجيل الخروج', 'info');
   }
 
-  // ════════ 10) الواجهة العامة ════════
+  // ═══ API عام ═══
   window.MEN_AUTH = {
     CASHBACK_RATE,
     open,
     openAccount,
     logout,
     getCurrentUser: () => currentUser,
-
     addCashback: async (amount) => {
       if (!currentUser || amount <= 0) return;
       const cashback = Number(currentUser.user_metadata?.cashback || 0) + Number(amount);
@@ -299,19 +353,26 @@
     }
   };
 
-  // ════════ 11) الاسترجاع عند التحميل ════════
+  // ═══ بدء التشغيل ═══
   async function bootstrap() {
     injectModals();
-    if (!sb) { syncUI(null); return; }
 
+    // ═══ استرجاع الجلسة المحفوظة ═══
     const { data: { session }, error } = await sb.auth.getSession();
     if (error) console.warn('[MEN_AUTH] getSession:', error.message);
-    syncUI(session?.user || null);
-    console.log(session ? '🔐 الجلسة محفوظة: ' + session.user.email : '🔓 لا جلسة محفوظة');
 
+    syncUI(session?.user || null);
+
+    // ═══ الاستماع للتغييرات ═══
     sb.auth.onAuthStateChange((event, session) => {
-      console.log('[MEN_AUTH] event:', event);
+      console.log('[MEN_AUTH] حدث:', event);
       syncUI(session?.user || null);
+      if (event === 'SIGNED_OUT') {
+        // امسح أي بيانات قديمة
+        Object.keys(localStorage)
+          .filter(k => k.startsWith('sb-') && k.includes('auth'))
+          .forEach(k => { /* نترك Supabase يتصرف بنفسه */ });
+      }
     });
   }
 
@@ -320,4 +381,20 @@
   } else {
     bootstrap();
   }
+
+  // ═══ أداة تشخيص — اكتب في Console: MEN_DEBUG()
+  window.MEN_DEBUG = async () => {
+    console.log('%c═══ MEN AUTH DEBUG ═══', 'font-weight:bold;color:#4a7aff;font-size:14px');
+    console.log('URL:', SUPABASE_URL);
+    console.log('Key starts:', SUPABASE_ANON_KEY.substring(0, 20) + '...');
+    const { data } = await sb.auth.getSession();
+    console.log('Session:', data.session);
+    console.log('User:', data.session?.user);
+  };
+  window.MEN_TEST_LOGIN = async (email, password) => {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    console.log('DATA:', data);
+    console.log('ERROR:', error);
+    return { data, error };
+  };
 })();
