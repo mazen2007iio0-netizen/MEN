@@ -530,9 +530,9 @@
     $('menAccCoverEmail').textContent = user.email || '—';
 
     // Member level
-    let level = 'برونزي', lvlIcon = '🥉';
-    if (orders.length >= 20 || totalSpent >= 1000) { level = 'ذهبي'; lvlIcon = '🥇'; }
-    else if (orders.length >= 5 || totalSpent >= 300) { level = 'فضي'; lvlIcon = '🥈'; }
+    let level = 'برونزي', lvlIcon = '';
+    if (orders.length >= 20 || totalSpent >= 1000) { level = 'ذهبي'; lvlIcon = ''; }
+    else if (orders.length >= 5 || totalSpent >= 300) { level = 'فضي'; lvlIcon = ''; }
     $('menAccMemberLevel').textContent = `${lvlIcon} ${level}`;
 
     // Stats
@@ -614,7 +614,7 @@
       currentUser = data.user;
       fillAccountPage(data.user);
       syncUI(data.user);
-      if (window.showToast) window.showToast('✅ تم حفظ التغييرات', 'success');
+      if (window.showToast) window.showToast(' تم حفظ التغييرات', 'success');
     } catch (err) {
       if (window.showToast) window.showToast('فشل الحفظ: ' + err.message, 'error');
     } finally {
@@ -624,7 +624,7 @@
   }
 
   async function deleteAccount() {
-    if (!confirm('⚠️ هل أنت متأكد من حذف حسابك نهائياً؟\nهذا الإجراء لا يمكن التراجع عنه.')) return;
+    if (!confirm(' هل أنت متأكد من حذف حسابك نهائياً؟\nهذا الإجراء لا يمكن التراجع عنه.')) return;
     if (!confirm('تأكيد أخير: سيتم فقدان كل بياناتك.')) return;
     if (window.showToast) window.showToast('تواصل مع الدعم لحذف الحساب: clan.men.ts@gmail.com', 'info');
   }
@@ -632,12 +632,12 @@
   function shareAccount() {
     const user = currentUser;
     if (!user) return;
-    const text = `🎮 أنا عضو في MEN Store!\nانضم إلينا واحصل على كاش باك 2%\n${location.origin}`;
+    const text = `أنا عضو في MEN Store!\nانضم إلينا واحصل على كاش باك 2%\n${location.origin}`;
     if (navigator.share) {
       navigator.share({ title: 'MEN Store', text, url: location.origin }).catch(() => {});
     } else {
       navigator.clipboard.writeText(text).then(() => {
-        if (window.showToast) window.showToast('📋 تم نسخ الرابط', 'success');
+        if (window.showToast) window.showToast(' تم نسخ الرابط', 'success');
       });
     }
   }
@@ -669,7 +669,7 @@
     card.style.animation = 'menCardIn .55s cubic-bezier(.16,1,.3,1)';
     $('menAuthBadgeIcon').className = login ? 'fas fa-fingerprint' : 'fas fa-user-plus';
     $('menAuthTitle').textContent = login ? 'تسجيل الدخول' : 'إنشاء حساب جديد';
-    $('menAuthSubtitle').textContent = login ? 'أهلاً بعودتك 👋' : 'انضم إلينا واحصل على كاش باك 2% 🎁';
+    $('menAuthSubtitle').textContent = login ? 'أهلاً بعودتك 👋' : 'انضم إلينا واحصل على كاش باك 2% ';
     $('menSubmitText').textContent = login ? 'دخول' : 'إنشاء الحساب';
     $('menSwitchText').textContent = login ? 'ليس لديك حساب؟' : 'لديك حساب بالفعل؟';
     $('menSwitchBtn').textContent = login ? 'إنشاء حساب جديد' : 'سجّل دخولك';
@@ -753,17 +753,17 @@
           options: { data: { name, phone, cashback: 0, orders: [] } }
         });
         if (error) throw error;
-        if (!data.session) { showError('📧 تم التسجيل! افتح بريدك وأكّد الحساب.'); return; }
-        await showSuccessThen('تم إنشاء حسابك 🎉');
+        if (!data.session) { showError(' تم التسجيل! افتح بريدك وأكّد الحساب.'); return; }
+        await showSuccessThen('تم إنشاء حسابك');
         launchConfetti();
       }
     } catch (err) {
       console.error('[AUTH ERROR]', err);
       const m = (err.message || '').toLowerCase();
-      if (m.includes('email not confirmed')) showError('⚠️ بريدك غير مؤكد — افتح بريدك');
-      else if (m.includes('invalid login')) showError('❌ البريد أو كلمة المرور خطأ');
-      else if (m.includes('already registered')) showError('📧 البريد مسجل — جرّب الدخول');
-      else if (m.includes('too many')) showError('⏳ محاولات كثيرة — انتظر دقيقة');
+      if (m.includes('email not confirmed')) showError(' بريدك غير مؤكد — افتح بريدك');
+      else if (m.includes('invalid login')) showError(' البريد أو كلمة المرور خطأ');
+      else if (m.includes('already registered')) showError(' البريد مسجل — جرّب الدخول');
+      else if (m.includes('too many')) showError(' محاولات كثيرة — انتظر دقيقة');
       else showError(err.message || 'حدث خطأ');
     } finally {
       btn.disabled = false;
@@ -785,7 +785,7 @@
     try {
       const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
       if (error) throw error;
-      if (window.showToast) window.showToast('📧 أرسلنا رابط الاستعادة', 'success');
+      if (window.showToast) window.showToast(' أرسلنا رابط الاستعادة', 'success');
       clearError();
     } catch (err) { showError(err.message || 'فشل الإرسال'); }
   }
@@ -870,7 +870,7 @@
       setTimeout(() => { if (currentUser) openAccount(); }, 500);
     }
 
-    console.log('%c🔐 Auth جاهز', 'color:#4a7aff;font-weight:bold');
+    console.log('%c Auth جاهز', 'color:#4a7aff;font-weight:bold');
   }
 
   if (document.readyState === 'loading') {
