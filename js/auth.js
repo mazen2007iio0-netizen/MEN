@@ -382,11 +382,11 @@
           <div class="men-showcase">
             <div class="men-showcase-top">
               <div class="men-logo-row">
-                <div class="men-logo-icon"><i class="fas fa-gamepad"></i></div>
-                <div class="men-logo-text">
-                  <div class="main">MEN Store</div>
-                  <div class="sub">Premium Gaming</div>
-                </div>
+                <img 
+                  src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" 
+                  alt="MEN Store" 
+                  style="height:56px;width:auto;object-fit:contain;border-radius:12px;filter:drop-shadow(0 8px 20px rgba(74,122,255,.4))"
+                >
               </div>
             </div>
 
