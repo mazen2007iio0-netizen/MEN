@@ -568,7 +568,7 @@
 
     wrap.querySelectorAll('[data-social]').forEach(b => {
       b.addEventListener('click', () => {
-        if (window.showToast) window.showToast('🔜 Google قيد التطوير', 'info');
+        if (window.showToast) window.showToast(' Google قيد التطوير', 'info');
       });
     });
   }
@@ -585,7 +585,7 @@
     document.querySelectorAll('[data-tab]').forEach(b =>
       b.classList.toggle('active', b.dataset.tab === authMode));
 
-    $('menHeadTitle').textContent = login ? 'أهلاً بعودتك 👋' : 'انضم إلينا 🎉';
+    $('menHeadTitle').textContent = login ? 'أهلاً بعودتك 👋' : 'انضم إلينا';
     $('menHeadSub').textContent = login
       ? 'سجّل دخولك للمتابعة والاستمتاع بالعروض الحصرية'
       : 'أنشئ حسابك واحصل على كاش باك 2% على كل طلب';
@@ -675,7 +675,7 @@
       if (authMode === 'login') {
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        console.log('✅ دخول:', data.user?.email);
+        console.log(' دخول:', data.user?.email);
         await showSuccess('مرحباً بك! 👋');
         launchConfetti();
       } else {
@@ -685,26 +685,26 @@
         });
         if (error) throw error;
         if (!data.session) {
-          showError('📧 تم إنشاء حسابك! افتح بريدك واضغط رابط التأكيد ثم سجّل الدخول.');
+          showError(' تم إنشاء حسابك! افتح بريدك واضغط رابط التأكيد ثم سجّل الدخول.');
           return;
         }
-        console.log('✅ حساب جديد:', data.user?.email);
-        await showSuccess('تم إنشاء حسابك 🎉');
+        console.log(' حساب جديد:', data.user?.email);
+        await showSuccess('تم إنشاء حسابك');
         launchConfetti();
       }
     } catch (err) {
       console.error('[AUTH ERROR]', err);
       const m = (err.message || '').toLowerCase();
       if (m.includes('email not confirmed'))
-        showError('⚠️ بريدك غير مؤكد — افتح بريدك واضغط رابط التأكيد');
+        showError(' بريدك غير مؤكد — افتح بريدك واضغط رابط التأكيد');
       else if (m.includes('invalid login'))
-        showError('❌ البريد أو كلمة المرور غير صحيحة');
+        showError(' البريد أو كلمة المرور غير صحيحة');
       else if (m.includes('already registered') || m.includes('already been registered'))
-        showError('📧 البريد مسجل بالفعل — انتقل لتسجيل الدخول');
+        showError(' البريد مسجل بالفعل — انتقل لتسجيل الدخول');
       else if (m.includes('password'))
-        showError('🔒 كلمة المرور ضعيفة');
+        showError(' كلمة المرور ضعيفة');
       else if (m.includes('too many'))
-        showError('⏳ محاولات كثيرة — انتظر دقيقة');
+        showError(' محاولات كثيرة — انتظر دقيقة');
       else
         showError(err.message || 'حدث خطأ غير متوقع');
     } finally {
@@ -738,7 +738,7 @@
         redirectTo: location.origin + location.pathname
       });
       if (error) throw error;
-      if (window.showToast) window.showToast('📧 أرسلنا رابط استعادة كلمة المرور', 'success');
+      if (window.showToast) window.showToast('أرسلنا رابط استعادة كلمة المرور', 'success');
       clearError();
     } catch (err) {
       showError(err.message || 'فشل الإرسال');
@@ -896,9 +896,9 @@
     $('menAccCoverName').textContent = name;
     $('menAccCoverEmail').textContent = user.email || '—';
 
-    let level = 'برونزي', lvlIcon = '🥉';
-    if (orders.length >= 20 || totalSpent >= 1000) { level = 'ذهبي'; lvlIcon = '🥇'; }
-    else if (orders.length >= 5 || totalSpent >= 300) { level = 'فضي'; lvlIcon = '🥈'; }
+    let level = 'برونزي', lvlIcon = '';
+    if (orders.length >= 20 || totalSpent >= 1000) { level = 'ذهبي'; lvlIcon = ''; }
+    else if (orders.length >= 5 || totalSpent >= 300) { level = 'فضي'; lvlIcon = ''; }
     $('menAccMemberLevel').textContent = `${lvlIcon} ${level}`;
 
     $('menAccStatOrders').textContent = orders.length;
@@ -967,7 +967,7 @@
       currentUser = data.user;
       fillAccountPage(data.user);
       syncUI(data.user);
-      if (window.showToast) window.showToast('✅ تم حفظ التغييرات', 'success');
+      if (window.showToast) window.showToast(' تم حفظ التغييرات', 'success');
     } catch (err) {
       if (window.showToast) window.showToast('فشل الحفظ: ' + err.message, 'error');
     } finally {
@@ -977,7 +977,7 @@
   }
 
   function deleteAccount() {
-    if (!confirm('⚠️ هل أنت متأكد من حذف حسابك نهائياً؟\nهذا الإجراء لا يمكن التراجع عنه.')) return;
+    if (!confirm(' هل أنت متأكد من حذف حسابك نهائياً؟\nهذا الإجراء لا يمكن التراجع عنه.')) return;
     if (window.showToast) window.showToast('تواصل مع الدعم: clan.men.ts@gmail.com', 'info');
   }
 
@@ -988,7 +988,7 @@
       navigator.share({ title: 'MEN Store', text, url: location.origin }).catch(() => {});
     } else {
       navigator.clipboard.writeText(text).then(() => {
-        if (window.showToast) window.showToast('📋 تم نسخ الرابط', 'success');
+        if (window.showToast) window.showToast(' تم نسخ الرابط', 'success');
       });
     }
   }
@@ -1023,7 +1023,7 @@
   async function logout() {
     await sb.auth.signOut();
     closeAccount();
-    if (window.showToast) window.showToast('تم تسجيل الخروج 👋', 'info');
+    if (window.showToast) window.showToast('تم تسجيل الخروج', 'info');
   }
 
   function syncUI(user) {
