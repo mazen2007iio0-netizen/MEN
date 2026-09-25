@@ -385,7 +385,7 @@
                 <img 
                   src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" 
                   alt="MEN Store" 
-                  style="height:56px;width:auto;object-fit:contain;border-radius:12px;filter:drop-shadow(0 8px 20px rgba(74,122,255,.4))"
+                  style="height:70px;width:auto;object-fit:contain;filter:brightness(0) invert(1) drop-shadow(0 8px 24px rgba(74,122,255,.5))"
                 >
               </div>
             </div>
