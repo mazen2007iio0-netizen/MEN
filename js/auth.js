@@ -1,5 +1,5 @@
 /* ============================================================
-   ✨ MEN Store — Auth v6 (Full Screen)
+   ✨ MEN Store — Auth v6 (Full Screen) — Phone + Email
    ============================================================ */
 (function () {
   'use strict';
@@ -29,25 +29,43 @@
   console.log('%c✨ MEN AUTH v6', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
   const CASHBACK_RATE = 0.02;
+  const PHONE_DOMAIN  = 'men-store.local'; // نطاق داخلي للجوالات
   let currentUser = null;
   let authMode = 'login';
   let rememberMe = true;
   const $ = id => document.getElementById(id);
 
+  // ═══ Helper: تحويل الجوال/البريد إلى بريد Supabase ═══
+  function normalizeIdentifier(raw) {
+    const val = String(raw || '').trim();
+    if (!val) return null;
+    const isEmail = val.includes('@');
+    if (isEmail) {
+      const email = val.toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: 'صيغة البريد الإلكتروني غير صحيحة' };
+      return { type: 'email', display: email, authEmail: email };
+    }
+    // جوال
+    const digits = val.replace(/\D/g, '');
+    // دعم: 05XXXXXXXX | 9665XXXXXXXX | 5XXXXXXXX | أرقام دولية
+    if (!/^05\d{8}$/.test(digits) && !/^9665\d{8}$/.test(digits) && !/^5\d{8}$/.test(digits) && !/^\d{8,15}$/.test(digits)) {
+      return { error: 'رقم الجوال غير صحيح (مثال: 05xxxxxxxx)' };
+    }
+    return { type: 'phone', display: digits, authEmail: `${digits}@${PHONE_DOMAIN}` };
+  }
+
   // ═══════════════════════════════════════════════════════════
-  // 🎨 CSS — Full Screen
+  // 🎨 CSS
   // ═══════════════════════════════════════════════════════════
   function injectCSS() {
     if ($('menAuthStyles')) return;
     const s = document.createElement('style');
     s.id = 'menAuthStyles';
     s.textContent = `
-      /* ═══════════════ FULLSCREEN OVERLAY ═══════════════ */
       .men-screen{position:fixed;inset:0;z-index:9999;display:none;font-family:'Cairo','Outfit',sans-serif;background:#060812;overflow-y:auto;overflow-x:hidden}
       .men-screen.active{display:block;animation:menFadeIn .35s ease}
       @keyframes menFadeIn{from{opacity:0}to{opacity:1}}
 
-      /* ═══ Ambient Background ═══ */
       .men-screen-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:
         radial-gradient(ellipse at 15% 20%,rgba(2,28,164,.35) 0%,transparent 55%),
         radial-gradient(ellipse at 85% 80%,rgba(74,122,255,.25) 0%,transparent 50%),
@@ -59,7 +77,6 @@
         mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);
         -webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%)}
 
-      /* ═══ Floating Orbs ═══ */
       .men-orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:1;opacity:.55}
       .men-orb.o1{width:500px;height:500px;background:radial-gradient(circle,#4a7aff,transparent 70%);top:-150px;left:-150px;animation:menOrb1 15s ease-in-out infinite}
       .men-orb.o2{width:450px;height:450px;background:radial-gradient(circle,#f5b342,transparent 70%);bottom:-150px;right:-150px;animation:menOrb2 18s ease-in-out infinite}
@@ -67,19 +84,12 @@
       @keyframes menOrb1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(100px,80px) scale(1.2)}}
       @keyframes menOrb2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-80px,-60px) scale(1.15)}}
 
-      /* ═══════════════ LAYOUT ═══════════════ */
       .men-layout{position:relative;z-index:10;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:stretch}
 
-      /* ═══ LEFT PANEL (Brand Showcase) ═══ */
       .men-showcase{position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:60px 70px;background:linear-gradient(160deg,rgba(2,28,164,.35) 0%,rgba(6,8,18,.9) 100%);border-left:1px solid rgba(74,122,255,.08);overflow:hidden}
       .men-showcase::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(74,122,255,.25),transparent 55%);pointer-events:none}
       .men-showcase-top{position:relative;z-index:2}
       .men-logo-row{display:flex;align-items:center;gap:14px}
-      .men-logo-icon{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;box-shadow:0 15px 40px -10px rgba(74,122,255,.9),inset 0 1px 0 rgba(255,255,255,.2)}
-      .men-logo-text{line-height:1.1}
-      .men-logo-text .main{font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.5px}
-      .men-logo-text .sub{font-size:.7rem;color:#6a7290;letter-spacing:3px;text-transform:uppercase;font-weight:700;margin-top:2px}
-
       .men-showcase-center{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center;padding:50px 0}
       .men-showcase-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.3);border-radius:60px;padding:8px 18px;font-size:.8rem;color:#6a9aff;font-weight:800;margin-bottom:24px;width:fit-content}
       .men-showcase-badge i{font-size:.85rem}
@@ -98,7 +108,6 @@
       .men-showcase-bottom .stat .n{color:#fff;font-size:1.5rem;font-weight:900;letter-spacing:-.5px}
       .men-showcase-bottom .stat .l{color:#8a92b0;font-size:.75rem;font-weight:600;margin-top:2px}
 
-      /* ═══ RIGHT PANEL (Form) ═══ */
       .men-form-panel{position:relative;display:flex;flex-direction:column;padding:50px 60px;background:linear-gradient(180deg,rgba(6,8,18,.6),rgba(6,8,18,.95));backdrop-filter:blur(20px)}
       .men-panel-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:auto}
 
@@ -111,7 +120,6 @@
       .men-welcome h2{font-size:1.9rem;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:8px;line-height:1.2}
       .men-welcome p{color:#8a92b0;font-size:.92rem;font-weight:600;line-height:1.7}
 
-      /* ═══ TABS ═══ */
       .men-tabs{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:4px;background:rgba(0,0,0,.35);border:1px solid rgba(74,122,255,.1);border-radius:16px;padding:4px;margin-bottom:26px}
       .men-tab{position:relative;padding:13px 16px;border-radius:12px;background:transparent;border:none;color:#8a92b0;font-family:'Cairo',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);z-index:2;display:flex;align-items:center;justify-content:center;gap:8px}
       .men-tab:hover:not(.active){color:#c3cbe4}
@@ -119,7 +127,6 @@
       .men-tabs-indicator{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);background:linear-gradient(135deg,#021ca4,#4a7aff);border-radius:12px;box-shadow:0 6px 18px -4px rgba(74,122,255,.7);transition:transform .4s cubic-bezier(.34,1.4,.64,1);z-index:1}
       .men-tabs[data-mode="signup"] .men-tabs-indicator{transform:translateX(calc(100% + 4px))}
 
-      /* ═══ FORM ═══ */
       .men-form{display:flex;flex-direction:column;gap:16px}
       .men-row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
@@ -135,7 +142,9 @@
       .men-input-wrap .men-eye{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#5a607a;font-size:.9rem;cursor:pointer;padding:8px;border-radius:50%;background:transparent;border:none;transition:all .3s}
       .men-input-wrap .men-eye:hover{color:#4a7aff;background:rgba(74,122,255,.1)}
 
-      /* ═══ STRENGTH ═══ */
+      .men-hint{font-size:.72rem;color:#6a7290;font-weight:600;margin-top:7px;padding-right:4px;display:flex;align-items:center;gap:6px}
+      .men-hint i{color:#4a7aff;font-size:.75rem}
+
       .men-strength{height:0;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);padding-right:4px}
       .men-strength.show{height:28px;margin-top:6px}
       .men-strength-row{display:flex;align-items:center;gap:10px}
@@ -152,7 +161,6 @@
       .men-strength.s3 .men-strength-label{color:#6a9aff}
       .men-strength.s4 .men-strength-label{color:#4caf50}
 
-      /* ═══ OPTIONS ═══ */
       .men-opts{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:2px;font-size:.84rem;flex-wrap:wrap}
       .men-remember{display:inline-flex;align-items:center;gap:9px;color:#8a92b0;font-weight:600;cursor:pointer;user-select:none;transition:color .3s}
       .men-remember:hover{color:#c3cbe4}
@@ -164,11 +172,9 @@
       .men-forgot{color:#6a9aff;font-weight:700;cursor:pointer;text-decoration:none;font-size:.84rem;transition:all .3s;white-space:nowrap}
       .men-forgot:hover{color:#4a7aff;text-shadow:0 0 16px rgba(74,122,255,.6)}
 
-      /* ═══ ERROR ═══ */
       .men-error{max-height:0;overflow:hidden;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.2);border-radius:12px;color:#ff8a8a;font-size:.84rem;font-weight:700;text-align:center;transition:all .35s cubic-bezier(.16,1,.3,1);display:flex;align-items:center;justify-content:center;gap:8px;padding:0 16px}
-      .men-error.show{max-height:70px;padding:12px 16px;margin-top:4px}
+      .men-error.show{max-height:80px;padding:12px 16px;margin-top:4px}
 
-      /* ═══ SUBMIT ═══ */
       .men-submit{position:relative;width:100%;height:56px;border:none;border-radius:14px;background:linear-gradient(135deg,#021ca4 0%,#4a7aff 100%);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);box-shadow:0 14px 34px -12px rgba(74,122,255,.8);display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:.3px;margin-top:6px}
       .men-submit::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#4a7aff,#021ca4);opacity:0;transition:opacity .35s}
       .men-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 22px 50px -12px rgba(74,122,255,1)}
@@ -181,33 +187,20 @@
       .men-submit.loading .men-btn-icon{display:none}
       @keyframes menSpin{to{transform:rotate(360deg)}}
 
-      /* ═══ TERMS ═══ */
       .men-terms{font-size:.75rem;color:#6a7290;text-align:center;line-height:1.7;margin-top:2px;font-weight:500}
       .men-terms a{color:#6a9aff;text-decoration:none;font-weight:700;cursor:pointer}
       .men-terms a:hover{color:#4a7aff;text-decoration:underline}
 
-      /* ═══ DIVIDER ═══ */
-      .men-divider{display:flex;align-items:center;gap:14px;margin:4px 0;color:#4a5070;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px}
-      .men-divider::before,.men-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(74,122,255,.2),transparent)}
-
-      /* ═══ SOCIAL ═══ */
-      .men-social-btn{width:100%;height:50px;border-radius:14px;background:rgba(74,122,255,.06);border:1.5px solid rgba(74,122,255,.12);color:#c3cbe4;font-family:'Cairo',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .3s cubic-bezier(.16,1,.3,1)}
-      .men-social-btn:hover{background:rgba(74,122,255,.12);border-color:rgba(74,122,255,.3);transform:translateY(-2px);color:#fff}
-      .men-social-btn i{font-size:1.05rem}
-
-      /* ═══ SUCCESS ═══ */
       .men-success-overlay{position:fixed;inset:0;background:linear-gradient(160deg,rgba(6,8,18,.99),rgba(2,4,12,1));z-index:10000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;opacity:0;transition:opacity .35s}
       .men-success-overlay.show{display:flex;opacity:1}
       .men-check-circle{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#4caf50,#66bb6a);display:flex;align-items:center;justify-content:center;color:#fff;font-size:44px;animation:menCheckPop .6s cubic-bezier(.34,1.56,.64,1);box-shadow:0 25px 60px -15px rgba(76,175,80,.8)}
       @keyframes menCheckPop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.15) rotate(8deg)}100%{transform:scale(1) rotate(0);opacity:1}}
       .men-success-overlay p{color:#4caf50;font-weight:800;font-size:1.3rem;letter-spacing:.3px}
 
-      /* ═══ CONFETTI ═══ */
       .men-confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10001}
       .men-confetti-piece{position:absolute;width:10px;height:10px;border-radius:2px;animation:menConfettiFall 3s linear forwards}
       @keyframes menConfettiFall{0%{transform:translateY(-100vh) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 
-      /* ═══════════════ RESPONSIVE ═══════════════ */
       @media (max-width:992px){
         .men-layout{grid-template-columns:1fr}
         .men-showcase{display:none}
@@ -224,7 +217,7 @@
         .men-tab{font-size:.84rem;padding:12px 12px}
       }
 
-      /* ═══════════════ ACCOUNT PAGE (نفس نسخة v4) ═══════════════ */
+      /* ═══ ACCOUNT PAGE ═══ */
       #menAccountPage{display:none}
       #menAccountPage.active{display:block;animation:menPageIn .5s cubic-bezier(.16,1,.3,1)}
       @keyframes menPageIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -344,7 +337,6 @@
     document.head.appendChild(s);
   }
 
-  // ═══ Confetti ═══
   function launchConfetti() {
     const colors = ['#4a7aff','#6a9aff','#f5b342','#4caf50','#fff','#021ca4'];
     const c = document.createElement('div');
@@ -371,7 +363,6 @@
     const wrap = document.createElement('div');
     wrap.innerHTML = `
       <div id="menAuthScreen" class="men-screen">
-        <!-- Background -->
         <div class="men-screen-bg"></div>
         <div class="men-orb o1"></div>
         <div class="men-orb o2"></div>
@@ -452,31 +443,23 @@
               </div>
 
               <form class="men-form" id="menForm" onsubmit="return false;">
-                <!-- Name + Phone (signup only) -->
-                <div class="men-row2" id="menRow2Fields" style="display:none">
-                  <div class="men-field">
-                    <label class="men-label" for="menAuthName">الاسم الكامل</label>
-                    <div class="men-input-wrap">
-                      <input type="text" id="menAuthName" placeholder="محمد أحمد" autocomplete="name" dir="rtl">
-                      <i class="fas fa-user men-icon"></i>
-                    </div>
-                  </div>
-                  <div class="men-field">
-                    <label class="men-label" for="menAuthPhone">رقم الجوال</label>
-                    <div class="men-input-wrap">
-                      <input type="tel" id="menAuthPhone" placeholder="05xxxxxxxx" autocomplete="tel" dir="ltr" style="text-align:right">
-                      <i class="fas fa-phone men-icon"></i>
-                    </div>
+                <!-- Name (signup only) -->
+                <div class="men-field" id="menNameField" style="display:none">
+                  <label class="men-label" for="menAuthName">الاسم الكامل</label>
+                  <div class="men-input-wrap">
+                    <input type="text" id="menAuthName" placeholder="محمد أحمد" autocomplete="name" dir="rtl">
+                    <i class="fas fa-user men-icon"></i>
                   </div>
                 </div>
 
-                <!-- Email -->
+                <!-- Identifier (phone or email) -->
                 <div class="men-field">
-                  <label class="men-label" for="menAuthEmail">البريد الإلكتروني</label>
+                  <label class="men-label" for="menAuthIdentifier" id="menIdentifierLabel">رقم الجوال أو البريد الإلكتروني</label>
                   <div class="men-input-wrap">
-                    <input type="email" id="menAuthEmail" placeholder="you@example.com" autocomplete="email" dir="ltr" style="text-align:right">
-                    <i class="fas fa-envelope men-icon"></i>
+                    <input type="text" id="menAuthIdentifier" placeholder="05xxxxxxxx  أو  you@example.com" autocomplete="username" dir="ltr" style="text-align:right">
+                    <i class="fas fa-user-circle men-icon"></i>
                   </div>
+                  <div class="men-hint"><i class="fas fa-circle-info"></i> يمكنك الدخول بالجوال أو بالبريد الإلكتروني</div>
                 </div>
 
                 <!-- Password -->
@@ -500,7 +483,7 @@
                   </div>
                 </div>
 
-                <!-- Options -->
+                <!-- Options (login only) -->
                 <div class="men-opts" id="menOptsRow">
                   <label class="men-remember">
                     <input type="checkbox" id="menRemember" checked>
@@ -510,7 +493,7 @@
                   <a class="men-forgot" id="menForgotBtn">نسيت كلمة المرور؟</a>
                 </div>
 
-                <!-- Terms -->
+                <!-- Terms (signup only) -->
                 <div class="men-terms" id="menTermsText" style="display:none">
                   بإنشاء حساب، أنت توافق على <a>الشروط والأحكام</a> و <a>سياسة الخصوصية</a>
                 </div>
@@ -528,16 +511,6 @@
                   <span id="menSubmitText">تسجيل الدخول</span>
                 </button>
               </form>
-
-              <!-- Divider -->
-              <div class="men-divider" id="menDivider" style="margin-top:20px">أو</div>
-
-              <!-- Social (Google only) -->
-              <div style="margin-top:20px">
-                <button class="men-social-btn" type="button" data-social="google">
-                  <i class="fab fa-google"></i> المتابعة باستخدام Google
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -551,29 +524,33 @@
     `;
     document.body.appendChild(wrap);
 
-    // Bind events
+    // ═══ Bind Events ═══
     wrap.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeAuth));
-    wrap.querySelectorAll('[data-tab]').forEach(btn =>
-      btn.addEventListener('click', () => switchMode(btn.dataset.tab)));
+    
+    // ⭐ ربط التبويبات
+    wrap.querySelectorAll('[data-tab]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchMode(btn.dataset.tab);
+      });
+    });
 
     $('menTogglePass').addEventListener('click', togglePassword);
     $('menAuthPassword').addEventListener('input', updateStrength);
     $('menAuthPassword').addEventListener('keydown', e => { if (e.key === 'Enter') handleSubmit(); });
-    $('menAuthEmail').addEventListener('keydown', e => { if (e.key === 'Enter') $('menAuthPassword').focus(); });
-    $('menAuthName').addEventListener('keydown', e => { if (e.key === 'Enter') $('menAuthPhone').focus(); });
-    $('menAuthPhone').addEventListener('keydown', e => { if (e.key === 'Enter') $('menAuthEmail').focus(); });
+    $('menAuthIdentifier').addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        if (authMode === 'signup' && $('menNameField').style.display === 'none') $('menAuthName').focus();
+        else $('menAuthPassword').focus();
+      }
+    });
+    $('menAuthName').addEventListener('keydown', e => { if (e.key === 'Enter') $('menAuthIdentifier').focus(); });
     $('menRemember').addEventListener('change', function () { rememberMe = this.checked; });
     $('menSubmit').addEventListener('click', handleSubmit);
     $('menForgotBtn').addEventListener('click', handleForgot);
-
-    wrap.querySelectorAll('[data-social]').forEach(b => {
-      b.addEventListener('click', () => {
-        if (window.showToast) window.showToast(' Google قيد التطوير', 'info');
-      });
-    });
   }
 
-  // ═══ Mode ═══
+  // ═══ Mode Switch ═══
   function switchMode(mode) {
     authMode = mode === 'signup' ? 'signup' : 'login';
     renderMode();
@@ -581,25 +558,36 @@
 
   function renderMode() {
     const login = authMode === 'login';
+    
+    // Tabs UI
     $('menTabs').dataset.mode = authMode;
     document.querySelectorAll('[data-tab]').forEach(b =>
       b.classList.toggle('active', b.dataset.tab === authMode));
 
+    // Head text
     $('menHeadTitle').textContent = login ? 'أهلاً بعودتك 👋' : 'انضم إلينا';
     $('menHeadSub').textContent = login
-      ? 'سجّل دخولك للمتابعة والاستمتاع بالعروض الحصرية'
-      : 'أنشئ حسابك واحصل على كاش باك 2% على كل طلب';
+      ? 'سجّل دخولك بالجوال أو البريد الإلكتروني'
+      : 'أنشئ حسابك في ثوانٍ وابدأ التسوق';
 
-    $('menRow2Fields').style.display = login ? 'none' : 'grid';
-    $('menOptsRow').style.display = login ? 'flex' : 'none';
-    $('menTermsText').style.display = login ? 'none' : 'block';
-    $('menDivider').style.display = login ? 'flex' : 'none';
-    document.querySelector('[data-social="google"]').style.display = login ? 'flex' : 'none';
+    // Fields
+    $('menNameField').style.display      = login ? 'none' : 'block';
+    $('menOptsRow').style.display        = login ? 'flex' : 'none';
+    $('menTermsText').style.display      = login ? 'none' : 'block';
 
+    // Submit
     $('menSubmitText').textContent = login ? 'تسجيل الدخول' : 'إنشاء الحساب';
     $('menAuthPassword').autocomplete = login ? 'current-password' : 'new-password';
+    
+    // Reset strength & error
     $('menStrength').classList.remove('show', 's1', 's2', 's3', 's4');
     clearError();
+    
+    // Focus
+    setTimeout(() => {
+      if (!login && $('menAuthName')) $('menAuthName').focus();
+      else if ($('menAuthIdentifier')) $('menAuthIdentifier').focus();
+    }, 100);
   }
 
   function togglePassword() {
@@ -640,7 +628,6 @@
     renderMode();
     $('menAuthScreen').classList.add('active');
     document.body.style.overflow = 'hidden';
-    setTimeout(() => $('menAuthEmail')?.focus(), 300);
   }
   function closeAuth() {
     $('menAuthScreen')?.classList.remove('active');
@@ -648,24 +635,23 @@
     clearError();
   }
 
-  // ═══ Submit ═══
+  // ═══════════════════════════════════════════════════════════
+  // ⭐ Submit — يدعم الجوال والبريد
+  // ═══════════════════════════════════════════════════════════
   async function handleSubmit() {
-    const email = $('menAuthEmail').value.trim().toLowerCase();
+    const rawIdent = $('menAuthIdentifier').value;
     const password = $('menAuthPassword').value;
     const name = $('menAuthName').value.trim();
-    const phone = $('menAuthPhone').value.trim();
     clearError();
 
-    if (authMode === 'signup') {
-      if (!name) return showError('الرجاء إدخال الاسم الكامل');
-      if (!phone) return showError('الرجاء إدخال رقم الجوال');
-      if (!/^05\d{8}$/.test(phone) && !/^\+?\d{8,15}$/.test(phone))
-        return showError('رقم الجوال غير صحيح (مثال: 05xxxxxxxx)');
-    }
-    if (!email) return showError('الرجاء إدخال البريد الإلكتروني');
-    if (!email.includes('@') || !email.includes('.')) return showError('صيغة البريد غير صحيحة');
+    // Validation
+    if (authMode === 'signup' && !name) return showError('الرجاء إدخال الاسم الكامل');
+    if (!rawIdent.trim()) return showError('الرجاء إدخال رقم الجوال أو البريد الإلكتروني');
     if (!password) return showError('الرجاء إدخال كلمة المرور');
     if (authMode === 'signup' && password.length < 6) return showError('كلمة المرور 6 أحرف على الأقل');
+
+    const ident = normalizeIdentifier(rawIdent);
+    if (!ident || ident.error) return showError(ident?.error || 'الرجاء إدخال رقم جوال أو بريد صحيح');
 
     const btn = $('menSubmit');
     btn.disabled = true;
@@ -673,22 +659,36 @@
 
     try {
       if (authMode === 'login') {
-        const { data, error } = await sb.auth.signInWithPassword({ email, password });
+        const { data, error } = await sb.auth.signInWithPassword({
+          email: ident.authEmail,
+          password
+        });
         if (error) throw error;
-        console.log(' دخول:', data.user?.email);
+        console.log('✅ دخول:', data.user?.email);
         await showSuccess('مرحباً بك! 👋');
         launchConfetti();
       } else {
+        // Signup
         const { data, error } = await sb.auth.signUp({
-          email, password,
-          options: { data: { name, phone, cashback: 0, orders: [] } }
+          email: ident.authEmail,
+          password,
+          options: {
+            data: {
+              name,
+              phone: ident.type === 'phone' ? ident.display : '',
+              email: ident.type === 'email' ? ident.display : '',
+              login_type: ident.type,
+              cashback: 0,
+              orders: []
+            }
+          }
         });
         if (error) throw error;
         if (!data.session) {
-          showError(' تم إنشاء حسابك! افتح بريدك واضغط رابط التأكيد ثم سجّل الدخول.');
+          showError('✅ تم إنشاء حسابك! يمكنك تسجيل الدخول الآن بنفس البيانات.');
           return;
         }
-        console.log(' حساب جديد:', data.user?.email);
+        console.log('✅ حساب جديد:', data.user?.email);
         await showSuccess('تم إنشاء حسابك');
         launchConfetti();
       }
@@ -696,15 +696,15 @@
       console.error('[AUTH ERROR]', err);
       const m = (err.message || '').toLowerCase();
       if (m.includes('email not confirmed'))
-        showError(' بريدك غير مؤكد — افتح بريدك واضغط رابط التأكيد');
-      else if (m.includes('invalid login'))
-        showError(' البريد أو كلمة المرور غير صحيحة');
-      else if (m.includes('already registered') || m.includes('already been registered'))
-        showError(' البريد مسجل بالفعل — انتقل لتسجيل الدخول');
+        showError('بريدك غير مؤكد — راجع إعدادات Supabase');
+      else if (m.includes('invalid login') || m.includes('invalid credentials'))
+        showError('البيانات غير صحيحة — تحقق من الجوال/البريد وكلمة المرور');
+      else if (m.includes('already registered') || m.includes('already been registered') || m.includes('user already exists'))
+        showError('هذا الحساب مسجل بالفعل — انتقل لتسجيل الدخول');
       else if (m.includes('password'))
-        showError(' كلمة المرور ضعيفة');
-      else if (m.includes('too many'))
-        showError(' محاولات كثيرة — انتظر دقيقة');
+        showError('كلمة المرور ضعيفة — استخدم 6 أحرف على الأقل');
+      else if (m.includes('too many') || m.includes('rate limit'))
+        showError('محاولات كثيرة — انتظر دقيقة ثم حاول مرة أخرى');
       else
         showError(err.message || 'حدث خطأ غير متوقع');
     } finally {
@@ -727,14 +727,23 @@
   }
 
   async function handleForgot() {
-    const email = $('menAuthEmail').value.trim().toLowerCase();
-    if (!email || !email.includes('@')) {
-      showError('اكتب بريدك الإلكتروني أولاً');
-      $('menAuthEmail').focus();
+    const rawIdent = $('menAuthIdentifier').value.trim();
+    if (!rawIdent) {
+      showError('اكتب رقم جوالك أو بريدك الإلكتروني أولاً');
+      $('menAuthIdentifier').focus();
       return;
     }
+    const ident = normalizeIdentifier(rawIdent);
+    if (!ident || ident.error) return showError(ident?.error || 'بيانات غير صحيحة');
+
+    // فقط البريد يدعم استعادة كلمة المرور
+    if (ident.type === 'phone') {
+      showError('لاستعادة كلمة المرور تواصل مع الدعم: clan.men.ts@gmail.com');
+      return;
+    }
+
     try {
-      const { error } = await sb.auth.resetPasswordForEmail(email, {
+      const { error } = await sb.auth.resetPasswordForEmail(ident.authEmail, {
         redirectTo: location.origin + location.pathname
       });
       if (error) throw error;
@@ -888,18 +897,19 @@
     const orders = Array.isArray(meta.orders) ? meta.orders : [];
     const cashback = Number(meta.cashback || 0);
     const totalSpent = orders.reduce((s, o) => s + Number(o.total || 0), 0);
-    const avatar = meta.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.email || 'M')}&background=021ca4&color=fff&bold=true&size=300`;
+    const displayId = meta.phone || meta.email || user.email || 'M';
+    const avatar = meta.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayId)}&background=021ca4&color=fff&bold=true&size=300`;
     const name = meta.name || user.email?.split('@')[0] || 'مستخدم';
     const since = user.created_at ? new Date(user.created_at).toLocaleDateString('ar-SA', { year: 'numeric', month: 'long' }) : '—';
 
     $('menAccCoverAvatar').src = avatar;
     $('menAccCoverName').textContent = name;
-    $('menAccCoverEmail').textContent = user.email || '—';
+    $('menAccCoverEmail').textContent = meta.phone || meta.email || user.email || '—';
 
-    let level = 'برونزي', lvlIcon = '';
-    if (orders.length >= 20 || totalSpent >= 1000) { level = 'ذهبي'; lvlIcon = ''; }
-    else if (orders.length >= 5 || totalSpent >= 300) { level = 'فضي'; lvlIcon = ''; }
-    $('menAccMemberLevel').textContent = `${lvlIcon} ${level}`;
+    let level = 'برونزي';
+    if (orders.length >= 20 || totalSpent >= 1000) level = 'ذهبي';
+    else if (orders.length >= 5 || totalSpent >= 300) level = 'فضي';
+    $('menAccMemberLevel').textContent = level;
 
     $('menAccStatOrders').textContent = orders.length;
     $('menAccStatCashback').textContent = cashback.toFixed(2);
@@ -908,13 +918,13 @@
 
     $('menAccCashbackBig').textContent = cashback.toFixed(2);
     $('menAccInfoName').textContent = name;
-    $('menAccInfoEmail').textContent = user.email || '—';
+    $('menAccInfoEmail').textContent = meta.email || user.email || '—';
     $('menAccInfoPhone').textContent = meta.phone || '—';
     $('menAccInfoId').textContent = '#' + String(user.id || '').slice(0, 8).toUpperCase();
 
     $('menAccSetName').value = meta.name || '';
     $('menAccSetPhone').value = meta.phone || '';
-    $('menAccSetEmail').value = user.email || '';
+    $('menAccSetEmail').value = meta.email || user.email || '';
 
     renderOrders(orders);
   }
@@ -967,7 +977,7 @@
       currentUser = data.user;
       fillAccountPage(data.user);
       syncUI(data.user);
-      if (window.showToast) window.showToast(' تم حفظ التغييرات', 'success');
+      if (window.showToast) window.showToast('✅ تم حفظ التغييرات', 'success');
     } catch (err) {
       if (window.showToast) window.showToast('فشل الحفظ: ' + err.message, 'error');
     } finally {
@@ -977,7 +987,7 @@
   }
 
   function deleteAccount() {
-    if (!confirm(' هل أنت متأكد من حذف حسابك نهائياً؟\nهذا الإجراء لا يمكن التراجع عنه.')) return;
+    if (!confirm('⚠️ هل أنت متأكد من حذف حسابك نهائياً؟\nهذا الإجراء لا يمكن التراجع عنه.')) return;
     if (window.showToast) window.showToast('تواصل مع الدعم: clan.men.ts@gmail.com', 'info');
   }
 
@@ -988,7 +998,7 @@
       navigator.share({ title: 'MEN Store', text, url: location.origin }).catch(() => {});
     } else {
       navigator.clipboard.writeText(text).then(() => {
-        if (window.showToast) window.showToast(' تم نسخ الرابط', 'success');
+        if (window.showToast) window.showToast('✅ تم نسخ الرابط', 'success');
       });
     }
   }
@@ -1033,8 +1043,9 @@
     if (user) {
       if (loginBtn) loginBtn.style.display = 'none';
       if (avatar) {
+        const ident = user.user_metadata?.phone || user.user_metadata?.email || user.email || 'M';
         avatar.src = user.user_metadata?.avatar_url
-          || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.email||'M')}&background=021ca4&color=fff&bold=true&size=100`;
+          || `https://ui-avatars.com/api/?name=${encodeURIComponent(ident)}&background=021ca4&color=fff&bold=true&size=100`;
         avatar.style.display = 'block';
       }
     } else {
