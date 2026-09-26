@@ -1,5 +1,5 @@
 /* ============================================================
-   ✨ MEN Store — Auth v6 (Full Screen) — Phone + Email
+   ✨ MEN Store — Auth v7 (Email + Phone + Initials Avatar)
    ============================================================ */
 (function () {
   'use strict';
@@ -26,32 +26,57 @@
   });
   window.MEN_SUPABASE = sb;
 
-  console.log('%c✨ MEN AUTH v6', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
+  console.log('%c✨ MEN AUTH v7', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
   const CASHBACK_RATE = 0.02;
-  const PHONE_DOMAIN  = 'men-store.local'; // نطاق داخلي للجوالات
   let currentUser = null;
   let authMode = 'login';
   let rememberMe = true;
   const $ = id => document.getElementById(id);
 
-  // ═══ Helper: تحويل الجوال/البريد إلى بريد Supabase ═══
-  function normalizeIdentifier(raw) {
-    const val = String(raw || '').trim();
-    if (!val) return null;
-    const isEmail = val.includes('@');
-    if (isEmail) {
-      const email = val.toLowerCase();
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: 'صيغة البريد الإلكتروني غير صحيحة' };
-      return { type: 'email', display: email, authEmail: email };
-    }
-    // جوال
-    const digits = val.replace(/\D/g, '');
-    // دعم: 05XXXXXXXX | 9665XXXXXXXX | 5XXXXXXXX | أرقام دولية
-    if (!/^05\d{8}$/.test(digits) && !/^9665\d{8}$/.test(digits) && !/^5\d{8}$/.test(digits) && !/^\d{8,15}$/.test(digits)) {
-      return { error: 'رقم الجوال غير صحيح (مثال: 05xxxxxxxx)' };
-    }
-    return { type: 'phone', display: digits, authEmail: `${digits}@${PHONE_DOMAIN}` };
+  // ═══════════════════════════════════════════════════════════
+  // 🛠️ Helpers
+  // ═══════════════════════════════════════════════════════════
+  
+  // تحويل رقم الجوال إلى صيغة موحدة
+  function normalizePhone(raw) {
+    const digits = String(raw || '').replace(/\D/g, '');
+    if (!digits) return null;
+    if (/^05\d{8}$/.test(digits)) return digits;                 // 05XXXXXXXX
+    if (/^9665\d{8}$/.test(digits)) return '0' + digits.slice(3); // 9665XXXXXXXX
+    if (/^5\d{8}$/.test(digits)) return '0' + digits;             // 5XXXXXXXX
+    if (/^\d{8,15}$/.test(digits)) return digits;                 // دولي
+    return null;
+  }
+
+  // التحقق من البريد
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim().toLowerCase());
+  }
+
+  // ⭐ توليد أفتار من الحرف الأول والأخير من الاسم
+  function makeInitialsAvatar(name, size = 200) {
+    const clean = String(name || '').trim();
+    const parts = clean.split(/\s+/).filter(Boolean);
+    let initials = '?';
+    if (parts.length === 0) initials = '?';
+    else if (parts.length === 1) initials = parts[0].substring(0, 2);
+    else initials = (parts[0][0] || '') + (parts[parts.length - 1][0] || '');
+    initials = initials.toUpperCase();
+
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
+      <defs>
+        <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#021ca4"/>
+          <stop offset="100%" stop-color="#4a7aff"/>
+        </linearGradient>
+      </defs>
+      <rect width="${size}" height="${size}" fill="url(#g)"/>
+      <text x="50%" y="52%" text-anchor="middle" dominant-baseline="central"
+        font-family="Cairo,Tajawal,Arial,Helvetica,sans-serif"
+        font-size="${Math.round(size * 0.44)}" font-weight="900" fill="#ffffff">${initials}</text>
+    </svg>`;
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -128,7 +153,6 @@
       .men-tabs[data-mode="signup"] .men-tabs-indicator{transform:translateX(calc(100% + 4px))}
 
       .men-form{display:flex;flex-direction:column;gap:16px}
-      .men-row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
       .men-field{position:relative}
       .men-label{display:block;font-size:.74rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:9px;padding-right:4px}
@@ -173,7 +197,7 @@
       .men-forgot:hover{color:#4a7aff;text-shadow:0 0 16px rgba(74,122,255,.6)}
 
       .men-error{max-height:0;overflow:hidden;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.2);border-radius:12px;color:#ff8a8a;font-size:.84rem;font-weight:700;text-align:center;transition:all .35s cubic-bezier(.16,1,.3,1);display:flex;align-items:center;justify-content:center;gap:8px;padding:0 16px}
-      .men-error.show{max-height:80px;padding:12px 16px;margin-top:4px}
+      .men-error.show{max-height:90px;padding:12px 16px;margin-top:4px}
 
       .men-submit{position:relative;width:100%;height:56px;border:none;border-radius:14px;background:linear-gradient(135deg,#021ca4 0%,#4a7aff 100%);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);box-shadow:0 14px 34px -12px rgba(74,122,255,.8);display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:.3px;margin-top:6px}
       .men-submit::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#4a7aff,#021ca4);opacity:0;transition:opacity .35s}
@@ -211,7 +235,6 @@
         .men-form-panel{padding:24px 18px}
         .men-welcome h2{font-size:1.5rem}
         .men-welcome p{font-size:.85rem}
-        .men-row2{grid-template-columns:1fr;gap:16px}
         .men-input-wrap input{height:52px;font-size:.9rem}
         .men-submit{height:54px}
         .men-tab{font-size:.84rem;padding:12px 12px}
@@ -356,7 +379,7 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🖼️ بناء الـ Screen
+  // 🖼️ Screen HTML
   // ═══════════════════════════════════════════════════════════
   function injectModals() {
     if ($('menAuthScreen')) return;
@@ -369,7 +392,7 @@
         <div class="men-orb o3"></div>
 
         <div class="men-layout">
-          <!-- ═══ LEFT: BRAND SHOWCASE ═══ -->
+          <!-- LEFT: BRAND SHOWCASE -->
           <div class="men-showcase">
             <div class="men-showcase-top">
               <div class="men-logo-row">
@@ -422,7 +445,7 @@
             </div>
           </div>
 
-          <!-- ═══ RIGHT: FORM ═══ -->
+          <!-- RIGHT: FORM -->
           <div class="men-form-panel">
             <div class="men-panel-top">
               <div></div>
@@ -452,9 +475,27 @@
                   </div>
                 </div>
 
-                <!-- Identifier (phone or email) -->
-                <div class="men-field">
-                  <label class="men-label" for="menAuthIdentifier" id="menIdentifierLabel">رقم الجوال أو البريد الإلكتروني</label>
+                <!-- Email (signup only) -->
+                <div class="men-field" id="menEmailField" style="display:none">
+                  <label class="men-label" for="menAuthEmail">البريد الإلكتروني</label>
+                  <div class="men-input-wrap">
+                    <input type="email" id="menAuthEmail" placeholder="you@example.com" autocomplete="email" dir="ltr" style="text-align:right">
+                    <i class="fas fa-envelope men-icon"></i>
+                  </div>
+                </div>
+
+                <!-- Phone (signup only) -->
+                <div class="men-field" id="menPhoneField" style="display:none">
+                  <label class="men-label" for="menAuthPhone">رقم الجوال</label>
+                  <div class="men-input-wrap">
+                    <input type="tel" id="menAuthPhone" placeholder="05xxxxxxxx" autocomplete="tel" dir="ltr" style="text-align:right">
+                    <i class="fas fa-phone men-icon"></i>
+                  </div>
+                </div>
+
+                <!-- Identifier (login only) -->
+                <div class="men-field" id="menIdentifierField">
+                  <label class="men-label" for="menAuthIdentifier">رقم الجوال أو البريد الإلكتروني</label>
                   <div class="men-input-wrap">
                     <input type="text" id="menAuthIdentifier" placeholder="05xxxxxxxx  أو  you@example.com" autocomplete="username" dir="ltr" style="text-align:right">
                     <i class="fas fa-user-circle men-icon"></i>
@@ -526,8 +567,6 @@
 
     // ═══ Bind Events ═══
     wrap.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeAuth));
-    
-    // ⭐ ربط التبويبات
     wrap.querySelectorAll('[data-tab]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -538,13 +577,10 @@
     $('menTogglePass').addEventListener('click', togglePassword);
     $('menAuthPassword').addEventListener('input', updateStrength);
     $('menAuthPassword').addEventListener('keydown', e => { if (e.key === 'Enter') handleSubmit(); });
-    $('menAuthIdentifier').addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        if (authMode === 'signup' && $('menNameField').style.display === 'none') $('menAuthName').focus();
-        else $('menAuthPassword').focus();
-      }
-    });
-    $('menAuthName').addEventListener('keydown', e => { if (e.key === 'Enter') $('menAuthIdentifier').focus(); });
+    $('menAuthIdentifier').addEventListener('keydown', e => { if (e.key === 'Enter') $('menAuthPassword').focus(); });
+    $('menAuthName').addEventListener('keydown', e => { if (e.key === 'Enter') $('menAuthEmail').focus(); });
+    $('menAuthEmail').addEventListener('keydown', e => { if (e.key === 'Enter') $('menAuthPhone').focus(); });
+    $('menAuthPhone').addEventListener('keydown', e => { if (e.key === 'Enter') $('menAuthPassword').focus(); });
     $('menRemember').addEventListener('change', function () { rememberMe = this.checked; });
     $('menSubmit').addEventListener('click', handleSubmit);
     $('menForgotBtn').addEventListener('click', handleForgot);
@@ -558,32 +594,30 @@
 
   function renderMode() {
     const login = authMode === 'login';
-    
-    // Tabs UI
+
     $('menTabs').dataset.mode = authMode;
     document.querySelectorAll('[data-tab]').forEach(b =>
       b.classList.toggle('active', b.dataset.tab === authMode));
 
-    // Head text
     $('menHeadTitle').textContent = login ? 'أهلاً بعودتك 👋' : 'انضم إلينا';
     $('menHeadSub').textContent = login
       ? 'سجّل دخولك بالجوال أو البريد الإلكتروني'
-      : 'أنشئ حسابك في ثوانٍ وابدأ التسوق';
+      : 'أنشئ حسابك في ثوانٍ — البريد والجوال مطلوبان';
 
-    // Fields
-    $('menNameField').style.display      = login ? 'none' : 'block';
-    $('menOptsRow').style.display        = login ? 'flex' : 'none';
-    $('menTermsText').style.display      = login ? 'none' : 'block';
+    // Fields visibility
+    $('menNameField').style.display       = login ? 'none' : 'block';
+    $('menEmailField').style.display      = login ? 'none' : 'block';
+    $('menPhoneField').style.display      = login ? 'none' : 'block';
+    $('menIdentifierField').style.display = login ? 'block' : 'none';
+    $('menOptsRow').style.display         = login ? 'flex' : 'none';
+    $('menTermsText').style.display       = login ? 'none' : 'block';
 
-    // Submit
     $('menSubmitText').textContent = login ? 'تسجيل الدخول' : 'إنشاء الحساب';
     $('menAuthPassword').autocomplete = login ? 'current-password' : 'new-password';
-    
-    // Reset strength & error
+
     $('menStrength').classList.remove('show', 's1', 's2', 's3', 's4');
     clearError();
-    
-    // Focus
+
     setTimeout(() => {
       if (!login && $('menAuthName')) $('menAuthName').focus();
       else if ($('menAuthIdentifier')) $('menAuthIdentifier').focus();
@@ -636,22 +670,11 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // ⭐ Submit — يدعم الجوال والبريد
+  // ⭐ Submit
   // ═══════════════════════════════════════════════════════════
   async function handleSubmit() {
-    const rawIdent = $('menAuthIdentifier').value;
     const password = $('menAuthPassword').value;
-    const name = $('menAuthName').value.trim();
     clearError();
-
-    // Validation
-    if (authMode === 'signup' && !name) return showError('الرجاء إدخال الاسم الكامل');
-    if (!rawIdent.trim()) return showError('الرجاء إدخال رقم الجوال أو البريد الإلكتروني');
-    if (!password) return showError('الرجاء إدخال كلمة المرور');
-    if (authMode === 'signup' && password.length < 6) return showError('كلمة المرور 6 أحرف على الأقل');
-
-    const ident = normalizeIdentifier(rawIdent);
-    if (!ident || ident.error) return showError(ident?.error || 'الرجاء إدخال رقم جوال أو بريد صحيح');
 
     const btn = $('menSubmit');
     btn.disabled = true;
@@ -659,33 +682,66 @@
 
     try {
       if (authMode === 'login') {
-        const { data, error } = await sb.auth.signInWithPassword({
-          email: ident.authEmail,
-          password
-        });
+        // ═══ تسجيل دخول (جوال أو بريد) ═══
+        const rawId = $('menAuthIdentifier').value.trim();
+        if (!rawId) throw new Error('الرجاء إدخال رقم الجوال أو البريد الإلكتروني');
+        if (!password) throw new Error('الرجاء إدخال كلمة المرور');
+
+        let email;
+        if (rawId.includes('@')) {
+          email = rawId.toLowerCase();
+          if (!isValidEmail(email)) throw new Error('صيغة البريد الإلكتروني غير صحيحة');
+        } else {
+          const phone = normalizePhone(rawId);
+          if (!phone) throw new Error('رقم الجوال غير صحيح (مثال: 05xxxxxxxx)');
+          // lookup phone → email
+          const { data, error: lookupErr } = await sb
+            .from('men_phone_email')
+            .select('email')
+            .eq('phone', phone)
+            .maybeSingle();
+          if (lookupErr) throw lookupErr;
+          if (!data?.email) throw new Error('لا يوجد حساب مرتبط بهذا الرقم');
+          email = data.email;
+        }
+
+        const { data, error } = await sb.auth.signInWithPassword({ email, password });
         if (error) throw error;
         console.log('✅ دخول:', data.user?.email);
         await showSuccess('مرحباً بك! 👋');
         launchConfetti();
+
       } else {
-        // Signup
+        // ═══ إنشاء حساب جديد ═══
+        const name  = $('menAuthName').value.trim();
+        const email = $('menAuthEmail').value.trim().toLowerCase();
+        const phone = normalizePhone($('menAuthPhone').value);
+
+        if (!name) throw new Error('الرجاء إدخال الاسم الكامل');
+        if (!email) throw new Error('الرجاء إدخال البريد الإلكتروني');
+        if (!isValidEmail(email)) throw new Error('صيغة البريد الإلكتروني غير صحيحة');
+        if (!phone) throw new Error('رقم الجوال غير صحيح (مثال: 05xxxxxxxx)');
+        if (!password) throw new Error('الرجاء إدخال كلمة المرور');
+        if (password.length < 6) throw new Error('كلمة المرور 6 أحرف على الأقل');
+
         const { data, error } = await sb.auth.signUp({
-          email: ident.authEmail,
+          email,
           password,
           options: {
-            data: {
-              name,
-              phone: ident.type === 'phone' ? ident.display : '',
-              email: ident.type === 'email' ? ident.display : '',
-              login_type: ident.type,
-              cashback: 0,
-              orders: []
-            }
+            data: { name, phone, email, cashback: 0, orders: [] }
           }
         });
         if (error) throw error;
+
+        // حفظ ربط الجوال → البريد
+        try {
+          await sb.from('men_phone_email').insert({ phone, email });
+        } catch (e) {
+          console.warn('phone→email map save failed', e);
+        }
+
         if (!data.session) {
-          showError('✅ تم إنشاء حسابك! يمكنك تسجيل الدخول الآن بنفس البيانات.');
+          showError('✅ تم إنشاء حسابك! يمكنك الآن تسجيل الدخول.');
           return;
         }
         console.log('✅ حساب جديد:', data.user?.email);
@@ -700,7 +756,9 @@
       else if (m.includes('invalid login') || m.includes('invalid credentials'))
         showError('البيانات غير صحيحة — تحقق من الجوال/البريد وكلمة المرور');
       else if (m.includes('already registered') || m.includes('already been registered') || m.includes('user already exists'))
-        showError('هذا الحساب مسجل بالفعل — انتقل لتسجيل الدخول');
+        showError('هذا البريد مسجل بالفعل — انتقل لتسجيل الدخول');
+      else if (m.includes('duplicate key'))
+        showError('هذا الرقم مستخدم بحساب آخر');
       else if (m.includes('password'))
         showError('كلمة المرور ضعيفة — استخدم 6 أحرف على الأقل');
       else if (m.includes('too many') || m.includes('rate limit'))
@@ -727,23 +785,20 @@
   }
 
   async function handleForgot() {
-    const rawIdent = $('menAuthIdentifier').value.trim();
-    if (!rawIdent) {
-      showError('اكتب رقم جوالك أو بريدك الإلكتروني أولاً');
+    const rawId = $('menAuthIdentifier').value.trim();
+    if (!rawId) {
+      showError('اكتب بريدك الإلكتروني أولاً (استعادة كلمة المرور عبر البريد فقط)');
       $('menAuthIdentifier').focus();
       return;
     }
-    const ident = normalizeIdentifier(rawIdent);
-    if (!ident || ident.error) return showError(ident?.error || 'بيانات غير صحيحة');
-
-    // فقط البريد يدعم استعادة كلمة المرور
-    if (ident.type === 'phone') {
-      showError('لاستعادة كلمة المرور تواصل مع الدعم: clan.men.ts@gmail.com');
+    if (!rawId.includes('@')) {
+      showError('لاستعادة كلمة المرور، أدخل بريدك الإلكتروني. للدعم: clan.men.ts@gmail.com');
       return;
     }
+    if (!isValidEmail(rawId)) return showError('صيغة البريد غير صحيحة');
 
     try {
-      const { error } = await sb.auth.resetPasswordForEmail(ident.authEmail, {
+      const { error } = await sb.auth.resetPasswordForEmail(rawId.toLowerCase(), {
         redirectTo: location.origin + location.pathname
       });
       if (error) throw error;
@@ -897,14 +952,16 @@
     const orders = Array.isArray(meta.orders) ? meta.orders : [];
     const cashback = Number(meta.cashback || 0);
     const totalSpent = orders.reduce((s, o) => s + Number(o.total || 0), 0);
-    const displayId = meta.phone || meta.email || user.email || 'M';
-    const avatar = meta.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayId)}&background=021ca4&color=fff&bold=true&size=300`;
     const name = meta.name || user.email?.split('@')[0] || 'مستخدم';
+
+    // ⭐ أفتار من الحرف الأول والأخير من الاسم
+    const avatar = meta.avatar_url || makeInitialsAvatar(name, 300);
+
     const since = user.created_at ? new Date(user.created_at).toLocaleDateString('ar-SA', { year: 'numeric', month: 'long' }) : '—';
 
     $('menAccCoverAvatar').src = avatar;
     $('menAccCoverName').textContent = name;
-    $('menAccCoverEmail').textContent = meta.phone || meta.email || user.email || '—';
+    $('menAccCoverEmail').textContent = meta.email || user.email || '—';
 
     let level = 'برونزي';
     if (orders.length >= 20 || totalSpent >= 1000) level = 'ذهبي';
@@ -1043,9 +1100,8 @@
     if (user) {
       if (loginBtn) loginBtn.style.display = 'none';
       if (avatar) {
-        const ident = user.user_metadata?.phone || user.user_metadata?.email || user.email || 'M';
-        avatar.src = user.user_metadata?.avatar_url
-          || `https://ui-avatars.com/api/?name=${encodeURIComponent(ident)}&background=021ca4&color=fff&bold=true&size=100`;
+        const name = user.user_metadata?.name || user.email?.split('@')[0] || 'M';
+        avatar.src = user.user_metadata?.avatar_url || makeInitialsAvatar(name, 100);
         avatar.style.display = 'block';
       }
     } else {
@@ -1064,6 +1120,7 @@
   window.MEN_AUTH = {
     CASHBACK_RATE, open, openAccount, logout,
     getCurrentUser: () => currentUser,
+    makeInitialsAvatar,
     addCashback: async (a) => {
       if (!currentUser || a <= 0) return;
       const c = Number(currentUser.user_metadata?.cashback || 0) + Number(a);
