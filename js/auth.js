@@ -405,7 +405,7 @@
             </div>
 
             <div class="men-showcase-center">
-              <div class="men-showcase-badge"><i class="fas fa-star"></i> متجرك الأول للألعاب</div>
+              <div class="men-showcase-badge"><i class=""></i> متجرك الأول للألعاب</div>
               <h1 class="men-showcase-title">كل ما تحتاجه<br>في <span>عالم الجيمنق</span></h1>
               <p class="men-showcase-desc">
                 انضم إلى أكثر من 5000 لاعب يستمتعون بأفضل الأسعار، التسليم الفوري، والكاش باك على كل طلب.
@@ -741,10 +741,10 @@
         }
 
         if (!data.session) {
-          showError('✅ تم إنشاء حسابك! يمكنك الآن تسجيل الدخول.');
+          showError(' تم إنشاء حسابك! يمكنك الآن تسجيل الدخول.');
           return;
         }
-        console.log('✅ حساب جديد:', data.user?.email);
+        console.log(' حساب جديد:', data.user?.email);
         await showSuccess('تم إنشاء حسابك');
         launchConfetti();
       }
