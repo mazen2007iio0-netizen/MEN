@@ -2,19 +2,208 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>لوحة الطلبات — MEN Store</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
-<body style="margin:0">
-
-  <script src="admin-orders.js"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="theme-color" content="#060812">
+  <meta name="description" content="لوحة إدارة طلبات MEN Store">
+  <title>لوحة الطلبات — MEN Store Admin</title>
   
+  <!-- ═══ الخطوط ═══ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- ═══ الأيقونات ═══ -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- ═══ Favicon (اختياري) ═══ -->
+  <link rel="icon" type="image/png" href="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png">
+  
+  <style>
+    /* ═══ شاشة التحميل الأولية ═══ */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html, body {
+      font-family: 'Cairo', sans-serif;
+      background: #060812;
+      color: #fff;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    
+    #bootLoader {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      background:
+        radial-gradient(ellipse at 15% 20%, rgba(2,28,164,.35), transparent 55%),
+        radial-gradient(ellipse at 85% 80%, rgba(74,122,255,.25), transparent 50%),
+        radial-gradient(ellipse at 50% 50%, #060812 0%, #030510 100%);
+      transition: opacity .4s ease, visibility .4s ease;
+    }
+    
+    #bootLoader.hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    
+    .boot-logo {
+      width: 120px;
+      height: auto;
+      filter: brightness(0) invert(1) drop-shadow(0 10px 30px rgba(74,122,255,.6));
+      animation: bootPulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes bootPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: .85; }
+    }
+    
+    .boot-spinner {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 3px solid rgba(74,122,255,.2);
+      border-top-color: #4a7aff;
+      animation: bootSpin .8s linear infinite;
+    }
+    
+    @keyframes bootSpin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .boot-text {
+      font-weight: 700;
+      font-size: .9rem;
+      color: #8a92b0;
+      letter-spacing: .5px;
+    }
+    
+    /* ═══ شاشة الخطأ ═══ */
+    #bootError {
+      position: fixed;
+      inset: 0;
+      z-index: 999998;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 24px;
+      text-align: center;
+      background: #060812;
+    }
+    
+    #bootError.show { display: flex; }
+    
+    #bootError i {
+      font-size: 3.5rem;
+      color: #d90429;
+    }
+    
+    #bootError h2 {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #fff;
+    }
+    
+    #bootError p {
+      color: #8a92b0;
+      font-weight: 600;
+      max-width: 400px;
+      line-height: 1.7;
+    }
+    
+    #bootError button {
+      padding: 12px 28px;
+      border-radius: 60px;
+      border: none;
+      background: linear-gradient(135deg, #021ca4, #4a7aff);
+      color: #fff;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: transform .3s;
+    }
+    
+    #bootError button:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ شاشة التحميل ═══ -->
+  <div id="bootLoader">
+    <img class="boot-logo" src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN Store">
+    <div class="boot-spinner"></div>
+    <div class="boot-text">جاري تحميل لوحة الإدارة...</div>
+  </div>
+
+  <!-- ═══ شاشة الخطأ (تظهر فقط عند الفشل) ═══ -->
+  <div id="bootError">
+    <i class="fas fa-triangle-exclamation"></i>
+    <h2>فشل تحميل اللوحة</h2>
+    <p id="bootErrMsg">تعذّر تحميل ملف الإدارة. تأكد من وجود ملف <code>admin-orders.js</code> في نفس المجلد.</p>
+    <button onclick="location.reload()">
+      <i class="fas fa-rotate"></i> إعادة المحاولة
+    </button>
+  </div>
+
+  <!-- ═══ تحميل السكربت الرئيسي ═══ -->
+  <script src="admin-orders.js" onerror="window.__admLoadError = true;"></script>
+  
+  <!-- ═══ التشغيل ═══ -->
   <script>
-    window.addEventListener('load', () => 
-      setTimeout(() => window.MEN_ADMIN.open(), 100)
-    );
+    (function() {
+      'use strict';
+      
+      // انتظر تحميل كل شيء
+      window.addEventListener('load', function() {
+        
+        // تحقق من تحميل السكربت
+        if (window.__admLoadError || !window.MEN_ADMIN) {
+          document.getElementById('bootLoader').classList.add('hide');
+          document.getElementById('bootError').classList.add('show');
+          return;
+        }
+        
+        // افتح اللوحة بعد تأخير بسيط
+        setTimeout(function() {
+          try {
+            window.MEN_ADMIN.open();
+            
+            // إخفاء شاشة التحميل بعد فتح اللوحة
+            setTimeout(function() {
+              document.getElementById('bootLoader').classList.add('hide');
+            }, 400);
+            
+          } catch (err) {
+            console.error('فشل فتح اللوحة:', err);
+            document.getElementById('bootLoader').classList.add('hide');
+            document.getElementById('bootError').classList.add('show');
+            document.getElementById('bootErrMsg').textContent = err.message || 'حدث خطأ غير متوقع';
+          }
+        }, 300);
+      });
+      
+      // حماية إضافية: لو ما اشتغل خلال 10 ثواني
+      setTimeout(function() {
+        var loader = document.getElementById('bootLoader');
+        if (loader && !loader.classList.contains('hide')) {
+          if (!window.MEN_ADMIN) {
+            loader.classList.add('hide');
+            document.getElementById('bootError').classList.add('show');
+          }
+        }
+      }, 10000);
+      
+    })();
   </script>
+
 </body>
 </html>
