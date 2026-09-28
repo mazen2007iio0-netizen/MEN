@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة الطلبات — MEN Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --blue:#4a7aff; --blue-dark:#021ca4; --green:#4caf50;
+    --gold:#f5b342; --red:#d90429; --bg:#060812;
+    --panel:rgba(14,20,38,.7); --border:rgba(74,122,255,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{font-family:'Cairo',sans-serif;background:var(--bg);color:#fff;min-height:100vh;overflow-x:hidden}
+  body::before{
+    content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(ellipse at 15% 20%,rgba(2,28,164,.35),transparent 55%),
+      radial-gradient(ellipse at 85% 80%,rgba(74,122,255,.25),transparent 50%),
+      radial-gradient(ellipse at 50% 50%,#060812 0%,#030510 100%);
+  }
+  body::after{
+    content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(74,122,255,.04) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(74,122,255,.04) 1px,transparent 1px);
+    background-size:60px 60px;
+    mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);
+    -webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);
+  }
+
+  /* ═══ LOGIN GATE ═══ */
+  #loginGate{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+  .gate-card{
+    background:linear-gradient(145deg,rgba(14,20,38,.85),rgba(8,12,24,.95));
+    border:1px solid var(--border);border-radius:28px;padding:44px 40px;
+    max-width:440px;width:100%;text-align:center;
+    box-shadow:0 40px 100px -30px rgba(2,28,164,.8);
+  }
+  .gate-icon{
+    width:80px;height:80px;margin:0 auto 20px;border-radius:24px;
+    background:linear-gradient(135deg,var(--blue-dark),var(--blue));
+    display:flex;align-items:center;justify-content:center;font-size:2rem;
+    box-shadow:0 20px 50px -12px rgba(74,122,255,.8);
+  }
+  .gate-card h1{font-size:1.7rem;font-weight:900;margin-bottom:10px;letter-spacing:-.5px}
+  .gate-card p{color:#8a92b0;font-weight:600;margin-bottom:26px;line-height:1.7}
+  .gate-field{margin-bottom:14px;text-align:right}
+  .gate-field label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
+  .gate-field input{
+    width:100%;height:52px;padding:0 18px;border-radius:14px;
+    background:rgba(0,0,0,.35);border:1.5px solid var(--border);
+    color:#fff;font-family:'Cairo',sans-serif;font-size:.94rem;font-weight:600;outline:none;
+    transition:all .3s;direction:ltr;text-align:right;
+  }
+  .gate-field input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(74,122,255,.15)}
+  .gate-btn{
+    width:100%;height:54px;border:none;border-radius:14px;margin-top:8px;
+    background:linear-gradient(135deg,var(--blue-dark),var(--blue));
+    color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;
+    cursor:pointer;transition:all .3s;
+    box-shadow:0 14px 34px -12px rgba(74,122,255,.8);
+  }
+  .gate-btn:hover{transform:translateY(-2px)}
+  .gate-btn:disabled{opacity:.7;cursor:not-allowed}
+  .gate-err{
+    display:none;margin-top:14px;padding:12px;border-radius:12px;
+    background:rgba(217,4,41,.1);border:1px solid rgba(217,4,41,.3);
+    color:#ff8a8a;font-size:.85rem;font-weight:700;
+  }
+  .gate-err.show{display:block}
+
+  /* ═══ DASHBOARD ═══ */
+  #dashboard{display:none;padding:24px 0 80px}
+  .dash-header{
+    position:sticky;top:0;z-index:100;
+    background:linear-gradient(180deg,rgba(6,8,18,.98),rgba(6,8,18,.9));
+    backdrop-filter:blur(20px);border-bottom:1px solid var(--border);
+    padding:16px 0;margin-bottom:28px;
+  }
+  .dash-header-inner{
+    max-width:1400px;margin:0 auto;padding:0 24px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  }
+  .dash-brand{display:flex;align-items:center;gap:14px}
+  .dash-brand img{height:44px;width:auto;filter:brightness(0) invert(1) drop-shadow(0 6px 18px rgba(74,122,255,.5))}
+  .dash-brand-text{line-height:1.2}
+  .dash-brand-text .t{font-size:1.05rem;font-weight:900;letter-spacing:-.3px}
+  .dash-brand-text .s{font-size:.72rem;color:#8a92b0;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+  .dash-user{display:flex;align-items:center;gap:12px}
+  .dash-user-info{text-align:left}
+  .dash-user-info .n{font-weight:800;font-size:.9rem}
+  .dash-user-info .e{font-size:.72rem;color:#8a92b0;font-weight:600}
+  .btn-ghost{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:10px 20px;border-radius:60px;
+    background:rgba(217,4,41,.12);border:1px solid rgba(217,4,41,.3);
+    color:#ff6b6b;font-family:'Cairo',sans-serif;font-weight:800;font-size:.84rem;
+    cursor:pointer;transition:all .3s;
+  }
+  .btn-ghost:hover{background:rgba(217,4,41,.22);transform:translateY(-2px)}
+
+  .container{max-width:1400px;margin:0 auto;padding:0 24px}
+
+  /* ═══ STATS ═══ */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+  .stat{
+    background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));
+    border:1px solid var(--border);border-radius:22px;padding:22px 22px;
+    position:relative;overflow:hidden;transition:all .35s;
+  }
+  .stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,#4a7aff);opacity:.9}
+  .stat:hover{transform:translateY(-5px);border-color:rgba(74,122,255,.35);box-shadow:0 22px 50px -15px rgba(2,28,164,.6)}
+  .stat-icon{
+    width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+    font-size:1.2rem;margin-bottom:14px;background:var(--icon-bg);color:var(--accent);
+  }
+  .stat-val{font-size:1.8rem;font-weight:900;line-height:1.1;margin-bottom:4px;letter-spacing:-1px}
+  .stat-lbl{font-size:.78rem;color:#8a92b0;font-weight:700}
+
+  /* ═══ FILTERS ═══ */
+  .filters{
+    background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));
+    border:1px solid var(--border);border-radius:22px;padding:20px 22px;
+    margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;
+  }
+  .filters-search{flex:1;min-width:220px;position:relative}
+  .filters-search input{
+    width:100%;height:48px;padding:0 44px 0 16px;border-radius:14px;
+    background:rgba(0,0,0,.35);border:1.5px solid var(--border);
+    color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.9rem;outline:none;
+    transition:all .3s;
+  }
+  .filters-search input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(74,122,255,.15)}
+  .filters-search i{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--blue);pointer-events:none}
+  .filters select{
+    height:48px;padding:0 18px;border-radius:14px;
+    background:rgba(0,0,0,.35);border:1.5px solid var(--border);
+    color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.88rem;
+    outline:none;cursor:pointer;min-width:170px;
+  }
+  .filters select:focus{border-color:var(--blue)}
+  .filters .refresh{
+    height:48px;padding:0 22px;border-radius:14px;border:none;
+    background:linear-gradient(135deg,var(--blue-dark),var(--blue));
+    color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.85rem;
+    cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+    transition:all .3s;box-shadow:0 10px 26px -10px rgba(74,122,255,.8);
+  }
+  .filters .refresh:hover{transform:translateY(-2px)}
+
+  /* ═══ ORDERS ═══ */
+  .orders-list{display:flex;flex-direction:column;gap:14px}
+  .order{
+    background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));
+    border:1px solid var(--border);border-radius:22px;padding:22px 24px;
+    transition:all .35s;position:relative;overflow:hidden;
+  }
+  .order:hover{transform:translateY(-3px);border-color:rgba(74,122,255,.35);box-shadow:0 20px 50px -15px rgba(2,28,164,.6)}
+  .order-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+  .order-id{font-weight:900;font-size:1rem;display:flex;align-items:center;gap:10px}
+  .order-id .dot{width:10px;height:10px;border-radius:50%;background:var(--st-color,#4caf50);box-shadow:0 0 14px var(--st-color,#4caf50)}
+  .order-date{color:#8a92b0;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:6px}
+  .order-badge{
+    color:#fff;font-size:.72rem;font-weight:800;padding:6px 14px;border-radius:20px;
+    display:inline-flex;align-items:center;gap:6px;
+    box-shadow:0 6px 18px -6px rgba(0,0,0,.6);
+  }
+  .order-customer{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;
+    padding:14px 16px;background:rgba(74,122,255,.05);border:1px solid var(--border);border-radius:16px;
+    margin-bottom:14px;
+  }
+  .cust-item{display:flex;align-items:center;gap:10px}
+  .cust-item i{
+    width:32px;height:32px;border-radius:10px;background:rgba(74,122,255,.15);
+    color:#6a9aff;display:flex;align-items:center;justify-content:center;font-size:.82rem;flex-shrink:0;
+  }
+  .cust-item .lbl{font-size:.68rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+  .cust-item .val{font-size:.86rem;font-weight:700;color:#fff;word-break:break-all}
+
+  .order-items{
+    padding:14px 16px;background:rgba(0,0,0,.2);border-radius:14px;
+    margin-bottom:14px;font-size:.85rem;color:#a8b0cc;line-height:1.9;
+  }
+  .order-items .name{color:#fff;font-weight:700}
+
+  .order-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+  .order-total{font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,#fff,#6a9aff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .order-cashback-info{
+    display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:20px;
+    font-size:.78rem;font-weight:800;
+  }
+  .order-cashback-info.earned{background:rgba(76,175,80,.12);border:1px solid rgba(76,175,80,.3);color:#66bb6a}
+  .order-cashback-info.pending{background:rgba(245,179,66,.1);border:1px solid rgba(245,179,66,.3);color:#f5b342}
+
+  .order-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px dashed rgba(74,122,255,.2)}
+  .order-actions select{
+    flex:1;min-width:160px;height:44px;padding:0 14px;border-radius:12px;
+    background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.25);
+    color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.85rem;
+    outline:none;cursor:pointer;
+  }
+  .order-actions select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(74,122,255,.15)}
+  .btn-action{
+    padding:11px 20px;border-radius:12px;border:none;
+    font-family:'Cairo',sans-serif;font-weight:800;font-size:.82rem;
+    cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .3s;
+  }
+  .btn-apply{background:linear-gradient(135deg,var(--blue-dark),var(--blue));color:#fff;box-shadow:0 8px 22px -8px rgba(74,122,255,.8)}
+  .btn-apply:hover{transform:translateY(-2px)}
+  .btn-cashback{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 8px 22px -8px rgba(245,179,66,.8)}
+  .btn-cashback:hover{transform:translateY(-2px)}
+  .btn-action:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
+
+  /* ═══ EMPTY / LOADING ═══ */
+  .empty{
+    text-align:center;padding:80px 24px;
+    background:rgba(74,122,255,.04);border:1.5px dashed rgba(74,122,255,.25);border-radius:24px;
+  }
+  .empty i{font-size:3rem;color:#4a7aff;margin-bottom:16px;opacity:.7}
+  .empty h3{font-size:1.2rem;font-weight:900;margin-bottom:8px}
+  .empty p{color:#8a92b0;font-weight:600}
+
+  .loader{text-align:center;padding:60px}
+  .loader .spin{
+    width:44px;height:44px;margin:0 auto 16px;border-radius:50%;
+    border:3px solid rgba(74,122,255,.2);border-top-color:#4a7aff;
+    animation:spin .8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ═══ MODAL ═══ */
+  .modal-back{
+    display:none;position:fixed;inset:0;z-index:999;
+    background:rgba(0,0,0,.75);backdrop-filter:blur(8px);
+    align-items:center;justify-content:center;padding:20px;
+  }
+  .modal-back.show{display:flex;animation:fadeIn .25s}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .modal{
+    background:linear-gradient(145deg,rgba(14,20,38,.98),rgba(8,12,24,1));
+    border:1px solid var(--border);border-radius:24px;
+    max-width:440px;width:100%;padding:30px 28px;
+    box-shadow:0 40px 100px -30px rgba(2,28,164,.9);
+    animation:popIn .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal-title{
+    display:flex;align-items:center;gap:12px;
+    font-size:1.15rem;font-weight:900;margin-bottom:8px;
+  }
+  .modal-title i{
+    width:42px;height:42px;border-radius:12px;
+    background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;
+    display:flex;align-items:center;justify-content:center;font-size:1rem;
+  }
+  .modal-sub{color:#8a92b0;font-size:.85rem;font-weight:600;margin-bottom:22px;line-height:1.7}
+  .modal-field{margin-bottom:14px}
+  .modal-field label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
+  .modal-field input, .modal-field textarea{
+    width:100%;padding:14px 18px;border-radius:14px;
+    background:rgba(0,0,0,.35);border:1.5px solid var(--border);
+    color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.94rem;
+    outline:none;transition:all .3s;resize:vertical;
+  }
+  .modal-field input:focus, .modal-field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(74,122,255,.15)}
+  .modal-field input[type=number]{direction:ltr;text-align:right;font-size:1.1rem;font-weight:800}
+  .quick-amounts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .quick-amounts button{
+    padding:8px 16px;border-radius:20px;border:1.5px solid var(--border);
+    background:rgba(74,122,255,.08);color:#6a9aff;
+    font-family:'Cairo',sans-serif;font-weight:800;font-size:.8rem;
+    cursor:pointer;transition:all .3s;
+  }
+  .quick-amounts button:hover{background:rgba(74,122,255,.2);border-color:var(--blue)}
+  .modal-actions{display:flex;gap:10px;margin-top:22px}
+  .modal-actions button{
+    flex:1;height:50px;border-radius:14px;border:none;
+    font-family:'Cairo',sans-serif;font-weight:800;font-size:.92rem;
+    cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .modal-actions .cancel{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:#e0e6f4}
+  .modal-actions .cancel:hover{background:rgba(255,255,255,.12)}
+  .modal-actions .confirm{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 12px 30px -10px rgba(245,179,66,.9)}
+  .modal-actions .confirm:hover{transform:translateY(-2px)}
+  .modal-actions .confirm:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+  /* ═══ TOAST ═══ */
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);
+    padding:14px 26px;border-radius:60px;font-weight:800;font-size:.9rem;
+    z-index:9999;transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+    display:inline-flex;align-items:center;gap:10px;box-shadow:0 15px 40px -10px rgba(0,0,0,.6);
+    max-width:90vw;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .toast.success{background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff}
+  .toast.error{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff}
+  .toast.info{background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff}
+
+  /* ═══ RESPONSIVE ═══ */
+  @media (max-width:900px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .dash-user-info{display:none}
+  }
+  @media (max-width:600px){
+    .container{padding:0 14px}
+    .dash-header-inner{padding:0 14px}
+    .order{padding:18px 16px}
+    .order-bottom{flex-direction:column;align-items:stretch;gap:10px}
+    .order-actions{flex-direction:column}
+    .order-actions select{min-width:100%}
+    .btn-action{width:100%;justify-content:center}
+    .stat{padding:18px 16px}
+    .stat-val{font-size:1.4rem}
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN GATE ═══ -->
+<div id="loginGate">
+  <div class="gate-card">
+    <div class="gate-icon"><i class="fas fa-shield-halved"></i></div>
+    <h1>لوحة إدارة الطلبات</h1>
+    <p>يجب تسجيل الدخول بحساب المشرف للوصول</p>
+    <div class="gate-field">
+      <label>البريد الإلكتروني</label>
+      <input type="email" id="gateEmail" placeholder="admin@example.com" autocomplete="email">
+    </div>
+    <div class="gate-field">
+      <label>كلمة المرور</label>
+      <input type="password" id="gatePass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="gate-btn" id="gateBtn"><i class="fas fa-right-to-bracket"></i> دخول</button>
+    <div class="gate-err" id="gateErr"></div>
+  </div>
+</div>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div id="dashboard">
+  <div class="dash-header">
+    <div class="dash-header-inner">
+      <div class="dash-brand">
+        <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN Store">
+        <div class="dash-brand-text">
+          <div class="t">لوحة الطلبات</div>
+          <div class="s">MEN Store Admin</div>
+        </div>
+      </div>
+      <div class="dash-user">
+        <div class="dash-user-info">
+          <div class="n" id="dashUserName">—</div>
+          <div class="e" id="dashUserEmail">—</div>
+        </div>
+        <button class="btn-ghost" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> خروج</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)">
+        <div class="stat-icon"><i class="fas fa-box"></i></div>
+        <div class="stat-val" id="statTotal">0</div>
+        <div class="stat-lbl">إجمالي الطلبات</div>
+      </div>
+      <div class="stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)">
+        <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
+        <div class="stat-val" id="statPending">0</div>
+        <div class="stat-lbl">قيد المعالجة</div>
+      </div>
+      <div class="stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)">
+        <div class="stat-icon"><i class="fas fa-circle-check"></i></div>
+        <div class="stat-val" id="statDelivered">0</div>
+        <div class="stat-lbl">تم الاستلام</div>
+      </div>
+      <div class="stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.15)">
+        <div class="stat-icon"><i class="fas fa-coins"></i></div>
+        <div class="stat-val" id="statRevenue">0</div>
+        <div class="stat-lbl">إجمالي المبيعات (ر.س)</div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <div class="filters-search">
+        <input type="text" id="searchInput" placeholder="ابحث بالاسم، البريد، الجوال، رقم الطلب...">
+        <i class="fas fa-search"></i>
+      </div>
+      <select id="statusFilter">
+        <option value="">كل الحالات</option>
+        <option value="pending">⏳ قيد الانتظار</option>
+        <option value="preparing">⚙️ جاري التجهيز</option>
+        <option value="review">🔍 تحت المراجعة</option>
+        <option value="delivered">✅ تم الاستلام</option>
+        <option value="cancelled">❌ ملغي</option>
+      </select>
+      <button class="refresh" id="refreshBtn"><i class="fas fa-rotate"></i> تحديث</button>
+    </div>
+
+    <!-- Orders -->
+    <div id="ordersContainer">
+      <div class="loader"><div class="spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل الطلبات...</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CASHBACK MODAL ═══ -->
+<div class="modal-back" id="cashbackModal">
+  <div class="modal">
+    <div class="modal-title">
+      <i class="fas fa-gift"></i>
+      إضافة كاش باك للعميل
+    </div>
+    <div class="modal-sub" id="cashbackSub">—</div>
+
+    <div class="modal-field">
+      <label>المبلغ (ر.س)</label>
+      <input type="number" id="cashbackAmount" placeholder="0.00" step="0.01" min="0.01">
+      <div class="quick-amounts">
+        <button type="button" data-amt="5">5 ر.س</button>
+        <button type="button" data-amt="10">10 ر.س</button>
+        <button type="button" data-amt="20">20 ر.س</button>
+        <button type="button" data-amt="50">50 ر.س</button>
+        <button type="button" data-amt="100">100 ر.س</button>
+      </div>
+    </div>
+
+    <div class="modal-field">
+      <label>السبب / ملاحظة (اختياري)</label>
+      <input type="text" id="cashbackReason" placeholder="مثال: تعويض عن تأخير، هدية، إلخ">
+    </div>
+
+    <div class="modal-actions">
+      <button class="cancel" id="cancelCashback" type="button">إلغاء</button>
+      <button class="confirm" id="confirmCashback" type="button"><i class="fas fa-check"></i> إضافة الكاش باك</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════ */
+/* ⚙️ الإعدادات — عدّلها حسب مشروعك */
+/* ═══════════════════════════════════════════════════════════ */
+const SUPABASE_URL  = 'https://xoqwzluyxynqpdpmidts.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
+const ADMIN_EMAILS = ['clan.men.ts@gmail.com']; // ⭐ أضف بريد المشرف
+const CASHBACK_RATE = 0.02;
+
+/* ═══════════════════════════════════════════════════════════ */
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, storageKey: 'men-auth-token' }
+});
+
+const $ = id => document.getElementById(id);
+const ORDER_STATUS = {
+  pending:   { label: 'قيد الانتظار', color: '#f5b342', bg: 'linear-gradient(135deg,#f5b342,#c98a1e)', icon: 'fa-hourglass-half', text: '#000' },
+  preparing: { label: 'جاري التجهيز', color: '#4a7aff', bg: 'linear-gradient(135deg,#4a7aff,#021ca4)', icon: 'fa-gears',         text: '#fff' },
+  review:    { label: 'تحت المراجعة', color: '#6a9aff', bg: 'linear-gradient(135deg,#6a9aff,#4a7aff)', icon: 'fa-magnifying-glass', text: '#fff' },
+  delivered: { label: 'تم الاستلام',   color: '#4caf50', bg: 'linear-gradient(135deg,#4caf50,#2e7d32)', icon: 'fa-circle-check',  text: '#fff' },
+  cancelled: { label: 'ملغي',         color: '#d90429', bg: 'linear-gradient(135deg,#d90429,#8b0018)', icon: 'fa-circle-xmark',  text: '#fff' }
+};
+
+let currentUser = null;
+let allOrders = [];
+let selectedOrderForCashback = null;
+
+/* ═══ Toast ═══ */
+function showToast(msg, type = 'info') {
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = `<i class="fas ${type==='success'?'fa-circle-check':type==='error'?'fa-circle-exclamation':'fa-circle-info'}"></i><span>${msg}</span>`;
+  document.body.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => {
+    t.classList.remove('show');
+    setTimeout(() => t.remove(), 400);
+  }, 3000);
+}
+
+const isAdmin = () => !!currentUser && ADMIN_EMAILS.includes((currentUser.email || '').toLowerCase());
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 🔐 AUTH GATE */
+/* ═══════════════════════════════════════════════════════════ */
+async function checkAuth() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user && ADMIN_EMAILS.includes((session.user.email || '').toLowerCase())) {
+    currentUser = session.user;
+    showDashboard();
+  } else {
+    showGate();
+  }
+}
+
+function showGate() {
+  $('loginGate').style.display = 'flex';
+  $('dashboard').style.display = 'none';
+}
+function showDashboard() {
+  $('loginGate').style.display = 'none';
+  $('dashboard').style.display = 'block';
+  $('dashUserName').textContent = currentUser.user_metadata?.name || currentUser.email.split('@')[0];
+  $('dashUserEmail').textContent = currentUser.email;
+  loadOrders();
+}
+
+$('gateBtn').addEventListener('click', async () => {
+  const email = $('gateEmail').value.trim().toLowerCase();
+  const pass = $('gatePass').value;
+  const err = $('gateErr');
+  err.classList.remove('show');
+
+  if (!email || !pass) { err.textContent = 'الرجاء إدخال البريد وكلمة المرور'; err.classList.add('show'); return; }
+  if (!ADMIN_EMAILS.includes(email)) { err.textContent = 'هذا الحساب ليس مشرفاً'; err.classList.add('show'); return; }
+
+  const btn = $('gateBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الدخول...';
+
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+    if (error) throw error;
+    currentUser = data.user;
+    showToast('مرحباً بك 👋', 'success');
+    showDashboard();
+  } catch (e) {
+    err.textContent = e.message || 'فشل تسجيل الدخول';
+    err.classList.add('show');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-right-to-bracket"></i> دخول';
+  }
+});
+
+$('gatePass').addEventListener('keydown', e => { if (e.key === 'Enter') $('gateBtn').click(); });
+$('gateEmail').addEventListener('keydown', e => { if (e.key === 'Enter') $('gatePass').focus(); });
+
+$('logoutBtn').addEventListener('click', async () => {
+  await sb.auth.signOut();
+  currentUser = null;
+  showGate();
+  showToast('تم تسجيل الخروج', 'info');
+});
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 📦 LOAD ORDERS */
+/* ═══════════════════════════════════════════════════════════ */
+async function loadOrders() {
+  const container = $('ordersContainer');
+  container.innerHTML = '<div class="loader"><div class="spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل الطلبات...</p></div>';
+
+  try {
+    const { data, error } = await sb
+      .from('men_orders')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(500);
+
+    if (error) throw error;
+    allOrders = data || [];
+    renderStats();
+    renderOrders();
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = `<div class="empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i><h3>فشل تحميل الطلبات</h3><p>${err.message}</p></div>`;
+  }
+}
+
+function renderStats() {
+  const total = allOrders.length;
+  const pending = allOrders.filter(o => o.status !== 'delivered' && o.status !== 'cancelled').length;
+  const delivered = allOrders.filter(o => o.status === 'delivered').length;
+  const revenue = allOrders.filter(o => o.status === 'delivered').reduce((s, o) => s + Number(o.total || 0), 0);
+
+  $('statTotal').textContent = total;
+  $('statPending').textContent = pending;
+  $('statDelivered').textContent = delivered;
+  $('statRevenue').textContent = revenue.toFixed(0);
+}
+
+function renderOrders() {
+  const container = $('ordersContainer');
+  const q = ($('searchInput').value || '').trim().toLowerCase();
+  const statusFilter = $('statusFilter').value;
+
+  let filtered = allOrders.filter(o => {
+    if (statusFilter && o.status !== statusFilter) return false;
+    if (q) {
+      const hay = `${o.id} ${o.user_name||''} ${o.user_email||''} ${o.user_phone||''}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  if (!filtered.length) {
+    container.innerHTML = `<div class="empty"><i class="fas fa-inbox"></i><h3>لا يوجد طلبات</h3><p>${q || statusFilter ? 'جرّب تغيير الفلتر أو البحث' : 'ستظهر الطلبات هنا تلقائياً'}</p></div>`;
+    return;
+  }
+
+  container.innerHTML = '<div class="orders-list">' + filtered.map(renderOrderCard).join('') + '</div>';
+
+  // Bind events
+  container.querySelectorAll('[data-apply-status]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const oid = btn.dataset.applyStatus;
+      const sel = container.querySelector(`select[data-order-select="${oid}"]`);
+      await applyStatus(oid, sel.value, btn);
+    });
+  });
+
+  container.querySelectorAll('[data-add-cashback]').forEach(btn => {
+    btn.addEventListener('click', () => openCashbackModal(btn.dataset.addCashback));
+  });
+}
+
+function renderOrderCard(o) {
+  const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
+  const items = Array.isArray(o.items) ? o.items : [];
+  const itemsHtml = items.map(it => `<div>• <span class="name">${it.name || 'منتج'}</span> × ${it.qty || 1} — ${(Number(it.price||0) * Number(it.qty||1)).toFixed(2)} ر.س</div>`).join('') || '<div>—</div>';
+  const date = o.created_at ? new Date(o.created_at).toLocaleString('ar-SA', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+
+  // Cashback info
+  let cashbackHtml = '';
+  if (o.status === 'delivered' && o.cashback_applied) {
+    cashbackHtml = `<div class="order-cashback-info earned"><i class="fas fa-gift"></i> كاش باك مكتسب: ${Number(o.cashback || 0).toFixed(2)} ر.س</div>`;
+  } else if (o.status !== 'cancelled' && o.status !== 'delivered') {
+    const potential = Number(o.total || 0) * CASHBACK_RATE;
+    cashbackHtml = `<div class="order-cashback-info pending"><i class="fas fa-clock"></i> متوقع عند التسليم: ${potential.toFixed(2)} ر.س</div>`;
+  }
+
+  // Status options
+  const options = Object.entries(ORDER_STATUS).map(([k, v]) =>
+    `<option value="${k}" ${k === o.status ? 'selected' : ''}>${v.label}</option>`
+  ).join('');
+
+  return `
+    <div class="order" data-order="${o.id}">
+      <div class="order-top">
+        <div>
+          <div class="order-id" style="--st-color:${st.color}">
+            <span class="dot"></span>
+            طلب #${String(o.id || '').slice(-8).toUpperCase()}
+          </div>
+          <div class="order-date" style="margin-top:6px"><i class="fas fa-clock"></i> ${date}</div>
+        </div>
+        <div class="order-badge" style="background:${st.bg};color:${st.text}">
+          <i class="fas ${st.icon}"></i> ${st.label}
+        </div>
+      </div>
+
+      <div class="order-customer">
+        <div class="cust-item"><i class="fas fa-user"></i><div><div class="lbl">العميل</div><div class="val">${o.user_name || '—'}</div></div></div>
+        <div class="cust-item"><i class="fas fa-envelope"></i><div><div class="lbl">البريد</div><div class="val">${o.user_email || '—'}</div></div></div>
+        <div class="cust-item"><i class="fas fa-phone"></i><div><div class="lbl">الجوال</div><div class="val">${o.user_phone || '—'}</div></div></div>
+      </div>
+
+      <div class="order-items">${itemsHtml}</div>
+
+      <div class="order-bottom">
+        <div class="order-total">${Number(o.total || 0).toFixed(2)} ر.س</div>
+        ${cashbackHtml}
+      </div>
+
+      <div class="order-actions">
+        <select data-order-select="${o.id}">${options}</select>
+        <button class="btn-action btn-apply" data-apply-status="${o.id}"><i class="fas fa-check"></i> تطبيق الحالة</button>
+        <button class="btn-action btn-cashback" data-add-cashback="${o.id}"><i class="fas fa-gift"></i> إضافة كاش باك</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 🔄 APPLY STATUS + AUTO CASHBACK */
+/* ═══════════════════════════════════════════════════════════ */
+async function applyStatus(orderId, newStatus, btnEl) {
+  if (!ORDER_STATUS[newStatus]) return;
+  const order = allOrders.find(o => String(o.id) === String(orderId));
+  if (!order) return;
+  if (order.status === newStatus) { showToast('الحالة نفسها', 'info'); return; }
+
+  if (btnEl) { btnEl.disabled = true; btnEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري...'; }
+
+  const oldStatus = order.status;
+  const updates = { status: newStatus, updated_at: new Date().toISOString() };
+  let cashbackMsg = '';
+
+  // ✅ تسليم → إضافة كاش باك
+  if (newStatus === 'delivered' && !order.cashback_applied) {
+    const earned = Math.round(Number(order.total || 0) * CASHBACK_RATE * 100) / 100;
+    updates.cashback = earned;
+    updates.cashback_applied = true;
+    updates.cashback_applied_at = new Date().toISOString();
+    cashbackMsg = ` + ${earned.toFixed(2)} ر.س كاش باك`;
+
+    // سجّل في log
+    try {
+      await sb.from('men_cashback_log').insert({
+        user_id: order.user_id,
+        user_email: order.user_email,
+        amount: earned,
+        reason: `كاش باك تلقائي من الطلب #${orderId}`,
+        order_id: orderId,
+        type: 'order',
+        created_by: currentUser.email
+      });
+    } catch (e) { console.warn('log insert failed', e); }
+  }
+
+  // ❌ إلغاء التسليم أو الإلغاء → خصم الكاش باك
+  if ((oldStatus === 'delivered' && newStatus !== 'delivered') || newStatus === 'cancelled') {
+    if (order.cashback_applied && order.cashback > 0) {
+      const refund = Number(order.cashback || 0);
+      updates.cashback = 0;
+      updates.cashback_applied = false;
+      cashbackMsg = ` − خصم ${refund.toFixed(2)} ر.س`;
+
+      // سجّل خصم سالب
+      try {
+        await sb.from('men_cashback_log').insert({
+          user_id: order.user_id,
+          user_email: order.user_email,
+          amount: -refund,
+          reason: `إلغاء كاش باك الطلب #${orderId}`,
+          order_id: orderId,
+          type: 'refund',
+          created_by: currentUser.email
+        });
+      } catch (e) { console.warn(e); }
+    }
+  }
+
+  try {
+    const { error } = await sb.from('men_orders').update(updates).eq('id', orderId);
+    if (error) throw error;
+
+    // تحديث محلي
+    Object.assign(order, updates);
+    renderStats();
+    renderOrders();
+    showToast(`✅ تم التحديث إلى "${ORDER_STATUS[newStatus].label}"${cashbackMsg}`, 'success');
+  } catch (err) {
+    console.error(err);
+    showToast('فشل التحديث: ' + err.message, 'error');
+    if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = '<i class="fas fa-check"></i> تطبيق الحالة'; }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 💰 CASHBACK MODAL */
+/* ═══════════════════════════════════════════════════════════ */
+function openCashbackModal(orderId) {
+  const order = allOrders.find(o => String(o.id) === String(orderId));
+  if (!order) return;
+  selectedOrderForCashback = order;
+
+  $('cashbackSub').innerHTML = `
+    العميل: <strong>${order.user_name || '—'}</strong><br>
+    البريد: <strong dir="ltr">${order.user_email || '—'}</strong><br>
+    رقم الطلب: <strong>#${String(order.id).slice(-8).toUpperCase()}</strong>
+  `;
+  $('cashbackAmount').value = '';
+  $('cashbackReason').value = '';
+  $('cashbackModal').classList.add('show');
+  setTimeout(() => $('cashbackAmount').focus(), 200);
+}
+
+function closeCashbackModal() {
+  $('cashbackModal').classList.remove('show');
+  selectedOrderForCashback = null;
+}
+
+document.querySelectorAll('[data-amt]').forEach(b => {
+  b.addEventListener('click', () => {
+    $('cashbackAmount').value = b.dataset.amt;
+  });
+});
+
+$('cancelCashback').addEventListener('click', closeCashbackModal);
+$('cashbackModal').addEventListener('click', e => {
+  if (e.target.id === 'cashbackModal') closeCashbackModal();
+});
+
+$('confirmCashback').addEventListener('click', async () => {
+  const amount = Number($('cashbackAmount').value);
+  const reason = $('cashbackReason').value.trim() || 'كاش باك إضافي من الإدارة';
+
+  if (!amount || amount <= 0) { showToast('أدخل مبلغاً صحيحاً', 'error'); return; }
+  if (!selectedOrderForCashback) return;
+
+  const order = selectedOrderForCashback;
+  const btn = $('confirmCashback');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
+
+  try {
+    // إضافة سجل كاش باك
+    const { error } = await sb.from('men_cashback_log').insert({
+      user_id: order.user_id,
+      user_email: order.user_email,
+      amount: amount,
+      reason: reason,
+      order_id: order.id,
+      type: 'manual',
+      created_by: currentUser.email
+    });
+    if (error) throw error;
+
+    showToast(`✅ تم إضافة ${amount.toFixed(2)} ر.س كاش باك لـ ${order.user_name || order.user_email}`, 'success');
+    closeCashbackModal();
+  } catch (err) {
+    console.error(err);
+    showToast('فشل: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-check"></i> إضافة الكاش باك';
+  }
+});
+
+/* ═══ Filters ═══ */
+$('searchInput').addEventListener('input', renderOrders);
+$('statusFilter').addEventListener('change', renderOrders);
+$('refreshBtn').addEventListener('click', () => { loadOrders(); showToast('تم التحديث', 'info'); });
+
+/* ═══ Auth state ═══ */
+sb.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_OUT') showGate();
+});
+
+/* ═══ Init ═══ */
+checkAuth();
+</script>
+</body>
+</html>
