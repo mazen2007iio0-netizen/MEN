@@ -7,19 +7,13 @@
   <meta name="description" content="لوحة إدارة طلبات MEN Store">
   <title>لوحة الطلبات — MEN Store Admin</title>
   
-  <!-- ═══ الخطوط ═══ -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <!-- ═══ الأيقونات ═══ -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
-  <!-- ═══ Favicon (اختياري) ═══ -->
   <link rel="icon" type="image/png" href="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png">
   
   <style>
-    /* ═══ شاشة التحميل الأولية ═══ */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     html, body {
@@ -84,7 +78,6 @@
       letter-spacing: .5px;
     }
     
-    /* ═══ شاشة الخطأ ═══ */
     #bootError {
       position: fixed;
       inset: 0;
@@ -137,51 +130,43 @@
 </head>
 <body>
 
-  <!-- ═══ شاشة التحميل ═══ -->
+  <!-- شاشة التحميل -->
   <div id="bootLoader">
     <img class="boot-logo" src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN Store">
     <div class="boot-spinner"></div>
     <div class="boot-text">جاري تحميل لوحة الإدارة...</div>
   </div>
 
-  <!-- ═══ شاشة الخطأ (تظهر فقط عند الفشل) ═══ -->
+  <!-- شاشة الخطأ -->
   <div id="bootError">
     <i class="fas fa-triangle-exclamation"></i>
     <h2>فشل تحميل اللوحة</h2>
-    <p id="bootErrMsg">تعذّر تحميل ملف الإدارة. تأكد من وجود ملف <code>admin-orders.js</code> في نفس المجلد.</p>
+    <p id="bootErrMsg">تعذّر تحميل ملف <code>as.js</code>. تأكد من وجوده في نفس المجلد.</p>
     <button onclick="location.reload()">
       <i class="fas fa-rotate"></i> إعادة المحاولة
     </button>
   </div>
 
-  <!-- ═══ تحميل السكربت الرئيسي ═══ -->
-  <script src="admin-orders.js" onerror="window.__admLoadError = true;"></script>
+  <!-- ⭐ السكربت الرئيسي — الاسم الجديد as.js -->
+  <script src="as.js" onerror="window.__admLoadError = true;"></script>
   
-  <!-- ═══ التشغيل ═══ -->
   <script>
     (function() {
       'use strict';
       
-      // انتظر تحميل كل شيء
       window.addEventListener('load', function() {
-        
-        // تحقق من تحميل السكربت
         if (window.__admLoadError || !window.MEN_ADMIN) {
           document.getElementById('bootLoader').classList.add('hide');
           document.getElementById('bootError').classList.add('show');
           return;
         }
         
-        // افتح اللوحة بعد تأخير بسيط
         setTimeout(function() {
           try {
             window.MEN_ADMIN.open();
-            
-            // إخفاء شاشة التحميل بعد فتح اللوحة
             setTimeout(function() {
               document.getElementById('bootLoader').classList.add('hide');
             }, 400);
-            
           } catch (err) {
             console.error('فشل فتح اللوحة:', err);
             document.getElementById('bootLoader').classList.add('hide');
@@ -191,7 +176,6 @@
         }, 300);
       });
       
-      // حماية إضافية: لو ما اشتغل خلال 10 ثواني
       setTimeout(function() {
         var loader = document.getElementById('bootLoader');
         if (loader && !loader.classList.contains('hide')) {
