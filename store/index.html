@@ -15,7 +15,7 @@ body{background:#060812;color:#f0f4ff;font-family:'Cairo','Outfit',sans-serif;li
 ::-webkit-scrollbar-track{background:#060812}
 ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#021ca4,#4a7aff);border-radius:12px;border:2px solid #060812}
 .container{width:94%;max-width:1400px;margin:0 auto;padding:0 20px}
-:root{--blue-deep:#021ca4;--blue-mid:#1a3a9e;--blue-light:#4a7aff;--blue-bright:#6a9aff;--blue-glow:rgba(74,122,255,.4);--gold:#f5b342;--green:#4caf50;--white:#fff;--card-bg:linear-gradient(145deg,rgba(14,20,38,.85),rgba(8,12,24,.9));--card-border:rgba(74,122,255,.12);--transition:all .45s cubic-bezier(.25,.46,.45,.94);--transition-fast:all .25s cubic-bezier(.25,.46,.45,.94);--radius-xl:24px;--radius-2xl:36px;--radius-3xl:48px}
+:root{--blue-deep:#021ca4;--blue-mid:#1a3a9e;--blue-light:#4a7aff;--blue-bright:#6a9aff;--blue-sky:#00d4ff;--blue-glow:rgba(74,122,255,.4);--gold:#f5b342;--green:#4caf50;--white:#fff;--card-bg:linear-gradient(145deg,rgba(14,20,38,.85),rgba(8,12,24,.9));--card-border:rgba(74,122,255,.12);--transition:all .45s cubic-bezier(.25,.46,.45,.94);--transition-fast:all .25s cubic-bezier(.25,.46,.45,.94);--radius-xl:24px;--radius-2xl:36px;--radius-3xl:48px}
 h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em}
 .riyal-icon{display:inline-block;width:.9em;height:.9em;vertical-align:-.08em;flex-shrink:0}
 .riyal-icon.small{width:.75em;height:.75em;vertical-align:-.05em}
@@ -38,8 +38,192 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 .header-cart-btn:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(74,122,255,.5)}
 .header-cart-btn .cart-badge{background:transparent;color:#fff;border-radius:0;padding:0 4px;font-size:.9rem;font-weight:800;min-width:18px;text-align:center;line-height:1.5;text-shadow:0 0 12px rgba(255,255,255,.45)}
 .menu-toggle{display:none;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);color:var(--blue-bright);width:40px;height:40px;border-radius:12px;cursor:pointer;font-size:1rem;align-items:center;justify-content:center}
+
+/* ═══════ Cart Page ═══════ */
+.cart-page-wrap{padding:20px 0 80px}
+.cart-page-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:32px}
+.cart-page-header-left{display:flex;align-items:center;gap:16px}
+.cart-page-title-icon{width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;box-shadow:0 12px 36px -8px rgba(74,122,255,.7);position:relative}
+.cart-page-title-icon::after{content:attr(data-count);position:absolute;top:-6px;right:-6px;background:linear-gradient(135deg,#d90429,#8b0018);color:#fff;font-size:.72rem;font-weight:900;min-width:24px;height:24px;padding:0 6px;border-radius:12px;display:flex;align-items:center;justify-content:center;border:2px solid #060812;box-shadow:0 4px 12px rgba(217,4,41,.5)}
+.cart-page-title h1{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;background:linear-gradient(135deg,#fff,var(--blue-bright));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-1px;margin-bottom:4px}
+.cart-page-title p{color:#8a92b0;font-size:.9rem;font-weight:600}
+.cart-continue-btn{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;border-radius:60px;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.2);color:var(--blue-bright);font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:var(--transition);text-decoration:none}
+.cart-continue-btn:hover{background:rgba(74,122,255,.2);transform:translateX(4px)}
+
+.cart-layout{display:grid;grid-template-columns:1fr 400px;gap:28px;align-items:start}
+
+.cart-main-card{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:28px;padding:28px;backdrop-filter:blur(16px);box-shadow:0 20px 60px -20px rgba(0,0,0,.6)}
+
+.cart-item-card{display:grid;grid-template-columns:120px 1fr auto;gap:20px;padding:18px;background:linear-gradient(145deg,rgba(20,28,48,.6),rgba(10,16,28,.7));border:1px solid rgba(74,122,255,.1);border-radius:22px;margin-bottom:14px;transition:var(--transition);position:relative;overflow:hidden;align-items:center}
+.cart-item-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;background:linear-gradient(180deg,var(--blue-light),var(--blue-deep));opacity:.6;transition:var(--transition)}
+.cart-item-card:hover{border-color:rgba(74,122,255,.3);transform:translateY(-2px);box-shadow:0 12px 32px -12px rgba(74,122,255,.4)}
+.cart-item-card.discounted{border-color:rgba(76,175,80,.4);background:linear-gradient(145deg,rgba(20,48,30,.5),rgba(10,28,18,.6))}
+.cart-item-card.discounted::before{background:linear-gradient(180deg,#4caf50,#2e7d32)}
+.cart-item-img-wrap{position:relative;width:120px;height:120px;border-radius:18px;overflow:hidden;background:#0a0e1a;border:1px solid rgba(74,122,255,.1)}
+.cart-item-img-wrap img{width:100%;height:100%;object-fit:cover;transition:var(--transition)}
+.cart-item-card:hover .cart-item-img-wrap img{transform:scale(1.06)}
+.cart-item-discount-tag{position:absolute;top:8px;right:8px;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;font-size:.66rem;font-weight:900;padding:4px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;box-shadow:0 4px 12px rgba(76,175,80,.5)}
+.cart-item-body{min-width:0}
+.cart-item-cat{font-size:.7rem;color:var(--blue-bright);font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:inline-flex;align-items:center;gap:6px}
+.cart-item-name{font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:10px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cart-item-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.cart-item-price{font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,#fff,var(--blue-bright));-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-flex;align-items:center;gap:4px}
+.cart-item-price .riyal-icon{width:.7em;height:.7em}
+.cart-item-old-price{font-size:.88rem;color:#6a708a;text-decoration:line-through;font-weight:600}
+.cart-item-unit{font-size:.78rem;color:#8a92b0;font-weight:600}
+
+.cart-qty-picker{display:inline-flex;align-items:center;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.2);border-radius:60px;padding:4px;gap:4px;transition:var(--transition-fast)}
+.cart-qty-picker:hover{border-color:rgba(74,122,255,.4)}
+.cart-qty-btn{width:36px;height:36px;border-radius:50%;border:none;background:rgba(74,122,255,.12);color:var(--blue-bright);cursor:pointer;font-size:.85rem;font-weight:800;transition:var(--transition-fast);display:flex;align-items:center;justify-content:center}
+.cart-qty-btn:hover:not(:disabled){background:linear-gradient(135deg,var(--blue-deep),var(--blue-light));color:#fff;transform:scale(1.1)}
+.cart-qty-btn:disabled{opacity:.3;cursor:not-allowed}
+.cart-qty-value{min-width:36px;text-align:center;font-weight:900;color:#fff;font-size:1rem;direction:ltr}
+
+.cart-item-side{display:flex;flex-direction:column;align-items:flex-end;gap:12px;justify-content:space-between;min-height:120px}
+.cart-item-total{text-align:left}
+.cart-item-total .lbl{font-size:.68rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.cart-item-total .val{font-size:1.35rem;font-weight:900;background:linear-gradient(135deg,#fff,var(--blue-bright));-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-flex;align-items:center;gap:4px}
+.cart-item-total .val .riyal-icon{width:.7em;height:.7em}
+
+.cart-remove-btn{width:42px;height:42px;border-radius:14px;background:rgba(217,4,41,.1);border:1px solid rgba(217,4,41,.25);color:#ff6b6b;cursor:pointer;font-size:.9rem;transition:var(--transition-fast);display:flex;align-items:center;justify-content:center}
+.cart-remove-btn:hover{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff;transform:translateY(-2px);box-shadow:0 8px 20px -6px rgba(217,4,41,.7);border-color:transparent}
+
+.cart-empty-page{text-align:center;padding:80px 30px;background:linear-gradient(145deg,rgba(74,122,255,.05),rgba(74,122,255,.02));border:1.5px dashed rgba(74,122,255,.25);border-radius:28px}
+.cart-empty-page-icon{width:120px;height:120px;margin:0 auto 24px;border-radius:50%;background:linear-gradient(135deg,rgba(74,122,255,.15),rgba(74,122,255,.05));display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--blue-bright);border:2px dashed rgba(74,122,255,.3);animation:cartEmptyPulse 3s ease-in-out infinite}
+@keyframes cartEmptyPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(74,122,255,.3)}50%{transform:scale(1.05);box-shadow:0 0 0 20px rgba(74,122,255,0)}}
+.cart-empty-page h3{font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:10px}
+.cart-empty-page p{color:#8a92b0;font-size:1rem;margin-bottom:26px;font-weight:600}
+.cart-empty-shop-btn{padding:15px 34px;border-radius:60px;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:var(--transition);box-shadow:0 12px 36px -8px rgba(74,122,255,.7)}
+.cart-empty-shop-btn:hover{transform:translateY(-3px);box-shadow:0 16px 48px -8px rgba(74,122,255,.9)}
+
+/* ═══════ Sidebar ═══════ */
+.cart-sidebar{position:sticky;top:100px;display:flex;flex-direction:column;gap:16px}
+.cart-summary-card{background:linear-gradient(145deg,rgba(14,20,38,.95),rgba(8,12,24,.98));border:1.5px solid rgba(74,122,255,.18);border-radius:28px;padding:26px;box-shadow:0 20px 60px -20px rgba(2,28,164,.5);position:relative;overflow:hidden}
+.cart-summary-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#021ca4,#4a7aff,#00d4ff,#4a7aff,#021ca4);background-size:200% 100%;animation:cartGradientShift 3s linear infinite}
+@keyframes cartGradientShift{0%{background-position:0% 0}100%{background-position:200% 0}}
+.cart-summary-title{display:flex;align-items:center;gap:12px;font-size:1.15rem;font-weight:900;color:#fff;margin-bottom:22px}
+.cart-summary-title i{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 6px 18px -6px rgba(74,122,255,.8)}
+
+/* Discount code input */
+.cart-discount-box{margin-bottom:20px}
+.cart-discount-label{font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.cart-discount-label i{color:var(--blue-bright)}
+.cart-discount-row{display:flex;gap:8px}
+.cart-discount-input{flex:1;padding:13px 18px;border-radius:14px;border:1.5px solid rgba(74,122,255,.15);background:rgba(0,0,0,.35);color:#f0f4ff;outline:none;font-family:'Cairo',sans-serif;font-size:.88rem;font-weight:700;min-width:0;transition:var(--transition-fast)}
+.cart-discount-input:focus{border-color:var(--blue-light);box-shadow:0 0 0 4px rgba(74,122,255,.12)}
+.cart-discount-input::placeholder{color:#4a5070;font-weight:500}
+.cart-discount-apply{padding:13px 22px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid));color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;white-space:nowrap;transition:var(--transition-fast);box-shadow:0 8px 20px -8px rgba(74,122,255,.8)}
+.cart-discount-apply:hover{transform:translateY(-2px);box-shadow:0 12px 28px -8px rgba(74,122,255,1)}
+.cart-discount-msg{font-size:.78rem;color:#4caf50;margin-top:8px;min-height:18px;font-weight:700;display:flex;align-items:center;gap:6px}
+.cart-discount-msg.error{color:#ff6b6b}
+
+/* Cashback Box — BLUE/SKY ═════════ */
+.cb-box{margin-bottom:20px;background:linear-gradient(145deg,rgba(0,212,255,.06),rgba(74,122,255,.06));border:1.5px solid rgba(0,212,255,.3);border-radius:22px;padding:18px;box-shadow:0 12px 40px -14px rgba(0,212,255,.3);position:relative;overflow:hidden}
+.cb-box::before{content:'';position:absolute;top:-50%;right:-30%;width:200px;height:200px;background:radial-gradient(circle,rgba(0,212,255,.15),transparent 70%);pointer-events:none}
+.cb-head{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+.cb-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#00d4ff,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#fff;box-shadow:0 8px 22px -8px rgba(0,212,255,.9);flex-shrink:0}
+.cb-info{flex:1;min-width:0}
+.cb-title{font-weight:900;font-size:.94rem;color:#fff;display:flex;align-items:center;gap:6px}
+.cb-title i{color:#00d4ff;font-size:.85rem}
+.cb-bal{font-size:.78rem;color:#8a92b0;font-weight:700;margin-top:3px}
+.cb-bal b{color:#00d4ff;font-weight:900;text-shadow:0 0 12px rgba(0,212,255,.4)}
+.cb-switch-wrap{cursor:pointer;display:inline-flex;flex-shrink:0}
+.cb-switch-wrap input{display:none}
+.cb-switch{width:54px;height:30px;border-radius:60px;background:rgba(255,255,255,.08);border:1.5px solid rgba(0,212,255,.35);position:relative;transition:all .3s}
+.cb-switch::after{content:'';position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#6a7290;transition:all .3s}
+.cb-switch-wrap input:checked ~ .cb-switch{background:linear-gradient(135deg,#00d4ff,#4a7aff);border-color:transparent;box-shadow:0 0 26px -4px rgba(0,212,255,.8)}
+.cb-switch-wrap input:checked ~ .cb-switch::after{right:calc(100% - 25px);background:#fff;box-shadow:0 0 8px rgba(255,255,255,.6)}
+.cb-body{margin-top:16px;padding-top:16px;border-top:1px dashed rgba(0,212,255,.25);animation:cbIn .35s ease;position:relative;z-index:1}
+@keyframes cbIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+.cb-full-btn{width:100%;padding:15px 20px;border-radius:16px;border:none;background:linear-gradient(135deg,#00d4ff,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:900;font-size:.92rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .3s;box-shadow:0 12px 32px -8px rgba(0,212,255,.7);margin-bottom:16px;position:relative;overflow:hidden}
+.cb-full-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.3) 50%,transparent 70%);transform:translateX(-100%);transition:transform .6s}
+.cb-full-btn:hover:not(:disabled)::after{transform:translateX(100%)}
+.cb-full-btn:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 18px 42px -8px rgba(0,212,255,.9)}
+.cb-full-btn.active{background:linear-gradient(135deg,#4caf50,#2e7d32);box-shadow:0 12px 32px -8px rgba(76,175,80,.8)}
+.cb-full-btn:disabled{opacity:.45;cursor:not-allowed;background:rgba(255,255,255,.06);color:#8a92b0;box-shadow:none;transform:none}
+
+.cb-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.cb-row label{font-size:.76rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:.8px}
+.cb-input{position:relative;display:flex;align-items:center;background:rgba(0,0,0,.35);border:1.5px solid rgba(0,212,255,.2);border-radius:12px;padding:0 14px;height:44px;min-width:160px;transition:all .3s}
+.cb-input:focus-within{border-color:#00d4ff;box-shadow:0 0 0 4px rgba(0,212,255,.15)}
+.cb-input input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;text-align:right;direction:ltr;padding:0 6px}
+.cb-input input::-webkit-outer-spin-button,.cb-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.cb-input input[type=number]{-moz-appearance:textfield}
+.cb-input span{color:#00d4ff;font-weight:800;font-size:.78rem;flex-shrink:0}
+
+.cb-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.cb-quick button{padding:9px 6px;border-radius:10px;border:1.5px solid rgba(0,212,255,.25);background:rgba(0,212,255,.08);color:#00d4ff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.74rem;cursor:pointer;transition:all .25s;white-space:nowrap}
+.cb-quick button:hover{background:linear-gradient(135deg,#00d4ff,#4a7aff);border-color:transparent;color:#fff;transform:translateY(-2px);box-shadow:0 8px 20px -6px rgba(0,212,255,.6)}
+
+.cb-summary{background:rgba(0,0,0,.3);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;border:1px solid rgba(0,212,255,.12)}
+.cb-summary > div{display:flex;justify-content:space-between;align-items:center;font-size:.83rem;font-weight:700;color:#a8b0cc}
+.cb-summary > div b{color:#fff;font-weight:900;direction:ltr}
+.cb-summary .discount b{color:#4caf50}
+.cb-summary .cb-used b{color:#00d4ff}
+.cb-summary .total{padding-top:10px;border-top:1px dashed rgba(0,212,255,.25);font-size:.94rem}
+.cb-summary .total b{font-size:1.2rem;background:linear-gradient(135deg,#fff,#00d4ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cb-summary .total.zero b{background:linear-gradient(135deg,#4caf50,#66bb6a);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.cb-success{margin-top:14px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,rgba(76,175,80,.15),rgba(46,125,50,.08));border:1.5px solid rgba(76,175,80,.4);color:#66bb6a;font-weight:800;font-size:.86rem;display:flex;align-items:center;gap:10px;animation:cbIn .35s ease}
+.cb-success i{font-size:1.2rem}
+
+/* Summary breakdown */
+.cart-breakdown{background:rgba(0,0,0,.25);border-radius:16px;padding:18px;margin-bottom:20px;display:flex;flex-direction:column;gap:12px}
+.cart-breakdown-row{display:flex;justify-content:space-between;align-items:center;font-size:.9rem;font-weight:700;color:#a8b0cc}
+.cart-breakdown-row b{color:#fff;font-weight:900;direction:ltr;display:inline-flex;align-items:center;gap:4px}
+.cart-breakdown-row b .riyal-icon{width:.85em;height:.85em}
+.cart-breakdown-row.discount b{color:#4caf50}
+.cart-breakdown-row.cb b{color:#00d4ff}
+
+.cart-final-total{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-top:2px dashed rgba(74,122,255,.2);margin-bottom:20px}
+.cart-final-total .lbl{font-size:1rem;font-weight:900;color:#fff}
+.cart-final-total .val{font-size:1.9rem;font-weight:900;background:linear-gradient(135deg,#fff,#00d4ff);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-flex;align-items:center;gap:6px;letter-spacing:-1px}
+.cart-final-total .val .riyal-icon{width:.7em;height:.7em}
+
+.cart-checkout-btn{width:100%;padding:18px;border-radius:18px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:900;font-size:1.05rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .35s;box-shadow:0 16px 40px -10px rgba(74,122,255,.8);position:relative;overflow:hidden}
+.cart-checkout-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.25) 50%,transparent 70%);transform:translateX(-100%);transition:transform .7s}
+.cart-checkout-btn:hover::after{transform:translateX(100%)}
+.cart-checkout-btn:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 20px 50px -10px rgba(74,122,255,1)}
+.cart-checkout-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.cart-checkout-btn i{font-size:1.15rem}
+
+.cart-trust-badges{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;flex-wrap:wrap}
+.cart-trust-badges span{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;color:#8a92b0;font-weight:700}
+.cart-trust-badges span i{color:#4caf50;font-size:.8rem}
+
+/* Responsive */
+@media (max-width:1024px){
+  .cart-layout{grid-template-columns:1fr;gap:20px}
+  .cart-sidebar{position:static;top:auto}
+}
+@media (max-width:768px){
+  .cart-item-card{grid-template-columns:90px 1fr;gap:14px}
+  .cart-item-img-wrap{width:90px;height:90px}
+  .cart-item-side{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center;min-height:auto;padding-top:10px;border-top:1px dashed rgba(74,122,255,.15)}
+  .cart-item-total{text-align:right}
+  .cart-page-title-icon{width:54px;height:54px;font-size:1.3rem}
+  .cart-summary-card{padding:22px 18px}
+  .cb-quick{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:480px){
+  .cart-item-card{grid-template-columns:70px 1fr;padding:14px;gap:12px}
+  .cart-item-img-wrap{width:70px;height:70px;border-radius:14px}
+  .cart-item-name{font-size:.92rem}
+  .cart-item-price{font-size:1.15rem}
+  .cart-item-total .val{font-size:1.1rem}
+  .cart-qty-picker{padding:3px}
+  .cart-qty-btn{width:32px;height:32px;font-size:.75rem}
+  .cart-qty-value{min-width:30px;font-size:.9rem}
+  .cart-remove-btn{width:36px;height:36px;font-size:.82rem}
+  .cart-empty-page{padding:50px 20px}
+  .cart-empty-page-icon{width:90px;height:90px;font-size:2.2rem}
+  .cart-empty-page h3{font-size:1.2rem}
+}
+
+/* ═══════ Rest of Store CSS (banner, products, etc.) ═══════ */
 .store-banner{position:relative;width:100%;margin:22px 0 22px;min-height:270px;border-radius:var(--radius-3xl);overflow:hidden;isolation:isolate;display:flex;align-items:center;background:linear-gradient(135deg,rgba(2,28,164,.42),rgba(74,122,255,.12) 55%,rgba(6,8,18,.92));border:1px solid rgba(74,122,255,.18);box-shadow:0 26px 70px -26px rgba(2,28,164,.75),inset 0 1px 0 rgba(255,255,255,.07)}
-.store-banner::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(circle at 12% 18%,rgba(74,122,255,.35),transparent 45%),radial-gradient(circle at 88% 88%,rgba(245,179,66,.16),transparent 45%)}
+.store-banner::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(circle at 12% 18%,rgba(74,122,255,.35),transparent 45%),radial-gradient(circle at 88% 88%,rgba(0,212,255,.16),transparent 45%)}
 .store-banner .banner-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:none;filter:brightness(.72) saturate(1.15)}
 .store-banner.has-image .banner-bg{display:block}
 .store-banner .banner-overlay{position:absolute;inset:0;z-index:1;display:none;background:linear-gradient(to left,rgba(6,8,18,.95) 0%,rgba(2,28,164,.62) 50%,rgba(6,8,18,.88) 100%)}
@@ -223,89 +407,6 @@ header.scrolled{background:rgba(4,6,14,.95);box-shadow:0 6px 40px rgba(0,0,0,.5)
 @keyframes modalIn{from{opacity:0;transform:scale(.94) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .modal-close{position:absolute;top:18px;left:20px;width:38px;height:38px;border-radius:50%;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);font-size:16px;cursor:pointer;color:#8a92b0;transition:var(--transition-fast);display:flex;align-items:center;justify-content:center;z-index:5}
 .modal-close:hover{background:rgba(217,4,41,.15);color:#ff6b6b;transform:rotate(90deg)}
-.cart-modal-box{width:100%;max-width:540px;padding:36px 32px}
-.cart-modal-box h3{font-size:1.5rem;margin-bottom:22px;color:#fff;display:flex;align-items:center;gap:12px}
-.cart-modal-box h3 i{width:40px;height:40px;background:linear-gradient(135deg,var(--blue-deep),var(--blue-light));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1rem}
-.cart-items-list{margin-bottom:6px;max-height:320px;overflow-y:auto;padding-left:6px}
-.cart-item{display:flex;align-items:center;gap:12px;background:rgba(74,122,255,.04);border:1px solid rgba(74,122,255,.08);border-radius:18px;padding:12px 14px;margin-bottom:10px;flex-wrap:wrap;transition:var(--transition-fast);position:relative}
-.cart-item.discounted{border-color:rgba(76,175,80,.4);background:rgba(76,175,80,.05)}
-.cart-item.discounted::after{content:'\f81d  خصم';font-family:'Font Awesome 6 Free','Cairo',sans-serif;font-weight:900;position:absolute;top:-8px;left:10px;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;font-size:.62rem;font-weight:800;padding:3px 10px;border-radius:20px;line-height:1.4}
-.cart-item img{width:56px;height:56px;object-fit:cover;border-radius:12px;flex-shrink:0}
-.cart-item .item-details{flex:1;min-width:120px}
-.cart-item .item-details .name{font-weight:700;color:#fff;font-size:.9rem;margin-bottom:2px}
-.cart-item .item-details .price{color:#8a92b0;font-size:.8rem;display:inline-flex;align-items:center;gap:4px}
-.cart-item .item-details .price .riyal-icon{width:.85em;height:.85em}
-.cart-item .qty-control{display:flex;align-items:center;gap:8px;margin-top:8px}
-.qty-btn{background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);color:var(--blue-bright);width:28px;height:28px;border-radius:50%;cursor:pointer;font-weight:700;transition:var(--transition-fast);display:flex;align-items:center;justify-content:center;font-size:.75rem}
-.qty-btn:hover{background:rgba(74,122,255,.2)}
-.qty-number{font-weight:800;min-width:24px;text-align:center;color:#fff;font-size:.9rem}
-.cart-item .item-total{font-size:.82rem;color:var(--blue-bright);font-weight:700;display:inline-flex;align-items:center;gap:4px}
-.cart-item .item-total .riyal-icon{width:.85em;height:.85em}
-.btn-cart-remove{background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.15);color:#ff6b6b;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.8rem}
-.btn-cart-remove:hover{background:rgba(217,4,41,.2);transform:scale(1.08)}
-.cart-total-display{display:flex;justify-content:space-between;align-items:center;font-size:1.3rem;font-weight:800;border-top:2px solid rgba(74,122,255,.1);padding-top:16px;margin-top:14px;color:#fff}
-.cart-total-display .total-price{display:inline-flex;align-items:center;gap:8px;font-size:1.5rem}
-.cart-total-display .total-price .num{background:linear-gradient(135deg,#fff,var(--blue-bright));-webkit-background-clip:text;background-clip:text;color:transparent}
-.cart-total-display .total-price .riyal-icon{width:.7em;height:.7em}
-.discount-row{display:flex;gap:8px;align-items:center;margin:16px 0 8px}
-.discount-row input{flex:1;padding:11px 20px;border-radius:60px;border:1px solid rgba(74,122,255,.1);background:rgba(0,0,0,.25);color:#f0f4ff;outline:none;font-family:'Cairo',sans-serif;font-size:.88rem;min-width:0}
-.discount-row input:focus{border-color:var(--blue-light);box-shadow:0 0 0 3px rgba(74,122,255,.1)}
-.discount-row .btn-apply{background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid));border:none;border-radius:60px;padding:11px 22px;color:#fff;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Cairo',sans-serif;font-size:.85rem}
-.discount-row .btn-apply:hover{transform:scale(1.04)}
-.discount-msg{font-size:.85rem;color:#4caf50;margin-top:4px;min-height:20px;font-weight:600}
-.discount-msg.error{color:#ff6b6b}
-.discount-msg.info{color:var(--blue-bright)}
-.input-field{margin:14px 0}
-.input-field label{display:block;margin-bottom:6px;color:#8a92b0;font-weight:600;font-size:.82rem}
-.input-field label i{color:var(--blue-bright);margin-left:6px}
-.input-field input{width:100%;padding:12px 20px;background:rgba(0,0,0,.25);border:1px solid rgba(74,122,255,.1);border-radius:60px;color:#f0f4ff;font-size:.92rem;outline:none;font-family:'Cairo',sans-serif}
-.input-field input:focus{border-color:var(--blue-light);box-shadow:0 0 0 3px rgba(74,122,255,.1)}
-.btn-submit{background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid));border:none;border-radius:60px;padding:15px;font-weight:800;color:#fff;width:100%;cursor:pointer;margin-top:8px;font-size:1rem;font-family:'Cairo',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px}
-.btn-submit:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(74,122,255,.5)}
-.cart-empty{text-align:center;color:#5a607a;padding:40px 20px;font-weight:600}
-.cart-empty i{font-size:3rem;display:block;margin-bottom:12px;color:rgba(74,122,255,.2)}
-
-/* ═══════════ Cashback Box ═══════════ */
-.cb-box{margin:14px 0;background:linear-gradient(145deg,rgba(14,20,38,.9),rgba(8,12,24,.98));border:1.5px solid rgba(245,179,66,.3);border-radius:20px;padding:16px 18px;box-shadow:0 12px 40px -14px rgba(245,179,66,.35)}
-.cb-head{display:flex;align-items:center;gap:12px}
-.cb-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#f5b342,#c98a1e);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#000;box-shadow:0 8px 22px -8px rgba(245,179,66,.8);flex-shrink:0}
-.cb-info{flex:1;min-width:0}
-.cb-title{font-weight:900;font-size:.94rem;color:#fff}
-.cb-bal{font-size:.78rem;color:#8a92b0;font-weight:700;margin-top:3px}
-.cb-bal b{color:#f5b342;font-weight:900}
-.cb-switch-wrap{cursor:pointer;display:inline-flex;flex-shrink:0}
-.cb-switch-wrap input{display:none}
-.cb-switch{width:52px;height:28px;border-radius:60px;background:rgba(255,255,255,.08);border:1.5px solid rgba(245,179,66,.3);position:relative;transition:all .3s}
-.cb-switch::after{content:'';position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#6a7290;transition:all .3s}
-.cb-switch-wrap input:checked ~ .cb-switch{background:linear-gradient(135deg,#f5b342,#c98a1e);border-color:transparent;box-shadow:0 0 22px -6px rgba(245,179,66,.9)}
-.cb-switch-wrap input:checked ~ .cb-switch::after{right:calc(100% - 23px);background:#fff}
-.cb-body{margin-top:14px;padding-top:14px;border-top:1px dashed rgba(245,179,66,.25);animation:cbIn .3s ease}
-@keyframes cbIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-.cb-full-btn{width:100%;padding:13px 18px;border-radius:14px;border:none;background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;font-family:'Cairo',sans-serif;font-weight:900;font-size:.92rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .3s;box-shadow:0 10px 28px -8px rgba(245,179,66,.85);margin-bottom:14px}
-.cb-full-btn:hover:not(:disabled){transform:translateY(-2px)}
-.cb-full-btn.active{background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;box-shadow:0 10px 28px -8px rgba(76,175,80,.85)}
-.cb-full-btn:disabled{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.08);color:#8a92b0;box-shadow:none;transform:none}
-.cb-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
-.cb-row label{font-size:.76rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:.8px}
-.cb-input{position:relative;display:flex;align-items:center;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.2);border-radius:12px;padding:0 14px;height:44px;min-width:150px;transition:all .3s}
-.cb-input:focus-within{border-color:#f5b342;box-shadow:0 0 0 4px rgba(245,179,66,.12)}
-.cb-input input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;text-align:right;direction:ltr;padding:0 6px}
-.cb-input input::-webkit-outer-spin-button,.cb-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.cb-input input[type=number]{-moz-appearance:textfield}
-.cb-input span{color:#f5b342;font-weight:800;font-size:.78rem;flex-shrink:0}
-.cb-quick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.cb-quick button{flex:1;min-width:60px;padding:8px 10px;border-radius:10px;border:1.5px solid rgba(245,179,66,.25);background:rgba(245,179,66,.08);color:#f5b342;font-family:'Cairo',sans-serif;font-weight:800;font-size:.74rem;cursor:pointer;transition:all .25s}
-.cb-quick button:hover{background:rgba(245,179,66,.22);border-color:#f5b342;transform:translateY(-2px)}
-.cb-summary{background:rgba(0,0,0,.28);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
-.cb-summary > div{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;font-weight:700;color:#a8b0cc}
-.cb-summary > div b{color:#fff;font-weight:900;direction:ltr}
-.cb-summary .discount b{color:#4caf50}
-.cb-summary .total{padding-top:8px;border-top:1px dashed rgba(245,179,66,.25);font-size:.92rem}
-.cb-summary .total b{font-size:1.15rem;background:linear-gradient(135deg,#fff,#f5b342);-webkit-background-clip:text;background-clip:text;color:transparent}
-.cb-summary .total.zero b{background:linear-gradient(135deg,#4caf50,#66bb6a);-webkit-background-clip:text;background-clip:text;color:transparent}
-.cb-success{margin-top:12px;padding:12px 14px;border-radius:12px;background:linear-gradient(135deg,rgba(76,175,80,.15),rgba(46,125,50,.1));border:1.5px solid rgba(76,175,80,.4);color:#66bb6a;font-weight:800;font-size:.86rem;display:flex;align-items:center;gap:10px;animation:cbIn .3s ease}
-.cb-success i{font-size:1.1rem}
-
 .ai-modal-box{width:100%;max-width:560px;height:620px;display:flex;flex-direction:column;padding:26px 26px 22px;overflow:hidden}
 .ai-modal-box h3{text-align:center;color:#fff;margin-bottom:14px;font-size:1.4rem;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px}
 .ai-modal-box h3 i{color:var(--blue-bright)}
@@ -377,7 +478,7 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
   .product-info{padding:14px 14px 16px}.product-name{font-size:.92rem}.product-price .current{font-size:1.4rem}
   .product-actions .btn-cart,.product-actions .btn-ai-search{font-size:.75rem;padding:9px 10px}
   .review-card{min-width:260px;padding:20px}.carousel-btn{width:38px;height:38px;font-size:.9rem}
-  .ai-modal-box{height:520px;padding:20px 18px}.cart-modal-box{padding:28px 22px}
+  .ai-modal-box{height:520px;padding:20px 18px}
   .footer-flex{flex-direction:column;gap:28px}
   .sort-bar{flex-direction:column;align-items:stretch;border-radius:24px;padding:14px 16px;gap:12px}
   .sort-bar .filter-tags{justify-content:center}.section-label h3{font-size:1.5rem}
@@ -394,14 +495,11 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
   .shop-grid{grid-template-columns:1fr 1fr;gap:10px}.product-info{padding:12px 12px 14px}.product-name{font-size:.82rem;margin-bottom:6px}
   .product-price .current{font-size:1.15rem}.product-actions .btn-cart,.product-actions .btn-ai-search{font-size:.68rem;padding:8px 6px;gap:4px}
   .product-badges{top:8px;right:8px}.product-discount-badge,.product-popular-badge,.product-savings-badge{font-size:.58rem;padding:3px 8px}
-  .review-card{min-width:220px;padding:16px}.ai-modal-box{height:480px;padding:16px 14px}.cart-modal-box{padding:22px 16px}
-  .cart-item{padding:10px;gap:8px}.cart-item img{width:44px;height:44px}
-  .product-page-title{font-size:1.35rem}.product-page-price .current{font-size:1.7rem}
+  .review-card{min-width:220px;padding:16px}.ai-modal-box{height:480px;padding:16px 14px}
   .related-grid{grid-template-columns:1fr 1fr;gap:10px}
   .banner-content h2{font-size:1.05rem;gap:10px}.banner-content h2 .banner-icon-wrap{width:38px;height:38px;font-size:1rem;border-radius:12px}
   .banner-code-btn{padding:11px 18px;font-size:.82rem}.store-banner{min-height:190px}.trust-item{font-size:.72rem}
   .static-page-header h1{font-size:1.3rem}.static-content{padding:18px 16px}
-  .cb-full-btn{font-size:.82rem;padding:12px 14px}
   .cb-quick button{font-size:.68rem;padding:7px 8px}
 }
 </style>
@@ -603,6 +701,146 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
     </div>
 </div>
 
+<!-- ═══════ CART PAGE ═══════ -->
+<div id="cartPage" class="page-view">
+    <div class="container">
+        <div class="breadcrumb">
+            <a data-nav="home">الرئيسية</a>
+            <span class="sep"><i class="fas fa-chevron-left"></i></span>
+            <span class="current">سلة المشتريات</span>
+        </div>
+
+        <div class="cart-page-wrap">
+            <div class="cart-page-header">
+                <div class="cart-page-header-left">
+                    <div class="cart-page-title-icon" id="cartTitleIcon" data-count="0"><i class="fas fa-shopping-bag"></i></div>
+                    <div class="cart-page-title">
+                        <h1>سلة المشتريات</h1>
+                        <p id="cartPageSubtitle">راجع منتجاتك قبل إتمام الطلب</p>
+                    </div>
+                </div>
+                <button class="cart-continue-btn" id="cartContinueBtn" type="button">
+                    <i class="fas fa-arrow-right"></i> متابعة التسوق
+                </button>
+            </div>
+
+            <div class="cart-layout" id="cartLayout">
+                <!-- Left: Items -->
+                <div class="cart-main-card">
+                    <div id="cartItemsContainer"></div>
+                </div>
+
+                <!-- Right: Summary -->
+                <div class="cart-sidebar">
+                    <div class="cart-summary-card">
+                        <div class="cart-summary-title">
+                            <i class="fas fa-receipt"></i>
+                            ملخص الطلب
+                        </div>
+
+                        <!-- Discount code -->
+                        <div class="cart-discount-box">
+                            <div class="cart-discount-label"><i class="fas fa-ticket"></i> كود الخصم</div>
+                            <div class="cart-discount-row">
+                                <input type="text" class="cart-discount-input" id="discountCodeInput" placeholder="أدخل الكود...">
+                                <button class="cart-discount-apply" id="applyDiscountBtn" type="button">تطبيق</button>
+                            </div>
+                            <div class="cart-discount-msg" id="discountMsg"></div>
+                        </div>
+
+                        <!-- 💰 Cashback Box (BLUE) -->
+                        <div id="cashbackUseRow" style="display:none">
+                            <div class="cb-box">
+                                <div class="cb-head">
+                                    <div class="cb-icon"><i class="fas fa-wallet"></i></div>
+                                    <div class="cb-info">
+                                        <div class="cb-title"><i class="fas fa-bolt"></i> الدفع من الكاش باك</div>
+                                        <div class="cb-bal">رصيدك: <b id="cashbackAvail">0.00</b> ر.س</div>
+                                    </div>
+                                    <label class="cb-switch-wrap">
+                                        <input type="checkbox" id="useCashbackToggle">
+                                        <span class="cb-switch"></span>
+                                    </label>
+                                </div>
+
+                                <div class="cb-body" id="cbBody" style="display:none">
+                                    <button type="button" class="cb-full-btn" id="cbFullBtn">
+                                        <i class="fas fa-bolt"></i>
+                                        <span id="cbFullText">ادفع المبلغ كامل من الكاش باك</span>
+                                    </button>
+
+                                    <div class="cb-row">
+                                        <label>أو حدد مبلغ مخصص</label>
+                                        <div class="cb-input">
+                                            <input type="number" id="cbCustomInput" min="0" step="0.01" placeholder="0.00">
+                                            <span>ر.س</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="cb-quick">
+                                        <button type="button" data-cbpct="25">25%</button>
+                                        <button type="button" data-cbpct="50">50%</button>
+                                        <button type="button" data-cbpct="75">75%</button>
+                                        <button type="button" data-cbpct="100">الكل</button>
+                                    </div>
+
+                                    <div class="cb-summary">
+                                        <div><span>المجموع</span><b id="cbOrig">0.00</b></div>
+                                        <div class="discount" id="cbDiscRow" style="display:none"><span>خصم الكود</span><b id="cbDisc">− 0.00</b></div>
+                                        <div class="cb-used"><span>يُخصم من الكاش باك</span><b id="cbUsed">− 0.00</b></div>
+                                        <div class="total" id="cbFinalRow"><span>المتبقي للدفع</span><b id="cbFinal">0.00 ر.س</b></div>
+                                    </div>
+
+                                    <div class="cb-success" id="cbSuccess" style="display:none">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>🎉 الطلب مغطّى بالكامل من الكاش باك!</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Breakdown -->
+                        <div class="cart-breakdown" id="cartBreakdown">
+                            <div class="cart-breakdown-row"><span>المجموع الفرعي</span><b id="cartSubtotal">0.00</b></div>
+                            <div class="cart-breakdown-row discount" id="cartDiscRow" style="display:none"><span>خصم الكود</span><b id="cartDiscVal">-0.00</b></div>
+                            <div class="cart-breakdown-row cb" id="cartCbRow" style="display:none"><span>كاش باك مستخدم</span><b id="cartCbVal">-0.00</b></div>
+                        </div>
+
+                        <div class="cart-final-total">
+                            <span class="lbl">الإجمالي النهائي</span>
+                            <span class="val"><span id="cartFinalVal">0.00</span></span>
+                        </div>
+
+                        <button class="cart-checkout-btn" id="cartSubmitBtn" type="button">
+                            <i class="fas fa-shield-halved"></i>
+                            <span>تأكيد الطلب</span>
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+
+                        <div class="cart-trust-badges">
+                            <span><i class="fas fa-lock"></i> دفع آمن</span>
+                            <span><i class="fas fa-bolt"></i> تسليم فوري</span>
+                            <span><i class="fas fa-rotate-left"></i> استرجاع مجاني</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty state -->
+            <div id="cartEmptyState" style="display:none">
+                <div class="cart-empty-page">
+                    <div class="cart-empty-page-icon"><i class="fas fa-shopping-basket"></i></div>
+                    <h3>سلتك فارغة</h3>
+                    <p>ابدأ رحلتك التسوقية واكتشف منتجاتنا المميزة</p>
+                    <button class="cart-empty-shop-btn" id="cartEmptyShopBtn" type="button">
+                        <i class="fas fa-shopping-bag"></i> تسوق الآن
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="aboutPage" class="page-view">
     <div class="container">
         <div class="breadcrumb"><a data-nav="home">الرئيسية</a><span class="sep"><i class="fas fa-chevron-left"></i></span><span class="current">من نحن</span></div>
@@ -709,74 +947,6 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
     </div>
 </footer>
 
-<div id="cartModal" class="modal-overlay">
-    <div class="modal-box cart-modal-box">
-        <div class="modal-close" id="cartModalClose"><i class="fas fa-times"></i></div>
-        <h3><i class="fas fa-shopping-bag"></i> سلة المشتريات</h3>
-        <div class="cart-items-list" id="cartItemsList"></div>
-        <div class="discount-row">
-            <input type="text" id="discountCodeInput" placeholder="أدخل كود الخصم">
-            <button class="btn-apply" id="applyDiscountBtn" type="button">تطبيق</button>
-        </div>
-        <div id="discountMsg" class="discount-msg"></div>
-
-        <!-- 💰 صندوق الدفع بالكاش باك -->
-        <div id="cashbackUseRow" style="display:none">
-          <div class="cb-box">
-            <div class="cb-head">
-              <div class="cb-icon"><i class="fas fa-wallet"></i></div>
-              <div class="cb-info">
-                <div class="cb-title"> الدفع من الكاش باك</div>
-                <div class="cb-bal">رصيدك: <b id="cashbackAvail">0.00</b> ر.س</div>
-              </div>
-              <label class="cb-switch-wrap">
-                <input type="checkbox" id="useCashbackToggle">
-                <span class="cb-switch"></span>
-              </label>
-            </div>
-
-            <div class="cb-body" id="cbBody" style="display:none">
-              <button type="button" class="cb-full-btn" id="cbFullBtn">
-                <i class="fas fa-bolt"></i>
-                <span id="cbFullText">ادفع المبلغ كامل من الكاش باك</span>
-              </button>
-
-              <div class="cb-row">
-                <label>أو حدد مبلغ مخصص</label>
-                <div class="cb-input">
-                  <input type="number" id="cbCustomInput" min="0" step="0.01" placeholder="0.00">
-                  <span>ر.س</span>
-                </div>
-              </div>
-
-              <div class="cb-quick">
-                <button type="button" data-cbpct="25">25%</button>
-                <button type="button" data-cbpct="50">50%</button>
-                <button type="button" data-cbpct="75">75%</button>
-                <button type="button" data-cbpct="100">استخدم الكل</button>
-              </div>
-
-              <div class="cb-summary">
-                <div><span>المجموع</span><b id="cbOrig">0.00</b></div>
-                <div class="discount" id="cbDiscRow" style="display:none"><span>خصم الكود</span><b id="cbDisc">− 0.00</b></div>
-                <div class="discount"><span>يُخصم من الكاش باك</span><b id="cbUsed">− 0.00</b></div>
-                <div class="total" id="cbFinalRow"><span>المتبقي للدفع</span><b id="cbFinal">0.00 ر.س</b></div>
-              </div>
-
-              <div class="cb-success" id="cbSuccess" style="display:none">
-                <i class="fas fa-check-circle"></i>
-                <span>🎉 الطلب مغطّى بالكامل من الكاش باك!</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="cart-total-display"><span>الإجمالي</span><span class="total-price" id="cartTotalPrice">0.00</span></div>
-        <div id="cartBreakdown" style="font-size:.82rem;color:#8a92b0;text-align:left;margin-top:8px;line-height:1.9;font-weight:600;"></div>
-        <button class="btn-submit" id="cartSubmitBtn" type="button"><i class="fas fa-check-circle"></i> تأكيد الطلب</button>
-    </div>
-</div>
-
 <div id="aiModal" class="modal-overlay">
     <div class="modal-box ai-modal-box">
         <div class="modal-close" id="aiModalClose"><i class="fas fa-times"></i></div>
@@ -806,7 +976,6 @@ footer{background:linear-gradient(180deg,transparent,rgba(2,4,12,.8));border-top
     <span class="fab-label">تحدث مع MEN Ai</span>
 </div>
 
-<!-- ═══════ سكربت المتجر ═══════ -->
 <script>
 window.RIYAL_IMG_URL = "https://www.socialcreator.com/srv/imgs/ti_imgs/200732_328971.png";
 window.riyal = function(size){const cls=size?`riyal-icon ${size}`:'riyal-icon';return `<img src="${window.RIYAL_IMG_URL}" class="${cls}" alt="ر.س" loading="lazy" style="filter: brightness(0) invert(1);">`;};
@@ -833,7 +1002,7 @@ async function loadStoreData(){
         try{const res=await fetch(path,{cache:'no-store'});if(!res.ok)continue;const data=await res.json();
             productsArray=data.products||[];reviewsData=data.reviews||[];ads=data.ads||[];
             if(data.settings){storeSettings={...storeSettings,...data.settings};if(data.settings.banner)storeSettings.banner={...storeSettings.banner,...data.settings.banner};}
-            console.log(' تحميل المنتجات:',productsArray.length);
+            console.log('✅ تحميل المنتجات:',productsArray.length);
             return true;
         }catch(err){continue;}
     }
@@ -885,6 +1054,7 @@ function savingsBadgeHTML(p){
 function hideAllPages(){$$('.page-view').forEach(p=>p.classList.remove('active'));}
 function showStorePage(){hideAllPages();$('storePage').classList.add('active');currentProductPageId=null;if(location.hash&&location.hash!=='#home')history.replaceState(null,'',location.pathname+location.search);}
 function showStaticPage(id){const el=$(id+'Page');if(!el)return;hideAllPages();el.classList.add('active');currentProductPageId=null;history.replaceState(null,'','#'+id);window.scrollTo({top:0,behavior:'smooth'});}
+function showCartPage(){hideAllPages();$('cartPage').classList.add('active');currentProductPageId=null;history.replaceState(null,'','#cart');updateCartUI();window.scrollTo({top:0,behavior:'smooth'});}
 
 function showProductPage(productId){
     const p=productsArray.find(pr=>pr.id===productId);if(!p)return;
@@ -963,22 +1133,22 @@ function updateQuantity(id,delta){
 function applyDiscount(){
     const input=$('discountCodeInput'),msg=$('discountMsg');if(!input||!msg)return;
     const code=input.value.trim().toUpperCase();
-    if(!code){msg.textContent='الرجاء إدخال كود الخصم';msg.className='discount-msg error';return;}
+    if(!code){msg.innerHTML='<i class="fas fa-circle-info"></i> الرجاء إدخال كود الخصم';msg.className='cart-discount-msg error';return;}
     const found=(storeSettings.discountCodes||[]).find(c=>(c.code||'').toUpperCase()===code);
     if(found){
         discountApplied=true;discountPercent=Number(found.percent)||0;discountCode=found.code;
         discountProducts=Array.isArray(found.products)?found.products:[];
-        msg.textContent=`✓ تم تطبيق خصم ${discountPercent}%`;
-        msg.className='discount-msg';
+        msg.innerHTML=`<i class="fas fa-check-circle"></i> تم تطبيق خصم ${discountPercent}%`;
+        msg.className='cart-discount-msg';
         updateCartUI();
         showToast(`تم تطبيق الخصم ${discountPercent}%`,'success');
     }else{
-        msg.textContent='كود الخصم غير صحيح';msg.className='discount-msg error';
+        msg.innerHTML='<i class="fas fa-circle-xmark"></i> كود الخصم غير صحيح';msg.className='cart-discount-msg error';
         discountApplied=false;discountPercent=0;discountCode='';discountProducts=[];
         updateCartUI();
     }
 }
-function applyDiscountCode(code){if($('discountCodeInput'))$('discountCodeInput').value=code;$('cartModal').classList.add('active');applyDiscount();}
+function applyDiscountCode(code){if($('discountCodeInput'))$('discountCodeInput').value=code;showCartPage();setTimeout(applyDiscount,300);}
 
 async function fetchCashbackBalance() {
     const user = window.MEN_AUTH?.getCurrentUser?.();
@@ -997,8 +1167,14 @@ async function fetchCashbackBalance() {
 function updateCartUI(){
     const totalItems=cartItems.reduce((s,p)=>s+p.quantity,0);
     if($('headerCartBadge'))$('headerCartBadge').textContent=totalItems;
-    const list=$('cartItemsList'),totalDisplay=$('cartTotalPrice');
-    const breakdown=$('cartBreakdown');
+    if($('cartTitleIcon')) $('cartTitleIcon').setAttribute('data-count', totalItems);
+    if($('cartPageSubtitle')){
+        $('cartPageSubtitle').textContent = totalItems > 0 ? `${totalItems} منتج في سلتك` : 'سلتك فارغة';
+    }
+
+    const container=$('cartItemsContainer');
+    const emptyState=$('cartEmptyState');
+    const layout=$('cartLayout');
 
     // احسب الإجماليات
     let total=0,discountableAmount=0;
@@ -1053,20 +1229,15 @@ function updateCartUI(){
         cashbackUsedAmount = cbUsed;
         const finalTotal = Math.max(0, afterDisc - cbUsed);
 
-        if(totalDisplay){
-            totalDisplay.innerHTML=`<span class="num">${finalTotal.toFixed(2)}</span> ${riyal()}`;
-        }
-        if(breakdown){
-            if(cartItems.length===0){breakdown.innerHTML='';}
-            else{
-                let b=[];
-                b.push(`المجموع: ${total.toFixed(2)} ر.س`);
-                if(discountAmount>0) b.push(`<span style="color:#4caf50;">خصم (${discountPercent}%): -${discountAmount.toFixed(2)} ر.س</span>`);
-                if(cbUsed>0) b.push(`<span style="color:#f5b342;">كاش باك مستخدم: -${cbUsed.toFixed(2)} ر.س</span>`);
-                breakdown.innerHTML=b.join('<br>');
-            }
-        }
+        // Subtotal
+        if($('cartSubtotal')) $('cartSubtotal').innerHTML = total.toFixed(2) + ' ' + riyal('small');
+        if($('cartDiscRow')) $('cartDiscRow').style.display = discountAmount > 0 ? 'flex' : 'none';
+        if($('cartDiscVal')) $('cartDiscVal').innerHTML = '-' + discountAmount.toFixed(2) + ' ' + riyal('small');
+        if($('cartCbRow')) $('cartCbRow').style.display = cbUsed > 0 ? 'flex' : 'none';
+        if($('cartCbVal')) $('cartCbVal').innerHTML = '-' + cbUsed.toFixed(2) + ' ' + riyal('small');
+        if($('cartFinalVal')) $('cartFinalVal').innerHTML = finalTotal.toFixed(2) + ' ' + riyal('small');
 
+        // Cashback Box summary
         if($('cbOrig')) $('cbOrig').textContent = afterDisc.toFixed(2);
         if($('cbDiscRow')){
             if(discountAmount>0){$('cbDiscRow').style.display='flex';$('cbDisc').textContent='− '+discountAmount.toFixed(2);}
@@ -1083,12 +1254,12 @@ function updateCartUI(){
             const coversFull = cbUsed >= afterDisc && afterDisc > 0;
             if(coversFull){
                 fullBtn.classList.add('active');
-                if($('cbFullText')) $('cbFullText').textContent = ' الطلب مغطّى بالكامل من الكاش باك';
+                if($('cbFullText')) $('cbFullText').textContent = '✅ الطلب مغطّى بالكامل';
                 if($('cbSuccess')) $('cbSuccess').style.display = 'flex';
             } else {
                 fullBtn.classList.remove('active');
                 if($('cbFullText')){
-                    if(canCover) $('cbFullText').textContent = ` ادفع ${afterDisc.toFixed(2)} ر.س كاملة من الكاش باك`;
+                    if(canCover) $('cbFullText').textContent = `⚡ ادفع ${afterDisc.toFixed(2)} ر.س كاملة`;
                     else $('cbFullText').textContent = `رصيدك ${cashbackBalance.toFixed(2)} ر.س (لا يكفي)`;
                 }
                 if($('cbSuccess')) $('cbSuccess').style.display = 'none';
@@ -1096,36 +1267,60 @@ function updateCartUI(){
         }
     }
 
-    if(!list)return;
+    // عرض / إخفاء الصفحة الفارغة
+    if(!container) return;
     if(cartItems.length===0){
-        list.innerHTML=`<div class="cart-empty"><i class="fas fa-shopping-basket"></i>سلتك فارغة</div>`;
-        discountApplied=false;discountPercent=0;discountCode='';discountProducts=[];
-        useCashback=false;useFullCashback=false;
-        if($('useCashbackToggle'))$('useCashbackToggle').checked=false;
-        if($('discountCodeInput'))$('discountCodeInput').value='';
-        if($('discountMsg')){const m=$('discountMsg');m.textContent='';m.className='discount-msg';}
-        if($('cbBody'))$('cbBody').style.display='none';
-    }else{
-        list.innerHTML=cartItems.map(p=>{
-            const isDisc=discountApplied&&discountPercent>0&&(discountProducts.length===0||discountProducts.includes(p.id));
-            return `<div class="cart-item ${isDisc?'discounted':''}">
-                <img src="${p.image}" alt="${p.name}">
-                <div class="item-details">
-                    <div class="name">${p.name}</div>
-                    <div class="price">${p.price} ${riyal('small')}</div>
-                    <div class="qty-control">
-                        <button class="qty-btn" data-id="${p.id}" data-delta="-1" type="button"><i class="fas fa-minus"></i></button>
-                        <span class="qty-number">${p.quantity}</span>
-                        <button class="qty-btn" data-id="${p.id}" data-delta="1" type="button"><i class="fas fa-plus"></i></button>
-                    </div>
-                </div>
-                <span class="item-total">${(parseFloat(p.price)*p.quantity).toFixed(2)} ${riyal('small')}</span>
-                <button class="btn-cart-remove" data-id="${p.id}" type="button"><i class="fas fa-trash"></i></button>
-            </div>`;
-        }).join('');
-        list.querySelectorAll('.qty-btn').forEach(b=>b.addEventListener('click',function(e){e.stopPropagation();updateQuantity(parseInt(this.dataset.id),parseInt(this.dataset.delta));}));
-        list.querySelectorAll('.btn-cart-remove').forEach(b=>b.addEventListener('click',function(){removeFromCart(parseInt(this.dataset.id));}));
+        container.innerHTML='';
+        if(layout) layout.style.display='none';
+        if(emptyState) emptyState.style.display='block';
+        return;
     }
+    if(layout) layout.style.display='grid';
+    if(emptyState) emptyState.style.display='none';
+
+    // عرض منتجات السلة
+    container.innerHTML=cartItems.map(p=>{
+        const isDisc=discountApplied&&discountPercent>0&&(discountProducts.length===0||discountProducts.includes(p.id));
+        const sub=parseFloat(p.price)*p.quantity;
+        return `<div class="cart-item-card ${isDisc?'discounted':''}" data-id="${p.id}">
+            <div class="cart-item-img-wrap">
+                <img src="${p.image}" alt="${p.name}">
+                ${isDisc?'<span class="cart-item-discount-tag"><i class="fas fa-tag"></i> خصم</span>':''}
+            </div>
+            <div class="cart-item-body">
+                <div class="cart-item-cat"><i class="fas fa-tag"></i> ${p.category||'منتج'}</div>
+                <div class="cart-item-name">${p.name}</div>
+                <div class="cart-item-price-row">
+                    <span class="cart-item-price">${p.price} ${riyal('small')}</span>
+                    ${p.originalPrice?`<span class="cart-item-old-price">${p.originalPrice}</span>`:''}
+                    <span class="cart-item-unit">× ${p.quantity}</span>
+                </div>
+                <div class="cart-qty-picker">
+                    <button class="cart-qty-btn" data-action="minus" data-id="${p.id}" type="button"><i class="fas fa-minus"></i></button>
+                    <span class="cart-qty-value">${p.quantity}</span>
+                    <button class="cart-qty-btn" data-action="plus" data-id="${p.id}" type="button"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            <div class="cart-item-side">
+                <div class="cart-item-total">
+                    <div class="lbl">الإجمالي</div>
+                    <div class="val">${sub.toFixed(2)} ${riyal('small')}</div>
+                </div>
+                <button class="cart-remove-btn" data-action="remove" data-id="${p.id}" type="button" title="حذف"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>`;
+    }).join('');
+
+    // ربط الأحداث
+    container.querySelectorAll('[data-action]').forEach(btn => {
+        btn.addEventListener('click', function(){
+            const id = parseInt(this.dataset.id);
+            const action = this.dataset.action;
+            if(action === 'plus') updateQuantity(id, 1);
+            else if(action === 'minus') updateQuantity(id, -1);
+            else if(action === 'remove') removeFromCart(id);
+        });
+    });
 }
 window.updateCartUI = updateCartUI;
 
@@ -1135,7 +1330,6 @@ async function sendCartRequest(){
     const user = window.MEN_AUTH ? window.MEN_AUTH.getCurrentUser() : null;
     if(!user){
         showToast("يجب تسجيل الدخول لإتمام الطلب","error");
-        $('cartModal').classList.remove('active');
         setTimeout(()=>window.MEN_AUTH?.open('login'),300);
         return;
     }
@@ -1148,7 +1342,6 @@ async function sendCartRequest(){
     const discountAmount=discountableAmount*(discountPercent/100);
     const afterDiscount=Math.max(0,total-discountAmount);
 
-    // اجلب الرصيد الفعلي من men_users
     const realBalance = await fetchCashbackBalance();
     let cashbackUsed = 0;
     if (useCashback && realBalance > 0) {
@@ -1162,18 +1355,21 @@ async function sendCartRequest(){
     cashbackUsed = Math.round(cashbackUsed * 100) / 100;
     const finalTotal = Math.max(0, afterDiscount - cashbackUsed);
 
+    const submitBtn = $('cartSubmitBtn');
+    if(submitBtn){submitBtn.disabled=true;submitBtn.innerHTML='<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';}
+
     let productList=cartItems.map((p,i)=>`${i+1}. ${p.name} (x${p.quantity}) - ${(parseFloat(p.price)*p.quantity).toFixed(2)} ر.س`).join('\n');
 
-    const embed={title:" طلب جديد من متجر MEN",color:0x4a7aff,fields:[
-        {name:" العميل",value:user.user_metadata?.name||user.email||'—',inline:true},
-        {name:" الجوال",value:user.user_metadata?.phone||'—',inline:true},
-        {name:" القطع",value:cartItems.reduce((s,p)=>s+p.quantity,0).toString(),inline:true},
-        {name:" المجموع",value:`${total.toFixed(2)} ر.س`,inline:true},
-        ...(discountAmount>0?[{name:" خصم الكود",value:`-${discountAmount.toFixed(2)} ر.س (${discountPercent}%)`,inline:true}]:[]),
-        ...(cashbackUsed>0?[{name:" كاش باك مستخدم",value:`-${cashbackUsed.toFixed(2)} ر.س`,inline:true}]:[]),
-        {name:"المدفوع",value:finalTotal>0?`${finalTotal.toFixed(2)} ر.س`:"مجاناً بالكامل",inline:true},
-        {name:" المنتجات",value:productList.substring(0,1000),inline:false},
-        {name:" الوقت",value:new Date().toLocaleString('ar-SA'),inline:true}
+    const embed={title:"🛒 طلب جديد من متجر MEN",color:0x4a7aff,fields:[
+        {name:"👤 العميل",value:user.user_metadata?.name||user.email||'—',inline:true},
+        {name:"📱 الجوال",value:user.user_metadata?.phone||'—',inline:true},
+        {name:"📦 القطع",value:cartItems.reduce((s,p)=>s+p.quantity,0).toString(),inline:true},
+        {name:"💰 المجموع",value:`${total.toFixed(2)} ر.س`,inline:true},
+        ...(discountAmount>0?[{name:"🎁 خصم الكود",value:`-${discountAmount.toFixed(2)} ر.س (${discountPercent}%)`,inline:true}]:[]),
+        ...(cashbackUsed>0?[{name:"💳 كاش باك مستخدم",value:`-${cashbackUsed.toFixed(2)} ر.س`,inline:true}]:[]),
+        {name:"✅ المدفوع",value:finalTotal>0?`${finalTotal.toFixed(2)} ر.س`:"مجاناً بالكامل 🎉",inline:true},
+        {name:"🛍️ المنتجات",value:productList.substring(0,1000),inline:false},
+        {name:"🕐 الوقت",value:new Date().toLocaleString('ar-SA'),inline:true}
     ],thumbnail:{url:cartItems[0]?.image||''},timestamp:new Date().toISOString()};
 
     try{
@@ -1208,7 +1404,6 @@ async function sendCartRequest(){
             showToast("تم إرسال طلبك بنجاح!","success");
         }
 
-        // حساب كاش باك جديد من الطلب (2% من المدفوع فعلياً)
         const newCashback = finalTotal * (window.MEN_AUTH?.CASHBACK_RATE || 0.02);
         if (newCashback > 0) setTimeout(()=>showToast(`💰 حصلت على ${newCashback.toFixed(2)} ر.س كاش باك!`,"success"), 900);
 
@@ -1220,13 +1415,16 @@ async function sendCartRequest(){
         if($('discountCodeInput'))$('discountCodeInput').value='';
         if($('discountMsg'))$('discountMsg').textContent='';
         updateCartUI();
-        $('cartModal').classList.remove('active');
 
         if(window.MEN_CASHBACK?.refresh) setTimeout(()=>window.MEN_CASHBACK.refresh(),500);
+
+        setTimeout(()=>{ if(cartItems.length===0) showStorePage(); }, 1200);
 
     }catch(e){
         console.error(e);
         showToast("فشل الإرسال، حاول مرة أخرى","error");
+    } finally {
+        if(submitBtn){submitBtn.disabled=false;submitBtn.innerHTML='<i class="fas fa-shield-halved"></i> <span>تأكيد الطلب</span> <i class="fas fa-arrow-left"></i>';}
     }
 }
 
@@ -1383,7 +1581,6 @@ function handleNavClick(target){
     showStorePage();
 }
 
-/* ════════ مزامنة الواجهة ════════ */
 function syncAuthUI(user){
     const mobileLogin=$('menMobileLogin');
     const mobileAccount=$('menMobileAccount');
@@ -1400,7 +1597,6 @@ function syncAuthUI(user){
             avatar.src = pic;
             avatar.style.display = 'block';
         }
-        // حدّث صندوق الكاش باك
         setTimeout(() => { if (typeof updateCartUI === 'function') updateCartUI(); }, 400);
     }else{
         if(loginBtn) loginBtn.style.display = 'inline-flex';
@@ -1417,7 +1613,6 @@ function bindAuthButtons(){
     if(mobileAccount) mobileAccount.addEventListener('click', () => {closeMobileMenu();window.MEN_AUTH?.openAccount();});
 }
 
-/* ═══════ Cashback UI Events ═══════ */
 function bindCashbackUI() {
     const toggle = $('useCashbackToggle');
     if (toggle && !toggle.dataset.bound) {
@@ -1496,6 +1691,8 @@ async function init(){
     on('menuBackdrop','click',closeMobileMenu);
     on('backToStoreBtn','click',()=>{showStorePage();window.scrollTo({top:0,behavior:'smooth'});});
     on('breadcrumbCat','click',()=>showStorePage());
+    on('cartContinueBtn','click',()=>{showStorePage();window.scrollTo({top:0,behavior:'smooth'});});
+    on('cartEmptyShopBtn','click',()=>{showStorePage();window.scrollTo({top:0,behavior:'smooth'});});
 
     on('storeSearchInput','input',(e)=>{
         if(currentProductPageId)return;
@@ -1513,9 +1710,7 @@ async function init(){
     }));
     on('sortSelect','change',function(){currentSort=this.value;renderStore(currentFilter,currentSort);});
 
-    on('headerCartBtn','click',()=>{updateCartUI();$('cartModal').classList.add('active');});
-    on('cartModalClose','click',()=>$('cartModal').classList.remove('active'));
-    on('cartModal','click',(e)=>{if(e.target===$('cartModal'))$('cartModal').classList.remove('active');});
+    on('headerCartBtn','click',()=>{updateCartUI();showCartPage();});
     on('applyDiscountBtn','click',applyDiscount);
     on('discountCodeInput','keydown',(e)=>{if(e.key==='Enter')applyDiscount();});
     on('cartSubmitBtn','click',()=>sendCartRequest());
@@ -1573,12 +1768,14 @@ async function init(){
 function handleHashChange(){
     const h=location.hash;
     if(h.startsWith('#product-')){const id=parseInt(h.replace('#product-',''));if(productsArray.some(p=>p.id===id))showProductPage(id);else showStorePage();}
+    else if(h==='#cart'){showCartPage();}
     else if(STATIC_PAGES.includes(h.replace('#','')))showStaticPage(h.replace('#',''));
     else showStorePage();
 }
 function handleInitialHash(){
     const h=location.hash;
     if(h.startsWith('#product-')){const id=parseInt(h.replace('#product-',''));if(productsArray.some(p=>p.id===id))showProductPage(id);}
+    else if(h==='#cart'){showCartPage();}
     else if(STATIC_PAGES.includes(h.replace('#','')))showStaticPage(h.replace('#',''));
 }
 document.addEventListener('DOMContentLoaded',init);
@@ -1586,10 +1783,7 @@ document.addEventListener('DOMContentLoaded',init);
 window.syncAuthUI = syncAuthUI;
 </script>
 
-<!-- ═══════ Supabase SDK ═══════ -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- ═══════ Auth Script ═══════ -->
 <script src="js/auth.js"></script>
 </body>
 </html>
