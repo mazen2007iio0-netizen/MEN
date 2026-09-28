@@ -1,5 +1,6 @@
 /* ============================================================
-   ✨ MEN Store — Auth v10 (Orders + Users + Customer Chat)
+   ✨ MEN Store — Auth v11
+   (Orders + Users + Customer Chat + Cashback Usage)
    ============================================================ */
 (function () {
   'use strict';
@@ -15,7 +16,7 @@
 
   if (!credsReady) {
     console.error('⛔ ضع مفاتيح Supabase');
-    window.MEN_AUTH = { CASHBACK_RATE: 0.02, open: () => alert('⚠️ أضف المفاتيح'), openAccount: () => {}, logout: () => {}, getCurrentUser: () => null, addCashback: async () => {}, deductCashback: async () => {}, addOrder: async () => {} };
+    window.MEN_AUTH = { CASHBACK_RATE: 0.02, open: () => alert('⚠️ أضف المفاتيح'), openAccount: () => {}, logout: () => {}, getCurrentUser: () => null, getCashbackBalance: async () => 0, addOrder: async () => null };
     return;
   }
 
@@ -26,7 +27,7 @@
   });
   window.MEN_SUPABASE = sb;
 
-  console.log('%c✨ MEN AUTH v10', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
+  console.log('%c✨ MEN AUTH v11', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
   const CASHBACK_RATE = 0.02;
   const PHONE_DOMAIN  = 'men-store.local';
@@ -257,6 +258,7 @@
       .men-acc-order-items{flex:1;min-width:200px;color:#a8b0cc;font-size:.85rem;line-height:1.7}
       .men-acc-order-total{font-size:1.3rem;font-weight:900;background:linear-gradient(135deg,#fff,#6a9aff);-webkit-background-clip:text;background-clip:text;color:transparent}
       .men-acc-order-badge{position:absolute;top:12px;left:12px;color:#fff;font-size:.62rem;font-weight:800;padding:4px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px}
+      .men-acc-order-cb{display:inline-flex;align-items:center;gap:6px;background:rgba(245,179,66,.12);border:1px solid rgba(245,179,66,.3);color:#f5b342;font-size:.72rem;font-weight:800;padding:5px 12px;border-radius:20px;margin-top:8px}
       .men-acc-empty{text-align:center;padding:60px 24px;background:rgba(74,122,255,.04);border:1.5px dashed rgba(74,122,255,.2);border-radius:24px}
       .men-acc-empty-icon{width:90px;height:90px;margin:0 auto 20px;border-radius:50%;background:rgba(74,122,255,.1);display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:#4a7aff}
       .men-acc-empty h3{color:#fff;font-size:1.2rem;margin-bottom:8px;font-weight:800}
@@ -274,7 +276,6 @@
       .men-acc-danger{margin-top:20px;padding:22px 24px;background:rgba(217,4,41,.06);border:1px solid rgba(217,4,41,.2);border-radius:20px}
       .men-acc-danger h4{color:#ff6b6b;font-size:1rem;margin-bottom:8px;font-weight:800;display:flex;align-items:center;gap:10px}
       .men-acc-danger p{color:#d0a8a8;font-size:.85rem;margin-bottom:14px;line-height:1.7}
-      /* ===== Chat inside account ===== */
       .men-acc-chat-wrap{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:26px;overflow:hidden;height:min(640px,75vh);display:flex;flex-direction:column}
       .men-acc-chat-head{padding:18px 22px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(74,122,255,.08),transparent)}
       .men-acc-chat-head .avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:.95rem;flex-shrink:0;box-shadow:0 6px 18px -6px rgba(74,122,255,.7)}
@@ -305,6 +306,39 @@
       .men-acc-chat-send{width:46px;height:46px;border-radius:14px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;cursor:pointer;font-size:1rem;transition:all .3s;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 22px -8px rgba(74,122,255,.9)}
       .men-acc-chat-send:hover:not(:disabled){transform:translateY(-2px)}
       .men-acc-chat-send:disabled{opacity:.5;cursor:not-allowed;transform:none}
+      /* ═══ Cashback box (cart) ═══ */
+      .men-cb-box{margin:14px 0;background:linear-gradient(145deg,rgba(14,20,38,.85),rgba(8,12,24,.95));border:1px solid rgba(74,122,255,.2);border-radius:20px;padding:18px 20px;font-family:'Cairo',sans-serif;color:#fff;box-shadow:0 12px 40px -14px rgba(2,28,164,.7)}
+      .men-cb-head{display:flex;align-items:center;gap:14px}
+      .men-cb-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.15rem;color:#fff;box-shadow:0 8px 22px -8px rgba(74,122,255,.8);flex-shrink:0}
+      .men-cb-info{flex:1;min-width:0}
+      .men-cb-title{font-weight:800;font-size:.95rem;color:#fff}
+      .men-cb-bal{font-size:.78rem;color:#8a92b0;font-weight:700;margin-top:3px}
+      .men-cb-bal b{color:#66bb6a;font-weight:900}
+      .men-cb-switch-wrap{cursor:pointer;display:inline-flex;flex-shrink:0}
+      .men-cb-switch-wrap input{display:none}
+      .men-cb-switch{width:52px;height:28px;border-radius:60px;background:rgba(255,255,255,.08);border:1.5px solid rgba(74,122,255,.2);position:relative;transition:all .3s}
+      .men-cb-switch::after{content:'';position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#6a7290;transition:all .3s}
+      .men-cb-switch-wrap input:checked ~ .men-cb-switch{background:linear-gradient(135deg,#021ca4,#4a7aff);border-color:transparent;box-shadow:0 0 22px -6px rgba(74,122,255,.9)}
+      .men-cb-switch-wrap input:checked ~ .men-cb-switch::after{right:calc(100% - 23px);background:#fff}
+      .men-cb-body{margin-top:18px;padding-top:18px;border-top:1px dashed rgba(74,122,255,.25);animation:menCbIn .35s ease}
+      @keyframes menCbIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+      .men-cb-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px;flex-wrap:wrap}
+      .men-cb-row label{font-size:.78rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+      .men-cb-input{position:relative;display:flex;align-items:center;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.2);border-radius:12px;padding:0 14px;height:46px;min-width:180px;transition:all .3s}
+      .men-cb-input:focus-within{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.15)}
+      .men-cb-input input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1.05rem;text-align:right;direction:ltr;padding:0 6px}
+      .men-cb-input input::-webkit-outer-spin-button,.men-cb-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+      .men-cb-input input[type=number]{-moz-appearance:textfield}
+      .men-cb-input span{color:#6a9aff;font-weight:800;font-size:.8rem;flex-shrink:0}
+      .men-cb-quick{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+      .men-cb-quick button{flex:1;min-width:70px;padding:9px 12px;border-radius:10px;border:1.5px solid rgba(74,122,255,.2);background:rgba(74,122,255,.08);color:#6a9aff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.78rem;cursor:pointer;transition:all .25s}
+      .men-cb-quick button:hover{background:rgba(74,122,255,.2);border-color:#4a7aff;transform:translateY(-2px)}
+      .men-cb-summary{background:rgba(0,0,0,.25);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+      .men-cb-summary > div{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;font-weight:700;color:#a8b0cc}
+      .men-cb-summary > div b{color:#fff;font-weight:900;direction:ltr}
+      .men-cb-summary .discount b{color:#66bb6a}
+      .men-cb-summary .total{padding-top:10px;border-top:1px dashed rgba(74,122,255,.25);font-size:.95rem}
+      .men-cb-summary .total b{font-size:1.15rem;background:linear-gradient(135deg,#fff,#6a9aff);-webkit-background-clip:text;background-clip:text;color:transparent}
       @media (max-width:992px){.men-acc-stats{grid-template-columns:repeat(2,1fr)}.men-acc-overview{grid-template-columns:1fr}.men-acc-settings-grid{grid-template-columns:1fr}}
       @media (max-width:768px){.men-acc-cover-inner{padding:32px 24px 26px;flex-direction:column;text-align:center;gap:22px}.men-acc-cover-avatar{width:100px;height:100px}.men-acc-cover-email,.men-acc-cover-tags,.men-acc-cover-actions{justify-content:center}.men-acc-tab{min-width:auto;padding:11px 12px;font-size:.8rem}.men-acc-tab span{display:none}.men-acc-card{padding:22px 20px}.men-acc-cashback{padding:26px 22px}.men-acc-stat{padding:18px 16px}.men-acc-chat-wrap{height:min(560px,72vh)}}
     `;
@@ -330,7 +364,7 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🖼️ Screen
+  // 🖼️ Auth Screen
   // ═══════════════════════════════════════════════════════════
   function injectModals() {
     if ($('menAuthScreen')) return;
@@ -794,7 +828,6 @@
     $('menAccDeleteBtn').addEventListener('click', deleteAccount);
     $('menAccShareBtn').addEventListener('click', shareAccount);
 
-    // Chat bindings
     $('menChatSend').addEventListener('click', sendCustomerChat);
     $('menChatRefresh').addEventListener('click', () => loadCustomerChat(true));
     const chatInp = $('menChatInput');
@@ -811,11 +844,9 @@
     document.querySelectorAll('[data-macc-tab]').forEach(b => b.classList.toggle('active', b.dataset.maccTab === tab));
     document.querySelectorAll('[data-macc-panel]').forEach(p => p.classList.toggle('active', p.dataset.maccPanel === tab));
 
-    // إدارة polling للمحادثة
     if (tab === 'chat') {
       loadCustomerChat();
       startChatPolling();
-      // إخفاء شارة عدد الرسائل غير المقروءة
       const badge = $('menChatBadge');
       if (badge) badge.style.display = 'none';
     } else {
@@ -824,7 +855,7 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 💬 Chat — Customer Side
+  // 💬 Chat
   // ═══════════════════════════════════════════════════════════
   async function loadCustomerChat(showLoader = false) {
     if (!currentUser) return;
@@ -841,9 +872,7 @@
         .eq('user_id', currentUser.id)
         .order('created_at', { ascending: true })
         .limit(300);
-
       if (error) throw error;
-
       renderCustomerChat(data || []);
     } catch (err) {
       console.error('loadCustomerChat error:', err);
@@ -861,15 +890,11 @@
       return;
     }
 
-    // إذا ما تغير شي، لا نعيد الرسم (تفادي وميض الشاشة)
-    if (msgs.length === chatLastCount && body.querySelectorAll('.men-acc-msg').length === msgs.length) {
-      return;
-    }
+    if (msgs.length === chatLastCount && body.querySelectorAll('.men-acc-msg').length === msgs.length) return;
     chatLastCount = msgs.length;
 
     body.innerHTML = msgs.map(m => {
       const time = fmtChatTime(m.created_at);
-
       if (m.type === 'note') {
         return `<div class="men-acc-msg note">
           <div class="meta"><i class="fas fa-comment-dots"></i> ملاحظة من الإدارة</div>
@@ -877,7 +902,6 @@
           <div class="time">${time}</div>
         </div>`;
       }
-
       const isCustomer = m.sender === 'customer';
       const cls = isCustomer ? 'customer' : 'admin';
       const label = isCustomer ? 'أنت' : (m.sender_name || 'الدعم');
@@ -887,8 +911,6 @@
         <div class="time">${time}</div>
       </div>`;
     }).join('');
-
-    // تمرير للأسفل
     body.scrollTop = body.scrollHeight;
   }
 
@@ -898,9 +920,7 @@
     const btn = $('menChatSend');
     const text = input?.value?.trim();
     if (!text) return;
-
     btn.disabled = true;
-
     try {
       const { error } = await sb.from('men_messages').insert({
         user_id: currentUser.id,
@@ -913,12 +933,10 @@
         is_read: false
       });
       if (error) throw error;
-
       input.value = '';
       input.style.height = 'auto';
-      chatLastCount = 0; // فرض إعادة الرسم
+      chatLastCount = 0;
       await loadCustomerChat();
-
     } catch (err) {
       console.error('sendCustomerChat error:', err);
       if (window.showToast) window.showToast('فشل الإرسال: ' + err.message, 'error');
@@ -941,7 +959,6 @@
     if (chatPollTimer) { clearInterval(chatPollTimer); chatPollTimer = null; }
   }
 
-  // فحص دوري للرسائل الجديدة (حتى لو المستخدم مو فاتح صفحة الحساب)
   async function checkUnreadMessages() {
     if (!currentUser) return;
     try {
@@ -1035,6 +1052,10 @@
       const items = Array.isArray(o.items) ? o.items : [];
       const itemsTxt = items.slice(0, 3).map(it => `${it.name || 'منتج'} ×${it.qty || 1}`).join(' • ') + (items.length > 3 ? ` +${items.length - 3}` : '');
       const date = o.created_at ? new Date(o.created_at).toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric' }) : '—';
+      const usedCb = Number(o.cashback_used || 0);
+      const cbLine = usedCb > 0
+        ? `<div class="men-acc-order-cb"><i class="fas fa-wallet"></i> استخدمت ${usedCb.toFixed(2)} ر.س كاش باك</div>`
+        : '';
       return `
         <div class="men-acc-order">
           <div class="men-acc-order-badge" style="background:${st.bg};color:#fff">
@@ -1045,7 +1066,7 @@
             <div class="men-acc-order-date"><i class="fas fa-clock"></i> ${date}</div>
           </div>
           <div class="men-acc-order-body">
-            <div class="men-acc-order-items">${itemsTxt || 'تفاصيل الطلب'}</div>
+            <div class="men-acc-order-items">${itemsTxt || 'تفاصيل الطلب'}${cbLine}</div>
             <div class="men-acc-order-total">${Number(o.total || 0).toFixed(2)} ر.س</div>
           </div>
         </div>`;
@@ -1129,10 +1150,12 @@
         avatar.style.display = 'block';
       }
       setTimeout(checkUnreadMessages, 800);
+      setTimeout(() => window.MEN_CASHBACK?.refresh?.(), 600);
     } else {
       if (loginBtn) loginBtn.style.display = 'inline-flex';
       if (avatar) avatar.style.display = 'none';
       if ($('menAccountPage')?.classList.contains('active')) closeAccount();
+      window.MEN_CASHBACK?.hide?.();
     }
     const mLogin = $('menMobileLogin');
     const mAccount = $('menMobileAccount');
@@ -1141,16 +1164,225 @@
     if (typeof window.updateCartUI === 'function') window.updateCartUI();
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // 💰 Cashback on Cart — Auto-injection
+  // ═══════════════════════════════════════════════════════════
+  const CASHBACK_UI_HTML = `
+    <div class="men-cb-box" id="menCbBox" style="display:none">
+      <div class="men-cb-head">
+        <div class="men-cb-icon"><i class="fas fa-wallet"></i></div>
+        <div class="men-cb-info">
+          <div class="men-cb-title">استخدم رصيد الكاش باك</div>
+          <div class="men-cb-bal">رصيدك المتاح: <b id="menCbBalance">0.00</b> ر.س</div>
+        </div>
+        <label class="men-cb-switch-wrap">
+          <input type="checkbox" id="menCbToggle">
+          <span class="men-cb-switch"></span>
+        </label>
+      </div>
+      <div class="men-cb-body" id="menCbBody" style="display:none">
+        <div class="men-cb-row">
+          <label>المبلغ المستخدم</label>
+          <div class="men-cb-input">
+            <input type="number" id="menCbInput" min="0" step="0.01" placeholder="0.00">
+            <span>ر.س</span>
+          </div>
+        </div>
+        <div class="men-cb-quick">
+          <button type="button" data-pct="25">25%</button>
+          <button type="button" data-pct="50">50%</button>
+          <button type="button" data-pct="75">75%</button>
+          <button type="button" data-pct="100">استخدم الكل</button>
+        </div>
+        <div class="men-cb-summary">
+          <div><span>الإجمالي الأصلي</span><b id="menCbOrig">0.00</b></div>
+          <div class="discount"><span>خصم الكاش باك</span><b id="menCbDiscount">− 0.00</b></div>
+          <div class="total"><span>المطلوب دفعه</span><b id="menCbFinal">0.00 ر.س</b></div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  let cbBalance = 0;
+  let cbTotal = 0;
+
+  function findCartTotal() {
+    const ids = ['cartTotalFinal','grandTotal','totalAmount','cartTotal','subtotal','checkoutTotal','orderTotal'];
+    for (const id of ids) {
+      const el = $(id);
+      if (el) {
+        const num = parseFloat(String(el.textContent).replace(/[^\d.]/g, ''));
+        if (!isNaN(num) && num > 0) return num;
+      }
+    }
+    // جرّب عناصر بـ class
+    const classes = ['.cart-total-value','.grand-total-value','.checkout-total-value','[data-cart-total]'];
+    for (const sel of classes) {
+      const el = document.querySelector(sel);
+      if (el) {
+        const num = parseFloat(String(el.textContent || el.dataset.cartTotal).replace(/[^\d.]/g, ''));
+        if (!isNaN(num) && num > 0) return num;
+      }
+    }
+    return 0;
+  }
+
+  function updateCbSummary() {
+    const box = $('menCbBox');
+    if (!box) return;
+    const useToggle = $('menCbToggle').checked;
+    const input = $('menCbInput');
+    let useCb = 0;
+
+    if (useToggle && input.value) {
+      useCb = Math.max(0, Number(input.value) || 0);
+      useCb = Math.min(useCb, cbBalance, cbTotal);
+      useCb = Math.round(useCb * 100) / 100;
+      input.value = useCb ? useCb.toFixed(2) : '';
+    }
+
+    $('menCbOrig').textContent = cbTotal.toFixed(2);
+    $('menCbDiscount').textContent = '− ' + useCb.toFixed(2);
+    $('menCbFinal').textContent = Math.max(0, cbTotal - useCb).toFixed(2) + ' ر.س';
+  }
+
+  async function refreshCbUI() {
+    const box = $('menCbBox');
+    if (!box) return;
+    if (!currentUser) { box.style.display = 'none'; return; }
+
+    try {
+      const { data } = await sb.from('men_users').select('cashback').eq('id', currentUser.id).maybeSingle();
+      cbBalance = Number(data?.cashback || 0);
+    } catch { cbBalance = 0; }
+
+    $('menCbBalance').textContent = cbBalance.toFixed(2);
+
+    if (cbBalance <= 0) {
+      box.style.display = 'none';
+      return;
+    }
+
+    box.style.display = 'block';
+    cbTotal = findCartTotal();
+    updateCbSummary();
+  }
+
+  function hideCbUI() {
+    const box = $('menCbBox');
+    if (box) box.style.display = 'none';
+  }
+
+  function injectCbIntoCart() {
+    // ابحث عن مكان مناسب لإدراج الصندوق
+    const targets = [
+      '#cartDrawer .cart-footer',
+      '#cartDrawer .cart-summary',
+      '#cartModal .cart-footer',
+      '.cart-drawer .cart-footer',
+      '.cart-sidebar .cart-footer',
+      '.cart-summary',
+      '.cart-footer',
+      '#checkoutSummary',
+      '#cartSummary'
+    ];
+    let anchor = null;
+    for (const sel of targets) {
+      const el = document.querySelector(sel);
+      if (el) { anchor = el; break; }
+    }
+    if (!anchor) return false;
+    if ($('menCbBox')) return true;
+
+    const wrap = document.createElement('div');
+    wrap.innerHTML = CASHBACK_UI_HTML;
+    const box = wrap.firstElementChild;
+    anchor.insertBefore(box, anchor.firstChild);
+
+    // Bind events
+    $('menCbToggle').addEventListener('change', () => {
+      const checked = $('menCbToggle').checked;
+      $('menCbBody').style.display = checked ? 'block' : 'none';
+      if (checked) {
+        cbTotal = findCartTotal();
+        const maxUse = Math.min(cbBalance, cbTotal);
+        $('menCbInput').value = maxUse.toFixed(2);
+      } else {
+        $('menCbInput').value = '';
+      }
+      updateCbSummary();
+    });
+
+    $('menCbInput').addEventListener('input', () => {
+      const v = Number($('menCbInput').value) || 0;
+      if (v > cbBalance) $('menCbInput').value = cbBalance.toFixed(2);
+      if (v > cbTotal) $('menCbInput').value = cbTotal.toFixed(2);
+      updateCbSummary();
+    });
+
+    box.querySelectorAll('[data-pct]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pct = Number(btn.dataset.pct) / 100;
+        const maxUse = Math.min(cbBalance, cbTotal);
+        const use = Math.round(maxUse * pct * 100) / 100;
+        $('menCbInput').value = use.toFixed(2);
+        updateCbSummary();
+      });
+    });
+
+    // راقب تغيير الإجمالي
+    setInterval(() => {
+      const t = findCartTotal();
+      if (t !== cbTotal) { cbTotal = t; updateCbSummary(); }
+    }, 1200);
+
+    return true;
+  }
+
+  // محاولة إدراج الصندوق كل ما يفتح الكارت
+  function watchCartOpen() {
+    setInterval(() => {
+      if (!currentUser) return;
+      const opened = document.querySelector('#cartDrawer.open, #cartDrawer.active, .cart-drawer.open, .cart-drawer.active, #cartModal.show, #cartModal.active, .cart-modal.show');
+      if (opened) {
+        if (injectCbIntoCart()) refreshCbUI();
+      }
+    }, 500);
+  }
+
   // ═══ Public API ═══
   window.MEN_AUTH = {
     CASHBACK_RATE, open, openAccount, logout,
     getCurrentUser: () => currentUser,
     isAdmin, makeInitialsAvatar,
 
-    addOrder: async (order) => {
-      if (!currentUser) return;
+    // ⭐ جديد: جلب رصيد الكاش باك
+    getCashbackBalance: async () => {
+      if (!currentUser) return 0;
+      try {
+        const { data } = await sb.from('men_users').select('cashback').eq('id', currentUser.id).maybeSingle();
+        return Number(data?.cashback || 0);
+      } catch { return 0; }
+    },
+
+    // ⭐ جديد: إنشاء طلب مع إمكانية استخدام الكاش باك
+    addOrder: async (order, cashbackUsed = 0) => {
+      if (!currentUser) return null;
       const orderId = 'M' + Date.now().toString().slice(-8);
       const meta = currentUser.user_metadata || {};
+      const total = Number(order.total) || 0;
+
+      // تحقق من الرصيد
+      let cbBalanceVal = 0;
+      try {
+        const { data } = await sb.from('men_users').select('cashback').eq('id', currentUser.id).maybeSingle();
+        cbBalanceVal = Number(data?.cashback || 0);
+      } catch (e) { console.warn(e); }
+
+      let useCb = Math.max(0, Number(cashbackUsed) || 0);
+      useCb = Math.min(useCb, cbBalanceVal, total);
+      useCb = Math.round(useCb * 100) / 100;
+      const finalTotal = Math.max(0, Math.round((total - useCb) * 100) / 100);
 
       try {
         const { error } = await sb.from('men_orders').insert({
@@ -1160,12 +1392,32 @@
           user_name: meta.name || '',
           user_phone: meta.phone || '',
           items: order.items || [],
-          total: Number(order.total) || 0,
+          total: finalTotal,
+          cashback_used: useCb,
           status: 'pending',
           cashback: 0,
           cashback_applied: false
         });
-        if (error) console.warn('insert order error:', error);
+        if (error) throw error;
+
+        // اخصم الكاش باك
+        if (useCb > 0) {
+          const newCb = Math.max(0, Math.round((cbBalanceVal - useCb) * 100) / 100);
+          await sb.from('men_users').update({
+            cashback: newCb,
+            updated_at: new Date().toISOString()
+          }).eq('id', currentUser.id);
+
+          await sb.from('men_cashback_log').insert({
+            user_id: currentUser.id,
+            user_email: meta.email || currentUser.email,
+            amount: -useCb,
+            reason: `استخدام كاش باك على الطلب #${orderId}`,
+            order_id: orderId,
+            type: 'used_on_order',
+            created_by: currentUser.email
+          });
+        }
 
         await sb.from('men_users').upsert({
           id: currentUser.id,
@@ -1175,8 +1427,12 @@
           updated_at: new Date().toISOString()
         }, { onConflict: 'id' });
 
-        console.log('✅ Order created:', orderId);
-        return orderId;
+        console.log('✅ Order created:', orderId, '| Used CB:', useCb, '| Final:', finalTotal);
+
+        // حدّث واجهة الكاش باك
+        refreshCbUI();
+
+        return { orderId, cashbackUsed: useCb, finalTotal };
       } catch (err) {
         console.error('addOrder failed:', err);
         throw err;
@@ -1192,6 +1448,7 @@
       const { data } = await sb.from('men_users').select('cashback').eq('id', currentUser.id).maybeSingle();
       const newCb = Math.round((Number(data?.cashback || 0) + Number(a)) * 100) / 100;
       await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', currentUser.id);
+      refreshCbUI();
     },
 
     deductCashback: async (a) => {
@@ -1203,7 +1460,23 @@
       const { data } = await sb.from('men_users').select('cashback').eq('id', currentUser.id).maybeSingle();
       const newCb = Math.max(0, Math.round((Number(data?.cashback || 0) - Number(a)) * 100) / 100);
       await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', currentUser.id);
-    }
+      refreshCbUI();
+    },
+
+    // ⭐ مساعدات
+    getUsedCashback: () => {
+      if (!$('menCbToggle')?.checked) return 0;
+      return Number($('menCbInput')?.value) || 0;
+    },
+    hideCashbackBox: hideCbUI,
+    refreshCashbackBox: refreshCbUI
+  };
+
+  // ═══ Alias (توافق مع الكود القديم) ═══
+  window.MEN_CASHBACK = {
+    getUsed: () => window.MEN_AUTH.getUsedCashback(),
+    refresh: () => refreshCbUI(),
+    hide: hideCbUI
   };
 
   // ═══ Bootstrap ═══
@@ -1225,8 +1498,8 @@
     if (location.hash === '#account') {
       setTimeout(() => { if (currentUser) openAccount(); }, 500);
     }
-    // فحص دوري كل 60 ثانية للرسائل غير المقروءة
     setInterval(checkUnreadMessages, 60000);
+    watchCartOpen();
   }
 
   if (document.readyState === 'loading') {
