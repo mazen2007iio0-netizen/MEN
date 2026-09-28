@@ -1,5 +1,5 @@
 /* ============================================================
-   ✨ MEN Store — Auth v7 (Email + Phone + Initials Avatar)
+   ✨ MEN Store — Auth v8 (Orders + Status + Cashback + Admin)
    ============================================================ */
 (function () {
   'use strict';
@@ -15,7 +15,7 @@
 
   if (!credsReady) {
     console.error('%c⛔ ضع مفاتيح Supabase في js/auth.js', 'background:#d90429;color:#fff;padding:6px 12px;border-radius:6px;font-weight:bold');
-    window.MEN_AUTH = { CASHBACK_RATE: 0.02, open: () => alert('⚠️ أضف مفاتيح Supabase'), openAccount: () => alert('⚠️ أضف مفاتيح Supabase'), logout: () => {}, getCurrentUser: () => null, addCashback: async () => {}, deductCashback: async () => {}, addOrder: async () => {} };
+    window.MEN_AUTH = { CASHBACK_RATE: 0.02, open: () => alert('⚠️ أضف مفاتيح Supabase'), openAccount: () => alert('⚠️ أضف مفاتيح Supabase'), logout: () => {}, getCurrentUser: () => null, addCashback: async () => {}, deductCashback: async () => {}, addOrder: async () => {}, updateOrderStatus: async () => {} };
     return;
   }
 
@@ -26,35 +26,47 @@
   });
   window.MEN_SUPABASE = sb;
 
-  console.log('%c✨ MEN AUTH v7', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
+  console.log('%c✨ MEN AUTH v8', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
+  // ════════ ⚙️ الإعدادات ════════
   const CASHBACK_RATE = 0.02;
+  const PHONE_DOMAIN  = 'men-store.local';
+
+  // ⭐ قائمة المشرفين (أضف بريدك)
+  const ADMIN_EMAILS = ['mkmkmkl24666606@gmail.com'];
+
+  // ⭐ حالات الطلب
+  const ORDER_STATUS = {
+    pending:   { label: 'قيد الانتظار',   color: '#f5b342', bg: 'linear-gradient(135deg,#f5b342,#c98a1e)', icon: 'fa-hourglass-half' },
+    preparing: { label: 'جاري التجهيز',   color: '#4a7aff', bg: 'linear-gradient(135deg,#4a7aff,#021ca4)', icon: 'fa-gears' },
+    review:    { label: 'تحت المراجعة',   color: '#6a9aff', bg: 'linear-gradient(135deg,#6a9aff,#4a7aff)', icon: 'fa-magnifying-glass' },
+    delivered: { label: 'تم الاستلام',     color: '#4caf50', bg: 'linear-gradient(135deg,#4caf50,#2e7d32)', icon: 'fa-circle-check' },
+    cancelled: { label: 'ملغي',           color: '#d90429', bg: 'linear-gradient(135deg,#d90429,#8b0018)', icon: 'fa-circle-xmark' }
+  };
+  const STATUS_ORDER = ['pending', 'preparing', 'review', 'delivered'];
+
   let currentUser = null;
   let authMode = 'login';
   let rememberMe = true;
   const $ = id => document.getElementById(id);
 
-  // ═══════════════════════════════════════════════════════════
-  // 🛠️ Helpers
-  // ═══════════════════════════════════════════════════════════
-  
-  // تحويل رقم الجوال إلى صيغة موحدة
+  const isAdmin = () => !!currentUser && ADMIN_EMAILS.includes((currentUser.email || '').toLowerCase());
+
+  // ════════ 🛠️ Helpers ════════
   function normalizePhone(raw) {
     const digits = String(raw || '').replace(/\D/g, '');
     if (!digits) return null;
-    if (/^05\d{8}$/.test(digits)) return digits;                 // 05XXXXXXXX
-    if (/^9665\d{8}$/.test(digits)) return '0' + digits.slice(3); // 9665XXXXXXXX
-    if (/^5\d{8}$/.test(digits)) return '0' + digits;             // 5XXXXXXXX
-    if (/^\d{8,15}$/.test(digits)) return digits;                 // دولي
+    if (/^05\d{8}$/.test(digits)) return digits;
+    if (/^9665\d{8}$/.test(digits)) return '0' + digits.slice(3);
+    if (/^5\d{8}$/.test(digits)) return '0' + digits;
+    if (/^\d{8,15}$/.test(digits)) return digits;
     return null;
   }
 
-  // التحقق من البريد
   function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim().toLowerCase());
   }
 
-  // ⭐ توليد أفتار من الحرف الأول والأخير من الاسم
   function makeInitialsAvatar(name, size = 200) {
     const clean = String(name || '').trim();
     const parts = clean.split(/\s+/).filter(Boolean);
@@ -110,7 +122,6 @@
       @keyframes menOrb2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-80px,-60px) scale(1.15)}}
 
       .men-layout{position:relative;z-index:10;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:stretch}
-
       .men-showcase{position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:60px 70px;background:linear-gradient(160deg,rgba(2,28,164,.35) 0%,rgba(6,8,18,.9) 100%);border-left:1px solid rgba(74,122,255,.08);overflow:hidden}
       .men-showcase::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(74,122,255,.25),transparent 55%);pointer-events:none}
       .men-showcase-top{position:relative;z-index:2}
@@ -153,7 +164,6 @@
       .men-tabs[data-mode="signup"] .men-tabs-indicator{transform:translateX(calc(100% + 4px))}
 
       .men-form{display:flex;flex-direction:column;gap:16px}
-
       .men-field{position:relative}
       .men-label{display:block;font-size:.74rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:9px;padding-right:4px}
       .men-input-wrap{position:relative;display:flex;align-items:center}
@@ -269,6 +279,7 @@
       .men-acc-tag.blue{color:#6a9aff;border-color:rgba(74,122,255,.3);background:rgba(74,122,255,.12)}
       .men-acc-tag.gold{color:#f5b342;border-color:rgba(245,179,66,.3);background:rgba(245,179,66,.12)}
       .men-acc-tag.green{color:#66bb6a;border-color:rgba(76,175,80,.3);background:rgba(76,175,80,.12)}
+      .men-acc-tag.admin{color:#ff6b6b;border-color:rgba(217,4,41,.4);background:rgba(217,4,41,.15)}
       .men-acc-cover-actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
       .men-acc-cover-btn{padding:11px 22px;border-radius:60px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .35s cubic-bezier(.16,1,.3,1)}
       .men-acc-cover-btn.primary{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;box-shadow:0 10px 30px -8px rgba(74,122,255,.7)}
@@ -309,17 +320,41 @@
       .men-acc-info-row .txt{flex:1;min-width:0}
       .men-acc-info-row .lbl{font-size:.7rem;color:#8a92b0;text-transform:uppercase;letter-spacing:1px;font-weight:800;margin-bottom:2px}
       .men-acc-info-row .val{color:#fff;font-weight:700;font-size:.92rem;word-break:break-all}
+
+      /* ═══ ORDERS ═══ */
       .men-acc-orders-list{display:flex;flex-direction:column;gap:14px}
-      .men-acc-order{background:linear-gradient(145deg,rgba(14,20,38,.6),rgba(8,12,24,.8));border:1px solid rgba(74,122,255,.12);border-radius:20px;padding:20px 22px;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden}
+      .men-acc-order{background:linear-gradient(145deg,rgba(14,20,38,.6),rgba(8,12,24,.8));border:1px solid rgba(74,122,255,.12);border-radius:20px;padding:20px 22px 22px;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden}
       .men-acc-order:hover{transform:translateY(-3px);border-color:rgba(74,122,255,.3);box-shadow:0 15px 40px -12px rgba(2,28,164,.5)}
       .men-acc-order-header{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap}
       .men-acc-order-id{font-weight:800;color:#fff;font-size:.95rem;display:flex;align-items:center;gap:10px}
-      .men-acc-order-id .dot{width:8px;height:8px;border-radius:50%;background:#4caf50;box-shadow:0 0 12px rgba(76,175,80,.8)}
+      .men-acc-order-id .dot{width:8px;height:8px;border-radius:50%;background:var(--st-color,#4caf50);box-shadow:0 0 12px var(--st-color,#4caf50)}
       .men-acc-order-date{color:#8a92b0;font-size:.78rem;display:flex;align-items:center;gap:6px;font-weight:600}
       .men-acc-order-body{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
       .men-acc-order-items{flex:1;min-width:200px;color:#a8b0cc;font-size:.85rem;line-height:1.7}
       .men-acc-order-total{font-size:1.3rem;font-weight:900;background:linear-gradient(135deg,#fff,#6a9aff);-webkit-background-clip:text;background-clip:text;color:transparent}
-      .men-acc-order-badge{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;font-size:.62rem;font-weight:800;padding:4px 10px;border-radius:20px}
+      .men-acc-order-badge{position:absolute;top:14px;left:14px;color:#fff;font-size:.68rem;font-weight:800;padding:5px 12px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 6px 18px -6px rgba(0,0,0,.6)}
+      .men-acc-order-badge i{font-size:.7rem}
+
+      /* شريط تقدم */
+      .men-order-progress{margin-top:16px;display:flex;align-items:center;gap:6px}
+      .men-order-step{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.08);position:relative;overflow:hidden}
+      .men-order-step.done::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#4a7aff,#6a9aff);border-radius:4px}
+      .men-order-step.current::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#4a7aff,#6a9aff);border-radius:4px;animation:menStepPulse 1.6s ease-in-out infinite}
+      @keyframes menStepPulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+      /* كاش باك الطلب */
+      .men-order-cashback{margin-top:12px;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:20px;font-size:.78rem;font-weight:800;background:rgba(76,175,80,.12);border:1px solid rgba(76,175,80,.3);color:#66bb6a}
+      .men-order-cashback.pending{background:rgba(245,179,66,.1);border-color:rgba(245,179,66,.3);color:#f5b342}
+
+      /* لوحة الإدارة */
+      .men-order-admin{margin-top:16px;padding-top:16px;border-top:1px dashed rgba(74,122,255,.2);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+      .men-order-admin-label{font-size:.72rem;font-weight:800;color:#6a9aff;letter-spacing:1px;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px}
+      .men-order-admin-select{flex:1;min-width:180px;padding:10px 14px;background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.25);border-radius:12px;color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.85rem;outline:none;cursor:pointer}
+      .men-order-admin-select:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
+      .men-order-admin-apply{padding:10px 20px;border-radius:12px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .3s}
+      .men-order-admin-apply:hover{transform:translateY(-2px);box-shadow:0 10px 24px -6px rgba(74,122,255,.7)}
+      .men-order-admin-apply:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
       .men-acc-empty{text-align:center;padding:60px 24px;background:rgba(74,122,255,.04);border:1.5px dashed rgba(74,122,255,.2);border-radius:24px}
       .men-acc-empty-icon{width:90px;height:90px;margin:0 auto 20px;border-radius:50%;background:rgba(74,122,255,.1);display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:#4a7aff}
       .men-acc-empty h3{color:#fff;font-size:1.2rem;margin-bottom:8px;font-weight:800}
@@ -355,6 +390,7 @@
         .men-acc-card{padding:22px 20px}
         .men-acc-cashback{padding:26px 22px}
         .men-acc-stat{padding:18px 16px}
+        .men-acc-order-badge{position:static;margin-bottom:12px;width:fit-content}
       }
     `;
     document.head.appendChild(s);
@@ -392,49 +428,31 @@
         <div class="men-orb o3"></div>
 
         <div class="men-layout">
-          <!-- LEFT: BRAND SHOWCASE -->
           <div class="men-showcase">
             <div class="men-showcase-top">
               <div class="men-logo-row">
-                <img 
-                  src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" 
-                  alt="MEN Store" 
-                  style="height:70px;width:auto;object-fit:contain;filter:brightness(0) invert(1) drop-shadow(0 8px 24px rgba(74,122,255,.5))"
-                >
+                <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN Store" style="height:70px;width:auto;object-fit:contain;filter:brightness(0) invert(1) drop-shadow(0 8px 24px rgba(74,122,255,.5))">
               </div>
             </div>
-
             <div class="men-showcase-center">
-              <div class="men-showcase-badge"><i class=""></i> متجرك الأول للألعاب</div>
+              <div class="men-showcase-badge"><i class="fas fa-star"></i> متجرك الأول للألعاب</div>
               <h1 class="men-showcase-title">كل ما تحتاجه<br>في <span>عالم الجيمنق</span></h1>
-              <p class="men-showcase-desc">
-                انضم إلى أكثر من 5000 لاعب يستمتعون بأفضل الأسعار، التسليم الفوري، والكاش باك على كل طلب.
-              </p>
+              <p class="men-showcase-desc">انضم إلى أكثر من 5000 لاعب يستمتعون بأفضل الأسعار، التسليم الفوري، والكاش باك على كل طلب.</p>
               <div class="men-features">
                 <div class="men-feature">
                   <div class="men-feature-icon"><i class="fas fa-bolt"></i></div>
-                  <div class="men-feature-text">
-                    <div class="t">تسليم فوري</div>
-                    <div class="s">استلم طلبك خلال 5 دقائق</div>
-                  </div>
+                  <div class="men-feature-text"><div class="t">تسليم فوري</div><div class="s">استلم طلبك خلال 5 دقائق</div></div>
                 </div>
                 <div class="men-feature">
                   <div class="men-feature-icon"><i class="fas fa-gift"></i></div>
-                  <div class="men-feature-text">
-                    <div class="t">كاش باك 2%</div>
-                    <div class="s">على كل عملية شراء</div>
-                  </div>
+                  <div class="men-feature-text"><div class="t">كاش باك 2%</div><div class="s">على كل عملية شراء</div></div>
                 </div>
                 <div class="men-feature">
                   <div class="men-feature-icon"><i class="fas fa-shield-halved"></i></div>
-                  <div class="men-feature-text">
-                    <div class="t">منتجات أصلية 100%</div>
-                    <div class="s">ضمان الجودة والأصالة</div>
-                  </div>
+                  <div class="men-feature-text"><div class="t">منتجات أصلية 100%</div><div class="s">ضمان الجودة والأصالة</div></div>
                 </div>
               </div>
             </div>
-
             <div class="men-showcase-bottom">
               <div class="stats">
                 <div class="stat"><div class="n">+5000</div><div class="l">عميل سعيد</div></div>
@@ -445,7 +463,6 @@
             </div>
           </div>
 
-          <!-- RIGHT: FORM -->
           <div class="men-form-panel">
             <div class="men-panel-top">
               <div></div>
@@ -458,7 +475,6 @@
                 <p id="menHeadSub">سجّل دخولك للمتابعة والاستمتاع بالعروض الحصرية</p>
               </div>
 
-              <!-- Tabs -->
               <div class="men-tabs" id="menTabs" data-mode="login">
                 <div class="men-tabs-indicator"></div>
                 <button class="men-tab active" data-tab="login" type="button"><i class="fas fa-right-to-bracket"></i> دخول</button>
@@ -466,7 +482,6 @@
               </div>
 
               <form class="men-form" id="menForm" onsubmit="return false;">
-                <!-- Name (signup only) -->
                 <div class="men-field" id="menNameField" style="display:none">
                   <label class="men-label" for="menAuthName">الاسم الكامل</label>
                   <div class="men-input-wrap">
@@ -475,7 +490,6 @@
                   </div>
                 </div>
 
-                <!-- Email (signup only) -->
                 <div class="men-field" id="menEmailField" style="display:none">
                   <label class="men-label" for="menAuthEmail">البريد الإلكتروني</label>
                   <div class="men-input-wrap">
@@ -484,7 +498,6 @@
                   </div>
                 </div>
 
-                <!-- Phone (signup only) -->
                 <div class="men-field" id="menPhoneField" style="display:none">
                   <label class="men-label" for="menAuthPhone">رقم الجوال</label>
                   <div class="men-input-wrap">
@@ -493,7 +506,6 @@
                   </div>
                 </div>
 
-                <!-- Identifier (login only) -->
                 <div class="men-field" id="menIdentifierField">
                   <label class="men-label" for="menAuthIdentifier">رقم الجوال أو البريد الإلكتروني</label>
                   <div class="men-input-wrap">
@@ -503,13 +515,12 @@
                   <div class="men-hint"><i class="fas fa-circle-info"></i> يمكنك الدخول بالجوال أو بالبريد الإلكتروني</div>
                 </div>
 
-                <!-- Password -->
                 <div class="men-field">
                   <label class="men-label" for="menAuthPassword">كلمة المرور</label>
                   <div class="men-input-wrap">
                     <input type="password" id="menAuthPassword" placeholder="••••••••" autocomplete="current-password" dir="ltr" style="text-align:right">
                     <i class="fas fa-lock men-icon"></i>
-                    <button class="men-eye" id="menTogglePass" type="button" title="إظهار/إخفاء"><i class="fas fa-eye"></i></button>
+                    <button class="men-eye" id="menTogglePass" type="button"><i class="fas fa-eye"></i></button>
                   </div>
                   <div class="men-strength" id="menStrength">
                     <div class="men-strength-row">
@@ -524,7 +535,6 @@
                   </div>
                 </div>
 
-                <!-- Options (login only) -->
                 <div class="men-opts" id="menOptsRow">
                   <label class="men-remember">
                     <input type="checkbox" id="menRemember" checked>
@@ -534,18 +544,15 @@
                   <a class="men-forgot" id="menForgotBtn">نسيت كلمة المرور؟</a>
                 </div>
 
-                <!-- Terms (signup only) -->
                 <div class="men-terms" id="menTermsText" style="display:none">
                   بإنشاء حساب، أنت توافق على <a>الشروط والأحكام</a> و <a>سياسة الخصوصية</a>
                 </div>
 
-                <!-- Error -->
                 <div class="men-error" id="menError">
                   <i class="fas fa-circle-exclamation"></i>
                   <span id="menErrorText"></span>
                 </div>
 
-                <!-- Submit -->
                 <button class="men-submit" id="menSubmit" type="button">
                   <i class="fas fa-arrow-left men-btn-icon"></i>
                   <span class="men-spinner"></span>
@@ -556,7 +563,6 @@
           </div>
         </div>
 
-        <!-- Success overlay -->
         <div class="men-success-overlay" id="menSuccessOverlay">
           <div class="men-check-circle"><i class="fas fa-check"></i></div>
           <p id="menSuccessText">تم بنجاح!</p>
@@ -565,13 +571,9 @@
     `;
     document.body.appendChild(wrap);
 
-    // ═══ Bind Events ═══
     wrap.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeAuth));
     wrap.querySelectorAll('[data-tab]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        switchMode(btn.dataset.tab);
-      });
+      btn.addEventListener('click', (e) => { e.preventDefault(); switchMode(btn.dataset.tab); });
     });
 
     $('menTogglePass').addEventListener('click', togglePassword);
@@ -586,7 +588,6 @@
     $('menForgotBtn').addEventListener('click', handleForgot);
   }
 
-  // ═══ Mode Switch ═══
   function switchMode(mode) {
     authMode = mode === 'signup' ? 'signup' : 'login';
     renderMode();
@@ -594,17 +595,12 @@
 
   function renderMode() {
     const login = authMode === 'login';
-
     $('menTabs').dataset.mode = authMode;
-    document.querySelectorAll('[data-tab]').forEach(b =>
-      b.classList.toggle('active', b.dataset.tab === authMode));
+    document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === authMode));
 
     $('menHeadTitle').textContent = login ? 'أهلاً بعودتك 👋' : 'انضم إلينا';
-    $('menHeadSub').textContent = login
-      ? 'سجّل دخولك بالجوال أو البريد الإلكتروني'
-      : 'أنشئ حسابك في ثوانٍ — البريد والجوال مطلوبان';
+    $('menHeadSub').textContent = login ? 'سجّل دخولك بالجوال أو البريد الإلكتروني' : 'أنشئ حسابك في ثوانٍ — البريد والجوال مطلوبان';
 
-    // Fields visibility
     $('menNameField').style.display       = login ? 'none' : 'block';
     $('menEmailField').style.display      = login ? 'none' : 'block';
     $('menPhoneField').style.display      = login ? 'none' : 'block';
@@ -647,13 +643,9 @@
     $('menStrengthLabel').textContent = labels[Math.max(1, score)];
   }
 
-  function showError(msg) {
-    $('menErrorText').textContent = msg;
-    $('menError').classList.add('show');
-  }
+  function showError(msg) { $('menErrorText').textContent = msg; $('menError').classList.add('show'); }
   function clearError() { $('menError').classList.remove('show'); }
 
-  // ═══ Open / Close ═══
   function open(mode) {
     injectCSS();
     injectModals();
@@ -669,20 +661,15 @@
     clearError();
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // ⭐ Submit
-  // ═══════════════════════════════════════════════════════════
   async function handleSubmit() {
     const password = $('menAuthPassword').value;
     clearError();
-
     const btn = $('menSubmit');
     btn.disabled = true;
     btn.classList.add('loading');
 
     try {
       if (authMode === 'login') {
-        // ═══ تسجيل دخول (جوال أو بريد) ═══
         const rawId = $('menAuthIdentifier').value.trim();
         if (!rawId) throw new Error('الرجاء إدخال رقم الجوال أو البريد الإلكتروني');
         if (!password) throw new Error('الرجاء إدخال كلمة المرور');
@@ -694,12 +681,7 @@
         } else {
           const phone = normalizePhone(rawId);
           if (!phone) throw new Error('رقم الجوال غير صحيح (مثال: 05xxxxxxxx)');
-          // lookup phone → email
-          const { data, error: lookupErr } = await sb
-            .from('men_phone_email')
-            .select('email')
-            .eq('phone', phone)
-            .maybeSingle();
+          const { data, error: lookupErr } = await sb.from('men_phone_email').select('email').eq('phone', phone).maybeSingle();
           if (lookupErr) throw lookupErr;
           if (!data?.email) throw new Error('لا يوجد حساب مرتبط بهذا الرقم');
           email = data.email;
@@ -710,9 +692,7 @@
         console.log('✅ دخول:', data.user?.email);
         await showSuccess('مرحباً بك! 👋');
         launchConfetti();
-
       } else {
-        // ═══ إنشاء حساب جديد ═══
         const name  = $('menAuthName').value.trim();
         const email = $('menAuthEmail').value.trim().toLowerCase();
         const phone = normalizePhone($('menAuthPhone').value);
@@ -725,46 +705,27 @@
         if (password.length < 6) throw new Error('كلمة المرور 6 أحرف على الأقل');
 
         const { data, error } = await sb.auth.signUp({
-          email,
-          password,
-          options: {
-            data: { name, phone, email, cashback: 0, orders: [] }
-          }
+          email, password,
+          options: { data: { name, phone, email, cashback: 0, orders: [] } }
         });
         if (error) throw error;
 
-        // حفظ ربط الجوال → البريد
-        try {
-          await sb.from('men_phone_email').insert({ phone, email });
-        } catch (e) {
-          console.warn('phone→email map save failed', e);
-        }
+        try { await sb.from('men_phone_email').insert({ phone, email }); } catch (e) { console.warn(e); }
 
-        if (!data.session) {
-          showError(' تم إنشاء حسابك! يمكنك الآن تسجيل الدخول.');
-          return;
-        }
-        console.log(' حساب جديد:', data.user?.email);
+        if (!data.session) { showError('✅ تم إنشاء حسابك! يمكنك الآن تسجيل الدخول.'); return; }
+        console.log('✅ حساب جديد:', data.user?.email);
         await showSuccess('تم إنشاء حسابك');
         launchConfetti();
       }
     } catch (err) {
       console.error('[AUTH ERROR]', err);
       const m = (err.message || '').toLowerCase();
-      if (m.includes('email not confirmed'))
-        showError('بريدك غير مؤكد — راجع إعدادات Supabase');
-      else if (m.includes('invalid login') || m.includes('invalid credentials'))
-        showError('البيانات غير صحيحة — تحقق من الجوال/البريد وكلمة المرور');
-      else if (m.includes('already registered') || m.includes('already been registered') || m.includes('user already exists'))
-        showError('هذا البريد مسجل بالفعل — انتقل لتسجيل الدخول');
-      else if (m.includes('duplicate key'))
-        showError('هذا الرقم مستخدم بحساب آخر');
-      else if (m.includes('password'))
-        showError('كلمة المرور ضعيفة — استخدم 6 أحرف على الأقل');
-      else if (m.includes('too many') || m.includes('rate limit'))
-        showError('محاولات كثيرة — انتظر دقيقة ثم حاول مرة أخرى');
-      else
-        showError(err.message || 'حدث خطأ غير متوقع');
+      if (m.includes('invalid login') || m.includes('invalid credentials')) showError('البيانات غير صحيحة — تحقق من الجوال/البريد وكلمة المرور');
+      else if (m.includes('already registered') || m.includes('already been registered') || m.includes('user already exists')) showError('هذا البريد مسجل بالفعل — انتقل لتسجيل الدخول');
+      else if (m.includes('duplicate key')) showError('هذا الرقم مستخدم بحساب آخر');
+      else if (m.includes('password')) showError('كلمة المرور ضعيفة');
+      else if (m.includes('too many') || m.includes('rate limit')) showError('محاولات كثيرة — انتظر دقيقة');
+      else showError(err.message || 'حدث خطأ غير متوقع');
     } finally {
       btn.disabled = false;
       btn.classList.remove('loading');
@@ -776,37 +737,21 @@
       $('menSuccessText').textContent = msg;
       $('menSuccessOverlay').classList.add('show');
       if (window.showToast) setTimeout(() => window.showToast(msg, 'success'), 300);
-      setTimeout(() => {
-        $('menSuccessOverlay').classList.remove('show');
-        closeAuth();
-        r();
-      }, 1300);
+      setTimeout(() => { $('menSuccessOverlay').classList.remove('show'); closeAuth(); r(); }, 1300);
     });
   }
 
   async function handleForgot() {
     const rawId = $('menAuthIdentifier').value.trim();
-    if (!rawId) {
-      showError('اكتب بريدك الإلكتروني أولاً (استعادة كلمة المرور عبر البريد فقط)');
-      $('menAuthIdentifier').focus();
-      return;
-    }
-    if (!rawId.includes('@')) {
-      showError('لاستعادة كلمة المرور، أدخل بريدك الإلكتروني. للدعم: clan.men.ts@gmail.com');
-      return;
-    }
+    if (!rawId) { showError('اكتب بريدك الإلكتروني أولاً'); $('menAuthIdentifier').focus(); return; }
+    if (!rawId.includes('@')) { showError('لاستعادة كلمة المرور، أدخل بريدك الإلكتروني. للدعم: clan.men.ts@gmail.com'); return; }
     if (!isValidEmail(rawId)) return showError('صيغة البريد غير صحيحة');
-
     try {
-      const { error } = await sb.auth.resetPasswordForEmail(rawId.toLowerCase(), {
-        redirectTo: location.origin + location.pathname
-      });
+      const { error } = await sb.auth.resetPasswordForEmail(rawId.toLowerCase(), { redirectTo: location.origin + location.pathname });
       if (error) throw error;
       if (window.showToast) window.showToast('أرسلنا رابط استعادة كلمة المرور', 'success');
       clearError();
-    } catch (err) {
-      showError(err.message || 'فشل الإرسال');
-    }
+    } catch (err) { showError(err.message || 'فشل الإرسال'); }
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -836,7 +781,7 @@
               <div class="men-acc-cover-info">
                 <h1 class="men-acc-cover-name" id="menAccCoverName">—</h1>
                 <div class="men-acc-cover-email"><i class="fas fa-envelope"></i> <span id="menAccCoverEmail">—</span></div>
-                <div class="men-acc-cover-tags">
+                <div class="men-acc-cover-tags" id="menAccCoverTags">
                   <span class="men-acc-tag blue"><i class="fas fa-crown"></i> عضو مميز</span>
                   <span class="men-acc-tag gold"><i class="fas fa-star"></i> <span id="menAccMemberLevel">برونزي</span></span>
                   <span class="men-acc-tag green"><i class="fas fa-circle-check"></i> موثّق</span>
@@ -884,7 +829,7 @@
                 <div class="cc-chip"><i class="fas fa-microchip"></i></div>
                 <div class="cc-label"><i class="fas fa-wallet"></i> رصيد الكاش باك</div>
                 <div class="cc-amount"><span id="menAccCashbackBig">0.00</span> <small>ر.س</small></div>
-                <div class="cc-note"><i class="fas fa-gift"></i> تكسب 2% على كل طلب</div>
+                <div class="cc-note"><i class="fas fa-gift"></i> تكسب 2% على كل طلب مستلم</div>
               </div>
               <div class="men-acc-card">
                 <div class="men-acc-card-title"><span class="icn"><i class="fas fa-user"></i></span> معلوماتي</div>
@@ -932,8 +877,7 @@
     $('menAccBackBtn').addEventListener('click', closeAccount);
     $('menAccShopNow').addEventListener('click', closeAccount);
     page.querySelectorAll('[data-macc-nav]').forEach(a => a.addEventListener('click', closeAccount));
-    page.querySelectorAll('[data-macc-tab]').forEach(btn =>
-      btn.addEventListener('click', () => switchAccountTab(btn.dataset.maccTab)));
+    page.querySelectorAll('[data-macc-tab]').forEach(btn => btn.addEventListener('click', () => switchAccountTab(btn.dataset.maccTab)));
     $('menAccSaveBtn').addEventListener('click', saveProfile);
     $('menAccLogoutBtn').addEventListener('click', logout);
     $('menAccDeleteBtn').addEventListener('click', deleteAccount);
@@ -941,27 +885,32 @@
   }
 
   function switchAccountTab(tab) {
-    document.querySelectorAll('[data-macc-tab]').forEach(b =>
-      b.classList.toggle('active', b.dataset.maccTab === tab));
-    document.querySelectorAll('[data-macc-panel]').forEach(p =>
-      p.classList.toggle('active', p.dataset.maccPanel === tab));
+    document.querySelectorAll('[data-macc-tab]').forEach(b => b.classList.toggle('active', b.dataset.maccTab === tab));
+    document.querySelectorAll('[data-macc-panel]').forEach(p => p.classList.toggle('active', p.dataset.maccPanel === tab));
   }
 
   function fillAccountPage(user) {
     const meta = user.user_metadata || {};
     const orders = Array.isArray(meta.orders) ? meta.orders : [];
     const cashback = Number(meta.cashback || 0);
-    const totalSpent = orders.reduce((s, o) => s + Number(o.total || 0), 0);
+    const totalSpent = orders.filter(o => o.status === 'delivered').reduce((s, o) => s + Number(o.total || 0), 0);
     const name = meta.name || user.email?.split('@')[0] || 'مستخدم';
-
-    // ⭐ أفتار من الحرف الأول والأخير من الاسم
     const avatar = meta.avatar_url || makeInitialsAvatar(name, 300);
-
     const since = user.created_at ? new Date(user.created_at).toLocaleDateString('ar-SA', { year: 'numeric', month: 'long' }) : '—';
 
     $('menAccCoverAvatar').src = avatar;
     $('menAccCoverName').textContent = name;
     $('menAccCoverEmail').textContent = meta.email || user.email || '—';
+
+    // شارة المشرف
+    const tagsEl = $('menAccCoverTags');
+    const existingAdmin = tagsEl.querySelector('.men-acc-tag.admin');
+    if (isAdmin() && !existingAdmin) {
+      const tag = document.createElement('span');
+      tag.className = 'men-acc-tag admin';
+      tag.innerHTML = '<i class="fas fa-shield-halved"></i> مشرف';
+      tagsEl.appendChild(tag);
+    }
 
     let level = 'برونزي';
     if (orders.length >= 20 || totalSpent >= 1000) level = 'ذهبي';
@@ -986,9 +935,13 @@
     renderOrders(orders);
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // 📦 RENDER ORDERS (مع الحالة + الإدارة)
+  // ═══════════════════════════════════════════════════════════
   function renderOrders(orders) {
     const list = $('menAccOrdersList');
     if (!list) return;
+
     if (!orders.length) {
       list.innerHTML = `
         <div class="men-acc-empty">
@@ -1001,30 +954,164 @@
       if (b) b.addEventListener('click', closeAccount);
       return;
     }
+
     const sorted = [...orders].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const admin = isAdmin();
+
     list.innerHTML = sorted.map((o, i) => {
+      const status = o.status || 'pending';
+      const st = ORDER_STATUS[status] || ORDER_STATUS.pending;
       const items = Array.isArray(o.items) ? o.items : [];
       const itemsTxt = items.slice(0, 3).map(it => `${it.name || 'منتج'} ×${it.qty || 1}`).join(' • ') + (items.length > 3 ? ` +${items.length - 3}` : '');
       const date = o.date ? new Date(o.date).toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
+      const orderId = o.id || String(sorted.length - i);
+
+      // شريط التقدم
+      const currentIdx = STATUS_ORDER.indexOf(status);
+      const progressSteps = STATUS_ORDER.map((s, idx) => {
+        let cls = 'men-order-step';
+        if (status === 'cancelled') cls += '';
+        else if (idx < currentIdx) cls += ' done';
+        else if (idx === currentIdx) cls += ' current';
+        return `<div class="${cls}"></div>`;
+      }).join('');
+
+      // الكاش باك
+      let cashbackHtml = '';
+      if (status === 'delivered' && o.cashbackApplied) {
+        cashbackHtml = `<div class="men-order-cashback"><i class="fas fa-gift"></i> كاش باك مكتسب: ${Number(o.cashback || 0).toFixed(2)} ر.س</div>`;
+      } else if (status !== 'cancelled' && status !== 'delivered') {
+        const potential = Number(o.total || 0) * CASHBACK_RATE;
+        cashbackHtml = `<div class="men-order-cashback pending"><i class="fas fa-clock"></i> كاش باك متوقع عند الاستلام: ${potential.toFixed(2)} ر.س</div>`;
+      }
+
+      // لوحة الإدارة
+      let adminHtml = '';
+      if (admin) {
+        const options = Object.entries(ORDER_STATUS).map(([key, val]) =>
+          `<option value="${key}" ${key === status ? 'selected' : ''}>${val.label}</option>`
+        ).join('');
+        adminHtml = `
+          <div class="men-order-admin">
+            <span class="men-order-admin-label"><i class="fas fa-shield-halved"></i> تغيير الحالة</span>
+            <select class="men-order-admin-select" data-order-id="${orderId}">
+              ${options}
+            </select>
+            <button class="men-order-admin-apply" data-order-id="${orderId}" type="button">
+              <i class="fas fa-check"></i> تطبيق
+            </button>
+          </div>`;
+      }
+
       return `
-        <div class="men-acc-order">
-          <div class="men-acc-order-badge"><i class="fas fa-check"></i> مكتمل</div>
+        <div class="men-acc-order" data-order-id="${orderId}">
+          <div class="men-acc-order-badge" style="background:${st.bg};color:${status === 'pending' ? '#000' : '#fff'}">
+            <i class="fas ${st.icon}"></i> ${st.label}
+          </div>
           <div class="men-acc-order-header">
-            <div class="men-acc-order-id"><span class="dot"></span> طلب #${String(o.id || (sorted.length - i)).slice(-6).toUpperCase()}</div>
+            <div class="men-acc-order-id" style="--st-color:${st.color}">
+              <span class="dot"></span> طلب #${String(orderId).slice(-6).toUpperCase()}
+            </div>
             <div class="men-acc-order-date"><i class="fas fa-clock"></i> ${date}</div>
           </div>
           <div class="men-acc-order-body">
             <div class="men-acc-order-items">${itemsTxt || 'تفاصيل الطلب'}</div>
             <div class="men-acc-order-total">${Number(o.total || 0).toFixed(2)} ر.س</div>
           </div>
+          ${status !== 'cancelled' ? `<div class="men-order-progress">${progressSteps}</div>` : ''}
+          ${cashbackHtml}
+          ${adminHtml}
         </div>`;
     }).join('');
+
+    // ═══ Bind admin controls ═══
+    if (admin) {
+      list.querySelectorAll('.men-order-admin-apply').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const orderId = btn.dataset.orderId;
+          const sel = list.querySelector(`.men-order-admin-select[data-order-id="${orderId}"]`);
+          const newStatus = sel?.value;
+          if (!newStatus) return;
+          await applyOrderStatus(orderId, newStatus, btn);
+        });
+      });
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // ⭐ تطبيق تغيير حالة الطلب (+ كاش باك تلقائي)
+  // ═══════════════════════════════════════════════════════════
+  async function applyOrderStatus(orderId, newStatus, btnEl) {
+    if (!currentUser) return;
+    if (!ORDER_STATUS[newStatus]) { window.showToast?.('حالة غير صحيحة', 'error'); return; }
+
+    const orders = [...(currentUser.user_metadata?.orders || [])];
+    const idx = orders.findIndex(o => String(o.id) === String(orderId));
+    if (idx < 0) { window.showToast?.('الطلب غير موجود', 'error'); return; }
+
+    const order = { ...orders[idx] };
+    const oldStatus = order.status || 'pending';
+    if (oldStatus === newStatus) { window.showToast?.('الحالة نفسها', 'info'); return; }
+
+    order.status = newStatus;
+    order.updatedAt = new Date().toISOString();
+
+    let newCashback = Number(currentUser.user_metadata?.cashback || 0);
+    let cashbackMsg = '';
+
+    // ✅ تطبيق الكاش باك عند التسليم
+    if (newStatus === 'delivered' && !order.cashbackApplied) {
+      const earned = Math.round(Number(order.total || 0) * CASHBACK_RATE * 100) / 100;
+      order.cashback = earned;
+      order.cashbackApplied = true;
+      order.cashbackAppliedAt = new Date().toISOString();
+      newCashback = Math.round((newCashback + earned) * 100) / 100;
+      cashbackMsg = ` + ${earned.toFixed(2)} ر.س كاش باك`;
+    }
+
+    // ❌ إلغاء الكاش باك عند تغيير الحالة من delivered
+    if (oldStatus === 'delivered' && newStatus !== 'delivered' && order.cashbackApplied) {
+      const refund = Number(order.cashback || 0);
+      newCashback = Math.max(0, Math.round((newCashback - refund) * 100) / 100);
+      order.cashbackApplied = false;
+      order.cashback = 0;
+      cashbackMsg = ` - خصم ${refund.toFixed(2)} ر.س من الكاش باك`;
+    }
+
+    // إلغاء الكاش باك في حالة cancelled
+    if (newStatus === 'cancelled' && order.cashbackApplied) {
+      const refund = Number(order.cashback || 0);
+      newCashback = Math.max(0, Math.round((newCashback - refund) * 100) / 100);
+      order.cashbackApplied = false;
+      order.cashback = 0;
+      cashbackMsg = ` - خصم ${refund.toFixed(2)} ر.س`;
+    }
+
+    orders[idx] = order;
+
+    if (btnEl) { btnEl.disabled = true; btnEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري...'; }
+
+    try {
+      const { data, error } = await sb.auth.updateUser({
+        data: { orders, cashback: newCashback }
+      });
+      if (error) throw error;
+      currentUser = data.user;
+      fillAccountPage(data.user);
+      syncUI(data.user);
+      window.showToast?.(`✅ تم التحديث إلى "${ORDER_STATUS[newStatus].label}"${cashbackMsg}`, 'success');
+    } catch (err) {
+      console.error(err);
+      window.showToast?.('فشل التحديث: ' + err.message, 'error');
+    } finally {
+      if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = '<i class="fas fa-check"></i> تطبيق'; }
+    }
   }
 
   async function saveProfile() {
     const name = $('menAccSetName').value.trim();
     const phone = $('menAccSetPhone').value.trim();
-    if (!name) { if (window.showToast) window.showToast('الرجاء إدخال الاسم', 'error'); return; }
+    if (!name) { window.showToast?.('الرجاء إدخال الاسم', 'error'); return; }
     const btn = $('menAccSaveBtn');
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
@@ -1034,9 +1121,9 @@
       currentUser = data.user;
       fillAccountPage(data.user);
       syncUI(data.user);
-      if (window.showToast) window.showToast('✅ تم حفظ التغييرات', 'success');
+      window.showToast?.('✅ تم حفظ التغييرات', 'success');
     } catch (err) {
-      if (window.showToast) window.showToast('فشل الحفظ: ' + err.message, 'error');
+      window.showToast?.('فشل الحفظ: ' + err.message, 'error');
     } finally {
       btn.disabled = false;
       btn.innerHTML = '<i class="fas fa-check"></i> حفظ التغييرات';
@@ -1045,19 +1132,14 @@
 
   function deleteAccount() {
     if (!confirm('⚠️ هل أنت متأكد من حذف حسابك نهائياً؟\nهذا الإجراء لا يمكن التراجع عنه.')) return;
-    if (window.showToast) window.showToast('تواصل مع الدعم: clan.men.ts@gmail.com', 'info');
+    window.showToast?.('تواصل مع الدعم: clan.men.ts@gmail.com', 'info');
   }
 
   function shareAccount() {
     if (!currentUser) return;
     const text = `🎮 أنا عضو في MEN Store!\nانضم إلينا واحصل على كاش باك 2%\n${location.origin}`;
-    if (navigator.share) {
-      navigator.share({ title: 'MEN Store', text, url: location.origin }).catch(() => {});
-    } else {
-      navigator.clipboard.writeText(text).then(() => {
-        if (window.showToast) window.showToast('✅ تم نسخ الرابط', 'success');
-      });
-    }
+    if (navigator.share) navigator.share({ title: 'MEN Store', text, url: location.origin }).catch(() => {});
+    else navigator.clipboard.writeText(text).then(() => window.showToast?.('✅ تم نسخ الرابط', 'success'));
   }
 
   function openAccount() {
@@ -1083,14 +1165,12 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function hideAllPages() {
-    document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
-  }
+  function hideAllPages() { document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active')); }
 
   async function logout() {
     await sb.auth.signOut();
     closeAccount();
-    if (window.showToast) window.showToast('تم تسجيل الخروج', 'info');
+    window.showToast?.('تم تسجيل الخروج', 'info');
   }
 
   function syncUI(user) {
@@ -1118,9 +1198,11 @@
 
   // ═══ Public API ═══
   window.MEN_AUTH = {
-    CASHBACK_RATE, open, openAccount, logout,
+    CASHBACK_RATE, ORDER_STATUS, open, openAccount, logout,
     getCurrentUser: () => currentUser,
+    isAdmin,
     makeInitialsAvatar,
+    updateOrderStatus: async (orderId, status) => applyOrderStatus(orderId, status, null),
     addCashback: async (a) => {
       if (!currentUser || a <= 0) return;
       const c = Number(currentUser.user_metadata?.cashback || 0) + Number(a);
@@ -1134,7 +1216,14 @@
     addOrder: async (order) => {
       if (!currentUser) return;
       const orders = currentUser.user_metadata?.orders || [];
-      orders.push({ ...order, id: 'M' + Date.now().toString().slice(-6), date: new Date().toISOString() });
+      orders.push({
+        ...order,
+        id: 'M' + Date.now().toString().slice(-6),
+        date: new Date().toISOString(),
+        status: 'pending',
+        cashback: 0,
+        cashbackApplied: false
+      });
       await sb.auth.updateUser({ data: { orders } });
     }
   };
