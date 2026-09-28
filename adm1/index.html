@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#060812">
 <title>لوحة الطلبات — MEN Store Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,20 +15,28 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-height:100vh}
 
-.ma-root{position:fixed;inset:0;z-index:99999;background:#060812;color:#fff;font-family:'Cairo',sans-serif;overflow-y:auto;overflow-x:hidden;display:block}
-.ma-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 15% 20%,rgba(2,28,164,.35) 0%,transparent 55%),radial-gradient(ellipse at 85% 80%,rgba(74,122,255,.25) 0%,transparent 50%),radial-gradient(ellipse at 50% 50%,#060812 0%,#030510 100%)}
-.ma-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(74,122,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,122,255,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%)}
+.ma-root{position:fixed;inset:0;z-index:99999;background:#060812;color:#fff;font-family:'Cairo','Outfit',sans-serif;overflow-y:auto;overflow-x:hidden;display:block}
+.ma-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(ellipse at 15% 20%,rgba(2,28,164,.35) 0%,transparent 55%),
+  radial-gradient(ellipse at 85% 80%,rgba(74,122,255,.25) 0%,transparent 50%),
+  radial-gradient(ellipse at 50% 50%,#060812 0%,#030510 100%)}
+.ma-bg::after{content:'';position:absolute;inset:0;background-image:
+  linear-gradient(rgba(74,122,255,.04) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(74,122,255,.04) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%)}
 
 .ma-gate{position:relative;z-index:10;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
 .ma-gate-card{background:linear-gradient(145deg,rgba(14,20,38,.85),rgba(8,12,24,.95));border:1px solid rgba(74,122,255,.14);border-radius:28px;padding:44px 40px;max-width:440px;width:100%;text-align:center;box-shadow:0 40px 100px -30px rgba(2,28,164,.8)}
 .ma-gate-icon{width:80px;height:80px;margin:0 auto 20px;border-radius:24px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:2rem;box-shadow:0 20px 50px -12px rgba(74,122,255,.8)}
-.ma-gate-card h1{font-size:1.7rem;font-weight:900;margin-bottom:10px}
+.ma-gate-card h1{font-size:1.7rem;font-weight:900;margin-bottom:10px;letter-spacing:-.5px}
 .ma-gate-card p{color:#8a92b0;font-weight:600;margin-bottom:26px;line-height:1.7}
 .ma-field{margin-bottom:14px;text-align:right}
 .ma-field label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
 .ma-field input{width:100%;height:52px;padding:0 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-size:.94rem;font-weight:600;outline:none;transition:all .3s;direction:ltr;text-align:right}
 .ma-field input:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.15)}
-.ma-gate-btn{width:100%;height:54px;border:none;border-radius:14px;margin-top:8px;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+.ma-gate-btn{width:100%;height:54px;border:none;border-radius:14px;margin-top:8px;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;transition:all .3s;box-shadow:0 14px 34px -12px rgba(74,122,255,.8);display:flex;align-items:center;justify-content:center;gap:10px}
 .ma-gate-btn:hover:not(:disabled){transform:translateY(-2px)}
 .ma-gate-btn:disabled{opacity:.7;cursor:not-allowed}
 .ma-gate-err{display:none;margin-top:14px;padding:12px;border-radius:12px;background:rgba(217,4,41,.1);border:1px solid rgba(217,4,41,.3);color:#ff8a8a;font-size:.85rem;font-weight:700}
@@ -39,18 +48,16 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-header-inner{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .ma-brand{display:flex;align-items:center;gap:14px}
 .ma-brand img{height:44px;width:auto;filter:brightness(0) invert(1) drop-shadow(0 6px 18px rgba(74,122,255,.5))}
-.ma-brand-text .t{font-size:1.05rem;font-weight:900;line-height:1.2}
+.ma-brand-text .t{font-size:1.05rem;font-weight:900;letter-spacing:-.3px;line-height:1.2}
 .ma-brand-text .s{font-size:.72rem;color:#8a92b0;font-weight:700;letter-spacing:1px;text-transform:uppercase}
-.ma-user{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ma-user{display:flex;align-items:center;gap:12px}
 .ma-user-info{text-align:left}
 .ma-user-info .n{font-weight:800;font-size:.9rem}
 .ma-user-info .e{font-size:.72rem;color:#8a92b0;font-weight:600}
-.ma-btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:60px;background:rgba(217,4,41,.12);border:1px solid rgba(217,4,41,.3);color:#ff6b6b;font-family:'Cairo',sans-serif;font-weight:800;font-size:.84rem;cursor:pointer;transition:all .3s;white-space:nowrap}
+.ma-btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:60px;background:rgba(217,4,41,.12);border:1px solid rgba(217,4,41,.3);color:#ff6b6b;font-family:'Cairo',sans-serif;font-weight:800;font-size:.84rem;cursor:pointer;transition:all .3s}
 .ma-btn-ghost:hover{background:rgba(217,4,41,.22);transform:translateY(-2px)}
 .ma-btn-users{background:rgba(74,122,255,.12)!important;border-color:rgba(74,122,255,.3)!important;color:#6a9aff!important}
 .ma-btn-users:hover{background:rgba(74,122,255,.22)!important}
-.ma-btn-migrate{background:rgba(76,175,80,.12)!important;border-color:rgba(76,175,80,.3)!important;color:#66bb6a!important}
-.ma-btn-migrate:hover{background:rgba(76,175,80,.22)!important}
 
 .ma-container{max-width:1400px;margin:0 auto;padding:0 24px}
 
@@ -59,16 +66,17 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,#4a7aff);opacity:.9}
 .ma-stat:hover{transform:translateY(-5px);border-color:rgba(74,122,255,.35);box-shadow:0 22px 50px -15px rgba(2,28,164,.6)}
 .ma-stat-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:14px;background:var(--icon-bg);color:var(--accent)}
-.ma-stat-val{font-size:1.8rem;font-weight:900;line-height:1.1;margin-bottom:4px}
+.ma-stat-val{font-size:1.8rem;font-weight:900;line-height:1.1;margin-bottom:4px;letter-spacing:-1px}
 .ma-stat-lbl{font-size:.78rem;color:#8a92b0;font-weight:700}
 
 .ma-filters{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:22px;padding:20px 22px;margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .ma-search{flex:1;min-width:220px;position:relative}
-.ma-search input{width:100%;height:48px;padding:0 44px 0 16px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.9rem;outline:none}
+.ma-search input{width:100%;height:48px;padding:0 44px 0 16px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.9rem;outline:none;transition:all .3s}
 .ma-search input:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.15)}
 .ma-search i{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#4a7aff;pointer-events:none}
 .ma-filters select{height:48px;padding:0 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.88rem;outline:none;cursor:pointer;min-width:170px}
-.ma-refresh{height:48px;padding:0 22px;border-radius:14px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 10px 26px -10px rgba(74,122,255,.8)}
+.ma-filters select:focus{border-color:#4a7aff}
+.ma-refresh{height:48px;padding:0 22px;border-radius:14px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .3s;box-shadow:0 10px 26px -10px rgba(74,122,255,.8)}
 .ma-refresh:hover{transform:translateY(-2px)}
 
 .ma-orders{display:flex;flex-direction:column;gap:14px}
@@ -78,7 +86,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-order-id{font-weight:900;font-size:1rem;display:flex;align-items:center;gap:10px}
 .ma-order-id .dot{width:10px;height:10px;border-radius:50%;background:var(--st-color,#4caf50);box-shadow:0 0 14px var(--st-color,#4caf50)}
 .ma-order-date{color:#8a92b0;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:6px;margin-top:6px}
-.ma-order-badge{color:#fff;font-size:.72rem;font-weight:800;padding:6px 14px;border-radius:20px;display:inline-flex;align-items:center;gap:6px}
+.ma-order-badge{color:#fff;font-size:.72rem;font-weight:800;padding:6px 14px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 6px 18px -6px rgba(0,0,0,.6)}
 .ma-customer{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:14px 16px;background:rgba(74,122,255,.05);border:1px solid rgba(74,122,255,.14);border-radius:16px;margin-bottom:14px}
 .ma-cust-item{display:flex;align-items:center;gap:10px}
 .ma-cust-item i{width:32px;height:32px;border-radius:10px;background:rgba(74,122,255,.15);color:#6a9aff;display:flex;align-items:center;justify-content:center;font-size:.82rem;flex-shrink:0}
@@ -97,10 +105,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-btn-action{padding:11px 20px;border-radius:12px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .3s}
 .ma-btn-apply{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;box-shadow:0 8px 22px -8px rgba(74,122,255,.8)}
 .ma-btn-apply:hover:not(:disabled){transform:translateY(-2px)}
-.ma-btn-cb{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000}
+.ma-btn-cb{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 8px 22px -8px rgba(245,179,66,.8)}
 .ma-btn-cb:hover{transform:translateY(-2px)}
-.ma-btn-edit{background:linear-gradient(135deg,#6a9aff,#4a7aff);color:#fff}
-.ma-btn-edit:hover{transform:translateY(-2px)}
 .ma-btn-action:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
 
 .ma-empty{text-align:center;padding:80px 24px;background:rgba(74,122,255,.04);border:1.5px dashed rgba(74,122,255,.25);border-radius:24px}
@@ -119,27 +125,30 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-modal-sub{color:#8a92b0;font-size:.85rem;font-weight:600;margin-bottom:22px;line-height:1.7}
 .ma-modal-field{margin-bottom:14px}
 .ma-modal-field label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
-.ma-modal-field input{width:100%;padding:14px 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.94rem;outline:none}
+.ma-modal-field input{width:100%;padding:14px 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.94rem;outline:none;transition:all .3s}
 .ma-modal-field input:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.15)}
 .ma-modal-field input[type=number]{direction:ltr;text-align:right;font-size:1.1rem;font-weight:800}
 .ma-quick{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .ma-quick button{padding:8px 16px;border-radius:20px;border:1.5px solid rgba(74,122,255,.14);background:rgba(74,122,255,.08);color:#6a9aff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;transition:all .3s}
 .ma-quick button:hover{background:rgba(74,122,255,.2);border-color:#4a7aff}
 .ma-modal-actions{display:flex;gap:10px;margin-top:22px}
-.ma-modal-actions button{flex:1;height:50px;border-radius:14px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.92rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.ma-modal-actions button{flex:1;height:50px;border-radius:14px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.92rem;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .ma-modal-actions .cancel{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:#e0e6f4}
 .ma-modal-actions .cancel:hover{background:rgba(255,255,255,.12)}
-.ma-modal-actions .confirm{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000}
+.ma-modal-actions .confirm{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 12px 30px -10px rgba(245,179,66,.9)}
 .ma-modal-actions .confirm:hover:not(:disabled){transform:translateY(-2px)}
 .ma-modal-actions .confirm:disabled{opacity:.6;cursor:not-allowed;transform:none}
 
-.ma-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:14px 26px;border-radius:60px;font-weight:800;font-size:.9rem;z-index:100001;transition:transform .4s;display:inline-flex;align-items:center;gap:10px;box-shadow:0 15px 40px -10px rgba(0,0,0,.6);max-width:90vw;font-family:'Cairo',sans-serif}
+.ma-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:14px 26px;border-radius:60px;font-weight:800;font-size:.9rem;z-index:100001;transition:transform .4s cubic-bezier(.34,1.56,.64,1);display:inline-flex;align-items:center;gap:10px;box-shadow:0 15px 40px -10px rgba(0,0,0,.6);max-width:90vw;font-family:'Cairo',sans-serif}
 .ma-toast.show{transform:translateX(-50%) translateY(0)}
 .ma-toast.success{background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff}
 .ma-toast.error{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff}
 .ma-toast.info{background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff}
 
-@media (max-width:900px){.ma-stats{grid-template-columns:repeat(2,1fr)}.ma-user-info{display:none}}
+@media (max-width:900px){
+  .ma-stats{grid-template-columns:repeat(2,1fr)}
+  .ma-user-info{display:none}
+}
 @media (max-width:600px){
   .ma-container{padding:0 14px}
   .ma-header-inner{padding:0 14px}
@@ -171,7 +180,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         <label>كلمة المرور</label>
         <input type="password" id="maGatePass" placeholder="••••••••" autocomplete="current-password">
       </div>
-      <button class="ma-gate-btn" id="maGateBtn"><i class="fas fa-right-to-bracket"></i> دخول</button>
+      <button class="ma-gate-btn" id="maGateBtn">
+        <i class="fas fa-right-to-bracket"></i> دخول
+      </button>
       <div class="ma-gate-err" id="maGateErr"></div>
     </div>
   </div>
@@ -191,23 +202,38 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
             <div class="n" id="maUserName">—</div>
             <div class="e" id="maUserEmail">—</div>
           </div>
-          <button class="ma-btn-ghost ma-btn-migrate" id="maMigrateBtn" title="استيراد العملاء والطلبات القديمة من auth.users">
-            <i class="fas fa-cloud-download-alt"></i> استيراد القديم
-          </button>
           <button class="ma-btn-ghost ma-btn-users" id="maViewUsers">
             <i class="fas fa-users"></i> <span id="maViewUsersText">العملاء</span>
           </button>
-          <button class="ma-btn-ghost" id="maLogout"><i class="fas fa-sign-out-alt"></i> خروج</button>
+          <button class="ma-btn-ghost" id="maLogout">
+            <i class="fas fa-sign-out-alt"></i> خروج
+          </button>
         </div>
       </div>
     </div>
 
     <div class="ma-container">
       <div class="ma-stats">
-        <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-box"></i></div><div class="ma-stat-val" id="maStatTotal">0</div><div class="ma-stat-lbl">إجمالي الطلبات</div></div>
-        <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-hourglass-half"></i></div><div class="ma-stat-val" id="maStatPending">0</div><div class="ma-stat-lbl">قيد المعالجة</div></div>
-        <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-circle-check"></i></div><div class="ma-stat-val" id="maStatDelivered">0</div><div class="ma-stat-lbl">تم الاستلام</div></div>
-        <div class="ma-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.15)"><div class="ma-stat-icon"><i class="fas fa-coins"></i></div><div class="ma-stat-val" id="maStatRevenue">0</div><div class="ma-stat-lbl">إجمالي المبيعات (ر.س)</div></div>
+        <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)">
+          <div class="ma-stat-icon"><i class="fas fa-box"></i></div>
+          <div class="ma-stat-val" id="maStatTotal">0</div>
+          <div class="ma-stat-lbl">إجمالي الطلبات</div>
+        </div>
+        <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)">
+          <div class="ma-stat-icon"><i class="fas fa-hourglass-half"></i></div>
+          <div class="ma-stat-val" id="maStatPending">0</div>
+          <div class="ma-stat-lbl">قيد المعالجة</div>
+        </div>
+        <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)">
+          <div class="ma-stat-icon"><i class="fas fa-circle-check"></i></div>
+          <div class="ma-stat-val" id="maStatDelivered">0</div>
+          <div class="ma-stat-lbl">تم الاستلام</div>
+        </div>
+        <div class="ma-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.15)">
+          <div class="ma-stat-icon"><i class="fas fa-coins"></i></div>
+          <div class="ma-stat-val" id="maStatRevenue">0</div>
+          <div class="ma-stat-lbl">إجمالي المبيعات (ر.س)</div>
+        </div>
       </div>
 
       <div class="ma-filters">
@@ -239,15 +265,15 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   <div class="ma-modal-back" id="maCbModal">
     <div class="ma-modal">
       <div class="ma-modal-title">
-        <i class="fas fa-gift" id="maCbIcon"></i>
-        <span id="maCbTitle">إضافة كاش باك</span>
+        <i class="fas fa-gift"></i>
+        إضافة كاش باك
       </div>
       <div class="ma-modal-sub" id="maCbSub">—</div>
 
       <div class="ma-modal-field">
-        <label id="maCbAmountLabel">المبلغ (ر.س)</label>
+        <label>المبلغ (ر.س)</label>
         <input type="number" id="maCbAmount" placeholder="0.00" step="0.01" min="0.01">
-        <div class="ma-quick" id="maCbQuick">
+        <div class="ma-quick">
           <button type="button" data-amt="5">5 ر.س</button>
           <button type="button" data-amt="10">10 ر.س</button>
           <button type="button" data-amt="20">20 ر.س</button>
@@ -263,7 +289,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
       <div class="ma-modal-actions">
         <button class="cancel" id="maCbCancel" type="button">إلغاء</button>
-        <button class="confirm" id="maCbConfirm" type="button"><i class="fas fa-check"></i> <span id="maCbConfirmText">إضافة الكاش باك</span></button>
+        <button class="confirm" id="maCbConfirm" type="button"><i class="fas fa-check"></i> إضافة الكاش باك</button>
       </div>
     </div>
   </div>
@@ -273,17 +299,20 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 (function () {
   'use strict';
 
+  // ═══════════════════════════════════════════════════════════
+  // ⚙️ الإعدادات
+  // ═══════════════════════════════════════════════════════════
   const SUPABASE_URL  = 'https://xoqwzluyxynqpdpmidts.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTg4NjQwMH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
   const ADMIN_EMAILS = ['mkmkmkl24666606@gmail.com'];
   const CASHBACK_RATE = 0.02;
 
   const ORDER_STATUS = {
     pending:   { label: 'قيد الانتظار', color: '#f5b342', bg: 'linear-gradient(135deg,#f5b342,#c98a1e)', icon: 'fa-hourglass-half', text: '#000' },
-    preparing: { label: 'جاري التجهيز', color: '#4a7aff', bg: 'linear-gradient(135deg,#4a7aff,#021ca4)', icon: 'fa-gears', text: '#fff' },
-    review:    { label: 'تحت المراجعة', color: '#6a9aff', bg: 'linear-gradient(135deg,#6a9aff,#4a7aff)', icon: 'fa-magnifying-glass', text: '#fff' },
-    delivered: { label: 'تم الاستلام',  color: '#4caf50', bg: 'linear-gradient(135deg,#4caf50,#2e7d32)', icon: 'fa-circle-check', text: '#fff' },
-    cancelled: { label: 'ملغي',         color: '#d90429', bg: 'linear-gradient(135deg,#d90429,#8b0018)', icon: 'fa-circle-xmark', text: '#fff' }
+    preparing: { label: 'جاري التجهيز', color: '#4a7aff', bg: 'linear-gradient(135deg,#4a7aff,#021ca4)', icon: 'fa-gears',           text: '#fff' },
+    review:    { label: 'تحت المراجعة', color: '#6a9aff', bg: 'linear-gradient(135deg,#6a9aff,#4a7aff)', icon: 'fa-magnifying-glass',text: '#fff' },
+    delivered: { label: 'تم الاستلام',  color: '#4caf50', bg: 'linear-gradient(135deg,#4caf50,#2e7d32)', icon: 'fa-circle-check',    text: '#fff' },
+    cancelled: { label: 'ملغي',         color: '#d90429', bg: 'linear-gradient(135deg,#d90429,#8b0018)', icon: 'fa-circle-xmark',    text: '#fff' }
   };
 
   let sb = null;
@@ -291,8 +320,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   let allOrders = [];
   let allUsers = [];
   let usersView = false;
-  let selectedTarget = null;
-  let modalMode = 'add'; // 'add' أو 'set'
+  let selectedOrderForCashback = null;
   const $ = id => document.getElementById(id);
 
   function isAdminEmail(email) {
@@ -300,8 +328,14 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     return ADMIN_EMAILS.includes((email || '').toLowerCase());
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // 🚀 Init
+  // ═══════════════════════════════════════════════════════════
   function init() {
-    if (!window.supabase?.createClient) { alert('فشل تحميل Supabase SDK'); return; }
+    if (!window.supabase?.createClient) {
+      alert('فشل تحميل Supabase SDK — تحقق من الإنترنت');
+      return;
+    }
     sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       auth: { persistSession: true, autoRefreshToken: true, storageKey: 'men-auth-token' }
     });
@@ -321,9 +355,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       toast('تم تسجيل الخروج', 'info');
     });
 
-    // ⭐ زر الاستيراد
-    $('maMigrateBtn').addEventListener('click', doMigrate);
-
+    // ⭐ زر التبديل بين الطلبات والعملاء
     $('maViewUsers').addEventListener('click', () => {
       usersView = !usersView;
       if (usersView) {
@@ -355,6 +387,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     });
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // 🔐 Auth
+  // ═══════════════════════════════════════════════════════════
   async function checkAuth() {
     const { data: { session } } = await sb.auth.getSession();
     if (session?.user && isAdminEmail(session.user.email)) {
@@ -384,8 +419,17 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     const err = $('maGateErr');
     err.classList.remove('show');
 
-    if (!email || !pass) { err.textContent = 'الرجاء إدخال البريد وكلمة المرور'; err.classList.add('show'); return; }
-    if (!isAdminEmail(email)) { err.textContent = 'هذا الحساب ليس مشرفاً'; err.classList.add('show'); return; }
+    if (!email || !pass) {
+      err.textContent = 'الرجاء إدخال البريد وكلمة المرور';
+      err.classList.add('show');
+      return;
+    }
+
+    if (!isAdminEmail(email)) {
+      err.textContent = 'هذا الحساب ليس مشرفاً';
+      err.classList.add('show');
+      return;
+    }
 
     const btn = $('maGateBtn');
     btn.disabled = true;
@@ -407,53 +451,18 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🔄 MIGRATE OLD DATA
-  // ═══════════════════════════════════════════════════════════
-  async function doMigrate() {
-    if (!confirm('سيتم استيراد جميع العملاء والطلبات القديمة من قاعدة البيانات.\n\nهل تريد المتابعة؟')) return;
-    
-    const btn = $('maMigrateBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الاستيراد...';
-
-    try {
-      const { data, error } = await sb.rpc('migrate_old_users_and_orders');
-      if (error) throw error;
-      
-      toast(`✅ تم استيراد ${data.users} عميل و ${data.orders} طلب`, 'success');
-      
-      // إعادة تحميل
-      if (usersView) await loadUsers(); else await loadOrders();
-      
-      setTimeout(() => {
-        if (!usersView) {
-          usersView = true;
-          $('maOrders').style.display = 'none';
-          $('maUsers').style.display = 'block';
-          $('maViewUsersText').textContent = 'الطلبات';
-          $('maViewUsers').querySelector('i').className = 'fas fa-box';
-          loadUsers();
-        }
-      }, 1000);
-      
-    } catch (err) {
-      console.error(err);
-      toast('فشل الاستيراد: ' + err.message, 'error');
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-cloud-download-alt"></i> استيراد القديم';
-    }
-  }
-
-  // ═══════════════════════════════════════════════════════════
-  // 📦 Orders
+  // 📦 Load Orders
   // ═══════════════════════════════════════════════════════════
   async function loadOrders() {
     const container = $('maOrders');
     container.innerHTML = '<div class="ma-loader"><div class="ma-spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل الطلبات...</p></div>';
 
     try {
-      const { data, error } = await sb.from('men_orders').select('*').order('created_at', { ascending: false }).limit(500);
+      const { data, error } = await sb.from('men_orders')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(500);
+
       if (error) throw error;
       allOrders = data || [];
       renderStats();
@@ -491,7 +500,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     });
 
     if (!filtered.length) {
-      container.innerHTML = `<div class="ma-empty"><i class="fas fa-inbox"></i><h3>لا يوجد طلبات</h3><p>${q || statusFilter ? 'جرّب تغيير الفلتر' : 'ستظهر الطلبات هنا'}</p></div>`;
+      container.innerHTML = `<div class="ma-empty"><i class="fas fa-inbox"></i><h3>لا يوجد طلبات</h3><p>${q || statusFilter ? 'جرّب تغيير الفلتر أو البحث' : 'ستظهر الطلبات هنا تلقائياً'}</p></div>`;
       return;
     }
 
@@ -506,7 +515,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     });
 
     container.querySelectorAll('[data-add-cashback]').forEach(btn => {
-      btn.addEventListener('click', () => openCbModal('add', { type: 'order', ...allOrders.find(o => String(o.id) === String(btn.dataset.addCashback)) }));
+      btn.addEventListener('click', () => openCbModal(btn.dataset.addCashback));
     });
   }
 
@@ -518,10 +527,10 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
     let cbHtml = '';
     if (o.status === 'delivered' && o.cashback_applied) {
-      cbHtml = `<div class="ma-cb-info earned"><i class="fas fa-gift"></i> كاش باك: ${Number(o.cashback || 0).toFixed(2)} ر.س</div>`;
+      cbHtml = `<div class="ma-cb-info earned"><i class="fas fa-gift"></i> كاش باك مكتسب: ${Number(o.cashback || 0).toFixed(2)} ر.س</div>`;
     } else if (o.status !== 'cancelled' && o.status !== 'delivered') {
       const potential = Number(o.total || 0) * CASHBACK_RATE;
-      cbHtml = `<div class="ma-cb-info pending"><i class="fas fa-clock"></i> متوقع: ${potential.toFixed(2)} ر.س</div>`;
+      cbHtml = `<div class="ma-cb-info pending"><i class="fas fa-clock"></i> متوقع عند التسليم: ${potential.toFixed(2)} ر.س</div>`;
     }
 
     const options = Object.entries(ORDER_STATUS).map(([k, v]) =>
@@ -532,10 +541,15 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       <div class="ma-order" data-order="${o.id}">
         <div class="ma-order-top">
           <div>
-            <div class="ma-order-id" style="--st-color:${st.color}"><span class="dot"></span> طلب #${String(o.id || '').slice(-8).toUpperCase()}</div>
+            <div class="ma-order-id" style="--st-color:${st.color}">
+              <span class="dot"></span>
+              طلب #${String(o.id || '').slice(-8).toUpperCase()}
+            </div>
             <div class="ma-order-date"><i class="fas fa-clock"></i> ${date}</div>
           </div>
-          <div class="ma-order-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</div>
+          <div class="ma-order-badge" style="background:${st.bg};color:${st.text}">
+            <i class="fas ${st.icon}"></i> ${st.label}
+          </div>
         </div>
 
         <div class="ma-customer">
@@ -553,8 +567,12 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
         <div class="ma-actions">
           <select data-order-select="${o.id}">${options}</select>
-          <button class="ma-btn-action ma-btn-apply" data-apply-status="${o.id}"><i class="fas fa-check"></i> تطبيق</button>
-          <button class="ma-btn-action ma-btn-cb" data-add-cashback="${o.id}"><i class="fas fa-gift"></i> كاش باك</button>
+          <button class="ma-btn-action ma-btn-apply" data-apply-status="${o.id}">
+            <i class="fas fa-check"></i> تطبيق الحالة
+          </button>
+          <button class="ma-btn-action ma-btn-cb" data-add-cashback="${o.id}">
+            <i class="fas fa-gift"></i> إضافة كاش باك
+          </button>
         </div>
       </div>
     `;
@@ -568,34 +586,28 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     container.innerHTML = '<div class="ma-loader"><div class="ma-spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل العملاء...</p></div>';
 
     try {
-      const { data, error } = await sb.from('men_users').select('*').order('created_at', { ascending: false }).limit(500);
+      const { data, error } = await sb.from('men_users')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(500);
+
       if (error) throw error;
       allUsers = data || [];
 
       if (!allUsers.length) {
-        container.innerHTML = `<div class="ma-empty"><i class="fas fa-users"></i><h3>لا يوجد عملاء</h3><p>اضغط "استيراد القديم" لجلب العملاء السابقين</p></div>`;
+        container.innerHTML = `<div class="ma-empty"><i class="fas fa-users"></i><h3>لا يوجد عملاء</h3><p>سيظهر العملاء هنا عند تسجيلهم</p></div>`;
         return;
       }
 
       container.innerHTML = '<div class="ma-orders">' + allUsers.map(renderUserCard).join('') + '</div>';
 
       container.querySelectorAll('[data-user-cb]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const u = allUsers.find(x => String(x.id) === String(btn.dataset.userCb));
-          openCbModal('add', { type: 'user', user_id: u.id, user_email: u.email, user_name: u.name });
-        });
-      });
-
-      container.querySelectorAll('[data-user-edit]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const u = allUsers.find(x => String(x.id) === String(btn.dataset.userEdit));
-          openCbModal('set', { type: 'user', user_id: u.id, user_email: u.email, user_name: u.name, current_cashback: Number(u.cashback || 0) });
-        });
+        btn.addEventListener('click', () => openUserCbModal(btn.dataset.userCb));
       });
 
     } catch (err) {
       console.error(err);
-      container.innerHTML = `<div class="ma-empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i><h3>فشل التحميل</h3><p>${err.message}</p></div>`;
+      container.innerHTML = `<div class="ma-empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i><h3>فشل تحميل العملاء</h3><p>${err.message}</p></div>`;
     }
   }
 
@@ -625,7 +637,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         <div class="ma-customer">
           <div class="ma-cust-item"><i class="fas fa-phone"></i><div><div class="lbl">الجوال</div><div class="val">${u.phone || '—'}</div></div></div>
           <div class="ma-cust-item"><i class="fas fa-calendar"></i><div><div class="lbl">سجل في</div><div class="val">${date}</div></div></div>
-          <div class="ma-cust-item"><i class="fas fa-id-card"></i><div><div class="lbl">العضوية</div><div class="val">#${String(u.id || '').slice(0, 8).toUpperCase()}</div></div></div>
+          <div class="ma-cust-item"><i class="fas fa-id-card"></i><div><div class="lbl">رقم العضوية</div><div class="val">#${String(u.id || '').slice(0, 8).toUpperCase()}</div></div></div>
         </div>
 
         <div class="ma-bottom">
@@ -634,11 +646,33 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         </div>
 
         <div class="ma-actions">
-          <button class="ma-btn-action ma-btn-cb" data-user-cb="${u.id}"><i class="fas fa-plus"></i> إضافة كاش باك</button>
-          <button class="ma-btn-action ma-btn-edit" data-user-edit="${u.id}"><i class="fas fa-pen"></i> تعديل الرصيد</button>
+          <button class="ma-btn-action ma-btn-cb" data-user-cb="${u.id}">
+            <i class="fas fa-gift"></i> إضافة كاش باك
+          </button>
         </div>
       </div>
     `;
+  }
+
+  function openUserCbModal(userId) {
+    const user = allUsers.find(u => String(u.id) === String(userId));
+    if (!user) return;
+    selectedOrderForCashback = {
+      user_id: user.id,
+      user_email: user.email,
+      user_name: user.name,
+      id: '—'
+    };
+
+    $('maCbSub').innerHTML = `
+      العميل: <strong>${user.name || '—'}</strong><br>
+      البريد: <strong dir="ltr">${user.email || '—'}</strong><br>
+      <em style="color:#6a9aff">إضافة مباشرة للرصيد (بدون طلب)</em>
+    `;
+    $('maCbAmount').value = '';
+    $('maCbReason').value = '';
+    $('maCbModal').classList.add('show');
+    setTimeout(() => $('maCbAmount').focus(), 200);
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -650,7 +684,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     if (!order) return;
     if (order.status === newStatus) { toast('الحالة نفسها', 'info'); return; }
 
-    if (btnEl) { btnEl.disabled = true; btnEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
+    if (btnEl) { btnEl.disabled = true; btnEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري...'; }
 
     const oldStatus = order.status;
     const updates = { status: newStatus, updated_at: new Date().toISOString() };
@@ -661,13 +695,14 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       updates.cashback = earned;
       updates.cashback_applied = true;
       updates.cashback_applied_at = new Date().toISOString();
-      cbMsg = ` + ${earned.toFixed(2)} ر.س`;
+      cbMsg = ` + ${earned.toFixed(2)} ر.س كاش باك`;
       try {
         await sb.from('men_cashback_log').insert({
           user_id: order.user_id, user_email: order.user_email, amount: earned,
           reason: `كاش باك تلقائي من الطلب #${orderId}`, order_id: orderId,
           type: 'order', created_by: currentUser.email
         });
+        // تحديث رصيد المستخدم
         const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
         const newCb = Math.round((Number(u?.cashback || 0) + earned) * 100) / 100;
         await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', order.user_id);
@@ -679,7 +714,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         const refund = Number(order.cashback || 0);
         updates.cashback = 0;
         updates.cashback_applied = false;
-        cbMsg = ` − ${refund.toFixed(2)} ر.س`;
+        cbMsg = ` − خصم ${refund.toFixed(2)} ر.س`;
         try {
           await sb.from('men_cashback_log').insert({
             user_id: order.user_id, user_email: order.user_email, amount: -refund,
@@ -699,45 +734,28 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       Object.assign(order, updates);
       renderStats();
       renderOrders();
-      toast(`✅ "${ORDER_STATUS[newStatus].label}"${cbMsg}`, 'success');
+      toast(`✅ تم التحديث إلى "${ORDER_STATUS[newStatus].label}"${cbMsg}`, 'success');
     } catch (err) {
       console.error(err);
-      toast('فشل: ' + err.message, 'error');
-      if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = '<i class="fas fa-check"></i> تطبيق'; }
+      toast('فشل التحديث: ' + err.message, 'error');
+      if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = '<i class="fas fa-check"></i> تطبيق الحالة'; }
     }
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 💰 Cashback Modal (add / set)
+  // 💰 Cashback Modal
   // ═══════════════════════════════════════════════════════════
-  function openCbModal(mode, target) {
-    modalMode = mode;
-    selectedTarget = target;
+  function openCbModal(orderId) {
+    const order = allOrders.find(o => String(o.id) === String(orderId));
+    if (!order) return;
+    selectedOrderForCashback = order;
 
-    const isEdit = mode === 'set';
-    $('maCbIcon').className = isEdit ? 'fas fa-pen' : 'fas fa-gift';
-    $('maCbTitle').textContent = isEdit ? 'تعديل رصيد الكاش باك' : 'إضافة كاش باك';
-    $('maCbAmountLabel').textContent = isEdit ? 'الرصيد الجديد (ر.س)' : 'المبلغ المراد إضافته (ر.س)';
-    $('maCbConfirmText').textContent = isEdit ? 'حفظ الرصيد الجديد' : 'إضافة الكاش باك';
-    $('maCbQuick').style.display = isEdit ? 'none' : 'flex';
-
-    if (target.type === 'user') {
-      $('maCbSub').innerHTML = `
-        العميل: <strong>${target.user_name || '—'}</strong><br>
-        البريد: <strong dir="ltr">${target.user_email || '—'}</strong>
-        ${isEdit ? `<br><em style="color:#6a9aff">الرصيد الحالي: ${Number(target.current_cashback || 0).toFixed(2)} ر.س</em>` : ''}
-      `;
-      if (isEdit) $('maCbAmount').value = Number(target.current_cashback || 0).toFixed(2);
-      else $('maCbAmount').value = '';
-    } else {
-      $('maCbSub').innerHTML = `
-        العميل: <strong>${target.user_name || '—'}</strong><br>
-        البريد: <strong dir="ltr">${target.user_email || '—'}</strong><br>
-        رقم الطلب: <strong>#${String(target.id).slice(-8).toUpperCase()}</strong>
-      `;
-      $('maCbAmount').value = '';
-    }
-
+    $('maCbSub').innerHTML = `
+      العميل: <strong>${order.user_name || '—'}</strong><br>
+      البريد: <strong dir="ltr">${order.user_email || '—'}</strong><br>
+      رقم الطلب: <strong>#${String(order.id).slice(-8).toUpperCase()}</strong>
+    `;
+    $('maCbAmount').value = '';
     $('maCbReason').value = '';
     $('maCbModal').classList.add('show');
     setTimeout(() => $('maCbAmount').focus(), 200);
@@ -745,62 +763,57 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
   function closeCbModal() {
     $('maCbModal').classList.remove('show');
-    selectedTarget = null;
+    selectedOrderForCashback = null;
   }
 
   async function confirmCashback() {
     const amount = Number($('maCbAmount').value);
-    const reason = $('maCbReason').value.trim() || (modalMode === 'set' ? 'تعديل الرصيد' : 'كاش باك إضافي');
+    const reason = $('maCbReason').value.trim() || 'كاش باك إضافي من الإدارة';
 
-    if (isNaN(amount) || amount < 0) { toast('أدخل قيمة صحيحة', 'error'); return; }
-    if (modalMode === 'add' && amount <= 0) { toast('أدخل مبلغاً أكبر من صفر', 'error'); return; }
-    if (!selectedTarget) return;
+    if (!amount || amount <= 0) { toast('أدخل مبلغاً صحيحاً', 'error'); return; }
+    if (!selectedOrderForCashback) return;
 
+    const order = selectedOrderForCashback;
     const btn = $('maCbConfirm');
     btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري...';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
 
     try {
-      if (modalMode === 'set') {
-        // ⭐ تعديل الرصيد لقيمة معينة (عبر دالة SQL)
-        const { error } = await sb.rpc('set_user_cashback', {
-          p_user_id: selectedTarget.user_id,
-          p_amount: amount,
-          p_reason: reason,
-          p_admin_email: currentUser.email
-        });
-        if (error) throw error;
-        toast(`✅ تم تعيين الرصيد إلى ${amount.toFixed(2)} ر.س`, 'success');
-      } else {
-        // ⭐ إضافة مبلغ للرصيد الحالي
-        await sb.from('men_cashback_log').insert({
-          user_id: selectedTarget.user_id,
-          user_email: selectedTarget.user_email,
-          amount: amount,
-          reason: reason,
-          order_id: selectedTarget.id && selectedTarget.id !== '—' ? selectedTarget.id : null,
-          type: 'manual',
-          created_by: currentUser.email
-        });
+      const { error } = await sb.from('men_cashback_log').insert({
+        user_id: order.user_id, user_email: order.user_email, amount: amount,
+        reason: reason, order_id: order.id !== '—' ? order.id : null,
+        type: 'manual', created_by: currentUser.email
+      });
+      if (error) throw error;
 
-        const { data: u } = await sb.from('men_users').select('cashback').eq('id', selectedTarget.user_id).maybeSingle();
-        const newCb = Math.round((Number(u?.cashback || 0) + amount) * 100) / 100;
-        await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', selectedTarget.user_id);
+      // تحديث رصيد العميل
+      const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
+      const currentCb = Number(u?.cashback || 0);
+      const newCb = Math.round((currentCb + amount) * 100) / 100;
 
-        toast(`✅ تم إضافة ${amount.toFixed(2)} ر.س`, 'success');
-      }
+      await sb.from('men_users').update({
+        cashback: newCb,
+        updated_at: new Date().toISOString()
+      }).eq('id', order.user_id);
 
+      toast(`✅ تم إضافة ${amount.toFixed(2)} ر.س كاش باك لـ ${order.user_name || order.user_email}`, 'success');
       closeCbModal();
-      if (usersView) loadUsers(); else loadOrders();
+
+      if (usersView) loadUsers();
+      else loadOrders();
+
     } catch (err) {
       console.error(err);
       toast('فشل: ' + err.message, 'error');
     } finally {
       btn.disabled = false;
-      btn.innerHTML = `<i class="fas fa-check"></i> <span id="maCbConfirmText">${modalMode === 'set' ? 'حفظ الرصيد الجديد' : 'إضافة الكاش باك'}</span>`;
+      btn.innerHTML = '<i class="fas fa-check"></i> إضافة الكاش باك';
     }
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // 🔔 Toast
+  // ═══════════════════════════════════════════════════════════
   function toast(msg, type = 'info') {
     const t = document.createElement('div');
     t.className = 'ma-toast ' + type;
@@ -808,11 +821,17 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     t.innerHTML = `<i class="fas ${icons[type] || 'fa-circle-info'}"></i><span>${msg}</span>`;
     document.body.appendChild(t);
     requestAnimationFrame(() => t.classList.add('show'));
-    setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3000);
+    setTimeout(() => {
+      t.classList.remove('show');
+      setTimeout(() => t.remove(), 400);
+    }, 3000);
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
 </script>
 
