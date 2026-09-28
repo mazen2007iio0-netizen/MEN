@@ -56,6 +56,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-user-info .e{font-size:.72rem;color:#8a92b0;font-weight:600}
 .ma-btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:60px;background:rgba(217,4,41,.12);border:1px solid rgba(217,4,41,.3);color:#ff6b6b;font-family:'Cairo',sans-serif;font-weight:800;font-size:.84rem;cursor:pointer;transition:all .3s}
 .ma-btn-ghost:hover{background:rgba(217,4,41,.22);transform:translateY(-2px)}
+.ma-btn-users{background:rgba(74,122,255,.12)!important;border-color:rgba(74,122,255,.3)!important;color:#6a9aff!important}
+.ma-btn-users:hover{background:rgba(74,122,255,.22)!important}
 
 .ma-container{max-width:1400px;margin:0 auto;padding:0 24px}
 
@@ -168,7 +170,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   <div class="ma-gate" id="maGate">
     <div class="ma-gate-card">
       <div class="ma-gate-icon"><i class="fas fa-shield-halved"></i></div>
-      <h1>لوحة إدارة الطلبات MEN</h1>
+      <h1>لوحة إدارة الطلبات</h1>
       <p>سجّل دخولك بحساب المشرف للوصول</p>
       <div class="ma-field">
         <label>البريد الإلكتروني</label>
@@ -200,6 +202,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
             <div class="n" id="maUserName">—</div>
             <div class="e" id="maUserEmail">—</div>
           </div>
+          <button class="ma-btn-ghost ma-btn-users" id="maViewUsers">
+            <i class="fas fa-users"></i> <span id="maViewUsersText">العملاء</span>
+          </button>
           <button class="ma-btn-ghost" id="maLogout">
             <i class="fas fa-sign-out-alt"></i> خروج
           </button>
@@ -250,6 +255,10 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       <div id="maOrders">
         <div class="ma-loader"><div class="ma-spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل الطلبات...</p></div>
       </div>
+
+      <div id="maUsers" style="display:none">
+        <div class="ma-loader"><div class="ma-spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل العملاء...</p></div>
+      </div>
     </div>
   </div>
 
@@ -257,7 +266,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     <div class="ma-modal">
       <div class="ma-modal-title">
         <i class="fas fa-gift"></i>
-        إضافة كاش باك للعميل
+        إضافة كاش باك
       </div>
       <div class="ma-modal-sub" id="maCbSub">—</div>
 
@@ -275,7 +284,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
       <div class="ma-modal-field">
         <label>السبب / ملاحظة (اختياري)</label>
-        <input type="text" id="maCbReason" placeholder="مثال: تعويض عن تأخير، هدية، إلخ">
+        <input type="text" id="maCbReason" placeholder="مثال: تعويض، هدية، إلخ">
       </div>
 
       <div class="ma-modal-actions">
@@ -295,10 +304,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   // ═══════════════════════════════════════════════════════════
   const SUPABASE_URL  = 'https://xoqwzluyxynqpdpmidts.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
-
-  // ⭐ بريد الأدمن الوحيد المسموح له بالدخول
   const ADMIN_EMAILS = ['mkmkmkl24666606@gmail.com'];
-
   const CASHBACK_RATE = 0.02;
 
   const ORDER_STATUS = {
@@ -312,10 +318,11 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   let sb = null;
   let currentUser = null;
   let allOrders = [];
+  let allUsers = [];
+  let usersView = false;
   let selectedOrderForCashback = null;
   const $ = id => document.getElementById(id);
 
-  // ⭐ فحص صلاحية الأدمن
   function isAdminEmail(email) {
     if (!ADMIN_EMAILS || ADMIN_EMAILS.length === 0) return true;
     return ADMIN_EMAILS.includes((email || '').toLowerCase());
@@ -348,9 +355,29 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       toast('تم تسجيل الخروج', 'info');
     });
 
+    // ⭐ زر التبديل بين الطلبات والعملاء
+    $('maViewUsers').addEventListener('click', () => {
+      usersView = !usersView;
+      if (usersView) {
+        $('maOrders').style.display = 'none';
+        $('maUsers').style.display = 'block';
+        $('maViewUsersText').textContent = 'الطلبات';
+        $('maViewUsers').querySelector('i').className = 'fas fa-box';
+        loadUsers();
+      } else {
+        $('maOrders').style.display = 'block';
+        $('maUsers').style.display = 'none';
+        $('maViewUsersText').textContent = 'العملاء';
+        $('maViewUsers').querySelector('i').className = 'fas fa-users';
+      }
+    });
+
     $('maSearch').addEventListener('input', renderOrders);
     $('maStatusFilter').addEventListener('change', renderOrders);
-    $('maRefresh').addEventListener('click', () => { loadOrders(); toast('تم التحديث', 'info'); });
+    $('maRefresh').addEventListener('click', () => {
+      if (usersView) loadUsers(); else loadOrders();
+      toast('تم التحديث', 'info');
+    });
 
     $('maCbCancel').addEventListener('click', closeCbModal);
     $('maCbModal').addEventListener('click', e => { if (e.target.id === 'maCbModal') closeCbModal(); });
@@ -552,6 +579,103 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   }
 
   // ═══════════════════════════════════════════════════════════
+  // 👥 Users
+  // ═══════════════════════════════════════════════════════════
+  async function loadUsers() {
+    const container = $('maUsers');
+    container.innerHTML = '<div class="ma-loader"><div class="ma-spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل العملاء...</p></div>';
+
+    try {
+      const { data, error } = await sb.from('men_users')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(500);
+
+      if (error) throw error;
+      allUsers = data || [];
+
+      if (!allUsers.length) {
+        container.innerHTML = `<div class="ma-empty"><i class="fas fa-users"></i><h3>لا يوجد عملاء</h3><p>سيظهر العملاء هنا عند تسجيلهم</p></div>`;
+        return;
+      }
+
+      container.innerHTML = '<div class="ma-orders">' + allUsers.map(renderUserCard).join('') + '</div>';
+
+      container.querySelectorAll('[data-user-cb]').forEach(btn => {
+        btn.addEventListener('click', () => openUserCbModal(btn.dataset.userCb));
+      });
+
+    } catch (err) {
+      console.error(err);
+      container.innerHTML = `<div class="ma-empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i><h3>فشل تحميل العملاء</h3><p>${err.message}</p></div>`;
+    }
+  }
+
+  function renderUserCard(u) {
+    const date = u.created_at ? new Date(u.created_at).toLocaleString('ar-SA', { year:'numeric', month:'short', day:'numeric' }) : '—';
+    const nameParts = (u.name || 'M').split(/\s+/);
+    let initials = '?';
+    if (nameParts.length === 1) initials = nameParts[0].substring(0, 2);
+    else initials = (nameParts[0][0] || '') + (nameParts[nameParts.length - 1][0] || '');
+    initials = initials.toUpperCase();
+
+    return `
+      <div class="ma-order">
+        <div class="ma-order-top">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;color:#fff">${initials}</div>
+            <div>
+              <div class="ma-order-id"><span class="dot" style="background:#4caf50"></span> ${u.name || 'بدون اسم'}</div>
+              <div class="ma-order-date" style="margin-top:6px"><i class="fas fa-envelope"></i> ${u.email || '—'}</div>
+            </div>
+          </div>
+          <div class="ma-order-badge" style="background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff">
+            <i class="fas fa-user"></i> عميل
+          </div>
+        </div>
+
+        <div class="ma-customer">
+          <div class="ma-cust-item"><i class="fas fa-phone"></i><div><div class="lbl">الجوال</div><div class="val">${u.phone || '—'}</div></div></div>
+          <div class="ma-cust-item"><i class="fas fa-calendar"></i><div><div class="lbl">سجل في</div><div class="val">${date}</div></div></div>
+          <div class="ma-cust-item"><i class="fas fa-id-card"></i><div><div class="lbl">رقم العضوية</div><div class="val">#${String(u.id || '').slice(0, 8).toUpperCase()}</div></div></div>
+        </div>
+
+        <div class="ma-bottom">
+          <div class="ma-total">${Number(u.cashback || 0).toFixed(2)} ر.س</div>
+          <div class="ma-cb-info earned"><i class="fas fa-wallet"></i> رصيد الكاش باك</div>
+        </div>
+
+        <div class="ma-actions">
+          <button class="ma-btn-action ma-btn-cb" data-user-cb="${u.id}">
+            <i class="fas fa-gift"></i> إضافة كاش باك
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  function openUserCbModal(userId) {
+    const user = allUsers.find(u => String(u.id) === String(userId));
+    if (!user) return;
+    selectedOrderForCashback = {
+      user_id: user.id,
+      user_email: user.email,
+      user_name: user.name,
+      id: '—'
+    };
+
+    $('maCbSub').innerHTML = `
+      العميل: <strong>${user.name || '—'}</strong><br>
+      البريد: <strong dir="ltr">${user.email || '—'}</strong><br>
+      <em style="color:#6a9aff">إضافة مباشرة للرصيد (بدون طلب)</em>
+    `;
+    $('maCbAmount').value = '';
+    $('maCbReason').value = '';
+    $('maCbModal').classList.add('show');
+    setTimeout(() => $('maCbAmount').focus(), 200);
+  }
+
+  // ═══════════════════════════════════════════════════════════
   // 🔄 Apply Status
   // ═══════════════════════════════════════════════════════════
   async function applyStatus(orderId, newStatus, btnEl) {
@@ -578,6 +702,10 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
           reason: `كاش باك تلقائي من الطلب #${orderId}`, order_id: orderId,
           type: 'order', created_by: currentUser.email
         });
+        // تحديث رصيد المستخدم
+        const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
+        const newCb = Math.round((Number(u?.cashback || 0) + earned) * 100) / 100;
+        await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', order.user_id);
       } catch (e) { console.warn(e); }
     }
 
@@ -593,6 +721,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
             reason: `إلغاء كاش باك الطلب #${orderId}`, order_id: orderId,
             type: 'refund', created_by: currentUser.email
           });
+          const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
+          const newCb = Math.max(0, Math.round((Number(u?.cashback || 0) - refund) * 100) / 100);
+          await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', order.user_id);
         } catch (e) { console.warn(e); }
       }
     }
@@ -650,11 +781,27 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     try {
       const { error } = await sb.from('men_cashback_log').insert({
         user_id: order.user_id, user_email: order.user_email, amount: amount,
-        reason: reason, order_id: order.id, type: 'manual', created_by: currentUser.email
+        reason: reason, order_id: order.id !== '—' ? order.id : null,
+        type: 'manual', created_by: currentUser.email
       });
       if (error) throw error;
+
+      // تحديث رصيد العميل
+      const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
+      const currentCb = Number(u?.cashback || 0);
+      const newCb = Math.round((currentCb + amount) * 100) / 100;
+
+      await sb.from('men_users').update({
+        cashback: newCb,
+        updated_at: new Date().toISOString()
+      }).eq('id', order.user_id);
+
       toast(`✅ تم إضافة ${amount.toFixed(2)} ر.س كاش باك لـ ${order.user_name || order.user_email}`, 'success');
       closeCbModal();
+
+      if (usersView) loadUsers();
+      else loadOrders();
+
     } catch (err) {
       console.error(err);
       toast('فشل: ' + err.message, 'error');
@@ -680,7 +827,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     }, 3000);
   }
 
-  // ═══ Start ═══
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
