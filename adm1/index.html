@@ -109,6 +109,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-btn-cb:hover{transform:translateY(-2px)}
 .ma-btn-deduct{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff;box-shadow:0 8px 22px -8px rgba(217,4,41,.8)}
 .ma-btn-deduct:hover{transform:translateY(-2px)}
+.ma-btn-delete{background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff;box-shadow:0 8px 22px -8px rgba(139,0,24,.9)}
+.ma-btn-delete:hover{transform:translateY(-2px);background:linear-gradient(135deg,#a30020,#6b0014)}
 .ma-btn-action:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
 
 .ma-empty{text-align:center;padding:80px 24px;background:rgba(74,122,255,.04);border:1.5px dashed rgba(74,122,255,.25);border-radius:24px}
@@ -140,7 +142,11 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-modal-actions .confirm{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 12px 30px -10px rgba(245,179,66,.9)}
 .ma-modal-actions .confirm:hover:not(:disabled){transform:translateY(-2px)}
 .ma-modal-actions .confirm.deduct{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff;box-shadow:0 12px 30px -10px rgba(217,4,41,.9)}
+.ma-modal-actions .confirm.danger{background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff;box-shadow:0 12px 30px -10px rgba(139,0,24,.9)}
 .ma-modal-actions .confirm:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+.ma-warn-box{margin-top:16px;padding:14px 16px;border-radius:14px;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.28);color:#ff9a9a;font-size:.82rem;font-weight:700;line-height:1.8;display:flex;gap:10px;align-items:flex-start}
+.ma-warn-box i{color:#d90429;font-size:1.1rem;flex-shrink:0;margin-top:2px}
 
 .ma-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:14px 26px;border-radius:60px;font-weight:800;font-size:.9rem;z-index:100001;transition:transform .4s cubic-bezier(.34,1.56,.64,1);display:inline-flex;align-items:center;gap:10px;box-shadow:0 15px 40px -10px rgba(0,0,0,.6);max-width:90vw;font-family:'Cairo',sans-serif}
 .ma-toast.show{transform:translateX(-50%) translateY(0)}
@@ -265,6 +271,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     </div>
   </div>
 
+  <!-- 💰 نافذة الكاش باك -->
   <div class="ma-modal-back" id="maCbModal">
     <div class="ma-modal">
       <div class="ma-modal-title">
@@ -296,6 +303,30 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       </div>
     </div>
   </div>
+
+  <!-- 🗑️ نافذة حذف الطلب -->
+  <div class="ma-modal-back" id="maDelModal">
+    <div class="ma-modal">
+      <div class="ma-modal-title">
+        <i class="fas fa-trash" id="maDelIcon" style="background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff"></i>
+        حذف الطلب نهائياً
+      </div>
+      <div class="ma-modal-sub" id="maDelSub">—</div>
+
+      <div class="ma-warn-box">
+        <i class="fas fa-triangle-exclamation"></i>
+        <div>
+          <strong>تحذير:</strong> سيتم حذف الطلب نهائياً من قاعدة البيانات — سيختفي من عند العميل ومن عندك، ولا يمكن استرجاعه.
+          إذا كان الطلب مُستلَم وسيُلغى الكاش باك الخاص به.
+        </div>
+      </div>
+
+      <div class="ma-modal-actions">
+        <button class="cancel" id="maDelCancel" type="button">إلغاء</button>
+        <button class="confirm danger" id="maDelConfirm" type="button"><i class="fas fa-trash"></i> حذف نهائي</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -324,7 +355,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   let allUsers = [];
   let usersView = false;
   let selectedOrderForCashback = null;
-  let cbMode = 'add'; // 'add' | 'deduct'
+  let selectedOrderForDelete = null;
+  let cbMode = 'add';
   const $ = id => document.getElementById(id);
 
   function isAdminEmail(email) {
@@ -382,12 +414,18 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       toast('تم التحديث', 'info');
     });
 
+    // Cashback modal
     $('maCbCancel').addEventListener('click', closeCbModal);
     $('maCbModal').addEventListener('click', e => { if (e.target.id === 'maCbModal') closeCbModal(); });
     $('maCbConfirm').addEventListener('click', confirmCashback);
     document.querySelectorAll('[data-amt]').forEach(b => {
       b.addEventListener('click', () => { $('maCbAmount').value = b.dataset.amt; });
     });
+
+    // Delete modal
+    $('maDelCancel').addEventListener('click', closeDelModal);
+    $('maDelModal').addEventListener('click', e => { if (e.target.id === 'maDelModal') closeDelModal(); });
+    $('maDelConfirm').addEventListener('click', confirmDelete);
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -427,7 +465,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       err.classList.add('show');
       return;
     }
-
     if (!isAdminEmail(email)) {
       err.textContent = 'هذا الحساب ليس مشرفاً';
       err.classList.add('show');
@@ -521,8 +558,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       btn.addEventListener('click', () => openCbModal(btn.dataset.addCashback, 'add'));
     });
 
-    container.querySelectorAll('[data-deduct-cashback]').forEach(btn => {
-      btn.addEventListener('click', () => openCbModal(btn.dataset.deductCashback, 'deduct'));
+    container.querySelectorAll('[data-delete-order]').forEach(btn => {
+      btn.addEventListener('click', () => openDelModal(btn.dataset.deleteOrder));
     });
   }
 
@@ -579,6 +616,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
           </button>
           <button class="ma-btn-action ma-btn-cb" data-add-cashback="${o.id}">
             <i class="fas fa-gift"></i> إضافة كاش باك
+          </button>
+          <button class="ma-btn-action ma-btn-delete" data-delete-order="${o.id}">
+            <i class="fas fa-trash"></i> حذف الطلب
           </button>
         </div>
       </div>
@@ -760,7 +800,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 💰 Cashback Modal (Add / Deduct)
+  // 💰 Cashback Modal
   // ═══════════════════════════════════════════════════════════
   function openCbModal(orderId, mode = 'add') {
     const order = allOrders.find(o => String(o.id) === String(orderId));
@@ -829,7 +869,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التنفيذ...';
 
     try {
-      // جلب الرصيد الحالي من السيرفر (مصدر الحقيقة)
       const { data: u, error: uErr } = await sb.from('men_users')
         .select('cashback, name, email')
         .eq('id', order.user_id)
@@ -838,7 +877,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
       const currentCb = Number(u?.cashback || 0);
 
-      // لا نسمح بالرصيد السالب
       if (isDeduct && amountRaw > currentCb) {
         toast(`الرصيد الحالي ${currentCb.toFixed(2)} ر.س فقط — لا يمكن الخصم`, 'error');
         btn.disabled = false;
@@ -848,7 +886,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
       const reason = reasonInput || (isDeduct ? 'خصم كاش باك من الإدارة' : 'كاش باك إضافي من الإدارة');
 
-      // 1) سجل العملية
       const { error } = await sb.from('men_cashback_log').insert({
         user_id: order.user_id,
         user_email: order.user_email,
@@ -860,7 +897,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       });
       if (error) throw error;
 
-      // 2) تحديث الرصيد
       const newCb = Math.round((currentCb + signedAmount) * 100) / 100;
       const { error: updErr } = await sb.from('men_users').update({
         cashback: newCb,
@@ -886,6 +922,101 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       toast('فشل: ' + err.message, 'error');
       btn.disabled = false;
       updateCbModalUI();
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // 🗑️ Delete Order
+  // ═══════════════════════════════════════════════════════════
+  function openDelModal(orderId) {
+    const order = allOrders.find(o => String(o.id) === String(orderId));
+    if (!order) return;
+    selectedOrderForDelete = order;
+
+    const items = Array.isArray(order.items) ? order.items : [];
+    const itemsList = items.length
+      ? items.map(it => `• ${it.name || 'منتج'} × ${it.qty || 1}`).join('<br>')
+      : '—';
+
+    const cbNote = (order.cashback_applied && Number(order.cashback || 0) > 0)
+      ? `<br><span style="color:#ff9a9a">⚠️ سيتم خصم ${Number(order.cashback).toFixed(2)} ر.س من رصيد العميل</span>`
+      : '';
+
+    $('maDelSub').innerHTML = `
+      رقم الطلب: <strong>#${String(order.id).slice(-8).toUpperCase()}</strong><br>
+      العميل: <strong>${order.user_name || '—'}</strong><br>
+      البريد: <strong dir="ltr">${order.user_email || '—'}</strong><br>
+      الإجمالي: <strong style="color:#6a9aff">${Number(order.total || 0).toFixed(2)} ر.س</strong><br>
+      <div style="margin-top:10px;padding:10px 12px;background:rgba(0,0,0,.25);border-radius:12px;font-size:.82rem;line-height:1.9">${itemsList}</div>
+      ${cbNote}
+    `;
+
+    $('maDelModal').classList.add('show');
+  }
+
+  function closeDelModal() {
+    $('maDelModal').classList.remove('show');
+    selectedOrderForDelete = null;
+  }
+
+  async function confirmDelete() {
+    if (!selectedOrderForDelete) return;
+    const order = selectedOrderForDelete;
+
+    const btn = $('maDelConfirm');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحذف...';
+
+    try {
+      // 1) إذا كان الطلب مستلم ولديه كاش باك → نسترجعه من رصيد العميل
+      if (order.cashback_applied && Number(order.cashback || 0) > 0) {
+        const refund = Number(order.cashback || 0);
+        try {
+          await sb.from('men_cashback_log').insert({
+            user_id: order.user_id,
+            user_email: order.user_email,
+            amount: -refund,
+            reason: `حذف الطلب #${order.id} — استرجاع الكاش باك`,
+            order_id: order.id,
+            type: 'refund',
+            created_by: currentUser.email
+          });
+          const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
+          const newCb = Math.max(0, Math.round((Number(u?.cashback || 0) - refund) * 100) / 100);
+          await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', order.user_id);
+        } catch (e) { console.warn('refund on delete:', e); }
+      }
+
+      // 2) نُسجّل عملية الحذف في سجل الكاش باك (اختياري — للمراجعة)
+      try {
+        await sb.from('men_cashback_log').insert({
+          user_id: order.user_id,
+          user_email: order.user_email,
+          amount: 0,
+          reason: `تم حذف الطلب #${order.id} نهائياً بواسطة ${currentUser.email}`,
+          order_id: order.id,
+          type: 'order_deleted',
+          created_by: currentUser.email
+        });
+      } catch (e) { console.warn('log on delete:', e); }
+
+      // 3) حذف الطلب من men_orders → يختفي من عند الجميع
+      const { error } = await sb.from('men_orders').delete().eq('id', order.id);
+      if (error) throw error;
+
+      // 4) تحديث الواجهة فوراً
+      allOrders = allOrders.filter(o => String(o.id) !== String(order.id));
+      renderStats();
+      renderOrders();
+
+      toast(`🗑️ تم حذف الطلب #${String(order.id).slice(-8).toUpperCase()} نهائياً`, 'success');
+      closeDelModal();
+
+    } catch (err) {
+      console.error(err);
+      toast('فشل الحذف: ' + err.message, 'error');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-trash"></i> حذف نهائي';
     }
   }
 
