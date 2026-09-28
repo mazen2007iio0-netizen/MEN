@@ -1,5 +1,5 @@
 /* ============================================================
-   ✨ MEN Store — Auth v8 (Orders + Status + Cashback + Admin)
+   ✨ MEN Store — Auth v9 (Orders in DB + Users)
    ============================================================ */
 (function () {
   'use strict';
@@ -14,8 +14,8 @@
                   && SUPABASE_ANON_KEY.length > 100;
 
   if (!credsReady) {
-    console.error('%c⛔ ضع مفاتيح Supabase في js/auth.js', 'background:#d90429;color:#fff;padding:6px 12px;border-radius:6px;font-weight:bold');
-    window.MEN_AUTH = { CASHBACK_RATE: 0.02, open: () => alert('⚠️ أضف مفاتيح Supabase'), openAccount: () => alert('⚠️ أضف مفاتيح Supabase'), logout: () => {}, getCurrentUser: () => null, addCashback: async () => {}, deductCashback: async () => {}, addOrder: async () => {}, updateOrderStatus: async () => {} };
+    console.error('⛔ ضع مفاتيح Supabase');
+    window.MEN_AUTH = { CASHBACK_RATE: 0.02, open: () => alert('⚠️ أضف المفاتيح'), openAccount: () => {}, logout: () => {}, getCurrentUser: () => null, addCashback: async () => {}, deductCashback: async () => {}, addOrder: async () => {} };
     return;
   }
 
@@ -26,33 +26,19 @@
   });
   window.MEN_SUPABASE = sb;
 
-  console.log('%c✨ MEN AUTH v8', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
+  console.log('%c✨ MEN AUTH v9', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
-  // ════════ ⚙️ الإعدادات ════════
   const CASHBACK_RATE = 0.02;
   const PHONE_DOMAIN  = 'men-store.local';
-
-  // ⭐ قائمة المشرفين (أضف بريدك)
-  const ADMIN_EMAILS = ['mkmkmkl24666606@gmail.com'];
-
-  // ⭐ حالات الطلب
-  const ORDER_STATUS = {
-    pending:   { label: 'قيد الانتظار',   color: '#f5b342', bg: 'linear-gradient(135deg,#f5b342,#c98a1e)', icon: 'fa-hourglass-half' },
-    preparing: { label: 'جاري التجهيز',   color: '#4a7aff', bg: 'linear-gradient(135deg,#4a7aff,#021ca4)', icon: 'fa-gears' },
-    review:    { label: 'تحت المراجعة',   color: '#6a9aff', bg: 'linear-gradient(135deg,#6a9aff,#4a7aff)', icon: 'fa-magnifying-glass' },
-    delivered: { label: 'تم الاستلام',     color: '#4caf50', bg: 'linear-gradient(135deg,#4caf50,#2e7d32)', icon: 'fa-circle-check' },
-    cancelled: { label: 'ملغي',           color: '#d90429', bg: 'linear-gradient(135deg,#d90429,#8b0018)', icon: 'fa-circle-xmark' }
-  };
-  const STATUS_ORDER = ['pending', 'preparing', 'review', 'delivered'];
+  const ADMIN_EMAILS  = ['mkmkmkl24666606@gmail.com'];
 
   let currentUser = null;
   let authMode = 'login';
   let rememberMe = true;
   const $ = id => document.getElementById(id);
-
   const isAdmin = () => !!currentUser && ADMIN_EMAILS.includes((currentUser.email || '').toLowerCase());
 
-  // ════════ 🛠️ Helpers ════════
+  // ═══ Helpers ═══
   function normalizePhone(raw) {
     const digits = String(raw || '').replace(/\D/g, '');
     if (!digits) return null;
@@ -76,18 +62,7 @@
     else initials = (parts[0][0] || '') + (parts[parts.length - 1][0] || '');
     initials = initials.toUpperCase();
 
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
-      <defs>
-        <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#021ca4"/>
-          <stop offset="100%" stop-color="#4a7aff"/>
-        </linearGradient>
-      </defs>
-      <rect width="${size}" height="${size}" fill="url(#g)"/>
-      <text x="50%" y="52%" text-anchor="middle" dominant-baseline="central"
-        font-family="Cairo,Tajawal,Arial,Helvetica,sans-serif"
-        font-size="${Math.round(size * 0.44)}" font-weight="900" fill="#ffffff">${initials}</text>
-    </svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#021ca4"/><stop offset="100%" stop-color="#4a7aff"/></linearGradient></defs><rect width="${size}" height="${size}" fill="url(#g)"/><text x="50%" y="52%" text-anchor="middle" dominant-baseline="central" font-family="Cairo,Tajawal,Arial,sans-serif" font-size="${Math.round(size * 0.44)}" font-weight="900" fill="#ffffff">${initials}</text></svg>`;
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   }
 
@@ -102,25 +77,14 @@
       .men-screen{position:fixed;inset:0;z-index:9999;display:none;font-family:'Cairo','Outfit',sans-serif;background:#060812;overflow-y:auto;overflow-x:hidden}
       .men-screen.active{display:block;animation:menFadeIn .35s ease}
       @keyframes menFadeIn{from{opacity:0}to{opacity:1}}
-
-      .men-screen-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:
-        radial-gradient(ellipse at 15% 20%,rgba(2,28,164,.35) 0%,transparent 55%),
-        radial-gradient(ellipse at 85% 80%,rgba(74,122,255,.25) 0%,transparent 50%),
-        radial-gradient(ellipse at 50% 50%,#060812 0%,#030510 100%)}
-      .men-screen-bg::after{content:'';position:absolute;inset:0;background-image:
-        linear-gradient(rgba(74,122,255,.04) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(74,122,255,.04) 1px,transparent 1px);
-        background-size:60px 60px;
-        mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);
-        -webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%)}
-
+      .men-screen-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 15% 20%,rgba(2,28,164,.35) 0%,transparent 55%),radial-gradient(ellipse at 85% 80%,rgba(74,122,255,.25) 0%,transparent 50%),radial-gradient(ellipse at 50% 50%,#060812 0%,#030510 100%)}
+      .men-screen-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(74,122,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,122,255,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%)}
       .men-orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:1;opacity:.55}
       .men-orb.o1{width:500px;height:500px;background:radial-gradient(circle,#4a7aff,transparent 70%);top:-150px;left:-150px;animation:menOrb1 15s ease-in-out infinite}
       .men-orb.o2{width:450px;height:450px;background:radial-gradient(circle,#f5b342,transparent 70%);bottom:-150px;right:-150px;animation:menOrb2 18s ease-in-out infinite}
       .men-orb.o3{width:350px;height:350px;background:radial-gradient(circle,#4a7aff,transparent 70%);top:40%;right:10%;animation:menOrb1 20s ease-in-out infinite reverse;opacity:.3}
       @keyframes menOrb1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(100px,80px) scale(1.2)}}
       @keyframes menOrb2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-80px,-60px) scale(1.15)}}
-
       .men-layout{position:relative;z-index:10;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:stretch}
       .men-showcase{position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:60px 70px;background:linear-gradient(160deg,rgba(2,28,164,.35) 0%,rgba(6,8,18,.9) 100%);border-left:1px solid rgba(74,122,255,.08);overflow:hidden}
       .men-showcase::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(74,122,255,.25),transparent 55%);pointer-events:none}
@@ -128,140 +92,93 @@
       .men-logo-row{display:flex;align-items:center;gap:14px}
       .men-showcase-center{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center;padding:50px 0}
       .men-showcase-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.3);border-radius:60px;padding:8px 18px;font-size:.8rem;color:#6a9aff;font-weight:800;margin-bottom:24px;width:fit-content}
-      .men-showcase-badge i{font-size:.85rem}
       .men-showcase-title{font-size:clamp(2rem,3.5vw,3rem);font-weight:900;color:#fff;letter-spacing:-1.5px;line-height:1.15;margin-bottom:18px}
       .men-showcase-title span{background:linear-gradient(135deg,#6a9aff,#4a7aff);-webkit-background-clip:text;background-clip:text;color:transparent}
       .men-showcase-desc{color:#a8b0cc;font-size:1rem;line-height:1.9;max-width:480px;margin-bottom:32px;font-weight:500}
       .men-features{display:flex;flex-direction:column;gap:14px}
-      .men-feature{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(14,20,38,.5);border:1px solid rgba(74,122,255,.1);border-radius:16px;backdrop-filter:blur(10px);transition:all .35s cubic-bezier(.16,1,.3,1);width:fit-content}
-      .men-feature:hover{background:rgba(74,122,255,.1);border-color:rgba(74,122,255,.3);transform:translateX(-6px)}
+      .men-feature{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(14,20,38,.5);border:1px solid rgba(74,122,255,.1);border-radius:16px;backdrop-filter:blur(10px);width:fit-content}
       .men-feature-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,rgba(74,122,255,.2),rgba(74,122,255,.08));border:1px solid rgba(74,122,255,.25);display:flex;align-items:center;justify-content:center;color:#6a9aff;font-size:1rem;flex-shrink:0}
       .men-feature-text .t{color:#fff;font-weight:800;font-size:.9rem}
       .men-feature-text .s{color:#8a92b0;font-size:.78rem;font-weight:500;margin-top:2px}
-
       .men-showcase-bottom{position:relative;z-index:2;color:#6a7290;font-size:.8rem;font-weight:600}
       .men-showcase-bottom .stats{display:flex;gap:30px;margin-bottom:20px}
-      .men-showcase-bottom .stat .n{color:#fff;font-size:1.5rem;font-weight:900;letter-spacing:-.5px}
+      .men-showcase-bottom .stat .n{color:#fff;font-size:1.5rem;font-weight:900}
       .men-showcase-bottom .stat .l{color:#8a92b0;font-size:.75rem;font-weight:600;margin-top:2px}
-
       .men-form-panel{position:relative;display:flex;flex-direction:column;padding:50px 60px;background:linear-gradient(180deg,rgba(6,8,18,.6),rgba(6,8,18,.95));backdrop-filter:blur(20px)}
       .men-panel-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:auto}
-
-      .men-close{width:42px;height:42px;border-radius:50%;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);color:#8a92b0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .35s cubic-bezier(.16,1,.3,1)}
+      .men-close{width:42px;height:42px;border-radius:50%;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);color:#8a92b0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .35s}
       .men-close:hover{background:rgba(217,4,41,.15);border-color:rgba(217,4,41,.3);color:#ff6b6b;transform:rotate(180deg) scale(1.08)}
-
       .men-form-inner{max-width:440px;width:100%;margin:auto;padding:30px 0}
-
       .men-welcome{margin-bottom:32px;text-align:right}
-      .men-welcome h2{font-size:1.9rem;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:8px;line-height:1.2}
+      .men-welcome h2{font-size:1.9rem;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:8px}
       .men-welcome p{color:#8a92b0;font-size:.92rem;font-weight:600;line-height:1.7}
-
       .men-tabs{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:4px;background:rgba(0,0,0,.35);border:1px solid rgba(74,122,255,.1);border-radius:16px;padding:4px;margin-bottom:26px}
-      .men-tab{position:relative;padding:13px 16px;border-radius:12px;background:transparent;border:none;color:#8a92b0;font-family:'Cairo',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);z-index:2;display:flex;align-items:center;justify-content:center;gap:8px}
-      .men-tab:hover:not(.active){color:#c3cbe4}
+      .men-tab{position:relative;padding:13px 16px;border-radius:12px;background:transparent;border:none;color:#8a92b0;font-family:'Cairo',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;transition:all .3s;z-index:2;display:flex;align-items:center;justify-content:center;gap:8px}
       .men-tab.active{color:#fff}
       .men-tabs-indicator{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);background:linear-gradient(135deg,#021ca4,#4a7aff);border-radius:12px;box-shadow:0 6px 18px -4px rgba(74,122,255,.7);transition:transform .4s cubic-bezier(.34,1.4,.64,1);z-index:1}
       .men-tabs[data-mode="signup"] .men-tabs-indicator{transform:translateX(calc(100% + 4px))}
-
       .men-form{display:flex;flex-direction:column;gap:16px}
       .men-field{position:relative}
       .men-label{display:block;font-size:.74rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:9px;padding-right:4px}
       .men-input-wrap{position:relative;display:flex;align-items:center}
-      .men-input-wrap input{width:100%;height:54px;padding:0 48px 0 16px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.1);border-radius:14px;color:#fff;font-size:.94rem;outline:none;font-family:'Cairo',sans-serif;font-weight:600;transition:all .3s cubic-bezier(.16,1,.3,1)}
+      .men-input-wrap input{width:100%;height:54px;padding:0 48px 0 16px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.1);border-radius:14px;color:#fff;font-size:.94rem;outline:none;font-family:'Cairo',sans-serif;font-weight:600;transition:all .3s}
       .men-input-wrap input::placeholder{color:#4a5070;font-weight:500}
-      .men-input-wrap input:hover{border-color:rgba(74,122,255,.2)}
       .men-input-wrap input:focus{border-color:#4a7aff;background:rgba(74,122,255,.06);box-shadow:0 0 0 4px rgba(74,122,255,.12)}
-      .men-input-wrap .men-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#4a7aff;font-size:.95rem;pointer-events:none;transition:all .3s}
-      .men-input-wrap input:focus ~ .men-icon{color:#6a9aff;transform:translateY(-50%) scale(1.1)}
-      .men-input-wrap .men-eye{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#5a607a;font-size:.9rem;cursor:pointer;padding:8px;border-radius:50%;background:transparent;border:none;transition:all .3s}
+      .men-input-wrap .men-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#4a7aff;font-size:.95rem;pointer-events:none}
+      .men-input-wrap .men-eye{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#5a607a;font-size:.9rem;cursor:pointer;padding:8px;border-radius:50%;background:transparent;border:none}
       .men-input-wrap .men-eye:hover{color:#4a7aff;background:rgba(74,122,255,.1)}
-
       .men-hint{font-size:.72rem;color:#6a7290;font-weight:600;margin-top:7px;padding-right:4px;display:flex;align-items:center;gap:6px}
       .men-hint i{color:#4a7aff;font-size:.75rem}
-
-      .men-strength{height:0;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);padding-right:4px}
+      .men-strength{height:0;overflow:hidden;transition:all .35s;padding-right:4px}
       .men-strength.show{height:28px;margin-top:6px}
       .men-strength-row{display:flex;align-items:center;gap:10px}
       .men-strength-bars{flex:1;display:flex;gap:4px}
       .men-strength-bar{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;position:relative}
-      .men-strength-bar::after{content:'';position:absolute;inset:0;border-radius:4px;transform:scaleX(0);transform-origin:right;transition:transform .45s cubic-bezier(.16,1,.3,1)}
+      .men-strength-bar::after{content:'';position:absolute;inset:0;border-radius:4px;transform:scaleX(0);transform-origin:right;transition:transform .45s}
       .men-strength.s1 .men-strength-bar:nth-child(1)::after{transform:scaleX(1);background:linear-gradient(90deg,#d90429,#ff4d4d)}
       .men-strength.s2 .men-strength-bar:nth-child(-n+2)::after{transform:scaleX(1);background:linear-gradient(90deg,#f5b342,#ffb700)}
       .men-strength.s3 .men-strength-bar:nth-child(-n+3)::after{transform:scaleX(1);background:linear-gradient(90deg,#4a7aff,#6a9aff)}
       .men-strength.s4 .men-strength-bar::after{transform:scaleX(1);background:linear-gradient(90deg,#4caf50,#66bb6a)}
-      .men-strength-label{font-size:.72rem;font-weight:800;white-space:nowrap;min-width:56px;text-align:left;letter-spacing:.3px}
-      .men-strength.s1 .men-strength-label{color:#ff4d4d}
-      .men-strength.s2 .men-strength-label{color:#ffb700}
-      .men-strength.s3 .men-strength-label{color:#6a9aff}
-      .men-strength.s4 .men-strength-label{color:#4caf50}
-
-      .men-opts{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:2px;font-size:.84rem;flex-wrap:wrap}
-      .men-remember{display:inline-flex;align-items:center;gap:9px;color:#8a92b0;font-weight:600;cursor:pointer;user-select:none;transition:color .3s}
-      .men-remember:hover{color:#c3cbe4}
+      .men-strength-label{font-size:.72rem;font-weight:800;white-space:nowrap;min-width:56px;text-align:left}
+      .men-opts{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.84rem;flex-wrap:wrap}
+      .men-remember{display:inline-flex;align-items:center;gap:9px;color:#8a92b0;font-weight:600;cursor:pointer;user-select:none}
       .men-remember input{display:none}
-      .men-check{width:18px;height:18px;border-radius:6px;border:1.5px solid rgba(74,122,255,.3);background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;transition:all .3s;position:relative;flex-shrink:0}
-      .men-remember input:checked ~ .men-check{background:linear-gradient(135deg,#021ca4,#4a7aff);border-color:transparent;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
-      .men-check::after{content:'\\f00c';font-family:'Font Awesome 6 Free';font-weight:900;font-size:.58rem;color:#fff;opacity:0;transform:scale(0);transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+      .men-check{width:18px;height:18px;border-radius:6px;border:1.5px solid rgba(74,122,255,.3);background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+      .men-remember input:checked ~ .men-check{background:linear-gradient(135deg,#021ca4,#4a7aff);border-color:transparent}
+      .men-check::after{content:'\\f00c';font-family:'Font Awesome 6 Free';font-weight:900;font-size:.58rem;color:#fff;opacity:0;transform:scale(0);transition:all .3s}
       .men-remember input:checked ~ .men-check::after{opacity:1;transform:scale(1)}
-      .men-forgot{color:#6a9aff;font-weight:700;cursor:pointer;text-decoration:none;font-size:.84rem;transition:all .3s;white-space:nowrap}
-      .men-forgot:hover{color:#4a7aff;text-shadow:0 0 16px rgba(74,122,255,.6)}
-
-      .men-error{max-height:0;overflow:hidden;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.2);border-radius:12px;color:#ff8a8a;font-size:.84rem;font-weight:700;text-align:center;transition:all .35s cubic-bezier(.16,1,.3,1);display:flex;align-items:center;justify-content:center;gap:8px;padding:0 16px}
-      .men-error.show{max-height:90px;padding:12px 16px;margin-top:4px}
-
-      .men-submit{position:relative;width:100%;height:56px;border:none;border-radius:14px;background:linear-gradient(135deg,#021ca4 0%,#4a7aff 100%);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);box-shadow:0 14px 34px -12px rgba(74,122,255,.8);display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:.3px;margin-top:6px}
-      .men-submit::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#4a7aff,#021ca4);opacity:0;transition:opacity .35s}
-      .men-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 22px 50px -12px rgba(74,122,255,1)}
-      .men-submit:hover:not(:disabled)::before{opacity:1}
-      .men-submit:active:not(:disabled){transform:translateY(0) scale(.98)}
-      .men-submit:disabled{cursor:not-allowed;opacity:.85}
-      .men-submit > *{position:relative;z-index:2;display:flex;align-items:center;gap:10px}
+      .men-forgot{color:#6a9aff;font-weight:700;cursor:pointer;font-size:.84rem;white-space:nowrap}
+      .men-forgot:hover{color:#4a7aff}
+      .men-error{max-height:0;overflow:hidden;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.2);border-radius:12px;color:#ff8a8a;font-size:.84rem;font-weight:700;text-align:center;transition:all .35s;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 16px}
+      .men-error.show{max-height:90px;padding:12px 16px}
+      .men-submit{position:relative;width:100%;height:56px;border:none;border-radius:14px;background:linear-gradient(135deg,#021ca4 0%,#4a7aff 100%);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;transition:all .35s;box-shadow:0 14px 34px -12px rgba(74,122,255,.8);display:flex;align-items:center;justify-content:center;gap:10px}
+      .men-submit:hover:not(:disabled){transform:translateY(-2px)}
+      .men-submit:disabled{opacity:.85;cursor:not-allowed}
       .men-spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:menSpin .7s linear infinite;display:none}
       .men-submit.loading .men-spinner{display:block}
       .men-submit.loading .men-btn-icon{display:none}
       @keyframes menSpin{to{transform:rotate(360deg)}}
-
-      .men-terms{font-size:.75rem;color:#6a7290;text-align:center;line-height:1.7;margin-top:2px;font-weight:500}
-      .men-terms a{color:#6a9aff;text-decoration:none;font-weight:700;cursor:pointer}
-      .men-terms a:hover{color:#4a7aff;text-decoration:underline}
-
+      .men-terms{font-size:.75rem;color:#6a7290;text-align:center;line-height:1.7;font-weight:500}
+      .men-terms a{color:#6a9aff;font-weight:700;cursor:pointer}
       .men-success-overlay{position:fixed;inset:0;background:linear-gradient(160deg,rgba(6,8,18,.99),rgba(2,4,12,1));z-index:10000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;opacity:0;transition:opacity .35s}
       .men-success-overlay.show{display:flex;opacity:1}
       .men-check-circle{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#4caf50,#66bb6a);display:flex;align-items:center;justify-content:center;color:#fff;font-size:44px;animation:menCheckPop .6s cubic-bezier(.34,1.56,.64,1);box-shadow:0 25px 60px -15px rgba(76,175,80,.8)}
       @keyframes menCheckPop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.15) rotate(8deg)}100%{transform:scale(1) rotate(0);opacity:1}}
-      .men-success-overlay p{color:#4caf50;font-weight:800;font-size:1.3rem;letter-spacing:.3px}
-
+      .men-success-overlay p{color:#4caf50;font-weight:800;font-size:1.3rem}
       .men-confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10001}
       .men-confetti-piece{position:absolute;width:10px;height:10px;border-radius:2px;animation:menConfettiFall 3s linear forwards}
       @keyframes menConfettiFall{0%{transform:translateY(-100vh) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-
-      @media (max-width:992px){
-        .men-layout{grid-template-columns:1fr}
-        .men-showcase{display:none}
-        .men-form-panel{padding:30px 24px;min-height:100vh}
-        .men-form-inner{max-width:480px;padding:20px 0}
-      }
-      @media (max-width:480px){
-        .men-form-panel{padding:24px 18px}
-        .men-welcome h2{font-size:1.5rem}
-        .men-welcome p{font-size:.85rem}
-        .men-input-wrap input{height:52px;font-size:.9rem}
-        .men-submit{height:54px}
-        .men-tab{font-size:.84rem;padding:12px 12px}
-      }
-
-      /* ═══ ACCOUNT PAGE ═══ */
+      @media (max-width:992px){.men-layout{grid-template-columns:1fr}.men-showcase{display:none}.men-form-panel{padding:30px 24px;min-height:100vh}}
+      @media (max-width:480px){.men-form-panel{padding:24px 18px}.men-welcome h2{font-size:1.5rem}.men-input-wrap input{height:52px}.men-submit{height:54px}.men-tab{font-size:.84rem;padding:12px}}
       #menAccountPage{display:none}
-      #menAccountPage.active{display:block;animation:menPageIn .5s cubic-bezier(.16,1,.3,1)}
+      #menAccountPage.active{display:block;animation:menPageIn .5s}
       @keyframes menPageIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
       .men-acc-wrap{padding:22px 0 80px}
       .men-acc-bread{display:flex;align-items:center;gap:10px;padding:14px 0 8px;font-size:.88rem;color:#8a92b0;flex-wrap:wrap}
-      .men-acc-bread a{color:#a8b0cc;text-decoration:none;cursor:pointer;font-weight:600}
+      .men-acc-bread a{color:#a8b0cc;cursor:pointer;font-weight:600}
       .men-acc-bread a:hover{color:#6a9aff}
-      .men-acc-bread .sep{color:#4a5070;font-size:.7rem}
       .men-acc-bread .cur{color:#fff;font-weight:700}
-      .men-acc-back{display:inline-flex;align-items:center;gap:10px;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);border-radius:60px;padding:10px 22px;color:#6a9aff;font-weight:700;cursor:pointer;transition:all .3s;font-family:'Cairo',sans-serif;font-size:.9rem;margin:12px 0 26px}
-      .men-acc-back:hover{background:rgba(74,122,255,.18);transform:translateX(4px)}
+      .men-acc-back{display:inline-flex;align-items:center;gap:10px;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.15);border-radius:60px;padding:10px 22px;color:#6a9aff;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;font-size:.9rem;margin:12px 0 26px}
       .men-acc-cover{position:relative;border-radius:32px;overflow:hidden;background:linear-gradient(135deg,rgba(2,28,164,.55) 0%,rgba(74,122,255,.22) 50%,rgba(6,8,18,.95) 100%);border:1px solid rgba(74,122,255,.2);box-shadow:0 40px 100px -30px rgba(2,28,164,.8);margin-bottom:24px}
       .men-acc-cover::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 15% 20%,rgba(74,122,255,.4),transparent 45%),radial-gradient(circle at 88% 85%,rgba(245,179,66,.2),transparent 45%);pointer-events:none}
       .men-acc-cover-inner{position:relative;z-index:2;padding:44px 40px 36px;display:flex;align-items:center;gap:28px;flex-wrap:wrap}
@@ -271,7 +188,7 @@
       @keyframes menRingSpin{to{transform:rotate(360deg)}}
       .men-acc-verified{position:absolute;bottom:6px;left:6px;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4a7aff,#6a9aff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem;border:3px solid #0a0e1a;z-index:3}
       .men-acc-cover-info{flex:1;min-width:240px}
-      .men-acc-cover-name{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:900;color:#fff;letter-spacing:-1px;line-height:1.2;margin-bottom:8px}
+      .men-acc-cover-name{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:8px}
       .men-acc-cover-email{color:#cdd6ea;font-size:.95rem;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
       .men-acc-cover-email i{color:#4a7aff}
       .men-acc-cover-tags{display:flex;gap:8px;flex-wrap:wrap}
@@ -279,52 +196,43 @@
       .men-acc-tag.blue{color:#6a9aff;border-color:rgba(74,122,255,.3);background:rgba(74,122,255,.12)}
       .men-acc-tag.gold{color:#f5b342;border-color:rgba(245,179,66,.3);background:rgba(245,179,66,.12)}
       .men-acc-tag.green{color:#66bb6a;border-color:rgba(76,175,80,.3);background:rgba(76,175,80,.12)}
-      .men-acc-tag.admin{color:#ff6b6b;border-color:rgba(217,4,41,.4);background:rgba(217,4,41,.15)}
       .men-acc-cover-actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
-      .men-acc-cover-btn{padding:11px 22px;border-radius:60px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .35s cubic-bezier(.16,1,.3,1)}
+      .men-acc-cover-btn{padding:11px 22px;border-radius:60px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .35s}
       .men-acc-cover-btn.primary{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;box-shadow:0 10px 30px -8px rgba(74,122,255,.7)}
       .men-acc-cover-btn.primary:hover{transform:translateY(-3px)}
       .men-acc-cover-btn.ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:#e0e6f4}
-      .men-acc-cover-btn.ghost:hover{background:rgba(255,255,255,.12);transform:translateY(-3px)}
       .men-acc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-      .men-acc-stat{background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));border:1px solid rgba(74,122,255,.12);border-radius:22px;padding:22px 20px;transition:all .4s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden}
-      .men-acc-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,#4a7aff);opacity:.8}
-      .men-acc-stat:hover{transform:translateY(-6px);border-color:rgba(74,122,255,.35);box-shadow:0 22px 50px -15px rgba(2,28,164,.6)}
+      .men-acc-stat{background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));border:1px solid rgba(74,122,255,.12);border-radius:22px;padding:22px 20px;position:relative;overflow:hidden}
+      .men-acc-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,#4a7aff)}
       .men-acc-stat-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;margin-bottom:14px;background:var(--icon-bg);color:var(--accent)}
-      .men-acc-stat-val{font-size:1.75rem;font-weight:900;color:#fff;line-height:1.1;margin-bottom:4px;letter-spacing:-1px}
+      .men-acc-stat-val{font-size:1.75rem;font-weight:900;color:#fff;margin-bottom:4px}
       .men-acc-stat-lbl{font-size:.78rem;color:#8a92b0;font-weight:700}
       .men-acc-tabs{display:flex;gap:6px;background:rgba(10,16,32,.6);border:1px solid rgba(74,122,255,.1);border-radius:60px;padding:6px;margin-bottom:24px;overflow-x:auto;backdrop-filter:blur(12px);scrollbar-width:none}
       .men-acc-tabs::-webkit-scrollbar{display:none}
-      .men-acc-tab{flex:1;min-width:130px;padding:13px 20px;border-radius:60px;background:transparent;border:none;color:#8a92b0;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .35s cubic-bezier(.16,1,.3,1);white-space:nowrap}
-      .men-acc-tab:hover:not(.active){background:rgba(74,122,255,.08);color:#fff}
+      .men-acc-tab{flex:1;min-width:130px;padding:13px 20px;border-radius:60px;background:transparent;border:none;color:#8a92b0;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
       .men-acc-tab.active{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;box-shadow:0 8px 24px -6px rgba(74,122,255,.6)}
       .men-acc-panel{display:none}
-      .men-acc-panel.active{display:block;animation:menPanelIn .5s cubic-bezier(.16,1,.3,1)}
+      .men-acc-panel.active{display:block;animation:menPanelIn .5s}
       @keyframes menPanelIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
       .men-acc-overview{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
-      .men-acc-card{background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));border:1px solid rgba(74,122,255,.12);border-radius:26px;padding:26px 28px;backdrop-filter:blur(12px);transition:all .35s}
-      .men-acc-card:hover{border-color:rgba(74,122,255,.25)}
+      .men-acc-card{background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));border:1px solid rgba(74,122,255,.12);border-radius:26px;padding:26px 28px;backdrop-filter:blur(12px)}
       .men-acc-card-title{font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:12px}
-      .men-acc-card-title .icn{width:38px;height:38px;border-radius:12px;background:rgba(74,122,255,.12);color:#6a9aff;border:1px solid rgba(74,122,255,.2);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+      .men-acc-card-title .icn{width:38px;height:38px;border-radius:12px;background:rgba(74,122,255,.12);color:#6a9aff;border:1px solid rgba(74,122,255,.2);display:flex;align-items:center;justify-content:center;font-size:.95rem}
       .men-acc-cashback{position:relative;background:linear-gradient(135deg,#021ca4 0%,#041580 55%,#021ca4 100%);border-radius:26px;padding:32px 30px;color:#fff;overflow:hidden;box-shadow:0 30px 70px -20px rgba(2,28,164,.9);border:1px solid rgba(74,122,255,.35)}
       .men-acc-cashback::before{content:'';position:absolute;top:-80px;right:-80px;width:260px;height:260px;background:radial-gradient(circle,rgba(74,122,255,.5),transparent 70%);border-radius:50%}
       .men-acc-cashback .cc-chip{position:relative;z-index:2;width:52px;height:40px;border-radius:8px;background:linear-gradient(135deg,#f5b342,#c98a1e);margin-bottom:22px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:rgba(0,0,0,.4)}
-      .men-acc-cashback .cc-label{position:relative;z-index:2;font-size:.82rem;opacity:.92;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.5px}
+      .men-acc-cashback .cc-label{position:relative;z-index:2;font-size:.82rem;opacity:.92;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-weight:800}
       .men-acc-cashback .cc-amount{position:relative;z-index:2;font-size:clamp(2.2rem,5vw,3rem);font-weight:900;letter-spacing:-2px;line-height:1;display:flex;align-items:baseline;gap:12px}
       .men-acc-cashback .cc-amount small{font-size:1.1rem;font-weight:700;opacity:.9}
       .men-acc-cashback .cc-note{position:relative;z-index:2;margin-top:18px;display:inline-flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);padding:8px 16px;border-radius:20px;font-size:.78rem;font-weight:700;border:1px solid rgba(74,122,255,.3)}
       .men-acc-info-list{display:flex;flex-direction:column;gap:12px}
-      .men-acc-info-row{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(74,122,255,.05);border:1px solid rgba(74,122,255,.1);border-radius:16px;transition:all .3s}
-      .men-acc-info-row:hover{background:rgba(74,122,255,.1);border-color:rgba(74,122,255,.25);transform:translateX(-4px)}
-      .men-acc-info-row .ic{width:38px;height:38px;border-radius:12px;background:rgba(74,122,255,.12);color:#6a9aff;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+      .men-acc-info-row{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(74,122,255,.05);border:1px solid rgba(74,122,255,.1);border-radius:16px}
+      .men-acc-info-row .ic{width:38px;height:38px;border-radius:12px;background:rgba(74,122,255,.12);color:#6a9aff;display:flex;align-items:center;justify-content:center;font-size:.9rem}
       .men-acc-info-row .txt{flex:1;min-width:0}
       .men-acc-info-row .lbl{font-size:.7rem;color:#8a92b0;text-transform:uppercase;letter-spacing:1px;font-weight:800;margin-bottom:2px}
       .men-acc-info-row .val{color:#fff;font-weight:700;font-size:.92rem;word-break:break-all}
-
-      /* ═══ ORDERS ═══ */
       .men-acc-orders-list{display:flex;flex-direction:column;gap:14px}
-      .men-acc-order{background:linear-gradient(145deg,rgba(14,20,38,.6),rgba(8,12,24,.8));border:1px solid rgba(74,122,255,.12);border-radius:20px;padding:20px 22px 22px;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden}
-      .men-acc-order:hover{transform:translateY(-3px);border-color:rgba(74,122,255,.3);box-shadow:0 15px 40px -12px rgba(2,28,164,.5)}
+      .men-acc-order{background:linear-gradient(145deg,rgba(14,20,38,.6),rgba(8,12,24,.8));border:1px solid rgba(74,122,255,.12);border-radius:20px;padding:20px 22px;position:relative;overflow:hidden}
       .men-acc-order-header{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap}
       .men-acc-order-id{font-weight:800;color:#fff;font-size:.95rem;display:flex;align-items:center;gap:10px}
       .men-acc-order-id .dot{width:8px;height:8px;border-radius:50%;background:var(--st-color,#4caf50);box-shadow:0 0 12px var(--st-color,#4caf50)}
@@ -332,29 +240,7 @@
       .men-acc-order-body{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
       .men-acc-order-items{flex:1;min-width:200px;color:#a8b0cc;font-size:.85rem;line-height:1.7}
       .men-acc-order-total{font-size:1.3rem;font-weight:900;background:linear-gradient(135deg,#fff,#6a9aff);-webkit-background-clip:text;background-clip:text;color:transparent}
-      .men-acc-order-badge{position:absolute;top:14px;left:14px;color:#fff;font-size:.68rem;font-weight:800;padding:5px 12px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 6px 18px -6px rgba(0,0,0,.6)}
-      .men-acc-order-badge i{font-size:.7rem}
-
-      /* شريط تقدم */
-      .men-order-progress{margin-top:16px;display:flex;align-items:center;gap:6px}
-      .men-order-step{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.08);position:relative;overflow:hidden}
-      .men-order-step.done::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#4a7aff,#6a9aff);border-radius:4px}
-      .men-order-step.current::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#4a7aff,#6a9aff);border-radius:4px;animation:menStepPulse 1.6s ease-in-out infinite}
-      @keyframes menStepPulse{0%,100%{opacity:1}50%{opacity:.5}}
-
-      /* كاش باك الطلب */
-      .men-order-cashback{margin-top:12px;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:20px;font-size:.78rem;font-weight:800;background:rgba(76,175,80,.12);border:1px solid rgba(76,175,80,.3);color:#66bb6a}
-      .men-order-cashback.pending{background:rgba(245,179,66,.1);border-color:rgba(245,179,66,.3);color:#f5b342}
-
-      /* لوحة الإدارة */
-      .men-order-admin{margin-top:16px;padding-top:16px;border-top:1px dashed rgba(74,122,255,.2);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-      .men-order-admin-label{font-size:.72rem;font-weight:800;color:#6a9aff;letter-spacing:1px;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px}
-      .men-order-admin-select{flex:1;min-width:180px;padding:10px 14px;background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.25);border-radius:12px;color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.85rem;outline:none;cursor:pointer}
-      .men-order-admin-select:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
-      .men-order-admin-apply{padding:10px 20px;border-radius:12px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .3s}
-      .men-order-admin-apply:hover{transform:translateY(-2px);box-shadow:0 10px 24px -6px rgba(74,122,255,.7)}
-      .men-order-admin-apply:disabled{opacity:.6;cursor:not-allowed;transform:none}
-
+      .men-acc-order-badge{position:absolute;top:12px;left:12px;color:#fff;font-size:.62rem;font-weight:800;padding:4px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px}
       .men-acc-empty{text-align:center;padding:60px 24px;background:rgba(74,122,255,.04);border:1.5px dashed rgba(74,122,255,.2);border-radius:24px}
       .men-acc-empty-icon{width:90px;height:90px;margin:0 auto 20px;border-radius:50%;background:rgba(74,122,255,.1);display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:#4a7aff}
       .men-acc-empty h3{color:#fff;font-size:1.2rem;margin-bottom:8px;font-weight:800}
@@ -363,35 +249,17 @@
       .men-acc-settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
       .men-acc-form-field label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
       .men-acc-form-field input{width:100%;padding:14px 20px;border-radius:14px;background:rgba(0,0,0,.3);border:1.5px solid rgba(74,122,255,.12);color:#fff;font-family:'Cairo',sans-serif;font-size:.92rem;font-weight:600;outline:none;transition:all .3s}
-      .men-acc-form-field input:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.12);background:rgba(74,122,255,.06)}
+      .men-acc-form-field input:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.12)}
       .men-acc-form-field input:disabled{opacity:.5;cursor:not-allowed}
       .men-acc-settings-actions{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
-      .men-acc-settings-actions button{padding:13px 26px;border-radius:60px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .35s}
+      .men-acc-settings-actions button{padding:13px 26px;border-radius:60px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
       .men-acc-settings-actions .save{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;box-shadow:0 10px 30px -8px rgba(74,122,255,.6)}
-      .men-acc-settings-actions .save:hover{transform:translateY(-3px)}
       .men-acc-settings-actions .danger{background:rgba(217,4,41,.12);border:1px solid rgba(217,4,41,.3);color:#ff6b6b}
-      .men-acc-settings-actions .danger:hover{background:rgba(217,4,41,.22);transform:translateY(-3px)}
       .men-acc-danger{margin-top:20px;padding:22px 24px;background:rgba(217,4,41,.06);border:1px solid rgba(217,4,41,.2);border-radius:20px}
       .men-acc-danger h4{color:#ff6b6b;font-size:1rem;margin-bottom:8px;font-weight:800;display:flex;align-items:center;gap:10px}
       .men-acc-danger p{color:#d0a8a8;font-size:.85rem;margin-bottom:14px;line-height:1.7}
-      @media (max-width:992px){
-        .men-acc-stats{grid-template-columns:repeat(2,1fr)}
-        .men-acc-overview{grid-template-columns:1fr}
-        .men-acc-settings-grid{grid-template-columns:1fr}
-      }
-      @media (max-width:768px){
-        .men-acc-cover-inner{padding:32px 24px 26px;flex-direction:column;text-align:center;gap:22px}
-        .men-acc-cover-avatar{width:100px;height:100px}
-        .men-acc-cover-email{justify-content:center}
-        .men-acc-cover-tags{justify-content:center}
-        .men-acc-cover-actions{justify-content:center}
-        .men-acc-tab{min-width:auto;padding:11px 14px;font-size:.8rem}
-        .men-acc-tab span{display:none}
-        .men-acc-card{padding:22px 20px}
-        .men-acc-cashback{padding:26px 22px}
-        .men-acc-stat{padding:18px 16px}
-        .men-acc-order-badge{position:static;margin-bottom:12px;width:fit-content}
-      }
+      @media (max-width:992px){.men-acc-stats{grid-template-columns:repeat(2,1fr)}.men-acc-overview{grid-template-columns:1fr}.men-acc-settings-grid{grid-template-columns:1fr}}
+      @media (max-width:768px){.men-acc-cover-inner{padding:32px 24px 26px;flex-direction:column;text-align:center;gap:22px}.men-acc-cover-avatar{width:100px;height:100px}.men-acc-cover-email,.men-acc-cover-tags,.men-acc-cover-actions{justify-content:center}.men-acc-tab{min-width:auto;padding:11px 14px;font-size:.8rem}.men-acc-tab span{display:none}.men-acc-card{padding:22px 20px}.men-acc-cashback{padding:26px 22px}.men-acc-stat{padding:18px 16px}}
     `;
     document.head.appendChild(s);
   }
@@ -415,7 +283,7 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🖼️ Screen HTML
+  // 🖼️ Screen
   // ═══════════════════════════════════════════════════════════
   function injectModals() {
     if ($('menAuthScreen')) return;
@@ -439,18 +307,9 @@
               <h1 class="men-showcase-title">كل ما تحتاجه<br>في <span>عالم الجيمنق</span></h1>
               <p class="men-showcase-desc">انضم إلى أكثر من 5000 لاعب يستمتعون بأفضل الأسعار، التسليم الفوري، والكاش باك على كل طلب.</p>
               <div class="men-features">
-                <div class="men-feature">
-                  <div class="men-feature-icon"><i class="fas fa-bolt"></i></div>
-                  <div class="men-feature-text"><div class="t">تسليم فوري</div><div class="s">استلم طلبك خلال 5 دقائق</div></div>
-                </div>
-                <div class="men-feature">
-                  <div class="men-feature-icon"><i class="fas fa-gift"></i></div>
-                  <div class="men-feature-text"><div class="t">كاش باك 2%</div><div class="s">على كل عملية شراء</div></div>
-                </div>
-                <div class="men-feature">
-                  <div class="men-feature-icon"><i class="fas fa-shield-halved"></i></div>
-                  <div class="men-feature-text"><div class="t">منتجات أصلية 100%</div><div class="s">ضمان الجودة والأصالة</div></div>
-                </div>
+                <div class="men-feature"><div class="men-feature-icon"><i class="fas fa-bolt"></i></div><div class="men-feature-text"><div class="t">تسليم فوري</div><div class="s">استلم طلبك خلال 5 دقائق</div></div></div>
+                <div class="men-feature"><div class="men-feature-icon"><i class="fas fa-gift"></i></div><div class="men-feature-text"><div class="t">كاش باك 2%</div><div class="s">على كل عملية شراء</div></div></div>
+                <div class="men-feature"><div class="men-feature-icon"><i class="fas fa-shield-halved"></i></div><div class="men-feature-text"><div class="t">منتجات أصلية 100%</div><div class="s">ضمان الجودة والأصالة</div></div></div>
               </div>
             </div>
             <div class="men-showcase-bottom">
@@ -597,23 +456,18 @@
     const login = authMode === 'login';
     $('menTabs').dataset.mode = authMode;
     document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === authMode));
-
     $('menHeadTitle').textContent = login ? 'أهلاً بعودتك 👋' : 'انضم إلينا';
     $('menHeadSub').textContent = login ? 'سجّل دخولك بالجوال أو البريد الإلكتروني' : 'أنشئ حسابك في ثوانٍ — البريد والجوال مطلوبان';
-
     $('menNameField').style.display       = login ? 'none' : 'block';
     $('menEmailField').style.display      = login ? 'none' : 'block';
     $('menPhoneField').style.display      = login ? 'none' : 'block';
     $('menIdentifierField').style.display = login ? 'block' : 'none';
     $('menOptsRow').style.display         = login ? 'flex' : 'none';
     $('menTermsText').style.display       = login ? 'none' : 'block';
-
     $('menSubmitText').textContent = login ? 'تسجيل الدخول' : 'إنشاء الحساب';
     $('menAuthPassword').autocomplete = login ? 'current-password' : 'new-password';
-
     $('menStrength').classList.remove('show', 's1', 's2', 's3', 's4');
     clearError();
-
     setTimeout(() => {
       if (!login && $('menAuthName')) $('menAuthName').focus();
       else if ($('menAuthIdentifier')) $('menAuthIdentifier').focus();
@@ -647,9 +501,7 @@
   function clearError() { $('menError').classList.remove('show'); }
 
   function open(mode) {
-    injectCSS();
-    injectModals();
-    injectAccountPage();
+    injectCSS(); injectModals(); injectAccountPage();
     authMode = mode === 'signup' ? 'signup' : 'login';
     renderMode();
     $('menAuthScreen').classList.add('active');
@@ -712,6 +564,21 @@
 
         try { await sb.from('men_phone_email').insert({ phone, email }); } catch (e) { console.warn(e); }
 
+        // ⭐ حفظ المستخدم في جدول men_users
+        if (data.user) {
+          try {
+            await sb.from('men_users').upsert({
+              id: data.user.id,
+              email: email,
+              name: name,
+              phone: phone,
+              cashback: 0,
+              updated_at: new Date().toISOString()
+            }, { onConflict: 'id' });
+            console.log('✅ User saved in men_users');
+          } catch (e) { console.warn('save user failed:', e); }
+        }
+
         if (!data.session) { showError('✅ تم إنشاء حسابك! يمكنك الآن تسجيل الدخول.'); return; }
         console.log('✅ حساب جديد:', data.user?.email);
         await showSuccess('تم إنشاء حسابك');
@@ -755,7 +622,7 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 👤 ACCOUNT PAGE
+  // 👤 Account Page
   // ═══════════════════════════════════════════════════════════
   function injectAccountPage() {
     if ($('menAccountPage')) return;
@@ -765,10 +632,7 @@
     page.className = 'page-view';
     page.innerHTML = `
       <div class="container">
-        <div class="men-acc-bread">
-          <a data-macc-nav="home">الرئيسية</a><span class="sep"><i class="fas fa-chevron-left"></i></span>
-          <span class="cur">حسابي</span>
-        </div>
+        <div class="men-acc-bread"><a data-macc-nav="home">الرئيسية</a><span class="sep"><i class="fas fa-chevron-left"></i></span><span class="cur">حسابي</span></div>
         <button class="men-acc-back" id="menAccBackBtn" type="button"><i class="fas fa-arrow-right"></i> العودة للمتجر</button>
         <div class="men-acc-wrap">
           <div class="men-acc-cover">
@@ -781,7 +645,7 @@
               <div class="men-acc-cover-info">
                 <h1 class="men-acc-cover-name" id="menAccCoverName">—</h1>
                 <div class="men-acc-cover-email"><i class="fas fa-envelope"></i> <span id="menAccCoverEmail">—</span></div>
-                <div class="men-acc-cover-tags" id="menAccCoverTags">
+                <div class="men-acc-cover-tags">
                   <span class="men-acc-tag blue"><i class="fas fa-crown"></i> عضو مميز</span>
                   <span class="men-acc-tag gold"><i class="fas fa-star"></i> <span id="menAccMemberLevel">برونزي</span></span>
                   <span class="men-acc-tag green"><i class="fas fa-circle-check"></i> موثّق</span>
@@ -795,26 +659,10 @@
           </div>
 
           <div class="men-acc-stats">
-            <div class="men-acc-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.12)">
-              <div class="men-acc-stat-icon"><i class="fas fa-box"></i></div>
-              <div class="men-acc-stat-val" id="menAccStatOrders">0</div>
-              <div class="men-acc-stat-lbl">الطلبات</div>
-            </div>
-            <div class="men-acc-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.12)">
-              <div class="men-acc-stat-icon"><i class="fas fa-wallet"></i></div>
-              <div class="men-acc-stat-val"><span id="menAccStatCashback">0</span> <small style="font-size:.9rem;color:#8a92b0">ر.س</small></div>
-              <div class="men-acc-stat-lbl">الكاش باك</div>
-            </div>
-            <div class="men-acc-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.12)">
-              <div class="men-acc-stat-icon"><i class="fas fa-coins"></i></div>
-              <div class="men-acc-stat-val"><span id="menAccStatSpent">0</span> <small style="font-size:.9rem;color:#8a92b0">ر.س</small></div>
-              <div class="men-acc-stat-lbl">إجمالي المشتريات</div>
-            </div>
-            <div class="men-acc-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.12)">
-              <div class="men-acc-stat-icon"><i class="fas fa-calendar"></i></div>
-              <div class="men-acc-stat-val" id="menAccStatSince" style="font-size:1.05rem">—</div>
-              <div class="men-acc-stat-lbl">عضو منذ</div>
-            </div>
+            <div class="men-acc-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.12)"><div class="men-acc-stat-icon"><i class="fas fa-box"></i></div><div class="men-acc-stat-val" id="menAccStatOrders">0</div><div class="men-acc-stat-lbl">الطلبات</div></div>
+            <div class="men-acc-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.12)"><div class="men-acc-stat-icon"><i class="fas fa-wallet"></i></div><div class="men-acc-stat-val"><span id="menAccStatCashback">0</span> <small style="font-size:.9rem;color:#8a92b0">ر.س</small></div><div class="men-acc-stat-lbl">الكاش باك</div></div>
+            <div class="men-acc-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.12)"><div class="men-acc-stat-icon"><i class="fas fa-coins"></i></div><div class="men-acc-stat-val"><span id="menAccStatSpent">0</span> <small style="font-size:.9rem;color:#8a92b0">ر.س</small></div><div class="men-acc-stat-lbl">إجمالي المشتريات</div></div>
+            <div class="men-acc-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.12)"><div class="men-acc-stat-icon"><i class="fas fa-calendar"></i></div><div class="men-acc-stat-val" id="menAccStatSince" style="font-size:1.05rem">—</div><div class="men-acc-stat-lbl">عضو منذ</div></div>
           </div>
 
           <div class="men-acc-tabs">
@@ -889,28 +737,31 @@
     document.querySelectorAll('[data-macc-panel]').forEach(p => p.classList.toggle('active', p.dataset.maccPanel === tab));
   }
 
-  function fillAccountPage(user) {
+  async function fillAccountPage(user) {
     const meta = user.user_metadata || {};
-    const orders = Array.isArray(meta.orders) ? meta.orders : [];
-    const cashback = Number(meta.cashback || 0);
-    const totalSpent = orders.filter(o => o.status === 'delivered').reduce((s, o) => s + Number(o.total || 0), 0);
     const name = meta.name || user.email?.split('@')[0] || 'مستخدم';
+
+    // ⭐ جلب الطلبات من الجدول
+    let orders = [];
+    try {
+      const { data } = await sb.from('men_orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+      orders = data || [];
+    } catch (e) { console.warn('orders fetch failed', e); }
+
+    // ⭐ جلب الكاش باك من men_users
+    let cashback = 0;
+    try {
+      const { data } = await sb.from('men_users').select('cashback').eq('id', user.id).maybeSingle();
+      cashback = Number(data?.cashback || 0);
+    } catch (e) { console.warn('cashback fetch failed', e); }
+
+    const totalSpent = orders.filter(o => o.status === 'delivered').reduce((s, o) => s + Number(o.total || 0), 0);
     const avatar = meta.avatar_url || makeInitialsAvatar(name, 300);
     const since = user.created_at ? new Date(user.created_at).toLocaleDateString('ar-SA', { year: 'numeric', month: 'long' }) : '—';
 
     $('menAccCoverAvatar').src = avatar;
     $('menAccCoverName').textContent = name;
     $('menAccCoverEmail').textContent = meta.email || user.email || '—';
-
-    // شارة المشرف
-    const tagsEl = $('menAccCoverTags');
-    const existingAdmin = tagsEl.querySelector('.men-acc-tag.admin');
-    if (isAdmin() && !existingAdmin) {
-      const tag = document.createElement('span');
-      tag.className = 'men-acc-tag admin';
-      tag.innerHTML = '<i class="fas fa-shield-halved"></i> مشرف';
-      tagsEl.appendChild(tag);
-    }
 
     let level = 'برونزي';
     if (orders.length >= 20 || totalSpent >= 1000) level = 'ذهبي';
@@ -935,183 +786,49 @@
     renderOrders(orders);
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // 📦 RENDER ORDERS (مع الحالة + الإدارة)
-  // ═══════════════════════════════════════════════════════════
   function renderOrders(orders) {
     const list = $('menAccOrdersList');
     if (!list) return;
-
     if (!orders.length) {
-      list.innerHTML = `
-        <div class="men-acc-empty">
-          <div class="men-acc-empty-icon"><i class="fas fa-shopping-basket"></i></div>
-          <h3>لا يوجد طلبات بعد</h3>
-          <p>ابدأ رحلتك التسوقية واكسب كاش باك 2% على كل عملية</p>
-          <button type="button" id="menAccEmptyShop"><i class="fas fa-shopping-bag"></i> تسوق الآن</button>
-        </div>`;
+      list.innerHTML = `<div class="men-acc-empty"><div class="men-acc-empty-icon"><i class="fas fa-shopping-basket"></i></div><h3>لا يوجد طلبات بعد</h3><p>ابدأ رحلتك التسوقية واكسب كاش باك 2% على كل عملية</p><button type="button" id="menAccEmptyShop"><i class="fas fa-shopping-bag"></i> تسوق الآن</button></div>`;
       const b = $('menAccEmptyShop');
       if (b) b.addEventListener('click', closeAccount);
       return;
     }
-
-    const sorted = [...orders].sort((a, b) => new Date(b.date) - new Date(a.date));
-    const admin = isAdmin();
-
-    list.innerHTML = sorted.map((o, i) => {
-      const status = o.status || 'pending';
-      const st = ORDER_STATUS[status] || ORDER_STATUS.pending;
+    const STATUS_MAP = {
+      pending:   { label: 'قيد الانتظار', color: '#f5b342', bg: 'linear-gradient(135deg,#f5b342,#c98a1e)', icon: 'fa-hourglass-half' },
+      preparing: { label: 'جاري التجهيز', color: '#4a7aff', bg: 'linear-gradient(135deg,#4a7aff,#021ca4)', icon: 'fa-gears' },
+      review:    { label: 'تحت المراجعة', color: '#6a9aff', bg: 'linear-gradient(135deg,#6a9aff,#4a7aff)', icon: 'fa-magnifying-glass' },
+      delivered: { label: 'تم الاستلام',  color: '#4caf50', bg: 'linear-gradient(135deg,#4caf50,#2e7d32)', icon: 'fa-circle-check' },
+      cancelled: { label: 'ملغي',         color: '#d90429', bg: 'linear-gradient(135deg,#d90429,#8b0018)', icon: 'fa-circle-xmark' }
+    };
+    const sorted = [...orders].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    list.innerHTML = sorted.map((o) => {
+      const st = STATUS_MAP[o.status] || STATUS_MAP.pending;
       const items = Array.isArray(o.items) ? o.items : [];
       const itemsTxt = items.slice(0, 3).map(it => `${it.name || 'منتج'} ×${it.qty || 1}`).join(' • ') + (items.length > 3 ? ` +${items.length - 3}` : '');
-      const date = o.date ? new Date(o.date).toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
-      const orderId = o.id || String(sorted.length - i);
-
-      // شريط التقدم
-      const currentIdx = STATUS_ORDER.indexOf(status);
-      const progressSteps = STATUS_ORDER.map((s, idx) => {
-        let cls = 'men-order-step';
-        if (status === 'cancelled') cls += '';
-        else if (idx < currentIdx) cls += ' done';
-        else if (idx === currentIdx) cls += ' current';
-        return `<div class="${cls}"></div>`;
-      }).join('');
-
-      // الكاش باك
-      let cashbackHtml = '';
-      if (status === 'delivered' && o.cashbackApplied) {
-        cashbackHtml = `<div class="men-order-cashback"><i class="fas fa-gift"></i> كاش باك مكتسب: ${Number(o.cashback || 0).toFixed(2)} ر.س</div>`;
-      } else if (status !== 'cancelled' && status !== 'delivered') {
-        const potential = Number(o.total || 0) * CASHBACK_RATE;
-        cashbackHtml = `<div class="men-order-cashback pending"><i class="fas fa-clock"></i> كاش باك متوقع عند الاستلام: ${potential.toFixed(2)} ر.س</div>`;
-      }
-
-      // لوحة الإدارة
-      let adminHtml = '';
-      if (admin) {
-        const options = Object.entries(ORDER_STATUS).map(([key, val]) =>
-          `<option value="${key}" ${key === status ? 'selected' : ''}>${val.label}</option>`
-        ).join('');
-        adminHtml = `
-          <div class="men-order-admin">
-            <span class="men-order-admin-label"><i class="fas fa-shield-halved"></i> تغيير الحالة</span>
-            <select class="men-order-admin-select" data-order-id="${orderId}">
-              ${options}
-            </select>
-            <button class="men-order-admin-apply" data-order-id="${orderId}" type="button">
-              <i class="fas fa-check"></i> تطبيق
-            </button>
-          </div>`;
-      }
-
+      const date = o.created_at ? new Date(o.created_at).toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric' }) : '—';
       return `
-        <div class="men-acc-order" data-order-id="${orderId}">
-          <div class="men-acc-order-badge" style="background:${st.bg};color:${status === 'pending' ? '#000' : '#fff'}">
+        <div class="men-acc-order">
+          <div class="men-acc-order-badge" style="background:${st.bg};color:#fff">
             <i class="fas ${st.icon}"></i> ${st.label}
           </div>
           <div class="men-acc-order-header">
-            <div class="men-acc-order-id" style="--st-color:${st.color}">
-              <span class="dot"></span> طلب #${String(orderId).slice(-6).toUpperCase()}
-            </div>
+            <div class="men-acc-order-id" style="--st-color:${st.color}"><span class="dot"></span> طلب #${String(o.id || '').slice(-6).toUpperCase()}</div>
             <div class="men-acc-order-date"><i class="fas fa-clock"></i> ${date}</div>
           </div>
           <div class="men-acc-order-body">
             <div class="men-acc-order-items">${itemsTxt || 'تفاصيل الطلب'}</div>
             <div class="men-acc-order-total">${Number(o.total || 0).toFixed(2)} ر.س</div>
           </div>
-          ${status !== 'cancelled' ? `<div class="men-order-progress">${progressSteps}</div>` : ''}
-          ${cashbackHtml}
-          ${adminHtml}
         </div>`;
     }).join('');
-
-    // ═══ Bind admin controls ═══
-    if (admin) {
-      list.querySelectorAll('.men-order-admin-apply').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const orderId = btn.dataset.orderId;
-          const sel = list.querySelector(`.men-order-admin-select[data-order-id="${orderId}"]`);
-          const newStatus = sel?.value;
-          if (!newStatus) return;
-          await applyOrderStatus(orderId, newStatus, btn);
-        });
-      });
-    }
-  }
-
-  // ═══════════════════════════════════════════════════════════
-  // ⭐ تطبيق تغيير حالة الطلب (+ كاش باك تلقائي)
-  // ═══════════════════════════════════════════════════════════
-  async function applyOrderStatus(orderId, newStatus, btnEl) {
-    if (!currentUser) return;
-    if (!ORDER_STATUS[newStatus]) { window.showToast?.('حالة غير صحيحة', 'error'); return; }
-
-    const orders = [...(currentUser.user_metadata?.orders || [])];
-    const idx = orders.findIndex(o => String(o.id) === String(orderId));
-    if (idx < 0) { window.showToast?.('الطلب غير موجود', 'error'); return; }
-
-    const order = { ...orders[idx] };
-    const oldStatus = order.status || 'pending';
-    if (oldStatus === newStatus) { window.showToast?.('الحالة نفسها', 'info'); return; }
-
-    order.status = newStatus;
-    order.updatedAt = new Date().toISOString();
-
-    let newCashback = Number(currentUser.user_metadata?.cashback || 0);
-    let cashbackMsg = '';
-
-    // ✅ تطبيق الكاش باك عند التسليم
-    if (newStatus === 'delivered' && !order.cashbackApplied) {
-      const earned = Math.round(Number(order.total || 0) * CASHBACK_RATE * 100) / 100;
-      order.cashback = earned;
-      order.cashbackApplied = true;
-      order.cashbackAppliedAt = new Date().toISOString();
-      newCashback = Math.round((newCashback + earned) * 100) / 100;
-      cashbackMsg = ` + ${earned.toFixed(2)} ر.س كاش باك`;
-    }
-
-    // ❌ إلغاء الكاش باك عند تغيير الحالة من delivered
-    if (oldStatus === 'delivered' && newStatus !== 'delivered' && order.cashbackApplied) {
-      const refund = Number(order.cashback || 0);
-      newCashback = Math.max(0, Math.round((newCashback - refund) * 100) / 100);
-      order.cashbackApplied = false;
-      order.cashback = 0;
-      cashbackMsg = ` - خصم ${refund.toFixed(2)} ر.س من الكاش باك`;
-    }
-
-    // إلغاء الكاش باك في حالة cancelled
-    if (newStatus === 'cancelled' && order.cashbackApplied) {
-      const refund = Number(order.cashback || 0);
-      newCashback = Math.max(0, Math.round((newCashback - refund) * 100) / 100);
-      order.cashbackApplied = false;
-      order.cashback = 0;
-      cashbackMsg = ` - خصم ${refund.toFixed(2)} ر.س`;
-    }
-
-    orders[idx] = order;
-
-    if (btnEl) { btnEl.disabled = true; btnEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري...'; }
-
-    try {
-      const { data, error } = await sb.auth.updateUser({
-        data: { orders, cashback: newCashback }
-      });
-      if (error) throw error;
-      currentUser = data.user;
-      fillAccountPage(data.user);
-      syncUI(data.user);
-      window.showToast?.(`✅ تم التحديث إلى "${ORDER_STATUS[newStatus].label}"${cashbackMsg}`, 'success');
-    } catch (err) {
-      console.error(err);
-      window.showToast?.('فشل التحديث: ' + err.message, 'error');
-    } finally {
-      if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = '<i class="fas fa-check"></i> تطبيق'; }
-    }
   }
 
   async function saveProfile() {
     const name = $('menAccSetName').value.trim();
     const phone = $('menAccSetPhone').value.trim();
-    if (!name) { window.showToast?.('الرجاء إدخال الاسم', 'error'); return; }
+    if (!name) { if (window.showToast) window.showToast('الرجاء إدخال الاسم', 'error'); return; }
     const btn = $('menAccSaveBtn');
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
@@ -1119,11 +836,12 @@
       const { data, error } = await sb.auth.updateUser({ data: { name, phone } });
       if (error) throw error;
       currentUser = data.user;
-      fillAccountPage(data.user);
+      await sb.from('men_users').update({ name, phone, updated_at: new Date().toISOString() }).eq('id', data.user.id);
+      await fillAccountPage(data.user);
       syncUI(data.user);
-      window.showToast?.('✅ تم حفظ التغييرات', 'success');
+      if (window.showToast) window.showToast('✅ تم حفظ التغييرات', 'success');
     } catch (err) {
-      window.showToast?.('فشل الحفظ: ' + err.message, 'error');
+      if (window.showToast) window.showToast('فشل الحفظ: ' + err.message, 'error');
     } finally {
       btn.disabled = false;
       btn.innerHTML = '<i class="fas fa-check"></i> حفظ التغييرات';
@@ -1131,8 +849,8 @@
   }
 
   function deleteAccount() {
-    if (!confirm('⚠️ هل أنت متأكد من حذف حسابك نهائياً؟\nهذا الإجراء لا يمكن التراجع عنه.')) return;
-    window.showToast?.('تواصل مع الدعم: clan.men.ts@gmail.com', 'info');
+    if (!confirm('⚠️ هل أنت متأكد من حذف حسابك نهائياً؟')) return;
+    if (window.showToast) window.showToast('تواصل مع الدعم: clan.men.ts@gmail.com', 'info');
   }
 
   function shareAccount() {
@@ -1142,19 +860,16 @@
     else navigator.clipboard.writeText(text).then(() => window.showToast?.('✅ تم نسخ الرابط', 'success'));
   }
 
-  function openAccount() {
+  async function openAccount() {
     if (!currentUser) return open('login');
-    injectCSS();
-    injectModals();
-    injectAccountPage();
-    fillAccountPage(currentUser);
+    injectCSS(); injectModals(); injectAccountPage();
+    await fillAccountPage(currentUser);
     hideAllPages();
     $('menAccountPage').classList.add('active');
     history.replaceState(null, '', '#account');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    sb.auth.getUser().then(({ data }) => {
-      if (data?.user) { currentUser = data.user; fillAccountPage(data.user); }
-    });
+    const { data } = await sb.auth.getUser();
+    if (data?.user) { currentUser = data.user; await fillAccountPage(data.user); }
   }
 
   function closeAccount() {
@@ -1170,7 +885,7 @@
   async function logout() {
     await sb.auth.signOut();
     closeAccount();
-    window.showToast?.('تم تسجيل الخروج', 'info');
+    if (window.showToast) window.showToast('تم تسجيل الخروج', 'info');
   }
 
   function syncUI(user) {
@@ -1198,33 +913,66 @@
 
   // ═══ Public API ═══
   window.MEN_AUTH = {
-    CASHBACK_RATE, ORDER_STATUS, open, openAccount, logout,
+    CASHBACK_RATE, open, openAccount, logout,
     getCurrentUser: () => currentUser,
-    isAdmin,
-    makeInitialsAvatar,
-    updateOrderStatus: async (orderId, status) => applyOrderStatus(orderId, status, null),
-    addCashback: async (a) => {
-      if (!currentUser || a <= 0) return;
-      const c = Number(currentUser.user_metadata?.cashback || 0) + Number(a);
-      await sb.auth.updateUser({ data: { cashback: Math.round(c * 100) / 100 } });
-    },
-    deductCashback: async (a) => {
-      if (!currentUser || a <= 0) return;
-      const c = Math.max(0, Number(currentUser.user_metadata?.cashback || 0) - Number(a));
-      await sb.auth.updateUser({ data: { cashback: Math.round(c * 100) / 100 } });
-    },
+    isAdmin, makeInitialsAvatar,
+
     addOrder: async (order) => {
       if (!currentUser) return;
-      const orders = currentUser.user_metadata?.orders || [];
-      orders.push({
-        ...order,
-        id: 'M' + Date.now().toString().slice(-6),
-        date: new Date().toISOString(),
-        status: 'pending',
-        cashback: 0,
-        cashbackApplied: false
+      const orderId = 'M' + Date.now().toString().slice(-8);
+      const meta = currentUser.user_metadata || {};
+
+      try {
+        const { error } = await sb.from('men_orders').insert({
+          id: orderId,
+          user_id: currentUser.id,
+          user_email: meta.email || currentUser.email,
+          user_name: meta.name || '',
+          user_phone: meta.phone || '',
+          items: order.items || [],
+          total: Number(order.total) || 0,
+          status: 'pending',
+          cashback: 0,
+          cashback_applied: false
+        });
+        if (error) console.warn('insert order error:', error);
+
+        await sb.from('men_users').upsert({
+          id: currentUser.id,
+          email: meta.email || currentUser.email,
+          name: meta.name || '',
+          phone: meta.phone || '',
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'id' });
+
+        console.log('✅ Order created:', orderId);
+        return orderId;
+      } catch (err) {
+        console.error('addOrder failed:', err);
+        throw err;
+      }
+    },
+
+    addCashback: async (a) => {
+      if (!currentUser || a <= 0) return;
+      await sb.from('men_cashback_log').insert({
+        user_id: currentUser.id, user_email: currentUser.email, amount: Number(a),
+        reason: 'كاش باك يدوي', type: 'manual', created_by: currentUser.email
       });
-      await sb.auth.updateUser({ data: { orders } });
+      const { data } = await sb.from('men_users').select('cashback').eq('id', currentUser.id).maybeSingle();
+      const newCb = Math.round((Number(data?.cashback || 0) + Number(a)) * 100) / 100;
+      await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', currentUser.id);
+    },
+
+    deductCashback: async (a) => {
+      if (!currentUser || a <= 0) return;
+      await sb.from('men_cashback_log').insert({
+        user_id: currentUser.id, user_email: currentUser.email, amount: -Number(a),
+        reason: 'خصم', type: 'manual', created_by: currentUser.email
+      });
+      const { data } = await sb.from('men_users').select('cashback').eq('id', currentUser.id).maybeSingle();
+      const newCb = Math.max(0, Math.round((Number(data?.cashback || 0) - Number(a)) * 100) / 100);
+      await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', currentUser.id);
     }
   };
 
@@ -1234,10 +982,10 @@
     injectModals();
     const { data: { session } } = await sb.auth.getSession();
     syncUI(session?.user || null);
-    sb.auth.onAuthStateChange((event, session) => {
+    sb.auth.onAuthStateChange(async (event, session) => {
       console.log('[MEN_AUTH]', event);
       syncUI(session?.user || null);
-      if ($('menAccountPage')?.classList.contains('active') && session?.user) fillAccountPage(session.user);
+      if ($('menAccountPage')?.classList.contains('active') && session?.user) await fillAccountPage(session.user);
     });
     const av = $('menHeaderAvatar');
     if (av && !av.dataset.bound) {
