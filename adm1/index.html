@@ -169,10 +169,10 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     <div class="ma-gate-card">
       <div class="ma-gate-icon"><i class="fas fa-shield-halved"></i></div>
       <h1>لوحة إدارة الطلبات</h1>
-      <p>يجب تسجيل الدخول بحساب المشرف للوصول</p>
+      <p>سجّل دخولك بحسابك للوصول</p>
       <div class="ma-field">
         <label>البريد الإلكتروني</label>
-        <input type="email" id="maGateEmail" placeholder="admin@example.com" autocomplete="email">
+        <input type="email" id="maGateEmail" placeholder="your@email.com" autocomplete="email">
       </div>
       <div class="ma-field">
         <label>كلمة المرور</label>
@@ -295,7 +295,12 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   // ═══════════════════════════════════════════════════════════
   const SUPABASE_URL  = 'https://xoqwzluyxynqpdpmidts.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
-  const ADMIN_EMAILS  = ['clan.men.ts@gmail.com']; // ⭐ أضف بريدك
+
+  // ⭐ قائمة المشرفين:
+  // - فارغة [] = أي حساب مسجل يدخل (للتجربة)
+  // - فيها بريد = فقط هؤلاء يدخلون
+  const ADMIN_EMAILS = [];
+
   const CASHBACK_RATE = 0.02;
 
   const ORDER_STATUS = {
@@ -311,6 +316,14 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   let allOrders = [];
   let selectedOrderForCashback = null;
   const $ = id => document.getElementById(id);
+
+  // ⭐ دالة فحص المشرف — ترجع true إذا:
+  // - القائمة فارغة (يقبل أي حساب)
+  // - أو البريد موجود في القائمة
+  function isAdminEmail(email) {
+    if (!ADMIN_EMAILS || ADMIN_EMAILS.length === 0) return true;
+    return ADMIN_EMAILS.includes((email || '').toLowerCase());
+  }
 
   // ═══════════════════════════════════════════════════════════
   // 🚀 Init
@@ -356,7 +369,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   // ═══════════════════════════════════════════════════════════
   async function checkAuth() {
     const { data: { session } } = await sb.auth.getSession();
-    if (session?.user && ADMIN_EMAILS.includes((session.user.email || '').toLowerCase())) {
+    if (session?.user && isAdminEmail(session.user.email)) {
       currentUser = session.user;
       showDashboard();
     } else {
@@ -383,8 +396,17 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     const err = $('maGateErr');
     err.classList.remove('show');
 
-    if (!email || !pass) { err.textContent = 'الرجاء إدخال البريد وكلمة المرور'; err.classList.add('show'); return; }
-    if (!ADMIN_EMAILS.includes(email)) { err.textContent = 'هذا الحساب ليس مشرفاً'; err.classList.add('show'); return; }
+    if (!email || !pass) {
+      err.textContent = 'الرجاء إدخال البريد وكلمة المرور';
+      err.classList.add('show');
+      return;
+    }
+
+    if (!isAdminEmail(email)) {
+      err.textContent = 'هذا الحساب ليس مشرفاً';
+      err.classList.add('show');
+      return;
+    }
 
     const btn = $('maGateBtn');
     btn.disabled = true;
