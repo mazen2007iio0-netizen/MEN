@@ -1,5 +1,5 @@
 /* ============================================================
-   ✨ MEN Store — Auth v9 (Orders in DB + Users)
+   ✨ MEN Store — Auth v10 (Orders + Users + Customer Chat)
    ============================================================ */
 (function () {
   'use strict';
@@ -26,7 +26,7 @@
   });
   window.MEN_SUPABASE = sb;
 
-  console.log('%c✨ MEN AUTH v9', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
+  console.log('%c✨ MEN AUTH v10', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
   const CASHBACK_RATE = 0.02;
   const PHONE_DOMAIN  = 'men-store.local';
@@ -35,6 +35,8 @@
   let currentUser = null;
   let authMode = 'login';
   let rememberMe = true;
+  let chatPollTimer = null;
+  let chatLastCount = 0;
   const $ = id => document.getElementById(id);
   const isAdmin = () => !!currentUser && ADMIN_EMAILS.includes((currentUser.email || '').toLowerCase());
 
@@ -51,6 +53,19 @@
 
   function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim().toLowerCase());
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function fmtChatTime(d) {
+    if (!d) return '—';
+    try {
+      return new Date(d).toLocaleString('ar-SA', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' });
+    } catch { return '—'; }
   }
 
   function makeInitialsAvatar(name, size = 200) {
@@ -209,8 +224,9 @@
       .men-acc-stat-lbl{font-size:.78rem;color:#8a92b0;font-weight:700}
       .men-acc-tabs{display:flex;gap:6px;background:rgba(10,16,32,.6);border:1px solid rgba(74,122,255,.1);border-radius:60px;padding:6px;margin-bottom:24px;overflow-x:auto;backdrop-filter:blur(12px);scrollbar-width:none}
       .men-acc-tabs::-webkit-scrollbar{display:none}
-      .men-acc-tab{flex:1;min-width:130px;padding:13px 20px;border-radius:60px;background:transparent;border:none;color:#8a92b0;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+      .men-acc-tab{flex:1;min-width:120px;padding:13px 18px;border-radius:60px;background:transparent;border:none;color:#8a92b0;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;position:relative;transition:all .3s}
       .men-acc-tab.active{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;box-shadow:0 8px 24px -6px rgba(74,122,255,.6)}
+      .men-acc-tab .men-chat-badge{position:absolute;top:2px;right:8px;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:linear-gradient(135deg,#d90429,#8b0018);color:#fff;font-size:.66rem;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(6,8,18,.9)}
       .men-acc-panel{display:none}
       .men-acc-panel.active{display:block;animation:menPanelIn .5s}
       @keyframes menPanelIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
@@ -258,8 +274,39 @@
       .men-acc-danger{margin-top:20px;padding:22px 24px;background:rgba(217,4,41,.06);border:1px solid rgba(217,4,41,.2);border-radius:20px}
       .men-acc-danger h4{color:#ff6b6b;font-size:1rem;margin-bottom:8px;font-weight:800;display:flex;align-items:center;gap:10px}
       .men-acc-danger p{color:#d0a8a8;font-size:.85rem;margin-bottom:14px;line-height:1.7}
+      /* ===== Chat inside account ===== */
+      .men-acc-chat-wrap{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:26px;overflow:hidden;height:min(640px,75vh);display:flex;flex-direction:column}
+      .men-acc-chat-head{padding:18px 22px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(74,122,255,.08),transparent)}
+      .men-acc-chat-head .avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:.95rem;flex-shrink:0;box-shadow:0 6px 18px -6px rgba(74,122,255,.7)}
+      .men-acc-chat-head .info{flex:1;min-width:0}
+      .men-acc-chat-head .name{font-weight:900;color:#fff;font-size:.98rem;line-height:1.2}
+      .men-acc-chat-head .status{font-size:.72rem;color:#66bb6a;font-weight:700;display:flex;align-items:center;gap:5px;margin-top:3px}
+      .men-acc-chat-head .status i{font-size:.5rem;animation:menPulse 1.8s ease-in-out infinite}
+      @keyframes menPulse{0%,100%{opacity:1}50%{opacity:.35}}
+      .men-acc-chat-head .refresh{width:40px;height:40px;border-radius:12px;background:rgba(74,122,255,.1);border:1px solid rgba(74,122,255,.2);color:#6a9aff;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+      .men-acc-chat-head .refresh:hover{background:rgba(74,122,255,.2);transform:rotate(180deg)}
+      .men-acc-chat-body{flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:12px;background:rgba(0,0,0,.12)}
+      .men-acc-chat-body::-webkit-scrollbar{width:6px}
+      .men-acc-chat-body::-webkit-scrollbar-thumb{background:rgba(74,122,255,.25);border-radius:6px}
+      .men-acc-chat-body::-webkit-scrollbar-track{background:transparent}
+      .men-acc-msg{max-width:78%;padding:11px 15px;border-radius:16px;font-size:.88rem;line-height:1.7;word-wrap:break-word;animation:menMsgIn .25s ease}
+      @keyframes menMsgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+      .men-acc-msg .meta{font-size:.62rem;font-weight:800;opacity:.8;margin-bottom:4px;letter-spacing:.5px;text-transform:uppercase}
+      .men-acc-msg .time{font-size:.62rem;font-weight:700;opacity:.75;margin-top:5px;text-align:left;direction:ltr}
+      .men-acc-msg.customer{align-self:flex-end;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;border-bottom-left-radius:4px}
+      .men-acc-msg.admin{align-self:flex-start;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#e0e6f4;border-bottom-right-radius:4px}
+      .men-acc-msg.note{align-self:center;background:linear-gradient(135deg,rgba(147,51,234,.22),rgba(107,33,168,.22));border:1px dashed rgba(147,51,234,.5);color:#e9d5ff;max-width:88%}
+      .men-acc-msg.note .meta{color:#c084fc}
+      .men-acc-chat-empty{text-align:center;padding:50px 20px;color:#8a92b0;font-weight:700;font-size:.88rem;margin:auto}
+      .men-acc-chat-empty i{font-size:2.5rem;color:#4a7aff;opacity:.5;display:block;margin-bottom:14px}
+      .men-acc-chat-foot{padding:14px 18px;border-top:1px solid rgba(74,122,255,.14);background:rgba(0,0,0,.2);display:flex;gap:10px;align-items:flex-end}
+      .men-acc-chat-foot textarea{flex:1;padding:12px 16px;border-radius:14px;background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.2);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.9rem;outline:none;transition:all .3s;resize:none;min-height:46px;max-height:120px;line-height:1.5}
+      .men-acc-chat-foot textarea:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
+      .men-acc-chat-send{width:46px;height:46px;border-radius:14px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;cursor:pointer;font-size:1rem;transition:all .3s;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 22px -8px rgba(74,122,255,.9)}
+      .men-acc-chat-send:hover:not(:disabled){transform:translateY(-2px)}
+      .men-acc-chat-send:disabled{opacity:.5;cursor:not-allowed;transform:none}
       @media (max-width:992px){.men-acc-stats{grid-template-columns:repeat(2,1fr)}.men-acc-overview{grid-template-columns:1fr}.men-acc-settings-grid{grid-template-columns:1fr}}
-      @media (max-width:768px){.men-acc-cover-inner{padding:32px 24px 26px;flex-direction:column;text-align:center;gap:22px}.men-acc-cover-avatar{width:100px;height:100px}.men-acc-cover-email,.men-acc-cover-tags,.men-acc-cover-actions{justify-content:center}.men-acc-tab{min-width:auto;padding:11px 14px;font-size:.8rem}.men-acc-tab span{display:none}.men-acc-card{padding:22px 20px}.men-acc-cashback{padding:26px 22px}.men-acc-stat{padding:18px 16px}}
+      @media (max-width:768px){.men-acc-cover-inner{padding:32px 24px 26px;flex-direction:column;text-align:center;gap:22px}.men-acc-cover-avatar{width:100px;height:100px}.men-acc-cover-email,.men-acc-cover-tags,.men-acc-cover-actions{justify-content:center}.men-acc-tab{min-width:auto;padding:11px 12px;font-size:.8rem}.men-acc-tab span{display:none}.men-acc-card{padding:22px 20px}.men-acc-cashback{padding:26px 22px}.men-acc-stat{padding:18px 16px}.men-acc-chat-wrap{height:min(560px,72vh)}}
     `;
     document.head.appendChild(s);
   }
@@ -564,15 +611,10 @@
 
         try { await sb.from('men_phone_email').insert({ phone, email }); } catch (e) { console.warn(e); }
 
-        // ⭐ حفظ المستخدم في جدول men_users
         if (data.user) {
           try {
             await sb.from('men_users').upsert({
-              id: data.user.id,
-              email: email,
-              name: name,
-              phone: phone,
-              cashback: 0,
+              id: data.user.id, email, name, phone, cashback: 0,
               updated_at: new Date().toISOString()
             }, { onConflict: 'id' });
             console.log('✅ User saved in men_users');
@@ -668,6 +710,7 @@
           <div class="men-acc-tabs">
             <button class="men-acc-tab active" data-macc-tab="overview" type="button"><i class="fas fa-house"></i> <span>نظرة عامة</span></button>
             <button class="men-acc-tab" data-macc-tab="orders" type="button"><i class="fas fa-box"></i> <span>طلباتي</span></button>
+            <button class="men-acc-tab" data-macc-tab="chat" type="button" id="menAccChatTab"><i class="fas fa-comments"></i> <span>المحادثة</span><span class="men-chat-badge" id="menChatBadge" style="display:none">0</span></button>
             <button class="men-acc-tab" data-macc-tab="settings" type="button"><i class="fas fa-gear"></i> <span>الإعدادات</span></button>
           </div>
 
@@ -695,6 +738,26 @@
             <div class="men-acc-card">
               <div class="men-acc-card-title"><span class="icn"><i class="fas fa-receipt"></i></span> سجل الطلبات</div>
               <div class="men-acc-orders-list" id="menAccOrdersList"></div>
+            </div>
+          </div>
+
+          <div class="men-acc-panel" data-macc-panel="chat">
+            <div class="men-acc-chat-wrap">
+              <div class="men-acc-chat-head">
+                <div class="avatar"><i class="fas fa-headset"></i></div>
+                <div class="info">
+                  <div class="name">فريق دعم MEN Store</div>
+                  <div class="status"><i class="fas fa-circle"></i> متصل الآن</div>
+                </div>
+                <button class="refresh" id="menChatRefresh" type="button" title="تحديث"><i class="fas fa-rotate"></i></button>
+              </div>
+              <div class="men-acc-chat-body" id="menChatBody">
+                <div class="men-acc-chat-empty"><i class="fas fa-comments"></i> جاري تحميل المحادثة...</div>
+              </div>
+              <div class="men-acc-chat-foot">
+                <textarea id="menChatInput" placeholder="اكتب رسالتك لفريق الدعم..." rows="1"></textarea>
+                <button class="men-acc-chat-send" id="menChatSend" type="button"><i class="fas fa-paper-plane"></i></button>
+              </div>
             </div>
           </div>
 
@@ -730,25 +793,188 @@
     $('menAccLogoutBtn').addEventListener('click', logout);
     $('menAccDeleteBtn').addEventListener('click', deleteAccount);
     $('menAccShareBtn').addEventListener('click', shareAccount);
+
+    // Chat bindings
+    $('menChatSend').addEventListener('click', sendCustomerChat);
+    $('menChatRefresh').addEventListener('click', () => loadCustomerChat(true));
+    const chatInp = $('menChatInput');
+    chatInp.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendCustomerChat(); }
+    });
+    chatInp.addEventListener('input', () => {
+      chatInp.style.height = 'auto';
+      chatInp.style.height = Math.min(chatInp.scrollHeight, 120) + 'px';
+    });
   }
 
   function switchAccountTab(tab) {
     document.querySelectorAll('[data-macc-tab]').forEach(b => b.classList.toggle('active', b.dataset.maccTab === tab));
     document.querySelectorAll('[data-macc-panel]').forEach(p => p.classList.toggle('active', p.dataset.maccPanel === tab));
+
+    // إدارة polling للمحادثة
+    if (tab === 'chat') {
+      loadCustomerChat();
+      startChatPolling();
+      // إخفاء شارة عدد الرسائل غير المقروءة
+      const badge = $('menChatBadge');
+      if (badge) badge.style.display = 'none';
+    } else {
+      stopChatPolling();
+    }
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // 💬 Chat — Customer Side
+  // ═══════════════════════════════════════════════════════════
+  async function loadCustomerChat(showLoader = false) {
+    if (!currentUser) return;
+    const body = $('menChatBody');
+    if (!body) return;
+
+    if (showLoader) {
+      body.innerHTML = '<div class="men-acc-chat-empty"><i class="fas fa-spinner fa-spin"></i> جاري التحديث...</div>';
+    }
+
+    try {
+      const { data, error } = await sb.from('men_messages')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: true })
+        .limit(300);
+
+      if (error) throw error;
+
+      renderCustomerChat(data || []);
+    } catch (err) {
+      console.error('loadCustomerChat error:', err);
+      body.innerHTML = `<div class="men-acc-chat-empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i> فشل التحميل<br><span style="font-size:.74rem;opacity:.8;margin-top:8px;display:block">${escapeHtml(err.message || '')}</span></div>`;
+    }
+  }
+
+  function renderCustomerChat(msgs) {
+    const body = $('menChatBody');
+    if (!body) return;
+
+    if (!msgs.length) {
+      body.innerHTML = '<div class="men-acc-chat-empty"><i class="fas fa-comments"></i> لا يوجد رسائل بعد<br><span style="font-size:.78rem;opacity:.75;margin-top:6px;display:block">ابدأ المحادثة مع فريق الدعم من الأسفل</span></div>';
+      chatLastCount = 0;
+      return;
+    }
+
+    // إذا ما تغير شي، لا نعيد الرسم (تفادي وميض الشاشة)
+    if (msgs.length === chatLastCount && body.querySelectorAll('.men-acc-msg').length === msgs.length) {
+      return;
+    }
+    chatLastCount = msgs.length;
+
+    body.innerHTML = msgs.map(m => {
+      const time = fmtChatTime(m.created_at);
+
+      if (m.type === 'note') {
+        return `<div class="men-acc-msg note">
+          <div class="meta"><i class="fas fa-comment-dots"></i> ملاحظة من الإدارة</div>
+          <div>${escapeHtml(m.message)}</div>
+          <div class="time">${time}</div>
+        </div>`;
+      }
+
+      const isCustomer = m.sender === 'customer';
+      const cls = isCustomer ? 'customer' : 'admin';
+      const label = isCustomer ? 'أنت' : (m.sender_name || 'الدعم');
+      return `<div class="men-acc-msg ${cls}">
+        <div class="meta">${escapeHtml(label)}</div>
+        <div>${escapeHtml(m.message)}</div>
+        <div class="time">${time}</div>
+      </div>`;
+    }).join('');
+
+    // تمرير للأسفل
+    body.scrollTop = body.scrollHeight;
+  }
+
+  async function sendCustomerChat() {
+    if (!currentUser) return;
+    const input = $('menChatInput');
+    const btn = $('menChatSend');
+    const text = input?.value?.trim();
+    if (!text) return;
+
+    btn.disabled = true;
+
+    try {
+      const { error } = await sb.from('men_messages').insert({
+        user_id: currentUser.id,
+        user_email: currentUser.email,
+        sender: 'customer',
+        sender_name: currentUser.user_metadata?.name || 'العميل',
+        sender_email: currentUser.email,
+        message: text,
+        type: 'chat',
+        is_read: false
+      });
+      if (error) throw error;
+
+      input.value = '';
+      input.style.height = 'auto';
+      chatLastCount = 0; // فرض إعادة الرسم
+      await loadCustomerChat();
+
+    } catch (err) {
+      console.error('sendCustomerChat error:', err);
+      if (window.showToast) window.showToast('فشل الإرسال: ' + err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      input.focus();
+    }
+  }
+
+  function startChatPolling() {
+    stopChatPolling();
+    chatPollTimer = setInterval(() => {
+      if (!currentUser) return;
+      if (!document.querySelector('[data-macc-panel="chat"]')?.classList.contains('active')) return;
+      loadCustomerChat();
+    }, 4000);
+  }
+
+  function stopChatPolling() {
+    if (chatPollTimer) { clearInterval(chatPollTimer); chatPollTimer = null; }
+  }
+
+  // فحص دوري للرسائل الجديدة (حتى لو المستخدم مو فاتح صفحة الحساب)
+  async function checkUnreadMessages() {
+    if (!currentUser) return;
+    try {
+      const { count, error } = await sb.from('men_messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', currentUser.id)
+        .eq('is_read', false)
+        .in('sender', ['admin']);
+      if (error) return;
+      const badge = $('menChatBadge');
+      if (!badge) return;
+      if (count && count > 0 && !document.querySelector('[data-macc-panel="chat"]')?.classList.contains('active')) {
+        badge.textContent = count > 9 ? '9+' : count;
+        badge.style.display = 'flex';
+      } else if (!count) {
+        badge.style.display = 'none';
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // 📊 Fill Account Page
+  // ═══════════════════════════════════════════════════════════
   async function fillAccountPage(user) {
     const meta = user.user_metadata || {};
     const name = meta.name || user.email?.split('@')[0] || 'مستخدم';
 
-    // ⭐ جلب الطلبات من الجدول
     let orders = [];
     try {
       const { data } = await sb.from('men_orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
       orders = data || [];
     } catch (e) { console.warn('orders fetch failed', e); }
 
-    // ⭐ جلب الكاش باك من men_users
     let cashback = 0;
     try {
       const { data } = await sb.from('men_users').select('cashback').eq('id', user.id).maybeSingle();
@@ -784,6 +1010,7 @@
     $('menAccSetEmail').value = meta.email || user.email || '';
 
     renderOrders(orders);
+    checkUnreadMessages();
   }
 
   function renderOrders(orders) {
@@ -873,6 +1100,7 @@
   }
 
   function closeAccount() {
+    stopChatPolling();
     hideAllPages();
     const store = $('storePage');
     if (store) store.classList.add('active');
@@ -883,6 +1111,7 @@
   function hideAllPages() { document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active')); }
 
   async function logout() {
+    stopChatPolling();
     await sb.auth.signOut();
     closeAccount();
     if (window.showToast) window.showToast('تم تسجيل الخروج', 'info');
@@ -899,6 +1128,7 @@
         avatar.src = user.user_metadata?.avatar_url || makeInitialsAvatar(name, 100);
         avatar.style.display = 'block';
       }
+      setTimeout(checkUnreadMessages, 800);
     } else {
       if (loginBtn) loginBtn.style.display = 'inline-flex';
       if (avatar) avatar.style.display = 'none';
@@ -995,6 +1225,8 @@
     if (location.hash === '#account') {
       setTimeout(() => { if (currentUser) openAccount(); }, 500);
     }
+    // فحص دوري كل 60 ثانية للرسائل غير المقروءة
+    setInterval(checkUnreadMessages, 60000);
   }
 
   if (document.readyState === 'loading') {
