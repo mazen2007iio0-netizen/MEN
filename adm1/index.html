@@ -61,13 +61,21 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
 .ma-container{max-width:1400px;margin:0 auto;padding:0 24px}
 
-.ma-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+/* ===== Stats section ===== */
+.ma-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
 .ma-stat{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:22px;padding:22px;position:relative;overflow:hidden;transition:all .35s}
 .ma-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,#4a7aff);opacity:.9}
 .ma-stat:hover{transform:translateY(-5px);border-color:rgba(74,122,255,.35);box-shadow:0 22px 50px -15px rgba(2,28,164,.6)}
 .ma-stat-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:14px;background:var(--icon-bg);color:var(--accent)}
 .ma-stat-val{font-size:1.8rem;font-weight:900;line-height:1.1;margin-bottom:4px;letter-spacing:-1px}
 .ma-stat-lbl{font-size:.78rem;color:#8a92b0;font-weight:700}
+
+.ma-stats-sm{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.ma-stat-sm{background:linear-gradient(145deg,rgba(14,20,38,.6),rgba(8,12,24,.8));border:1px solid rgba(74,122,255,.1);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;transition:all .3s}
+.ma-stat-sm:hover{border-color:rgba(74,122,255,.28);transform:translateY(-3px)}
+.ma-stat-sm-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;background:var(--icon-bg);color:var(--accent)}
+.ma-stat-sm-val{font-size:1.1rem;font-weight:900;line-height:1.2}
+.ma-stat-sm-lbl{font-size:.7rem;color:#8a92b0;font-weight:700;margin-top:2px}
 
 .ma-filters{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:22px;padding:20px 22px;margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .ma-search{flex:1;min-width:220px;position:relative}
@@ -111,7 +119,18 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-btn-deduct:hover{transform:translateY(-2px)}
 .ma-btn-delete{background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff;box-shadow:0 8px 22px -8px rgba(139,0,24,.9)}
 .ma-btn-delete:hover{transform:translateY(-2px);background:linear-gradient(135deg,#a30020,#6b0014)}
+.ma-btn-chat{background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff;box-shadow:0 8px 22px -8px rgba(74,122,255,.9)}
+.ma-btn-chat:hover{transform:translateY(-2px)}
+.ma-btn-note{background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff;box-shadow:0 8px 22px -8px rgba(147,51,234,.8)}
+.ma-btn-note:hover{transform:translateY(-2px)}
 .ma-btn-action:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
+
+/* ===== User stats block ===== */
+.ma-user-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px;background:linear-gradient(135deg,rgba(74,122,255,.08),rgba(2,28,164,.05));border:1px solid rgba(74,122,255,.18);border-radius:16px;margin-bottom:14px}
+.ma-us-item{text-align:center;padding:6px 4px;border-left:1px dashed rgba(74,122,255,.2)}
+.ma-us-item:first-child{border-left:none}
+.ma-us-val{font-size:1.05rem;font-weight:900;background:linear-gradient(135deg,#fff,#6a9aff);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.2}
+.ma-us-lbl{font-size:.66rem;color:#8a92b0;font-weight:800;margin-top:4px;text-transform:uppercase;letter-spacing:.6px}
 
 .ma-empty{text-align:center;padding:80px 24px;background:rgba(74,122,255,.04);border:1.5px dashed rgba(74,122,255,.25);border-radius:24px}
 .ma-empty i{font-size:3rem;color:#4a7aff;margin-bottom:16px;opacity:.7}
@@ -124,13 +143,15 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-modal-back{display:none;position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
 .ma-modal-back.show{display:flex}
 .ma-modal{background:linear-gradient(145deg,rgba(14,20,38,.98),rgba(8,12,24,1));border:1px solid rgba(74,122,255,.14);border-radius:24px;max-width:440px;width:100%;padding:30px 28px;box-shadow:0 40px 100px -30px rgba(2,28,164,.9)}
+.ma-modal.ma-modal-lg{max-width:560px;display:flex;flex-direction:column;max-height:90vh;padding:0;overflow:hidden}
 .ma-modal-title{display:flex;align-items:center;gap:12px;font-size:1.15rem;font-weight:900;margin-bottom:8px}
-.ma-modal-title i{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .3s}
+.ma-modal-title i{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .3s;flex-shrink:0}
 .ma-modal-sub{color:#8a92b0;font-size:.85rem;font-weight:600;margin-bottom:22px;line-height:1.7}
 .ma-modal-field{margin-bottom:14px}
 .ma-modal-field label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
-.ma-modal-field input{width:100%;padding:14px 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.94rem;outline:none;transition:all .3s}
-.ma-modal-field input:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.15)}
+.ma-modal-field input,.ma-modal-field textarea{width:100%;padding:14px 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.94rem;outline:none;transition:all .3s;resize:none}
+.ma-modal-field textarea{min-height:120px;line-height:1.7}
+.ma-modal-field input:focus,.ma-modal-field textarea:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.15)}
 .ma-modal-field input[type=number]{direction:ltr;text-align:right;font-size:1.1rem;font-weight:800}
 .ma-quick{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .ma-quick button{padding:8px 16px;border-radius:20px;border:1.5px solid rgba(74,122,255,.14);background:rgba(74,122,255,.08);color:#6a9aff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;transition:all .3s}
@@ -141,12 +162,46 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-modal-actions .cancel:hover{background:rgba(255,255,255,.12)}
 .ma-modal-actions .confirm{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 12px 30px -10px rgba(245,179,66,.9)}
 .ma-modal-actions .confirm:hover:not(:disabled){transform:translateY(-2px)}
-.ma-modal-actions .confirm.deduct{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff;box-shadow:0 12px 30px -10px rgba(217,4,41,.9)}
-.ma-modal-actions .confirm.danger{background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff;box-shadow:0 12px 30px -10px rgba(139,0,24,.9)}
+.ma-modal-actions .confirm.deduct{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff}
+.ma-modal-actions .confirm.danger{background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff}
+.ma-modal-actions .confirm.purple{background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff}
 .ma-modal-actions .confirm:disabled{opacity:.6;cursor:not-allowed;transform:none}
 
 .ma-warn-box{margin-top:16px;padding:14px 16px;border-radius:14px;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.28);color:#ff9a9a;font-size:.82rem;font-weight:700;line-height:1.8;display:flex;gap:10px;align-items:flex-start}
 .ma-warn-box i{color:#d90429;font-size:1.1rem;flex-shrink:0;margin-top:2px}
+
+/* ===== Chat modal ===== */
+.ma-chat-header{padding:20px 24px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(74,122,255,.06),transparent)}
+.ma-chat-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;flex-shrink:0}
+.ma-chat-header-info{flex:1;min-width:0}
+.ma-chat-header-name{font-size:1rem;font-weight:900;line-height:1.2}
+.ma-chat-header-status{font-size:.74rem;color:#66bb6a;font-weight:700;display:flex;align-items:center;gap:5px;margin-top:3px}
+.ma-chat-close{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#e0e6f4;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.ma-chat-close:hover{background:rgba(217,4,41,.2);border-color:rgba(217,4,41,.4);color:#ff6b6b}
+
+.ma-chat-body{flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:12px;background:rgba(0,0,0,.15);min-height:280px;max-height:420px}
+.ma-chat-body::-webkit-scrollbar{width:6px}
+.ma-chat-body::-webkit-scrollbar-track{background:transparent}
+.ma-chat-body::-webkit-scrollbar-thumb{background:rgba(74,122,255,.25);border-radius:6px}
+
+.ma-msg{max-width:78%;padding:11px 15px;border-radius:16px;font-size:.88rem;line-height:1.7;word-wrap:break-word;position:relative;animation:msgIn .25s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.ma-msg-meta{font-size:.62rem;font-weight:800;opacity:.8;margin-bottom:4px;letter-spacing:.5px;text-transform:uppercase}
+.ma-msg-time{font-size:.62rem;font-weight:700;opacity:.75;margin-top:5px;text-align:left;direction:ltr}
+.ma-msg.admin{align-self:flex-end;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;border-bottom-left-radius:4px}
+.ma-msg.customer{align-self:flex-start;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#e0e6f4;border-bottom-right-radius:4px}
+.ma-msg.note{align-self:center;background:linear-gradient(135deg,rgba(147,51,234,.25),rgba(107,33,168,.25));border:1px dashed rgba(147,51,234,.5);color:#e9d5ff;max-width:88%}
+.ma-msg.note .ma-msg-meta{color:#c084fc}
+
+.ma-chat-empty{text-align:center;padding:50px 20px;color:#8a92b0;font-weight:700;font-size:.88rem}
+.ma-chat-empty i{font-size:2.2rem;color:#4a7aff;opacity:.5;display:block;margin-bottom:12px}
+
+.ma-chat-footer{padding:16px 20px;border-top:1px solid rgba(74,122,255,.14);background:rgba(0,0,0,.2);display:flex;gap:10px;align-items:flex-end}
+.ma-chat-footer textarea{flex:1;padding:12px 16px;border-radius:14px;background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.2);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.9rem;outline:none;transition:all .3s;resize:none;min-height:46px;max-height:120px;line-height:1.5}
+.ma-chat-footer textarea:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
+.ma-chat-send{width:46px;height:46px;border-radius:14px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;cursor:pointer;font-size:1rem;transition:all .3s;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 22px -8px rgba(74,122,255,.9)}
+.ma-chat-send:hover:not(:disabled){transform:translateY(-2px)}
+.ma-chat-send:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
 .ma-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:14px 26px;border-radius:60px;font-weight:800;font-size:.9rem;z-index:100001;transition:transform .4s cubic-bezier(.34,1.56,.64,1);display:inline-flex;align-items:center;gap:10px;box-shadow:0 15px 40px -10px rgba(0,0,0,.6);max-width:90vw;font-family:'Cairo',sans-serif}
 .ma-toast.show{transform:translateX(-50%) translateY(0)}
@@ -155,7 +210,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-toast.info{background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff}
 
 @media (max-width:900px){
-  .ma-stats{grid-template-columns:repeat(2,1fr)}
+  .ma-stats,.ma-stats-sm{grid-template-columns:repeat(2,1fr)}
+  .ma-user-stats{grid-template-columns:repeat(2,1fr)}
+  .ma-us-item:nth-child(3){border-left:none}
   .ma-user-info{display:none}
 }
 @media (max-width:600px){
@@ -168,6 +225,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   .ma-btn-action{width:100%;justify-content:center}
   .ma-stat{padding:18px 16px}
   .ma-stat-val{font-size:1.4rem}
+  .ma-modal{padding:22px 20px}
+  .ma-modal.ma-modal-lg{padding:0}
+  .ma-chat-body{max-height:340px}
 }
 </style>
 </head>
@@ -222,6 +282,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     </div>
 
     <div class="ma-container">
+      <!-- Stats Row 1 -->
       <div class="ma-stats">
         <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)">
           <div class="ma-stat-icon"><i class="fas fa-box"></i></div>
@@ -242,6 +303,38 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
           <div class="ma-stat-icon"><i class="fas fa-coins"></i></div>
           <div class="ma-stat-val" id="maStatRevenue">0</div>
           <div class="ma-stat-lbl">إجمالي المبيعات (ر.س)</div>
+        </div>
+      </div>
+
+      <!-- Stats Row 2 (small insights) -->
+      <div class="ma-stats-sm">
+        <div class="ma-stat-sm" style="--accent:#9333ea;--icon-bg:rgba(147,51,234,.15)">
+          <div class="ma-stat-sm-icon"><i class="fas fa-users"></i></div>
+          <div>
+            <div class="ma-stat-sm-val" id="maStatCustomers">0</div>
+            <div class="ma-stat-sm-lbl">إجمالي العملاء</div>
+          </div>
+        </div>
+        <div class="ma-stat-sm" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)">
+          <div class="ma-stat-sm-icon"><i class="fas fa-chart-line"></i></div>
+          <div>
+            <div class="ma-stat-sm-val" id="maStatAvg">0</div>
+            <div class="ma-stat-sm-lbl">متوسط قيمة الطلب</div>
+          </div>
+        </div>
+        <div class="ma-stat-sm" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)">
+          <div class="ma-stat-sm-icon"><i class="fas fa-gift"></i></div>
+          <div>
+            <div class="ma-stat-sm-val" id="maStatCashback">0</div>
+            <div class="ma-stat-sm-lbl">كاش باك ممنوح (ر.س)</div>
+          </div>
+        </div>
+        <div class="ma-stat-sm" style="--accent:#d90429;--icon-bg:rgba(217,4,41,.15)">
+          <div class="ma-stat-sm-icon"><i class="fas fa-circle-xmark"></i></div>
+          <div>
+            <div class="ma-stat-sm-val" id="maStatCancelled">0</div>
+            <div class="ma-stat-sm-lbl">طلبات ملغاة</div>
+          </div>
         </div>
       </div>
 
@@ -271,7 +364,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     </div>
   </div>
 
-  <!-- 💰 نافذة الكاش باك -->
+  <!-- 💰 Cashback Modal -->
   <div class="ma-modal-back" id="maCbModal">
     <div class="ma-modal">
       <div class="ma-modal-title">
@@ -294,7 +387,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
       <div class="ma-modal-field">
         <label>السبب / ملاحظة (اختياري)</label>
-        <input type="text" id="maCbReason" placeholder="مثال: تعويض، هدية، تصحيح رصيد، إلخ">
+        <input type="text" id="maCbReason" placeholder="مثال: تعويض، هدية، تصحيح رصيد...">
       </div>
 
       <div class="ma-modal-actions">
@@ -304,7 +397,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     </div>
   </div>
 
-  <!-- 🗑️ نافذة حذف الطلب -->
+  <!-- 🗑️ Delete Order Modal -->
   <div class="ma-modal-back" id="maDelModal">
     <div class="ma-modal">
       <div class="ma-modal-title">
@@ -316,8 +409,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       <div class="ma-warn-box">
         <i class="fas fa-triangle-exclamation"></i>
         <div>
-          <strong>تحذير:</strong> سيتم حذف الطلب نهائياً من قاعدة البيانات — سيختفي من عند العميل ومن عندك، ولا يمكن استرجاعه.
-          إذا كان الطلب مُستلَم وسيُلغى الكاش باك الخاص به.
+          <strong>تحذير:</strong> سيتم حذف الطلب نهائياً من قاعدة البيانات — سيختفي من عند العميل ومن عندك.
+          إذا كان الطلب مُستلَم سيُخصم الكاش باك تلقائياً.
         </div>
       </div>
 
@@ -327,15 +420,61 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       </div>
     </div>
   </div>
+
+  <!-- 📝 Note Modal -->
+  <div class="ma-modal-back" id="maNoteModal">
+    <div class="ma-modal">
+      <div class="ma-modal-title">
+        <i class="fas fa-comment-dots" id="maNoteIcon" style="background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff"></i>
+        إرسال ملاحظة للعميل
+      </div>
+      <div class="ma-modal-sub" id="maNoteSub">—</div>
+
+      <div class="ma-modal-field">
+        <label>نص الملاحظة</label>
+        <textarea id="maNoteText" placeholder="اكتب ملاحظتك هنا... ستظهر للعميل كرسالة"></textarea>
+      </div>
+
+      <div class="ma-warn-box" style="background:rgba(147,51,234,.08);border-color:rgba(147,51,234,.3);color:#d8b4fe">
+        <i class="fas fa-info-circle" style="color:#9333ea"></i>
+        <div>ستظهر الملاحظة للعميل كرسالة مباشرة بمجرد دخوله للموقع.</div>
+      </div>
+
+      <div class="ma-modal-actions">
+        <button class="cancel" id="maNoteCancel" type="button">إلغاء</button>
+        <button class="confirm purple" id="maNoteConfirm" type="button"><i class="fas fa-paper-plane"></i> إرسال الملاحظة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 💬 Chat Modal -->
+  <div class="ma-modal-back" id="maChatModal">
+    <div class="ma-modal ma-modal-lg">
+      <div class="ma-chat-header">
+        <div class="ma-chat-avatar" id="maChatAvatar">?</div>
+        <div class="ma-chat-header-info">
+          <div class="ma-chat-header-name" id="maChatName">—</div>
+          <div class="ma-chat-header-status"><i class="fas fa-circle" style="font-size:.5rem"></i> <span id="maChatEmail">—</span></div>
+        </div>
+        <button class="ma-chat-close" id="maChatClose" type="button"><i class="fas fa-xmark"></i></button>
+      </div>
+
+      <div class="ma-chat-body" id="maChatBody">
+        <div class="ma-chat-empty"><i class="fas fa-comments"></i> جاري تحميل المحادثة...</div>
+      </div>
+
+      <div class="ma-chat-footer">
+        <textarea id="maChatInput" placeholder="اكتب رسالتك..." rows="1"></textarea>
+        <button class="ma-chat-send" id="maChatSend" type="button"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
 (function () {
   'use strict';
 
-  // ═══════════════════════════════════════════════════════════
-  // ⚙️ الإعدادات
-  // ═══════════════════════════════════════════════════════════
   const SUPABASE_URL  = 'https://xoqwzluyxynqpdpmidts.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
   const ADMIN_EMAILS = ['mkmkmkl24666606@gmail.com'];
@@ -356,12 +495,41 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   let usersView = false;
   let selectedOrderForCashback = null;
   let selectedOrderForDelete = null;
+  let selectedUserForNote = null;
+  let selectedUserForChat = null;
   let cbMode = 'add';
   const $ = id => document.getElementById(id);
 
   function isAdminEmail(email) {
     if (!ADMIN_EMAILS || ADMIN_EMAILS.length === 0) return true;
     return ADMIN_EMAILS.includes((email || '').toLowerCase());
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function fmtDate(d) {
+    if (!d) return '—';
+    try {
+      return new Date(d).toLocaleString('ar-SA', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+    } catch { return '—'; }
+  }
+
+  function fmtTimeAgo(d) {
+    if (!d) return '—';
+    const diff = Date.now() - new Date(d).getTime();
+    const sec = Math.floor(diff / 1000);
+    if (sec < 60) return 'الآن';
+    const min = Math.floor(sec / 60);
+    if (min < 60) return `قبل ${min} د`;
+    const hr = Math.floor(min / 60);
+    if (hr < 24) return `قبل ${hr} س`;
+    const day = Math.floor(hr / 24);
+    if (day < 30) return `قبل ${day} يوم`;
+    return fmtDate(d);
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -398,17 +566,27 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         $('maUsers').style.display = 'block';
         $('maViewUsersText').textContent = 'الطلبات';
         $('maViewUsers').querySelector('i').className = 'fas fa-box';
-        loadUsers();
+        $('maSearch').placeholder = 'ابحث بالاسم، البريد، الجوال...';
+        $('maStatusFilter').style.display = 'none';
+        if (!allUsers.length) loadUsers();
+        else renderUsers();
       } else {
         $('maOrders').style.display = 'block';
         $('maUsers').style.display = 'none';
         $('maViewUsersText').textContent = 'العملاء';
         $('maViewUsers').querySelector('i').className = 'fas fa-users';
+        $('maSearch').placeholder = 'ابحث بالاسم، البريد، الجوال، رقم الطلب...';
+        $('maStatusFilter').style.display = '';
       }
     });
 
-    $('maSearch').addEventListener('input', renderOrders);
+    // 🔍 بحث موحد يعمل على الطلبات والعملاء
+    $('maSearch').addEventListener('input', () => {
+      if (usersView) renderUsers();
+      else renderOrders();
+    });
     $('maStatusFilter').addEventListener('change', renderOrders);
+
     $('maRefresh').addEventListener('click', () => {
       if (usersView) loadUsers(); else loadOrders();
       toast('تم التحديث', 'info');
@@ -426,6 +604,19 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     $('maDelCancel').addEventListener('click', closeDelModal);
     $('maDelModal').addEventListener('click', e => { if (e.target.id === 'maDelModal') closeDelModal(); });
     $('maDelConfirm').addEventListener('click', confirmDelete);
+
+    // Note modal
+    $('maNoteCancel').addEventListener('click', closeNoteModal);
+    $('maNoteModal').addEventListener('click', e => { if (e.target.id === 'maNoteModal') closeNoteModal(); });
+    $('maNoteConfirm').addEventListener('click', confirmNote);
+
+    // Chat modal
+    $('maChatClose').addEventListener('click', closeChatModal);
+    $('maChatModal').addEventListener('click', e => { if (e.target.id === 'maChatModal') closeChatModal(); });
+    $('maChatSend').addEventListener('click', sendChatMessage);
+    $('maChatInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
+    });
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -452,6 +643,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     $('maUserName').textContent = currentUser.user_metadata?.name || currentUser.email.split('@')[0];
     $('maUserEmail').textContent = currentUser.email;
     loadOrders();
+    // نحمّل العملاء في الخلفية للإحصائيات
+    loadUsers(true);
   }
 
   async function doLogin() {
@@ -491,7 +684,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 📦 Load Orders
+  // 📦 Orders
   // ═══════════════════════════════════════════════════════════
   async function loadOrders() {
     const container = $('maOrders');
@@ -509,7 +702,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       renderOrders();
     } catch (err) {
       console.error(err);
-      container.innerHTML = `<div class="ma-empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i><h3>فشل تحميل الطلبات</h3><p>${err.message}</p></div>`;
+      container.innerHTML = `<div class="ma-empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i><h3>فشل تحميل الطلبات</h3><p>${escapeHtml(err.message)}</p></div>`;
     }
   }
 
@@ -517,12 +710,19 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     const total = allOrders.length;
     const pending = allOrders.filter(o => o.status !== 'delivered' && o.status !== 'cancelled').length;
     const delivered = allOrders.filter(o => o.status === 'delivered').length;
+    const cancelled = allOrders.filter(o => o.status === 'cancelled').length;
     const revenue = allOrders.filter(o => o.status === 'delivered').reduce((s, o) => s + Number(o.total || 0), 0);
+    const avg = delivered > 0 ? revenue / delivered : 0;
+    const totalCashback = allUsers.reduce((s, u) => s + Number(u.cashback || 0), 0);
 
     $('maStatTotal').textContent = total;
     $('maStatPending').textContent = pending;
     $('maStatDelivered').textContent = delivered;
     $('maStatRevenue').textContent = revenue.toFixed(0);
+    $('maStatCustomers').textContent = allUsers.length;
+    $('maStatAvg').textContent = avg.toFixed(0) + ' ر.س';
+    $('maStatCashback').textContent = totalCashback.toFixed(0);
+    $('maStatCancelled').textContent = cancelled;
   }
 
   function renderOrders() {
@@ -566,8 +766,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   function renderOrderCard(o) {
     const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
     const items = Array.isArray(o.items) ? o.items : [];
-    const itemsHtml = items.map(it => `<div>• <span class="name">${it.name || 'منتج'}</span> × ${it.qty || 1} — ${(Number(it.price||0) * Number(it.qty||1)).toFixed(2)} ر.س</div>`).join('') || '<div>—</div>';
-    const date = o.created_at ? new Date(o.created_at).toLocaleString('ar-SA', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+    const itemsHtml = items.map(it => `<div>• <span class="name">${escapeHtml(it.name || 'منتج')}</span> × ${it.qty || 1} — ${(Number(it.price||0) * Number(it.qty||1)).toFixed(2)} ر.س</div>`).join('') || '<div>—</div>';
+    const date = fmtDate(o.created_at);
 
     let cbHtml = '';
     if (o.status === 'delivered' && o.cashback_applied) {
@@ -597,9 +797,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         </div>
 
         <div class="ma-customer">
-          <div class="ma-cust-item"><i class="fas fa-user"></i><div><div class="lbl">العميل</div><div class="val">${o.user_name || '—'}</div></div></div>
-          <div class="ma-cust-item"><i class="fas fa-envelope"></i><div><div class="lbl">البريد</div><div class="val">${o.user_email || '—'}</div></div></div>
-          <div class="ma-cust-item"><i class="fas fa-phone"></i><div><div class="lbl">الجوال</div><div class="val">${o.user_phone || '—'}</div></div></div>
+          <div class="ma-cust-item"><i class="fas fa-user"></i><div><div class="lbl">العميل</div><div class="val">${escapeHtml(o.user_name || '—')}</div></div></div>
+          <div class="ma-cust-item"><i class="fas fa-envelope"></i><div><div class="lbl">البريد</div><div class="val">${escapeHtml(o.user_email || '—')}</div></div></div>
+          <div class="ma-cust-item"><i class="fas fa-phone"></i><div><div class="lbl">الجوال</div><div class="val">${escapeHtml(o.user_phone || '—')}</div></div></div>
         </div>
 
         <div class="ma-items">${itemsHtml}</div>
@@ -615,10 +815,10 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
             <i class="fas fa-check"></i> تطبيق الحالة
           </button>
           <button class="ma-btn-action ma-btn-cb" data-add-cashback="${o.id}">
-            <i class="fas fa-gift"></i> إضافة كاش باك
+            <i class="fas fa-gift"></i> كاش باك
           </button>
           <button class="ma-btn-action ma-btn-delete" data-delete-order="${o.id}">
-            <i class="fas fa-trash"></i> حذف الطلب
+            <i class="fas fa-trash"></i> حذف
           </button>
         </div>
       </div>
@@ -628,9 +828,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   // ═══════════════════════════════════════════════════════════
   // 👥 Users
   // ═══════════════════════════════════════════════════════════
-  async function loadUsers() {
+  async function loadUsers(silent = false) {
     const container = $('maUsers');
-    container.innerHTML = '<div class="ma-loader"><div class="ma-spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل العملاء...</p></div>';
+    if (!silent) container.innerHTML = '<div class="ma-loader"><div class="ma-spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل العملاء...</p></div>';
 
     try {
       const { data, error } = await sb.from('men_users')
@@ -640,40 +840,76 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
       if (error) throw error;
       allUsers = data || [];
+      // حدّث إحصائيات العملاء في الأعلى
+      $('maStatCustomers').textContent = allUsers.length;
+      const totalCashback = allUsers.reduce((s, u) => s + Number(u.cashback || 0), 0);
+      $('maStatCashback').textContent = totalCashback.toFixed(0);
 
-      if (!allUsers.length) {
-        container.innerHTML = `<div class="ma-empty"><i class="fas fa-users"></i><h3>لا يوجد عملاء</h3><p>سيظهر العملاء هنا عند تسجيلهم</p></div>`;
-        return;
-      }
-
-      container.innerHTML = '<div class="ma-orders">' + allUsers.map(renderUserCard).join('') + '</div>';
-
-      container.querySelectorAll('[data-user-cb]').forEach(btn => {
-        btn.addEventListener('click', () => openUserCbModal(btn.dataset.userCb, btn.dataset.cbMode || 'add'));
-      });
-
+      if (!silent) renderUsers();
     } catch (err) {
       console.error(err);
-      container.innerHTML = `<div class="ma-empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i><h3>فشل تحميل العملاء</h3><p>${err.message}</p></div>`;
+      if (!silent) container.innerHTML = `<div class="ma-empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i><h3>فشل تحميل العملاء</h3><p>${escapeHtml(err.message)}</p></div>`;
     }
   }
 
+  // 🔍 بحث + عرض العملاء
+  function renderUsers() {
+    const container = $('maUsers');
+    const q = ($('maSearch').value || '').trim().toLowerCase();
+
+    let filtered = allUsers.filter(u => {
+      if (!q) return true;
+      const hay = `${u.id} ${u.name||''} ${u.email||''} ${u.phone||''}`.toLowerCase();
+      return hay.includes(q);
+    });
+
+    if (!filtered.length) {
+      container.innerHTML = `<div class="ma-empty"><i class="fas fa-users"></i><h3>لا يوجد عملاء</h3><p>${q ? 'لا يوجد نتائج مطابقة للبحث' : 'سيظهر العملاء هنا عند تسجيلهم'}</p></div>`;
+      return;
+    }
+
+    container.innerHTML = '<div class="ma-orders">' + filtered.map(renderUserCard).join('') + '</div>';
+
+    container.querySelectorAll('[data-user-cb]').forEach(btn => {
+      btn.addEventListener('click', () => openUserCbModal(btn.dataset.userCb, btn.dataset.cbMode || 'add'));
+    });
+    container.querySelectorAll('[data-user-note]').forEach(btn => {
+      btn.addEventListener('click', () => openNoteModal(btn.dataset.userNote));
+    });
+    container.querySelectorAll('[data-user-chat]').forEach(btn => {
+      btn.addEventListener('click', () => openChatModal(btn.dataset.userChat));
+    });
+  }
+
+  function getUserStats(userId) {
+    const list = allOrders.filter(o => String(o.user_id) === String(userId));
+    const total = list.length;
+    const delivered = list.filter(o => o.status === 'delivered');
+    const paid = delivered.reduce((s, o) => s + Number(o.total || 0), 0);
+    const pending = list.filter(o => o.status !== 'delivered' && o.status !== 'cancelled').length;
+    const cancelled = list.filter(o => o.status === 'cancelled').length;
+    const lastOrder = list[0];
+    return { total, paid, pending, cancelled, lastOrder };
+  }
+
   function renderUserCard(u) {
-    const date = u.created_at ? new Date(u.created_at).toLocaleString('ar-SA', { year:'numeric', month:'short', day:'numeric' }) : '—';
+    const stats = getUserStats(u.id);
     const nameParts = (u.name || 'M').split(/\s+/);
     let initials = '?';
     if (nameParts.length === 1) initials = nameParts[0].substring(0, 2);
     else initials = (nameParts[0][0] || '') + (nameParts[nameParts.length - 1][0] || '');
     initials = initials.toUpperCase();
 
+    const lastTxt = stats.lastOrder ? fmtTimeAgo(stats.lastOrder.created_at) : 'لا يوجد';
+
     return `
       <div class="ma-order">
         <div class="ma-order-top">
           <div style="display:flex;align-items:center;gap:14px">
-            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;color:#fff">${initials}</div>
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;color:#fff">${escapeHtml(initials)}</div>
             <div>
-              <div class="ma-order-id"><span class="dot" style="background:#4caf50"></span> ${u.name || 'بدون اسم'}</div>
-              <div class="ma-order-date" style="margin-top:6px"><i class="fas fa-envelope"></i> ${u.email || '—'}</div>
+              <div class="ma-order-id"><span class="dot" style="background:#4caf50"></span> ${escapeHtml(u.name || 'بدون اسم')}</div>
+              <div class="ma-order-date" style="margin-top:6px"><i class="fas fa-envelope"></i> ${escapeHtml(u.email || '—')}</div>
             </div>
           </div>
           <div class="ma-order-badge" style="background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff">
@@ -681,18 +917,39 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
           </div>
         </div>
 
-        <div class="ma-customer">
-          <div class="ma-cust-item"><i class="fas fa-phone"></i><div><div class="lbl">الجوال</div><div class="val">${u.phone || '—'}</div></div></div>
-          <div class="ma-cust-item"><i class="fas fa-calendar"></i><div><div class="lbl">سجل في</div><div class="val">${date}</div></div></div>
-          <div class="ma-cust-item"><i class="fas fa-id-card"></i><div><div class="lbl">رقم العضوية</div><div class="val">#${String(u.id || '').slice(0, 8).toUpperCase()}</div></div></div>
+        <div class="ma-user-stats">
+          <div class="ma-us-item">
+            <div class="ma-us-val">${stats.total}</div>
+            <div class="ma-us-lbl">إجمالي الطلبات</div>
+          </div>
+          <div class="ma-us-item">
+            <div class="ma-us-val">${stats.paid.toFixed(0)} ر.س</div>
+            <div class="ma-us-lbl">إجمالي المدفوع</div>
+          </div>
+          <div class="ma-us-item">
+            <div class="ma-us-val" style="background:linear-gradient(135deg,#66bb6a,#2e7d32);-webkit-background-clip:text;background-clip:text;color:transparent">${Number(u.cashback || 0).toFixed(0)} ر.س</div>
+            <div class="ma-us-lbl">رصيد الكاش باك</div>
+          </div>
+          <div class="ma-us-item">
+            <div class="ma-us-val" style="font-size:.86rem">${lastTxt}</div>
+            <div class="ma-us-lbl">آخر طلب</div>
+          </div>
         </div>
 
-        <div class="ma-bottom">
-          <div class="ma-total">${Number(u.cashback || 0).toFixed(2)} ر.س</div>
-          <div class="ma-cb-info earned"><i class="fas fa-wallet"></i> رصيد الكاش باك</div>
+        <div class="ma-customer">
+          <div class="ma-cust-item"><i class="fas fa-phone"></i><div><div class="lbl">الجوال</div><div class="val">${escapeHtml(u.phone || '—')}</div></div></div>
+          <div class="ma-cust-item"><i class="fas fa-calendar"></i><div><div class="lbl">سجل في</div><div class="val">${fmtDate(u.created_at)}</div></div></div>
+          <div class="ma-cust-item"><i class="fas fa-hourglass-half"></i><div><div class="lbl">طلبات جارية</div><div class="val">${stats.pending}</div></div></div>
+          <div class="ma-cust-item"><i class="fas fa-circle-xmark"></i><div><div class="lbl">ملغاة</div><div class="val">${stats.cancelled}</div></div></div>
         </div>
 
         <div class="ma-actions">
+          <button class="ma-btn-action ma-btn-chat" data-user-chat="${u.id}">
+            <i class="fas fa-comments"></i> المحادثة
+          </button>
+          <button class="ma-btn-action ma-btn-note" data-user-note="${u.id}">
+            <i class="fas fa-comment-dots"></i> ملاحظة
+          </button>
           <button class="ma-btn-action ma-btn-cb" data-user-cb="${u.id}" data-cb-mode="add">
             <i class="fas fa-gift"></i> إضافة كاش باك
           </button>
@@ -702,35 +959,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         </div>
       </div>
     `;
-  }
-
-  function openUserCbModal(userId, mode = 'add') {
-    const user = allUsers.find(u => String(u.id) === String(userId));
-    if (!user) return;
-    cbMode = mode;
-    selectedOrderForCashback = {
-      user_id: user.id,
-      user_email: user.email,
-      user_name: user.name,
-      user_cashback: Number(user.cashback || 0),
-      id: '—'
-    };
-    updateCbModalUI();
-
-    const modeHint = mode === 'deduct'
-      ? `<em style="color:#ff8a8a">وضع الخصم — سيتم إنقاص المبلغ من رصيد العميل</em>`
-      : `<em style="color:#6a9aff">إضافة مباشرة للرصيد (بدون طلب)</em>`;
-
-    $('maCbSub').innerHTML = `
-      العميل: <strong>${user.name || '—'}</strong><br>
-      البريد: <strong dir="ltr">${user.email || '—'}</strong><br>
-      الرصيد الحالي: <strong style="color:#66bb6a">${Number(user.cashback || 0).toFixed(2)} ر.س</strong><br>
-      ${modeHint}
-    `;
-    $('maCbAmount').value = '';
-    $('maCbReason').value = '';
-    $('maCbModal').classList.add('show');
-    setTimeout(() => $('maCbAmount').focus(), 200);
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -800,8 +1028,34 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 💰 Cashback Modal
+  // 💰 Cashback
   // ═══════════════════════════════════════════════════════════
+  function openUserCbModal(userId, mode = 'add') {
+    const user = allUsers.find(u => String(u.id) === String(userId));
+    if (!user) return;
+    cbMode = mode;
+    selectedOrderForCashback = {
+      user_id: user.id, user_email: user.email, user_name: user.name,
+      user_cashback: Number(user.cashback || 0), id: '—'
+    };
+    updateCbModalUI();
+
+    const modeHint = mode === 'deduct'
+      ? `<em style="color:#ff8a8a">وضع الخصم — سيتم إنقاص المبلغ من رصيد العميل</em>`
+      : `<em style="color:#6a9aff">إضافة مباشرة للرصيد (بدون طلب)</em>`;
+
+    $('maCbSub').innerHTML = `
+      العميل: <strong>${escapeHtml(user.name || '—')}</strong><br>
+      البريد: <strong dir="ltr">${escapeHtml(user.email || '—')}</strong><br>
+      الرصيد الحالي: <strong style="color:#66bb6a">${Number(user.cashback || 0).toFixed(2)} ر.س</strong><br>
+      ${modeHint}
+    `;
+    $('maCbAmount').value = '';
+    $('maCbReason').value = '';
+    $('maCbModal').classList.add('show');
+    setTimeout(() => $('maCbAmount').focus(), 200);
+  }
+
   function openCbModal(orderId, mode = 'add') {
     const order = allOrders.find(o => String(o.id) === String(orderId));
     if (!order) return;
@@ -809,15 +1063,10 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     selectedOrderForCashback = order;
     updateCbModalUI();
 
-    const modeHint = mode === 'deduct'
-      ? `<em style="color:#ff8a8a">وضع الخصم — سيتم إنقاص المبلغ من رصيد العميل</em>`
-      : `<em style="color:#6a9aff">إضافة كاش باك يدوي مرتبط بالطلب</em>`;
-
     $('maCbSub').innerHTML = `
-      العميل: <strong>${order.user_name || '—'}</strong><br>
-      البريد: <strong dir="ltr">${order.user_email || '—'}</strong><br>
-      رقم الطلب: <strong>#${String(order.id).slice(-8).toUpperCase()}</strong><br>
-      ${modeHint}
+      العميل: <strong>${escapeHtml(order.user_name || '—')}</strong><br>
+      البريد: <strong dir="ltr">${escapeHtml(order.user_email || '—')}</strong><br>
+      رقم الطلب: <strong>#${String(order.id).slice(-8).toUpperCase()}</strong>
     `;
     $('maCbAmount').value = '';
     $('maCbReason').value = '';
@@ -829,7 +1078,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     const isDeduct = cbMode === 'deduct';
     const icon = $('maCbIcon');
     const confirmBtn = $('maCbConfirm');
-
     $('maCbTitle').textContent = isDeduct ? 'خصم كاش باك' : 'إضافة كاش باك';
 
     if (isDeduct) {
@@ -870,9 +1118,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
     try {
       const { data: u, error: uErr } = await sb.from('men_users')
-        .select('cashback, name, email')
-        .eq('id', order.user_id)
-        .maybeSingle();
+        .select('cashback, name, email').eq('id', order.user_id).maybeSingle();
       if (uErr) throw uErr;
 
       const currentCb = Number(u?.cashback || 0);
@@ -887,22 +1133,21 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       const reason = reasonInput || (isDeduct ? 'خصم كاش باك من الإدارة' : 'كاش باك إضافي من الإدارة');
 
       const { error } = await sb.from('men_cashback_log').insert({
-        user_id: order.user_id,
-        user_email: order.user_email,
-        amount: signedAmount,
-        reason: reason,
-        order_id: order.id !== '—' ? order.id : null,
-        type: isDeduct ? 'deduct' : 'manual',
-        created_by: currentUser.email
+        user_id: order.user_id, user_email: order.user_email, amount: signedAmount,
+        reason: reason, order_id: order.id !== '—' ? order.id : null,
+        type: isDeduct ? 'deduct' : 'manual', created_by: currentUser.email
       });
       if (error) throw error;
 
       const newCb = Math.round((currentCb + signedAmount) * 100) / 100;
       const { error: updErr } = await sb.from('men_users').update({
-        cashback: newCb,
-        updated_at: new Date().toISOString()
+        cashback: newCb, updated_at: new Date().toISOString()
       }).eq('id', order.user_id);
       if (updErr) throw updErr;
+
+      // تحديث محلي
+      const localUser = allUsers.find(x => String(x.id) === String(order.user_id));
+      if (localUser) localUser.cashback = newCb;
 
       const nameLabel = u?.name || order.user_name || order.user_email;
       toast(
@@ -913,9 +1158,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       );
 
       closeCbModal();
-
-      if (usersView) loadUsers();
-      else loadOrders();
+      if (usersView) renderUsers();
+      renderStats();
 
     } catch (err) {
       console.error(err);
@@ -934,23 +1178,18 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     selectedOrderForDelete = order;
 
     const items = Array.isArray(order.items) ? order.items : [];
-    const itemsList = items.length
-      ? items.map(it => `• ${it.name || 'منتج'} × ${it.qty || 1}`).join('<br>')
-      : '—';
-
+    const itemsList = items.length ? items.map(it => `• ${escapeHtml(it.name || 'منتج')} × ${it.qty || 1}`).join('<br>') : '—';
     const cbNote = (order.cashback_applied && Number(order.cashback || 0) > 0)
-      ? `<br><span style="color:#ff9a9a">⚠️ سيتم خصم ${Number(order.cashback).toFixed(2)} ر.س من رصيد العميل</span>`
-      : '';
+      ? `<br><span style="color:#ff9a9a">⚠️ سيتم خصم ${Number(order.cashback).toFixed(2)} ر.س من رصيد العميل</span>` : '';
 
     $('maDelSub').innerHTML = `
       رقم الطلب: <strong>#${String(order.id).slice(-8).toUpperCase()}</strong><br>
-      العميل: <strong>${order.user_name || '—'}</strong><br>
-      البريد: <strong dir="ltr">${order.user_email || '—'}</strong><br>
+      العميل: <strong>${escapeHtml(order.user_name || '—')}</strong><br>
+      البريد: <strong dir="ltr">${escapeHtml(order.user_email || '—')}</strong><br>
       الإجمالي: <strong style="color:#6a9aff">${Number(order.total || 0).toFixed(2)} ر.س</strong><br>
       <div style="margin-top:10px;padding:10px 12px;background:rgba(0,0,0,.25);border-radius:12px;font-size:.82rem;line-height:1.9">${itemsList}</div>
       ${cbNote}
     `;
-
     $('maDelModal').classList.add('show');
   }
 
@@ -968,43 +1207,33 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحذف...';
 
     try {
-      // 1) إذا كان الطلب مستلم ولديه كاش باك → نسترجعه من رصيد العميل
       if (order.cashback_applied && Number(order.cashback || 0) > 0) {
         const refund = Number(order.cashback || 0);
         try {
           await sb.from('men_cashback_log').insert({
-            user_id: order.user_id,
-            user_email: order.user_email,
-            amount: -refund,
-            reason: `حذف الطلب #${order.id} — استرجاع الكاش باك`,
-            order_id: order.id,
-            type: 'refund',
-            created_by: currentUser.email
+            user_id: order.user_id, user_email: order.user_email, amount: -refund,
+            reason: `حذف الطلب #${order.id} — استرجاع الكاش باك`, order_id: order.id,
+            type: 'refund', created_by: currentUser.email
           });
           const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
           const newCb = Math.max(0, Math.round((Number(u?.cashback || 0) - refund) * 100) / 100);
           await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', order.user_id);
+          const localUser = allUsers.find(x => String(x.id) === String(order.user_id));
+          if (localUser) localUser.cashback = newCb;
         } catch (e) { console.warn('refund on delete:', e); }
       }
 
-      // 2) نُسجّل عملية الحذف في سجل الكاش باك (اختياري — للمراجعة)
       try {
         await sb.from('men_cashback_log').insert({
-          user_id: order.user_id,
-          user_email: order.user_email,
-          amount: 0,
+          user_id: order.user_id, user_email: order.user_email, amount: 0,
           reason: `تم حذف الطلب #${order.id} نهائياً بواسطة ${currentUser.email}`,
-          order_id: order.id,
-          type: 'order_deleted',
-          created_by: currentUser.email
+          order_id: order.id, type: 'order_deleted', created_by: currentUser.email
         });
       } catch (e) { console.warn('log on delete:', e); }
 
-      // 3) حذف الطلب من men_orders → يختفي من عند الجميع
       const { error } = await sb.from('men_orders').delete().eq('id', order.id);
       if (error) throw error;
 
-      // 4) تحديث الواجهة فوراً
       allOrders = allOrders.filter(o => String(o.id) !== String(order.id));
       renderStats();
       renderOrders();
@@ -1021,13 +1250,176 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   }
 
   // ═══════════════════════════════════════════════════════════
+  // 📝 Note
+  // ═══════════════════════════════════════════════════════════
+  function openNoteModal(userId) {
+    const user = allUsers.find(u => String(u.id) === String(userId));
+    if (!user) return;
+    selectedUserForNote = user;
+
+    $('maNoteSub').innerHTML = `
+      العميل: <strong>${escapeHtml(user.name || '—')}</strong><br>
+      البريد: <strong dir="ltr">${escapeHtml(user.email || '—')}</strong>
+    `;
+    $('maNoteText').value = '';
+    $('maNoteModal').classList.add('show');
+    setTimeout(() => $('maNoteText').focus(), 200);
+  }
+
+  function closeNoteModal() {
+    $('maNoteModal').classList.remove('show');
+    selectedUserForNote = null;
+  }
+
+  async function confirmNote() {
+    if (!selectedUserForNote) return;
+    const text = $('maNoteText').value.trim();
+    if (!text) { toast('اكتب نص الملاحظة', 'error'); return; }
+
+    const btn = $('maNoteConfirm');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+
+    try {
+      const { error } = await sb.from('men_messages').insert({
+        user_id: selectedUserForNote.id,
+        user_email: selectedUserForNote.email,
+        sender: 'admin',
+        sender_name: currentUser.user_metadata?.name || currentUser.email.split('@')[0],
+        sender_email: currentUser.email,
+        message: text,
+        type: 'note',
+        is_read: false
+      });
+      if (error) throw error;
+
+      toast(`📝 تم إرسال الملاحظة إلى ${selectedUserForNote.name || selectedUserForNote.email}`, 'success');
+      closeNoteModal();
+    } catch (err) {
+      console.error(err);
+      toast('فشل الإرسال: ' + err.message, 'error');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الملاحظة';
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // 💬 Chat
+  // ═══════════════════════════════════════════════════════════
+  async function openChatModal(userId) {
+    const user = allUsers.find(u => String(u.id) === String(userId));
+    if (!user) return;
+    selectedUserForChat = user;
+
+    const nameParts = (user.name || 'M').split(/\s+/);
+    let initials = nameParts.length === 1 ? nameParts[0].substring(0, 2)
+      : (nameParts[0][0] || '') + (nameParts[nameParts.length - 1][0] || '');
+    initials = initials.toUpperCase();
+
+    $('maChatAvatar').textContent = initials;
+    $('maChatName').textContent = user.name || 'بدون اسم';
+    $('maChatEmail').textContent = user.email || '—';
+    $('maChatBody').innerHTML = '<div class="ma-chat-empty"><i class="fas fa-spinner fa-spin"></i> جاري تحميل المحادثة...</div>';
+    $('maChatInput').value = '';
+    $('maChatModal').classList.add('show');
+
+    await loadChatMessages(user.id);
+    setTimeout(() => $('maChatInput').focus(), 200);
+  }
+
+  function closeChatModal() {
+    $('maChatModal').classList.remove('show');
+    selectedUserForChat = null;
+  }
+
+  async function loadChatMessages(userId) {
+    try {
+      const { data, error } = await sb.from('men_messages')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: true })
+        .limit(300);
+
+      if (error) throw error;
+      renderChatMessages(data || []);
+    } catch (err) {
+      console.error(err);
+      $('maChatBody').innerHTML = `<div class="ma-chat-empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i> فشل التحميل: ${escapeHtml(err.message)}<br><span style="font-size:.74rem;margin-top:8px;display:block">تأكد من إنشاء جدول men_messages</span></div>`;
+    }
+  }
+
+  function renderChatMessages(msgs) {
+    const body = $('maChatBody');
+
+    if (!msgs.length) {
+      body.innerHTML = '<div class="ma-chat-empty"><i class="fas fa-comment-slash"></i> لا يوجد رسائل بعد<br><span style="font-size:.78rem;opacity:.7;margin-top:6px;display:block">ابدأ المحادثة من الأسفل</span></div>';
+      return;
+    }
+
+    body.innerHTML = msgs.map(m => {
+      const time = fmtDate(m.created_at);
+      if (m.type === 'note') {
+        return `<div class="ma-msg note">
+          <div class="ma-msg-meta"><i class="fas fa-comment-dots"></i> ملاحظة إدارية — ${escapeHtml(m.sender_name || 'المشرف')}</div>
+          <div>${escapeHtml(m.message)}</div>
+          <div class="ma-msg-time">${time}</div>
+        </div>`;
+      }
+      const cls = m.sender === 'admin' ? 'admin' : 'customer';
+      const senderLabel = m.sender === 'admin' ? 'المشرف' : 'العميل';
+      return `<div class="ma-msg ${cls}">
+        <div class="ma-msg-meta">${senderLabel}</div>
+        <div>${escapeHtml(m.message)}</div>
+        <div class="ma-msg-time">${time}</div>
+      </div>`;
+    }).join('');
+
+    body.scrollTop = body.scrollHeight;
+  }
+
+  async function sendChatMessage() {
+    if (!selectedUserForChat) return;
+    const input = $('maChatInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const btn = $('maChatSend');
+    btn.disabled = true;
+
+    try {
+      const { error } = await sb.from('men_messages').insert({
+        user_id: selectedUserForChat.id,
+        user_email: selectedUserForChat.email,
+        sender: 'admin',
+        sender_name: currentUser.user_metadata?.name || currentUser.email.split('@')[0],
+        sender_email: currentUser.email,
+        message: text,
+        type: 'chat',
+        is_read: false
+      });
+      if (error) throw error;
+
+      input.value = '';
+      input.style.height = 'auto';
+      await loadChatMessages(selectedUserForChat.id);
+
+    } catch (err) {
+      console.error(err);
+      toast('فشل الإرسال: ' + err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      input.focus();
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════
   // 🔔 Toast
   // ═══════════════════════════════════════════════════════════
   function toast(msg, type = 'info') {
     const t = document.createElement('div');
     t.className = 'ma-toast ' + type;
     const icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', info: 'fa-circle-info' };
-    t.innerHTML = `<i class="fas ${icons[type] || 'fa-circle-info'}"></i><span>${msg}</span>`;
+    t.innerHTML = `<i class="fas ${icons[type] || 'fa-circle-info'}"></i><span>${escapeHtml(msg)}</span>`;
     document.body.appendChild(t);
     requestAnimationFrame(() => t.classList.add('show'));
     setTimeout(() => {
