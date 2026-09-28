@@ -107,6 +107,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-btn-apply:hover:not(:disabled){transform:translateY(-2px)}
 .ma-btn-cb{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 8px 22px -8px rgba(245,179,66,.8)}
 .ma-btn-cb:hover{transform:translateY(-2px)}
+.ma-btn-deduct{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff;box-shadow:0 8px 22px -8px rgba(217,4,41,.8)}
+.ma-btn-deduct:hover{transform:translateY(-2px)}
 .ma-btn-action:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
 
 .ma-empty{text-align:center;padding:80px 24px;background:rgba(74,122,255,.04);border:1.5px dashed rgba(74,122,255,.25);border-radius:24px}
@@ -121,7 +123,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-modal-back.show{display:flex}
 .ma-modal{background:linear-gradient(145deg,rgba(14,20,38,.98),rgba(8,12,24,1));border:1px solid rgba(74,122,255,.14);border-radius:24px;max-width:440px;width:100%;padding:30px 28px;box-shadow:0 40px 100px -30px rgba(2,28,164,.9)}
 .ma-modal-title{display:flex;align-items:center;gap:12px;font-size:1.15rem;font-weight:900;margin-bottom:8px}
-.ma-modal-title i{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.ma-modal-title i{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .3s}
 .ma-modal-sub{color:#8a92b0;font-size:.85rem;font-weight:600;margin-bottom:22px;line-height:1.7}
 .ma-modal-field{margin-bottom:14px}
 .ma-modal-field label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
@@ -137,6 +139,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-modal-actions .cancel:hover{background:rgba(255,255,255,.12)}
 .ma-modal-actions .confirm{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 12px 30px -10px rgba(245,179,66,.9)}
 .ma-modal-actions .confirm:hover:not(:disabled){transform:translateY(-2px)}
+.ma-modal-actions .confirm.deduct{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff;box-shadow:0 12px 30px -10px rgba(217,4,41,.9)}
 .ma-modal-actions .confirm:disabled{opacity:.6;cursor:not-allowed;transform:none}
 
 .ma-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:14px 26px;border-radius:60px;font-weight:800;font-size:.9rem;z-index:100001;transition:transform .4s cubic-bezier(.34,1.56,.64,1);display:inline-flex;align-items:center;gap:10px;box-shadow:0 15px 40px -10px rgba(0,0,0,.6);max-width:90vw;font-family:'Cairo',sans-serif}
@@ -265,8 +268,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   <div class="ma-modal-back" id="maCbModal">
     <div class="ma-modal">
       <div class="ma-modal-title">
-        <i class="fas fa-gift"></i>
-        إضافة كاش باك
+        <i class="fas fa-gift" id="maCbIcon"></i>
+        <span id="maCbTitle">إضافة كاش باك</span>
       </div>
       <div class="ma-modal-sub" id="maCbSub">—</div>
 
@@ -284,7 +287,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
       <div class="ma-modal-field">
         <label>السبب / ملاحظة (اختياري)</label>
-        <input type="text" id="maCbReason" placeholder="مثال: تعويض، هدية، إلخ">
+        <input type="text" id="maCbReason" placeholder="مثال: تعويض، هدية، تصحيح رصيد، إلخ">
       </div>
 
       <div class="ma-modal-actions">
@@ -321,6 +324,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   let allUsers = [];
   let usersView = false;
   let selectedOrderForCashback = null;
+  let cbMode = 'add'; // 'add' | 'deduct'
   const $ = id => document.getElementById(id);
 
   function isAdminEmail(email) {
@@ -355,7 +359,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       toast('تم تسجيل الخروج', 'info');
     });
 
-    // ⭐ زر التبديل بين الطلبات والعملاء
     $('maViewUsers').addEventListener('click', () => {
       usersView = !usersView;
       if (usersView) {
@@ -515,7 +518,11 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     });
 
     container.querySelectorAll('[data-add-cashback]').forEach(btn => {
-      btn.addEventListener('click', () => openCbModal(btn.dataset.addCashback));
+      btn.addEventListener('click', () => openCbModal(btn.dataset.addCashback, 'add'));
+    });
+
+    container.querySelectorAll('[data-deduct-cashback]').forEach(btn => {
+      btn.addEventListener('click', () => openCbModal(btn.dataset.deductCashback, 'deduct'));
     });
   }
 
@@ -602,7 +609,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       container.innerHTML = '<div class="ma-orders">' + allUsers.map(renderUserCard).join('') + '</div>';
 
       container.querySelectorAll('[data-user-cb]').forEach(btn => {
-        btn.addEventListener('click', () => openUserCbModal(btn.dataset.userCb));
+        btn.addEventListener('click', () => openUserCbModal(btn.dataset.userCb, btn.dataset.cbMode || 'add'));
       });
 
     } catch (err) {
@@ -646,28 +653,39 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         </div>
 
         <div class="ma-actions">
-          <button class="ma-btn-action ma-btn-cb" data-user-cb="${u.id}">
+          <button class="ma-btn-action ma-btn-cb" data-user-cb="${u.id}" data-cb-mode="add">
             <i class="fas fa-gift"></i> إضافة كاش باك
+          </button>
+          <button class="ma-btn-action ma-btn-deduct" data-user-cb="${u.id}" data-cb-mode="deduct">
+            <i class="fas fa-minus"></i> خصم كاش باك
           </button>
         </div>
       </div>
     `;
   }
 
-  function openUserCbModal(userId) {
+  function openUserCbModal(userId, mode = 'add') {
     const user = allUsers.find(u => String(u.id) === String(userId));
     if (!user) return;
+    cbMode = mode;
     selectedOrderForCashback = {
       user_id: user.id,
       user_email: user.email,
       user_name: user.name,
+      user_cashback: Number(user.cashback || 0),
       id: '—'
     };
+    updateCbModalUI();
+
+    const modeHint = mode === 'deduct'
+      ? `<em style="color:#ff8a8a">وضع الخصم — سيتم إنقاص المبلغ من رصيد العميل</em>`
+      : `<em style="color:#6a9aff">إضافة مباشرة للرصيد (بدون طلب)</em>`;
 
     $('maCbSub').innerHTML = `
       العميل: <strong>${user.name || '—'}</strong><br>
       البريد: <strong dir="ltr">${user.email || '—'}</strong><br>
-      <em style="color:#6a9aff">إضافة مباشرة للرصيد (بدون طلب)</em>
+      الرصيد الحالي: <strong style="color:#66bb6a">${Number(user.cashback || 0).toFixed(2)} ر.س</strong><br>
+      ${modeHint}
     `;
     $('maCbAmount').value = '';
     $('maCbReason').value = '';
@@ -702,7 +720,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
           reason: `كاش باك تلقائي من الطلب #${orderId}`, order_id: orderId,
           type: 'order', created_by: currentUser.email
         });
-        // تحديث رصيد المستخدم
         const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
         const newCb = Math.round((Number(u?.cashback || 0) + earned) * 100) / 100;
         await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', order.user_id);
@@ -743,17 +760,24 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 💰 Cashback Modal
+  // 💰 Cashback Modal (Add / Deduct)
   // ═══════════════════════════════════════════════════════════
-  function openCbModal(orderId) {
+  function openCbModal(orderId, mode = 'add') {
     const order = allOrders.find(o => String(o.id) === String(orderId));
     if (!order) return;
+    cbMode = mode;
     selectedOrderForCashback = order;
+    updateCbModalUI();
+
+    const modeHint = mode === 'deduct'
+      ? `<em style="color:#ff8a8a">وضع الخصم — سيتم إنقاص المبلغ من رصيد العميل</em>`
+      : `<em style="color:#6a9aff">إضافة كاش باك يدوي مرتبط بالطلب</em>`;
 
     $('maCbSub').innerHTML = `
       العميل: <strong>${order.user_name || '—'}</strong><br>
       البريد: <strong dir="ltr">${order.user_email || '—'}</strong><br>
-      رقم الطلب: <strong>#${String(order.id).slice(-8).toUpperCase()}</strong>
+      رقم الطلب: <strong>#${String(order.id).slice(-8).toUpperCase()}</strong><br>
+      ${modeHint}
     `;
     $('maCbAmount').value = '';
     $('maCbReason').value = '';
@@ -761,42 +785,97 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     setTimeout(() => $('maCbAmount').focus(), 200);
   }
 
+  function updateCbModalUI() {
+    const isDeduct = cbMode === 'deduct';
+    const icon = $('maCbIcon');
+    const confirmBtn = $('maCbConfirm');
+
+    $('maCbTitle').textContent = isDeduct ? 'خصم كاش باك' : 'إضافة كاش باك';
+
+    if (isDeduct) {
+      icon.className = 'fas fa-minus';
+      icon.style.background = 'linear-gradient(135deg,#d90429,#8b0018)';
+      icon.style.color = '#fff';
+      confirmBtn.className = 'confirm deduct';
+      confirmBtn.innerHTML = '<i class="fas fa-minus"></i> خصم الكاش باك';
+    } else {
+      icon.className = 'fas fa-gift';
+      icon.style.background = 'linear-gradient(135deg,#f5b342,#c98a1e)';
+      icon.style.color = '#000';
+      confirmBtn.className = 'confirm';
+      confirmBtn.innerHTML = '<i class="fas fa-check"></i> إضافة الكاش باك';
+    }
+  }
+
   function closeCbModal() {
     $('maCbModal').classList.remove('show');
     selectedOrderForCashback = null;
+    cbMode = 'add';
   }
 
   async function confirmCashback() {
-    const amount = Number($('maCbAmount').value);
-    const reason = $('maCbReason').value.trim() || 'كاش باك إضافي من الإدارة';
+    const amountRaw = Number($('maCbAmount').value);
+    const reasonInput = $('maCbReason').value.trim();
 
-    if (!amount || amount <= 0) { toast('أدخل مبلغاً صحيحاً', 'error'); return; }
+    if (!amountRaw || amountRaw <= 0) { toast('أدخل مبلغاً صحيحاً', 'error'); return; }
     if (!selectedOrderForCashback) return;
 
     const order = selectedOrderForCashback;
+    const isDeduct = cbMode === 'deduct';
+    const signedAmount = isDeduct ? -amountRaw : amountRaw;
+
     const btn = $('maCbConfirm');
     btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التنفيذ...';
 
     try {
+      // جلب الرصيد الحالي من السيرفر (مصدر الحقيقة)
+      const { data: u, error: uErr } = await sb.from('men_users')
+        .select('cashback, name, email')
+        .eq('id', order.user_id)
+        .maybeSingle();
+      if (uErr) throw uErr;
+
+      const currentCb = Number(u?.cashback || 0);
+
+      // لا نسمح بالرصيد السالب
+      if (isDeduct && amountRaw > currentCb) {
+        toast(`الرصيد الحالي ${currentCb.toFixed(2)} ر.س فقط — لا يمكن الخصم`, 'error');
+        btn.disabled = false;
+        updateCbModalUI();
+        return;
+      }
+
+      const reason = reasonInput || (isDeduct ? 'خصم كاش باك من الإدارة' : 'كاش باك إضافي من الإدارة');
+
+      // 1) سجل العملية
       const { error } = await sb.from('men_cashback_log').insert({
-        user_id: order.user_id, user_email: order.user_email, amount: amount,
-        reason: reason, order_id: order.id !== '—' ? order.id : null,
-        type: 'manual', created_by: currentUser.email
+        user_id: order.user_id,
+        user_email: order.user_email,
+        amount: signedAmount,
+        reason: reason,
+        order_id: order.id !== '—' ? order.id : null,
+        type: isDeduct ? 'deduct' : 'manual',
+        created_by: currentUser.email
       });
       if (error) throw error;
 
-      // تحديث رصيد العميل
-      const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
-      const currentCb = Number(u?.cashback || 0);
-      const newCb = Math.round((currentCb + amount) * 100) / 100;
-
-      await sb.from('men_users').update({
+      // 2) تحديث الرصيد
+      const newCb = Math.round((currentCb + signedAmount) * 100) / 100;
+      const { error: updErr } = await sb.from('men_users').update({
         cashback: newCb,
         updated_at: new Date().toISOString()
       }).eq('id', order.user_id);
+      if (updErr) throw updErr;
 
-      toast(`✅ تم إضافة ${amount.toFixed(2)} ر.س كاش باك لـ ${order.user_name || order.user_email}`, 'success');
+      const nameLabel = u?.name || order.user_name || order.user_email;
+      toast(
+        isDeduct
+          ? `✅ تم خصم ${amountRaw.toFixed(2)} ر.س من رصيد ${nameLabel}`
+          : `✅ تم إضافة ${amountRaw.toFixed(2)} ر.س كاش باك لـ ${nameLabel}`,
+        'success'
+      );
+
       closeCbModal();
 
       if (usersView) loadUsers();
@@ -805,9 +884,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     } catch (err) {
       console.error(err);
       toast('فشل: ' + err.message, 'error');
-    } finally {
       btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-check"></i> إضافة الكاش باك';
+      updateCbModalUI();
     }
   }
 
