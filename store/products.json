@@ -213,6 +213,41 @@
       "warranty": "ضمان استبدال الكود في حال العطل",
       "popular": false
     },
+{
+  "id": 10,
+  "name": "FC 27",
+  "price": "339",
+  "image": "https://mestores.com/media/catalog/product//f/c/fc27ps52dpftfront_ksa_cmyk.jpg",
+  "images": [
+    "",
+    "https://cdn.salla.sa/AnzPY/YPOGNm3qSbR8ckF9ZkXMrr7cackhSD5YgTIH9BAu.jpg",
+    "",
+    ""
+  ],
+  "category": "لعبة",
+  "rating": 4.4,
+  "features": [
+    "نسخة رقمية",
+    "شحن فوري",
+    "تفعيل سريع",
+    "متوافقة مع FC 27"
+  ],
+  "cons": [
+    "غير متوفر لجميع المناطق"
+  ],
+  "description": "لعبة FC 27 بتجربة كرة قدم متكاملة، مع تفعيل رقمي سريع والاستمتاع بالمباريات وأطوار اللعبة.",
+  "tags": [
+    "FC 27",
+    "فيفا",
+    "كرة القدم",
+    "ألعاب",
+    "رقمي"
+  ],
+  "usage": "بعد شراء المنتج، استخدم كود التفعيل في المتجر أو المنصة المخصصة للعبة.",
+  "warranty": "ضمان استبدال الكود في حال وجود مشكلة في التفعيل.",
+  "popular": false
+    },
+
     {
       "id": 5,
       "name": "ستور سوني 10$",
