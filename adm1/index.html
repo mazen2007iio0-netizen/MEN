@@ -107,6 +107,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-cb-info{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:20px;font-size:.78rem;font-weight:800}
 .ma-cb-info.earned{background:rgba(76,175,80,.12);border:1px solid rgba(76,175,80,.3);color:#66bb6a}
 .ma-cb-info.pending{background:rgba(245,179,66,.1);border:1px solid rgba(245,179,66,.3);color:#f5b342}
+.ma-cb-info.paid{background:rgba(76,175,80,.18);border:1px solid rgba(76,175,80,.5);color:#66bb6a}
+.ma-cb-info.unpaid{background:rgba(245,179,66,.15);border:1px solid rgba(245,179,66,.5);color:#f5b342}
 .ma-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px dashed rgba(74,122,255,.2)}
 .ma-actions select{flex:1;min-width:160px;height:44px;padding:0 14px;border-radius:12px;background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.25);color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.85rem;outline:none;cursor:pointer}
 .ma-actions select:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
@@ -123,6 +125,10 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-btn-chat:hover{transform:translateY(-2px)}
 .ma-btn-note{background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff;box-shadow:0 8px 22px -8px rgba(147,51,234,.8)}
 .ma-btn-note:hover{transform:translateY(-2px)}
+.ma-btn-paid{background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;box-shadow:0 8px 22px -8px rgba(76,175,80,.8)}
+.ma-btn-paid:hover{transform:translateY(-2px)}
+.ma-btn-unpaid{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:#8a92b0}
+.ma-btn-unpaid:hover{background:rgba(255,255,255,.12)}
 .ma-btn-action:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
 
 /* ===== User stats block ===== */
@@ -580,7 +586,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       }
     });
 
-    // 🔍 بحث موحد يعمل على الطلبات والعملاء
     $('maSearch').addEventListener('input', () => {
       if (usersView) renderUsers();
       else renderOrders();
@@ -643,7 +648,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     $('maUserName').textContent = currentUser.user_metadata?.name || currentUser.email.split('@')[0];
     $('maUserEmail').textContent = currentUser.email;
     loadOrders();
-    // نحمّل العملاء في الخلفية للإحصائيات
     loadUsers(true);
   }
 
@@ -761,6 +765,15 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     container.querySelectorAll('[data-delete-order]').forEach(btn => {
       btn.addEventListener('click', () => openDelModal(btn.dataset.deleteOrder));
     });
+
+    // ✅ أزرار تعليم الكاش باك كمدفوع / غير مدفوع
+    container.querySelectorAll('[data-mark-paid]').forEach(btn => {
+      btn.addEventListener('click', () => toggleCashbackPaid(btn.dataset.markPaid, true));
+    });
+
+    container.querySelectorAll('[data-unmark-paid]').forEach(btn => {
+      btn.addEventListener('click', () => toggleCashbackPaid(btn.dataset.unmarkPaid, false));
+    });
   }
 
   function renderOrderCard(o) {
@@ -769,9 +782,15 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     const itemsHtml = items.map(it => `<div>• <span class="name">${escapeHtml(it.name || 'منتج')}</span> × ${it.qty || 1} — ${(Number(it.price||0) * Number(it.qty||1)).toFixed(2)} ر.س</div>`).join('') || '<div>—</div>';
     const date = fmtDate(o.created_at);
 
+    // ═══ كاش باك: 3 حالات واضحة ═══
     let cbHtml = '';
     if (o.status === 'delivered' && o.cashback_applied) {
-      cbHtml = `<div class="ma-cb-info earned"><i class="fas fa-gift"></i> كاش باك مكتسب: ${Number(o.cashback || 0).toFixed(2)} ر.س</div>`;
+      const amount = Number(o.cashback || 0).toFixed(2);
+      if (o.cashback_paid) {
+        cbHtml = `<div class="ma-cb-info paid"><i class="fas fa-circle-check"></i> كاش باك مدفوع: ${amount} ر.س</div>`;
+      } else {
+        cbHtml = `<div class="ma-cb-info unpaid"><i class="fas fa-hourglass-half"></i> كاش باك غير مدفوع: ${amount} ر.س</div>`;
+      }
     } else if (o.status !== 'cancelled' && o.status !== 'delivered') {
       const potential = Number(o.total || 0) * CASHBACK_RATE;
       cbHtml = `<div class="ma-cb-info pending"><i class="fas fa-clock"></i> متوقع عند التسليم: ${potential.toFixed(2)} ر.س</div>`;
@@ -780,6 +799,10 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     const options = Object.entries(ORDER_STATUS).map(([k, v]) =>
       `<option value="${k}" ${k === o.status ? 'selected' : ''}>${v.label}</option>`
     ).join('');
+
+    // ✅ زر تعليم الدفع يظهر فقط للطلبات المُستلمة التي عليها كاش باك
+    const showMarkPaid = o.status === 'delivered' && o.cashback_applied && !o.cashback_paid;
+    const showUnmarkPaid = o.cashback_paid;
 
     return `
       <div class="ma-order" data-order="${o.id}">
@@ -817,12 +840,70 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
           <button class="ma-btn-action ma-btn-cb" data-add-cashback="${o.id}">
             <i class="fas fa-gift"></i> كاش باك
           </button>
+          ${showMarkPaid ? `
+            <button class="ma-btn-action ma-btn-paid" data-mark-paid="${o.id}">
+              <i class="fas fa-money-bill-wave"></i> تعليم كمدفوع
+            </button>
+          ` : ''}
+          ${showUnmarkPaid ? `
+            <button class="ma-btn-action ma-btn-unpaid" data-unmark-paid="${o.id}">
+              <i class="fas fa-rotate-left"></i> إلغاء الدفع
+            </button>
+          ` : ''}
           <button class="ma-btn-action ma-btn-delete" data-delete-order="${o.id}">
             <i class="fas fa-trash"></i> حذف
           </button>
         </div>
       </div>
     `;
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // 💵 Toggle Cashback Paid
+  // ═══════════════════════════════════════════════════════════
+  async function toggleCashbackPaid(orderId, paid) {
+    const order = allOrders.find(o => String(o.id) === String(orderId));
+    if (!order) return;
+
+    const updates = {
+      cashback_paid: paid,
+      cashback_paid_at: paid ? new Date().toISOString() : null,
+      updated_at: new Date().toISOString()
+    };
+
+    try {
+      const { error } = await sb.from('men_orders').update(updates).eq('id', orderId);
+      if (error) throw error;
+
+      Object.assign(order, updates);
+      renderOrders();
+
+      toast(
+        paid
+          ? `✅ تم تعليم كاش باك الطلب #${String(orderId).slice(-8).toUpperCase()} كمدفوع`
+          : `↩️ تم إلغاء تعليم الدفع للطلب #${String(orderId).slice(-8).toUpperCase()}`,
+        'success'
+      );
+
+      // إشعار العميل بأن الكاش باك تم دفعه
+      if (paid) {
+        try {
+          await sb.from('men_messages').insert({
+            user_id: order.user_id,
+            user_email: order.user_email,
+            sender: 'admin',
+            sender_name: 'الإدارة',
+            sender_email: currentUser.email,
+            message: `تم دفع كاش باك بقيمة ${Number(order.cashback || 0).toFixed(2)} ر.س لطلبك #${String(orderId).slice(-8).toUpperCase()} ✅`,
+            type: 'note',
+            is_read: false
+          });
+        } catch (e) { console.warn('notify paid:', e); }
+      }
+    } catch (err) {
+      console.error(err);
+      toast('فشل التحديث: ' + err.message, 'error');
+    }
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -840,7 +921,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
       if (error) throw error;
       allUsers = data || [];
-      // حدّث إحصائيات العملاء في الأعلى
       $('maStatCustomers').textContent = allUsers.length;
       const totalCashback = allUsers.reduce((s, u) => s + Number(u.cashback || 0), 0);
       $('maStatCashback').textContent = totalCashback.toFixed(0);
@@ -852,7 +932,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     }
   }
 
-  // 🔍 بحث + عرض العملاء
   function renderUsers() {
     const container = $('maUsers');
     const q = ($('maSearch').value || '').trim().toLowerCase();
@@ -981,6 +1060,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       updates.cashback = earned;
       updates.cashback_applied = true;
       updates.cashback_applied_at = new Date().toISOString();
+      updates.cashback_paid = false; // لسه ما اتدفعش
       cbMsg = ` + ${earned.toFixed(2)} ر.س كاش باك`;
       try {
         await sb.from('men_cashback_log').insert({
@@ -999,6 +1079,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         const refund = Number(order.cashback || 0);
         updates.cashback = 0;
         updates.cashback_applied = false;
+        updates.cashback_paid = false;
         cbMsg = ` − خصم ${refund.toFixed(2)} ر.س`;
         try {
           await sb.from('men_cashback_log').insert({
@@ -1145,7 +1226,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       }).eq('id', order.user_id);
       if (updErr) throw updErr;
 
-      // تحديث محلي
       const localUser = allUsers.find(x => String(x.id) === String(order.user_id));
       if (localUser) localUser.cashback = newCb;
 
