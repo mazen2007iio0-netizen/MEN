@@ -8,13 +8,12 @@
       "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/201887_332160.png"
     },
     "discountCodes": [
-      { "code": "MEN1",  "percent": 10, "products": [] },
-      { "code": "rrr",   "percent": 10, "products": [5, 7, 9] },
+      { "code": "MEN1", "percent": 10, "products": [] },
+      { "code": "rrr", "percent": 10, "products": [5, 7, 9] },
       { "code": "MEN20", "percent": 20, "products": [1, 2] }
     ],
     "carouselInterval": 5000
   },
-
   "ads": [
     {
       "img": "https://www.socialcreator.com/srv/imgs/ti_imgs/201887_332160.png",
@@ -22,16 +21,14 @@
       "desc": "MEN Pass"
     }
   ],
-
   "reviews": [
-    { "author": "أحمد السالم",  "stars": 5, "text": "المتجر رائع جداً ." },
+    { "author": "أحمد السالم", "stars": 5, "text": "المتجر رائع جداً ." },
     { "author": "نورة العتيبي", "stars": 4, "text": "خدمة سريعة ." },
-    { "author": "خالد الحربي",  "stars": 5, "text": "أفضل تيشيرتات ." },
+    { "author": "خالد الحربي", "stars": 5, "text": "أفضل تيشيرتات ." },
     { "author": "سارة الغامدي", "stars": 4, "text": "الشحن سريع ." },
     { "author": "فيصل المالكي", "stars": 3, "text": "منتج جيد ." },
-    { "author": "منى الشمري",   "stars": 5, "text": "MEN Pass ممتاز !" }
+    { "author": "منى الشمري", "stars": 5, "text": "MEN Pass ممتاز !" }
   ],
-
   "products": [
     {
       "id": 1,
@@ -61,7 +58,7 @@
       "id": 6,
       "name": "بطاقة المعركة",
       "price": "24.99",
-      "originalPrice": "34.99", 
+      "originalPrice": "34.99",
       "image": "https://www.socialcreator.com/srv/imgs/ti_imgs/201133_332160.png",
       "images": [
         "https://www.socialcreator.com/srv/imgs/ti_imgs/201133_332160.png",
@@ -213,42 +210,64 @@
       "warranty": "ضمان استبدال الكود في حال العطل",
       "popular": false
     },
-{
-  "id": 10,
-  "name": "FC 27",
-  "price": "170",
-  "originalPrice": "339",
-  "image": "https://mestores.com/media/catalog/product//f/c/fc27ps52dpftfront_ksa_cmyk.jpg",
-  "images": [
-    "https://mestores.com/media/catalog/product//f/c/fc27ps52dpftfront_ksa_cmyk.jpg",
-    "https://cdn.salla.sa/AnzPY/YPOGNm3qSbR8ckF9ZkXMrr7cackhSD5YgTIH9BAu.jpg",
-    "https://mestores.com/media/catalog/product//f/c/fc27ps52dpftfront_ksa_cmyk.jpg",
-    "https://mestores.com/media/catalog/product//f/c/fc27ps52dpftfront_ksa_cmyk.jpg"
-  ],
-  "category": "لعبة",
-  "rating": 4.4,
-  "features": [
-    "نسخة رقمية",
-    "شحن فوري",
-    "تفعيل سريع",
-    "متوافقة مع FC 27"
-  ],
-  "cons": [
-    "غير متوفر لجميع المناطق"
-  ],
-  "description": "لعبة FC 27 بتجربة كرة قدم متكاملة، مع تفعيل رقمي سريع والاستمتاع بالمباريات وأطوار اللعبة.",
-  "tags": [
-    "FC 27",
-    "فيفا",
-    "كرة القدم",
-    "ألعاب",
-    "رقمي"
-  ],
-  "usage": "بعد شراء المنتج، استخدم كود التفعيل في المتجر أو المنصة المخصصة للعبة.",
-  "warranty": "ضمان استبدال الكود في حال وجود مشكلة في التفعيل.",
-  "popular": false
+    {
+      "id": 11,
+      "name": "سماعة الالعاب الفا 2",
+      "price": "199",
+      "originalPrice": "249",
+      "image": "https://cdn.salla.sa/cdn-cgi/image/fit=scale-down,width=900,height=1000,onerror=redirect,format=webp/oNQR/6a20bf73-3c3d-44aa-89ff-1486d4f06153-1000x1000-aYhDYcgap9gIrkZhw5YzgJKHgV8wxbPif1E1qfrs.jpg",
+      "images": [
+        "https://cdn.salla.sa/cdn-cgi/image/fit=scale-down,width=900,height=1000,onerror=redirect,format=webp/oNQR/6a20bf73-3c3d-44aa-89ff-1486d4f06153-1000x1000-aYhDYcgap9gIrkZhw5YzgJKHgV8wxbPif1E1qfrs.jpg",
+        "https://cdn.salla.sa/cdn-cgi/image/fit=scale-down,width=900,height=1000,onerror=redirect,format=webp/oNQR/658520dc-ed50-4115-bfc6-2e1aea0e5e1c-1000x1000-s7A2mMjcA62PQSpleBwLa45u6Yl7Y0i8Plr9lDJJ.jpg",
+        "https://cdn.salla.sa/cdn-cgi/image/fit=scale-down,width=900,height=1000,onerror=redirect,format=webp/oNQR/156a52da-4cb9-43f0-81f8-447f08fdd6a0-1000x1000-8bknGxo3IckZ4nMj9BNH4qhPHH55XkjFoGilseUX.jpg",
+        "https://cdn.salla.sa/cdn-cgi/image/fit=scale-down,width=900,height=1000,onerror=redirect,format=webp/oNQR/8970eaf7-a95a-4887-9683-4b5b17ce1812-1000x1000-FTsDfhBebp0vwy319tcAQPhemBKxS4TDa1M2iNLK.jpg"
+      ],
+      "category": "مستلزمات الألعاب",
+      "rating": 4.7,
+      "features": ["شحن فوري", "تجربة لعب فريدة و مميزة مع سماعة الالعاب"],
+      "cons": ["غير متوفر لجميع المناطق"],
+      "description": "سماعة الالعاب الفا 2 برو لاسلكية بخاصية عزل الضوضاء و الصوت المحيطي",
+      "tags": ["ألعاب", "هدية", "سماعة"],
+      "usage": "سماعات الألعاب اللاسلكية .",
+      "warranty": "ضمان استبدال الكود في حال العطل",
+      "popular": false
     },
-
+    
+    {
+      "id": 10,
+      "name": "FC 27",
+      "price": "170",
+      "originalPrice": "339",
+      "image": "https://mestores.com/media/catalog/product//f/c/fc27ps52dpftfront_ksa_cmyk.jpg",
+      "images": [
+        "https://mestores.com/media/catalog/product//f/c/fc27ps52dpftfront_ksa_cmyk.jpg",
+        "https://cdn.salla.sa/AnzPY/YPOGNm3qSbR8ckF9ZkXMrr7cackhSD5YgTIH9BAu.jpg",
+        "https://mestores.com/media/catalog/product//f/c/fc27ps52dpftfront_ksa_cmyk.jpg",
+        "https://mestores.com/media/catalog/product//f/c/fc27ps52dpftfront_ksa_cmyk.jpg"
+      ],
+      "category": "لعبة",
+      "rating": 4.4,
+      "features": [
+        "نسخة رقمية",
+        "شحن فوري",
+        "تفعيل سريع",
+        "متوافقة مع FC 27"
+      ],
+      "cons": [
+        "غير متوفر لجميع المناطق"
+      ],
+      "description": "لعبة FC 27 بتجربة كرة قدم متكاملة، مع تفعيل رقمي سريع والاستمتاع بالمباريات وأطوار اللعبة.",
+      "tags": [
+        "FC 27",
+        "فيفا",
+        "كرة القدم",
+        "ألعاب",
+        "رقمي"
+      ],
+      "usage": "بعد شراء المنتج، استخدم كود التفعيل في المتجر أو المنصة المخصصة للعبة.",
+      "warranty": "ضمان استبدال الكود في حال وجود مشكلة في التفعيل.",
+      "popular": false
+    },
     {
       "id": 5,
       "name": "ستور سوني 10$",
