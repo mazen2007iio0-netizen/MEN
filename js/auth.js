@@ -15,8 +15,8 @@
                   && SUPABASE_ANON_KEY.length > 100;
 
   if (!credsReady) {
-    console.error('⛔ ضع مفاتيح Supabase');
-    window.MEN_AUTH = { CASHBACK_RATE: 0.02, open: () => alert('⚠️ أضف المفاتيح'), openAccount: () => {}, logout: () => {}, getCurrentUser: () => null, getCashbackBalance: async () => 0, addOrder: async () => null };
+    console.error(' ضع مفاتيح Supabase');
+    window.MEN_AUTH = { CASHBACK_RATE: 0.02, open: () => alert(' أضف المفاتيح'), openAccount: () => {}, logout: () => {}, getCurrentUser: () => null, getCashbackBalance: async () => 0, addOrder: async () => null };
     return;
   }
 
@@ -495,7 +495,7 @@
               </div>
             </div>
             <div class="men-showcase-center">
-              <div class="men-showcase-badge"><i class="fas fa-star"></i> متجرك الأول للألعاب</div>
+              <div class="men-showcase-badge"><i class=""></i> متجرك الأول للألعاب</div>
               <h1 class="men-showcase-title">كل ما تحتاجه<br>في <span>عالم الجيمنق</span></h1>
               <p class="men-showcase-desc">انضم إلى أكثر من 5000 لاعب يستمتعون بأفضل الأسعار، التسليم الفوري، والكاش باك على كل طلب.</p>
               <div class="men-features">
@@ -733,8 +733,8 @@
 
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        console.log('✅ دخول:', data.user?.email);
-        await showSuccess('مرحباً بك! 👋');
+        console.log(' دخول:', data.user?.email);
+        await showSuccess('مرحباً بك!');
         launchConfetti();
       } else {
         const name  = $('menAuthName').value.trim();
@@ -762,19 +762,19 @@
               id: data.user.id, email, name, phone, cashback: 0,
               updated_at: new Date().toISOString()
             }, { onConflict: 'id' });
-            console.log('✅ User saved in men_users');
+            console.log(' User saved in men_users');
           } catch (e) { console.warn('save user failed:', e); }
         }
 
-        if (!data.session) { showError('✅ تم إنشاء حسابك! يمكنك الآن تسجيل الدخول.'); return; }
-        console.log('✅ حساب جديد:', data.user?.email);
+        if (!data.session) { showError(' تم إنشاء حسابك! يمكنك الآن تسجيل الدخول.'); return; }
+        console.log(' حساب جديد:', data.user?.email);
         await showSuccess('تم إنشاء حسابك');
         launchConfetti();
       }
     } catch (err) {
       console.error('[AUTH ERROR]', err);
       const m = (err.message || '').toLowerCase();
-      if (m.includes('invalid login') || m.includes('invalid credentials')) showError('البيانات غير صحيحة — تحقق من الجوال/البريد وكلمة المرور');
+      if (m.includes('invalid login') || m.includes('invalid credentials')) showError('البيانات غير صحيحة تحقق من رقم الجوال/البريد وكلمة المرور');
       else if (m.includes('already registered') || m.includes('already been registered') || m.includes('user already exists')) showError('هذا البريد مسجل بالفعل — انتقل لتسجيل الدخول');
       else if (m.includes('duplicate key')) showError('هذا الرقم مستخدم بحساب آخر');
       else if (m.includes('password')) showError('كلمة المرور ضعيفة');
@@ -1316,7 +1316,7 @@
       await sb.from('men_users').update({ name, phone, updated_at: new Date().toISOString() }).eq('id', data.user.id);
       await fillAccountPage(data.user);
       syncUI(data.user);
-      if (window.showToast) window.showToast('✅ تم حفظ التغييرات', 'success');
+      if (window.showToast) window.showToast(' تم حفظ التغييرات', 'success');
     } catch (err) {
       if (window.showToast) window.showToast('فشل الحفظ: ' + err.message, 'error');
     } finally {
@@ -1326,15 +1326,15 @@
   }
 
   function deleteAccount() {
-    if (!confirm('⚠️ هل أنت متأكد من حذف حسابك نهائياً؟')) return;
+    if (!confirm(' هل أنت متأكد من حذف حسابك نهائياً؟')) return;
     if (window.showToast) window.showToast('تواصل مع الدعم: clan.men.ts@gmail.com', 'info');
   }
 
   function shareAccount() {
     if (!currentUser) return;
-    const text = `🎮 أنا عضو في MEN Store!\nانضم إلينا واحصل على كاش باك 2%\n${location.origin}`;
+    const text = ` أنا عضو في MEN Store!\nانضم إلينا واحصل على كاش باك 2%\n${location.origin}`;
     if (navigator.share) navigator.share({ title: 'MEN Store', text, url: location.origin }).catch(() => {});
-    else navigator.clipboard.writeText(text).then(() => window.showToast?.('✅ تم نسخ الرابط', 'success'));
+    else navigator.clipboard.writeText(text).then(() => window.showToast?.(' تم نسخ الرابط', 'success'));
   }
 
   async function openAccount() {
@@ -1647,7 +1647,7 @@
           updated_at: new Date().toISOString()
         }, { onConflict: 'id' });
 
-        console.log('✅ Order created:', orderId, '| Used CB:', useCb, '| Final:', finalTotal);
+        console.log(' Order created:', orderId, '| Used CB:', useCb, '| Final:', finalTotal);
         refreshCbUI();
 
         return { orderId, cashbackUsed: useCb, finalTotal };
