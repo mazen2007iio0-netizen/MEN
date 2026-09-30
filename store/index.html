@@ -1064,7 +1064,7 @@ async function loadStoreData(){
         try{const res=await fetch(path,{cache:'no-store'});if(!res.ok)continue;const data=await res.json();
             productsArray=data.products||[];reviewsData=data.reviews||[];ads=data.ads||[];
             if(data.settings){storeSettings={...storeSettings,...data.settings};if(data.settings.banner)storeSettings.banner={...storeSettings.banner,...data.settings.banner};}
-            console.log('✅ تحميل المنتجات:',productsArray.length);
+            console.log(' تحميل المنتجات:',productsArray.length);
             return true;
         }catch(err){continue;}
     }
@@ -1312,12 +1312,12 @@ function updateCartUI(){
             const coversFull = cbUsed >= afterDisc && afterDisc > 0;
             if(coversFull){
                 fullBtn.classList.add('active');
-                if($('cbFullText')) $('cbFullText').textContent = '✅ الطلب مغطّى بالكامل';
+                if($('cbFullText')) $('cbFullText').textContent = ' الطلب مغطّى بالكامل';
                 if($('cbSuccess')) $('cbSuccess').style.display = 'flex';
             } else {
                 fullBtn.classList.remove('active');
                 if($('cbFullText')){
-                    if(canCover) $('cbFullText').textContent = `⚡ ادفع ${afterDisc.toFixed(2)} ر.س كاملة`;
+                    if(canCover) $('cbFullText').textContent = ` ادفع ${afterDisc.toFixed(2)} ر.س كاملة`;
                     else $('cbFullText').textContent = `رصيدك ${cashbackBalance.toFixed(2)} ر.س (لا يكفي)`;
                 }
                 if($('cbSuccess')) $('cbSuccess').style.display = 'none';
@@ -1415,16 +1415,16 @@ async function sendCartRequest(){
 
     let productList=cartItems.map((p,i)=>`${i+1}. ${p.name} (x${p.quantity}) - ${(parseFloat(p.price)*p.quantity).toFixed(2)} ر.س`).join('\n');
 
-    const embed={title:"🛒 طلب جديد من متجر MEN",color:0x1e40af,fields:[
-        {name:"👤 العميل",value:user.user_metadata?.name||user.email||'—',inline:true},
-        {name:"📱 الجوال",value:user.user_metadata?.phone||'—',inline:true},
-        {name:"📦 القطع",value:cartItems.reduce((s,p)=>s+p.quantity,0).toString(),inline:true},
-        {name:"💰 المجموع",value:`${total.toFixed(2)} ر.س`,inline:true},
-        ...(discountAmount>0?[{name:"🎁 خصم الكود",value:`-${discountAmount.toFixed(2)} ر.س (${discountPercent}%)`,inline:true}]:[]),
-        ...(cashbackUsed>0?[{name:"💳 كاش باك مستخدم",value:`-${cashbackUsed.toFixed(2)} ر.س`,inline:true}]:[]),
-        {name:"✅ المدفوع",value:finalTotal>0?`${finalTotal.toFixed(2)} ر.س`:"مجاناً بالكامل 🎉",inline:true},
-        {name:"🛍️ المنتجات",value:productList.substring(0,1000),inline:false},
-        {name:"🕐 الوقت",value:new Date().toLocaleString('ar-SA'),inline:true}
+    const embed={title:" طلب جديد من متجر MEN",color:0x1e40af,fields:[
+        {name:" العميل",value:user.user_metadata?.name||user.email||'—',inline:true},
+        {name:" الجوال",value:user.user_metadata?.phone||'—',inline:true},
+        {name:" القطع",value:cartItems.reduce((s,p)=>s+p.quantity,0).toString(),inline:true},
+        {name:" المجموع",value:`${total.toFixed(2)} ر.س`,inline:true},
+        ...(discountAmount>0?[{name:" خصم الكود",value:`-${discountAmount.toFixed(2)} ر.س (${discountPercent}%)`,inline:true}]:[]),
+        ...(cashbackUsed>0?[{name:" كاش باك مستخدم",value:`-${cashbackUsed.toFixed(2)} ر.س`,inline:true}]:[]),
+        {name:" المدفوع",value:finalTotal>0?`${finalTotal.toFixed(2)} ر.س`:"مجاناً بالكامل",inline:true},
+        {name:" المنتجات",value:productList.substring(0,1000),inline:false},
+        {name:" الوقت",value:new Date().toLocaleString('ar-SA'),inline:true}
     ],thumbnail:{url:cartItems[0]?.image||''},timestamp:new Date().toISOString()};
 
     try{
@@ -1452,15 +1452,15 @@ async function sendCartRequest(){
         }
 
         if (finalTotal === 0 && cashbackUsed > 0) {
-            showToast("🎉 تم الشراء بالكامل من الكاش باك!","success");
+            showToast(" تم الشراء بالكامل من الكاش باك!","success");
         } else if (cashbackUsed > 0) {
-            showToast(`✅ تم! استخدمنا ${cashbackUsed.toFixed(2)} ر.س من رصيدك`,"success");
+            showToast(` تم! استخدمنا ${cashbackUsed.toFixed(2)} ر.س من رصيدك`,"success");
         } else {
             showToast("تم إرسال طلبك بنجاح!","success");
         }
 
         const newCashback = finalTotal * (window.MEN_AUTH?.CASHBACK_RATE || 0.02);
-        if (newCashback > 0) setTimeout(()=>showToast(`💰 حصلت على ${newCashback.toFixed(2)} ر.س كاش باك!`,"success"), 900);
+        if (newCashback > 0) setTimeout(()=>showToast(` حصلت على ${newCashback.toFixed(2)} ر.س كاش باك!`,"success"), 900);
 
         cartItems=[];discountApplied=false;discountPercent=0;discountCode='';discountProducts=[];
         useCashback=false;useFullCashback=false;cashbackBalance=0;cashbackUsedAmount=0;
