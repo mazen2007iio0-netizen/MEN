@@ -229,10 +229,31 @@
       "description": "سماعة الالعاب الفا 2 برو لاسلكية بخاصية عزل الضوضاء و الصوت المحيطي",
       "tags": ["ألعاب", "هدية", "سماعة"],
       "usage": "سماعات الألعاب اللاسلكية .",
-      "warranty": "ضمان استبدال الكود في حال العطل",
+      "warranty": "ضمان استبدال المنتج في حال العطل",
       "popular": false
-    },
-    
+    },  
+   {
+      "id": 12,
+      "name": "Forza Horizon 5",
+      "price": "119",
+      "originalPrice": "239",
+      "image": "https://cdn.salla.sa/AnzPY/a8fbfb80-2d27-46a2-9855-e36b7d1a2201-1000x1000-R90NVhuVo6JD1yxsj6KcLSdAF2tiNeZ64Hu5gY8L.jpg",
+      "images": [
+        "https://cdn.salla.sa/AnzPY/a8fbfb80-2d27-46a2-9855-e36b7d1a2201-1000x1000-R90NVhuVo6JD1yxsj6KcLSdAF2tiNeZ64Hu5gY8L.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQe21otcZEyggRKKjNcGJtPYiuOsg16oVC570nM9-OK61_gHQTlA9AhYmdu270VsMM76nnOt4oUxjiozmCu112sRPt6qkH3SO1m-_qHj7Y&s=10",
+        "https://image.api.playstation.com/vulcan/ap/rnd/202506/0923/990422299f45142f3cbd90581338289d8c76e2feac0ff23c.png",
+        "https://store-images.s-microsoft.com/image/apps.54576.13734397844529069.cb22092f-c997-40f9-8554-70d6a55fabbf.90ea65fb-556b-43f0-b4bc-3c51f77a0397?h=720"
+      ],
+      "category": "لعبة",
+      "rating": 4.7,
+      "features": ["شحن فوري", "تجربة لعب فريدة "],
+      "cons": ["غير متوفر لجميع المناطق"],
+      "description": "انطلق في مغامرة المحركات الأضخم واكتشف جمال المكسيك الساحر خلف مقود مئات السيارات الأسطورية. في فورزا هورايزن 5، ",
+      "tags": ["ألعاب", "هدية", "رقمي"],
+      "usage": "شراء لعبة .",
+      "warranty": "ضمان استبدال الحساب في حال العطل",
+      "popular": false
+    },   
     {
       "id": 10,
       "name": "FC 27",
@@ -268,6 +289,7 @@
       "warranty": "ضمان استبدال الكود في حال وجود مشكلة في التفعيل.",
       "popular": false
     },
+    
     {
       "id": 5,
       "name": "ستور سوني 10$",
