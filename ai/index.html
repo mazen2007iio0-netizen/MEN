@@ -10,19 +10,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: #000000;
-            color: #f0f4ff;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+        body { font-family: 'Cairo', sans-serif; background: #000000; color: #f0f4ff; min-height: 100vh; overflow-x: hidden; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #000000; }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #021ca4, #1a3a9e);
-            border-radius: 12px;
-        }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #021ca4, #1a3a9e); border-radius: 12px; }
         .bg-ambient {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
             background: radial-gradient(ellipse at 20% 30%, rgba(2, 28, 164, 0.15) 0%, transparent 55%),
@@ -30,63 +21,168 @@
                         radial-gradient(ellipse at 50% 50%, #000000 0%, #000000 100%);
             animation: ambientFloat 20s ease-in-out infinite alternate;
         }
-        @keyframes ambientFloat {
-            0% { transform: scale(1) rotate(0deg); }
-            100% { transform: scale(1.05) rotate(2deg); }
-        }
+        @keyframes ambientFloat { 0% { transform: scale(1) rotate(0deg); } 100% { transform: scale(1.05) rotate(2deg); } }
         .container { width: 92%; max-width: 1100px; margin: 0 auto; padding: 0 18px; }
         :root {
-            --blue-deep: #021ca4;
-            --blue-mid: #1a3a9e;
-            --blue-light: #4a7aff;
-            --blue-glow: rgba(74, 122, 255, 0.2);
-            --card-bg: rgba(10, 16, 32, 0.85);
-            --card-border: rgba(2, 28, 164, 0.25);
-            --radius-xl: 24px;
-            --radius-2xl: 40px;
-            --glow-neon: 0 0 30px rgba(74, 122, 255, 0.15);
+            --blue-deep: #021ca4; --blue-mid: #1a3a9e; --blue-light: #4a7aff;
+            --card-bg: rgba(10, 16, 32, 0.85); --card-border: rgba(2, 28, 164, 0.25);
+            --radius-xl: 24px; --radius-2xl: 40px;
         }
         header {
-            background: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(24px);
+            background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(24px);
             border-bottom: 1px solid rgba(2, 28, 164, 0.10);
             padding: 12px 0; position: sticky; top: 0; z-index: 1000;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
         }
         .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
-        .header-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+        /* ═══ Logo ═══ */
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo img { height: 44px; filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(74,122,255,.3)); }
+        .logo h1 {
+            font-size: 1.6rem; font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 40%, var(--blue-light));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .logo h1 i { color: var(--blue-light); margin-left: 6px; font-size: 1.3rem; }
+
+        /* ═══ زر الدخول / صورة البروفايل ═══ */
         .header-right { display: flex; align-items: center; gap: 10px; }
-        .btn-back, .btn-memory, .btn-settings, .btn-lib {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(74, 122, 255, 0.15);
-            border-radius: 40px; padding: 0 20px; height: 44px;
-            color: #b0c4e8; font-size: 1rem; cursor: pointer;
+        .btn-login {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+            border: 1px solid rgba(74, 122, 255, 0.25);
+            border-radius: 40px; padding: 0 22px; height: 44px;
+            color: #fff; font-family: 'Cairo', sans-serif;
+            font-weight: 700; font-size: 0.95rem; cursor: pointer;
             transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            text-decoration: none; font-family: 'Cairo', sans-serif;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-            position: relative; overflow: hidden;
+            box-shadow: 0 6px 24px -8px rgba(2, 28, 164, 0.6);
         }
-        .btn-back i, .btn-memory i, .btn-settings i, .btn-lib i { font-size: 1.2rem; transition: 0.3s; }
-        .btn-back .back-text, .btn-memory .memory-text, .btn-settings .settings-text, .btn-lib .lib-text {
-            font-weight: 600; font-size: 0.95rem; white-space: nowrap;
-        }
-        .btn-back:hover, .btn-memory:hover, .btn-settings:hover, .btn-lib:hover {
-            background: rgba(74, 122, 255, 0.08);
-            border-color: var(--blue-light); color: #fff;
+        .btn-login:hover {
             transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 8px 30px rgba(74, 122, 255, 0.15);
+            box-shadow: 0 10px 32px -8px rgba(74, 122, 255, 0.7);
         }
-        .btn-lib i { color: #f5b342; }
+        .btn-login i { font-size: 1.05rem; }
+
+        .btn-profile {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(74, 122, 255, 0.2);
+            border-radius: 40px; padding: 4px 16px 4px 4px; height: 44px;
+            cursor: pointer; transition: 0.3s;
+            font-family: 'Cairo', sans-serif;
+        }
+        .btn-profile:hover {
+            background: rgba(74, 122, 255, 0.1);
+            border-color: var(--blue-light);
+            transform: translateY(-1px);
+        }
+        .btn-profile img {
+            width: 36px; height: 36px; border-radius: 50%;
+            border: 2px solid rgba(74, 122, 255, 0.5);
+            object-fit: cover;
+        }
+        .btn-profile .p-name {
+            color: #d0dcf5; font-weight: 700; font-size: 0.88rem;
+            max-width: 110px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .btn-profile .p-dot {
+            width: 8px; height: 8px; border-radius: 50%; background: #4ade80;
+            box-shadow: 0 0 8px #4ade80;
+        }
+        @media (max-width: 600px) {
+            .btn-profile .p-name { display: none; }
+            .btn-profile { padding: 4px; }
+        }
+
+        /* ═══ Sidebar ═══ */
+        .side-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,.6);
+            backdrop-filter: blur(4px); z-index: 1400;
+            opacity: 0; pointer-events: none; transition: opacity .3s;
+        }
+        .side-overlay.show { opacity: 1; pointer-events: auto; }
+        .side-menu {
+            position: fixed; top: 0; right: -360px; width: 340px; height: 100vh;
+            background: linear-gradient(180deg, rgba(6,10,24,.98), rgba(4,6,15,.99));
+            border-left: 1px solid rgba(74,122,255,.15);
+            z-index: 1500; transition: right .4s cubic-bezier(.16,1,.3,1);
+            display: flex; flex-direction: column;
+            backdrop-filter: blur(20px);
+            box-shadow: -30px 0 80px -20px rgba(0,0,0,.9);
+        }
+        .side-menu.open { right: 0; }
+        .side-head {
+            padding: 26px 22px 20px;
+            border-bottom: 1px solid rgba(74,122,255,.1);
+            display: flex; flex-direction: column; align-items: center;
+            text-align: center; gap: 12px;
+            background: linear-gradient(180deg, rgba(37,99,235,.1), transparent);
+        }
+        .side-head img {
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 3px solid #4a7aff;
+            box-shadow: 0 0 0 6px rgba(74,122,255,.15), 0 12px 36px -10px rgba(74,122,255,.8);
+            object-fit: cover;
+        }
+        .side-head .s-name { color: #fff; font-weight: 800; font-size: 1.1rem; }
+        .side-head .s-email { color: #8a92b0; font-size: .78rem; font-weight: 600; word-break: break-all; }
+        .side-head .s-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(74,122,255,.12); border: 1px solid rgba(74,122,255,.25);
+            color: #60a5fa; font-size: .7rem; font-weight: 800;
+            padding: 4px 12px; border-radius: 20px;
+        }
+        .side-close {
+            position: absolute; top: 14px; left: 14px;
+            width: 34px; height: 34px; border-radius: 50%;
+            background: rgba(74,122,255,.1); border: 1px solid rgba(74,122,255,.2);
+            color: #8a92b0; cursor: pointer; transition: all .3s;
+            display: flex; align-items: center; justify-content: center; font-size: .8rem;
+        }
+        .side-close:hover { background: rgba(220,38,38,.15); color: #f87171; transform: rotate(180deg); }
+        .side-body { flex: 1; overflow-y: auto; padding: 16px 12px; }
+        .side-body::-webkit-scrollbar { width: 4px; }
+        .side-body::-webkit-scrollbar-thumb { background: rgba(74,122,255,.3); border-radius: 4px; }
+        .side-item {
+            display: flex; align-items: center; gap: 14px;
+            padding: 14px 18px; border-radius: 14px;
+            color: #c0ccf0; font-family: 'Cairo', sans-serif;
+            font-weight: 700; font-size: .92rem;
+            cursor: pointer; transition: all .3s; border: none;
+            background: transparent; width: 100%; text-align: right;
+            margin-bottom: 4px;
+        }
+        .side-item i {
+            font-size: 1.1rem; width: 40px; height: 40px;
+            border-radius: 12px; background: rgba(74,122,255,.1);
+            color: #4a7aff; display: flex; align-items: center;
+            justify-content: center; flex-shrink: 0;
+            transition: all .3s;
+        }
+        .side-item:hover { background: rgba(74,122,255,.08); color: #fff; }
+        .side-item:hover i { background: rgba(74,122,255,.2); color: #60a5fa; transform: scale(1.08); }
+        .side-item.danger { color: #f87171; }
+        .side-item.danger i { background: rgba(220,38,38,.1); color: #f87171; }
+        .side-item.danger:hover { background: rgba(220,38,38,.08); }
+        .side-item.danger:hover i { background: rgba(220,38,38,.2); }
+        .side-divider { height: 1px; background: rgba(74,122,255,.1); margin: 8px 14px; }
+        .side-foot {
+            padding: 14px 20px; border-top: 1px solid rgba(74,122,255,.1);
+            color: #4a5070; font-size: .72rem; text-align: center; font-weight: 600;
+        }
+        @media (max-width: 480px) {
+            .side-menu { width: 88vw; right: -88vw; }
+        }
+
+        /* ═══ Chat ═══ */
         .chat-wrapper {
-            margin: 0 0 20px;
+            margin: 20px 0;
             background: var(--card-bg); backdrop-filter: blur(24px);
             border: 1px solid var(--card-border);
             border-radius: var(--radius-2xl); overflow: hidden;
-            box-shadow: var(--glow-neon);
             display: flex; flex-direction: column;
-            height: calc(100vh - 240px); min-height: 500px;
+            height: calc(100vh - 160px); min-height: 500px;
         }
         .chat-header {
             padding: 18px 24px;
@@ -133,10 +229,7 @@
             border: 1px solid rgba(2, 28, 164, 0.08);
             border-bottom-right-radius: 6px;
         }
-        .message .msg-time {
-            font-size: 0.65rem; color: #6a708a; margin-top: 6px;
-            display: block; text-align: left;
-        }
+        .message .msg-time { font-size: 0.65rem; color: #6a708a; margin-top: 6px; display: block; text-align: left; }
         .message.user .msg-time { text-align: right; }
         .message.bot .bot-actions {
             display: flex; gap: 8px; margin-top: 8px;
@@ -148,21 +241,12 @@
             border: 1px solid rgba(74, 122, 255, 0.15);
             border-radius: 30px; padding: 4px 14px;
             color: #b0c4e8; font-size: 0.8rem; cursor: pointer;
-            transition: 0.3s; font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', sans-serif;
             display: inline-flex; align-items: center; gap: 6px;
         }
-        .message.bot .bot-actions button:hover {
-            background: rgba(74, 122, 255, 0.12);
-            border-color: var(--blue-light); color: #fff;
-        }
-        .products-row-wrapper {
-            width: 100%; overflow-x: auto; overflow-y: hidden;
-            padding: 6px 0 12px 0; margin: 4px 0;
-        }
-        .products-row {
-            display: flex; flex-wrap: nowrap; gap: 18px;
-            width: max-content; min-width: 100%; padding: 2px 2px 6px 2px;
-        }
+        .message.bot .bot-actions button:hover { background: rgba(74, 122, 255, 0.12); color: #fff; }
+        .products-row-wrapper { width: 100%; overflow-x: auto; padding: 6px 0 12px 0; margin: 4px 0; }
+        .products-row { display: flex; flex-wrap: nowrap; gap: 18px; width: max-content; min-width: 100%; }
         .products-row .men-product-card { min-width: 260px; max-width: 280px; flex: 0 0 auto; margin: 0; }
         .products-row .men-product-card .product-image { height: 160px; }
         .products-row .men-product-card .product-content { padding: 14px 16px 16px; }
@@ -170,39 +254,29 @@
         .products-row .men-product-card .price { font-size: 1.2rem; }
         .products-row .men-product-card .btn-product { padding: 6px 14px; font-size: 0.75rem; }
         .welcome-animation { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; width: 100%; }
-        .welcome-main {
-            display: flex; flex-wrap: wrap; gap: 4px;
-            font-size: 2.4rem; font-weight: 900; margin-bottom: 4px;
+        .welcome-main { display: flex; flex-wrap: wrap; gap: 4px; font-size: 2.4rem; font-weight: 900; margin-bottom: 4px; }
+        .welcome-main .letter {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffffff 20%, var(--blue-light));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            animation: bounceGlow 1.8s ease-in-out infinite alternate;
         }
-        .typewriter-container {
-            font-size: 1.4rem; font-weight: 700;
-            display: flex; align-items: center; gap: 2px;
-            min-height: 2.8rem; direction: rtl;
+        @keyframes bounceGlow {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(-12px) scale(1.08); }
         }
+        .typewriter-container { font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 2px; min-height: 2.8rem; direction: rtl; }
         .typewriter-text { display: inline; color: #c0ccf0; }
-        .typewriter-text .highlight {
-            background: linear-gradient(135deg, var(--blue-light), #a0c0ff);
-            -webkit-background-clip: text; background-clip: text;
-            color: transparent; font-weight: 900;
-        }
-        .typewriter-cursor {
-            display: inline-block; width: 3px; height: 1.8rem;
-            background: var(--blue-light); margin-right: 4px;
-            animation: blinkCursor 0.7s step-end infinite; vertical-align: middle;
-        }
+        .typewriter-text .highlight { background: linear-gradient(135deg, var(--blue-light), #a0c0ff); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 900; }
+        .typewriter-cursor { display: inline-block; width: 3px; height: 1.8rem; background: var(--blue-light); margin-right: 4px; animation: blinkCursor 0.7s step-end infinite; vertical-align: middle; }
         @keyframes blinkCursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        .welcome-desc {
-            font-size: 0.95rem; color: #8a9abb; margin-top: 6px;
-            display: flex; align-items: center; gap: 8px;
-            opacity: 0; animation: fadeInUp 1s ease-out 1.8s forwards;
-        }
+        .welcome-desc { font-size: 0.95rem; color: #8a9abb; margin-top: 6px; display: flex; align-items: center; gap: 8px; opacity: 0; animation: fadeInUp 1s ease-out 1.8s forwards; }
         .welcome-desc i { color: var(--blue-light); animation: spinSlow 4s linear infinite; }
         @keyframes spinSlow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .typing-indicator {
             align-self: flex-start; display: none;
             padding: 10px 20px; background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius-xl);
-            border-bottom-right-radius: 6px;
+            border-radius: var(--radius-xl); border-bottom-right-radius: 6px;
             border: 1px solid rgba(2, 28, 164, 0.08);
             gap: 10px; align-items: center; color: #a0b0d4; font-size: 0.95rem;
         }
@@ -214,31 +288,18 @@
         }
         .typing-indicator .dots span:nth-child(2) { animation-delay: 0.2s; }
         .typing-indicator .dots span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes typingBounce {
-            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-            30% { transform: translateY(-10px); opacity: 1; }
-        }
-        .typing-indicator i { color: var(--blue-light); animation: spinSlow 1s linear infinite; }
-        .suggested-questions {
-            display: flex; flex-wrap: wrap; gap: 8px;
-            padding: 10px 20px 4px 20px;
-            background: rgba(0, 0, 0, 0.25);
-            border-top: 1px solid rgba(2, 28, 164, 0.08);
-        }
+        @keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-10px); opacity: 1; } }
+        .suggested-questions { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 20px 4px 20px; background: rgba(0, 0, 0, 0.25); border-top: 1px solid rgba(2, 28, 164, 0.08); }
         .suggested-questions.hidden { display: none; }
         .suggested-questions .sq-btn {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(74, 122, 255, 0.15);
             border-radius: 30px; padding: 8px 18px;
             font-family: 'Cairo', sans-serif; font-size: 0.85rem;
-            color: #b0c4e8; cursor: pointer;
-            transition: 0.3s; white-space: nowrap;
+            color: #b0c4e8; cursor: pointer; white-space: nowrap;
             display: inline-flex; align-items: center; gap: 6px;
         }
-        .suggested-questions .sq-btn:hover {
-            background: rgba(74, 122, 255, 0.08);
-            border-color: var(--blue-light); color: #fff;
-        }
+        .suggested-questions .sq-btn:hover { background: rgba(74, 122, 255, 0.08); color: #fff; }
         .input-area {
             padding: 12px 20px 16px;
             border-top: 1px solid rgba(2, 28, 164, 0.08);
@@ -252,15 +313,11 @@
             border: 1.5px solid rgba(2, 28, 164, 0.1);
             padding: 4px 16px 4px 8px; min-height: 52px;
         }
-        .input-area .input-wrapper:focus-within {
-            border-color: var(--blue-light);
-            box-shadow: 0 0 30px rgba(74, 122, 255, 0.05);
-        }
+        .input-area .input-wrapper:focus-within { border-color: var(--blue-light); }
         .input-area .input-wrapper textarea {
             flex: 1; background: transparent; border: none; outline: none;
             color: #f0f4ff; font-size: 1rem; font-family: 'Cairo', sans-serif;
-            resize: none; padding: 12px 4px; min-height: 44px; max-height: 150px;
-            line-height: 1.6;
+            resize: none; padding: 12px 4px; min-height: 44px; max-height: 150px; line-height: 1.6;
         }
         .input-area .input-wrapper textarea::placeholder { color: #5a607a; }
         .input-area .input-wrapper .char-count { font-size: 0.7rem; color: #4a5070; padding: 8px 4px; }
@@ -268,7 +325,6 @@
             width: 52px; height: 52px; min-width: 52px; border-radius: 50%;
             border: none; background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
             color: #fff; font-size: 1.4rem; cursor: pointer;
-            transition: 0.4s;
             display: flex; align-items: center; justify-content: center;
         }
         .input-area .btn-send:hover { transform: scale(1.08); }
@@ -297,21 +353,11 @@
         }
         .plus-dropdown .dropdown-item i { color: var(--blue-light); width: 24px; text-align: center; }
         .plus-dropdown .dropdown-item:hover { background: rgba(74, 122, 255, 0.08); color: #fff; }
-        .sub-dropdown {
-            display: none; margin-top: 4px; margin-right: 10px;
-            border-right: 2px solid rgba(74, 122, 255, 0.25);
-            padding-right: 6px; background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-        }
+        .sub-dropdown { display: none; margin-top: 4px; margin-right: 10px; border-right: 2px solid rgba(74, 122, 255, 0.25); padding-right: 6px; background: rgba(0, 0, 0, 0.2); border-radius: 12px; }
         .sub-dropdown.show { display: block; }
         .sub-dropdown .dropdown-item { font-size: 0.85rem; padding: 10px 16px 10px 12px; }
         .plus-dropdown .dropdown-divider { height: 1px; background: rgba(74, 122, 255, 0.1); margin: 6px 12px; }
-        .coming-soon-badge {
-            background: rgba(255, 180, 0, 0.15);
-            color: #ffb800; font-size: 0.7rem;
-            padding: 2px 10px; border-radius: 30px;
-            margin-right: 6px; font-weight: 600;
-        }
+        .coming-soon-badge { background: rgba(255, 180, 0, 0.15); color: #ffb800; font-size: 0.7rem; padding: 2px 10px; border-radius: 30px; margin-right: 6px; font-weight: 600; }
         .dropdown-item.disabled-item { opacity: 0.6; cursor: not-allowed; }
         .file-preview {
             display: none; padding: 6px 16px 6px 12px;
@@ -327,8 +373,7 @@
         .modal-overlay {
             display: none; position: fixed; inset: 0;
             background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(16px);
-            z-index: 9999; justify-content: center; align-items: center;
-            padding: 20px;
+            z-index: 9999; justify-content: center; align-items: center; padding: 20px;
         }
         .modal-overlay.active { display: flex; }
         .modal-box {
@@ -353,11 +398,39 @@
             line-height: 1.8; max-height: 50vh; overflow-y: auto;
             white-space: pre-wrap; word-break: break-word;
         }
-        footer {
-            background: #000000;
-            border-top: 1px solid rgba(2, 28, 164, 0.03);
-            padding: 50px 0 30px; margin-top: 30px;
+        .memory-list { display: flex; flex-direction: column; gap: 14px; margin: 12px 0 22px; max-height: 55vh; overflow-y: auto; }
+        .memory-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(74, 122, 255, 0.08);
+            border-radius: 20px; padding: 16px 20px;
+            display: flex; justify-content: space-between; align-items: center; gap: 14px; cursor: pointer;
         }
+        .memory-item:hover { background: rgba(74, 122, 255, 0.05); border-color: rgba(74, 122, 255, 0.2); }
+        .memory-item .memory-content { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; }
+        .memory-item .memory-title { color: #d0dcf5; font-size: 1rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+        .memory-item .memory-count { color: #6a708a; font-size: 0.8rem; }
+        .memory-item .memory-time { color: #6a708a; font-size: 0.7rem; margin-right: auto; }
+        .memory-item .memory-delete { color: #ff6b6b; background: rgba(255, 0, 0, 0.08); border: none; border-radius: 50%; width: 34px; height: 34px; min-width: 34px; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; }
+        .memory-item .memory-delete:hover { background: rgba(255, 0, 0, 0.2); }
+        .memory-empty { color: #6a708a; text-align: center; padding: 40px 0; font-size: 1.1rem; opacity: 0.7; }
+        .memory-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+        .memory-actions .btn-clear { background: rgba(255, 0, 0, 0.08); border: 1px solid rgba(255, 0, 0, 0.15); border-radius: 30px; padding: 8px 22px; color: #ff6b6b; font-family: 'Cairo', sans-serif; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .memory-actions .btn-new-session { background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid)); border: none; border-radius: 30px; padding: 8px 22px; color: #fff; font-family: 'Cairo', sans-serif; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+        .settings-group { margin: 20px 0; }
+        .settings-group label { display: block; color: #b0c4e8; font-size: 1rem; margin-bottom: 8px; font-weight: 600; }
+        .settings-group .settings-input { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .settings-group select, .settings-group input[type="number"] { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(74, 122, 255, 0.2); border-radius: 30px; padding: 10px 18px; color: #f0f4ff; font-family: 'Cairo', sans-serif; font-size: 1rem; outline: none; min-width: 120px; }
+        .settings-group select option { background: #0a0f1f; }
+        .toggle-switch { display: inline-flex; align-items: center; gap: 12px; cursor: pointer; color: #b0c4e8; font-size: 0.95rem; }
+        .toggle-switch input { display: none; }
+        .toggle-switch .slider { width: 50px; height: 28px; background: rgba(255, 255, 255, 0.1); border-radius: 30px; position: relative; border: 1px solid rgba(74, 122, 255, 0.15); flex-shrink: 0; }
+        .toggle-switch .slider::before { content: ''; position: absolute; width: 22px; height: 22px; background: #6a708a; border-radius: 50%; top: 2px; left: 3px; transition: 0.4s; }
+        .toggle-switch input:checked+.slider { background: rgba(74, 122, 255, 0.25); border-color: var(--blue-light); }
+        .toggle-switch input:checked+.slider::before { transform: translateX(22px); background: var(--blue-light); }
+        .settings-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px; flex-wrap: wrap; }
+        .settings-actions .btn-apply { background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid)); border: none; border-radius: 40px; padding: 10px 30px; color: #fff; font-family: 'Cairo', sans-serif; font-size: 1rem; cursor: pointer; font-weight: 600; }
+        .settings-actions .btn-clear-settings { background: rgba(255, 0, 0, 0.08); border: 1px solid rgba(255, 0, 0, 0.15); border-radius: 40px; padding: 10px 24px; color: #ff6b6b; font-family: 'Cairo', sans-serif; font-size: 1rem; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        footer { background: #000000; border-top: 1px solid rgba(2, 28, 164, 0.03); padding: 50px 0 30px; margin-top: 30px; }
         .footer-flex { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; }
         .footer-col h4 { color: var(--blue-light); margin-bottom: 18px; font-size: 1.2rem; }
         .footer-col p { color: #6a708a; margin: 10px 0; display: flex; align-items: center; gap: 10px; }
@@ -366,176 +439,18 @@
         .social-icons a { font-size: 1.4rem; color: #6a708a; transition: 0.4s; }
         .social-icons a:hover { color: var(--blue-light); transform: translateY(-6px) scale(1.2); }
         .copyright { text-align: center; margin-top: 40px; padding-top: 20px; color: #4a5070; font-size: 0.9rem; width: 100%; }
-
-        /* ═══ MEN CHAT AUTH ═══ */
-        .men-auth-gate{position:fixed;inset:0;z-index:99999;display:none;font-family:'Cairo',sans-serif;background:#04060f;overflow-y:auto}
-        .men-auth-gate.active{display:block;animation:menAFade .4s}
-        @keyframes menAFade{from{opacity:0}to{opacity:1}}
-        .men-auth-bg{position:fixed;inset:0;pointer-events:none;background:
-          radial-gradient(ellipse 60% 50% at 15% 15%,rgba(10,26,92,.5),transparent 60%),
-          radial-gradient(ellipse 55% 45% at 85% 85%,rgba(30,64,175,.3),transparent 55%),
-          radial-gradient(ellipse at 50% 50%,#04060f,#020408)}
-        .men-auth-orb{position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;opacity:.5}
-        .men-auth-orb.o1{width:500px;height:500px;background:radial-gradient(circle,#1e3a8a,transparent 70%);top:-150px;left:-150px}
-        .men-auth-orb.o2{width:450px;height:450px;background:radial-gradient(circle,#2563eb,transparent 70%);bottom:-150px;right:-150px}
-        .men-auth-layout{position:relative;z-index:10;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center}
-        .men-auth-show{display:flex;flex-direction:column;padding:60px 70px;justify-content:center;gap:24px}
-        .men-auth-show h1{font-size:clamp(2rem,3.5vw,3rem);font-weight:900;color:#fff;letter-spacing:-1.5px;line-height:1.15}
-        .men-auth-show h1 span{background:linear-gradient(135deg,#60a5fa,#3b82f6);-webkit-background-clip:text;background-clip:text;color:transparent}
-        .men-auth-show p{color:#a8b0cc;font-size:1rem;line-height:1.9;max-width:480px}
-        .men-auth-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(37,99,235,.15);border:1px solid rgba(59,130,246,.3);border-radius:60px;padding:8px 18px;font-size:.8rem;color:#60a5fa;font-weight:800;width:fit-content}
-        .men-auth-form-wrap{display:flex;flex-direction:column;padding:50px 60px;justify-content:center}
-        .men-auth-box{max-width:440px;width:100%;margin:0 auto;background:rgba(10,16,32,.6);border:1px solid rgba(37,99,235,.15);border-radius:28px;padding:36px 32px;backdrop-filter:blur(20px);box-shadow:0 30px 80px -30px rgba(10,26,92,.8)}
-        .men-auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:rgba(0,0,0,.4);border:1px solid rgba(37,99,235,.12);border-radius:14px;padding:4px;margin-bottom:22px;position:relative}
-        .men-auth-tab{padding:12px;border-radius:10px;background:transparent;border:none;color:#8a92b0;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:all .3s;z-index:2}
-        .men-auth-tab.active{color:#fff}
-        .men-auth-tabs-ind{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);background:linear-gradient(135deg,#0a1a5c,#1e40af);border-radius:10px;transition:transform .4s cubic-bezier(.34,1.4,.64,1);z-index:1}
-        .men-auth-tabs[data-mode="signup"] .men-auth-tabs-ind{transform:translateX(calc(100% + 4px))}
-        .men-auth-field{margin-bottom:14px}
-        .men-auth-label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;padding-right:4px}
-        .men-auth-input-wrap{position:relative;display:flex;align-items:center}
-        .men-auth-input-wrap input{width:100%;height:52px;padding:0 46px 0 14px;background:rgba(4,6,15,.5);border:1.5px solid rgba(37,99,235,.15);border-radius:12px;color:#fff;font-size:.92rem;outline:none;font-family:'Cairo',sans-serif;font-weight:600;transition:all .3s}
-        .men-auth-input-wrap input:focus{border-color:#2563eb;background:rgba(37,99,235,.06);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
-        .men-auth-input-wrap .men-a-icon{position:absolute;right:14px;color:#3b82f6;font-size:.9rem;pointer-events:none}
-        .men-auth-input-wrap .men-a-eye{position:absolute;left:10px;color:#5a607a;cursor:pointer;padding:6px;background:transparent;border:none;font-size:.85rem}
-        .men-auth-error{max-height:0;overflow:hidden;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:10px;color:#f87171;font-size:.82rem;font-weight:700;text-align:center;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 14px;margin-top:12px}
-        .men-auth-error.show{max-height:80px;padding:10px 14px}
-        .men-auth-submit{width:100%;height:54px;margin-top:18px;border:none;border-radius:12px;background:linear-gradient(135deg,#0a1a5c,#1e40af);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid rgba(59,130,246,.15)}
-        .men-auth-submit:hover:not(:disabled){transform:translateY(-2px)}
-        .men-auth-submit:disabled{opacity:.7;cursor:not-allowed}
-        .men-auth-spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:menASpin .7s linear infinite;display:none}
-        .men-auth-submit.loading .men-auth-spinner{display:block}
-        .men-auth-submit.loading .men-auth-icon{display:none}
-        @keyframes menASpin{to{transform:rotate(360deg)}}
-        .men-auth-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.18);color:#8a92b0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;z-index:20;display:none}
-        @media (max-width:900px){.men-auth-layout{grid-template-columns:1fr}.men-auth-show{display:none}.men-auth-form-wrap{padding:30px 20px}}
-
-        /* ═══ USER BADGE ═══ */
-        .men-user-badge{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid rgba(74,122,255,.15);border-radius:40px;padding:6px 14px 6px 6px;cursor:pointer;transition:all .3s;font-family:'Cairo',sans-serif}
-        .men-user-badge:hover{background:rgba(74,122,255,.1);border-color:#4a7aff;transform:translateY(-1px)}
-        .men-user-badge img{width:32px;height:32px;border-radius:50%;border:2px solid rgba(74,122,255,.4);object-fit:cover}
-        .men-user-badge .u-name{color:#d0dcf5;font-weight:700;font-size:.88rem;max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .men-user-badge .u-status{font-size:.65rem;color:#4ade80;font-weight:600;display:flex;align-items:center;gap:4px}
-        .men-user-badge .u-status::before{content:'';width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80}
-        @media (max-width:600px){.men-user-badge .u-name{display:none}.men-user-badge{padding:4px 4px}}
-
-        /* ═══ LIBRARY SIDEBAR ═══ */
-        .men-lib-sidebar{position:fixed;top:0;right:-400px;width:380px;height:100vh;background:linear-gradient(180deg,rgba(6,10,24,.98),rgba(4,6,15,.99));border-left:1px solid rgba(74,122,255,.15);z-index:1500;transition:right .4s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;backdrop-filter:blur(20px);box-shadow:-30px 0 80px -20px rgba(0,0,0,.9)}
-        .men-lib-sidebar.open{right:0}
-        .men-lib-head{padding:20px 18px 14px;border-bottom:1px solid rgba(74,122,255,.1);display:flex;justify-content:space-between;align-items:center;gap:12px}
-        .men-lib-head h3{font-size:1.05rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:10px}
-        .men-lib-head h3 i{color:#4a7aff}
-        .men-lib-new{background:linear-gradient(135deg,#0a1a5c,#1e40af);color:#fff;border:none;border-radius:20px;padding:8px 14px;font-family:'Cairo',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .3s}
-        .men-lib-new:hover{transform:scale(1.05)}
-        .men-lib-body{flex:1;overflow-y:auto;padding:12px 10px}
-        .men-lib-body::-webkit-scrollbar{width:5px}
-        .men-lib-body::-webkit-scrollbar-thumb{background:rgba(74,122,255,.3);border-radius:5px}
-        .men-lib-group{margin-bottom:18px}
-        .men-lib-group-label{font-size:.7rem;color:#6a7290;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;padding:6px 12px 8px;display:flex;align-items:center;gap:8px}
-        .men-lib-group-label i{color:#4a7aff;font-size:.75rem}
-        .men-lib-item{padding:11px 14px;border-radius:12px;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:12px;margin-bottom:4px;position:relative}
-        .men-lib-item:hover{background:rgba(74,122,255,.08);transform:translateX(-3px)}
-        .men-lib-item.active{background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.25)}
-        .men-lib-item .li-icon{width:34px;height:34px;border-radius:10px;background:rgba(74,122,255,.1);color:#60a5fa;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
-        .men-lib-item .li-info{flex:1;min-width:0}
-        .men-lib-item .li-title{color:#d0dcf5;font-weight:700;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .men-lib-item .li-meta{color:#6a7290;font-size:.7rem;font-weight:600;margin-top:2px;display:flex;gap:8px}
-        .men-lib-item .li-del{background:transparent;border:none;color:#6a7290;cursor:pointer;padding:6px;border-radius:8px;transition:all .3s;opacity:0}
-        .men-lib-item:hover .li-del{opacity:1}
-        .men-lib-item .li-del:hover{background:rgba(220,38,38,.15);color:#f87171}
-        .men-lib-empty{padding:60px 20px;text-align:center;color:#6a7290;font-size:.85rem}
-        .men-lib-empty i{font-size:2.5rem;color:#4a7aff;opacity:.4;display:block;margin-bottom:14px}
-        .men-lib-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:1400;opacity:0;pointer-events:none;transition:opacity .3s}
-        .men-lib-overlay.show{opacity:1;pointer-events:auto}
-        .men-lib-foot{padding:14px;border-top:1px solid rgba(74,122,255,.1);display:flex;flex-direction:column;gap:10px;background:rgba(0,0,0,.3)}
-        .men-lib-storage{background:rgba(74,122,255,.06);border:1px solid rgba(74,122,255,.12);border-radius:14px;padding:12px 14px}
-        .men-lib-storage .st-row{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:#8a92b0;font-weight:700;margin-bottom:8px}
-        .men-lib-storage .st-row b{color:#60a5fa;font-weight:800;direction:ltr}
-        .men-lib-storage .st-bar{height:6px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden}
-        .men-lib-storage .st-fill{height:100%;background:linear-gradient(90deg,#1e40af,#60a5fa);border-radius:6px;transition:width .5s}
-        .men-lib-storage .st-fill.warn{background:linear-gradient(90deg,#d4a548,#f5b342)}
-        .men-lib-storage .st-fill.danger{background:linear-gradient(90deg,#dc2626,#ff4d4d)}
-        .men-lib-daily{background:rgba(74,122,255,.06);border:1px solid rgba(74,122,255,.12);border-radius:14px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
-        .men-lib-daily .d-info{font-size:.75rem;color:#8a92b0;font-weight:700}
-        .men-lib-daily .d-info b{color:#60a5fa;font-weight:800;font-size:.9rem}
-        .men-lib-daily .d-count{font-size:1.1rem;font-weight:900;color:#fff;direction:ltr}
-        .men-lib-daily.exceeded .d-count{color:#f87171}
-        @media (max-width:480px){.men-lib-sidebar{width:88vw;right:-88vw}}
-
-        /* ═══ PROFILE MODAL ═══ */
-        .men-profile-modal{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(20px);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;animation:menAFade .3s}
-        .men-profile-modal.active{display:flex}
-        .men-profile-box{background:linear-gradient(180deg,rgba(10,16,32,.98),rgba(4,6,15,.99));border:1px solid rgba(74,122,255,.2);border-radius:28px;max-width:520px;width:100%;max-height:88vh;overflow-y:auto;padding:32px 28px;box-shadow:0 40px 100px -30px rgba(10,26,92,.9);position:relative}
-        .men-profile-box::-webkit-scrollbar{width:5px}
-        .men-profile-box::-webkit-scrollbar-thumb{background:rgba(74,122,255,.3);border-radius:5px}
-        .men-profile-avatar{width:100px;height:100px;border-radius:50%;border:3px solid #4a7aff;margin:0 auto 16px;display:block;box-shadow:0 0 0 8px rgba(74,122,255,.15);object-fit:cover;background:#0a0e1a}
-        .men-profile-name{text-align:center;font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:6px}
-        .men-profile-email{text-align:center;color:#8a92b0;font-size:.88rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px;word-break:break-all}
-        .men-profile-tags{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px}
-        .men-profile-tag{background:rgba(74,122,255,.12);border:1px solid rgba(74,122,255,.25);color:#60a5fa;font-size:.72rem;font-weight:800;padding:5px 12px;border-radius:20px;display:inline-flex;align-items:center;gap:6px}
-        .men-profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
-        .men-profile-stat{background:rgba(74,122,255,.06);border:1px solid rgba(74,122,255,.12);border-radius:16px;padding:16px;text-align:center}
-        .men-profile-stat .ps-val{font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:4px;direction:ltr}
-        .men-profile-stat .ps-lbl{font-size:.72rem;color:#8a92b0;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-        .men-profile-storage{margin-bottom:20px;background:rgba(74,122,255,.06);border:1px solid rgba(74,122,255,.12);border-radius:16px;padding:16px 18px}
-        .men-profile-storage .mps-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-        .men-profile-storage .mps-title{color:#d0dcf5;font-weight:800;font-size:.88rem;display:flex;align-items:center;gap:8px}
-        .men-profile-storage .mps-title i{color:#4a7aff}
-        .men-profile-storage .mps-val{color:#60a5fa;font-weight:900;font-size:.85rem;direction:ltr}
-        .men-profile-storage .mps-bar{height:8px;background:rgba(255,255,255,.06);border-radius:8px;overflow:hidden;margin-bottom:8px}
-        .men-profile-storage .mps-fill{height:100%;background:linear-gradient(90deg,#1e40af,#60a5fa);border-radius:8px;transition:width .6s}
-        .men-profile-storage .mps-fill.warn{background:linear-gradient(90deg,#d4a548,#f5b342)}
-        .men-profile-storage .mps-fill.danger{background:linear-gradient(90deg,#dc2626,#ff4d4d)}
-        .men-profile-storage .mps-note{font-size:.7rem;color:#6a7290;font-weight:600}
-        .men-profile-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
-        .men-profile-actions button{flex:1;min-width:130px;padding:12px 20px;border-radius:14px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
-        .men-profile-actions .btn-acc{background:linear-gradient(135deg,#0a1a5c,#1e40af);color:#fff;border:1px solid rgba(59,130,246,.15)}
-        .men-profile-actions .btn-acc:hover{transform:translateY(-2px)}
-        .men-profile-actions .btn-out{background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.3);color:#f87171}
-        .men-profile-close{position:absolute;top:14px;left:14px;width:36px;height:36px;border-radius:50%;background:rgba(74,122,255,.1);border:1px solid rgba(74,122,255,.2);color:#8a92b0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s}
-        .men-profile-close:hover{background:rgba(220,38,38,.15);color:#f87171;transform:rotate(180deg)}
-
-        /* ═══ DAILY BAR ═══ */
-        .men-daily-bar{padding:6px 20px;background:rgba(74,122,255,.05);border-bottom:1px solid rgba(74,122,255,.08);font-size:.72rem;color:#8a92b0;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:10px}
-        .men-daily-bar b{color:#60a5fa;font-weight:800}
-        .men-daily-bar.warn b{color:#f5b342}
-        .men-daily-bar.danger b{color:#f87171}
-        .men-daily-bar .db-progress{flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;max-width:180px}
-        .men-daily-bar .db-fill{height:100%;background:linear-gradient(90deg,#1e40af,#60a5fa);border-radius:4px;transition:width .5s}
-        .men-daily-bar.warn .db-fill{background:linear-gradient(90deg,#d4a548,#f5b342)}
-        .men-daily-bar.danger .db-fill{background:linear-gradient(90deg,#dc2626,#ff4d4d)}
-
-        /* ═══ MEN PRODUCT CARD ═══ */
-        .men-product-card {
-            width: 100%; max-width: 380px;
-            background: rgba(10, 16, 32, 0.95);
-            border: 1px solid rgba(2, 28, 164, 0.3);
-            border-radius: 28px; overflow: hidden;
-            color: #f0f4ff;
-            margin: 6px 0;
-        }
+        .men-product-card { width: 100%; max-width: 380px; background: rgba(10, 16, 32, 0.95); border: 1px solid rgba(2, 28, 164, 0.3); border-radius: 28px; overflow: hidden; color: #f0f4ff; margin: 6px 0; }
         .men-product-card .product-image { width: 100%; height: 220px; object-fit: cover; }
         .men-product-card .product-content { padding: 24px 22px 22px; }
-        .men-product-card .badge {
-            display: inline-block;
-            background: rgba(74, 122, 255, 0.12);
-            color: var(--blue-light); padding: 6px 16px;
-            border-radius: 40px; font-size: 0.8rem; font-weight: 600;
-        }
+        .men-product-card .badge { display: inline-block; background: rgba(74, 122, 255, 0.12); color: var(--blue-light); padding: 6px 16px; border-radius: 40px; font-size: 0.8rem; font-weight: 600; }
         .men-product-card .product-content h2 { margin: 14px 0 8px; font-size: 1.8rem; font-weight: 800; color: #fff; }
         .men-product-card .product-content p { color: #a0b0d4; line-height: 1.8; margin: 8px 0 20px; font-size: 0.95rem; }
         .men-product-card .bottom { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
         .men-product-card .price { font-size: 2rem; font-weight: 900; color: var(--blue-light); }
         .men-product-card .price small { font-size: 1rem; color: #6a8ab0; font-weight: 600; margin-right: 4px; }
-        .men-product-card .btn-product {
-            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-            color: #fff; border: none; padding: 12px 28px;
-            border-radius: 40px; font-family: 'Cairo', sans-serif;
-            font-size: 0.95rem; font-weight: 700; cursor: pointer;
-            display: inline-flex; align-items: center; gap: 8px;
-        }
+        .men-product-card .btn-product { background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid)); color: #fff; border: none; padding: 12px 28px; border-radius: 40px; font-family: 'Cairo', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
 
-        /* ═══ CODE ═══ */
+        /* Code blocks */
         .code-response { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         .code-response .code-text { line-height: 1.8; color: #e0e8ff; margin: 0; font-size: 0.95rem; min-height: 1.5rem; }
         .code-block { background: #060a14; border: 1px solid rgba(74, 122, 255, 0.25); border-radius: 16px; margin: 6px 0; overflow: hidden; direction: ltr; text-align: left; }
@@ -551,1433 +466,1026 @@
         .code-content .tok-function { color: #dcdcaa; }
 
         @media (max-width: 768px) {
-            .chat-wrapper { height: calc(100vh - 200px); min-height: 400px; }
+            .logo h1 { font-size: 1.2rem; }
+            .logo img { height: 34px; }
+            .chat-wrapper { height: calc(100vh - 140px); min-height: 400px; border-radius: var(--radius-xl); }
             .message { max-width: 90%; padding: 12px 16px; font-size: 0.95rem; }
             .input-area .btn-send, .input-area .btn-plus { width: 44px; height: 44px; min-width: 44px; }
-            .logo h1 { font-size: 1.4rem; }
-            .btn-back, .btn-memory, .btn-settings, .btn-lib { height: 38px; padding: 0 14px; font-size: 0.9rem; }
-            .btn-back .back-text, .btn-memory .memory-text, .btn-settings .settings-text, .btn-lib .lib-text { font-size: 0.8rem; }
-            .men-acc-chat-wrap { height: min(560px, 72vh); }
+            .btn-login { height: 38px; padding: 0 16px; font-size: 0.85rem; }
+            .btn-profile { height: 38px; }
+            .btn-profile img { width: 30px; height: 30px; }
         }
         @media (max-width: 480px) {
-            .btn-back .back-text, .btn-memory .memory-text, .btn-settings .settings-text, .btn-lib .lib-text { display: none; }
-            .btn-back, .btn-memory, .btn-settings, .btn-lib { padding: 0 12px; }
+            .logo h1 { font-size: 1rem; }
+            .logo img { height: 30px; }
+            .btn-login { height: 34px; padding: 0 12px; font-size: 0.8rem; }
+            .btn-login span { display: none; }
+            .btn-profile { height: 34px; padding: 3px; }
+            .btn-profile img { width: 28px; height: 28px; }
         }
     </style>
 </head>
 <body>
-
-<!-- ═══ AUTH GATE ═══ -->
-<div class="men-auth-gate" id="menAuthGate">
-    <div class="men-auth-bg"></div>
-    <div class="men-auth-orb o1"></div>
-    <div class="men-auth-orb o2"></div>
-    <div class="men-auth-layout">
-        <div class="men-auth-show">
-            <div class="men-auth-badge"><i class="fas fa-bolt"></i> MEN Ai v12</div>
-            <h1>مرحباً بك في<br><span>مساعدك الذكي</span></h1>
-            <p>سجّل دخولك للوصول إلى مكتبة محادثاتك، التخزين السحابي 5GB المجاني، والعديد من الميزات.</p>
+    <div class="bg-ambient"></div>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="logo1.png" alt="MEN" onerror="this.style.display='none'">
+                <h1>MEN Ai <i class="fas fa-wand-sparkles"></i></h1>
+            </div>
+            <div class="header-right" id="headerRight">
+                <button class="btn-login" id="menLoginBtn" type="button">
+                    <i class="fas fa-user"></i> <span>دخول</span>
+                </button>
+                <button class="btn-profile" id="menProfileBtn" type="button" style="display:none">
+                    <img id="menProfileBtnAvatar" src="" alt="">
+                    <span class="p-name" id="menProfileBtnName">—</span>
+                    <span class="p-dot"></span>
+                </button>
+            </div>
         </div>
-        <div class="men-auth-form-wrap">
-            <div class="men-auth-box">
-                <h2 style="font-size:1.5rem;font-weight:900;color:#fff;text-align:center;margin-bottom:6px" id="menAuthTitle">أهلاً بعودتك 👋</h2>
-                <p style="color:#8a92b0;font-size:.85rem;text-align:center;margin-bottom:24px;font-weight:600" id="menAuthSub">سجّل دخولك للمتابعة</p>
-                <div class="men-auth-tabs" id="menAuthTabs" data-mode="login">
-                    <div class="men-auth-tabs-ind"></div>
-                    <button class="men-auth-tab active" data-atab="login" type="button">دخول</button>
-                    <button class="men-auth-tab" data-atab="signup" type="button">حساب جديد</button>
+    </header>
+
+    <!-- ═══ Sidebar ═══ -->
+    <div class="side-overlay" id="sideOverlay"></div>
+    <aside class="side-menu" id="sideMenu">
+        <div class="side-head" style="position:relative">
+            <button class="side-close" id="sideClose" type="button"><i class="fas fa-times"></i></button>
+            <img id="sideAvatar" src="" alt="">
+            <div class="s-name" id="sideName">—</div>
+            <div class="s-email" id="sideEmail">—</div>
+            <span class="s-badge"><i class="fas fa-crown"></i> عضو مميز</span>
+        </div>
+        <div class="side-body">
+            <button class="side-item" id="sideBackBtn" type="button"><i class="fas fa-arrow-right"></i> رجوع</button>
+            <button class="side-item" id="sideMemoryBtn" type="button"><i class="fas fa-brain"></i> الذاكرة (الجلسات)</button>
+            <button class="side-item" id="sideSettingsBtn" type="button"><i class="fas fa-cog"></i> الإعدادات</button>
+            <div class="side-divider"></div>
+            <button class="side-item danger" id="sideLogoutBtn" type="button"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+        </div>
+        <div class="side-foot">MEN Ai © 2020 — جميع الحقوق محفوظة</div>
+    </aside>
+
+    <main>
+        <div class="container">
+            <div class="chat-wrapper">
+                <div class="chat-header">
+                    <div class="bot-info">
+                        <div class="bot-avatar"><i class="fas fa-wand-sparkles"></i></div>
+                        <div><div class="bot-name">MEN Ai</div></div>
+                    </div>
                 </div>
-                <div id="menAuthNameField" style="display:none">
-                    <div class="men-auth-field">
-                        <label class="men-auth-label">الاسم الكامل</label>
-                        <div class="men-auth-input-wrap">
-                            <input type="text" id="menAuthName" placeholder="محمد أحمد" dir="rtl">
-                            <i class="fas fa-user men-a-icon"></i>
+                <div class="messages-area" id="messagesArea"></div>
+                <div class="typing-indicator" id="typingIndicator">
+                    <i class="fas fa-circle-notch"></i>
+                    <span>جار التفكير</span>
+                    <span class="dots"><span></span><span></span><span></span></span>
+                </div>
+                <div class="suggested-questions" id="suggestedQuestions">
+                    <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
+                    <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
+                    <button class="sq-btn" data-question="كيف يمكنني التواصل مع الدعم؟"><i class="fas fa-headset"></i> التواصل مع الدعم</button>
+                </div>
+                <div class="input-area">
+                    <button class="btn-plus" id="plusBtn" title="خيارات إضافية"><i class="fas fa-plus"></i></button>
+                    <div class="plus-dropdown" id="plusDropdown">
+                        <button class="dropdown-item" id="attachOption"><i class="fas fa-paperclip"></i> إرفاق ملف</button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" id="doitOption"><i class="fas fa-network-wired"></i> التعزيز</button>
+                        <div class="sub-dropdown" id="subDropdown">
+                            <button class="dropdown-item sub-item disabled-item" id="aiAgentOption"><i class="fas fa-hand-sparkles"></i> وكيل MEN Ai <span class="coming-soon-badge">قريباً</span></button>
+                            <button class="dropdown-item sub-item disabled-item" id="searchBoostOption"><i class="fas fa-search"></i> البحث في المعزز <span class="coming-soon-badge">قريباً</span></button>
                         </div>
                     </div>
-                </div>
-                <div class="men-auth-field">
-                    <label class="men-auth-label">البريد الإلكتروني</label>
-                    <div class="men-auth-input-wrap">
-                        <input type="email" id="menAuthEmail" placeholder="you@example.com" dir="ltr" style="text-align:right">
-                        <i class="fas fa-envelope men-a-icon"></i>
+                    <div class="file-preview hidden-preview" id="filePreview">
+                        <i class="fas fa-file"></i>
+                        <span id="fileName">ملف</span>
+                        <span class="remove-file" id="removeFile"><i class="fas fa-times"></i></span>
                     </div>
-                </div>
-                <div class="men-auth-field">
-                    <label class="men-auth-label">كلمة المرور</label>
-                    <div class="men-auth-input-wrap">
-                        <input type="password" id="menAuthPassword" placeholder="••••••••" dir="ltr" style="text-align:right">
-                        <i class="fas fa-lock men-a-icon"></i>
-                        <button class="men-a-eye" id="menTogglePass" type="button"><i class="fas fa-eye"></i></button>
+                    <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls" style="display:none;">
+                    <div class="input-wrapper">
+                        <textarea id="messageInput" rows="1"></textarea>
+                        <span class="char-count" id="charCount">0</span>
                     </div>
+                    <button class="btn-send" id="sendBtn" title="إرسال"><i class="fas fa-arrow-up"></i></button>
                 </div>
-                <div class="men-auth-error" id="menAuthError">
-                    <i class="fas fa-circle-exclamation"></i>
-                    <span id="menAuthErrorText"></span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Memory Modal -->
+    <div class="modal-overlay" id="memoryModal">
+        <div class="modal-box">
+            <h3><i class="fas fa-brain"></i> ذاكرة MEN Ai (الجلسات)</h3>
+            <div class="memory-list" id="memoryList"><div class="memory-empty">لا توجد محادثات محفوظة بعد.</div></div>
+            <div class="memory-actions">
+                <button class="btn-new-session" id="newSessionBtn"><i class="fas fa-plus-circle"></i> محادثة جديدة</button>
+                <button class="btn-clear" id="clearMemoryBtn"><i class="fas fa-trash-alt"></i> مسح الكل</button>
+                <button class="modal-close" id="memoryModalClose">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-box">
+            <h3><i class="fas fa-sliders-h"></i> الإعدادات</h3>
+            <div class="settings-group">
+                <label>الحد الأقصى للرسائل في كل محادثة</label>
+                <div class="settings-input">
+                    <select id="memoryLimitSelect">
+                        <option value="6">6 (افتراضي)</option>
+                        <option value="12">12</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="500">500 (كثير)</option>
+                        <option value="1000">1000 (كثير جداً)</option>
+                    </select>
+                    <span style="color:#6a708a;font-size:0.9rem;">أو أدخل قيمة مخصصة</span>
+                    <input type="number" id="customLimitInput" min="1" max="10000" placeholder="مخصص" style="width:100px;">
                 </div>
-                <button class="men-auth-submit" id="menAuthSubmit">
-                    <i class="fas fa-arrow-left men-auth-icon"></i>
-                    <span class="men-auth-spinner"></span>
-                    <span id="menAuthSubmitText">تسجيل الدخول</span>
+            </div>
+            <div class="settings-group">
+                <label>رسائل التعزيز التلقائي</label>
+                <div class="settings-input">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoBoostToggle">
+                        <span class="slider"></span>
+                        <span>تفعيل الرسالة بعد كل رد</span>
+                    </label>
+                </div>
+            </div>
+            <div class="settings-group">
+                <label>تعلم من محادثتي</label>
+                <button class="btn-apply" id="learnFromConversationBtn" style="background:rgba(74,122,255,0.15);border:1px solid rgba(74,122,255,0.3);color:#b0c4e8;padding:8px 20px;border-radius:30px;cursor:pointer;font-family:'Cairo',sans-serif;display:inline-flex;align-items:center;gap:8px;">
+                    <i class="fas fa-graduation-cap"></i> تعلم من المحادثة الحالية
                 </button>
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- ═══ LIBRARY SIDEBAR ═══ -->
-<div class="men-lib-overlay" id="menLibOverlay"></div>
-<aside class="men-lib-sidebar" id="menLibSidebar">
-    <div class="men-lib-head">
-        <h3><i class="fas fa-book"></i> مكتبة المحادثات</h3>
-        <button class="men-lib-new" id="menLibNew"><i class="fas fa-plus"></i> جديدة</button>
-    </div>
-    <div class="men-lib-body" id="menLibBody">
-        <div class="men-lib-empty"><i class="fas fa-comments"></i>لا توجد محادثات بعد</div>
-    </div>
-    <div class="men-lib-foot">
-        <div class="men-lib-storage">
-            <div class="st-row"><span><i class="fas fa-database"></i> التخزين السحابي</span><b id="menStText">0 / 5 GB</b></div>
-            <div class="st-bar"><div class="st-fill" id="menStFill" style="width:0%"></div></div>
-        </div>
-        <div class="men-lib-daily" id="menDailyBox">
-            <div class="d-info"><i class="fas fa-calendar-day"></i> رسائل اليوم<br><b id="menDailyLabel">50 متبقية</b></div>
-            <div class="d-count" id="menDailyCount">0/50</div>
-        </div>
-    </div>
-</aside>
-
-<!-- ═══ PROFILE MODAL ═══ -->
-<div class="men-profile-modal" id="menProfileModal">
-    <div class="men-profile-box">
-        <button class="men-profile-close" id="menProfileClose"><i class="fas fa-times"></i></button>
-        <img class="men-profile-avatar" id="menProfileAvatar" src="" alt="">
-        <h2 class="men-profile-name" id="menProfileName">—</h2>
-        <div class="men-profile-email"><i class="fas fa-envelope"></i> <span id="menProfileEmail">—</span></div>
-        <div class="men-profile-tags">
-            <span class="men-profile-tag"><i class="fas fa-crown"></i> عضو مميز</span>
-            <span class="men-profile-tag"><i class="fas fa-shield-halved"></i> موثّق</span>
-        </div>
-        <div class="men-profile-stats">
-            <div class="men-profile-stat"><div class="ps-val" id="menPSessions">0</div><div class="ps-lbl">المحادثات</div></div>
-            <div class="men-profile-stat"><div class="ps-val" id="menPMsgs">0</div><div class="ps-lbl">الرسائل</div></div>
-        </div>
-        <div class="men-profile-storage">
-            <div class="mps-head">
-                <div class="mps-title"><i class="fas fa-cloud"></i> التخزين السحابي</div>
-                <div class="mps-val" id="menPStorage">0 / 5 GB</div>
+            <div class="settings-actions">
+                <button class="btn-clear-settings" id="clearMemorySettingsBtn"><i class="fas fa-trash-alt"></i> مسح الذاكرة</button>
+                <button class="btn-apply" id="applySettingsBtn">تطبيق الإعدادات</button>
             </div>
-            <div class="mps-bar"><div class="mps-fill" id="menPStorageFill" style="width:0%"></div></div>
-            <div class="mps-note" id="menPStorageNote">5 جيجابايت مجانية · تُحسب بالتقريب حسب حجم المحادثات</div>
-        </div>
-        <div class="men-profile-actions">
-            <button class="btn-acc" id="menOpenLibBtn"><i class="fas fa-book"></i> مكتبة المحادثات</button>
-            <button class="btn-out" id="menLogoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+            <button class="modal-close" id="settingsModalClose" style="margin-top:10px;">إغلاق</button>
         </div>
     </div>
-</div>
 
-<div class="bg-ambient"></div>
-<header>
-    <div class="container header-content">
-        <div class="header-left">
-            <a href="#" class="btn-back" id="backBtn" title="رجوع">
-                <i class="fas fa-arrow-right"></i>
-                <span class="back-text">رجوع</span>
-            </a>
-            <button class="btn-memory" id="memoryBtn" title="الذاكرة">
-                <i class="fas fa-brain"></i>
-                <span class="memory-text">الذاكرة</span>
-            </button>
-            <button class="btn-lib" id="libBtn" title="مكتبة المحادثات">
-                <i class="fas fa-book"></i>
-                <span class="lib-text">المكتبة</span>
-            </button>
-            <button class="btn-settings" id="settingsBtn" title="الإعدادات">
-                <i class="fas fa-cog"></i>
-                <span class="settings-text">الإعدادات</span>
-            </button>
-        </div>
-        <div class="header-right" id="menUserArea">
-            <div class="men-user-badge" id="menUserBadge" style="display:none">
-                <img id="menUserAvatar" src="" alt="">
-                <div>
-                    <div class="u-name" id="menUserName">—</div>
-                    <div class="u-status">متصل</div>
-                </div>
-            </div>
-            <button class="btn-memory" id="menLoginBtn" style="display:none">
-                <i class="fas fa-user"></i>
-                <span class="memory-text">دخول</span>
-            </button>
+    <!-- Extract Modal -->
+    <div class="modal-overlay" id="extractModal">
+        <div class="modal-box">
+            <h3><i class="fas fa-file-alt"></i> النص المستخرج من الملف</h3>
+            <div class="modal-text" id="extractedText">جاري استخراج النص...</div>
+            <button class="modal-close" id="modalClose">إغلاق</button>
         </div>
     </div>
-</header>
-<main>
-    <div class="container">
-        <div class="chat-wrapper">
-            <div class="chat-header">
-                <div class="bot-info">
-                    <div class="bot-avatar"><i class="fas fa-wand-sparkles"></i></div>
-                    <div>
-                        <div class="bot-name">MEN Ai</div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-flex">
+                <div class="footer-col">
+                    <h4><i class="fas fa-compass" style="margin-left:8px; color:var(--blue-deep);"></i>تواصل معنا</h4>
+                    <p><i class="fas fa-envelope"></i> clan.men.ts@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> 0540367546</p>
+                    <div class="social-icons">
+                        <a href="https://x.com/men_vi5" target="_blank"><i class="fab fa-x-twitter"></i></a>
+                        <a href="https://youtube.com/@clan_men" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a href="https://discord.gg/UJTZfvGew" target="_blank"><i class="fab fa-discord"></i></a>
+                        <a href="https://www.tiktok.com/@team_men2020" target="_blank"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
-            </div>
-            <div class="men-daily-bar" id="menDailyBar">
-                <span><i class="fas fa-calendar-day"></i> الحد اليومي: <b id="menDailyBarText">50 / 50</b></span>
-                <div class="db-progress"><div class="db-fill" id="menDailyBarFill" style="width:0%"></div></div>
-            </div>
-            <div class="messages-area" id="messagesArea"></div>
-            <div class="typing-indicator" id="typingIndicator">
-                <i class="fas fa-circle-notch"></i>
-                <span>جار التفكير</span>
-                <span class="dots"><span></span><span></span><span></span></span>
-            </div>
-            <div class="suggested-questions" id="suggestedQuestions">
-                <button class="sq-btn" data-question="متى تأسس الفريق؟"><i class="fas fa-calendar-alt"></i> متى تأسس الفريق؟</button>
-                <button class="sq-btn" data-question="كيف اشترك في MEN pass؟"><i class="fas fa-ticket-alt"></i> كيف اشترك في MEN pass؟</button>
-                <button class="sq-btn" data-question="كيف يمكنني التواصل مع الدعم؟"><i class="fas fa-headset"></i> التواصل مع الدعم</button>
-            </div>
-            <div class="input-area">
-                <button class="btn-plus" id="plusBtn" title="خيارات إضافية">
-                    <i class="fas fa-plus"></i>
-                </button>
-                <div class="plus-dropdown" id="plusDropdown">
-                    <button class="dropdown-item" id="attachOption">
-                        <i class="fas fa-paperclip"></i> إرفاق ملف
-                    </button>
-                    <div class="dropdown-divider"></div>
-                    <button class="dropdown-item" id="doitOption">
-                        <i class="fas fa-network-wired"></i> التعزيز
-                    </button>
-                    <div class="sub-dropdown" id="subDropdown">
-                        <button class="dropdown-item sub-item disabled-item" id="aiAgentOption">
-                            <i class="fas fa-hand-sparkles"></i> وكيل MEN Ai
-                            <span class="coming-soon-badge">قريباً</span>
-                        </button>
-                        <button class="dropdown-item sub-item disabled-item" id="searchBoostOption">
-                            <i class="fas fa-search"></i> البحث في المعزز
-                            <span class="coming-soon-badge">قريباً</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="file-preview hidden-preview" id="filePreview">
-                    <i class="fas fa-file"></i>
-                    <span id="fileName">ملف</span>
-                    <span class="remove-file" id="removeFile"><i class="fas fa-times"></i></span>
-                </div>
-                <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.xls" style="display:none;">
-                <div class="input-wrapper">
-                    <textarea id="messageInput" rows="1"></textarea>
-                    <span class="char-count" id="charCount">0</span>
-                </div>
-                <button class="btn-send" id="sendBtn" title="إرسال">
-                    <i class="fas fa-arrow-up"></i>
-                </button>
+                <div class="copyright">جميع الحقوق محفوظة © 2020 MEN <span></span></div>
             </div>
         </div>
-    </div>
-</main>
+    </footer>
 
-<!-- Modals (memory, settings, extract) -->
-<div class="modal-overlay" id="memoryModal">
-    <div class="modal-box">
-        <h3><i class="fas fa-brain"></i> ذاكرة MEN Ai (الجلسات)</h3>
-        <div id="memoryList" style="max-height:55vh;overflow-y:auto;padding:12px 0"></div>
-        <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:12px;flex-wrap:wrap">
-            <button class="modal-close" id="newSessionBtn" style="background:linear-gradient(135deg,#021ca4,#1a3a9e)"><i class="fas fa-plus-circle"></i> محادثة جديدة</button>
-            <button class="modal-close" id="clearMemoryBtn" style="background:rgba(255,0,0,.08);color:#ff6b6b;border:1px solid rgba(255,0,0,.15)"><i class="fas fa-trash-alt"></i> مسح الكل</button>
-            <button class="modal-close" id="memoryModalClose">إغلاق</button>
-        </div>
-    </div>
-</div>
+    <!-- ✅ ملف المصادقة المستقل -->
+    <script src="xain.js"></script>
 
-<div class="modal-overlay" id="settingsModal">
-    <div class="modal-box">
-        <h3><i class="fas fa-sliders-h"></i> الإعدادات</h3>
-        <div style="margin:20px 0">
-            <label style="display:block;color:#b0c4e8;font-size:1rem;margin-bottom:8px;font-weight:600">الحد الأقصى للرسائل في كل محادثة</label>
-            <select id="memoryLimitSelect" style="background:rgba(255,255,255,.05);border:1px solid rgba(74,122,255,.2);border-radius:30px;padding:10px 18px;color:#f0f4ff;font-family:'Cairo',sans-serif;font-size:1rem">
-                <option value="6">6 (افتراضي)</option>
-                <option value="12">12</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="200">200</option>
-                <option value="500">500</option>
-                <option value="1000">1000</option>
-            </select>
-        </div>
-        <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap">
-            <button class="modal-close" id="clearMemorySettingsBtn" style="background:rgba(255,0,0,.08);color:#ff6b6b;border:1px solid rgba(255,0,0,.15)"><i class="fas fa-trash-alt"></i> مسح الذاكرة</button>
-            <button class="modal-close" id="applySettingsBtn">تطبيق الإعدادات</button>
-        </div>
-        <button class="modal-close" id="settingsModalClose" style="margin-top:10px;background:rgba(255,255,255,.05);color:#a0b0d4;border:1px solid rgba(74,122,255,.15)">إغلاق</button>
-    </div>
-</div>
+    <script>
+        // ============================================================
+        //  MEN Ai - Main Chat Logic
+        // ============================================================
+        const TYPING_SPEED = 70;
+        const CODE_TEXT_SPEED = 60;
+        const CODE_BLOCK_SPEED = 8;
+        const WELCOME_SPEED = 70;
 
-<div class="modal-overlay" id="extractModal">
-    <div class="modal-box">
-        <h3><i class="fas fa-file-alt"></i> النص المستخرج من الملف</h3>
-        <div class="modal-text" id="extractedText">جاري استخراج النص...</div>
-        <button class="modal-close" id="modalClose">إغلاق</button>
-    </div>
-</div>
+        let responses = {}, mdrResponses = {}, codResponses = {}, keywordsMap = {}, products = [], customReplies = {};
+        const CUSTOM_REPLIES_KEY = 'menCustomReplies';
+        let attachedFile = null;
+        let extractedText = '';
+        const MEMORY_KEY = 'menChatMemory';
+        const SETTINGS_KEY = 'menChatSettings';
+        let maxMessagesPerSession = 6;
+        let autoBoostEnabled = false;
 
-<footer>
-    <div class="container">
-        <div class="footer-flex">
-            <div class="footer-col">
-                <h4><i class="fas fa-compass" style="margin-left:8px;color:var(--blue-deep)"></i>تواصل معنا</h4>
-                <p><i class="fas fa-envelope"></i> clan.men.ts@gmail.com</p>
-                <p><i class="fas fa-phone"></i> 0540367546</p>
-                <div class="social-icons">
-                    <a href="https://x.com/men_vi5" target="_blank"><i class="fab fa-x-twitter"></i></a>
-                    <a href="https://youtube.com/@clan_men" target="_blank"><i class="fab fa-youtube"></i></a>
-                    <a href="https://discord.gg/UJTZfvGew" target="_blank"><i class="fab fa-discord"></i></a>
-                    <a href="https://www.tiktok.com/@team_men2020" target="_blank"><i class="fab fa-tiktok"></i></a>
-                </div>
-            </div>
-            <div class="copyright">جميع الحقوق محفوظة © 2020 MEN <span></span></div>
-        </div>
-    </div>
-</footer>
-
-<script>
-// ============================================================
-//  MEN Ai - Complete System v12
-// ============================================================
-
-// ═══ Speed Constants ═══
-const TYPING_SPEED = 40;
-const CODE_TEXT_SPEED = 35;
-const CODE_BLOCK_SPEED = 6;
-const WELCOME_SPEED = 50;
-
-// ═══ Globals ═══
-let responses = {};
-let mdrResponses = {};
-let codResponses = {};
-let keywordsMap = {};
-let products = [];
-let customReplies = {};
-
-const CUSTOM_REPLIES_KEY = 'menCustomReplies';
-let attachedFile = null;
-let extractedText = '';
-
-const MEMORY_KEY = 'menChatMemory';
-const SETTINGS_KEY = 'menChatSettings';
-let maxMessagesPerSession = 6;
-
-function loadSettings() {
-    try {
-        const saved = localStorage.getItem(SETTINGS_KEY);
-        if (saved) { maxMessagesPerSession = JSON.parse(saved).limit || 6; }
-    } catch(e){}
-}
-function saveSettings(limit) {
-    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify({limit})); maxMessagesPerSession = limit; } catch(e){}
-}
-
-// ═══ Memory Functions ═══
-function getMemory() {
-    try {
-        const data = localStorage.getItem(MEMORY_KEY);
-        if (data) {
-            const parsed = JSON.parse(data);
-            if (parsed.sessions && Array.isArray(parsed.sessions)) return parsed;
+        function loadSettings() {
+            try {
+                const saved = localStorage.getItem(SETTINGS_KEY);
+                if (saved) {
+                    const s = JSON.parse(saved);
+                    maxMessagesPerSession = s.limit || 6;
+                    autoBoostEnabled = s.autoBoost || false;
+                    return s;
+                }
+            } catch(e) {}
+            return { limit: 6, autoBoost: false };
         }
-    } catch(e){}
-    return { sessions: [], currentSessionId: null };
-}
-function saveMemory(memory) {
-    try { localStorage.setItem(MEMORY_KEY, JSON.stringify(memory)); } catch(e){}
-}
-function createNewSession(title) {
-    const memory = getMemory();
-    const id = Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 5);
-    const session = {
-        id, title: title || 'محادثة جديدة', messages: [],
-        lastUpdated: new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' })
-    };
-    memory.sessions.unshift(session);
-    memory.currentSessionId = id;
-    saveMemory(memory);
-    return id;
-}
-function getCurrentSession() {
-    const memory = getMemory();
-    if (!memory.currentSessionId || !memory.sessions.some(s => s.id === memory.currentSessionId)) {
-        const id = createNewSession('محادثة جديدة');
-        memory.currentSessionId = id;
-        saveMemory(memory);
-    }
-    return memory.sessions.find(s => s.id === memory.currentSessionId);
-}
-function setCurrentSession(sessionId) {
-    const memory = getMemory();
-    if (memory.sessions.some(s => s.id === sessionId)) {
-        memory.currentSessionId = sessionId;
-        saveMemory(memory);
-        return true;
-    }
-    return false;
-}
-function saveToMemory(role, content, type = 'text', meta = null) {
-    try {
-        const memory = getMemory();
-        let session = memory.sessions.find(s => s.id === memory.currentSessionId);
-        if (!session) {
-            const id = createNewSession('محادثة جديدة');
+        function saveSettings(limit, autoBoost) {
+            try { localStorage.setItem(SETTINGS_KEY, JSON.stringify({limit, autoBoost})); maxMessagesPerSession = limit; autoBoostEnabled = autoBoost; } catch(e){}
+        }
+
+        function getMemory() {
+            try {
+                const data = localStorage.getItem(MEMORY_KEY);
+                if (data) {
+                    const p = JSON.parse(data);
+                    if (p.sessions && Array.isArray(p.sessions)) return p;
+                }
+            } catch(e){}
+            return { sessions: [], currentSessionId: null };
+        }
+        function saveMemory(m) { try { localStorage.setItem(MEMORY_KEY, JSON.stringify(m)); } catch(e){} }
+        function createNewSession(title) {
+            const memory = getMemory();
+            const id = Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 5);
+            const session = { id, title: title || 'محادثة جديدة', messages: [], lastUpdated: new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' }) };
+            memory.sessions.unshift(session);
             memory.currentSessionId = id;
-            session = memory.sessions.find(s => s.id === id);
+            saveMemory(memory);
+            return id;
         }
-        const timestamp = new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' });
-        session.messages.push({ role, content, type, meta, timestamp });
-        session.lastUpdated = timestamp;
-        if (role === 'user' && session.messages.length === 1) {
-            const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
-            session.title = title || 'محادثة جديدة';
+        function getCurrentSession() {
+            const memory = getMemory();
+            if (!memory.currentSessionId || !memory.sessions.some(s => s.id === memory.currentSessionId)) {
+                const id = createNewSession('محادثة جديدة');
+                memory.currentSessionId = id;
+                saveMemory(memory);
+            }
+            return memory.sessions.find(s => s.id === memory.currentSessionId);
         }
-        if (session.messages.length > maxMessagesPerSession) {
-            const index = memory.sessions.findIndex(s => s.id === session.id);
-            if (index !== -1) {
-                memory.sessions.splice(index, 1);
-                if (memory.currentSessionId === session.id) {
-                    memory.currentSessionId = null;
-                    const newId = createNewSession('محادثة جديدة');
-                    memory.currentSessionId = newId;
+        function setCurrentSession(sessionId) {
+            const memory = getMemory();
+            if (memory.sessions.some(s => s.id === sessionId)) {
+                memory.currentSessionId = sessionId;
+                saveMemory(memory);
+                return true;
+            }
+            return false;
+        }
+        function saveToMemory(role, content, type = 'text', meta = null) {
+            try {
+                const memory = getMemory();
+                let session = memory.sessions.find(s => s.id === memory.currentSessionId);
+                if (!session) {
+                    const id = createNewSession('محادثة جديدة');
+                    memory.currentSessionId = id;
+                    session = memory.sessions.find(s => s.id === id);
+                }
+                const timestamp = new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' });
+                session.messages.push({ role, content, type, meta, timestamp });
+                session.lastUpdated = timestamp;
+                if (role === 'user' && session.messages.length === 1) {
+                    session.title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
+                }
+                if (session.messages.length > maxMessagesPerSession) {
+                    const index = memory.sessions.findIndex(s => s.id === session.id);
+                    if (index !== -1) {
+                        memory.sessions.splice(index, 1);
+                        if (memory.currentSessionId === session.id) {
+                            memory.currentSessionId = null;
+                            const newId = createNewSession('محادثة جديدة');
+                            memory.currentSessionId = newId;
+                        }
+                        saveMemory(memory);
+                        loadCurrentSession();
+                        return;
+                    }
                 }
                 saveMemory(memory);
-                loadCurrentSession();
+            } catch(e){}
+        }
+        function loadMemory() {
+            const memory = getMemory();
+            renderMemoryList(memory.sessions);
+        }
+        function renderMemoryList(sessions) {
+            const container = document.getElementById('memoryList');
+            if (!sessions || !sessions.length) {
+                container.innerHTML = '<div class="memory-empty">لا توجد محادثات محفوظة بعد.</div>';
                 return;
             }
+            container.innerHTML = sessions.map(s => `
+                <div class="memory-item" data-session-id="${s.id}">
+                    <div class="memory-content">
+                        <span class="memory-title">${escapeHtml(s.title || 'محادثة')}</span>
+                        <span class="memory-count">(${s.messages.length} رسالة)</span>
+                        <span class="memory-time">${s.lastUpdated || ''}</span>
+                    </div>
+                    <button class="memory-delete" data-session-id="${s.id}"><i class="fas fa-times"></i></button>
+                </div>
+            `).join('');
+            container.querySelectorAll('.memory-item').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    if (e.target.closest('.memory-delete')) return;
+                    restoreSession(this.dataset.sessionId);
+                });
+                el.querySelector('.memory-delete').addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    deleteSession(this.dataset.sessionId);
+                });
+            });
         }
-        saveMemory(memory);
-    } catch(e){}
-}
-function deleteSession(sessionId) {
-    if (!confirm('هل تريد حذف هذه المحادثة؟')) return;
-    try {
-        const memory = getMemory();
-        const index = memory.sessions.findIndex(s => s.id === sessionId);
-        if (index !== -1) {
-            memory.sessions.splice(index, 1);
-            if (memory.currentSessionId === sessionId) {
-                memory.currentSessionId = null;
-                if (memory.sessions.length > 0) memory.currentSessionId = memory.sessions[0].id;
-                else { const id = createNewSession('محادثة جديدة'); memory.currentSessionId = id; }
+        function deleteSession(sessionId) {
+            if (!confirm('هل تريد حذف هذه المحادثة؟')) return;
+            const memory = getMemory();
+            const i = memory.sessions.findIndex(s => s.id === sessionId);
+            if (i !== -1) {
+                memory.sessions.splice(i, 1);
+                if (memory.currentSessionId === sessionId) {
+                    memory.currentSessionId = memory.sessions[0]?.id || null;
+                    if (!memory.currentSessionId) {
+                        const id = createNewSession('محادثة جديدة');
+                        memory.currentSessionId = id;
+                    }
+                }
+                saveMemory(memory);
+                loadMemory();
+                loadCurrentSession();
             }
-            saveMemory(memory);
+        }
+        function clearAllSessions() {
+            if (!confirm('مسح كل المحادثات؟')) return;
+            saveMemory({ sessions: [], currentSessionId: null });
+            createNewSession('محادثة جديدة');
+            loadMemory();
+            document.getElementById('memoryModal').classList.remove('active');
+            document.getElementById('settingsModal').classList.remove('active');
             loadCurrentSession();
         }
-    } catch(e){}
-}
-function clearAllSessions() {
-    if (!confirm('هل تريد مسح كل المحادثات؟')) return;
-    try {
-        const memory = { sessions: [], currentSessionId: null };
-        saveMemory(memory);
-        const newId = createNewSession('محادثة جديدة');
-        memory.currentSessionId = newId;
-        saveMemory(memory);
-        document.getElementById('memoryModal').classList.remove('active');
-        loadCurrentSession();
-    } catch(e){}
-}
+        function restoreSession(sessionId) {
+            const memory = getMemory();
+            const session = memory.sessions.find(s => s.id === sessionId);
+            if (!session) return;
+            setCurrentSession(sessionId);
+            document.getElementById('memoryModal').classList.remove('active');
+            loadCurrentSession();
+        }
 
-function loadCurrentSession() {
-    const session = getCurrentSession();
-    if (!session) return;
-    const area = document.getElementById('messagesArea');
-    area.innerHTML = '';
-    if (session.messages.length === 0) {
-        const welcomeDiv = document.createElement('div');
-        welcomeDiv.className = 'message bot';
-        welcomeDiv.innerHTML = buildWelcomeMessage() + `<span class="msg-time">الآن</span>`;
-        area.appendChild(welcomeDiv);
-        scrollToBottom();
-        const typewriterElement = document.getElementById('typewriterText');
-        if (typewriterElement) {
-            const fullText = 'مرحبا بك في MEN Ai';
-            typeTextEffect(typewriterElement, fullText, WELCOME_SPEED).then(() => {
-                typewriterElement.innerHTML = fullText.replace('MEN Ai', '<span class="highlight">MEN Ai</span>');
-                const cursor = document.getElementById('typewriterCursor');
-                if (cursor) cursor.style.display = 'none';
+        function loadCurrentSession() {
+            const session = getCurrentSession();
+            if (!session) return;
+            const area = document.getElementById('messagesArea');
+            area.innerHTML = '';
+            if (!session.messages.length) {
+                const div = document.createElement('div');
+                div.className = 'message bot';
+                div.innerHTML = buildWelcomeMessage() + `<span class="msg-time">الآن</span>`;
+                area.appendChild(div);
+                const tw = document.getElementById('typewriterText');
+                if (tw) {
+                    const fullText = 'مرحبا بك في MEN Ai';
+                    typeTextEffect(tw, fullText, WELCOME_SPEED).then(() => {
+                        tw.innerHTML = fullText.replace('MEN Ai', '<span class="highlight">MEN Ai</span>');
+                        const c = document.getElementById('typewriterCursor');
+                        if (c) c.style.display = 'none';
+                    });
+                }
+                return;
+            }
+            session.messages.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = `message ${msg.role}`;
+                const timeHtml = `<span class="msg-time">${msg.timestamp || 'الآن'}</span>`;
+                if (msg.role === 'bot' && msg.type === 'products') div.innerHTML = buildAllProductsRow() + timeHtml;
+                else if (msg.role === 'bot' && msg.type === 'product' && msg.meta) div.innerHTML = `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(msg.meta)}</div></div>` + timeHtml;
+                else if (msg.role === 'bot' && msg.type === 'code' && msg.meta) {
+                    const cr = msg.meta;
+                    div.innerHTML = buildCodeHtml(cr.text || '', cr.code || '', cr.language || 'code') + timeHtml;
+                    const tEl = div.querySelector('.code-text');
+                    if (tEl) tEl.textContent = cr.text || '';
+                    const pEl = div.querySelector('.code-content');
+                    if (pEl && cr.code) { try { pEl.innerHTML = highlightCode(cr.code, cr.language); } catch(e) { pEl.textContent = cr.code; } }
+                }
+                else div.innerHTML = escapeHtml(msg.content) + timeHtml;
+                if (msg.role === 'bot') {
+                    const a = document.createElement('div');
+                    a.className = 'bot-actions';
+                    a.innerHTML = `<button class="copy-btn" data-content="${escapeHtml(msg.content)}"><i class="fas fa-copy"></i> نسخ</button>`;
+                    div.appendChild(a);
+                }
+                area.appendChild(div);
             });
-        }
-        return;
-    }
-    session.messages.forEach(msg => {
-        const div = document.createElement('div');
-        div.className = `message ${msg.role}`;
-        const timeHtml = `<span class="msg-time">${msg.timestamp || 'الآن'}</span>`;
-        if (msg.role === 'bot' && msg.type === 'products') {
-            div.innerHTML = buildAllProductsRow() + timeHtml;
-        } else if (msg.role === 'bot' && msg.type === 'product' && msg.meta) {
-            div.innerHTML = `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(msg.meta)}</div></div>` + timeHtml;
-        } else if (msg.role === 'bot' && msg.type === 'code' && msg.meta) {
-            const codeReply = msg.meta;
-            div.innerHTML = buildCodeHtml(codeReply.text || '', codeReply.code || '', codeReply.language || 'code') + timeHtml;
-            const textEl = div.querySelector('.code-text');
-            if (textEl) textEl.textContent = codeReply.text || '';
-            const preEl = div.querySelector('.code-content');
-            if (preEl && codeReply.code) {
-                try { preEl.innerHTML = highlightCode(codeReply.code, codeReply.language); }
-                catch (e) { preEl.textContent = codeReply.code; }
-            }
-        } else {
-            div.innerHTML = escapeHtml(msg.content) + timeHtml;
-        }
-        if (msg.role === 'bot') {
-            const actions = document.createElement('div');
-            actions.className = 'bot-actions';
-            actions.innerHTML = `<button class="copy-btn" data-content="${escapeHtml(msg.content)}"><i class="fas fa-copy"></i> نسخ</button>`;
-            div.appendChild(actions);
-        }
-        area.appendChild(div);
-    });
-    scrollToBottom();
-    document.querySelectorAll('.copy-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const content = this.dataset.content;
-            navigator.clipboard.writeText(content).then(() => {
-                const orig = this.innerHTML;
-                this.innerHTML = '<i class="fas fa-check"></i> تم';
-                setTimeout(() => { this.innerHTML = orig; }, 1500);
-            }).catch(() => {});
-        });
-    });
-}
-
-function buildWelcomeMessage() {
-    return `
-        <div class="welcome-animation">
-            <div class="welcome-main">
-                <span class="letter" style="animation-delay:0s">M</span>
-                <span class="letter" style="animation-delay:.1s">E</span>
-                <span class="letter" style="animation-delay:.2s">N</span>
-                <span class="letter" style="animation-delay:.3s">&nbsp;</span>
-                <span class="letter" style="animation-delay:.4s">A</span>
-                <span class="letter" style="animation-delay:.5s">i</span>
-            </div>
-            <div class="typewriter-container">
-                <span class="typewriter-text" id="typewriterText"></span>
-                <span class="typewriter-cursor" id="typewriterCursor"></span>
-            </div>
-            <div class="welcome-desc">
-                <i class="fas fa-circle-notch"></i> أنا هنا لمساعدتك اسألني عن أي شيء!
-            </div>
-        </div>
-    `;
-}
-function typeTextEffect(element, text, speed = 60) {
-    return new Promise((resolve) => {
-        let index = 0;
-        element.textContent = '';
-        const interval = setInterval(() => {
-            if (index < text.length) { element.textContent += text.charAt(index); index++; }
-            else { clearInterval(interval); resolve(); }
-        }, speed);
-    });
-}
-
-// ═══ Replies ═══
-function loadCustomReplies() {
-    try { customReplies = JSON.parse(localStorage.getItem(CUSTOM_REPLIES_KEY) || '{}'); } catch(e){ customReplies = {}; }
-}
-function saveCustomReplies() {
-    try { localStorage.setItem(CUSTOM_REPLIES_KEY, JSON.stringify(customReplies)); } catch(e){}
-}
-function mergeReplies() {
-    let merged = JSON.parse(JSON.stringify(responses));
-    for (const [cat, obj] of Object.entries(mdrResponses)) {
-        if (!merged[cat]) merged[cat] = { keywords: [], responses: [] };
-        if (obj.keywords) merged[cat].keywords = [...new Set([...merged[cat].keywords, ...obj.keywords])];
-        if (obj.responses) merged[cat].responses = [...new Set([...merged[cat].responses, ...obj.responses])];
-    }
-    for (const [cat, obj] of Object.entries(customReplies)) {
-        if (!merged[cat]) merged[cat] = { keywords: [], responses: [] };
-        if (obj.keywords) merged[cat].keywords = [...new Set([...merged[cat].keywords, ...obj.keywords])];
-        if (obj.responses) merged[cat].responses = [...new Set([...merged[cat].responses, ...obj.responses])];
-    }
-    return merged;
-}
-function rebuildKeywordsMap() {
-    const merged = mergeReplies();
-    let map = {};
-    for (const [cat, obj] of Object.entries(merged)) {
-        if (obj.keywords && Array.isArray(obj.keywords)) map[cat] = obj.keywords.map(k => k.toLowerCase());
-    }
-    keywordsMap = map;
-}
-function getReply(category) {
-    const merged = mergeReplies();
-    let catObj = merged[category] || merged['default'];
-    if (!catObj || !catObj.responses || catObj.responses.length === 0) {
-        catObj = merged['default'] || { responses: ['عذراً، لا يوجد رد متاح.'] };
-    }
-    const list = catObj.responses;
-    return list[Math.floor(Math.random() * list.length)];
-}
-function getCategoryForText(text) {
-    const lower = text.trim().toLowerCase();
-    const merged = mergeReplies();
-    for (const [cat, obj] of Object.entries(merged)) {
-        if (obj.keywords && Array.isArray(obj.keywords)) {
-            for (const pattern of obj.keywords.map(k => k.toLowerCase())) {
-                if (lower.includes(pattern)) return cat;
-            }
-        }
-    }
-    return 'default';
-}
-function evaluateMath(text) {
-    const match = text.match(/(\d+)\s*([+\-*/])\s*(\d+)/);
-    if (!match) return null;
-    const a = parseFloat(match[1]), op = match[2], b = parseFloat(match[3]);
-    if (isNaN(a) || isNaN(b)) return null;
-    let r;
-    switch(op){ case '+': r=a+b; break; case '-': r=a-b; break; case '*': r=a*b; break; case '/': if (b===0) return 'لا يمكن القسمة على صفر'; r=a/b; break; default: return null; }
-    return Number.isInteger(r) ? r : r.toFixed(2);
-}
-function findProduct(text) {
-    const lower = text.trim().toLowerCase();
-    for (const p of products) {
-        if (p.keywords && p.keywords.some(k => lower.includes(k.toLowerCase()))) return p;
-        const name = (p.name||'').toLowerCase();
-        if (name.includes(lower) || lower.includes(name)) return p;
-    }
-    return null;
-}
-function findCodeCategory(text) {
-    const lower = text.trim().toLowerCase();
-    for (const [cat, obj] of Object.entries(codResponses)) {
-        if (obj.keywords && Array.isArray(obj.keywords)) {
-            for (const kw of obj.keywords) if (lower.includes(kw.toLowerCase())) return obj;
-        }
-    }
-    return null;
-}
-function getCodeResponse(obj) {
-    if (!obj || !obj.responses || !obj.responses.length) return null;
-    return obj.responses[Math.floor(Math.random() * obj.responses.length)];
-}
-function buildCodeHtml(text, code, language) {
-    let html = `<div class="code-response">`;
-    if (text) html += `<p class="code-text"></p>`;
-    if (code) {
-        html += `<div class="code-block">
-            <div class="code-header">
-                <span class="code-lang"><i class="fas fa-code"></i> ${escapeHtml(language || 'code')}</span>
-                <button class="code-copy-btn" type="button"><i class="fas fa-copy"></i> نسخ الكود</button>
-            </div>
-            <pre class="code-content"></pre>
-        </div>`;
-    }
-    html += `</div>`;
-    return html;
-}
-
-// ═══ Syntax Highlighter ═══
-const CODE_KEYWORDS = {
-    python: ['def','class','if','elif','else','for','while','return','import','from','as','try','except','finally','with','lambda','yield','pass','break','continue','raise','in','is','not','and','or','None','True','False','async','await','self','print','input','len','range','str','int','float','list','dict','set','tuple','bool'],
-    javascript: ['function','const','let','var','if','else','for','while','return','class','extends','new','this','try','catch','finally','throw','async','await','import','export','from','default','switch','case','break','continue','typeof','instanceof','null','undefined','true','false','in','of','do','console','document'],
-    html: ['DOCTYPE','html','head','body','title','meta','link','script','style','div','span','p','a','img','ul','ol','li','h1','h2','h3','form','input','button','table','header','footer','nav','main','section','class','id','href','src'],
-    css: ['body','html','div','span','p','a','color','background','margin','padding','border','font','display','flex','grid','width','height','position','transition','transform','opacity']
-};
-function highlightCode(code, language) {
-    if (!code) return '';
-    const lang = (language || 'javascript').toLowerCase();
-    let text = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const stash = [];
-    const stashIt = (html) => { const id = '\uE000q' + stash.length + 'q\uE001'; stash.push(html); return id; };
-    text = text.replace(/("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/g, m => stashIt('<span class="tok-string">'+m+'</span>'));
-    if (lang === 'python') text = text.replace(/(#[^\n]*)/g, m => stashIt('<span class="tok-comment">'+m+'</span>'));
-    else text = text.replace(/(\/\/[^\n]*)/g, m => stashIt('<span class="tok-comment">'+m+'</span>'));
-    text = text.replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="tok-number">$1</span>');
-    const kw = CODE_KEYWORDS[lang] || CODE_KEYWORDS.javascript;
-    if (kw && kw.length) {
-        const escaped = kw.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).sort((a,b)=>b.length-a.length);
-        text = text.replace(new RegExp('\\b('+escaped.join('|')+')\\b','g'), '<span class="tok-keyword">$1</span>');
-    }
-    text = text.replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g, (m,n) => '<span class="tok-function">'+n+'</span>(');
-    text = text.replace(/\uE000q(\d+)q\uE001/g, (_, i) => stash[parseInt(i)] || '');
-    return text;
-}
-
-// ═══ Products ═══
-function buildAllProductsRow() {
-    if (!products || !products.length) return '<p style="color:#8a9abb;padding:10px 0">لا توجد منتجات متاحة حالياً.</p>';
-    let html = '<div class="products-row-wrapper"><div class="products-row">';
-    products.forEach(p => { html += buildProductCard(p); });
-    html += '</div></div>';
-    return html;
-}
-function buildProductCard(product) {
-    const image = product.image || 'images/default.png';
-    const name = product.name || 'منتج';
-    const description = product.description || 'لا يوجد وصف';
-    const price = product.price || '0';
-    const currency = product.currency || 'ر.س';
-    const badge = product.badge || 'منتج';
-    const link = product.link || '#';
-    return `<div class="men-product-card">
-        <img src="${image}" class="product-image" alt="${name}" onerror="this.src='images/default.png'">
-        <div class="product-content">
-            <span class="badge">${badge}</span>
-            <h2>${name}</h2>
-            <p>${description}</p>
-            <div class="bottom">
-                <div class="price">${price} <small>${currency}</small></div>
-                <button class="btn-product" onclick="window.location.href='${link}'"><i class="fas fa-arrow-left"></i> عرض</button>
-            </div>
-        </div>
-    </div>`;
-}
-
-// ═══ File Extraction ═══
-async function extractTextFromFile(file) {
-    const ft = file.type, fn = file.name.toLowerCase();
-    if (ft.startsWith('image/')) {
-        try {
-            const url = URL.createObjectURL(file);
-            const result = await Tesseract.recognize(url, 'ara');
-            URL.revokeObjectURL(url);
-            return result.data.text || 'لم يتم التعرف على نص.';
-        } catch(e){ return 'خطأ في معالجة الصورة.'; }
-    }
-    if (ft === 'text/plain' || fn.endsWith('.txt') || ft === 'text/csv' || fn.endsWith('.csv')) {
-        try { return await file.text() || 'الملف فارغ.'; } catch(e){ return 'خطأ في قراءة الملف.'; }
-    }
-    if (ft === 'application/pdf' || fn.endsWith('.pdf')) {
-        try {
-            const buf = await file.arrayBuffer();
-            const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
-            let t = '';
-            for (let i = 1; i <= pdf.numPages; i++) {
-                const page = await pdf.getPage(i);
-                const tc = await page.getTextContent();
-                t += tc.items.map(it => it.str).join(' ') + '\n';
-            }
-            return t || 'لا يوجد نص في PDF.';
-        } catch(e){ return 'خطأ في قراءة PDF.'; }
-    }
-    if (fn.endsWith('.docx')) {
-        try {
-            const buf = await file.arrayBuffer();
-            const r = await mammoth.extractRawText({ arrayBuffer: buf });
-            return r.value || 'الملف فارغ.';
-        } catch(e){ return 'خطأ في قراءة Word.'; }
-    }
-    if (fn.endsWith('.xlsx') || fn.endsWith('.xls')) {
-        try {
-            const buf = await file.arrayBuffer();
-            const wb = XLSX.read(buf, { type: 'array' });
-            let t = '';
-            wb.SheetNames.forEach(n => {
-                const j = XLSX.utils.sheet_to_json(wb.Sheets[n]);
-                if (j.length) { t += `\n--- ${n} ---\n`; j.forEach(r => t += Object.values(r).join(' | ') + '\n'); }
-            });
-            return t || 'لا توجد بيانات.';
-        } catch(e){ return 'خطأ في قراءة Excel.'; }
-    }
-    return 'نوع الملف غير مدعوم.';
-}
-function showExtractedText(text) {
-    document.getElementById('extractedText').textContent = text || 'لم يتم استخراج نص.';
-    document.getElementById('extractModal').classList.add('active');
-}
-document.getElementById('modalClose').addEventListener('click', () => document.getElementById('extractModal').classList.remove('active'));
-document.getElementById('extractModal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
-
-// ═══ File Attach ═══
-function showAttachedFile(file) {
-    attachedFile = file;
-    document.getElementById('fileName').textContent = file.name;
-    document.getElementById('filePreview').classList.remove('hidden-preview');
-    document.getElementById('filePreview').classList.add('visible');
-}
-function hideAttachedFile() {
-    attachedFile = null; extractedText = '';
-    document.getElementById('filePreview').classList.remove('visible');
-    document.getElementById('filePreview').classList.add('hidden-preview');
-    document.getElementById('fileInput').value = '';
-}
-document.getElementById('fileInput').addEventListener('change', function() {
-    if (this.files && this.files.length > 0) {
-        const f = this.files[0];
-        if (f.size > 10*1024*1024) { alert('الحد الأقصى 10 ميجابايت'); this.value = ''; return; }
-        showAttachedFile(f);
-        closeAllDropdowns();
-    } else hideAttachedFile();
-});
-document.getElementById('removeFile').addEventListener('click', hideAttachedFile);
-
-// ═══ Dropdown ═══
-const plusBtn = document.getElementById('plusBtn');
-const plusDropdown = document.getElementById('plusDropdown');
-const subDropdown = document.getElementById('subDropdown');
-function toggleDropdown() {
-    plusDropdown.classList.toggle('show');
-    plusBtn.classList.toggle('active');
-}
-function closeAllDropdowns() {
-    plusDropdown.classList.remove('show');
-    plusBtn.classList.remove('active');
-    subDropdown.classList.remove('show');
-}
-plusBtn.addEventListener('click', e => { e.stopPropagation(); toggleDropdown(); });
-document.getElementById('attachOption').addEventListener('click', e => { e.stopPropagation(); document.getElementById('fileInput').click(); closeAllDropdowns(); });
-document.getElementById('doitOption').addEventListener('click', e => { e.stopPropagation(); subDropdown.classList.toggle('show'); });
-document.getElementById('aiAgentOption').addEventListener('click', e => { e.stopPropagation(); alert('قريباً'); closeAllDropdowns(); });
-document.getElementById('searchBoostOption').addEventListener('click', e => { e.stopPropagation(); alert('قريباً'); closeAllDropdowns(); });
-document.addEventListener('click', e => { if (!e.target.closest('.input-area')) closeAllDropdowns(); });
-
-// ═══ Memory/Settings Modals ═══
-document.getElementById('memoryBtn').addEventListener('click', () => {
-    renderMemoryModal();
-    document.getElementById('memoryModal').classList.add('active');
-});
-document.getElementById('memoryModalClose').addEventListener('click', () => document.getElementById('memoryModal').classList.remove('active'));
-document.getElementById('memoryModal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
-document.getElementById('clearMemoryBtn').addEventListener('click', clearAllSessions);
-document.getElementById('newSessionBtn').addEventListener('click', () => {
-    const id = createNewSession('محادثة جديدة');
-    setCurrentSession(id);
-    document.getElementById('memoryModal').classList.remove('active');
-    loadCurrentSession();
-    if (typeof renderLibrary === 'function') renderLibrary();
-});
-function renderMemoryModal() {
-    const memory = getMemory();
-    const container = document.getElementById('memoryList');
-    if (!memory.sessions.length) {
-        container.innerHTML = '<div style="color:#6a708a;text-align:center;padding:40px 0;font-size:1.1rem">لا توجد محادثات محفوظة بعد.</div>';
-        return;
-    }
-    container.innerHTML = memory.sessions.map(s => `
-        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(74,122,255,.08);border-radius:20px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:10px">
-            <div style="flex:1;min-width:0">
-                <div style="color:#d0dcf5;font-weight:700">${escapeHtml(s.title||'محادثة')}</div>
-                <div style="color:#6a708a;font-size:.8rem">${s.messages.length} رسالة · ${s.lastUpdated||''}</div>
-            </div>
-            <button data-del-sid="${s.id}" style="background:rgba(255,0,0,.08);color:#ff6b6b;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer"><i class="fas fa-times"></i></button>
-        </div>
-    `).join('');
-    container.querySelectorAll('[data-del-sid]').forEach(b => {
-        b.addEventListener('click', () => { deleteSession(b.dataset.delSid); renderMemoryModal(); if (typeof renderLibrary === 'function') renderLibrary(); });
-    });
-}
-
-document.getElementById('settingsBtn').addEventListener('click', () => {
-    const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
-    document.getElementById('memoryLimitSelect').value = saved.limit || 6;
-    document.getElementById('settingsModal').classList.add('active');
-});
-document.getElementById('settingsModalClose').addEventListener('click', () => document.getElementById('settingsModal').classList.remove('active'));
-document.getElementById('settingsModal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
-document.getElementById('applySettingsBtn').addEventListener('click', () => {
-    const v = parseInt(document.getElementById('memoryLimitSelect').value);
-    if (isNaN(v) || v < 1) { alert('قيمة غير صحيحة'); return; }
-    saveSettings(v);
-    alert('تم الحفظ ✓');
-    document.getElementById('settingsModal').classList.remove('active');
-});
-document.getElementById('clearMemorySettingsBtn').addEventListener('click', clearAllSessions);
-
-// ═══ Helper functions ═══
-function scrollToBottom() {
-    const area = document.getElementById('messagesArea');
-    area.scrollTop = area.scrollHeight;
-}
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
-function typeText(element, text, speed = 20) {
-    return new Promise(resolve => {
-        let i = 0;
-        element.innerHTML = '';
-        const iv = setInterval(() => {
-            if (i < text.length) {
-                const ch = text.charAt(i);
-                element.innerHTML += ch === '\n' ? '<br>' : ch;
-                i++;
-                scrollToBottom();
-            } else { clearInterval(iv); resolve(); }
-        }, speed);
-    });
-}
-function typeTextInto(element, text, speed) {
-    return new Promise(resolve => {
-        let i = 0;
-        element.textContent = '';
-        const iv = setInterval(() => {
-            if (i < text.length) { element.textContent += text.charAt(i); i++; scrollToBottom(); }
-            else { clearInterval(iv); resolve(); }
-        }, speed);
-    });
-}
-
-// ═══ Smart Reply ═══
-async function generateSmartReply(text) {
-    const lower = text.trim().toLowerCase();
-    const codeObj = findCodeCategory(text);
-    if (codeObj) {
-        const reply = getCodeResponse(codeObj);
-        if (reply) return { type: 'code', content: reply };
-    }
-    if (lower.includes('عرض المنتجات') || lower.includes('المنتجات') || lower.includes('اشتري')) {
-        return { type: 'products', content: buildAllProductsRow() };
-    }
-    const math = evaluateMath(text);
-    if (math !== null) return { type: 'text', content: `النتيجة: **${math}**` };
-    if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
-        const now = new Date();
-        const t = now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true });
-        const d = now.toLocaleDateString('ar-SA', { timeZone: 'Asia/Riyadh' });
-        return { type: 'text', content: `الوقت: ${t}\nالتاريخ: ${d}` };
-    }
-    const product = findProduct(text);
-    if (product) return { type: 'product', content: `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(product)}</div></div>`, product };
-    const cat = getCategoryForText(text);
-    if (cat !== 'default') return { type: 'text', content: getReply(cat) };
-    return { type: 'text', content: getReply('default') };
-}
-
-// ═══ Send Message ═══
-const messagesArea = document.getElementById('messagesArea');
-const messageInput = document.getElementById('messageInput');
-const sendBtn = document.getElementById('sendBtn');
-const charCount = document.getElementById('charCount');
-const typingIndicator = document.getElementById('typingIndicator');
-const suggestedQuestions = document.getElementById('suggestedQuestions');
-let isProcessing = false;
-
-document.querySelectorAll('.sq-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const q = this.dataset.question;
-        if (q) { messageInput.value = q; charCount.textContent = q.length; sendMessage(); }
-    });
-});
-messageInput.addEventListener('input', function() {
-    charCount.textContent = this.value.length > 0 ? this.value.length : '0';
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 150) + 'px';
-});
-messageInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-});
-sendBtn.addEventListener('click', sendMessage);
-
-async function sendMessage() {
-    // ═══ Check Auth ═══
-    if (!window.MEN_AI_USER) {
-        if (typeof window.openMenAuthGate === 'function') window.openMenAuthGate('login');
-        return;
-    }
-    // ═══ Check Daily Limit ═══
-    if (typeof window.isLimitReached === 'function' && window.isLimitReached()) {
-        alert('لقد وصلت للحد اليومي (50 رسالة). عُد غداً.');
-        return;
-    }
-    const text = messageInput.value.trim();
-    if (!text && !attachedFile) return;
-    if (isProcessing) return;
-    if (suggestedQuestions) suggestedQuestions.classList.add('hidden');
-    isProcessing = true;
-    sendBtn.disabled = true;
-
-    try {
-        let fileText = '';
-        if (attachedFile) { fileText = await extractTextFromFile(attachedFile); showExtractedText(fileText); }
-        let userContent = text;
-        if (attachedFile) userContent += `\n[ملف: ${attachedFile.name}]\n${fileText}`;
-
-        const userMsg = document.createElement('div');
-        userMsg.className = 'message user';
-        let display = text || 'أرسل ملفاً';
-        if (attachedFile) display += ` <span style="color:#4a7aff;font-size:.8rem">${attachedFile.name}</span>`;
-        userMsg.innerHTML = escapeHtml(display) + `<span class="msg-time">الآن</span>`;
-        messagesArea.appendChild(userMsg);
-        scrollToBottom();
-        saveToMemory('user', userContent, 'text');
-
-        // Increment daily counter
-        if (typeof window.incDailyUsage === 'function') window.incDailyUsage();
-
-        messageInput.value = '';
-        messageInput.style.height = 'auto';
-        charCount.textContent = '0';
-        typingIndicator.style.display = 'flex';
-        scrollToBottom();
-        await delay(700 + Math.random() * 900);
-        typingIndicator.style.display = 'none';
-
-        let reply = await generateSmartReply(text || fileText || 'ملف');
-        if (attachedFile && fileText && fileText.length > 0 && reply.type === 'text') {
-            reply.content = `📎 استخرجت من ملفك:\n"${fileText.substring(0, 200)}${fileText.length > 200 ? '...' : ''}"\n\n${reply.content}`;
-        }
-
-        const botMsg = document.createElement('div');
-        botMsg.className = 'message bot';
-        messagesArea.appendChild(botMsg);
-        scrollToBottom();
-
-        let replyContent = '';
-        if (reply.type === 'products' || reply.type === 'product') {
-            botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
-            replyContent = reply.type === 'products' ? 'تم عرض المنتجات' : 'تم عرض المنتج';
-        } else if (reply.type === 'code') {
-            const cr = reply.content;
-            botMsg.innerHTML = buildCodeHtml('', '', cr.language);
-            const container = botMsg.querySelector('.code-response');
-            if (cr.text) {
-                const t = document.createElement('p');
-                t.className = 'code-text';
-                container.insertBefore(t, container.firstChild);
-                await typeTextInto(t, cr.text, CODE_TEXT_SPEED);
-            }
-            if (cr.code) {
-                container.insertAdjacentHTML('beforeend', `
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span class="code-lang"><i class="fas fa-code"></i> ${escapeHtml(cr.language || 'code')}</span>
-                            <button class="code-copy-btn" type="button"><i class="fas fa-copy"></i> نسخ الكود</button>
-                        </div>
-                        <pre class="code-content"></pre>
-                    </div>
-                `);
-                const pre = container.querySelector('.code-content');
-                await typeTextInto(pre, cr.code, CODE_BLOCK_SPEED);
-                try { pre.innerHTML = highlightCode(cr.code, cr.language); } catch(e){}
-                const cpBtn = container.querySelector('.code-copy-btn');
-                cpBtn.addEventListener('click', function() {
-                    const code = this.closest('.code-block').querySelector('.code-content').textContent;
-                    navigator.clipboard.writeText(code).then(() => {
+            scrollToBottom();
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(this.dataset.content).then(() => {
+                        const orig = this.innerHTML;
                         this.innerHTML = '<i class="fas fa-check"></i> تم';
-                        setTimeout(() => this.innerHTML = '<i class="fas fa-copy"></i> نسخ الكود', 1500);
+                        setTimeout(() => { this.innerHTML = orig; }, 1500);
                     });
                 });
-            }
-            const tspan = document.createElement('span');
-            tspan.className = 'msg-time';
-            tspan.textContent = 'الآن';
-            botMsg.appendChild(tspan);
-            replyContent = `${cr.text || ''}\n\n\`\`\`${cr.language}\n${cr.code}\n\`\`\``;
-        } else {
-            await typeText(botMsg, reply.content, TYPING_SPEED);
-            const tspan = document.createElement('span');
-            tspan.className = 'msg-time';
-            tspan.textContent = 'الآن';
-            botMsg.appendChild(tspan);
-            replyContent = reply.content;
+            });
         }
 
-        // Save to memory with proper type
-        if (reply.type === 'products') saveToMemory('bot', 'تم عرض المنتجات', 'products');
-        else if (reply.type === 'product') saveToMemory('bot', 'تم عرض المنتج', 'product', reply.product);
-        else if (reply.type === 'code') saveToMemory('bot', replyContent, 'code', reply.content);
-        else saveToMemory('bot', replyContent, 'text');
+        function buildWelcomeMessage() {
+            return `<div class="welcome-animation">
+                <div class="welcome-main">
+                    <span class="letter" style="animation-delay: 0s;">M</span>
+                    <span class="letter" style="animation-delay: 0.12s;">E</span>
+                    <span class="letter" style="animation-delay: 0.24s;">N</span>
+                    <span class="letter" style="animation-delay: 0.36s;">&nbsp;</span>
+                    <span class="letter" style="animation-delay: 0.48s;">A</span>
+                    <span class="letter" style="animation-delay: 0.60s;">i</span>
+                </div>
+                <div class="typewriter-container">
+                    <span class="typewriter-text" id="typewriterText"></span>
+                    <span class="typewriter-cursor" id="typewriterCursor"></span>
+                </div>
+                <div class="welcome-desc"><i class="fas fa-circle-notch"></i> أنا هنا لمساعدتك اسألني عن أي شيء!</div>
+            </div>`;
+        }
+        function typeTextEffect(el, text, speed = 60) {
+            return new Promise(r => {
+                let i = 0; el.textContent = '';
+                const iv = setInterval(() => {
+                    if (i < text.length) { el.textContent += text.charAt(i); i++; }
+                    else { clearInterval(iv); r(); }
+                }, speed);
+            });
+        }
 
-        if (attachedFile) hideAttachedFile();
-        if (typeof window.renderLibrary === 'function') window.renderLibrary();
-        if (typeof window.renderStorage === 'function') window.renderStorage();
+        function loadCustomReplies() { try { customReplies = JSON.parse(localStorage.getItem(CUSTOM_REPLIES_KEY) || '{}'); } catch(e){ customReplies = {}; } }
+        function saveCustomReplies() { try { localStorage.setItem(CUSTOM_REPLIES_KEY, JSON.stringify(customReplies)); } catch(e){} }
+        function mergeReplies() {
+            let merged = JSON.parse(JSON.stringify(responses));
+            for (const [cat, obj] of Object.entries(mdrResponses)) {
+                if (!merged[cat]) merged[cat] = { keywords: [], responses: [] };
+                if (obj.keywords) merged[cat].keywords = [...new Set([...merged[cat].keywords, ...obj.keywords])];
+                if (obj.responses) merged[cat].responses = [...new Set([...merged[cat].responses, ...obj.responses])];
+            }
+            for (const [cat, obj] of Object.entries(customReplies)) {
+                if (!merged[cat]) merged[cat] = { keywords: [], responses: [] };
+                if (obj.keywords) merged[cat].keywords = [...new Set([...merged[cat].keywords, ...obj.keywords])];
+                if (obj.responses) merged[cat].responses = [...new Set([...merged[cat].responses, ...obj.responses])];
+            }
+            return merged;
+        }
+        function rebuildKeywordsMap() {
+            const m = mergeReplies();
+            keywordsMap = {};
+            for (const [cat, obj] of Object.entries(m)) if (obj.keywords) keywordsMap[cat] = obj.keywords.map(k => k.toLowerCase());
+        }
+        function getReply(category) {
+            const m = mergeReplies();
+            let c = m[category] || m['default'];
+            if (!c || !c.responses || !c.responses.length) c = m['default'] || { responses: ['عذراً، لا يوجد رد.'] };
+            return c.responses[Math.floor(Math.random() * c.responses.length)];
+        }
+        function getCategoryForText(text) {
+            const lower = text.trim().toLowerCase();
+            const m = mergeReplies();
+            for (const [cat, obj] of Object.entries(m)) {
+                if (obj.keywords) for (const p of obj.keywords.map(k => k.toLowerCase())) if (lower.includes(p)) return cat;
+            }
+            return 'default';
+        }
+        function evaluateMath(text) {
+            const match = text.match(/(\d+)\s*([+\-*/])\s*(\d+)/);
+            if (!match) return null;
+            const a = parseFloat(match[1]), op = match[2], b = parseFloat(match[3]);
+            if (isNaN(a) || isNaN(b)) return null;
+            let r;
+            switch(op){ case '+': r=a+b; break; case '-': r=a-b; break; case '*': r=a*b; break; case '/': if (b===0) return 'لا يمكن القسمة على صفر'; r=a/b; break; default: return null; }
+            return Number.isInteger(r) ? r : r.toFixed(2);
+        }
+        function findProduct(text) {
+            const lower = text.trim().toLowerCase();
+            for (const p of products) {
+                if (p.keywords && p.keywords.some(k => lower.includes(k.toLowerCase()))) return p;
+                const n = (p.name || '').toLowerCase();
+                if (n.includes(lower) || lower.includes(n)) return p;
+            }
+            return null;
+        }
+        function findCodeCategory(text) {
+            const lower = text.trim().toLowerCase();
+            for (const [cat, obj] of Object.entries(codResponses)) {
+                if (obj.keywords) for (const kw of obj.keywords) if (lower.includes(kw.toLowerCase())) return obj;
+            }
+            return null;
+        }
+        function getCodeResponse(obj) {
+            if (!obj || !obj.responses || !obj.responses.length) return null;
+            return obj.responses[Math.floor(Math.random() * obj.responses.length)];
+        }
+        function buildCodeHtml(text, code, language) {
+            let h = `<div class="code-response">`;
+            if (text) h += `<p class="code-text"></p>`;
+            if (code) h += `<div class="code-block"><div class="code-header"><span class="code-lang"><i class="fas fa-code"></i> ${escapeHtml(language || 'code')}</span><button class="code-copy-btn" type="button"><i class="fas fa-copy"></i> نسخ الكود</button></div><pre class="code-content"></pre></div>`;
+            h += `</div>`;
+            return h;
+        }
 
-    } catch(err) {
-        console.error(err);
-        const em = document.createElement('div');
-        em.className = 'message bot';
-        em.innerHTML = 'عذراً، حدث خطأ.' + `<span class="msg-time">الآن</span>`;
-        messagesArea.appendChild(em);
-    } finally {
-        isProcessing = false;
-        sendBtn.disabled = false;
-        messageInput.focus();
-        scrollToBottom();
-    }
-}
-
-// ═══ Load data ═══
-async function loadResponses() {
-    try {
-        const r = await fetch('responses.json');
-        if (!r.ok) throw new Error();
-        responses = await r.json();
-    } catch(e) {
-        responses = {
-            default: { keywords: ['مرحبا','السلام','اهلا'], responses: ['مرحباً! كيف يمكنني مساعدتك؟','أهلاً بك في MEN Ai.'] },
-            time: { keywords: ['وقت','ساعة','تاريخ'], responses: ['الوقت الآن {time}'] },
-            founding: { keywords: ['تأسس','الفريق'], responses: ['تأسس فريق MEN عام 2020.'] },
-            support: { keywords: ['دعم','تواصل'], responses: ['الدعم: clan.men.ts@gmail.com'] }
+        const CODE_KEYWORDS = {
+            python: ['def','class','if','elif','else','for','while','return','import','from','as','try','except','finally','with','lambda','yield','pass','break','continue','raise','in','is','not','and','or','None','True','False','async','await','self','print','input','len','range','str','int','float','list','dict','set','tuple','bool'],
+            javascript: ['function','const','let','var','if','else','for','while','return','class','extends','new','this','try','catch','finally','throw','async','await','import','export','from','default','switch','case','break','continue','typeof','instanceof','null','undefined','true','false','in','of','do','console','document'],
+            html: ['DOCTYPE','html','head','body','title','meta','link','script','style','div','span','p','a','img','ul','ol','li','h1','h2','h3','form','input','button','table','header','footer','nav','main','section','class','id','href','src'],
+            css: ['body','html','div','span','p','a','color','background','margin','padding','border','font','display','flex','grid','width','height','position','transition','transform','opacity']
         };
-    }
-}
-async function loadMdr() {
-    try { const r = await fetch('mdr.json'); if (r.ok) mdrResponses = await r.json(); } catch(e){ mdrResponses = {}; }
-}
-async function loadCod() {
-    try { const r = await fetch('cod.json'); if (r.ok) codResponses = await r.json(); } catch(e){ codResponses = {}; }
-}
-async function loadProducts() {
-    try { const r = await fetch('products.json'); if (r.ok) products = await r.json(); } catch(e){ products = []; }
-}
-function loadExternalLibraries() {
-    return new Promise(resolve => {
-        let n = 0; const total = 4;
-        const check = () => { if (++n >= total) resolve(); };
-        ['https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js',
-         'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
-         'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js',
-         'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'].forEach(src => {
-            const s = document.createElement('script');
-            s.src = src; s.onload = check; s.onerror = check;
-            document.head.appendChild(s);
+        function highlightCode(code, language) {
+            if (!code) return '';
+            const lang = (language || 'javascript').toLowerCase();
+            let text = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            const stash = [];
+            const stashIt = (html) => { const id = '\uE000q' + stash.length + 'q\uE001'; stash.push(html); return id; };
+            text = text.replace(/("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/g, m => stashIt('<span class="tok-string">'+m+'</span>'));
+            if (lang === 'python') text = text.replace(/(#[^\n]*)/g, m => stashIt('<span class="tok-comment">'+m+'</span>'));
+            else text = text.replace(/(\/\/[^\n]*)/g, m => stashIt('<span class="tok-comment">'+m+'</span>'));
+            text = text.replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="tok-number">$1</span>');
+            const kw = CODE_KEYWORDS[lang] || CODE_KEYWORDS.javascript;
+            if (kw && kw.length) {
+                const esc = kw.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).sort((a,b)=>b.length-a.length);
+                text = text.replace(new RegExp('\\b('+esc.join('|')+')\\b','g'), '<span class="tok-keyword">$1</span>');
+            }
+            text = text.replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g, (m,n) => '<span class="tok-function">'+n+'</span>(');
+            text = text.replace(/\uE000q(\d+)q\uE001/g, (_, i) => stash[parseInt(i)] || '');
+            return text;
+        }
+
+        function buildAllProductsRow() {
+            if (!products || !products.length) return '<p style="color:#8a9abb;padding:10px 0">لا توجد منتجات.</p>';
+            let h = '<div class="products-row-wrapper"><div class="products-row">';
+            products.forEach(p => { h += buildProductCard(p); });
+            return h + '</div></div>';
+        }
+        function buildProductCard(p) {
+            const img = p.image || 'images/default.png';
+            const name = p.name || 'منتج';
+            const desc = p.description || '';
+            const price = p.price || '0';
+            const cur = p.currency || 'ر.س';
+            const badge = p.badge || 'منتج';
+            const link = p.link || '#';
+            return `<div class="men-product-card">
+                <img src="${img}" class="product-image" alt="${name}" onerror="this.src='images/default.png'">
+                <div class="product-content">
+                    <span class="badge">${badge}</span>
+                    <h2>${name}</h2>
+                    <p>${desc}</p>
+                    <div class="bottom">
+                        <div class="price">${price} <small>${cur}</small></div>
+                        <button class="btn-product" onclick="window.location.href='${link}'"><i class="fas fa-arrow-left"></i> عرض</button>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        async function extractTextFromFile(file) {
+            const ft = file.type, fn = file.name.toLowerCase();
+            if (ft.startsWith('image/')) {
+                try { const u = URL.createObjectURL(file); const r = await Tesseract.recognize(u, 'ara'); URL.revokeObjectURL(u); return r.data.text || 'لا يوجد نص.'; }
+                catch(e){ return 'خطأ في الصورة.'; }
+            }
+            if (ft === 'text/plain' || fn.endsWith('.txt') || ft === 'text/csv' || fn.endsWith('.csv')) {
+                try { return await file.text() || 'فارغ.'; } catch(e){ return 'خطأ.'; }
+            }
+            if (ft === 'application/pdf' || fn.endsWith('.pdf')) {
+                try {
+                    const b = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: b }).promise;
+                    let t = '';
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const pg = await pdf.getPage(i);
+                        const tc = await pg.getTextContent();
+                        t += tc.items.map(it => it.str).join(' ') + '\n';
+                    }
+                    return t || 'لا يوجد نص.';
+                } catch(e){ return 'خطأ PDF.'; }
+            }
+            if (fn.endsWith('.docx')) {
+                try { const b = await file.arrayBuffer(); const r = await mammoth.extractRawText({ arrayBuffer: b }); return r.value || 'فارغ.'; }
+                catch(e){ return 'خطأ Word.'; }
+            }
+            if (fn.endsWith('.xlsx') || fn.endsWith('.xls')) {
+                try {
+                    const b = await file.arrayBuffer();
+                    const wb = XLSX.read(b, { type: 'array' });
+                    let t = '';
+                    wb.SheetNames.forEach(n => {
+                        const j = XLSX.utils.sheet_to_json(wb.Sheets[n]);
+                        if (j.length) { t += `\n--- ${n} ---\n`; j.forEach(r => t += Object.values(r).join(' | ') + '\n'); }
+                    });
+                    return t || 'لا بيانات.';
+                } catch(e){ return 'خطأ Excel.'; }
+            }
+            return 'نوع غير مدعوم.';
+        }
+        function showExtractedText(text) {
+            document.getElementById('extractedText').textContent = text || 'لا نص.';
+            document.getElementById('extractModal').classList.add('active');
+        }
+        document.getElementById('modalClose').addEventListener('click', () => document.getElementById('extractModal').classList.remove('active'));
+        document.getElementById('extractModal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
+
+        function showAttachedFile(file) {
+            attachedFile = file;
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('filePreview').classList.remove('hidden-preview');
+            document.getElementById('filePreview').classList.add('visible');
+        }
+        function hideAttachedFile() {
+            attachedFile = null; extractedText = '';
+            document.getElementById('filePreview').classList.remove('visible');
+            document.getElementById('filePreview').classList.add('hidden-preview');
+            document.getElementById('fileInput').value = '';
+        }
+        document.getElementById('fileInput').addEventListener('change', function() {
+            if (this.files && this.files.length) {
+                const f = this.files[0];
+                if (f.size > 10*1024*1024) { alert('الحد الأقصى 10 ميجا'); this.value = ''; return; }
+                showAttachedFile(f);
+                closeAllDropdowns();
+            } else hideAttachedFile();
         });
-        setTimeout(resolve, 8000);
-    });
-}
+        document.getElementById('removeFile').addEventListener('click', hideAttachedFile);
 
-// ═══ Init ═══
-async function init() {
-    await loadExternalLibraries();
-    await Promise.all([loadResponses(), loadMdr(), loadCod(), loadProducts()]);
-    loadCustomReplies();
-    rebuildKeywordsMap();
-    loadSettings();
-    loadCurrentSession();
-    console.log('%c MEN Ai Ready ', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900');
-}
-init();
+        const plusBtn = document.getElementById('plusBtn');
+        const plusDropdown = document.getElementById('plusDropdown');
+        const subDropdown = document.getElementById('subDropdown');
+        function toggleDropdown() { plusDropdown.classList.toggle('show'); plusBtn.classList.toggle('active'); }
+        function closeAllDropdowns() { plusDropdown.classList.remove('show'); plusBtn.classList.remove('active'); subDropdown.classList.remove('show'); }
+        plusBtn.addEventListener('click', e => { e.stopPropagation(); toggleDropdown(); });
+        document.getElementById('attachOption').addEventListener('click', e => { e.stopPropagation(); document.getElementById('fileInput').click(); closeAllDropdowns(); });
+        document.getElementById('doitOption').addEventListener('click', e => { e.stopPropagation(); subDropdown.classList.toggle('show'); });
+        document.getElementById('aiAgentOption').addEventListener('click', e => { e.stopPropagation(); alert('قريباً'); closeAllDropdowns(); });
+        document.getElementById('searchBoostOption').addEventListener('click', e => { e.stopPropagation(); alert('قريباً'); closeAllDropdowns(); });
+        document.addEventListener('click', e => { if (!e.target.closest('.input-area')) closeAllDropdowns(); });
 
-// ============================================================
-//  ✨ MEN Ai Auth + Library + Storage + Daily Limit v12
-// ============================================================
-(function(){
-  'use strict';
-  const SB_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';
-  const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
-  const DAILY_LIMIT = 50;
-  const STORAGE_MAX_BYTES = 5 * 1024 * 1024 * 1024;
-  const DAILY_KEY = 'menAiDailyUsage';
-  const $ = id => document.getElementById(id);
-  
-  if (!window.supabase?.createClient) { console.error('[MEN-AI] Supabase missing'); return; }
-  const sb = window.supabase.createClient(SB_URL, SB_KEY, {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'men-ai-auth' }
-  });
-  let currentUser = null;
+        document.getElementById('memoryModalClose').addEventListener('click', () => document.getElementById('memoryModal').classList.remove('active'));
+        document.getElementById('memoryModal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
+        document.getElementById('clearMemoryBtn').addEventListener('click', clearAllSessions);
+        document.getElementById('newSessionBtn').addEventListener('click', () => {
+            const id = createNewSession('محادثة جديدة');
+            setCurrentSession(id);
+            document.getElementById('memoryModal').classList.remove('active');
+            loadCurrentSession();
+        });
 
-  function makeAvatar(name){
-    const clean = String(name||'').trim();
-    const parts = clean.split(/\s+/).filter(Boolean);
-    let ini = '?';
-    if (parts.length === 1) ini = parts[0].substring(0,2);
-    else if (parts.length > 1) ini = (parts[0][0]||'')+(parts[parts.length-1][0]||'');
-    ini = ini.toUpperCase();
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a1a5c"/><stop offset="1" stop-color="#4a7aff"/></linearGradient></defs><rect width="200" height="200" fill="url(#g)"/><text x="50%" y="52%" text-anchor="middle" dominant-baseline="central" font-family="Cairo,sans-serif" font-size="88" font-weight="900" fill="#fff">${ini}</text></svg>`;
-    return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
-  }
+        document.getElementById('settingsModalClose').addEventListener('click', () => document.getElementById('settingsModal').classList.remove('active'));
+        document.getElementById('settingsModal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
+        document.getElementById('applySettingsBtn').addEventListener('click', () => {
+            const v = parseInt(document.getElementById('memoryLimitSelect').value);
+            const boost = document.getElementById('autoBoostToggle').checked;
+            if (isNaN(v) || v < 1) { alert('قيمة غير صحيحة'); return; }
+            saveSettings(v, boost);
+            document.getElementById('settingsModal').classList.remove('active');
+        });
+        document.getElementById('clearMemorySettingsBtn').addEventListener('click', clearAllSessions);
+        document.getElementById('learnFromConversationBtn').addEventListener('click', () => {
+            const session = getCurrentSession();
+            if (!session || session.messages.length < 2) { alert('لا توجد محادثة كافية.'); return; }
+            let u = null, b = null;
+            for (let i = session.messages.length - 1; i >= 0; i--) {
+                if (session.messages[i].role === 'user' && !u) u = session.messages[i];
+                if (session.messages[i].role === 'bot' && !b) b = session.messages[i];
+                if (u && b) break;
+            }
+            if (!u || !b) { alert('تعذر العثور.'); return; }
+            let cat = getCategoryForText(u.content);
+            if (cat === 'default') cat = 'custom';
+            if (!customReplies[cat]) customReplies[cat] = { keywords: [], responses: [] };
+            const words = u.content.split(/\s+/).filter(w => w.length > 2).slice(0, 3).map(w => w.toLowerCase());
+            words.forEach(w => { if (!customReplies[cat].keywords.includes(w)) customReplies[cat].keywords.push(w); });
+            if (!customReplies[cat].responses.includes(b.content)) customReplies[cat].responses.push(b.content);
+            saveCustomReplies();
+            rebuildKeywordsMap();
+            alert('تم التعلم!');
+        });
 
-  function getDailyUsage(){
-    try {
-      const today = new Date().toDateString();
-      const saved = JSON.parse(localStorage.getItem(DAILY_KEY) || '{}');
-      if (saved.date !== today) return { date: today, count: 0 };
-      return saved;
-    } catch { return { date: new Date().toDateString(), count: 0 }; }
-  }
-  window.incDailyUsage = function(){
-    const u = getDailyUsage(); u.count++;
-    localStorage.setItem(DAILY_KEY, JSON.stringify(u));
-    renderDaily();
-    return u.count;
-  };
-  window.isLimitReached = function(){ return getDailyUsage().count >= DAILY_LIMIT; };
+        async function generateSmartReply(text) {
+            const lower = text.trim().toLowerCase();
+            const codeObj = findCodeCategory(text);
+            if (codeObj) {
+                const r = getCodeResponse(codeObj);
+                if (r) return { type: 'code', content: r };
+            }
+            if (lower.includes('عرض المنتجات') || lower.includes('المنتجات') || lower.includes('اشتري')) {
+                return { type: 'products', content: buildAllProductsRow() };
+            }
+            if (lower.includes('وكيل') || lower.includes('معزز') || lower.includes('boost')) {
+                return { type: 'text', content: '⏳ هذه الميزة ستكون متاحة قريباً.' };
+            }
+            const math = evaluateMath(text);
+            if (math !== null) return { type: 'text', content: `النتيجة: **${math}**` };
+            if (keywordsMap['time'] && keywordsMap['time'].some(p => lower.includes(p))) {
+                const now = new Date();
+                return { type: 'text', content: `الوقت: ${now.toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh', hour12: true })}\nالتاريخ: ${now.toLocaleDateString('ar-SA', { timeZone: 'Asia/Riyadh' })}` };
+            }
+            const p = findProduct(text);
+            if (p) return { type: 'product', content: `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(p)}</div></div>`, product: p };
+            const cat = getCategoryForText(text);
+            if (cat !== 'default') return { type: 'text', content: getReply(cat) };
+            return { type: 'text', content: getReply('default') };
+        }
 
-  function renderDaily(){
-    const u = getDailyUsage();
-    const left = Math.max(0, DAILY_LIMIT - u.count);
-    const pct = Math.min(100, (u.count / DAILY_LIMIT) * 100);
-    const bar = $('menDailyBar');
-    if (bar){
-      bar.classList.toggle('warn', pct >= 70 && pct < 90);
-      bar.classList.toggle('danger', pct >= 90);
-      $('menDailyBarText').textContent = `${left} / ${DAILY_LIMIT}`;
-      $('menDailyBarFill').style.width = pct + '%';
-    }
-    const dl = $('menDailyLabel'), dc = $('menDailyCount'), db = $('menDailyBox');
-    if (dl) dl.textContent = left === 0 ? 'انتهى الحد' : `${left} متبقية`;
-    if (dc) dc.textContent = `${u.count}/${DAILY_LIMIT}`;
-    if (db) db.classList.toggle('exceeded', left === 0);
-  }
+        function typeText(el, text, speed = 20) {
+            return new Promise(r => {
+                let i = 0; el.innerHTML = '';
+                const iv = setInterval(() => {
+                    if (i < text.length) {
+                        const ch = text.charAt(i);
+                        el.innerHTML += ch === '\n' ? '<br>' : ch;
+                        i++; scrollToBottom();
+                    } else { clearInterval(iv); r(); }
+                }, speed);
+            });
+        }
+        function typeTextInto(el, text, speed) {
+            return new Promise(r => {
+                let i = 0; el.textContent = '';
+                const iv = setInterval(() => {
+                    if (i < text.length) { el.textContent += text.charAt(i); i++; scrollToBottom(); }
+                    else { clearInterval(iv); r(); }
+                }, speed);
+            });
+        }
+        function scrollToBottom() { const a = document.getElementById('messagesArea'); a.scrollTop = a.scrollHeight; }
+        function escapeHtml(text) { const d = document.createElement('div'); d.textContent = text; return d.innerHTML; }
+        function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-  function estimateStorage(){
-    try {
-      const memory = JSON.parse(localStorage.getItem('menChatMemory') || '{}');
-      let bytes = 0;
-      (memory.sessions||[]).forEach(s => {
-        (s.messages||[]).forEach(m => { bytes += ((m.content||'').length + 50) * 2; });
-      });
-      return bytes;
-    } catch { return 0; }
-  }
-  function fmtBytes(b){
-    if (b < 1024) return b + ' B';
-    if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
-    if (b < 1024*1024*1024) return (b/(1024*1024)).toFixed(2) + ' MB';
-    return (b/(1024*1024*1024)).toFixed(2) + ' GB';
-  }
-  window.renderStorage = function(){
-    const bytes = estimateStorage();
-    const pct = Math.min(100, (bytes / STORAGE_MAX_BYTES) * 100);
-    const txt = `${fmtBytes(bytes)} / 5 GB`;
-    const stText = $('menStText'); if (stText) stText.textContent = txt;
-    const stFill = $('menStFill');
-    if (stFill){
-      stFill.style.width = pct.toFixed(2)+'%';
-      stFill.classList.toggle('warn', pct >= 70 && pct < 90);
-      stFill.classList.toggle('danger', pct >= 90);
-    }
-    const pSt = $('menPStorage'); if (pSt) pSt.textContent = txt;
-    const pFill = $('menPStorageFill');
-    if (pFill){
-      pFill.style.width = pct.toFixed(2)+'%';
-      pFill.classList.toggle('warn', pct >= 70 && pct < 90);
-      pFill.classList.toggle('danger', pct >= 90);
-    }
-  };
+        const messagesArea = document.getElementById('messagesArea');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const charCount = document.getElementById('charCount');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const suggestedQuestions = document.getElementById('suggestedQuestions');
+        let isProcessing = false;
 
-  window.openMenAuthGate = function(mode){
-    $('menAuthGate').classList.add('active');
-    document.body.style.overflow = 'hidden';
-    switchAuthMode(mode || 'login');
-  };
-  function closeAuthGate(){
-    $('menAuthGate').classList.remove('active');
-    document.body.style.overflow = '';
-  }
-  function switchAuthMode(mode){
-    const isLogin = mode === 'login';
-    $('menAuthTabs').dataset.mode = mode;
-    document.querySelectorAll('[data-atab]').forEach(b => b.classList.toggle('active', b.dataset.atab === mode));
-    $('menAuthTitle').textContent = isLogin ? 'أهلاً بعودتك 👋' : 'انضم إلينا';
-    $('menAuthSub').textContent = isLogin ? 'سجّل دخولك للمتابعة' : 'أنشئ حسابك في ثوانٍ';
-    $('menAuthNameField').style.display = isLogin ? 'none' : 'block';
-    $('menAuthSubmitText').textContent = isLogin ? 'تسجيل الدخول' : 'إنشاء الحساب';
-    $('menAuthError').classList.remove('show');
-  }
-  function showAuthError(msg){
-    $('menAuthErrorText').textContent = msg;
-    $('menAuthError').classList.add('show');
-  }
+        document.querySelectorAll('.sq-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const q = this.dataset.question;
+                if (q) { messageInput.value = q; charCount.textContent = q.length; sendMessage(); }
+            });
+        });
+        messageInput.addEventListener('input', function() {
+            charCount.textContent = this.value.length > 0 ? this.value.length : '0';
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+        });
+        messageInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+        });
+        sendBtn.addEventListener('click', sendMessage);
 
-  async function doAuthSubmit(){
-    const mode = $('menAuthTabs').dataset.mode;
-    const email = $('menAuthEmail').value.trim().toLowerCase();
-    const password = $('menAuthPassword').value;
-    const name = $('menAuthName').value.trim();
-    const btn = $('menAuthSubmit');
-    $('menAuthError').classList.remove('show');
-    if (!email || !password) return showAuthError('الرجاء إدخال البريد وكلمة المرور');
-    if (mode === 'signup' && !name) return showAuthError('الرجاء إدخال الاسم');
-    if (password.length < 6) return showAuthError('كلمة المرور 6 أحرف على الأقل');
-    btn.disabled = true; btn.classList.add('loading');
-    try {
-      if (mode === 'signup'){
-        const { data, error } = await sb.auth.signUp({ email, password, options: { data: { name } } });
-        if (error) throw error;
-        if (!data.session) { showAuthError('تم إنشاء حسابك! تحقق من بريدك للتفعيل.'); return; }
-      } else {
-        const { error } = await sb.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-      }
-      closeAuthGate();
-    } catch(err){
-      const m = (err.message||'').toLowerCase();
-      if (m.includes('invalid login') || m.includes('invalid credentials')) showAuthError('بيانات الدخول غير صحيحة');
-      else if (m.includes('already registered')) showAuthError('البريد مسجّل بالفعل');
-      else if (m.includes('rate')) showAuthError('محاولات كثيرة — انتظر دقيقة');
-      else showAuthError(err.message || 'حدث خطأ');
-    } finally {
-      btn.disabled = false; btn.classList.remove('loading');
-    }
-  }
+        async function sendMessage() {
+            // ═══ حماية: لا يرسل بدون تسجيل ═══
+            if (!window.MEN_AUTH?.isLoggedIn()) {
+                window.MEN_AUTH?.open('login');
+                return;
+            }
+            const text = messageInput.value.trim();
+            if (!text && !attachedFile) return;
+            if (isProcessing) return;
+            if (suggestedQuestions) suggestedQuestions.classList.add('hidden');
+            isProcessing = true;
+            sendBtn.disabled = true;
 
-  async function openProfile(){
-    if (!currentUser) return window.openMenAuthGate('login');
-    const meta = currentUser.user_metadata || {};
-    const name = meta.name || currentUser.email.split('@')[0];
-    $('menProfileAvatar').src = makeAvatar(name);
-    $('menProfileName').textContent = name;
-    $('menProfileEmail').textContent = currentUser.email;
-    const memory = getMemory();
-    $('menPSessions').textContent = memory.sessions.length;
-    $('menPMsgs').textContent = memory.sessions.reduce((s,x) => s + x.messages.length, 0);
-    window.renderStorage();
-    $('menProfileModal').classList.add('active');
-  }
-  function closeProfile(){ $('menProfileModal').classList.remove('active'); }
+            try {
+                let fileText = '';
+                if (attachedFile) { fileText = await extractTextFromFile(attachedFile); showExtractedText(fileText); }
+                let userContent = text;
+                if (attachedFile) userContent += `\n[ملف: ${attachedFile.name}]\n${fileText}`;
 
-  function groupSessions(sessions){
-    const groups = { today:[], yesterday:[], week:[], older:[] };
-    const now = new Date();
-    const todayKey = now.toDateString();
-    const yest = new Date(now); yest.setDate(now.getDate()-1);
-    const yestKey = yest.toDateString();
-    const weekAgo = now.getTime() - 7*86400000;
-    sessions.forEach(s => {
-      const d = new Date(s.lastUpdated || Date.now());
-      const k = d.toDateString();
-      if (k === todayKey) groups.today.push(s);
-      else if (k === yestKey) groups.yesterday.push(s);
-      else if (d.getTime() >= weekAgo) groups.week.push(s);
-      else groups.older.push(s);
-    });
-    return groups;
-  }
-  window.renderLibrary = function(){
-    const body = $('menLibBody');
-    if (!body) return;
-    const memory = getMemory();
-    if (!memory.sessions.length){
-      body.innerHTML = '<div class="men-lib-empty"><i class="fas fa-comments"></i>لا توجد محادثات بعد</div>';
-      window.renderStorage(); renderDaily(); return;
-    }
-    const groups = groupSessions(memory.sessions);
-    const labels = {
-      today: { t: 'اليوم', i: 'fa-sun' },
-      yesterday: { t: 'أمس', i: 'fa-moon' },
-      week: { t: 'آخر 7 أيام', i: 'fa-calendar-week' },
-      older: { t: 'أقدم', i: 'fa-archive' }
-    };
-    let html = '';
-    ['today','yesterday','week','older'].forEach(key => {
-      const arr = groups[key];
-      if (!arr.length) return;
-      html += `<div class="men-lib-group"><div class="men-lib-group-label"><i class="fas ${labels[key].i}"></i>${labels[key].t} (${arr.length})</div>`;
-      arr.forEach(s => {
-        const active = s.id === memory.currentSessionId;
-        html += `<div class="men-lib-item ${active?'active':''}" data-sid="${s.id}">
-          <div class="li-icon"><i class="fas fa-comment-dots"></i></div>
-          <div class="li-info">
-            <div class="li-title">${escapeHtml(s.title||'محادثة')}</div>
-            <div class="li-meta"><span>${s.messages.length} رسالة</span></div>
-          </div>
-          <button class="li-del" data-del="${s.id}" title="حذف"><i class="fas fa-trash"></i></button>
-        </div>`;
-      });
-      html += '</div>';
-    });
-    body.innerHTML = html;
-    body.querySelectorAll('.men-lib-item').forEach(el => {
-      el.addEventListener('click', e => {
-        if (e.target.closest('.li-del')) return;
-        setCurrentSession(el.dataset.sid);
-        loadCurrentSession();
-        window.renderLibrary();
-        closeLibrary();
-      });
-    });
-    body.querySelectorAll('.li-del').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        if (!confirm('حذف هذه المحادثة؟')) return;
-        deleteSession(btn.dataset.del);
-        window.renderLibrary();
-      });
-    });
-    window.renderStorage(); renderDaily();
-  };
-  function openLibrary(){
-    $('menLibSidebar').classList.add('open');
-    $('menLibOverlay').classList.add('show');
-    window.renderLibrary();
-  }
-  function closeLibrary(){
-    $('menLibSidebar').classList.remove('open');
-    $('menLibOverlay').classList.remove('show');
-  }
+                const userMsg = document.createElement('div');
+                userMsg.className = 'message user';
+                let display = text || 'أرسل ملفاً';
+                if (attachedFile) display += ` <span style="color:#4a7aff;font-size:.8rem">${attachedFile.name}</span>`;
+                userMsg.innerHTML = escapeHtml(display) + `<span class="msg-time">الآن</span>`;
+                messagesArea.appendChild(userMsg);
+                scrollToBottom();
+                saveToMemory('user', userContent, 'text');
 
-  function syncUI(user){
-    currentUser = user;
-    window.MEN_AI_USER = user;
-    const badge = $('menUserBadge');
-    const loginBtn = $('menLoginBtn');
-    if (user){
-      const name = user.user_metadata?.name || user.email.split('@')[0];
-      $('menUserAvatar').src = makeAvatar(name);
-      $('menUserName').textContent = name;
-      badge.style.display = 'flex';
-      loginBtn.style.display = 'none';
-    } else {
-      badge.style.display = 'none';
-      loginBtn.style.display = 'inline-flex';
-    }
-    renderDaily();
-    window.renderStorage();
-  }
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                charCount.textContent = '0';
+                typingIndicator.style.display = 'flex';
+                scrollToBottom();
+                await delay(700 + Math.random() * 900);
+                typingIndicator.style.display = 'none';
 
-  async function initAuth(){
-    $('menAuthClose').addEventListener('click', () => {
-      if (!currentUser) return;
-      closeAuthGate();
-    });
-    document.querySelectorAll('[data-atab]').forEach(b => b.addEventListener('click', () => switchAuthMode(b.dataset.atab)));
-    $('menAuthSubmit').addEventListener('click', doAuthSubmit);
-    $('menAuthPassword').addEventListener('keydown', e => { if (e.key === 'Enter') doAuthSubmit(); });
-    $('menTogglePass').addEventListener('click', () => {
-      const inp = $('menAuthPassword');
-      const i = $('menTogglePass').querySelector('i');
-      if (inp.type === 'password'){ inp.type = 'text'; i.className = 'fas fa-eye-slash'; }
-      else { inp.type = 'password'; i.className = 'fas fa-eye'; }
-    });
-    $('menLoginBtn').addEventListener('click', () => window.openMenAuthGate('login'));
-    $('menUserBadge').addEventListener('click', openProfile);
-    $('menProfileClose').addEventListener('click', closeProfile);
-    $('menProfileModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeProfile(); });
-    $('menLogoutBtn').addEventListener('click', async () => {
-      await sb.auth.signOut();
-      closeProfile();
-    });
-    $('menOpenLibBtn').addEventListener('click', () => { closeProfile(); openLibrary(); });
-    $('libBtn').addEventListener('click', openLibrary);
-    $('menLibOverlay').addEventListener('click', closeLibrary);
-    $('menLibNew').addEventListener('click', () => {
-      const id = createNewSession('محادثة جديدة');
-      setCurrentSession(id);
-      loadCurrentSession();
-      window.renderLibrary();
-      closeLibrary();
-    });
+                let reply = await generateSmartReply(text || fileText || 'ملف');
+                if (attachedFile && fileText && reply.type === 'text') {
+                    reply.content = `📎 استخرجت:\n"${fileText.substring(0, 200)}${fileText.length > 200 ? '...' : ''}"\n\n${reply.content}`;
+                }
 
-    const { data: { session } } = await sb.auth.getSession();
-    if (!session?.user){
-      window.openMenAuthGate('login');
-    } else {
-      syncUI(session.user);
-    }
-    sb.auth.onAuthStateChange((evt, s) => {
-      syncUI(s?.user || null);
-      if (!s?.user && evt === 'SIGNED_OUT') window.openMenAuthGate('login');
-      if (s?.user && evt === 'SIGNED_IN') closeAuthGate();
-    });
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot';
+                messagesArea.appendChild(botMsg);
+                scrollToBottom();
 
-    renderDaily();
-    window.renderStorage();
-    setInterval(() => { window.renderStorage(); renderDaily(); }, 15000);
-    console.log('%c✨ MEN Ai Auth Ready', 'background:linear-gradient(135deg,#0a1a5c,#2563eb);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900');
-  }
+                let replyContent = '';
+                if (reply.type === 'products' || reply.type === 'product') {
+                    botMsg.innerHTML = reply.content + `<span class="msg-time">الآن</span>`;
+                    replyContent = reply.type === 'products' ? 'المنتجات' : 'المنتج';
+                    const a = document.createElement('div');
+                    a.className = 'bot-actions';
+                    a.innerHTML = `<button class="copy-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-copy"></i> نسخ</button>`;
+                    botMsg.appendChild(a);
+                } else if (reply.type === 'code') {
+                    const cr = reply.content;
+                    botMsg.innerHTML = buildCodeHtml('', '', cr.language);
+                    const container = botMsg.querySelector('.code-response');
+                    if (cr.text) {
+                        const t = document.createElement('p');
+                        t.className = 'code-text';
+                        container.insertBefore(t, container.firstChild);
+                        await typeTextInto(t, cr.text, CODE_TEXT_SPEED);
+                    }
+                    if (cr.code) {
+                        container.insertAdjacentHTML('beforeend', `
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-lang"><i class="fas fa-code"></i> ${escapeHtml(cr.language || 'code')}</span>
+                                    <button class="code-copy-btn" type="button"><i class="fas fa-copy"></i> نسخ الكود</button>
+                                </div>
+                                <pre class="code-content"></pre>
+                            </div>
+                        `);
+                        const pre = container.querySelector('.code-content');
+                        await typeTextInto(pre, cr.code, CODE_BLOCK_SPEED);
+                        try { pre.innerHTML = highlightCode(cr.code, cr.language); } catch(e){}
+                        const cb = container.querySelector('.code-copy-btn');
+                        cb.addEventListener('click', function() {
+                            const c = this.closest('.code-block').querySelector('.code-content').textContent;
+                            navigator.clipboard.writeText(c).then(() => {
+                                this.innerHTML = '<i class="fas fa-check"></i> تم';
+                                setTimeout(() => this.innerHTML = '<i class="fas fa-copy"></i> نسخ الكود', 1500);
+                            });
+                        });
+                    }
+                    const ts = document.createElement('span');
+                    ts.className = 'msg-time'; ts.textContent = 'الآن';
+                    botMsg.appendChild(ts);
+                    replyContent = `${cr.text || ''}\n\n\`\`\`${cr.language}\n${cr.code}\n\`\`\``;
+                } else {
+                    await typeText(botMsg, reply.content, TYPING_SPEED);
+                    const ts = document.createElement('span');
+                    ts.className = 'msg-time'; ts.textContent = 'الآن';
+                    botMsg.appendChild(ts);
+                    replyContent = reply.content;
+                    const a = document.createElement('div');
+                    a.className = 'bot-actions';
+                    a.innerHTML = `<button class="copy-btn" data-content="${escapeHtml(replyContent)}"><i class="fas fa-copy"></i> نسخ</button>`;
+                    botMsg.appendChild(a);
+                }
+                botMsg.querySelectorAll('.copy-btn').forEach(b => {
+                    b.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        navigator.clipboard.writeText(this.dataset.content).then(() => {
+                            const orig = this.innerHTML;
+                            this.innerHTML = '<i class="fas fa-check"></i> تم';
+                            setTimeout(() => this.innerHTML = orig, 1500);
+                        });
+                    });
+                });
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAuth);
-  else initAuth();
-})();
-</script>
+                if (reply.type === 'products') saveToMemory('bot', 'المنتجات', 'products');
+                else if (reply.type === 'product') saveToMemory('bot', 'المنتج', 'product', reply.product);
+                else if (reply.type === 'code') saveToMemory('bot', replyContent, 'code', reply.content);
+                else saveToMemory('bot', replyContent, 'text');
+
+                if (autoBoostEnabled) {
+                    await delay(600);
+                    const bm = document.createElement('div');
+                    bm.className = 'message bot';
+                    bm.innerHTML = 'هل تريد مساعدة إضافية؟' + `<span class="msg-time">الآن</span>`;
+                    messagesArea.appendChild(bm);
+                    scrollToBottom();
+                    saveToMemory('bot', 'هل تريد مساعدة إضافية؟', 'text');
+                }
+
+                if (attachedFile) hideAttachedFile();
+            } catch(err) {
+                console.error(err);
+                const em = document.createElement('div');
+                em.className = 'message bot';
+                em.innerHTML = 'عذراً، حدث خطأ.' + `<span class="msg-time">الآن</span>`;
+                messagesArea.appendChild(em);
+            } finally {
+                isProcessing = false;
+                sendBtn.disabled = false;
+                messageInput.focus();
+                scrollToBottom();
+            }
+        }
+
+        async function loadResponses() {
+            try { const r = await fetch('responses.json'); if (r.ok) responses = await r.json(); else throw new Error(); }
+            catch(e) {
+                responses = {
+                    default: { keywords: ['مرحبا','السلام','اهلا'], responses: ['مرحباً! كيف يمكنني مساعدتك؟'] },
+                    time: { keywords: ['وقت','ساعة'], responses: ['الوقت الآن {time}'] },
+                    founding: { keywords: ['تأسس','الفريق'], responses: ['تأسس فريق MEN عام 2020.'] },
+                    support: { keywords: ['دعم','تواصل'], responses: ['الدعم: clan.men.ts@gmail.com'] }
+                };
+            }
+        }
+        async function loadMdr() { try { const r = await fetch('mdr.json'); if (r.ok) mdrResponses = await r.json(); } catch(e){ mdrResponses = {}; } }
+        async function loadCod() { try { const r = await fetch('cod.json'); if (r.ok) codResponses = await r.json(); } catch(e){ codResponses = {}; } }
+        async function loadProducts() { try { const r = await fetch('products.json'); if (r.ok) products = await r.json(); } catch(e){ products = []; } }
+        function loadExternalLibraries() {
+            return new Promise(resolve => {
+                let n = 0; const total = 4;
+                const check = () => { if (++n >= total) resolve(); };
+                ['https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js',
+                 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+                 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js',
+                 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'].forEach(src => {
+                    const s = document.createElement('script');
+                    s.src = src; s.onload = check; s.onerror = check;
+                    document.head.appendChild(s);
+                });
+                setTimeout(resolve, 8000);
+            });
+        }
+
+        // ═══ Sidebar Logic ═══
+        const sideMenu = document.getElementById('sideMenu');
+        const sideOverlay = document.getElementById('sideOverlay');
+        function openSide() { sideMenu.classList.add('open'); sideOverlay.classList.add('show'); }
+        function closeSide() { sideMenu.classList.remove('open'); sideOverlay.classList.remove('show'); }
+
+        sideOverlay.addEventListener('click', closeSide);
+        document.getElementById('sideClose').addEventListener('click', closeSide);
+
+        document.getElementById('sideBackBtn').addEventListener('click', () => {
+            closeSide();
+            if (document.referrer) window.history.back();
+            else window.location.href = '/';
+        });
+        document.getElementById('sideMemoryBtn').addEventListener('click', () => {
+            closeSide();
+            loadMemory();
+            document.getElementById('memoryModal').classList.add('active');
+        });
+        document.getElementById('sideSettingsBtn').addEventListener('click', () => {
+            closeSide();
+            const s = loadSettings();
+            document.getElementById('memoryLimitSelect').value = s.limit || 6;
+            document.getElementById('autoBoostToggle').checked = s.autoBoost || false;
+            document.getElementById('settingsModal').classList.add('active');
+        });
+        document.getElementById('sideLogoutBtn').addEventListener('click', () => {
+            closeSide();
+            if (confirm('تسجيل الخروج؟')) window.MEN_AUTH?.logout();
+        });
+
+        document.getElementById('menLoginBtn').addEventListener('click', () => window.MEN_AUTH?.open('login'));
+        document.getElementById('menProfileBtn').addEventListener('click', openSide);
+
+        // ═══ ربط الـ Auth بالـ UI ═══
+        window.addEventListener('load', () => {
+            if (window.MEN_AUTH) {
+                window.MEN_AUTH.onAuthChange((user) => {
+                    const loginBtn = document.getElementById('menLoginBtn');
+                    const profileBtn = document.getElementById('menProfileBtn');
+                    if (user) {
+                        const name = user.user_metadata?.name || user.email.split('@')[0];
+                        loginBtn.style.display = 'none';
+                        profileBtn.style.display = 'flex';
+                        document.getElementById('menProfileBtnAvatar').src = window.MEN_AUTH.makeAvatar(name, 100);
+                        document.getElementById('menProfileBtnName').textContent = name;
+                        document.getElementById('sideAvatar').src = window.MEN_AUTH.makeAvatar(name, 200);
+                        document.getElementById('sideName').textContent = name;
+                        document.getElementById('sideEmail').textContent = user.email;
+                    } else {
+                        loginBtn.style.display = 'inline-flex';
+                        profileBtn.style.display = 'none';
+                    }
+                });
+            }
+        });
+
+        // ═══ Init ═══
+        async function init() {
+            messageInput.disabled = true;
+            sendBtn.disabled = true;
+            await loadExternalLibraries();
+            await Promise.all([loadResponses(), loadMdr(), loadCod(), loadProducts()]);
+            loadCustomReplies();
+            rebuildKeywordsMap();
+            loadSettings();
+            loadCurrentSession();
+            loadMemory();
+            messageInput.disabled = false;
+            sendBtn.disabled = false;
+            console.log('%c MEN Ai Ready ', 'background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900');
+        }
+        init();
+    </script>
 </body>
 </html>
