@@ -254,7 +254,30 @@
       "usage": "شراء لعبة .",
       "warranty": "ضمان استبدال الحساب في حال العطل",
       "popular": false
-    },   
+    }, 
+    {
+      "id": 13,
+      "name": "Assassins creed MIRAGE",
+      "price": "69",
+      "originalPrice": "199",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQC25WbwKBeU0TpiQ6Nn2kWOiPnGca9sLWMEsv10b45w&s=10",
+      "images": [
+        "https://image.api.playstation.com/vulcan/ap/rnd/202208/1718/M1M5lbWg6QPwf2gx34N3v78v.jpg?w=440",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd0Syeimlki9NJjKVVLSmoGHLEbn1z1GArbNh3BM5DhQ&s=10",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQljLBDcqHqJsO1T1IoJKlR4zJGmHxRjQwHgGspah9eDA&s=10",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW6WzAC0VyGKR2BId83IO8DLizcFBejhMi0UaQ20GWzQ&s=10"
+      ],
+      "category": "لعبة",
+      "rating": 4.6,
+      "features": ["شحن فوري", "تجربة لعب فريدة "],
+      "cons": ["غير متوفر لجميع المناطق"],
+      "description": "لعبة أساسنز كريد السراب | Assassin's Creed Mirage",
+      "tags": ["ألعاب", "هدية", "رقمي"],
+      "usage": "شراء لعبة .",
+      "warranty": "ضمان استبدال الحساب في حال العطل",
+      "popular": false
+    },
+    
     {
       "id": 10,
       "name": "FC 27",
