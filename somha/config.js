@@ -1,8 +1,6 @@
 window.SUMHA_CONFIG = {
   siteName: "سومها",
   tagline: "أعلى سوم يفوز",
-
-  // ✅ الشعار الجديد
   logo: "https://www.socialcreator.com/srv/imgs/ti_imgs/202750_332160.png",
 
   icons: {
