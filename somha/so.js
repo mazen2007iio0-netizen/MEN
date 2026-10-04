@@ -411,7 +411,7 @@
       ${guestBanner()}
       <div class="hero">
         <h1>${esc(state.settings.hero_title || (CFG.siteName+'… '+CFG.tagline+''))}</h1>
-        <p>${esc(state.settings.hero_subtitle || 'منصة المزادات السعودية')}</p>
+        <p>${esc(state.settings.hero_subtitle || 'منصة المزادات')}</p>
         <div class="hero-cta">
           ${state.user
             ? `<button class="c1" onclick="SUMHA.openSell()">اعرض منتجك</button><button class="c2" onclick="SUMHA.go('live')"> المزادات المباشرة</button>`
@@ -420,7 +420,7 @@
         <div class="stats">
           <div><b>${all.length}</b><span>مزاد نشط</span></div>
           <div><b>${new Set(all.map(a=>a.seller_id)).size}</b><span>بائع</span></div>
-          <div><b>4.9★</b><span>تقييم المنصة</span></div>
+          <div><b>4.4★</b><span>تقييم المنصة</span></div>
         </div>
       </div>
       <section><div class="sec-h"><h2>${ico('live')} المزاد المباشر</h2><a onclick="SUMHA.go('live')">عرض الكل</a></div><div class="hrow">${liveNow.length ? liveNow.map(cardHTML).join('') : '<div style="padding:20px;color:var(--muted);font-size:13px">لا توجد مزادات مباشرة الآن</div>'}</div></section>
