@@ -6,27 +6,15 @@
 <title>لوحة المشرف | سومها</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{
-  --cream:#faf6ef;--cream2:#f3ebdd;--sand:#e8dcc4;--line:#ecdfc7;
-  --gold:#c9a961;--gold2:#b8934a;
-  --maroon:#8d0b0b;--maroon2:#6d0808;
-  --ink:#2b1a14;--ink2:#5a463c;--muted:#a08c78;--white:#fff;
-  --sh:0 6px 18px rgba(43,26,20,.06);
-  --sh-lg:0 14px 34px rgba(43,26,20,.12);
-  --sidebar:#1f1410;
-}
+:root{--cream:#faf6ef;--cream2:#f3ebdd;--sand:#e8dcc4;--line:#ecdfc7;--gold:#c9a961;--gold2:#b8934a;--maroon:#8d0b0b;--maroon2:#6d0808;--ink:#2b1a14;--ink2:#5a463c;--muted:#a08c78;--white:#fff;--sh:0 6px 18px rgba(43,26,20,.06);--sh-lg:0 14px 34px rgba(43,26,20,.12);--sidebar:#1f1410}
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%}
 body{font-family:'Tajawal',system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.5}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
 input,select,textarea{font-family:inherit}
 img{display:block;max-width:100%}
 a{text-decoration:none;color:inherit}
-
 .layout{display:grid;grid-template-columns:1fr;min-height:100vh}
 @media(min-width:992px){.layout{grid-template-columns:260px 1fr}}
-
-/* Sidebar */
 .sidebar{background:var(--sidebar);color:#f7f0e6;padding:22px 18px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;max-height:100vh;overflow-y:auto}
 .sidebar .brand{display:flex;align-items:center;gap:12px;padding-bottom:18px;margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,.08)}
 .sidebar .brand img{height:44px;object-fit:contain;max-width:150px}
@@ -37,9 +25,6 @@ a{text-decoration:none;color:inherit}
 .nav-item .ic{width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:16px}
 .sidebar .sep{margin:14px 0;border-top:1px solid rgba(255,255,255,.08)}
 .sidebar .logout{color:#ffb3b3}
-.sidebar .logout:hover{background:rgba(209,26,26,.2)}
-
-/* Main */
 .main{padding:22px;max-width:100%;overflow-x:hidden}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:22px;flex-wrap:wrap}
 .topbar h1{font-size:22px;font-weight:900}
@@ -47,28 +32,20 @@ a{text-decoration:none;color:inherit}
 .topbar .actions{display:flex;gap:8px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:11px;font-weight:800;font-size:13.5px;transition:.15s}
 .btn-primary{background:linear-gradient(135deg,var(--maroon),var(--maroon2));color:#fff;box-shadow:0 6px 16px rgba(141,11,11,.25)}
-.btn-primary:hover{transform:translateY(-1px)}
-.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 6px 16px rgba(201,169,97,.3)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff}
 .btn-ghost{background:var(--white);border:1.5px solid var(--line);color:var(--ink2)}
-.btn-ghost:hover{border-color:var(--maroon);color:var(--maroon)}
 .btn-danger{background:#fdecec;color:var(--maroon);border:1.5px solid #f5c6c6}
 .btn-sm{padding:7px 12px;font-size:12px;border-radius:9px}
-
-/* Stats grid */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:24px}
 .stat-card{background:var(--white);border:1.5px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--sh);position:relative;overflow:hidden}
 .stat-card::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,var(--maroon),var(--gold))}
 .stat-card .ic{width:42px;height:42px;border-radius:12px;background:var(--cream2);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px}
 .stat-card .val{font-size:26px;font-weight:900;color:var(--maroon);line-height:1.1}
 .stat-card .lbl{font-size:12.5px;color:var(--ink2);font-weight:700;margin-top:4px}
-
-/* Card */
 .card{background:var(--white);border:1.5px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--sh);margin-bottom:20px}
 .card-hdr{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
 .card-hdr h2{font-size:17px;font-weight:900;display:flex;align-items:center;gap:8px}
 .card-hdr h2::before{content:"";width:5px;height:18px;border-radius:3px;background:linear-gradient(180deg,var(--maroon),var(--gold))}
-
-/* Table */
 .tbl-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--line)}
 table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px}
 thead{background:var(--cream2)}
@@ -92,8 +69,6 @@ td .user-cell .av{width:34px;height:34px;border-radius:10px;background:linear-gr
 .tag.st-delivered{background:#dff5e5;color:#1f7a3a}
 .tag.st-cancelled{background:#ffe5e5;color:#c00}
 .actions-cell{display:flex;gap:6px;flex-wrap:wrap}
-
-/* Modal */
 .ov{position:fixed;inset:0;z-index:500;background:rgba(43,26,20,.55);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
 .ov.on{display:flex;animation:fade .22s}
 @keyframes fade{from{opacity:0}to{opacity:1}}
@@ -108,74 +83,41 @@ td .user-cell .av{width:34px;height:34px;border-radius:10px;background:linear-gr
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--maroon);background:var(--white);box-shadow:0 0 0 4px rgba(141,11,11,.08)}
 .chk{display:flex;align-items:center;gap:8px;padding:10px;background:var(--cream);border-radius:11px;cursor:pointer;font-weight:700;font-size:13.5px}
 .chk input{width:auto}
-
-/* Empty & loading */
 .empty{text-align:center;padding:44px 20px;color:var(--muted)}
 .empty .e-ico{font-size:44px;margin-bottom:10px;opacity:.5}
 .empty h3{font-size:15px;font-weight:800;color:var(--ink2);margin-bottom:6px}
-.empty p{font-size:12.5px}
 .loading{text-align:center;padding:40px;color:var(--muted);font-size:13.5px}
-
-/* Toast */
-#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:13px;font-weight:700;font-size:13.5px;z-index:3000;opacity:0;pointer-events:none;transition:.3s;box-shadow:var(--sh-lg);max-width:88vw;text-align:center}
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:13px;font-weight:700;font-size:13.5px;z-index:3000;opacity:0;pointer-events:none;transition:.3s;max-width:88vw;text-align:center}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* Mobile */
 .mob-bar{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--line)}
 @media(min-width:992px){.mob-bar{display:none}}
 .mob-bar button{white-space:nowrap;padding:9px 14px;border-radius:10px;background:var(--white);border:1.5px solid var(--line);font-weight:700;font-size:13px;color:var(--ink2)}
 .mob-bar button.on{background:var(--maroon);color:#fff;border-color:var(--maroon)}
-@media(max-width:600px){
-  .main{padding:14px}
-  .card{padding:14px;border-radius:14px}
-  .topbar h1{font-size:19px}
-  .stat-card{padding:14px}
-  .stat-card .val{font-size:22px}
-}
+@media(max-width:600px){.main{padding:14px}.card{padding:14px}.topbar h1{font-size:19px}.stat-card{padding:14px}.stat-card .val{font-size:22px}}
 </style>
 </head>
 <body>
 
 <div class="layout">
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
+  <aside class="sidebar">
     <div class="brand">
       <img id="logoImgAdmin" alt="سومها">
       <span class="role" id="roleTag">admin</span>
     </div>
-    <div class="nav-item on" data-page="dashboard" onclick="ADMIN.nav('dashboard')">
-      <span class="ic">📊</span><span>لوحة التحكم</span>
-    </div>
-    <div class="nav-item" data-page="auctions" onclick="ADMIN.nav('auctions')">
-      <span class="ic">🔨</span><span>المزادات</span>
-    </div>
-    <div class="nav-item" data-page="products" onclick="ADMIN.nav('products')">
-      <span class="ic">📦</span><span>المنتجات</span>
-    </div>
-    <div class="nav-item" data-page="users" onclick="ADMIN.nav('users')">
-      <span class="ic">👥</span><span>العملاء</span>
-    </div>
-    <div class="nav-item" data-page="orders" onclick="ADMIN.nav('orders')">
-      <span class="ic">🧾</span><span>الطلبات</span>
-    </div>
-    <div class="nav-item" data-page="admins" onclick="ADMIN.nav('admins')">
-      <span class="ic">👑</span><span>المشرفون</span>
-    </div>
-    <div class="nav-item" data-page="settings" onclick="ADMIN.nav('settings')">
-      <span class="ic">⚙️</span><span>الإعدادات والشعار</span>
-    </div>
+    <div class="nav-item on" data-page="dashboard" onclick="ADMIN.nav('dashboard')"><span class="ic">📊</span><span>لوحة التحكم</span></div>
+    <div class="nav-item" data-page="auctions" onclick="ADMIN.nav('auctions')"><span class="ic">🔨</span><span>المزادات</span></div>
+    <div class="nav-item" data-page="products" onclick="ADMIN.nav('products')"><span class="ic">📦</span><span>المنتجات</span></div>
+    <div class="nav-item" data-page="users" onclick="ADMIN.nav('users')"><span class="ic">👥</span><span>العملاء</span></div>
+    <div class="nav-item" data-page="orders" onclick="ADMIN.nav('orders')"><span class="ic">🧾</span><span>الطلبات</span></div>
+    <div class="nav-item" data-page="admins" onclick="ADMIN.nav('admins')"><span class="ic">👑</span><span>المشرفون</span></div>
+    <div class="nav-item" data-page="settings" onclick="ADMIN.nav('settings')"><span class="ic">⚙️</span><span>الإعدادات</span></div>
     <div class="sep"></div>
-    <div class="nav-item" onclick="location.href='index.html'">
-      <span class="ic">🌐</span><span>الموقع الرئيسي</span>
-    </div>
-    <div class="nav-item logout" onclick="ADMIN.logout()">
-      <span class="ic">🚪</span><span>تسجيل الخروج</span>
-    </div>
+    <div class="nav-item" onclick="location.href='index.html'"><span class="ic">🌐</span><span>الموقع الرئيسي</span></div>
+    <div class="nav-item logout" onclick="ADMIN.logout()"><span class="ic">🚪</span><span>تسجيل الخروج</span></div>
   </aside>
 
-  <!-- Main -->
   <div class="main">
-    <div class="mob-bar" id="mobBar">
+    <div class="mob-bar">
       <button class="on" data-page="dashboard" onclick="ADMIN.nav('dashboard')">لوحة التحكم</button>
       <button data-page="auctions" onclick="ADMIN.nav('auctions')">المزادات</button>
       <button data-page="products" onclick="ADMIN.nav('products')">المنتجات</button>
@@ -186,10 +128,7 @@ td .user-cell .av{width:34px;height:34px;border-radius:10px;background:linear-gr
     </div>
 
     <div class="topbar">
-      <div>
-        <h1 id="pageTitle">لوحة التحكم</h1>
-        <p class="sub" id="pageSub">نظرة سريعة على الموقع</p>
-      </div>
+      <div><h1 id="pageTitle">لوحة التحكم</h1><p class="sub" id="pageSub">نظرة سريعة</p></div>
       <div class="actions" id="topActions"></div>
     </div>
 
@@ -197,7 +136,6 @@ td .user-cell .av{width:34px;height:34px;border-radius:10px;background:linear-gr
   </div>
 </div>
 
-<!-- Modals -->
 <div class="ov" id="ovAuction" onclick="if(event.target===this)ADMIN.closeModal('ovAuction')">
   <div class="modal">
     <button class="modal-close" onclick="ADMIN.closeModal('ovAuction')">✖️</button>
@@ -209,7 +147,7 @@ td .user-cell .av{width:34px;height:34px;border-radius:10px;background:linear-gr
         <div class="field"><label>التصنيف *</label><select id="aCat" required></select></div>
       </div>
       <div class="field"><label>الوصف</label><textarea id="aDesc" rows="3"></textarea></div>
-      <div class="field"><label>رابط الصورة (اختياري)</label><input id="aImg" placeholder="https://..."></div>
+      <div class="field"><label>رابط الصورة</label><input id="aImg" placeholder="https://..."></div>
       <div class="row2">
         <div class="field"><label>السعر الابتدائي *</label><input type="number" id="aStart" min="1" required></div>
         <div class="field"><label>السعر الحالي *</label><input type="number" id="aCurrent" min="1" required></div>
@@ -217,9 +155,7 @@ td .user-cell .av{width:34px;height:34px;border-radius:10px;background:linear-gr
       <div class="row2">
         <div class="field"><label>أقل زيادة *</label><input type="number" id="aInc" min="1" value="50" required></div>
         <div class="field"><label>الحالة</label><select id="aStatus">
-          <option value="approved">معتمد</option>
-          <option value="pending">قيد المراجعة</option>
-          <option value="rejected">مرفوض</option>
+          <option value="approved">معتمد</option><option value="pending">قيد المراجعة</option><option value="rejected">مرفوض</option>
         </select></div>
       </div>
       <div class="row2">
@@ -243,16 +179,12 @@ td .user-cell .av{width:34px;height:34px;border-radius:10px;background:linear-gr
     <button class="modal-close" onclick="ADMIN.closeModal('ovAdmin')">✖️</button>
     <h2>إضافة مشرف جديد</h2>
     <form id="formAdmin" onsubmit="ADMIN.addAdmin(event)">
-      <div class="field">
-        <label>اختر مستخدم من القائمة *</label>
-        <select id="adUser" required style="width:100%;padding:11px 13px;border-radius:11px;border:1.5px solid var(--line);background:var(--cream);font-size:14px"></select>
-      </div>
+      <div class="field"><label>اختر مستخدم *</label><select id="adUser" required></select></div>
       <div class="field"><label>الدور</label><select id="adRole">
-        <option value="admin">مشرف</option>
-        <option value="super_admin">مشرف عام</option>
+        <option value="admin">مشرف</option><option value="super_admin">مشرف عام</option>
       </select></div>
       <div style="display:flex;gap:8px;margin-top:16px">
-        <button type="submit" class="btn btn-primary" style="flex:1">إضافة مشرف</button>
+        <button type="submit" class="btn btn-primary" style="flex:1">إضافة</button>
         <button type="button" class="btn btn-ghost" onclick="ADMIN.closeModal('ovAdmin')">إلغاء</button>
       </div>
     </form>
@@ -272,7 +204,6 @@ td .user-cell .av{width:34px;height:34px;border-radius:10px;background:linear-gr
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="somha/supabase-config.js"></script>
 <script src="somha/config.js"></script>
-<script src="somha/so.js"></script>
 <script src="somha/admin.js"></script>
 <script>ADMIN.boot();</script>
 </body>
