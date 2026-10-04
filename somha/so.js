@@ -68,11 +68,11 @@
   // ============ Supabase Init ============
   async function initSupabase(){
     if(!window.supabase || !SBC?.url || SBC.anonKey.includes("ضع_هنا")){
-      console.warn("⚠️ Supabase غير مُهيأ");
+      console.warn(" Supabase غير مُهيأ");
       return null;
     }
     sb = window.supabase.createClient(SBC.url, SBC.anonKey);
-    console.log("✅ Supabase متصل");
+    console.log(" Supabase متصل");
     const { data: { session } } = await sb.auth.getSession();
     if(session){
       await loadProfile(session.user.id, session.user);
@@ -270,7 +270,7 @@
     if(!state.user?.email){ toast('لا يوجد بريد'); return; }
     const { error } = await sb.auth.resend({ type:'signup', email: state.user.email });
     if(error){ toast(error.message); return; }
-    toast('تم إرسال رابط التوثيق 📧');
+    toast('تم إرسال رابط التوثيق');
   }
 
   // ============ Notifs ============
@@ -410,12 +410,12 @@
     return `
       ${guestBanner()}
       <div class="hero">
-        <h1>${esc(state.settings.hero_title || (CFG.siteName+'… '+CFG.tagline+' 🏆'))}</h1>
+        <h1>${esc(state.settings.hero_title || (CFG.siteName+'… '+CFG.tagline+''))}</h1>
         <p>${esc(state.settings.hero_subtitle || 'منصة المزادات السعودية')}</p>
         <div class="hero-cta">
           ${state.user
-            ? `<button class="c1" onclick="SUMHA.openSell()">اعرض منتجك</button><button class="c2" onclick="SUMHA.go('live')">🔴 المزادات المباشرة</button>`
-            : `<button class="c1" onclick="SUMHA.openAuth()">✨ أنشئ حسابك الآن</button><button class="c2" onclick="SUMHA.go('live')">🔴 تصفح المزادات</button>`}
+            ? `<button class="c1" onclick="SUMHA.openSell()">اعرض منتجك</button><button class="c2" onclick="SUMHA.go('live')"> المزادات المباشرة</button>`
+            : `<button class="c1" onclick="SUMHA.openAuth()"> أنشئ حسابك الآن</button><button class="c2" onclick="SUMHA.go('live')"> تصفح المزادات</button>`}
         </div>
         <div class="stats">
           <div><b>${all.length}</b><span>مزاد نشط</span></div>
