@@ -1,5 +1,5 @@
 // ============================================================
-// سومها — المنطق الكامل (so.js)
+// سومها — منطق التطبيق الكامل (بريد + جوال + Realtime)
 // ============================================================
 (function(){
   const CFG = window.SUMHA_CONFIG;
@@ -11,7 +11,7 @@
     pendingAction:null, channel:null
   };
 
-  // ============ الأيقونات ============
+  // ============ SVG Fallbacks ============
   const CAT_SVG = {
     'سيارات ومركبات': `<svg viewBox="0 0 100 80"><defs><linearGradient id="c1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a5f7e"/><stop offset="1" stop-color="#0d1a30"/></linearGradient></defs><ellipse cx="50" cy="70" rx="42" ry="3" fill="#000" opacity=".2"/><path d="M8 46 L14 32 Q18 26 26 24 L40 20 L74 20 L86 30 L94 46 L94 58 L8 58 Z" fill="url(#c1)"/><circle cx="28" cy="58" r="11" fill="#0a0a0a"/><circle cx="28" cy="58" r="6" fill="#c0c0c0"/><circle cx="72" cy="58" r="11" fill="#0a0a0a"/><circle cx="72" cy="58" r="6" fill="#c0c0c0"/></svg>`,
     'إلكترونيات': `<svg viewBox="0 0 80 100"><defs><linearGradient id="p1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a7a7a"/><stop offset="1" stop-color="#1a1a1a"/></linearGradient><linearGradient id="p2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a4a75"/><stop offset="1" stop-color="#05101e"/></linearGradient></defs><rect x="22" y="10" width="36" height="80" rx="6" fill="url(#p1)"/><rect x="24" y="12" width="32" height="76" rx="5" fill="#0a0a0a"/><rect x="25.5" y="13.5" width="29" height="73" rx="4" fill="url(#p2)"/><rect x="35" y="16" width="10" height="3" rx="1.5" fill="#0a0a0a"/></svg>`,
@@ -34,9 +34,13 @@
     return url ? `<img src="${url}" alt="" style="width:1em;height:1em;object-fit:contain;vertical-align:-.15em">` : (EMOJI[n]||'');
   };
 
-  // ============ أدوات ============
+  // ============ Helpers ============
   const fmt = n => Number(n||0).toLocaleString('en-US');
-  const highestBid = a => (a.bids && a.bids.length) ? Math.max(...a.bids.map(b=>Number(b.amount))) : Number(a.current_price);
+  const highestBid = a => (a.bids&&a.bids.length)?Math.max(...a.bids.map(b=>Number(b.amount))):Number(a.current_price);
+  const isValidEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  const isValidPhone = p => /^05\d{8}$/.test(p);
+  const phoneToEmail = p => p + '@sumha.app';
+  const esc = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   function leftTime(ms){
     if(ms<=0) return 'انتهى';
     const s=Math.floor(ms/1000);
@@ -54,16 +58,14 @@
     return 'قبل '+Math.floor(d/86400)+' يوم';
   }
   function toast(m){
-    const t=document.getElementById('toast');
-    if(!t) return;
+    const t=document.getElementById('toast'); if(!t) return;
     t.textContent=m;t.classList.add('show');
     clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400);
   }
   const openOv = id => document.getElementById(id)?.classList.add('on');
   const closeOv = id => document.getElementById(id)?.classList.remove('on');
-  const esc = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-  // ============ تهيئة Supabase ============
+  // ============ Supabase Init ============
   async function initSupabase(){
     if(!window.supabase || !SBC?.url || SBC.anonKey.includes("ضع_هنا")){
       console.warn("⚠️ Supabase غير مُهيأ");
@@ -71,21 +73,18 @@
     }
     sb = window.supabase.createClient(SBC.url, SBC.anonKey);
     console.log("✅ Supabase متصل");
-
     const { data: { session } } = await sb.auth.getSession();
     if(session){
       await loadProfile(session.user.id, session.user);
       await loadSettings();
     }
-
     sb.auth.onAuthStateChange(async (evt, sess) => {
       if(evt === 'SIGNED_OUT'){
         state.user=null; state.profile=null; state.isAdmin=false;
         renderHeader(); go('home');
       } else if(evt === 'SIGNED_IN' && sess){
         await loadProfile(sess.user.id, sess.user);
-        await loadSettings();
-        renderHeader();
+        await loadSettings(); renderHeader();
       }
     });
     return sb;
@@ -99,12 +98,13 @@
       id: uid,
       name: prof.full_name || authUser?.user_metadata?.full_name || 'مستخدم',
       phone: prof.phone || authUser?.user_metadata?.phone || '',
+      email: prof.email || authUser?.email || '',
       joinedAt: new Date(prof.created_at || authUser?.created_at || Date.now()).getTime(),
       rating: prof.rating || 5.0,
       sales: prof.sales || 0,
-      purchases: prof.purchases || 0
+      purchases: prof.purchases || 0,
+      emailVerified: !!authUser?.email_confirmed_at
     };
-    // تحقق من صلاحية المشرف
     const { data: adminRow } = await sb.from('admins').select('role').eq('id', uid).maybeSingle();
     state.isAdmin = !!adminRow;
     state.adminRole = adminRow?.role || null;
@@ -114,37 +114,31 @@
     const { data } = await sb.from('settings').select('key, value');
     state.settings = {};
     (data||[]).forEach(s => state.settings[s.key] = s.value);
-    // طبّق الشعار الجديد على الصفحة إن وُجد
     const logoUrl = state.settings.logo_url || CFG.logo;
     if(logoUrl){
-      document.querySelectorAll('#logoImgSm, #logoImgAuth, #logoImgAdmin').forEach(el => el.src = logoUrl);
+      document.querySelectorAll('#logoImgSm, #logoImgAuth').forEach(el => el.src = logoUrl);
     }
   }
 
   async function loadAuctions(){
     const { data, error } = await sb
       .from('auctions')
-      .select(`
-        *,
-        seller:profiles!auctions_seller_id_fkey(full_name, rating, sales),
-        bids(id, amount, user_id, created_at, user:profiles!bids_user_id_fkey(full_name))
-      `)
+      .select(`*, seller:profiles!auctions_seller_id_fkey(full_name, rating, sales),
+        bids(id, amount, user_id, created_at, user:profiles!bids_user_id_fkey(full_name))`)
       .eq('status','approved')
       .order('created_at', { ascending: false });
     if(error){ console.error(error); return; }
     state.auctions = (data||[]).map(a => ({
-      ...a,
-      bids: a.bids || [],
+      ...a, bids: a.bids || [],
       sellerName: a.seller?.full_name || 'بائع',
       sellerRating: Number(a.seller?.rating)||5,
       sellerSales: a.seller?.sales || 0
     }));
   }
 
-  // ============ Realtime ============
   function subscribeRealtime(){
     if(state.channel) sb.removeChannel(state.channel);
-    state.channel = sb.channel('sumha-realtime')
+    state.channel = sb.channel('sumha-rt')
       .on('postgres_changes', { event:'*', schema:'public', table:'auctions' }, async () => {
         await loadAuctions();
         if(['home','live','product'].includes(state.page)) render();
@@ -155,13 +149,19 @@
       })
       .on('postgres_changes', { event:'INSERT', schema:'public', table:'notifications' }, () => updateNotifDot())
       .on('postgres_changes', { event:'*', schema:'public', table:'settings' }, async () => {
-        await loadSettings();
-        renderHeader(); render();
+        await loadSettings(); renderHeader(); render();
       })
       .subscribe();
   }
 
-  // ============ المصادقة ============
+  // ============ Auth ============
+  async function resolveLoginEmail(id){
+    id = id.trim();
+    if(isValidEmail(id)) return id.toLowerCase();
+    if(isValidPhone(id)) return phoneToEmail(id);
+    return null;
+  }
+
   function openAuth(pending){
     state.pendingAction = pending || null;
     document.querySelectorAll('.tabs button').forEach((b,i)=>b.classList.toggle('on', i===0));
@@ -190,40 +190,56 @@
     e.preventDefault();
     if(!sb){ toast('الاتصال بالسيرفر غير جاهز'); return; }
     const name = document.getElementById('suName').value.trim();
+    const email = document.getElementById('suEmail').value.trim().toLowerCase();
     const phone = document.getElementById('suPhone').value.trim();
     const pass = document.getElementById('suPass').value;
     const err = document.getElementById('suErr');
     err.textContent = '';
     if(name.length < 3){ err.textContent='أدخل اسمك الكامل'; return; }
-    if(!/^05\d{8}$/.test(phone)){ err.textContent='رقم الجوال يبدأ بـ 05 (10 أرقام)'; return; }
+    if(!isValidEmail(email)){ err.textContent='البريد الإلكتروني غير صحيح'; return; }
+    if(!isValidPhone(phone)){ err.textContent='رقم الجوال يبدأ بـ 05 (10 أرقام)'; return; }
     if(pass.length < 6){ err.textContent='كلمة المرور 6 أحرف على الأقل'; return; }
-    err.textContent = 'جاري إنشاء الحساب...';
-    const email = phone + '@sumha.app';
-    const { data, error } = await sb.auth.signUp({
-      email, password: pass,
-      options: { data: { full_name: name, phone } }
-    });
-    if(error){
-      err.textContent = error.message.includes('already') ? 'رقم الجوال مسجل مسبقًا' : error.message;
+
+    const { data: existing } = await sb.from('profiles')
+      .select('email, phone').or(`email.eq.${email},phone.eq.${phone}`).maybeSingle();
+    if(existing){
+      if(existing.email === email) err.textContent='هذا البريد مسجل مسبقاً';
+      else err.textContent='هذا الجوال مسجل مسبقاً';
       return;
     }
-    await new Promise(r => setTimeout(r, 900));
+
+    err.textContent = 'جاري إنشاء الحساب...';
+    const { data, error } = await sb.auth.signUp({
+      email, password: pass,
+      options: { data: { full_name: name, phone, email } }
+    });
+    if(error){
+      if(error.message.includes('already registered')) err.textContent='هذا البريد مسجل مسبقاً';
+      else if(error.message.toLowerCase().includes('password')) err.textContent='كلمة المرور ضعيفة';
+      else err.textContent = error.message;
+      return;
+    }
+    if(!data.user){ err.textContent='تعذر إنشاء الحساب'; return; }
+    await new Promise(r => setTimeout(r, 1200));
     await loadProfile(data.user.id, data.user);
     await enterApp();
-    toast('تم إنشاء حسابك 🎉');
+    toast('تم إنشاء حسابك 🎉 — راجع بريدك للتوثيق');
   });
 
   document.getElementById('formLogin')?.addEventListener('submit', async e => {
     e.preventDefault();
     if(!sb){ toast('الاتصال بالسيرفر غير جاهز'); return; }
-    const phone = document.getElementById('lgPhone').value.trim();
+    const identifier = document.getElementById('lgIdentifier').value.trim();
     const pass = document.getElementById('lgPass').value;
     const err = document.getElementById('lgErr');
     err.textContent = 'جاري الدخول...';
-    const email = phone + '@sumha.app';
+    const email = await resolveLoginEmail(identifier);
+    if(!email){ err.textContent='أدخل بريداً أو جوالاً صحيحاً'; return; }
     const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
     if(error){
-      err.textContent = error.message.includes('Invalid') ? 'رقم الجوال أو كلمة المرور غير صحيحة' : error.message;
+      if(error.message.includes('Invalid')) err.textContent='البيانات غير صحيحة';
+      else if(error.message.includes('Email not confirmed')) err.textContent='وثّق بريدك أولاً';
+      else err.textContent = error.message;
       return;
     }
     await loadProfile(data.user.id, data.user);
@@ -238,45 +254,50 @@
     await loadAuctions();
     subscribeRealtime();
     renderHeader(); render(); updateNotifDot();
-    const pending = state.pendingAction; state.pendingAction = null;
-    if(pending) setTimeout(() => pending(), 300);
+    const p = state.pendingAction; state.pendingAction = null;
+    if(p) setTimeout(() => p(), 300);
   }
 
   async function logout(){
     if(sb) await sb.auth.signOut();
     if(state.channel){ sb.removeChannel(state.channel); state.channel = null; }
-    state.user = null; state.profile = null; state.isAdmin = false;
+    state.user=null; state.profile=null; state.isAdmin=false;
     renderHeader(); go('home');
     toast('تم تسجيل الخروج');
   }
 
-  // ============ التنبيهات ============
-  async function addNotif(userId, icon, title, body){
-    if(!sb || !userId) return;
-    await sb.from('notifications').insert({ user_id: userId, icon, title, body });
+  async function resendVerification(){
+    if(!state.user?.email){ toast('لا يوجد بريد'); return; }
+    const { error } = await sb.auth.resend({ type:'signup', email: state.user.email });
+    if(error){ toast(error.message); return; }
+    toast('تم إرسال رابط التوثيق 📧');
+  }
+
+  // ============ Notifs ============
+  async function addNotif(uid, icon, title, body){
+    if(!sb || !uid) return;
+    await sb.from('notifications').insert({ user_id: uid, icon, title, body });
   }
   async function getMyNotifs(){
     if(!state.user) return [];
     const { data } = await sb.from('notifications').select('*')
-      .eq('user_id', state.user.id).order('created_at', { ascending: false }).limit(50);
+      .eq('user_id', state.user.id).order('created_at',{ascending:false}).limit(50);
     return data || [];
   }
   async function updateNotifDot(){
     if(!state.user) return;
     const { count } = await sb.from('notifications')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', state.user.id).eq('read', false);
+      .select('*',{count:'exact',head:true}).eq('user_id', state.user.id).eq('read', false);
     const dot = document.getElementById('notifDot');
     if(dot) dot.hidden = !count;
   }
   async function markNotifsRead(){
     if(!state.user) return;
-    await sb.from('notifications').update({ read: true })
-      .eq('user_id', state.user.id).eq('read', false);
+    await sb.from('notifications').update({ read:true }).eq('user_id', state.user.id).eq('read', false);
     updateNotifDot();
   }
 
-  // ============ المفضلة ============
+  // ============ Favorites ============
   async function isFav(aid){
     if(!state.user) return false;
     const { data } = await sb.from('favorites').select('id')
@@ -285,7 +306,7 @@
   }
   async function toggleFav(aid, ev){
     if(ev) ev.stopPropagation();
-    if(!state.user){ openAuth(() => toggleFav(aid)); return; }
+    if(!state.user){ openAuth(()=>toggleFav(aid)); return; }
     const fav = await isFav(aid);
     if(fav){
       await sb.from('favorites').delete().eq('user_id', state.user.id).eq('auction_id', aid);
@@ -299,23 +320,22 @@
   async function myFavs(){
     if(!state.user) return [];
     const { data } = await sb.from('favorites').select('auction_id').eq('user_id', state.user.id);
-    const ids = (data||[]).map(f => f.auction_id);
+    const ids = (data||[]).map(f=>f.auction_id);
     return state.auctions.filter(a => ids.includes(a.id));
   }
 
-  // ============ الهيدر ============
+  // ============ Header ============
   function renderHeader(){
-    const el = document.getElementById('hdrActions');
-    if(!el) return;
+    const el = document.getElementById('hdrActions'); if(!el) return;
     const adminBtn = state.isAdmin
-      ? `<button class="ibtn" onclick="location.href='admin.html'" title="لوحة المشرف" style="background:linear-gradient(135deg,#8d0b0b,#6d0808);color:#fff;border-color:transparent">${ico('admin')}</button>`
+      ? `<button class="ibtn" onclick="location.href='admin.html'" title="لوحة المشرف" style="background:linear-gradient(135deg,#8d0b0b,#6d0808);color:#fff;border-color:transparent;font-size:18px">${ico('admin')}</button>`
       : '';
     if(state.user){
       el.innerHTML = `
         <button class="btn-sell" onclick="SUMHA.openSell()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>اعرض منتجك</span></button>
         ${adminBtn}
         <button class="ibtn" onclick="SUMHA.go('notifs')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="dot" id="notifDot" hidden></span></button>
-        <div class="user-chip" onclick="SUMHA.go('account')"><div class="uav">${state.user.name[0]}</div><div><b>${esc(state.user.name.split(' ')[0])}</b><span>حسابي</span></div></div>`;
+        <div class="user-chip" onclick="SUMHA.go('account')"><div class="uav">${esc(state.user.name[0])}</div><div><b>${esc(state.user.name.split(' ')[0])}</b><span>حسابي</span></div></div>`;
     } else {
       el.innerHTML = `
         <button class="btn-sell" onclick="SUMHA.openSell()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>اعرض منتجك</span></button>
@@ -323,21 +343,20 @@
     }
   }
 
-  // ============ التنقل ============
+  // ============ Router ============
   function go(page, data){
-    if(page === 'account' && !state.user){ openAuth(()=>go('account')); return; }
+    if(page==='account' && !state.user){ openAuth(()=>go('account')); return; }
     if(['my-bids','my-wins','my-products','favorites','notifs'].includes(page) && !state.user){
       openAuth(()=>go(page)); return;
     }
-    state.page = page; state.pageData = data||{};
+    state.page=page; state.pageData=data||{};
     document.querySelectorAll('.ni').forEach(n=>n.classList.toggle('on', n.dataset.nav===page));
-    window.scrollTo({top:0, behavior:'smooth'});
+    window.scrollTo({top:0,behavior:'smooth'});
     render();
   }
 
   async function render(){
-    const main = document.getElementById('main');
-    if(!main) return;
+    const main = document.getElementById('main'); if(!main) return;
     const live = state.auctions.filter(a => new Date(a.end_time).getTime() > Date.now());
     switch(state.page){
       case 'home': main.innerHTML = renderHome(live); break;
@@ -376,25 +395,23 @@
     });
   }
 
-  // ============ الصفحة الرئيسية ============
+  // ============ Home ============
   function guestBanner(){
     if(state.user) return '';
     return `<div class="guest-banner"><div class="gi">🎯</div><div class="gt"><b>أنت تتصفح كزائر</b><span>سجّل الآن لتتمكن من المزايدة وعرض منتجاتك</span></div><button onclick="SUMHA.openAuth()">تسجيل سريع</button></div>`;
   }
 
   function renderHome(all){
-    // 🔴 المزاد المباشر — أول قسم بدل العرض
-    const liveNow = all.filter(a => new Date(a.end_time).getTime() - Date.now() < 6*3600000).slice(0, 8);
-    const featured = all.filter(a => a.featured).slice(0, 8);
+    const liveNow = all.filter(a => new Date(a.end_time).getTime() - Date.now() < 6*3600000).slice(0,8);
+    const featured = all.filter(a => a.featured).slice(0,8);
     const ending = [...all].sort((a,b)=>new Date(a.end_time)-new Date(b.end_time)).slice(0,4);
     const topBids = [...all].sort((a,b)=>(b.bids?.length||0)-(a.bids?.length||0)).slice(0,4);
     const latest = [...all].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).slice(0,4);
-
     return `
       ${guestBanner()}
       <div class="hero">
         <h1>${esc(state.settings.hero_title || (CFG.siteName+'… '+CFG.tagline+' 🏆'))}</h1>
-        <p>${esc(state.settings.hero_subtitle || 'منصة المزادات السعودية — اعرض منتجك، زايد بثقة، واربح بأعلى سوم')}</p>
+        <p>${esc(state.settings.hero_subtitle || 'منصة المزادات السعودية')}</p>
         <div class="hero-cta">
           ${state.user
             ? `<button class="c1" onclick="SUMHA.openSell()">اعرض منتجك</button><button class="c2" onclick="SUMHA.go('live')">🔴 المزادات المباشرة</button>`
@@ -406,13 +423,7 @@
           <div><b>4.9★</b><span>تقييم المنصة</span></div>
         </div>
       </div>
-
-      <!-- 🔴 المزاد المباشر أولاً -->
-      <section>
-        <div class="sec-h"><h2>${ico('live')} المزاد المباشر</h2><a onclick="SUMHA.go('live')">عرض الكل</a></div>
-        <div class="hrow">${liveNow.length ? liveNow.map(cardHTML).join('') : '<div style="padding:20px;color:var(--muted);font-size:13px">لا توجد مزادات مباشرة الآن</div>'}</div>
-      </section>
-
+      <section><div class="sec-h"><h2>${ico('live')} المزاد المباشر</h2><a onclick="SUMHA.go('live')">عرض الكل</a></div><div class="hrow">${liveNow.length ? liveNow.map(cardHTML).join('') : '<div style="padding:20px;color:var(--muted);font-size:13px">لا توجد مزادات مباشرة الآن</div>'}</div></section>
       <section><div class="sec-h"><h2>${ico('featured')} مزادات مميزة</h2></div><div class="hrow">${featured.length ? featured.map(cardHTML).join('') : '<div style="padding:20px;color:var(--muted);font-size:13px">لا توجد مزادات مميزة</div>'}</div></section>
       <section><div class="sec-h"><h2>${ico('ending')} تنتهي قريبًا</h2></div><div class="grid">${ending.map(cardHTML).join('')}</div></section>
       <section><div class="sec-h"><h2>التصنيفات</h2><a onclick="SUMHA.go('cats')">عرض الكل</a></div><div class="cats">${CFG.categories.map(c=>{
@@ -428,9 +439,8 @@
     const highest = highestBid(a);
     const ms = new Date(a.end_time).getTime() - Date.now();
     const warn = ms < 3600000 ? 'warn' : '';
-    const badge = ms < 6*3600000
-      ? `<span class="badge live">مباشر</span>`
-      : (a.featured ? `<span class="badge feat">${ico('featured')} مميز</span>` : '');
+    const badge = ms < 6*3600000 ? `<span class="badge live">مباشر</span>` :
+      (a.featured ? `<span class="badge feat">${ico('featured')} مميز</span>` : '');
     const imgEl = a.image_url
       ? `<img src="${a.image_url}" alt="${esc(a.title)}" loading="lazy" onerror="this.outerHTML='${CAT_SVG[a.category]||''}'">`
       : (CAT_SVG[a.category]||'');
@@ -512,7 +522,7 @@
       </div>`;
   }
 
-  // ============ المزايدة ============
+  // ============ Bid ============
   async function placeBid(aid){
     if(!state.user){ openAuth(()=>placeBid(aid)); return; }
     const a = state.auctions.find(x=>x.id===aid);
@@ -531,7 +541,7 @@
       addNotif(prevTop.user_id,'⚠️','تم تجاوز مزايدتك',`على "${a.title}" — السعر الآن ${fmt(amount)} ر.س`);
     }
     if(a.seller_id !== state.user.id){
-      addNotif(a.seller_id,'⚡','مزايدة جديدة على منتجك',`"${a.title}" — ${fmt(amount)} ر.س من ${state.user.name}`);
+      addNotif(a.seller_id,'⚡','مزايدة جديدة على منتجك',`"${a.title}" — ${fmt(amount)} ر.س`);
     }
     addNotif(state.user.id,'✅','تم تسجيل مزايدتك',`"${a.title}" بمبلغ ${fmt(amount)} ر.س`);
     toast('تم تسجيل مزايدتك ✅');
@@ -551,15 +561,25 @@
     toast('تم استلام البلاغ ✅');
   }
 
-  // ============ الحساب ============
+  // ============ Account ============
   async function renderAccount(){
     const u = state.user; if(!u) return '';
     const myBids = await myBidsAuctions();
     const myWinsList = await myWins();
     const myProducts = await myAuctions();
     const favs = await myFavs();
+    const verifiedBadge = u.emailVerified
+      ? `<span style="background:#dff5e5;color:#1f7a3a;font-size:10px;padding:2px 8px;border-radius:6px;font-weight:800">موثق ✓</span>`
+      : `<span style="background:#fff5dd;color:#a87a20;font-size:10px;padding:2px 8px;border-radius:6px;font-weight:800">غير موثق</span>`;
     return `
-      <div class="acc-hdr"><div class="av">${esc(u.name[0])}</div><div><h2>${esc(u.name)}</h2><p>${esc(u.phone)} · عضو منذ ${new Date(u.joinedAt).toLocaleDateString('ar-SA')}</p></div></div>
+      <div class="acc-hdr">
+        <div class="av">${esc(u.name[0])}</div>
+        <div style="flex:1;min-width:0">
+          <h2>${esc(u.name)} ${verifiedBadge}</h2>
+          <p style="direction:ltr;text-align:right;word-break:break-all;font-size:12px">${esc(u.email)}</p>
+          <p>${esc(u.phone)}</p>
+        </div>
+      </div>
       <div class="acc-stats"><div class="acc-stat"><b>${myBids.length}</b><span>مزايدة</span></div><div class="acc-stat"><b>${myWinsList.length}</b><span>فوز</span></div><div class="acc-stat"><b>${(u.rating||5).toFixed(1)}★</b><span>تقييمي</span></div></div>
       <div class="menu">
         <div class="mi" onclick="SUMHA.go('my-bids')"><div class="ico">${ico('chart')}</div><div class="txt"><b>المزادات التي شاركت فيها</b><span>${myBids.length} مزاد</span></div><div class="arr">‹</div></div>
@@ -567,6 +587,7 @@
         <div class="mi" onclick="SUMHA.go('my-products')"><div class="ico">${ico('package')}</div><div class="txt"><b>منتجاتي المعروضة</b><span>${myProducts.length} منتج</span></div><div class="arr">‹</div></div>
         <div class="mi" onclick="SUMHA.go('favorites')"><div class="ico">${ico('heart')}</div><div class="txt"><b>المحفوظات</b><span>${favs.length} منتج</span></div><div class="arr">‹</div></div>
         <div class="mi" onclick="SUMHA.go('notifs')"><div class="ico">${ico('bell')}</div><div class="txt"><b>التنبيهات</b></div><div class="arr">‹</div></div>
+        ${!u.emailVerified ? `<div class="mi" onclick="SUMHA.resendVerification()" style="background:#fff9e6"><div class="ico" style="background:#fff0c2">📧</div><div class="txt"><b>إعادة إرسال توثيق البريد</b><span>اضغط لتأكيد بريدك</span></div><div class="arr">‹</div></div>` : ''}
         ${state.isAdmin?`<div class="mi" onclick="location.href='admin.html'" style="background:#fff5e8"><div class="ico" style="background:#8d0b0b;color:#fff">${ico('admin')}</div><div class="txt"><b>لوحة المشرف</b><span>إدارة الموقع</span></div><div class="arr">‹</div></div>`:''}
         <div class="mi danger" onclick="SUMHA.logout()"><div class="ico">${ico('logout')}</div><div class="txt"><b>تسجيل الخروج</b><span>الخروج من الحساب</span></div><div class="arr">‹</div></div>
       </div>`;
@@ -577,7 +598,7 @@
     return `<div class="page-h"><button class="back-btn" onclick="SUMHA.go('account')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button><h1>${ico('bell')} التنبيهات</h1></div>${items.length?`<div class="box" style="padding:6px 14px">${items.map(n=>`<div class="bid-item"><div class="u"><div class="av2">${n.icon||'🔔'}</div><div><b>${esc(n.title)}</b><span>${esc(n.body)}</span></div></div><div style="font-size:11px;color:var(--muted);flex-shrink:0">${ago(n.created_at)}</div></div>`).join('')}</div>`:emptyState('لا توجد تنبيهات','ستظهر هنا إشعاراتك')}`;
   }
 
-  // ============ عرض منتج ============
+  // ============ Sell ============
   function openSell(){
     if(!state.user){ openAuth(()=>openSell()); return; }
     document.getElementById('pCat').innerHTML = '<option value="">اختر تصنيف</option>' + CFG.categories.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
@@ -630,13 +651,13 @@
       location, condition, status:'approved'
     });
     if(error){ toast(error.message); return; }
-    addNotif(state.user.id,'✅','تم نشر منتجك',`"${title}" متاح للمزايدة الآن`);
+    addNotif(state.user.id,'✅','تم نشر منتجك',`"${title}" متاح للمزايدة`);
     closeOv('ovSell'); e.target.reset();
     toast('تم نشر منتجك 🎉');
     await loadAuctions(); go('my-products');
   });
 
-  // ============ البحث ============
+  // ============ Search ============
   document.getElementById('searchInput')?.addEventListener('input', e => {
     const q = e.target.value.trim();
     if(!q){ if(state.page==='search') go('home'); return; }
@@ -649,7 +670,7 @@
     initCountdowns();
   });
 
-  // ============ العد التنازلي ============
+  // ============ Countdown ============
   function initCountdowns(){
     document.querySelectorAll('.tmr[data-end]').forEach(el => {
       const ms = Number(el.dataset.end) - Date.now();
@@ -667,10 +688,9 @@
 
   // ============ Boot ============
   async function boot(){
-    // طبّق الشعار من CFG فوراً (قبل تحميل Supabase)
     const logoUrl = CFG.logo;
     if(logoUrl){
-      document.querySelectorAll('#logoImgSm, #logoImgAuth, #logoImgAdmin').forEach(el => el.src = logoUrl);
+      document.querySelectorAll('#logoImgSm, #logoImgAuth').forEach(el => el.src = logoUrl);
     }
     await initSupabase();
     if(sb){
@@ -684,10 +704,10 @@
     });
   }
 
-  // ============ واجهة عامة ============
   window.SUMHA = {
     boot, go, openAuth, closeOv, openSell, logout,
     toggleFav, placeBid, shareProduct, reportProduct,
+    resendVerification,
     get user(){ return state.user; },
     get isAdmin(){ return state.isAdmin; },
     get adminRole(){ return state.adminRole; },
