@@ -6,292 +6,127 @@
 <title>لوحة المشرف | سومها</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{
-  --cream:#faf6ef;--cream2:#f3ebdd;--sand:#e8dcc4;--line:#ecdfc7;
-  --gold:#c9a961;--gold2:#b8934a;--gold3:#e8c980;
-  --maroon:#8d0b0b;--maroon2:#6d0808;
-  --ink:#2b1a14;--ink2:#5a463c;--muted:#a08c78;--white:#fff;
-  --sh:0 8px 24px rgba(43,26,20,.06);
-  --sh-lg:0 18px 40px rgba(43,26,20,.14);
-  --sh-glow:0 12px 32px rgba(141,11,11,.22);
-}
+:root{--cream:#faf6ef;--cream2:#f3ebdd;--sand:#e8dcc4;--line:#ecdfc7;--gold:#c9a961;--gold2:#b8934a;--maroon:#8d0b0b;--maroon2:#6d0808;--ink:#2b1a14;--ink2:#5a463c;--muted:#a08c78;--white:#fff;--sh:0 6px 18px rgba(43,26,20,.06);--sh-lg:0 14px 34px rgba(43,26,20,.12);--sh-glow:0 12px 32px rgba(141,11,11,.22);--sidebar:#1f1410}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow-x:hidden}
-body{font-family:'Tajawal',system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.55}
+body{font-family:'Tajawal',system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.5}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
 input,select,textarea{font-family:inherit}
 img{display:block;max-width:100%}
 a{text-decoration:none;color:inherit}
+svg{display:block}
 
-/* ========== LAYOUT ========== */
+/* ICON HELPERS */
+.btn svg{width:15px;height:15px;flex-shrink:0}
+.nav-item .ic svg{width:18px;height:18px}
+.ni .ic svg{width:22px;height:22px}
+.stat-card .ic svg{width:20px;height:20px;color:var(--maroon)}
+.mi-ph svg{width:26px;height:26px;color:var(--maroon)}
+.tag svg{width:11px;height:11px;vertical-align:-.15em;display:inline-block}
+.mi-detail .val svg{width:14px;height:14px;vertical-align:-.2em}
+
 .layout{display:flex;flex-direction:column;min-height:100vh;padding-bottom:80px}
 
-/* ========== TOP HEADER (Mobile) ========== */
-.mob-header{
-  position:sticky;top:0;z-index:100;
-  background:linear-gradient(135deg,#8d0b0b,#6d0808);
-  color:#fff;padding:14px 16px;
-  display:flex;align-items:center;gap:12px;
-  box-shadow:0 4px 16px rgba(141,11,11,.25);
-}
-.mob-header .brand-mini{
-  display:flex;align-items:center;gap:10px;flex:1;min-width:0;
-}
+/* MOBILE HEADER */
+.mob-header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#8d0b0b,#6d0808);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 16px rgba(141,11,11,.25)}
+.mob-header .brand-mini{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
 .mob-header .brand-mini img{height:36px;object-fit:contain}
-.mob-header .role-chip{
-  font-size:10px;background:rgba(255,255,255,.2);
-  padding:3px 8px;border-radius:6px;font-weight:800;
-  white-space:nowrap;
-}
-.mob-header .hdr-btn{
-  width:38px;height:38px;border-radius:11px;
-  background:rgba(255,255,255,.15);backdrop-filter:blur(10px);
-  display:flex;align-items:center;justify-content:center;
-  color:#fff;font-size:16px;flex-shrink:0;
-  border:1px solid rgba(255,255,255,.2);
-}
+.mob-header .role-chip{font-size:10px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:6px;font-weight:800;white-space:nowrap}
+.mob-header .hdr-btn{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.15);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;border:1px solid rgba(255,255,255,.2);transition:.2s}
+.mob-header .hdr-btn:hover{background:rgba(255,255,255,.25)}
+.mob-header .hdr-btn svg{width:18px;height:18px}
 
-/* ========== SIDEBAR (Desktop only) ========== */
+/* SIDEBAR */
 .sidebar{display:none}
 @media(min-width:992px){
   .layout{flex-direction:row;padding-bottom:0}
   .mob-header{display:none}
-  .sidebar{
-    display:flex;flex-direction:column;gap:6px;
-    background:#1f1410;color:#f7f0e6;
-    width:260px;min-width:260px;padding:22px 18px;
-    position:sticky;top:0;height:100vh;overflow-y:auto;
-  }
+  .sidebar{display:flex;flex-direction:column;gap:6px;background:var(--sidebar);color:#f7f0e6;width:260px;min-width:260px;padding:22px 18px;position:sticky;top:0;height:100vh;overflow-y:auto}
 }
-
-/* ========== SIDEBAR CONTENT ========== */
-.sidebar .brand{
-  display:flex;align-items:center;gap:12px;
-  padding-bottom:18px;margin-bottom:14px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-}
+.sidebar .brand{display:flex;align-items:center;gap:12px;padding-bottom:18px;margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,.08)}
 .sidebar .brand img{height:44px;object-fit:contain;max-width:150px}
-.sidebar .brand .role{
-  margin-right:auto;font-size:10px;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  color:#1f1410;padding:3px 8px;border-radius:6px;font-weight:800;
-}
-.nav-item{
-  display:flex;align-items:center;gap:12px;
-  padding:12px 14px;border-radius:12px;
-  color:rgba(255,255,255,.7);font-weight:700;font-size:14px;
-  cursor:pointer;transition:.15s;
-}
+.sidebar .brand .role{margin-right:auto;font-size:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1f1410;padding:3px 8px;border-radius:6px;font-weight:800}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;color:rgba(255,255,255,.7);font-weight:700;font-size:14px;cursor:pointer;transition:.15s}
 .nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
-.nav-item.on{
-  background:linear-gradient(135deg,var(--maroon),var(--maroon2));
-  color:#fff;box-shadow:0 6px 16px rgba(141,11,11,.35);
-}
-.nav-item .ic{width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.nav-item.on{background:linear-gradient(135deg,var(--maroon),var(--maroon2));color:#fff;box-shadow:0 6px 16px rgba(141,11,11,.35)}
+.nav-item .ic{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-item .ic svg{color:currentColor}
 .sidebar .sep{margin:14px 0;border-top:1px solid rgba(255,255,255,.08)}
 .sidebar .logout{color:#ffb3b3}
 
-/* ========== MAIN ========== */
 .main{flex:1;padding:16px 14px;max-width:100%;overflow-x:hidden}
-
-/* Page title (mobile) */
-.page-title{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:12px;margin-bottom:18px;flex-wrap:wrap;
-}
-.page-title h1{
-  font-size:20px;font-weight:900;letter-spacing:-.3px;
-  display:flex;align-items:center;gap:8px;
-}
-.page-title h1::before{
-  content:"";width:5px;height:22px;border-radius:3px;
-  background:linear-gradient(180deg,var(--maroon),var(--gold));
-}
-.page-title .sub{font-size:12.5px;color:var(--ink2);margin-top:2px}
+.page-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.page-title h1{font-size:20px;font-weight:900;letter-spacing:-.3px;display:flex;align-items:center;gap:8px}
+.page-title h1::before{content:"";width:5px;height:22px;border-radius:3px;background:linear-gradient(180deg,var(--maroon),var(--gold))}
+.page-title .sub{font-size:12.5px;color:var(--ink2);margin-top:2px;padding-right:13px}
 .page-title .actions{display:flex;gap:8px;flex-wrap:wrap}
 
-/* ========== BUTTONS ========== */
-.btn{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:11px 18px;border-radius:12px;
-  font-weight:800;font-size:13.5px;
-  transition:.2s;white-space:nowrap;
-  border:1.5px solid transparent;
-}
-.btn-primary{
-  background:linear-gradient(135deg,var(--maroon),var(--maroon2));
-  color:#fff;box-shadow:0 6px 16px rgba(141,11,11,.25);
-}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:11px 18px;border-radius:12px;font-weight:800;font-size:13.5px;transition:.2s;white-space:nowrap;border:1.5px solid transparent;color:inherit}
+.btn-primary{background:linear-gradient(135deg,var(--maroon),var(--maroon2));color:#fff;box-shadow:0 6px 16px rgba(141,11,11,.25)}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(141,11,11,.35)}
-.btn-gold{
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  color:#fff;box-shadow:0 6px 16px rgba(201,169,97,.3);
-}
 .btn-ghost{background:var(--white);border-color:var(--line);color:var(--ink2)}
 .btn-ghost:hover{border-color:var(--maroon);color:var(--maroon)}
 .btn-danger{background:#fdecec;color:var(--maroon);border-color:#f5c6c6}
-.btn-danger:hover{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.btn-danger:hover{background:var(--maroon);color:#fff}
 .btn-sm{padding:8px 12px;font-size:12px;border-radius:10px}
-.btn-icon{padding:9px;width:38px;justify-content:center}
+.btn-sm svg{width:14px;height:14px}
 
-/* ========== STATS CARDS ========== */
-.stats-grid{
-  display:grid;grid-template-columns:repeat(2,1fr);
-  gap:10px;margin-bottom:18px;
-}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
 @media(min-width:640px){.stats-grid{grid-template-columns:repeat(3,1fr);gap:12px}}
 @media(min-width:992px){.stats-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}}
-
-.stat-card{
-  background:var(--white);border:1.5px solid var(--line);
-  border-radius:18px;padding:16px 14px;
-  box-shadow:var(--sh);position:relative;overflow:hidden;
-  transition:.2s;
-}
+.stat-card{background:var(--white);border:1.5px solid var(--line);border-radius:18px;padding:16px 14px;box-shadow:var(--sh);position:relative;overflow:hidden;transition:.2s}
 .stat-card:hover{transform:translateY(-2px);box-shadow:var(--sh-lg);border-color:var(--sand)}
-.stat-card::before{
-  content:"";position:absolute;top:0;right:0;
-  width:4px;height:100%;
-  background:linear-gradient(180deg,var(--maroon),var(--gold));
-}
-.stat-card .ic{
-  width:40px;height:40px;border-radius:12px;
-  background:var(--cream2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:19px;margin-bottom:10px;
-}
-.stat-card .val{
-  font-size:22px;font-weight:900;color:var(--maroon);
-  line-height:1.1;letter-spacing:-.5px;
-}
-.stat-card .lbl{
-  font-size:11.5px;color:var(--ink2);
-  font-weight:800;margin-top:4px;
-}
-@media(min-width:992px){
-  .stat-card .val{font-size:26px}
-  .stat-card .lbl{font-size:12.5px}
-}
+.stat-card::before{content:"";position:absolute;top:0;right:0;width:4px;height:100%;background:linear-gradient(180deg,var(--maroon),var(--gold))}
+.stat-card .ic{width:40px;height:40px;border-radius:12px;background:var(--cream2);display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.stat-card .val{font-size:22px;font-weight:900;color:var(--maroon);line-height:1.1;letter-spacing:-.5px}
+.stat-card .lbl{font-size:11.5px;color:var(--ink2);font-weight:800;margin-top:4px}
+@media(min-width:992px){.stat-card .val{font-size:26px}.stat-card .lbl{font-size:12.5px}}
 
-/* ========== CARD ========== */
-.card{
-  background:var(--white);border:1.5px solid var(--line);
-  border-radius:20px;padding:16px;
-  box-shadow:var(--sh);margin-bottom:16px;
-}
+.card{background:var(--white);border:1.5px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--sh);margin-bottom:16px}
 @media(min-width:768px){.card{padding:20px}}
-.card-hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:12px;margin-bottom:14px;flex-wrap:wrap;
-}
-.card-hdr h2{
-  font-size:16px;font-weight:900;
-  display:flex;align-items:center;gap:8px;
-  letter-spacing:-.3px;
-}
-.card-hdr h2::before{
-  content:"";width:5px;height:18px;
-  border-radius:3px;
-  background:linear-gradient(180deg,var(--maroon),var(--gold));
-}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.card-hdr h2{font-size:16px;font-weight:900;display:flex;align-items:center;gap:8px;letter-spacing:-.3px}
+.card-hdr h2::before{content:"";width:5px;height:18px;border-radius:3px;background:linear-gradient(180deg,var(--maroon),var(--gold))}
 
-/* ========== TABLE (Desktop) ========== */
 .tbl-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--line);background:var(--white)}
 table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
 thead{background:var(--cream2)}
-th{
-  text-align:right;padding:12px 14px;
-  font-weight:800;color:var(--ink2);
-  font-size:12px;white-space:nowrap;
-  border-bottom:1px solid var(--line);
-}
-td{
-  padding:12px 14px;border-bottom:1px solid var(--line);
-  vertical-align:middle;
-}
+th{text-align:right;padding:12px 14px;font-weight:800;color:var(--ink2);font-size:12px;white-space:nowrap;border-bottom:1px solid var(--line)}
+td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
 tbody tr:last-child td{border-bottom:none}
 tbody tr:hover{background:var(--cream)}
 .thumb{width:44px;height:44px;border-radius:10px;object-fit:cover;border:1px solid var(--line)}
-.thumb-ph{
-  width:44px;height:44px;border-radius:10px;
-  background:var(--cream2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;
-}
+.thumb-ph{width:44px;height:44px;border-radius:10px;background:var(--cream2);display:flex;align-items:center;justify-content:center;color:var(--maroon)}
+.thumb-ph svg{width:22px;height:22px}
 .user-cell{display:flex;align-items:center;gap:8px}
-.user-cell .av{
-  width:34px;height:34px;border-radius:10px;
-  background:linear-gradient(135deg,var(--maroon),var(--maroon2));
-  color:#fff;display:flex;align-items:center;justify-content:center;
-  font-weight:900;font-size:13px;flex-shrink:0;
-}
+.user-cell .av{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--maroon),var(--maroon2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;flex-shrink:0}
 .actions-cell{display:flex;gap:6px;flex-wrap:wrap}
 
-/* ========== MOBILE CARDS (instead of table) ========== */
+/* MOBILE CARDS */
 .mob-list{display:flex;flex-direction:column;gap:12px}
 @media(min-width:768px){.mob-list{display:none}}
+@media(min-width:768px){.tbl-wrap{display:block!important}}
+@media(max-width:767px){.tbl-wrap{display:none!important}}
 
-.mob-item{
-  background:var(--white);border:1.5px solid var(--line);
-  border-radius:16px;padding:14px;
-  transition:.2s;
-}
+.mob-item{background:var(--white);border:1.5px solid var(--line);border-radius:16px;padding:14px;transition:.2s}
 .mob-item:active{transform:scale(.99);background:var(--cream)}
-.mob-item .mi-top{
-  display:flex;align-items:center;gap:12px;margin-bottom:12px;
-}
-.mob-item .mi-img{
-  width:56px;height:56px;border-radius:14px;
-  object-fit:cover;flex-shrink:0;border:1px solid var(--line);
-}
-.mob-item .mi-ph{
-  width:56px;height:56px;border-radius:14px;
-  background:radial-gradient(circle at 40% 30%,#fffdf8,#f3ebdd);
-  display:flex;align-items:center;justify-content:center;
-  font-size:26px;flex-shrink:0;border:1px solid var(--line);
-}
+.mob-item .mi-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.mob-item .mi-img{width:56px;height:56px;border-radius:14px;object-fit:cover;flex-shrink:0;border:1px solid var(--line)}
+.mob-item .mi-ph{width:56px;height:56px;border-radius:14px;background:radial-gradient(circle at 40% 30%,#fffdf8,#f3ebdd);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--line);color:var(--maroon)}
+.mob-item .mi-ph svg{width:28px;height:28px}
 .mob-item .mi-info{flex:1;min-width:0}
-.mob-item .mi-info b{
-  font-size:14.5px;font-weight:900;
-  display:block;line-height:1.3;
-  overflow:hidden;text-overflow:ellipsis;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
-}
-.mob-item .mi-info .meta{
-  font-size:11.5px;color:var(--ink2);
-  margin-top:4px;display:flex;gap:8px;flex-wrap:wrap;
-}
-.mob-item .mi-info .meta span{
-  background:var(--cream);padding:2px 8px;
-  border-radius:6px;font-weight:700;
-}
-.mob-item .mi-details{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:10px;padding:12px 0;
-  border-top:1px dashed var(--line);
-  border-bottom:1px dashed var(--line);
-  margin-bottom:12px;
-}
+.mob-item .mi-info b{font-size:14.5px;font-weight:900;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mob-item .mi-info .meta{font-size:11.5px;color:var(--ink2);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap}
+.mob-item .mi-info .meta span{background:var(--cream);padding:2px 8px;border-radius:6px;font-weight:700}
+.mob-item .mi-details{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);margin-bottom:12px}
 .mob-item .mi-detail{text-align:right}
-.mob-item .mi-detail .lbl{
-  font-size:10.5px;color:var(--muted);
-  font-weight:800;display:block;margin-bottom:2px;
-}
-.mob-item .mi-detail .val{
-  font-size:14px;font-weight:900;color:var(--ink);
-}
+.mob-item .mi-detail .lbl{font-size:10.5px;color:var(--muted);font-weight:800;display:block;margin-bottom:2px}
+.mob-item .mi-detail .val{font-size:13.5px;font-weight:900;color:var(--ink);word-break:break-word}
 .mob-item .mi-detail .val.price{color:var(--maroon)}
-.mob-item .mi-actions{
-  display:flex;gap:8px;
-}
+.mob-item .mi-actions{display:flex;gap:8px}
 .mob-item .mi-actions .btn{flex:1;justify-content:center}
 
-/* ========== TAGS ========== */
-.tag{
-  display:inline-block;padding:3px 9px;
-  border-radius:7px;font-size:10.5px;font-weight:800;
-  white-space:nowrap;
-}
+.tag{display:inline-block;padding:3px 9px;border-radius:7px;font-size:10.5px;font-weight:800;white-space:nowrap}
 .tag.live{background:#ffe5e5;color:#c00}
 .tag.ended{background:#e5e5e5;color:#666}
 .tag.featured{background:#fff5dd;color:#a87a20}
@@ -303,127 +138,45 @@ tbody tr:hover{background:var(--cream)}
 .tag.st-delivered{background:#dff5e5;color:#1f7a3a}
 .tag.st-cancelled{background:#ffe5e5;color:#c00}
 
-/* ========== BOTTOM NAV (Mobile) ========== */
-.bnav{
-  position:fixed;bottom:0;left:0;right:0;z-index:99;
-  background:rgba(255,255,255,.98);
-  backdrop-filter:blur(20px);
-  border-top:1px solid var(--line);
-  display:flex;justify-content:space-around;
-  padding:10px 4px 14px;
-  box-shadow:0 -8px 24px rgba(43,26,20,.06);
-}
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:99;background:rgba(255,255,255,.98);backdrop-filter:blur(20px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 4px 14px;box-shadow:0 -8px 24px rgba(43,26,20,.06)}
 @media(min-width:992px){.bnav{display:none}}
-.ni{
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-  color:var(--muted);font-size:10px;font-weight:800;
-  padding:6px 4px;border-radius:12px;
-  transition:.2s;flex:1;min-width:0;
-}
+.ni{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);font-size:10px;font-weight:800;padding:6px 4px;border-radius:12px;transition:.2s;flex:1;min-width:0;cursor:pointer}
 .ni.on{color:var(--maroon)}
+.ni .ic{transition:.2s;display:flex;align-items:center;justify-content:center}
 .ni.on .ic{transform:scale(1.12)}
-.ni .ic{transition:.2s;font-size:20px}
-.ni.mid{
-  background:linear-gradient(135deg,var(--maroon),var(--maroon2));
-  color:#fff;border-radius:14px;
-  margin-top:-22px;padding:10px 12px;
-  box-shadow:0 10px 22px rgba(141,11,11,.4);
-  flex:0 0 auto;
-}
-.ni.mid .ic{font-size:22px}
+.ni.mid{background:linear-gradient(135deg,var(--maroon),var(--maroon2));color:#fff;border-radius:14px;margin-top:-22px;padding:10px 12px;box-shadow:0 10px 22px rgba(141,11,11,.4);flex:0 0 auto}
+.ni.mid .ic svg{color:#fff}
 
-/* ========== MODAL ========== */
-.ov{
-  position:fixed;inset:0;z-index:500;
-  background:rgba(43,26,20,.55);
-  backdrop-filter:blur(8px);
-  display:none;align-items:flex-end;justify-content:center;
-}
+.ov{position:fixed;inset:0;z-index:500;background:rgba(43,26,20,.55);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center}
 .ov.on{display:flex;animation:fade .25s}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-.modal{
-  background:var(--cream);width:100%;max-width:640px;
-  max-height:92vh;overflow-y:auto;
-  border-radius:26px 26px 0 0;padding:24px 18px 32px;
-  animation:up .3s cubic-bezier(.2,.8,.2,1);
-  position:relative;
-}
+.modal{background:var(--cream);width:100%;max-width:640px;max-height:92vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:24px 18px 32px;animation:up .3s cubic-bezier(.2,.8,.2,1);position:relative}
 @keyframes up{from{transform:translateY(30px);opacity:.5}to{transform:translateY(0);opacity:1}}
-@media(min-width:768px){
-  .ov{align-items:center;padding:20px}
-  .modal{border-radius:24px;padding:26px 24px}
-}
-.modal-close{
-  position:absolute;top:14px;left:14px;
-  width:36px;height:36px;border-radius:11px;
-  background:var(--white);border:1.5px solid var(--line);
-  display:flex;align-items:center;justify-content:center;
-  color:var(--ink2);z-index:5;transition:.2s;
-}
+@media(min-width:768px){.ov{align-items:center;padding:20px}.modal{border-radius:24px;padding:26px 24px}}
+.modal-close{position:absolute;top:14px;left:14px;width:36px;height:36px;border-radius:11px;background:var(--white);border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink2);z-index:5;transition:.2s}
+.modal-close svg{width:15px;height:15px}
 .modal-close:hover{border-color:var(--maroon);color:var(--maroon)}
-.modal h2{
-  font-size:19px;font-weight:900;
-  margin-bottom:18px;padding-left:44px;
-}
+.modal h2{font-size:19px;font-weight:900;margin-bottom:18px;padding-left:44px}
 
-/* ========== FORM ========== */
 .row2{display:grid;grid-template-columns:1fr;gap:12px}
 @media(min-width:520px){.row2{grid-template-columns:1fr 1fr}}
 .field{margin-bottom:14px}
-.field label{
-  display:block;font-size:12.5px;font-weight:800;
-  color:var(--ink2);margin-bottom:6px;
-}
-.field input,.field select,.field textarea{
-  width:100%;padding:13px 14px;border-radius:13px;
-  border:1.5px solid var(--line);background:var(--cream);
-  font-size:14.5px;color:var(--ink);outline:none;
-  transition:.2s;font-weight:600;
-}
-.field input:focus,.field select:focus,.field textarea:focus{
-  border-color:var(--maroon);background:var(--white);
-  box-shadow:0 0 0 4px rgba(141,11,11,.08);
-}
-.chk{
-  display:flex;align-items:center;gap:8px;padding:12px;
-  background:var(--cream);border:1.5px solid var(--line);
-  border-radius:13px;cursor:pointer;font-weight:800;font-size:13.5px;
-  transition:.2s;
-}
+.field label{display:block;font-size:12.5px;font-weight:800;color:var(--ink2);margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:13px 14px;border-radius:13px;border:1.5px solid var(--line);background:var(--cream);font-size:14.5px;color:var(--ink);outline:none;transition:.2s;font-weight:600}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--maroon);background:var(--white);box-shadow:0 0 0 4px rgba(141,11,11,.08)}
+.chk{display:flex;align-items:center;gap:8px;padding:12px;background:var(--cream);border:1.5px solid var(--line);border-radius:13px;cursor:pointer;font-weight:800;font-size:13.5px;transition:.2s}
 .chk:hover{border-color:var(--maroon)}
 .chk input{width:auto;accent-color:var(--maroon)}
 
-/* ========== EMPTY ========== */
-.empty{
-  text-align:center;padding:50px 20px;
-  color:var(--muted);background:var(--white);
-  border:1.5px solid var(--line);border-radius:20px;
-}
-.empty .e-ico{font-size:52px;margin-bottom:14px;opacity:.5}
-.empty h3{
-  font-size:16px;font-weight:900;
-  color:var(--ink2);margin-bottom:8px;
-}
+.empty{text-align:center;padding:50px 20px;color:var(--muted);background:var(--white);border:1.5px solid var(--line);border-radius:20px}
+.empty .e-ico{width:60px;height:60px;margin:0 auto 14px;background:var(--cream2);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--maroon)}
+.empty .e-ico svg{width:32px;height:32px}
+.empty h3{font-size:16px;font-weight:900;color:var(--ink2);margin-bottom:8px}
 .empty p{font-size:13px;margin:6px 0}
-.empty code{
-  background:#1f1410;color:#ffd88a;
-  padding:12px 16px;border-radius:12px;
-  display:inline-block;margin-top:12px;
-  font-size:11.5px;direction:ltr;text-align:left;
-  line-height:1.7;word-break:break-all;max-width:100%;
-}
+.empty code{background:#1f1410;color:#ffd88a;padding:12px 16px;border-radius:12px;display:inline-block;margin-top:12px;font-size:11.5px;direction:ltr;text-align:left;line-height:1.7;word-break:break-all;max-width:100%}
 .empty .btn{margin-top:14px}
 
-/* ========== TOAST ========== */
-#toast{
-  position:fixed;bottom:100px;left:50%;
-  transform:translateX(-50%) translateY(20px);
-  background:var(--ink);color:#fff;
-  padding:14px 22px;border-radius:14px;
-  font-weight:800;font-size:13.5px;z-index:3000;
-  opacity:0;pointer-events:none;transition:.3s;
-  box-shadow:var(--sh-lg);max-width:88vw;text-align:center;
-}
+#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:14px 22px;border-radius:14px;font-weight:800;font-size:13.5px;z-index:3000;opacity:0;pointer-events:none;transition:.3s;box-shadow:var(--sh-lg);max-width:88vw;text-align:center}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(min-width:992px){#toast{bottom:30px}}
 </style>
@@ -437,25 +190,25 @@ tbody tr:hover{background:var(--cream)}
       <img id="logoMob" alt="سومها">
       <span class="role-chip" id="roleChipMob">admin</span>
     </div>
-    <button class="hdr-btn" onclick="location.href='index.html'" title="الموقع">🌐</button>
-    <button class="hdr-btn" onclick="ADMIN.logout()" title="خروج">🚪</button>
+    <button class="hdr-btn" onclick="location.href='index.html'" title="الموقع" id="mobBtnHome"></button>
+    <button class="hdr-btn" onclick="ADMIN.logout()" title="خروج" id="mobBtnOut"></button>
   </div>
 
-  <!-- SIDEBAR (Desktop) -->
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="brand">
       <img id="logoImgAdmin" alt="سومها">
       <span class="role" id="roleTag">admin</span>
     </div>
-    <div class="nav-item on" data-page="dashboard" onclick="ADMIN.nav('dashboard')"><span class="ic">📊</span><span>لوحة التحكم</span></div>
-    <div class="nav-item" data-page="auctions" onclick="ADMIN.nav('auctions')"><span class="ic">🔨</span><span>المزادات</span></div>
-    <div class="nav-item" data-page="users" onclick="ADMIN.nav('users')"><span class="ic">👥</span><span>العملاء</span></div>
-    <div class="nav-item" data-page="orders" onclick="ADMIN.nav('orders')"><span class="ic">🧾</span><span>الطلبات</span></div>
-    <div class="nav-item" data-page="admins" onclick="ADMIN.nav('admins')"><span class="ic">👑</span><span>المشرفون</span></div>
-    <div class="nav-item" data-page="settings" onclick="ADMIN.nav('settings')"><span class="ic">⚙️</span><span>الإعدادات</span></div>
+    <div class="nav-item on" data-page="dashboard" onclick="ADMIN.nav('dashboard')"><span class="ic" data-ico="chart"></span><span>لوحة التحكم</span></div>
+    <div class="nav-item" data-page="auctions" onclick="ADMIN.nav('auctions')"><span class="ic" data-ico="hammer"></span><span>المزادات</span></div>
+    <div class="nav-item" data-page="users" onclick="ADMIN.nav('users')"><span class="ic" data-ico="user"></span><span>العملاء</span></div>
+    <div class="nav-item" data-page="orders" onclick="ADMIN.nav('orders')"><span class="ic" data-ico="receipt"></span><span>الطلبات</span></div>
+    <div class="nav-item" data-page="admins" onclick="ADMIN.nav('admins')"><span class="ic" data-ico="admin"></span><span>المشرفون</span></div>
+    <div class="nav-item" data-page="settings" onclick="ADMIN.nav('settings')"><span class="ic" data-ico="settings"></span><span>الإعدادات</span></div>
     <div class="sep"></div>
-    <div class="nav-item" onclick="location.href='index.html'"><span class="ic">🌐</span><span>الموقع الرئيسي</span></div>
-    <div class="nav-item logout" onclick="ADMIN.logout()"><span class="ic">🚪</span><span>تسجيل الخروج</span></div>
+    <div class="nav-item" onclick="location.href='index.html'"><span class="ic" data-ico="globe"></span><span>الموقع الرئيسي</span></div>
+    <div class="nav-item logout" onclick="ADMIN.logout()"><span class="ic" data-ico="logout"></span><span>تسجيل الخروج</span></div>
   </aside>
 
   <!-- MAIN -->
@@ -469,39 +222,24 @@ tbody tr:hover{background:var(--cream)}
     </div>
 
     <div id="view">
-      <div class="empty"><div class="e-ico">⏳</div><h3>جاري التحميل...</h3></div>
+      <div class="empty"><div class="e-ico" id="loadingIco"></div><h3>جاري التحميل...</h3></div>
     </div>
   </div>
 </div>
 
 <!-- BOTTOM NAV -->
 <nav class="bnav">
-  <div class="ni on" data-page="dashboard" onclick="ADMIN.nav('dashboard')">
-    <span class="ic">📊</span>
-    <span>الرئيسية</span>
-  </div>
-  <div class="ni" data-page="auctions" onclick="ADMIN.nav('auctions')">
-    <span class="ic">🔨</span>
-    <span>المزادات</span>
-  </div>
-  <div class="ni mid" data-page="add" onclick="ADMIN.openAuctionForm()">
-    <span class="ic">➕</span>
-    <span>جديد</span>
-  </div>
-  <div class="ni" data-page="users" onclick="ADMIN.nav('users')">
-    <span class="ic">👥</span>
-    <span>العملاء</span>
-  </div>
-  <div class="ni" data-page="orders" onclick="ADMIN.nav('orders')">
-    <span class="ic">🧾</span>
-    <span>الطلبات</span>
-  </div>
+  <div class="ni on" data-page="dashboard" onclick="ADMIN.nav('dashboard')"><span class="ic" data-ico="chart"></span><span>الرئيسية</span></div>
+  <div class="ni" data-page="auctions" onclick="ADMIN.nav('auctions')"><span class="ic" data-ico="hammer"></span><span>المزادات</span></div>
+  <div class="ni mid" onclick="ADMIN.openAuctionForm()"><span class="ic" data-ico="plus"></span><span>جديد</span></div>
+  <div class="ni" data-page="users" onclick="ADMIN.nav('users')"><span class="ic" data-ico="user"></span><span>العملاء</span></div>
+  <div class="ni" data-page="orders" onclick="ADMIN.nav('orders')"><span class="ic" data-ico="receipt"></span><span>الطلبات</span></div>
 </nav>
 
 <!-- MODAL: Auction -->
 <div class="ov" id="ovAuction" onclick="if(event.target===this)ADMIN.closeModal('ovAuction')">
   <div class="modal">
-    <button class="modal-close" onclick="ADMIN.closeModal('ovAuction')">✖️</button>
+    <button class="modal-close" onclick="ADMIN.closeModal('ovAuction')" id="closeAucBtn"></button>
     <h2 id="auctionModalTitle">إنشاء مزاد جديد</h2>
     <form id="formAuction" onsubmit="ADMIN.saveAuction(event)">
       <input type="hidden" id="aId">
@@ -518,9 +256,7 @@ tbody tr:hover{background:var(--cream)}
       <div class="row2">
         <div class="field"><label>أقل زيادة *</label><input type="number" id="aInc" min="1" value="50" required></div>
         <div class="field"><label>الحالة</label><select id="aStatus">
-          <option value="approved">معتمد</option>
-          <option value="pending">قيد المراجعة</option>
-          <option value="rejected">مرفوض</option>
+          <option value="approved">معتمد</option><option value="pending">قيد المراجعة</option><option value="rejected">مرفوض</option>
         </select></div>
       </div>
       <div class="row2">
@@ -528,13 +264,11 @@ tbody tr:hover{background:var(--cream)}
         <div class="field"><label>الموقع</label><input id="aLocation" placeholder="الرياض"></div>
       </div>
       <div class="field"><label>الحالة الفيزيائية</label><select id="aCond">
-        <option>جديد</option>
-        <option>مستعمل — ممتاز</option>
-        <option>مستعمل — جيد</option>
+        <option>جديد</option><option>مستعمل — ممتاز</option><option>مستعمل — جيد</option>
       </select></div>
-      <label class="chk"><input type="checkbox" id="aFeatured"> ⭐ مزاد مميز</label>
+      <label class="chk"><input type="checkbox" id="aFeatured"> مزاد مميز</label>
       <div style="display:flex;gap:8px;margin-top:18px">
-        <button type="submit" class="btn btn-primary" style="flex:1;padding:14px">💾 حفظ</button>
+        <button type="submit" class="btn btn-primary" style="flex:1;padding:14px">حفظ</button>
         <button type="button" class="btn btn-ghost" onclick="ADMIN.closeModal('ovAuction')">إلغاء</button>
       </div>
     </form>
@@ -544,16 +278,15 @@ tbody tr:hover{background:var(--cream)}
 <!-- MODAL: Admin -->
 <div class="ov" id="ovAdmin" onclick="if(event.target===this)ADMIN.closeModal('ovAdmin')">
   <div class="modal">
-    <button class="modal-close" onclick="ADMIN.closeModal('ovAdmin')">✖️</button>
+    <button class="modal-close" onclick="ADMIN.closeModal('ovAdmin')" id="closeAdmBtn"></button>
     <h2>إضافة مشرف جديد</h2>
     <form id="formAdmin" onsubmit="ADMIN.addAdmin(event)">
       <div class="field"><label>اختر مستخدم *</label><select id="adUser" required></select></div>
       <div class="field"><label>الدور</label><select id="adRole">
-        <option value="admin">مشرف</option>
-        <option value="super_admin">مشرف عام</option>
+        <option value="admin">مشرف</option><option value="super_admin">مشرف عام</option>
       </select></div>
       <div style="display:flex;gap:8px;margin-top:18px">
-        <button type="submit" class="btn btn-primary" style="flex:1;padding:14px">➕ إضافة</button>
+        <button type="submit" class="btn btn-primary" style="flex:1;padding:14px">إضافة</button>
         <button type="button" class="btn btn-ghost" onclick="ADMIN.closeModal('ovAdmin')">إلغاء</button>
       </div>
     </form>
@@ -563,7 +296,7 @@ tbody tr:hover{background:var(--cream)}
 <!-- MODAL: Order -->
 <div class="ov" id="ovOrder" onclick="if(event.target===this)ADMIN.closeModal('ovOrder')">
   <div class="modal">
-    <button class="modal-close" onclick="ADMIN.closeModal('ovOrder')">✖️</button>
+    <button class="modal-close" onclick="ADMIN.closeModal('ovOrder')" id="closeOrdBtn"></button>
     <h2>تفاصيل الطلب</h2>
     <div id="orderDetails"></div>
   </div>
@@ -574,6 +307,7 @@ tbody tr:hover{background:var(--cream)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="somha/supabase-config.js"></script>
 <script src="somha/config.js"></script>
+<script src="somha/icons.js"></script>
 <script src="somha/admin.js"></script>
 <script>ADMIN.boot();</script>
 </body>
