@@ -1,25 +1,24 @@
+// ============================================================
+// سومها — الملف التعريفي
+// ============================================================
 window.SUMHA_CONFIG = {
   siteName: "سومها",
-  tagline: "أعلى سوم يفوز",
+  tagline: "",
   logo: "https://www.socialcreator.com/srv/imgs/ti_imgs/202750_332160.png",
 
-  icons: {
-    live:"", featured:"", ending:"", topBids:"", latest:"",
-    hammer:"", timer:"", heart:"", heartEmpty:"", share:"",
-    report:"", seller:"", history:"", rules:"", user:"",
-    trophy:"", package:"", bell:"", chart:"", logout:"",
-    admin:"", edit:"", trash:"", check:"", close:"", plus:""
-  },
+  // اتركه فارغاً — الأيقونات الآن SVG من icons.js
+  icons: {},
 
+  // مفاتيح الأيقونات من icons.js
   categories: [
-    { name: "سيارات ومركبات", icon: "" },
-    { name: "إلكترونيات",      icon: "" },
-    { name: "أجهزة وتقنية",    icon: "" },
-    { name: "عقارات",          icon: "" },
-    { name: "مقتنيات",         icon: "" },
-    { name: "ساعات ومجوهرات",  icon: "" },
-    { name: "أثاث",            icon: "" },
-    { name: "منتجات متنوعة",   icon: "" }
+    { name: "سيارات ومركبات", icon: "cars" },
+    { name: "إلكترونيات",      icon: "electronics" },
+    { name: "أجهزة وتقنية",    icon: "tech" },
+    { name: "عقارات",          icon: "realestate" },
+    { name: "مقتنيات",         icon: "antiques" },
+    { name: "ساعات ومجوهرات",  icon: "watches" },
+    { name: "أثاث",            icon: "furniture" },
+    { name: "منتجات متنوعة",   icon: "misc" }
   ],
 
   useSupabase: true
