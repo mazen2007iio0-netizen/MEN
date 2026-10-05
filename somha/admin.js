@@ -1,8 +1,9 @@
 // ============================================================
-// سومها — لوحة تحكم المشرفين (admin.js)
+// سومها — لوحة تحكم المشرفين (admin.js) — مستقلة تماماً
+// لا تعتمد على so.js أو SUMHA
 // ============================================================
 (function(){
-  const CFG = window.SUMHA_CONFIG;
+  const CFG = window.SUMHA_CONFIG || {};
   const SBC = window.SUPABASE_CONFIG;
   let sb = null;
   const st = { user:null, role:null, page:'dashboard', users:[], auctions:[], orders:[], admins:[], settings:{} };
@@ -12,28 +13,63 @@
   const fmt = n => Number(n||0).toLocaleString('en-US');
   const fmtDate = d => d ? new Date(d).toLocaleString('ar-SA',{dateStyle:'short',timeStyle:'short'}) : '—';
   const fmtDTLocal = d => { const x=new Date(d), p=n=>String(n).padStart(2,'0'); return `${x.getFullYear()}-${p(x.getMonth()+1)}-${p(x.getDate())}T${p(x.getHours())}:${p(x.getMinutes())}`; };
-  function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2400); }
+  function toast(m){ const t=$('toast'); if(!t) return; t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2400); }
   const openModal = id => $(id)?.classList.add('on');
   const closeModal = id => $(id)?.classList.remove('on');
 
+  const CATEGORIES = CFG.categories || [
+    {name:"سيارات ومركبات"},{name:"إلكترونيات"},{name:"أجهزة وتقنية"},
+    {name:"عقارات"},{name:"مقتنيات"},{name:"ساعات ومجوهرات"},
+    {name:"أثاث"},{name:"منتجات متنوعة"}
+  ];
+
+  // ============ Boot ============
   async function boot(){
-    const logoUrl = CFG.logo;
-    if(logoUrl && $('logoImgAdmin')) $('logoImgAdmin').src = logoUrl;
-    if(!window.supabase || !SBC?.url || SBC.anonKey.includes("ضع_هنا")){
-      $('view').innerHTML = `<div class="empty"><div class="e-ico">⚠️</div><h3>Supabase غير مُهيأ</h3></div>`;
+    const logoUrl = CFG.logo || 'https://www.socialcreator.com/srv/imgs/ti_imgs/202750_332160.png';
+    if($('logoImgAdmin')) $('logoImgAdmin').src = logoUrl;
+
+    if(!window.supabase || !SBC?.url || !SBC?.anonKey || SBC.anonKey.includes("ضع_هنا")){
+      $('view').innerHTML = `<div class="empty"><div class="e-ico">⚠️</div><h3>Supabase غير مُهيأ</h3><p>تحقق من <code>somha/supabase-config.js</code></p></div>`;
       return;
     }
+
     sb = window.supabase.createClient(SBC.url, SBC.anonKey);
+
     const { data: { session } } = await sb.auth.getSession();
     if(!session){
-      $('view').innerHTML = `<div class="empty"><div class="e-ico">🔒</div><h3>يجب تسجيل الدخول أولاً</h3><p>سجّل من <a href="index.html" style="color:var(--maroon);font-weight:800">الصفحة الرئيسية</a></p></div>`;
+      $('view').innerHTML = `
+        <div class="empty">
+          <div class="e-ico">🔒</div>
+          <h3>يجب تسجيل الدخول أولاً</h3>
+          <p>سجّل دخولك من الموقع الرئيسي ثم ارجع لهذه الصفحة</p>
+          <p style="margin-top:14px"><a href="index.html" class="btn btn-primary" style="display:inline-flex;text-decoration:none;padding:12px 22px">← الذهاب للموقع</a></p>
+        </div>`;
       return;
     }
-    const { data: adminRow } = await sb.from('admins').select('role').eq('id', session.user.id).maybeSingle();
+
+    // تحقق من صلاحية المشرف
+    const { data: adminRow, error: adminErr } = await sb
+      .from('admins').select('role').eq('id', session.user.id).maybeSingle();
+
+    if(adminErr){
+      $('view').innerHTML = `<div class="empty"><div class="e-ico">⚠️</div><h3>خطأ في الاتصال</h3><p>${esc(adminErr.message)}</p></div>`;
+      return;
+    }
+
     if(!adminRow){
-      $('view').innerHTML = `<div class="empty"><div class="e-ico">🚫</div><h3>غير مصرح لك</h3><p>هذه الصفحة للمشرفين فقط</p></div>`;
+      $('view').innerHTML = `
+        <div class="empty">
+          <div class="e-ico">🚫</div>
+          <h3>غير مصرح لك بالدخول</h3>
+          <p>حسابك غير مضاف كمشرف. لتفعيله، افتح Supabase → SQL Editor ونفّذ:</p>
+          <code>insert into public.admins (id, role)<br>values ('${session.user.id}', 'super_admin');</code>
+          <p style="margin-top:16px;font-size:12px">معرّف حسابك (UUID):</p>
+          <code style="margin-top:6px">${session.user.id}</code>
+          <p style="margin-top:14px">ثم حدّث هذه الصفحة 🔄</p>
+        </div>`;
       return;
     }
+
     st.user = session.user;
     st.role = adminRow.role;
     $('roleTag').textContent = adminRow.role === 'super_admin' ? 'مشرف عام' : 'مشرف';
@@ -42,17 +78,24 @@
   }
 
   async function loadAll(){
-    const [u, a, o, ad, s] = await Promise.all([
-      sb.from('profiles').select('*').order('created_at',{ascending:false}),
-      sb.from('auctions').select('*, seller:profiles!auctions_seller_id_fkey(full_name), bids(count)').order('created_at',{ascending:false}),
-      sb.from('orders').select('*, auction:auctions(title), buyer:profiles!orders_buyer_id_fkey(full_name, phone), seller:profiles!orders_seller_id_fkey(full_name, phone)').order('created_at',{ascending:false}),
-      sb.from('admins').select('*, profile:profiles!admins_id_fkey(full_name, phone, email)'),
-      sb.from('settings').select('key, value')
-    ]);
-    st.users = u.data||[]; st.auctions = a.data||[]; st.orders = o.data||[];
-    st.admins = ad.data||[];
-    st.settings = {};
-    (s.data||[]).forEach(x => st.settings[x.key] = x.value);
+    try {
+      const [u, a, o, ad, s] = await Promise.all([
+        sb.from('profiles').select('*').order('created_at',{ascending:false}),
+        sb.from('auctions').select('*, seller:profiles!auctions_seller_id_fkey(full_name), bids(count)').order('created_at',{ascending:false}),
+        sb.from('orders').select('*, auction:auctions(title), buyer:profiles!orders_buyer_id_fkey(full_name, phone), seller:profiles!orders_seller_id_fkey(full_name, phone)').order('created_at',{ascending:false}),
+        sb.from('admins').select('*, profile:profiles!admins_id_fkey(full_name, phone, email)'),
+        sb.from('settings').select('key, value')
+      ]);
+      st.users = u.data||[];
+      st.auctions = a.data||[];
+      st.orders = o.data||[];
+      st.admins = ad.data||[];
+      st.settings = {};
+      (s.data||[]).forEach(x => st.settings[x.key] = x.value);
+    } catch(e){
+      console.error(e);
+      toast('خطأ في تحميل البيانات');
+    }
   }
 
   function nav(page){
@@ -60,10 +103,9 @@
     document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('on', n.dataset.page===page));
     document.querySelectorAll('.mob-bar button').forEach(b=>b.classList.toggle('on', b.dataset.page===page));
     const titles = {
-      dashboard:['لوحة التحكم','نظرة سريعة'],
+      dashboard:['لوحة التحكم','نظرة سريعة على الموقع'],
       auctions:['المزادات','إدارة كاملة'],
-      products:['المنتجات','كل المنتجات'],
-      users:['العملاء','قائمة كاملة'],
+      users:['العملاء','قائمة كاملة بالمستخدمين'],
       orders:['الطلبات','إدارة الطلبات'],
       admins:['المشرفون','إدارة الصلاحيات'],
       settings:['الإعدادات','هوية الموقع']
@@ -76,7 +118,7 @@
 
   function renderActions(){
     const el = $('topActions');
-    if(st.page==='auctions' || st.page==='products'){
+    if(st.page==='auctions'){
       el.innerHTML = `<button class="btn btn-primary" onclick="ADMIN.openAuctionForm()">➕ إنشاء مزاد</button>`;
     } else if(st.page==='admins'){
       el.innerHTML = `<button class="btn btn-primary" onclick="ADMIN.openAdminForm()">➕ إضافة مشرف</button>`;
@@ -85,14 +127,13 @@
     }
   }
 
-  async function reload(){ await loadAll(); render(); toast('تم التحديث'); }
+  async function reload(){ await loadAll(); render(); toast('تم التحديث ✅'); }
 
   function render(){
     const v = $('view');
     switch(st.page){
       case 'dashboard': v.innerHTML = renderDashboard(); break;
       case 'auctions': v.innerHTML = renderAuctions(); break;
-      case 'products': v.innerHTML = renderAuctions(); break;
       case 'users': v.innerHTML = renderUsers(); break;
       case 'orders': v.innerHTML = renderOrders(); break;
       case 'admins': v.innerHTML = renderAdmins(); break;
@@ -112,7 +153,7 @@
         <div class="stat-card"><div class="ic">🔴</div><div class="val">${active}</div><div class="lbl">مزادات نشطة</div></div>
         <div class="stat-card"><div class="ic">💰</div><div class="val">${totalBids}</div><div class="lbl">إجمالي المزايدات</div></div>
         <div class="stat-card"><div class="ic">🧾</div><div class="val">${st.orders.length}</div><div class="lbl">إجمالي الطلبات</div></div>
-        <div class="stat-card"><div class="ic">⏳</div><div class="val">${pendingOrders}</div><div class="lbl">طلبات قيد الانتظار</div></div>
+        <div class="stat-card"><div class="ic">⏳</div><div class="val">${pendingOrders}</div><div class="lbl">قيد الانتظار</div></div>
         <div class="stat-card"><div class="ic">💵</div><div class="val">${fmt(revenue)}</div><div class="lbl">الإيرادات (ر.س)</div></div>
         <div class="stat-card"><div class="ic">👑</div><div class="val">${st.admins.length}</div><div class="lbl">المشرفون</div></div>
       </div>
@@ -160,7 +201,7 @@
         <tbody>${st.auctions.map(a => {
           const live = new Date(a.end_time) > new Date();
           return `<tr>
-            <td>${a.image_url ? `<img src="${a.image_url}" class="thumb" onerror="this.style.display='none'">` : `<div class="thumb-svg">📦</div>`}</td>
+            <td>${a.image_url ? `<img src="${a.image_url}" class="thumb" onerror="this.style.display='none'">` : `<div class="thumb" style="display:flex;align-items:center;justify-content:center;background:var(--cream2);font-size:22px">📦</div>`}</td>
             <td><b>${esc(a.title)}</b>${a.featured?' <span class="tag featured">⭐</span>':''}</td>
             <td>${esc(a.category||'—')}</td>
             <td>${esc(a.seller?.full_name||'—')}</td>
@@ -249,7 +290,7 @@
   }
 
   function renderSettings(){
-    const s = st.settings;
+    const s = st.settings || {};
     return `<div class="card">
       <div class="card-hdr"><h2>⚙️ الإعدادات والشعار</h2></div>
       <form onsubmit="ADMIN.saveSettings(event)">
@@ -264,8 +305,8 @@
           </div>
         </div>
         <div class="row2">
-          <div class="field"><label>اسم الموقع</label><input id="sName" value="${esc(s.site_name||CFG.siteName)}"></div>
-          <div class="field"><label>الشعار النصي</label><input id="sTag" value="${esc(s.tagline||CFG.tagline)}"></div>
+          <div class="field"><label>اسم الموقع</label><input id="sName" value="${esc(s.site_name||'سومها')}"></div>
+          <div class="field"><label>الشعار النصي</label><input id="sTag" value="${esc(s.tagline||'أعلى سوم يفوز')}"></div>
         </div>
         <div class="field"><label>عنوان الهيرو</label><input id="sHeroTitle" value="${esc(s.hero_title||'')}"></div>
         <div class="field"><label>وصف الهيرو</label><textarea id="sHeroSub" rows="2">${esc(s.hero_subtitle||'')}</textarea></div>
@@ -294,7 +335,7 @@
 
   async function openAuctionForm(id){
     $('formAuction').reset();
-    $('aCat').innerHTML = '<option value="">اختر تصنيف</option>' + CFG.categories.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
+    $('aCat').innerHTML = '<option value="">اختر تصنيف</option>' + CATEGORIES.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
     $('auctionModalTitle').textContent = id ? 'تعديل المزاد' : 'إنشاء مزاد جديد';
     if(id){
       const a = st.auctions.find(x => x.id === id);
@@ -314,7 +355,9 @@
       $('aFeatured').checked = !!a.featured;
     } else {
       $('aId').value = '';
-      $('aStart').value = 100; $('aCurrent').value = 100; $('aInc').value = 50;
+      $('aStart').value = 100;
+      $('aCurrent').value = 100;
+      $('aInc').value = 50;
       $('aEnd').value = fmtDTLocal(new Date(Date.now()+24*3600000));
     }
     openModal('ovAuction');
@@ -338,28 +381,34 @@
       featured: $('aFeatured').checked
     };
     let res;
-    if(id){ res = await sb.from('auctions').update(payload).eq('id', id); }
-    else {
+    if(id){
+      res = await sb.from('auctions').update(payload).eq('id', id);
+    } else {
       payload.seller_id = st.user.id;
       payload.start_time = new Date().toISOString();
       res = await sb.from('auctions').insert(payload);
     }
     if(res.error){ toast(res.error.message); return; }
-    toast(id?'تم التحديث':'تم الإنشاء');
-    closeModal('ovAuction'); await loadAll(); render();
+    toast(id?'تم التحديث ✅':'تم الإنشاء 🎉');
+    closeModal('ovAuction');
+    await loadAll();
+    render();
   }
 
   async function deleteAuction(id){
     if(!confirm('حذف هذا المزاد؟')) return;
     const { error } = await sb.from('auctions').delete().eq('id', id);
     if(error){ toast(error.message); return; }
-    toast('تم الحذف'); await loadAll(); render();
+    toast('تم الحذف ✅');
+    await loadAll();
+    render();
   }
 
   function openAdminForm(){
-    if(st.role !== 'super_admin'){ toast('فقط المشرف العام يمكنه الإضافة'); return; }
-    const opts = st.users.filter(u => !st.admins.find(a => a.id === u.id))
-      .map(u => `<option value="${u.id}">${esc(u.full_name||'—')} — ${esc(u.email||'')} — ${esc(u.phone||'')}</option>`).join('');
+    if(st.role !== 'super_admin'){ toast('فقط المشرف العام يمكنه إضافة مشرفين'); return; }
+    const opts = st.users
+      .filter(u => !st.admins.find(a => a.id === u.id))
+      .map(u => `<option value="${u.id}">${esc(u.full_name||'—')} — ${esc(u.email||'')}</option>`).join('');
     $('adUser').innerHTML = '<option value="">اختر مستخدم</option>' + opts;
     openModal('ovAdmin');
   }
@@ -371,15 +420,19 @@
     if(!uid){ toast('اختر مستخدم'); return; }
     const { error } = await sb.from('admins').insert({ id: uid, role });
     if(error){ toast(error.message); return; }
-    toast('تم إضافة المشرف ');
-    closeModal('ovAdmin'); await loadAll(); render();
+    toast('تم إضافة المشرف 👑');
+    closeModal('ovAdmin');
+    await loadAll();
+    render();
   }
 
   async function removeAdmin(id){
     if(!confirm('إزالة صلاحيات هذا المشرف؟')) return;
     const { error } = await sb.from('admins').delete().eq('id', id);
     if(error){ toast(error.message); return; }
-    toast('تمت الإزالة'); await loadAll(); render();
+    toast('تمت الإزالة ✅');
+    await loadAll();
+    render();
   }
 
   async function saveSettings(e){
@@ -397,9 +450,10 @@
     for(const [key, value] of updates){
       await sb.from('settings').upsert({ key, value, updated_at: new Date().toISOString() });
     }
-    toast('تم الحفظ ');
+    toast('تم الحفظ ✅');
     $('logoImgAdmin').src = updates[0][1];
-    await loadAll(); render();
+    await loadAll();
+    render();
   }
 
   function viewOrder(id){
@@ -422,7 +476,7 @@
         </select>
       </div>
       <div class="field"><label>ملاحظات</label><textarea id="oNotes" rows="2">${esc(o.notes||'')}</textarea></div>
-      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="ADMIN.updateOrder('${o.id}')"> حفظ</button>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="ADMIN.updateOrder('${o.id}')">💾 حفظ</button>
     `;
     openModal('ovOrder');
   }
@@ -432,8 +486,10 @@
     const notes = $('oNotes').value.trim();
     const { error } = await sb.from('orders').update({ status, notes }).eq('id', id);
     if(error){ toast(error.message); return; }
-    toast('تم التحديث '); closeModal('ovOrder');
-    await loadAll(); render();
+    toast('تم التحديث ✅');
+    closeModal('ovOrder');
+    await loadAll();
+    render();
   }
 
   function viewUser(id){
@@ -442,13 +498,13 @@
     const userAuctions = st.auctions.filter(a => a.seller_id === id);
     const userOrders = st.orders.filter(o => o.buyer_id === id || o.seller_id === id);
     alert(
-      ` الاسم: ${u.full_name}\n` +
-      ` البريد: ${u.email}\n` +
-      ` الجوال: ${u.phone}\n` +
-      ` التقييم: ${(u.rating||5).toFixed(1)}\n` +
-      ` المزادات: ${userAuctions.length}\n` +
-      ` الطلبات: ${userOrders.length}\n` +
-      ` التسجيل: ${fmtDate(u.created_at)}`
+      `👤 الاسم: ${u.full_name||'—'}\n` +
+      `📧 البريد: ${u.email||'—'}\n` +
+      `📱 الجوال: ${u.phone||'—'}\n` +
+      `⭐ التقييم: ${(u.rating||5).toFixed(1)}\n` +
+      `🔨 المزادات: ${userAuctions.length}\n` +
+      `🧾 الطلبات: ${userOrders.length}\n` +
+      `📅 التسجيل: ${fmtDate(u.created_at)}`
     );
   }
 
