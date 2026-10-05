@@ -1,6 +1,5 @@
 // ============================================================
-// سومها — لوحة تحكم المشرفين (admin.js) — مستقلة تماماً
-// لا تعتمد على so.js أو SUMHA
+// سومها — لوحة تحكم المشرفين (admin.js) — Mobile First
 // ============================================================
 (function(){
   const CFG = window.SUMHA_CONFIG || {};
@@ -27,6 +26,7 @@
   async function boot(){
     const logoUrl = CFG.logo || 'https://www.socialcreator.com/srv/imgs/ti_imgs/202750_332160.png';
     if($('logoImgAdmin')) $('logoImgAdmin').src = logoUrl;
+    if($('logoMob')) $('logoMob').src = logoUrl;
 
     if(!window.supabase || !SBC?.url || !SBC?.anonKey || SBC.anonKey.includes("ضع_هنا")){
       $('view').innerHTML = `<div class="empty"><div class="e-ico">⚠️</div><h3>Supabase غير مُهيأ</h3><p>تحقق من <code>somha/supabase-config.js</code></p></div>`;
@@ -42,12 +42,11 @@
           <div class="e-ico">🔒</div>
           <h3>يجب تسجيل الدخول أولاً</h3>
           <p>سجّل دخولك من الموقع الرئيسي ثم ارجع لهذه الصفحة</p>
-          <p style="margin-top:14px"><a href="index.html" class="btn btn-primary" style="display:inline-flex;text-decoration:none;padding:12px 22px">← الذهاب للموقع</a></p>
+          <a href="index.html" class="btn btn-primary">← الذهاب للموقع</a>
         </div>`;
       return;
     }
 
-    // تحقق من صلاحية المشرف
     const { data: adminRow, error: adminErr } = await sb
       .from('admins').select('role').eq('id', session.user.id).maybeSingle();
 
@@ -61,18 +60,19 @@
         <div class="empty">
           <div class="e-ico">🚫</div>
           <h3>غير مصرح لك بالدخول</h3>
-          <p>حسابك غير مضاف كمشرف. لتفعيله، افتح Supabase → SQL Editor ونفّذ:</p>
+          <p>حسابك غير مضاف كمشرف. نفّذ هذا في Supabase SQL Editor:</p>
           <code>insert into public.admins (id, role)<br>values ('${session.user.id}', 'super_admin');</code>
-          <p style="margin-top:16px;font-size:12px">معرّف حسابك (UUID):</p>
-          <code style="margin-top:6px">${session.user.id}</code>
-          <p style="margin-top:14px">ثم حدّث هذه الصفحة 🔄</p>
+          <p style="margin-top:14px;font-size:11.5px">ثم حدّث الصفحة 🔄</p>
         </div>`;
       return;
     }
 
     st.user = session.user;
     st.role = adminRow.role;
-    $('roleTag').textContent = adminRow.role === 'super_admin' ? 'مشرف عام' : 'مشرف';
+    const roleLabel = adminRow.role === 'super_admin' ? 'مشرف عام' : 'مشرف';
+    if($('roleTag')) $('roleTag').textContent = roleLabel;
+    if($('roleChipMob')) $('roleChipMob').textContent = roleLabel;
+
     await loadAll();
     nav('dashboard');
   }
@@ -101,7 +101,7 @@
   function nav(page){
     st.page = page;
     document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('on', n.dataset.page===page));
-    document.querySelectorAll('.mob-bar button').forEach(b=>b.classList.toggle('on', b.dataset.page===page));
+    document.querySelectorAll('.ni').forEach(n=>n.classList.toggle('on', n.dataset.page===page));
     const titles = {
       dashboard:['لوحة التحكم','نظرة سريعة على الموقع'],
       auctions:['المزادات','إدارة كاملة'],
@@ -110,20 +110,23 @@
       admins:['المشرفون','إدارة الصلاحيات'],
       settings:['الإعدادات','هوية الموقع']
     };
-    $('pageTitle').textContent = titles[page][0];
-    $('pageSub').textContent = titles[page][1];
+    if(titles[page]){
+      $('pageTitle').textContent = titles[page][0];
+      $('pageSub').textContent = titles[page][1];
+    }
     renderActions();
     render();
+    window.scrollTo({top:0, behavior:'smooth'});
   }
 
   function renderActions(){
     const el = $('topActions');
     if(st.page==='auctions'){
-      el.innerHTML = `<button class="btn btn-primary" onclick="ADMIN.openAuctionForm()">➕ إنشاء مزاد</button>`;
+      el.innerHTML = `<button class="btn btn-primary" onclick="ADMIN.openAuctionForm()">➕ <span>مزاد جديد</span></button>`;
     } else if(st.page==='admins'){
-      el.innerHTML = `<button class="btn btn-primary" onclick="ADMIN.openAdminForm()">➕ إضافة مشرف</button>`;
+      el.innerHTML = `<button class="btn btn-primary" onclick="ADMIN.openAdminForm()">➕ <span>مشرف جديد</span></button>`;
     } else {
-      el.innerHTML = `<button class="btn btn-ghost" onclick="ADMIN.reload()">🔄 تحديث</button>`;
+      el.innerHTML = `<button class="btn btn-ghost" onclick="ADMIN.reload()">🔄</button>`;
     }
   }
 
@@ -146,6 +149,7 @@
     const totalBids = st.auctions.reduce((s,a) => s + (a.bids?.[0]?.count||0), 0);
     const pendingOrders = st.orders.filter(o => o.status === 'pending').length;
     const revenue = st.orders.filter(o => o.status === 'delivered').reduce((s,o) => s + Number(o.amount||0), 0);
+
     return `
       <div class="stats-grid">
         <div class="stat-card"><div class="ic">👥</div><div class="val">${st.users.length}</div><div class="lbl">إجمالي العملاء</div></div>
@@ -159,133 +163,312 @@
       </div>
 
       <div class="card">
-        <div class="card-hdr"><h2>🔨 أحدث المزادات</h2></div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>المنتج</th><th>البائع</th><th>السعر الحالي</th><th>المزايدات</th><th>الحالة</th></tr></thead>
-          <tbody>${st.auctions.slice(0,6).map(a => `
-            <tr>
-              <td>${esc(a.title)}</td>
-              <td>${esc(a.seller?.full_name||'—')}</td>
-              <td><b style="color:var(--maroon)">${fmt(a.current_price)} ر.س</b></td>
-              <td>${a.bids?.[0]?.count||0}</td>
-              <td>${new Date(a.end_time) > new Date() ? '<span class="tag live">نشط</span>' : '<span class="tag ended">انتهى</span>'}</td>
-            </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">لا توجد مزادات</td></tr>'}
-          </tbody>
-        </table></div>
+        <div class="card-hdr">
+          <h2>🔨 أحدث المزادات</h2>
+          <button class="btn btn-ghost btn-sm" onclick="ADMIN.nav('auctions')">الكل ←</button>
+        </div>
+        ${st.auctions.length ? `
+          <div class="mob-list">
+            ${st.auctions.slice(0,4).map(a => mobAuction(a, true)).join('')}
+          </div>
+          <div class="tbl-wrap" style="display:none" id="dashAucTbl">
+            <table>
+              <thead><tr><th>المنتج</th><th>البائع</th><th>السعر</th><th>الحالة</th></tr></thead>
+              <tbody>${st.auctions.slice(0,6).map(a => `
+                <tr>
+                  <td>${esc(a.title)}</td>
+                  <td>${esc(a.seller?.full_name||'—')}</td>
+                  <td><b style="color:var(--maroon)">${fmt(a.current_price)} ر.س</b></td>
+                  <td>${new Date(a.end_time) > new Date() ? '<span class="tag live">نشط</span>' : '<span class="tag ended">انتهى</span>'}</td>
+                </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+        ` : '<div class="empty"><div class="e-ico">🔨</div><h3>لا توجد مزادات بعد</h3></div>'}
       </div>
 
       <div class="card">
-        <div class="card-hdr"><h2>👥 أحدث العملاء</h2></div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>الاسم</th><th>البريد</th><th>الجوال</th><th>التسجيل</th></tr></thead>
-          <tbody>${st.users.slice(0,6).map(u => `
-            <tr>
-              <td><div class="user-cell"><div class="av">${esc((u.full_name||'?')[0])}</div>${esc(u.full_name||'—')}</div></td>
-              <td style="direction:ltr;text-align:right;font-size:12px">${esc(u.email||'—')}</td>
-              <td style="direction:ltr;text-align:right">${esc(u.phone||'—')}</td>
-              <td>${fmtDate(u.created_at)}</td>
-            </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:30px">لا يوجد عملاء</td></tr>'}
-          </tbody>
-        </table></div>
+        <div class="card-hdr">
+          <h2>👥 أحدث العملاء</h2>
+          <button class="btn btn-ghost btn-sm" onclick="ADMIN.nav('users')">الكل ←</button>
+        </div>
+        ${st.users.length ? `
+          <div class="mob-list">
+            ${st.users.slice(0,4).map(u => `
+              <div class="mob-item">
+                <div class="mi-top">
+                  <div class="av" style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--maroon),var(--maroon2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;flex-shrink:0">${esc((u.full_name||'?')[0])}</div>
+                  <div class="mi-info">
+                    <b>${esc(u.full_name||'—')}</b>
+                    <div class="meta">
+                      <span>${esc(u.phone||'—')}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>`).join('')}
+          </div>
+        ` : '<div class="empty"><div class="e-ico">👥</div><h3>لا يوجد عملاء</h3></div>'}
+      </div>`;
+  }
+
+  // ============ Mobile Auction Card ============
+  function mobAuction(a, compact){
+    const live = new Date(a.end_time) > new Date();
+    return `
+      <div class="mob-item">
+        <div class="mi-top">
+          ${a.image_url 
+            ? `<img src="${a.image_url}" class="mi-img" onerror="this.outerHTML='<div class=\\'mi-ph\\'>📦</div>'">`
+            : `<div class="mi-ph">📦</div>`}
+          <div class="mi-info">
+            <b>${esc(a.title)}</b>
+            <div class="meta">
+              <span>${esc(a.category||'—')}</span>
+              ${a.featured ? '<span style="background:#fff5dd;color:#a87a20">⭐ مميز</span>' : ''}
+            </div>
+          </div>
+        </div>
+        <div class="mi-details">
+          <div class="mi-detail">
+            <span class="lbl">البائع</span>
+            <span class="val">${esc(a.seller?.full_name||'—')}</span>
+          </div>
+          <div class="mi-detail">
+            <span class="lbl">السعر الحالي</span>
+            <span class="val price">${fmt(a.current_price)} ر.س</span>
+          </div>
+          <div class="mi-detail">
+            <span class="lbl">الزيادة</span>
+            <span class="val">${fmt(a.min_increment)} ر.س</span>
+          </div>
+          <div class="mi-detail">
+            <span class="lbl">الحالة</span>
+            <span class="val">${live ? '<span class="tag live">مباشر</span>' : '<span class="tag ended">انتهى</span>'}</span>
+          </div>
+        </div>
+        ${!compact ? `
+          <div class="mi-actions">
+            <button class="btn btn-ghost btn-sm" onclick="ADMIN.openAuctionForm('${a.id}')">✏️ تعديل</button>
+            <button class="btn btn-danger btn-sm" onclick="ADMIN.deleteAuction('${a.id}')">🗑️ حذف</button>
+          </div>` : ''}
       </div>`;
   }
 
   function renderAuctions(){
     return `<div class="card">
       <div class="card-hdr"><h2>🔨 جميع المزادات (${st.auctions.length})</h2></div>
-      <div class="tbl-wrap"><table>
-        <thead><tr>
-          <th>الصورة</th><th>المنتج</th><th>التصنيف</th><th>البائع</th>
-          <th>السعر</th><th>الزيادة</th><th>الحالة</th><th>النهاية</th><th>إجراءات</th>
-        </tr></thead>
-        <tbody>${st.auctions.map(a => {
-          const live = new Date(a.end_time) > new Date();
-          return `<tr>
-            <td>${a.image_url ? `<img src="${a.image_url}" class="thumb" onerror="this.style.display='none'">` : `<div class="thumb" style="display:flex;align-items:center;justify-content:center;background:var(--cream2);font-size:22px">📦</div>`}</td>
-            <td><b>${esc(a.title)}</b>${a.featured?' <span class="tag featured">⭐</span>':''}</td>
-            <td>${esc(a.category||'—')}</td>
-            <td>${esc(a.seller?.full_name||'—')}</td>
-            <td><b style="color:var(--maroon)">${fmt(a.current_price)} ر.س</b></td>
-            <td>${fmt(a.min_increment)} ر.س</td>
-            <td>${live?'<span class="tag live">مباشر</span>':'<span class="tag ended">انتهى</span>'}</td>
-            <td>${fmtDate(a.end_time)}</td>
-            <td><div class="actions-cell">
-              <button class="btn btn-ghost btn-sm" onclick="ADMIN.openAuctionForm('${a.id}')">✏️ تعديل</button>
-              <button class="btn btn-danger btn-sm" onclick="ADMIN.deleteAuction('${a.id}')">🗑️</button>
-            </div></td>
-          </tr>`;
-        }).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:30px">لا توجد مزادات</td></tr>'}
-        </tbody>
-      </table></div>
+      ${st.auctions.length ? `
+        <div class="mob-list">
+          ${st.auctions.map(a => mobAuction(a)).join('')}
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>الصورة</th><th>المنتج</th><th>التصنيف</th><th>البائع</th>
+              <th>السعر</th><th>الزيادة</th><th>الحالة</th><th>النهاية</th><th>إجراءات</th>
+            </tr></thead>
+            <tbody>${st.auctions.map(a => {
+              const live = new Date(a.end_time) > new Date();
+              return `<tr>
+                <td>${a.image_url ? `<img src="${a.image_url}" class="thumb" onerror="this.style.display='none'">` : `<div class="thumb-ph">📦</div>`}</td>
+                <td><b>${esc(a.title)}</b>${a.featured?' <span class="tag featured">⭐</span>':''}</td>
+                <td>${esc(a.category||'—')}</td>
+                <td>${esc(a.seller?.full_name||'—')}</td>
+                <td><b style="color:var(--maroon)">${fmt(a.current_price)} ر.س</b></td>
+                <td>${fmt(a.min_increment)} ر.س</td>
+                <td>${live?'<span class="tag live">مباشر</span>':'<span class="tag ended">انتهى</span>'}</td>
+                <td>${fmtDate(a.end_time)}</td>
+                <td><div class="actions-cell">
+                  <button class="btn btn-ghost btn-sm" onclick="ADMIN.openAuctionForm('${a.id}')">✏️</button>
+                  <button class="btn btn-danger btn-sm" onclick="ADMIN.deleteAuction('${a.id}')">🗑️</button>
+                </div></td>
+              </tr>`;
+            }).join('')}
+            </tbody>
+          </table>
+        </div>
+      ` : '<div class="empty"><div class="e-ico">🔨</div><h3>لا توجد مزادات بعد</h3><p>ابدأ بإنشاء أول مزاد</p></div>'}
     </div>`;
   }
 
   function renderUsers(){
     return `<div class="card">
       <div class="card-hdr"><h2>👥 كشف العملاء (${st.users.length})</h2></div>
-      <div class="tbl-wrap"><table>
-        <thead><tr>
-          <th>#</th><th>الاسم</th><th>البريد الإلكتروني</th><th>الجوال</th>
-          <th>التقييم</th><th>المبيعات</th><th>المشتريات</th><th>التسجيل</th><th>إجراءات</th>
-        </tr></thead>
-        <tbody>${st.users.map((u,i) => `
-          <tr>
-            <td>${i+1}</td>
-            <td><div class="user-cell"><div class="av">${esc((u.full_name||'?')[0])}</div>${esc(u.full_name||'—')}</div></td>
-            <td style="direction:ltr;text-align:right;font-size:12.5px">${esc(u.email||'—')}</td>
-            <td style="direction:ltr;text-align:right">${esc(u.phone||'—')}</td>
-            <td><span style="color:var(--gold)">★</span> ${(u.rating||5).toFixed(1)}</td>
-            <td>${u.sales||0}</td>
-            <td>${u.purchases||0}</td>
-            <td>${fmtDate(u.created_at)}</td>
-            <td><button class="btn btn-ghost btn-sm" onclick="ADMIN.viewUser('${u.id}')">👁️ عرض</button></td>
-          </tr>`).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:30px">لا يوجد عملاء</td></tr>'}
-        </tbody>
-      </table></div>
+      ${st.users.length ? `
+        <div class="mob-list">
+          ${st.users.map(u => `
+            <div class="mob-item">
+              <div class="mi-top">
+                <div class="av" style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--maroon),var(--maroon2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;flex-shrink:0">${esc((u.full_name||'?')[0])}</div>
+                <div class="mi-info">
+                  <b>${esc(u.full_name||'—')}</b>
+                  <div class="meta">
+                    <span>${esc(u.phone||'—')}</span>
+                    <span style="background:#fff5dd;color:#a87a20">★ ${(u.rating||5).toFixed(1)}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mi-details">
+                <div class="mi-detail">
+                  <span class="lbl">البريد الإلكتروني</span>
+                  <span class="val" style="font-size:11.5px;direction:ltr;text-align:right;word-break:break-all">${esc(u.email||'—')}</span>
+                </div>
+                <div class="mi-detail">
+                  <span class="lbl">التسجيل</span>
+                  <span class="val" style="font-size:11.5px">${fmtDate(u.created_at)}</span>
+                </div>
+                <div class="mi-detail">
+                  <span class="lbl">المبيعات</span>
+                  <span class="val">${u.sales||0}</span>
+                </div>
+                <div class="mi-detail">
+                  <span class="lbl">المشتريات</span>
+                  <span class="val">${u.purchases||0}</span>
+                </div>
+              </div>
+              <div class="mi-actions">
+                <button class="btn btn-ghost btn-sm" onclick="ADMIN.viewUser('${u.id}')">👁️ عرض التفاصيل</button>
+              </div>
+            </div>`).join('')}
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>#</th><th>الاسم</th><th>البريد</th><th>الجوال</th>
+              <th>التقييم</th><th>مبيعات</th><th>مشتريات</th><th>التسجيل</th><th></th>
+            </tr></thead>
+            <tbody>${st.users.map((u,i) => `
+              <tr>
+                <td>${i+1}</td>
+                <td><div class="user-cell"><div class="av">${esc((u.full_name||'?')[0])}</div>${esc(u.full_name||'—')}</div></td>
+                <td style="direction:ltr;text-align:right;font-size:12px">${esc(u.email||'—')}</td>
+                <td style="direction:ltr;text-align:right">${esc(u.phone||'—')}</td>
+                <td><span style="color:var(--gold)">★</span> ${(u.rating||5).toFixed(1)}</td>
+                <td>${u.sales||0}</td>
+                <td>${u.purchases||0}</td>
+                <td>${fmtDate(u.created_at)}</td>
+                <td><button class="btn btn-ghost btn-sm" onclick="ADMIN.viewUser('${u.id}')">👁️</button></td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      ` : '<div class="empty"><div class="e-ico">👥</div><h3>لا يوجد عملاء بعد</h3></div>'}
     </div>`;
   }
 
   function renderOrders(){
     return `<div class="card">
       <div class="card-hdr"><h2>🧾 الطلبات (${st.orders.length})</h2></div>
-      <div class="tbl-wrap"><table>
-        <thead><tr>
-          <th>#</th><th>المزاد</th><th>المشتري</th><th>البائع</th>
-          <th>المبلغ</th><th>الحالة</th><th>التاريخ</th><th>إجراءات</th>
-        </tr></thead>
-        <tbody>${st.orders.map((o,i) => `
-          <tr>
-            <td>${i+1}</td>
-            <td>${esc(o.auction?.title||'—')}</td>
-            <td>${esc(o.buyer?.full_name||'—')}<br><small style="color:var(--muted)">${esc(o.buyer?.phone||'')}</small></td>
-            <td>${esc(o.seller?.full_name||'—')}</td>
-            <td><b style="color:var(--maroon)">${fmt(o.amount)} ر.س</b></td>
-            <td><span class="tag st-${o.status}">${statusLabel(o.status)}</span></td>
-            <td>${fmtDate(o.created_at)}</td>
-            <td><button class="btn btn-ghost btn-sm" onclick="ADMIN.viewOrder('${o.id}')">👁️ تفاصيل</button></td>
-          </tr>`).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:30px">لا توجد طلبات</td></tr>'}
-        </tbody>
-      </table></div>
+      ${st.orders.length ? `
+        <div class="mob-list">
+          ${st.orders.map(o => `
+            <div class="mob-item">
+              <div class="mi-top">
+                <div class="mi-ph" style="background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff">🧾</div>
+                <div class="mi-info">
+                  <b>${esc(o.auction?.title||'—')}</b>
+                  <div class="meta">
+                    <span class="tag st-${o.status}">${statusLabel(o.status)}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mi-details">
+                <div class="mi-detail">
+                  <span class="lbl">المشتري</span>
+                  <span class="val" style="font-size:12.5px">${esc(o.buyer?.full_name||'—')}</span>
+                </div>
+                <div class="mi-detail">
+                  <span class="lbl">البائع</span>
+                  <span class="val" style="font-size:12.5px">${esc(o.seller?.full_name||'—')}</span>
+                </div>
+                <div class="mi-detail">
+                  <span class="lbl">المبلغ</span>
+                  <span class="val price">${fmt(o.amount)} ر.س</span>
+                </div>
+                <div class="mi-detail">
+                  <span class="lbl">التاريخ</span>
+                  <span class="val" style="font-size:11.5px">${fmtDate(o.created_at)}</span>
+                </div>
+              </div>
+              <div class="mi-actions">
+                <button class="btn btn-ghost btn-sm" onclick="ADMIN.viewOrder('${o.id}')">👁️ تفاصيل</button>
+              </div>
+            </div>`).join('')}
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>#</th><th>المزاد</th><th>المشتري</th><th>البائع</th>
+              <th>المبلغ</th><th>الحالة</th><th>التاريخ</th><th></th>
+            </tr></thead>
+            <tbody>${st.orders.map((o,i) => `
+              <tr>
+                <td>${i+1}</td>
+                <td>${esc(o.auction?.title||'—')}</td>
+                <td>${esc(o.buyer?.full_name||'—')}</td>
+                <td>${esc(o.seller?.full_name||'—')}</td>
+                <td><b style="color:var(--maroon)">${fmt(o.amount)} ر.س</b></td>
+                <td><span class="tag st-${o.status}">${statusLabel(o.status)}</span></td>
+                <td>${fmtDate(o.created_at)}</td>
+                <td><button class="btn btn-ghost btn-sm" onclick="ADMIN.viewOrder('${o.id}')">👁️</button></td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      ` : '<div class="empty"><div class="e-ico">🧾</div><h3>لا توجد طلبات</h3></div>'}
     </div>`;
   }
+
   const statusLabel = s => ({pending:'قيد الانتظار',confirmed:'مؤكد',shipped:'تم الشحن',delivered:'تم التسليم',cancelled:'ملغي'}[s]||s);
 
   function renderAdmins(){
     return `<div class="card">
       <div class="card-hdr"><h2>👑 المشرفون (${st.admins.length})</h2></div>
-      <div class="tbl-wrap"><table>
-        <thead><tr><th>#</th><th>الاسم</th><th>البريد</th><th>الجوال</th><th>الدور</th><th>إجراءات</th></tr></thead>
-        <tbody>${st.admins.map((a,i) => `
-          <tr>
-            <td>${i+1}</td>
-            <td><div class="user-cell"><div class="av">${esc((a.profile?.full_name||'?')[0])}</div>${esc(a.profile?.full_name||'—')}</div></td>
-            <td style="direction:ltr;text-align:right;font-size:12px">${esc(a.profile?.email||'—')}</td>
-            <td style="direction:ltr;text-align:right">${esc(a.profile?.phone||'—')}</td>
-            <td><span class="tag role-${a.role}">${a.role==='super_admin'?'مشرف عام':'مشرف'}</span></td>
-            <td>${st.role==='super_admin' && a.id!==st.user.id ? `<button class="btn btn-danger btn-sm" onclick="ADMIN.removeAdmin('${a.id}')">🗑️ إزالة</button>` : '<span style="color:var(--muted);font-size:12px">—</span>'}</td>
-          </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">لا يوجد مشرفون</td></tr>'}
-        </tbody>
-      </table></div>
+      ${st.admins.length ? `
+        <div class="mob-list">
+          ${st.admins.map(a => `
+            <div class="mob-item">
+              <div class="mi-top">
+                <div class="av" style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;flex-shrink:0">${esc((a.profile?.full_name||'?')[0])}</div>
+                <div class="mi-info">
+                  <b>${esc(a.profile?.full_name||'—')}</b>
+                  <div class="meta">
+                    <span class="tag role-${a.role}">${a.role==='super_admin'?'مشرف عام':'مشرف'}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mi-details">
+                <div class="mi-detail">
+                  <span class="lbl">البريد</span>
+                  <span class="val" style="font-size:11.5px;direction:ltr;text-align:right;word-break:break-all">${esc(a.profile?.email||'—')}</span>
+                </div>
+                <div class="mi-detail">
+                  <span class="lbl">الجوال</span>
+                  <span class="val" style="font-size:12.5px">${esc(a.profile?.phone||'—')}</span>
+                </div>
+              </div>
+              ${st.role==='super_admin' && a.id!==st.user.id ? `
+                <div class="mi-actions">
+                  <button class="btn btn-danger btn-sm" onclick="ADMIN.removeAdmin('${a.id}')">🗑️ إزالة</button>
+                </div>` : ''}
+            </div>`).join('')}
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>#</th><th>الاسم</th><th>البريد</th><th>الجوال</th><th>الدور</th><th></th></tr></thead>
+            <tbody>${st.admins.map((a,i) => `
+              <tr>
+                <td>${i+1}</td>
+                <td><div class="user-cell"><div class="av">${esc((a.profile?.full_name||'?')[0])}</div>${esc(a.profile?.full_name||'—')}</div></td>
+                <td style="direction:ltr;text-align:right;font-size:12px">${esc(a.profile?.email||'—')}</td>
+                <td style="direction:ltr;text-align:right">${esc(a.profile?.phone||'—')}</td>
+                <td><span class="tag role-${a.role}">${a.role==='super_admin'?'مشرف عام':'مشرف'}</span></td>
+                <td>${st.role==='super_admin' && a.id!==st.user.id ? `<button class="btn btn-danger btn-sm" onclick="ADMIN.removeAdmin('${a.id}')">🗑️</button>` : '—'}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      ` : '<div class="empty"><div class="e-ico">👑</div><h3>لا يوجد مشرفون</h3></div>'}
     </div>`;
   }
 
@@ -300,7 +483,7 @@
         </div>
         <div class="field">
           <label>معاينة الشعار</label>
-          <div style="background:var(--cream);border:1.5px solid var(--line);border-radius:12px;padding:14px;text-align:center">
+          <div style="background:var(--cream);border:1.5px solid var(--line);border-radius:14px;padding:16px;text-align:center">
             <img src="${esc(s.logo_url||CFG.logo||'')}" style="height:80px;object-fit:contain;margin:0 auto" onerror="this.style.opacity=.3">
           </div>
         </div>
@@ -315,18 +498,18 @@
           <div class="field"><label>اللون الذهبي</label><input type="color" id="sGold" value="${esc(s.gold_color||'#c9a961')}"></div>
         </div>
         <div class="field"><label>اللون السكري</label><input type="color" id="sCream" value="${esc(s.cream_color||'#faf6ef')}"></div>
-        <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px">💾 حفظ الإعدادات</button>
+        <button type="submit" class="btn btn-primary" style="width:100%;margin-top:10px;padding:14px">💾 حفظ الإعدادات</button>
       </form>
     </div>
 
     <div class="card">
-      <div class="card-hdr"><h2>📋 جدول بيانات الإعدادات (Raw)</h2></div>
+      <div class="card-hdr"><h2>📋 جدول الإعدادات (Raw)</h2></div>
       <div class="tbl-wrap"><table>
         <thead><tr><th>المفتاح</th><th>القيمة</th></tr></thead>
         <tbody>${Object.entries(s).map(([k,v]) => `
           <tr>
-            <td><code style="background:var(--cream2);padding:3px 8px;border-radius:6px;font-size:12px">${esc(k)}</code></td>
-            <td style="word-break:break-all;direction:ltr;text-align:right;font-size:12.5px">${esc(String(v||''))}</td>
+            <td><code style="background:var(--cream2);padding:3px 8px;border-radius:6px;font-size:11.5px">${esc(k)}</code></td>
+            <td style="word-break:break-all;direction:ltr;text-align:right;font-size:12px">${esc(String(v||''))}</td>
           </tr>`).join('') || '<tr><td colspan="2" style="text-align:center;color:var(--muted);padding:20px">لا توجد إعدادات</td></tr>'}
         </tbody>
       </table></div>
@@ -388,8 +571,17 @@
       payload.start_time = new Date().toISOString();
       res = await sb.from('auctions').insert(payload);
     }
-    if(res.error){ toast(res.error.message); return; }
-    toast(id?'تم التحديث ✅':'تم الإنشاء 🎉');
+    if(res.error){
+      console.error(res.error);
+      const code = res.error.code || '';
+      let msg = res.error.message || 'خطأ غير معروف';
+      if(code === '42501' || msg.includes('row-level security')) msg = 'صلاحيات غير كافية — راجع SQL إصلاح RLS';
+      else if(code === '23503') msg = 'سجل البروفايل غير موجود';
+      else if(code === '23502') msg = 'حقل مطلوب ناقص';
+      toast('❌ ' + msg);
+      return;
+    }
+    toast(id ? 'تم التحديث ✅' : 'تم الإنشاء 🎉');
     closeModal('ovAuction');
     await loadAll();
     render();
@@ -451,7 +643,8 @@
       await sb.from('settings').upsert({ key, value, updated_at: new Date().toISOString() });
     }
     toast('تم الحفظ ✅');
-    $('logoImgAdmin').src = updates[0][1];
+    if($('logoImgAdmin')) $('logoImgAdmin').src = updates[0][1];
+    if($('logoMob')) $('logoMob').src = updates[0][1];
     await loadAll();
     render();
   }
@@ -460,23 +653,23 @@
     const o = st.orders.find(x => x.id === id);
     if(!o) return;
     $('orderDetails').innerHTML = `
-      <div class="field"><label>المزاد</label><div>${esc(o.auction?.title||'—')}</div></div>
+      <div class="field"><label>المزاد</label><div style="font-weight:800">${esc(o.auction?.title||'—')}</div></div>
       <div class="row2">
-        <div class="field"><label>المشتري</label><div>${esc(o.buyer?.full_name||'—')} — ${esc(o.buyer?.phone||'')}</div></div>
-        <div class="field"><label>البائع</label><div>${esc(o.seller?.full_name||'—')} — ${esc(o.seller?.phone||'')}</div></div>
+        <div class="field"><label>المشتري</label><div style="font-weight:700">${esc(o.buyer?.full_name||'—')}<br><small style="color:var(--muted)">${esc(o.buyer?.phone||'')}</small></div></div>
+        <div class="field"><label>البائع</label><div style="font-weight:700">${esc(o.seller?.full_name||'—')}<br><small style="color:var(--muted)">${esc(o.seller?.phone||'')}</small></div></div>
       </div>
       <div class="row2">
-        <div class="field"><label>المبلغ</label><div><b style="color:var(--maroon)">${fmt(o.amount)} ر.س</b></div></div>
+        <div class="field"><label>المبلغ</label><div><b style="color:var(--maroon);font-size:18px">${fmt(o.amount)} ر.س</b></div></div>
         <div class="field"><label>الحالة</label><div><span class="tag st-${o.status}">${statusLabel(o.status)}</span></div></div>
       </div>
       <div class="field">
         <label>تغيير الحالة</label>
-        <select id="oStatus" style="width:100%;padding:11px 13px;border-radius:11px;border:1.5px solid var(--line);background:var(--cream);font-size:14px">
+        <select id="oStatus">
           ${['pending','confirmed','shipped','delivered','cancelled'].map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${statusLabel(s)}</option>`).join('')}
         </select>
       </div>
       <div class="field"><label>ملاحظات</label><textarea id="oNotes" rows="2">${esc(o.notes||'')}</textarea></div>
-      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="ADMIN.updateOrder('${o.id}')">💾 حفظ</button>
+      <button class="btn btn-primary" style="width:100%;margin-top:10px;padding:14px" onclick="ADMIN.updateOrder('${o.id}')">💾 حفظ</button>
     `;
     openModal('ovOrder');
   }
