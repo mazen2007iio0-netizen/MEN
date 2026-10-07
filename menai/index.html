@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0a1628">
     <title>MEN Ai</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -293,7 +293,6 @@
         .model-name {
             display: flex;
             align-items: center;
-            gap: 7px;
             padding: 7px 12px;
             border-radius: 10px;
             border: none;
@@ -306,7 +305,6 @@
             transition: background .15s;
         }
         .model-name:hover { background: var(--bg-hover); }
-        .model-name i { font-size: .62rem; opacity: .55; }
 
         .header-spacer { flex: 1; }
 
@@ -358,49 +356,161 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            gap: 26px;
-            padding: 24px 20px 34px;
+            gap: 22px;
+            padding: 20px 20px 34px;
         }
         .welcome h1 {
-            font-size: clamp(1.45rem, 4.4vw, 1.95rem);
+            font-size: clamp(1.4rem, 4.2vw, 1.9rem);
             font-weight: 600;
             color: var(--txt);
             letter-spacing: -.02em;
             line-height: 1.35;
         }
         .welcome h1 .user-name {
-            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-weight: 700;
+            color: #ffffff;
+            font-weight: 800;
         }
-        .suggestions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            max-width: 660px;
-        }
-        .faq-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 9px;
-            padding: 10px 16px;
-            border-radius: 20px;
-            border: 1px solid var(--line-2);
-            background: transparent;
-            color: var(--txt);
-            font-family: inherit;
+
+        .welcome-sub {
             font-size: .85rem;
+            color: var(--txt-3);
             font-weight: 500;
-            cursor: pointer;
-            transition: background .15s, border-color .15s;
-            white-space: nowrap;
+            margin-top: -10px;
         }
-        .faq-btn:hover { background: var(--bg-hover); border-color: rgba(96, 165, 250, .4); }
-        .faq-btn:active { transform: scale(.97); }
-        .faq-btn i { font-size: .8rem; color: var(--accent-2); }
+
+        /* ═══ FAQ CARDS (Q&A) ═══ */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 11px;
+            width: 100%;
+            max-width: 720px;
+        }
+
+        .faq-card {
+            position: relative;
+            background: linear-gradient(135deg, rgba(18, 35, 63, .95), rgba(10, 22, 40, .95));
+            border: 1px solid rgba(96, 165, 250, .15);
+            border-radius: 18px;
+            padding: 14px 16px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: border-color .3s, transform .3s, box-shadow .3s;
+            text-align: right;
+            user-select: none;
+        }
+
+        .faq-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(96, 165, 250, .1), transparent 65%);
+            opacity: 0;
+            transition: opacity .35s;
+            pointer-events: none;
+        }
+
+        .faq-card:hover {
+            border-color: rgba(96, 165, 250, .42);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px -14px rgba(59, 130, 246, .45);
+        }
+        .faq-card:hover::before { opacity: 1; }
+
+        .faq-card.open {
+            border-color: rgba(96, 165, 250, .5);
+            box-shadow: 0 14px 34px -14px rgba(59, 130, 246, .5);
+        }
+        .faq-card.open::before { opacity: 1; }
+
+        /* ═══ نجوم متحركة ═══ */
+        .sparkle {
+            position: absolute;
+            color: rgba(96, 165, 250, .7);
+            pointer-events: none;
+            line-height: 1;
+            text-shadow: 0 0 10px rgba(96, 165, 250, .9), 0 0 20px rgba(59, 130, 246, .5);
+            animation: twinkle 2.6s ease-in-out infinite;
+            z-index: 0;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: .1; transform: scale(.4) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.15) rotate(180deg); }
+        }
+        .faq-card:hover .sparkle {
+            animation-duration: 1.2s;
+            color: rgba(147, 197, 253, 1);
+        }
+
+        .faq-q {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .faq-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, .2), rgba(96, 165, 250, .05));
+            border: 1px solid rgba(96, 165, 250, .22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-2);
+            font-size: .85rem;
+            flex-shrink: 0;
+            transition: all .3s cubic-bezier(.16, 1, .3, 1);
+        }
+        .faq-card:hover .faq-icon {
+            background: linear-gradient(135deg, rgba(59, 130, 246, .4), rgba(96, 165, 250, .18));
+            transform: scale(1.08) rotate(-5deg);
+            box-shadow: 0 0 18px rgba(59, 130, 246, .5);
+            color: #fff;
+        }
+
+        .faq-q-text {
+            flex: 1;
+            font-size: .87rem;
+            font-weight: 600;
+            color: var(--txt);
+            line-height: 1.4;
+        }
+
+        .faq-arrow {
+            font-size: .68rem;
+            color: var(--txt-3);
+            transition: transform .3s, color .3s;
+            flex-shrink: 0;
+        }
+        .faq-card.open .faq-arrow {
+            transform: rotate(180deg);
+            color: var(--accent-2);
+        }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .38s ease, padding .38s ease, opacity .38s ease, margin .38s ease;
+            opacity: 0;
+            color: var(--txt-2);
+            font-size: .82rem;
+            line-height: 1.85;
+            padding: 0 4px;
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid transparent;
+            margin-top: 0;
+        }
+        .faq-card.open .faq-a {
+            max-height: 240px;
+            padding: 11px 4px 2px;
+            opacity: 1;
+            border-top-color: rgba(96, 165, 250, .12);
+            margin-top: 12px;
+        }
 
         /* ── Messages ── */
         .msg {
@@ -1034,9 +1144,9 @@
             .msg.user .msg-inner { max-width: 92%; padding: 9px 15px; }
             .input-area { padding: 6px 12px calc(14px + env(safe-area-inset-bottom)); }
             .composer textarea { font-size: 16px; }
-            .welcome { gap: 20px; padding: 18px 16px 28px; }
-            .suggestions { gap: 8px; }
-            .faq-btn { font-size: .8rem; padding: 9px 13px; }
+            .welcome { gap: 18px; padding: 16px 14px 28px; }
+            .faq-grid { grid-template-columns: 1fr; gap: 9px; }
+            .faq-card { padding: 12px 14px; }
             .search-indicator { padding: 8px 14px 8px 50px; }
             .modal-box { padding: 18px 16px; border-radius: 18px; }
             .men-product-card { min-width: 200px; max-width: 210px; }
@@ -1045,7 +1155,7 @@
         }
 
         @media (max-width: 380px) {
-            .faq-btn { font-size: .75rem; padding: 8px 11px; }
+            .faq-q-text { font-size: .82rem; }
             .msg .msg-inner { font-size: .9rem; }
         }
 
@@ -1100,7 +1210,6 @@
             </button>
             <button class="model-name" type="button">
                 <span>MEN Ai</span>
-                <i class="fas fa-chevron-down"></i>
             </button>
             <div class="header-spacer"></div>
             <button class="btn-login" id="menLoginBtn" type="button">
@@ -1214,7 +1323,7 @@
 
     <script>
         // ============================================================
-        //  MEN Ai — Main Chat Logic (Dark Blue Theme)
+        //  MEN Ai — Main Chat Logic (Dark Blue Theme + Q&A Welcome)
         // ============================================================
         const TYPING_SPEED = 38;
         const CODE_TEXT_SPEED = 32;
@@ -1230,16 +1339,41 @@
         let maxMessagesPerSession = 6;
         let autoBoostEnabled = false;
 
-        // ⭐ اسم المستخدم الحالي (يُستخدم في رسالة الترحيب)
+        // ⭐ الاسم الأول للمستخدم
         let currentUserName = '';
 
-        const FAQ_QUESTIONS = [
-            { icon: 'fa-calendar', q: 'متى تأسس الفريق؟' },
-            { icon: 'fa-ticket', q: 'كيف اشترك في MEN pass؟' },
-            { icon: 'fa-headset', q: 'كيف يمكنني التواصل مع الدعم؟' },
-            { icon: 'fa-bag-shopping', q: 'عرض المنتجات' },
-            { icon: 'fa-crown', q: 'ما هي مميزات MEN PRO؟' },
-            { icon: 'fa-download', q: 'كيف أحمل التطبيق؟' }
+        // ═══ الأسئلة الشائعة (سؤال + جواب) ═══
+        const FAQ_ITEMS = [
+            {
+                icon: 'fa-calendar',
+                q: 'متى تأسس الفريق؟',
+                a: 'تأسس فريق MEN عام 2020، وبدأ رحلته في تقديم خدمات احترافية للمستخدمين العرب بجودة عالية.'
+            },
+            {
+                icon: 'fa-ticket',
+                q: 'كيف أشترك في MEN pass؟',
+                a: 'يمكنك الاشتراك في MEN pass من خلال صفحة الاشتراك في المتجر، أو التواصل مع الدعم لمساعدتك في التفعيل خلال دقائق.'
+            },
+            {
+                icon: 'fa-headset',
+                q: 'كيف أتواصل مع الدعم؟',
+                a: 'فريق الدعم متاح لخدمتك عبر البريد الإلكتروني clan.men.ts@gmail.com، أو من خلال قنوات التواصل الرسمية.'
+            },
+            {
+                icon: 'fa-bag-shopping',
+                q: 'كيف أعرض المنتجات؟',
+                a: 'اكتب «عرض المنتجات» في المحادثة وسأعرض لك كل المنتجات المتاحة فوراً مع الأسعار وروابط الشراء.'
+            },
+            {
+                icon: 'fa-crown',
+                q: 'ما هي مميزات MEN PRO؟',
+                a: 'MEN PRO يمنحك مزايا حصرية: أولوية في الدعم، خصومات خاصة، وميزات متقدمة داخل التطبيق، وتجربة بدون إعلانات.'
+            },
+            {
+                icon: 'fa-download',
+                q: 'كيف أحمل التطبيق؟',
+                a: 'يمكنك تحميل التطبيق من المتجر الرسمي على جهازك، أو من الرابط المتوفر في الصفحة الرئيسية للمتجر.'
+            }
         ];
 
         /* ═══════════════ SETTINGS ═══════════════ */
@@ -1425,15 +1559,28 @@
             loadMemory();
         }
 
-        /* ═══════════════ WELCOME SCREEN ═══════════════
-           رسالة الترحيب تتضمن اسم المستخدم إن وُجد */
+        /* ═══════════════ WELCOME SCREEN (مع Q&A ونجوم) ═══════════════ */
         function buildWelcomeScreen() {
-            const chips = FAQ_QUESTIONS.map(f => `
-                <button class="faq-btn" data-q="${escapeHtml(f.q)}">
-                    <i class="fas ${f.icon}"></i>
-                    <span>${escapeHtml(f.q)}</span>
-                </button>
-            `).join('');
+            const cards = FAQ_ITEMS.map((f, i) => {
+                // مواضع النجوم لكل بطاقة (تختلف قليلاً حسب الـ index)
+                const sparkles = `
+                    <span class="sparkle" style="top:8px;left:12px;font-size:.7rem;animation-delay:${i * 0.2}s">✦</span>
+                    <span class="sparkle" style="bottom:10px;right:18px;font-size:.55rem;animation-delay:${0.6 + i * 0.2}s">✧</span>
+                    <span class="sparkle" style="top:50%;right:6px;font-size:.45rem;animation-delay:${1.2 + i * 0.2}s">✦</span>
+                    <span class="sparkle" style="top:30%;left:6px;font-size:.5rem;animation-delay:${1.8 + i * 0.2}s">✧</span>
+                `;
+                return `
+                    <div class="faq-card" data-idx="${i}">
+                        ${sparkles}
+                        <div class="faq-q">
+                            <div class="faq-icon"><i class="fas ${f.icon}"></i></div>
+                            <span class="faq-q-text">${escapeHtml(f.q)}</span>
+                            <i class="fas fa-chevron-down faq-arrow"></i>
+                        </div>
+                        <div class="faq-a">${escapeHtml(f.a)}</div>
+                    </div>
+                `;
+            }).join('');
 
             const greeting = currentUserName
                 ? `كيف أساعدك يا <span class="user-name">${escapeHtml(currentUserName)}</span>؟`
@@ -1442,7 +1589,8 @@
             return `
                 <div class="welcome">
                     <h1>${greeting}</h1>
-                    <div class="suggestions">${chips}</div>
+                    <p class="welcome-sub">اختر سؤالاً لعرض الجواب</p>
+                    <div class="faq-grid">${cards}</div>
                 </div>
             `;
         }
@@ -1454,7 +1602,7 @@
             const welcomeWrap = area.querySelector('.welcome-wrap');
             if (!welcomeWrap) return;
             welcomeWrap.innerHTML = buildWelcomeScreen();
-            bindFaqButtons(welcomeWrap);
+            bindWelcomeInteractions(welcomeWrap);
         }
 
         /* ═══════════════ RENDER SESSION ═══════════════ */
@@ -1469,7 +1617,7 @@
                 wrap.className = 'welcome-wrap';
                 wrap.innerHTML = buildWelcomeScreen();
                 area.appendChild(wrap);
-                bindFaqButtons(area);
+                bindWelcomeInteractions(wrap);
                 return;
             }
 
@@ -1515,15 +1663,15 @@
             scrollToBottom();
         }
 
-        function bindFaqButtons(container) {
-            container.querySelectorAll('.faq-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const q = btn.dataset.q;
-                    if (q) {
-                        messageInput.value = q;
-                        messageInput.dispatchEvent(new Event('input'));
-                        sendMessage();
-                    }
+        /* ═══ ربط تفاعلات واجهة الترحيب ═══ */
+        function bindWelcomeInteractions(container) {
+            // بطاقات الأسئلة والأجوبة (فتح/إغلاق)
+            container.querySelectorAll('.faq-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const isOpen = card.classList.contains('open');
+                    // إغلاق كل البطاقات الأخرى
+                    container.querySelectorAll('.faq-card').forEach(c => c.classList.remove('open'));
+                    if (!isOpen) card.classList.add('open');
                 });
             });
         }
@@ -2210,26 +2358,27 @@
         document.getElementById('menLoginBtn').addEventListener('click', () => window.MEN_AUTH?.open('login'));
 
         /* ═══════════════ AUTH UI SYNC ═══════════════
-           ⭐ يُحدَّث الاسم عند تسجيل الدخول/الخروج، وتتحدث رسالة الترحيب تلقائياً */
+           ⭐ الاسم الأول فقط، وتحديث فوري لرسالة الترحيب */
         window.addEventListener('load', () => {
             if (window.MEN_AUTH) {
                 window.MEN_AUTH.onAuthChange((user) => {
                     const loginBtn = document.getElementById('menLoginBtn');
                     const profileRow = document.getElementById('menProfileBtn');
                     if (user) {
-                        const name = user.user_metadata?.name || user.email.split('@')[0];
-                        currentUserName = name;
+                        const fullName = user.user_metadata?.name || user.email.split('@')[0];
+                        const firstName = fullName.trim().split(/\s+/)[0];
+                        currentUserName = firstName;
                         loginBtn.style.display = 'none';
                         profileRow.style.display = 'flex';
-                        document.getElementById('menProfileBtnAvatar').src = window.MEN_AUTH.makeAvatar(name, 100);
-                        document.getElementById('menProfileBtnName').textContent = name;
+                        document.getElementById('menProfileBtnAvatar').src = window.MEN_AUTH.makeAvatar(fullName, 100);
+                        document.getElementById('menProfileBtnName').textContent = firstName;
                         document.getElementById('menProfileEmail').textContent = user.email;
                     } else {
                         currentUserName = '';
                         loginBtn.style.display = 'inline-flex';
                         profileRow.style.display = 'none';
                     }
-                    // ⭐ تحديث رسالة الترحيب مباشرةً
+                    // ⭐ تحديث رسالة الترحيب فوراً
                     refreshWelcomeIfVisible();
                 });
             }
