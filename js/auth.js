@@ -1,6 +1,6 @@
 /* ============================================================
-   ✨ MEN Store — Auth v14
-   (Deep Blue Theme + Orders + Users + Customer Chat + Premium Cashback Card + Logo Fix)
+   ✨ MEN Store — Auth v15
+   (Deep Blue Theme + Orders + Users + Customer Chat + Premium Cashback + Guaranteed Logo)
    ============================================================ */
 (function () {
   'use strict';
@@ -9,7 +9,34 @@
   const SUPABASE_URL      = 'https://xoqwzluyxynqpdpmidts.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
 
+  // ⭐ الشعار الأصلي (يحاول تحميله أولاً)
   const LOGO_URL = 'https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png';
+
+  // ⭐ الشعار الاحتياطي — SVG مضمون 100% (يظهر تلقائياً لو فشل الأصلي)
+  const LOGO_FALLBACK_SVG =
+    'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" width="240" height="60">
+        <defs>
+          <linearGradient id="menGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#e0ecff"/>
+          </linearGradient>
+        </defs>
+        <text x="0" y="42"
+              font-family="Cairo, Outfit, Arial Black, sans-serif"
+              font-size="38"
+              font-weight="900"
+              fill="url(#menGrad)"
+              letter-spacing="-1.5">MEN</text>
+        <text x="82" y="42"
+              font-family="Cairo, Outfit, Arial, sans-serif"
+              font-size="38"
+              font-weight="300"
+              fill="url(#menGrad)"
+              letter-spacing="6"
+              opacity="0.85">STORE</text>
+      </svg>
+    `);
 
   const credsReady = SUPABASE_URL.startsWith('https://')
                   && SUPABASE_URL.includes('.supabase.co')
@@ -29,7 +56,7 @@
   });
   window.MEN_SUPABASE = sb;
 
-  console.log('%c✨ MEN AUTH v14 · Deep Blue + Logo Fix', 'background:linear-gradient(135deg,#0a1a5c,#2563eb);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
+  console.log('%c✨ MEN AUTH v15 · Deep Blue + Guaranteed Logo', 'background:linear-gradient(135deg,#0a1a5c,#2563eb);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
   const CASHBACK_RATE = 0.02;
   const PHONE_DOMAIN  = 'men-store.local';
@@ -129,15 +156,14 @@
   // 🎨 CSS
   // ═══════════════════════════════════════════════════════════
   function injectCSS() {
-    if ($('menAuthStylesV14')) return;
-    // إزالة النسخ القديمة
-    ['menAuthStyles','menAuthStylesV12','menAuthStylesV13'].forEach(id => {
+    if ($('menAuthStylesV15')) return;
+    ['menAuthStyles','menAuthStylesV12','menAuthStylesV13','menAuthStylesV14'].forEach(id => {
       const old = document.getElementById(id);
       if (old) old.remove();
     });
 
     const s = document.createElement('style');
-    s.id = 'menAuthStylesV14';
+    s.id = 'menAuthStylesV15';
     s.textContent = `
       /* ═══ AUTH SCREEN ═══ */
       .men-screen{position:fixed;inset:0;z-index:9999;display:none;font-family:'Cairo','Outfit',sans-serif;background:#04060f;overflow-y:auto;overflow-x:hidden}
@@ -164,6 +190,7 @@
       .men-showcase::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(37,99,235,.22),transparent 55%);pointer-events:none}
       .men-showcase-top{position:relative;z-index:2}
       .men-logo-row{display:flex;align-items:center;gap:14px}
+      .men-logo-row img{filter:brightness(0) invert(1) drop-shadow(0 8px 24px rgba(37,99,235,.5));height:70px;width:auto;object-fit:contain}
       .men-showcase-center{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center;padding:50px 0}
       .men-showcase-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(37,99,235,.15);border:1px solid rgba(59,130,246,.3);border-radius:60px;padding:8px 18px;font-size:.8rem;color:#60a5fa;font-weight:800;margin-bottom:24px;width:fit-content}
       .men-showcase-title{font-size:clamp(2rem,3.5vw,3rem);font-weight:900;color:#fff;letter-spacing:-1.5px;line-height:1.15;margin-bottom:18px}
@@ -459,11 +486,10 @@
         padding:20px 24px 8px;
         display:flex;align-items:center;justify-content:space-between;gap:16px;
       }
-      /* ⭐ الشعار — إصلاح كامل */
       .men-cb-logo{
-        height:36px !important;
+        height:38px !important;
         width:auto !important;
-        max-width:160px !important;
+        max-width:180px !important;
         object-fit:contain !important;
         display:block !important;
         flex-shrink:0;
@@ -471,17 +497,8 @@
         -webkit-filter:brightness(0) invert(1) drop-shadow(0 4px 14px rgba(255,255,255,.35)) !important;
         opacity:1 !important;
         visibility:visible !important;
+        transition:opacity .3s;
       }
-      .men-cb-logo-text{
-        color:#fff;
-        font-weight:900;
-        font-size:1.15rem;
-        letter-spacing:2px;
-        text-shadow:0 4px 16px rgba(255,255,255,.35);
-        font-family:'Cairo','Outfit',sans-serif;
-        display:none;
-      }
-      .men-cb-logo-fallback .men-cb-logo-text{display:inline-block}
       .men-cb-badge{
         display:inline-flex;align-items:center;gap:6px;
         padding:6px 14px;border-radius:40px;
@@ -648,7 +665,9 @@
           <div class="men-showcase">
             <div class="men-showcase-top">
               <div class="men-logo-row">
-                <img src="${LOGO_URL}" alt="MEN Store" style="height:70px;width:auto;object-fit:contain;filter:brightness(0) invert(1) drop-shadow(0 8px 24px rgba(37,99,235,.5))" crossorigin="anonymous" referrerpolicy="no-referrer">
+                <img src="${LOGO_URL}" alt="MEN Store"
+                     crossorigin="anonymous" referrerpolicy="no-referrer"
+                     onerror="this.onerror=null;this.src='${LOGO_FALLBACK_SVG}';this.style.filter='brightness(0) invert(1) drop-shadow(0 8px 24px rgba(37,99,235,.5))';">
               </div>
             </div>
             <div class="men-showcase-center">
@@ -1548,13 +1567,13 @@
           class="men-cb-logo"
           id="menCbLogo"
           src="${LOGO_URL}"
+          data-fallback="${LOGO_FALLBACK_SVG}"
           alt="MEN Store"
           crossorigin="anonymous"
           referrerpolicy="no-referrer"
           loading="eager"
-          onerror="(function(img){img.style.display='none';var p=img.parentElement;if(p){p.classList.add('men-cb-logo-fallback');}})(this)"
+          onerror="if(this.dataset.fbApplied!=='1'){this.dataset.fbApplied='1';this.src=this.dataset.fallback;this.style.filter='brightness(0) invert(1) drop-shadow(0 4px 14px rgba(255,255,255,.35))';}"
         >
-        <span class="men-cb-logo-text">MEN STORE</span>
         <div class="men-cb-badge">
           <i class="fas fa-gift"></i>
           <span>كاش باك</span>
@@ -1693,13 +1712,13 @@
     const box = wrap.firstElementChild;
     anchor.insertBefore(box, anchor.firstChild);
 
-    // فحص إضافي للشعار بعد الإدراج
+    // فحص ثانٍ بعد 1.2 ثانية
     setTimeout(() => {
       const logo = $('menCbLogo');
-      if (logo && (!logo.complete || logo.naturalWidth === 0)) {
-        console.warn('[MEN_CB] الشعار لم يتحمّل — استخدام النص البديل');
-        logo.style.display = 'none';
-        $('menCbTop')?.classList.add('men-cb-logo-fallback');
+      if (logo && logo.dataset.fbApplied !== '1' && (!logo.complete || logo.naturalWidth === 0)) {
+        console.warn('[MEN_CB] الشعار الأصلي لم يتحمّل — استخدام البديل');
+        logo.dataset.fbApplied = '1';
+        logo.src = logo.dataset.fallback;
       }
     }, 1200);
 
