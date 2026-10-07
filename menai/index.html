@@ -349,7 +349,7 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* ══════════════ WELCOME SCREEN (أنيميشن جديد) ══════════════ */
+        /* ══════════════ WELCOME SCREEN ══════════════ */
         .welcome-wrap {
             margin: auto 0;
             width: 100%;
@@ -365,25 +365,24 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            gap: 24px;
-            max-width: 560px;
+            gap: 22px;
+            max-width: 640px;
             width: 100%;
             position: relative;
             z-index: 2;
         }
 
-        /* ═══ الأيقونة العائمة (بدون مربع) ═══ */
+        /* ═══ الأيقونة العائمة ═══ */
         .logo-stage {
             position: relative;
-            width: 160px;
-            height: 160px;
+            width: 140px;
+            height: 140px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 8px;
         }
 
-        /* الهالة الخارجية النابضة */
         .aura {
             position: absolute;
             inset: 0;
@@ -397,7 +396,6 @@
             50% { transform: scale(1.15); opacity: .9; }
         }
 
-        /* حلقتان دوّارتان */
         .ring-orbit {
             position: absolute;
             inset: 12px;
@@ -415,10 +413,8 @@
         }
         @keyframes orbitSpin { to { transform: rotate(360deg); } }
 
-        /* الأيقونة الوسطى - نجم لامع */
         .logo-star {
-            font-size: 3.4rem;
-            color: #ffffff;
+            font-size: 3rem;
             position: relative;
             z-index: 3;
             filter: drop-shadow(0 0 18px rgba(96, 165, 250, .9)) drop-shadow(0 0 36px rgba(37, 99, 235, .6));
@@ -433,59 +429,7 @@
             50% { transform: translateY(-10px) rotate(-8deg) scale(1.08); }
         }
 
-        /* ⭐ نجوم متطايرة حول الأيقونة */
-        .orbit-star {
-            position: absolute;
-            font-size: .9rem;
-            color: #93c5fd;
-            text-shadow: 0 0 12px rgba(96, 165, 250, .9), 0 0 24px rgba(59, 130, 246, .5);
-            pointer-events: none;
-            animation: orbitStar 6s ease-in-out infinite;
-            z-index: 2;
-        }
-        .orbit-star.s1 { top: 8%; left: 50%; font-size: 1rem; animation-delay: 0s; }
-        .orbit-star.s2 { top: 50%; right: 6%; font-size: .75rem; animation-delay: .8s; }
-        .orbit-star.s3 { bottom: 10%; left: 45%; font-size: .85rem; animation-delay: 1.6s; }
-        .orbit-star.s4 { top: 45%; left: 4%; font-size: .7rem; animation-delay: 2.4s; }
-        .orbit-star.s5 { top: 20%; right: 20%; font-size: .55rem; animation-delay: 3.2s; }
-        .orbit-star.s6 { bottom: 22%; right: 15%; font-size: .65rem; animation-delay: 4s; }
-
-        @keyframes orbitStar {
-            0%, 100% {
-                opacity: .3;
-                transform: translate(0, 0) scale(.7) rotate(0deg);
-            }
-            50% {
-                opacity: 1;
-                transform: translate(0, -6px) scale(1.2) rotate(180deg);
-            }
-        }
-
-        /* ⭐ نقاط صغيرة متناثرة في الخلفية */
-        .bg-dots {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: 1;
-        }
-        .bg-dot {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #60a5fa;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #60a5fa, 0 0 16px rgba(96, 165, 250, .6);
-            animation: dotFloat 8s linear infinite;
-            opacity: 0;
-        }
-        @keyframes dotFloat {
-            0% { opacity: 0; transform: translateY(40px) scale(.5); }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { opacity: 0; transform: translateY(-120px) scale(1); }
-        }
-
+        /* ═══ عنوان الترحيب ═══ */
         .welcome h1 {
             font-size: clamp(1.6rem, 5vw, 2.15rem);
             font-weight: 700;
@@ -513,12 +457,107 @@
             50% { filter: drop-shadow(0 0 14px rgba(96, 165, 250, .9)); }
         }
 
+        /* ═══════════════════════════════════════════
+           ✨ أنيميشن الخطوط من اليمين إلى اليسار
+           ═══════════════════════════════════════════ */
+        .line-sweep-container {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin: 4px 0;
+            animation: textFade 1s ease .4s both;
+        }
+
+        .sweep-line {
+            height: 1.5px;
+            width: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(96, 165, 250, .15) 10%,
+                rgba(96, 165, 250, .8) 50%,
+                rgba(147, 197, 253, 1) 70%,
+                rgba(96, 165, 250, .4) 90%,
+                transparent 100%);
+            transform-origin: right;
+            transform: scaleX(0);
+            animation: sweepRightToLeft 2.6s cubic-bezier(.4, 0, .2, 1) infinite;
+            position: relative;
+            box-shadow: 0 0 12px rgba(96, 165, 250, .5);
+        }
+
+        .sweep-line.short {
+            width: 62%;
+            height: 1px;
+            animation-delay: .35s;
+            opacity: .75;
+        }
+
+        .sweep-line.thin {
+            width: 38%;
+            height: 1px;
+            animation-delay: .7s;
+            opacity: .5;
+        }
+
+        @keyframes sweepRightToLeft {
+            0% {
+                transform: scaleX(0);
+                opacity: 0;
+            }
+            15% {
+                opacity: 1;
+            }
+            60% {
+                transform: scaleX(1);
+                opacity: 1;
+            }
+            85% {
+                transform: scaleX(1);
+                opacity: .4;
+            }
+            100% {
+                transform: scaleX(1) translateX(-30%);
+                opacity: 0;
+            }
+        }
+
+        /* نقطة لامعة على طرف الخط */
+        .sweep-line::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #93c5fd;
+            transform: translate(0, -50%);
+            box-shadow: 0 0 12px #60a5fa, 0 0 24px rgba(96, 165, 250, .7);
+            animation: sparkMove 2.6s cubic-bezier(.4, 0, .2, 1) infinite;
+            opacity: 0;
+        }
+        .sweep-line.short::after { animation-delay: .35s; }
+        .sweep-line.thin::after { animation-delay: .7s; }
+
+        @keyframes sparkMove {
+            0% { opacity: 0; right: 0; }
+            15% { opacity: 1; right: 0; }
+            60% { opacity: 1; right: 100%; }
+            85% { opacity: .4; right: 100%; }
+            100% { opacity: 0; right: 100%; }
+        }
+
+        /* ═══ السؤال ═══ */
         .welcome-question {
             font-size: 1.05rem;
             color: var(--txt-2);
             font-weight: 500;
             letter-spacing: -.01em;
-            animation: textFade 1s ease .5s both;
+            animation: textFade 1s ease .7s both;
         }
 
         .welcome-hint {
@@ -529,7 +568,7 @@
             align-items: center;
             gap: 8px;
             margin-top: 6px;
-            animation: textFade 1s ease .8s both;
+            animation: textFade 1s ease 1s both;
         }
         .welcome-hint i {
             color: var(--accent-3);
@@ -1221,11 +1260,12 @@
             .input-area { padding: 6px 12px calc(14px + env(safe-area-inset-bottom)); }
             .composer textarea { font-size: 16px; }
             .welcome { gap: 20px; padding: 20px 4px; }
-            .logo-stage { width: 130px; height: 130px; }
-            .logo-star { font-size: 2.8rem; }
+            .logo-stage { width: 120px; height: 120px; }
+            .logo-star { font-size: 2.6rem; }
             .welcome h1 { font-size: 1.4rem; }
             .welcome-question { font-size: .95rem; }
             .welcome-hint { font-size: .75rem; }
+            .line-sweep-container { max-width: 320px; gap: 8px; }
             .search-indicator { padding: 8px 14px 8px 50px; }
             .modal-box { padding: 18px 16px; border-radius: 18px; }
             .men-product-card { min-width: 200px; max-width: 210px; }
@@ -1236,16 +1276,18 @@
         @media (max-width: 380px) {
             .msg .msg-inner { font-size: .9rem; }
             .welcome h1 { font-size: 1.25rem; }
-            .logo-stage { width: 110px; height: 110px; }
-            .logo-star { font-size: 2.4rem; }
+            .logo-stage { width: 100px; height: 100px; }
+            .logo-star { font-size: 2.2rem; }
+            .line-sweep-container { max-width: 240px; }
         }
 
         @media (max-height: 500px) and (orientation: landscape) {
             .welcome { gap: 12px; }
-            .logo-stage { width: 90px; height: 90px; margin-bottom: 0; }
-            .logo-star { font-size: 2rem; }
+            .logo-stage { width: 80px; height: 80px; margin-bottom: 0; }
+            .logo-star { font-size: 1.8rem; }
             .welcome h1 { font-size: 1.2rem; }
             .welcome-hint { display: none; }
+            .line-sweep-container { max-width: 280px; gap: 6px; }
         }
     </style>
 </head>
@@ -1407,7 +1449,7 @@
 
     <script>
         // ============================================================
-        //  MEN Ai — Main Chat Logic (Animated Welcome)
+        //  MEN Ai — Main Chat Logic (Line Sweep Animation)
         // ============================================================
         const TYPING_SPEED = 38;
         const CODE_TEXT_SPEED = 32;
@@ -1615,41 +1657,32 @@
             loadMemory();
         }
 
-        /* ═══════════════ WELCOME SCREEN (أنيميشن جديد) ═══════════════ */
+        /* ═══════════════ WELCOME SCREEN (خط ضوئي) ═══════════════ */
         function buildWelcomeScreen() {
             const greeting = currentUserName
                 ? `كيف حالك يا <span class="user-name">${escapeHtml(currentUserName)}</span>؟`
                 : 'كيف حالك؟';
 
-            // ⭐ توليد نقاط خلفية عشوائية متناثرة
-            let dots = '';
-            for (let i = 0; i < 14; i++) {
-                const left = Math.random() * 100;
-                const delay = Math.random() * 8;
-                const dur = 6 + Math.random() * 6;
-                const size = 1 + Math.random() * 2;
-                dots += `<span class="bg-dot" style="left:${left}%;bottom:-10px;width:${size}px;height:${size}px;animation-delay:${delay}s;animation-duration:${dur}s;"></span>`;
-            }
-
             return `
                 <div class="welcome">
-                    <div class="bg-dots">${dots}</div>
-
                     <div class="logo-stage">
                         <div class="aura"></div>
                         <div class="ring-orbit"></div>
                         <div class="ring-orbit r2"></div>
-                        <span class="orbit-star s1">✦</span>
-                        <span class="orbit-star s2">✧</span>
-                        <span class="orbit-star s3">✦</span>
-                        <span class="orbit-star s4">✧</span>
-                        <span class="orbit-star s5">✦</span>
-                        <span class="orbit-star s6">✧</span>
                         <i class="fas fa-sparkles logo-star"></i>
                     </div>
 
                     <h1>${greeting}</h1>
+
+                    <!-- ✨ خطوط ضوئية تنسحب من اليمين إلى اليسار -->
+                    <div class="line-sweep-container">
+                        <div class="sweep-line"></div>
+                        <div class="sweep-line short"></div>
+                        <div class="sweep-line thin"></div>
+                    </div>
+
                     <p class="welcome-question">وش حاب نعمل اليوم؟</p>
+
                     <div class="welcome-hint">
                         <i class="fas fa-circle-info"></i>
                         <span>اكتب سؤالك بالأسفل أو ارفق ملفاً لتحليله</span>
