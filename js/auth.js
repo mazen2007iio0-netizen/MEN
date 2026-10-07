@@ -1,6 +1,6 @@
 /* ============================================================
-   ✨ MEN Store — Auth v12
-   (Deep Blue Theme + Orders + Users + Customer Chat + Cashback)
+   ✨ MEN Store — Auth v13
+   (Deep Blue Theme + Orders + Users + Customer Chat + Premium Cashback Card)
    ============================================================ */
 (function () {
   'use strict';
@@ -27,13 +27,13 @@
   });
   window.MEN_SUPABASE = sb;
 
-  console.log('%c✨ MEN AUTH v12 · Deep Blue', 'background:linear-gradient(135deg,#0a1a5c,#2563eb);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
+  console.log('%c✨ MEN AUTH v13 · Deep Blue', 'background:linear-gradient(135deg,#0a1a5c,#2563eb);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
   const CASHBACK_RATE = 0.02;
   const PHONE_DOMAIN  = 'men-store.local';
   const ADMIN_EMAILS  = ['mkmkmkl24666606@gmail.com'];
-  const SUPPORT_NAME  = 'فريق الدعم';   // ← اسم ثابت بدل اسم المشرف
-  const SUPPORT_INITIAL = 'M';         // ← أول حرف للأفاتار
+  const SUPPORT_NAME  = 'فريق الدعم';
+  const SUPPORT_INITIAL = 'M';
 
   let currentUser = null;
   let authMode = 'login';
@@ -104,7 +104,7 @@
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   }
 
-  // ═══ Sound notification (Web Audio API) ═══
+  // ═══ Sound notification ═══
   function playPing() {
     try {
       const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -125,7 +125,7 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🎨 CSS — Deep Blue Theme
+  // 🎨 CSS — Deep Blue Theme + Premium Cashback Card
   // ═══════════════════════════════════════════════════════════
   function injectCSS() {
     if ($('menAuthStyles')) return;
@@ -332,7 +332,7 @@
       .men-acc-danger h4{color:#f87171;font-size:1rem;margin-bottom:8px;font-weight:800;display:flex;align-items:center;gap:10px}
       .men-acc-danger p{color:#d0a8a8;font-size:.85rem;margin-bottom:14px;line-height:1.7}
 
-      /* ═══ CHAT (Deep Blue + Admin Name Hidden) ═══ */
+      /* ═══ CHAT ═══ */
       .men-acc-chat-wrap{background:linear-gradient(160deg,rgba(12,18,38,.85),rgba(6,10,24,.95));border:1px solid rgba(37,99,235,.18);border-radius:26px;overflow:hidden;height:min(640px,75vh);display:flex;flex-direction:column;box-shadow:0 20px 60px -20px rgba(0,0,0,.7)}
       .men-acc-chat-head{padding:18px 22px;border-bottom:1px solid rgba(37,99,235,.15);display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(30,64,175,.15),transparent);position:relative}
       .men-acc-chat-head::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(59,130,246,.3),transparent)}
@@ -353,40 +353,28 @@
       .men-acc-chat-body::-webkit-scrollbar{width:6px}
       .men-acc-chat-body::-webkit-scrollbar-thumb{background:rgba(37,99,235,.3);border-radius:6px}
       .men-acc-chat-body::-webkit-scrollbar-track{background:transparent}
-
       .men-chat-day-sep{text-align:center;margin:8px 0;position:relative}
       .men-chat-day-sep span{display:inline-block;background:rgba(10,26,92,.6);border:1px solid rgba(37,99,235,.2);color:#60a5fa;font-size:.7rem;font-weight:700;padding:5px 14px;border-radius:20px;position:relative;z-index:1}
-
       .men-acc-msg{max-width:78%;padding:12px 16px;border-radius:18px;font-size:.9rem;line-height:1.7;word-wrap:break-word;animation:menMsgIn .3s cubic-bezier(.4,0,.2,1);position:relative}
       @keyframes menMsgIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
       .men-acc-msg .meta{font-size:.62rem;font-weight:800;opacity:.85;margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase}
       .men-acc-msg .time{font-size:.6rem;font-weight:700;opacity:.7;margin-top:6px;text-align:left;direction:ltr;display:flex;align-items:center;gap:4px}
       .men-acc-msg .time i{font-size:.55rem}
-
-      /* رسالة العميل — يمين، أزرق غامق */
       .men-acc-msg.customer{align-self:flex-end;background:linear-gradient(135deg,#0a1a5c,#1e40af);color:#fff;border-bottom-left-radius:6px;border:1px solid rgba(59,130,246,.2);box-shadow:0 8px 22px -12px rgba(10,26,92,.7)}
       .men-acc-msg.customer .meta{color:#93c5fd}
       .men-acc-msg.customer .time{color:#93c5fd}
-
-      /* رسالة الدعم — يسار، رمادي شفاف + اسم مخفي */
       .men-acc-msg.admin{align-self:flex-start;background:linear-gradient(135deg,rgba(16,22,44,.9),rgba(10,14,30,.95));border:1px solid rgba(37,99,235,.15);color:#e0e6f4;border-bottom-right-radius:6px}
       .men-acc-msg.admin .meta{color:#60a5fa;display:flex;align-items:center;gap:6px}
       .men-acc-msg.admin .meta::before{content:'\\f4ce';font-family:'Font Awesome 6 Free';font-weight:900;font-size:.62rem;color:#3b82f6}
       .men-acc-msg.admin .time{color:#8a92b0}
-
-      /* ملاحظة إدارية — بالوسط، بنفسجي */
       .men-acc-msg.note{align-self:center;background:linear-gradient(135deg,rgba(147,51,234,.18),rgba(107,33,168,.18));border:1.5px dashed rgba(147,51,234,.5);color:#e9d5ff;max-width:88%;text-align:center}
       .men-acc-msg.note .meta{color:#c084fc;justify-content:center;display:flex}
       .men-acc-msg.note .time{color:#c084fc;justify-content:center;display:flex}
-
-      /* مؤشر الكتابة */
       .men-typing-indicator{display:flex;align-items:center;gap:6px;padding:12px 16px;background:rgba(16,22,44,.9);border:1px solid rgba(37,99,235,.15);border-radius:18px;border-bottom-right-radius:6px;align-self:flex-start;max-width:fit-content;margin-top:4px}
       .men-typing-indicator .dot{width:6px;height:6px;border-radius:50%;background:#60a5fa;animation:menTypingBounce 1.4s infinite ease-in-out}
       .men-typing-indicator .dot:nth-child(2){animation-delay:.2s}
       .men-typing-indicator .dot:nth-child(3){animation-delay:.4s}
       @keyframes menTypingBounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-6px);opacity:1}}
-
-      /* حالة فارغة */
       .men-acc-chat-empty{text-align:center;padding:50px 20px;color:#8a92b0;font-weight:700;font-size:.88rem;margin:auto}
       .men-acc-chat-empty i{font-size:2.8rem;color:#2563eb;opacity:.5;display:block;margin-bottom:16px}
       .men-acc-chat-empty h4{color:#e0e6f4;font-size:1rem;font-weight:800;margin-bottom:6px}
@@ -394,8 +382,6 @@
       .men-acc-chat-empty .quick-ask{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:400px;margin:0 auto}
       .men-acc-chat-empty .quick-ask button{padding:8px 16px;border-radius:20px;border:1px solid rgba(37,99,235,.25);background:rgba(37,99,235,.08);color:#60a5fa;font-family:'Cairo',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;transition:all .25s}
       .men-acc-chat-empty .quick-ask button:hover{background:linear-gradient(135deg,#0a1a5c,#1e40af);border-color:transparent;color:#fff;transform:translateY(-2px)}
-
-      /* صندوق الإدخال */
       .men-acc-chat-foot{padding:14px 18px;border-top:1px solid rgba(37,99,235,.15);background:rgba(4,6,15,.5);display:flex;gap:10px;align-items:flex-end}
       .men-acc-chat-foot textarea{flex:1;padding:13px 18px;border-radius:16px;background:rgba(4,6,15,.6);border:1.5px solid rgba(37,99,235,.2);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.9rem;outline:none;transition:all .3s;resize:none;min-height:46px;max-height:120px;line-height:1.5}
       .men-acc-chat-foot textarea::placeholder{color:#5a607a}
@@ -419,39 +405,185 @@
         .men-acc-msg{max-width:85%}
       }
 
-      /* ═══ Cashback Box (Deep Blue) ═══ */
-      .men-cb-box{margin:14px 0;background:linear-gradient(160deg,rgba(10,26,92,.3),rgba(30,58,138,.15));border:1px solid rgba(59,130,246,.25);border-radius:20px;padding:18px 20px;font-family:'Cairo',sans-serif;color:#fff;box-shadow:0 12px 40px -14px rgba(10,26,92,.6)}
-      .men-cb-head{display:flex;align-items:center;gap:14px}
-      .men-cb-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#1e40af,#2563eb);display:flex;align-items:center;justify-content:center;font-size:1.15rem;color:#fff;box-shadow:0 8px 22px -8px rgba(37,99,235,.8);flex-shrink:0;border:1px solid rgba(147,197,253,.2)}
-      .men-cb-info{flex:1;min-width:0}
-      .men-cb-title{font-weight:800;font-size:.95rem;color:#fff}
-      .men-cb-bal{font-size:.78rem;color:#8a92b0;font-weight:700;margin-top:3px}
-      .men-cb-bal b{color:#60a5fa;font-weight:900}
+      /* ═══════════════════════════════════════════════════════════
+         💳 Premium Cashback Card (Deep Blue + White Logo)
+         ═══════════════════════════════════════════════════════════ */
+      .men-cb-box{
+        position:relative;
+        margin:18px 0;
+        border-radius:26px;
+        overflow:hidden;
+        background:
+          radial-gradient(ellipse 80% 60% at 20% 0%,rgba(59,130,246,.35),transparent 60%),
+          radial-gradient(ellipse 70% 50% at 100% 100%,rgba(212,165,72,.14),transparent 60%),
+          linear-gradient(135deg,#050e2e 0%,#0a1a5c 40%,#122a75 70%,#0a1a5c 100%);
+        border:1px solid rgba(96,165,250,.25);
+        box-shadow:
+          0 30px 80px -25px rgba(10,26,92,.95),
+          0 0 0 1px rgba(255,255,255,.04) inset,
+          0 1px 0 rgba(255,255,255,.12) inset;
+        font-family:'Cairo',sans-serif;
+        color:#fff;
+        isolation:isolate;
+      }
+      .men-cb-box::before{
+        content:'';
+        position:absolute;inset:0;
+        background-image:
+          linear-gradient(rgba(96,165,250,.06) 1px,transparent 1px),
+          linear-gradient(90deg,rgba(96,165,250,.06) 1px,transparent 1px);
+        background-size:22px 22px;
+        -webkit-mask-image:radial-gradient(ellipse at 30% 20%,black 10%,transparent 70%);
+        mask-image:radial-gradient(ellipse at 30% 20%,black 10%,transparent 70%);
+        pointer-events:none;z-index:1;
+      }
+      .men-cb-box::after{
+        content:'';
+        position:absolute;top:-100%;left:-100%;
+        width:200%;height:200%;
+        background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.05) 45%,rgba(255,255,255,.14) 50%,rgba(255,255,255,.05) 55%,transparent 60%);
+        transform:translateX(-100%) rotate(8deg);
+        animation:menCbShine 7s ease-in-out infinite;
+        pointer-events:none;z-index:2;
+      }
+      @keyframes menCbShine{0%,70%,100%{transform:translateX(-100%) rotate(8deg)}80%{transform:translateX(100%) rotate(8deg)}}
+      .men-cb-top{
+        position:relative;z-index:3;
+        padding:20px 24px 8px;
+        display:flex;align-items:center;justify-content:space-between;gap:16px;
+      }
+      .men-cb-logo{
+        height:34px;width:auto;object-fit:contain;
+        filter:brightness(0) invert(1) drop-shadow(0 4px 14px rgba(255,255,255,.25));
+        opacity:.95;
+      }
+      .men-cb-badge{
+        display:inline-flex;align-items:center;gap:6px;
+        padding:6px 14px;border-radius:40px;
+        background:rgba(255,255,255,.08);
+        border:1px solid rgba(255,255,255,.15);
+        font-size:.72rem;font-weight:800;letter-spacing:.5px;
+        color:#bfdbfe;backdrop-filter:blur(10px);
+      }
+      .men-cb-badge i{color:#d4a548;font-size:.75rem}
+      .men-cb-card-body{
+        position:relative;z-index:3;
+        padding:6px 24px 22px;
+        display:grid;grid-template-columns:auto 1fr auto;
+        align-items:center;gap:18px;
+      }
+      .men-cb-chip{
+        width:48px;height:38px;border-radius:8px;
+        background:linear-gradient(135deg,#d4a548 0%,#f0c46e 30%,#b8860b 70%,#d4a548 100%);
+        display:flex;align-items:center;justify-content:center;
+        font-size:1rem;color:rgba(0,0,0,.35);
+        box-shadow:0 6px 14px -4px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.5);
+        position:relative;flex-shrink:0;
+      }
+      .men-cb-chip::before{content:'';position:absolute;top:50%;left:6px;right:6px;height:1px;background:rgba(0,0,0,.18)}
+      .men-cb-chip::after{content:'';position:absolute;top:6px;bottom:6px;left:50%;width:1px;background:rgba(0,0,0,.18)}
+      .men-cb-balance-wrap{min-width:0}
+      .men-cb-balance-label{
+        font-size:.68rem;font-weight:800;color:#93c5fd;
+        letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;
+      }
+      .men-cb-balance{
+        display:flex;align-items:baseline;gap:8px;
+        font-size:1.75rem;font-weight:900;color:#fff;
+        letter-spacing:-1px;line-height:1;direction:ltr;
+      }
+      .men-cb-balance small{font-size:.85rem;font-weight:700;color:#93c5fd;letter-spacing:0}
       .men-cb-switch-wrap{cursor:pointer;display:inline-flex;flex-shrink:0}
       .men-cb-switch-wrap input{display:none}
-      .men-cb-switch{width:52px;height:28px;border-radius:60px;background:rgba(255,255,255,.06);border:1.5px solid rgba(59,130,246,.3);position:relative;transition:all .3s}
-      .men-cb-switch::after{content:'';position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#6a7290;transition:all .3s}
-      .men-cb-switch-wrap input:checked ~ .men-cb-switch{background:linear-gradient(135deg,#1e40af,#2563eb);border-color:transparent;box-shadow:0 0 22px -6px rgba(37,99,235,.9)}
-      .men-cb-switch-wrap input:checked ~ .men-cb-switch::after{right:calc(100% - 23px);background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.3)}
-      .men-cb-body{margin-top:18px;padding-top:18px;border-top:1px dashed rgba(59,130,246,.25);animation:menCbIn .35s ease}
+      .men-cb-switch{
+        width:56px;height:30px;border-radius:60px;
+        background:rgba(255,255,255,.06);
+        border:1.5px solid rgba(255,255,255,.18);
+        position:relative;transition:all .35s;
+        box-shadow:inset 0 2px 6px rgba(0,0,0,.35);
+      }
+      .men-cb-switch::after{
+        content:'';position:absolute;top:3px;right:3px;
+        width:22px;height:22px;border-radius:50%;
+        background:linear-gradient(135deg,#94a3b8,#64748b);
+        transition:all .35s cubic-bezier(.34,1.4,.64,1);
+        box-shadow:0 2px 6px rgba(0,0,0,.4);
+      }
+      .men-cb-switch-wrap input:checked ~ .men-cb-switch{
+        background:linear-gradient(135deg,#2563eb,#60a5fa);
+        border-color:rgba(147,197,253,.5);
+        box-shadow:0 0 20px -2px rgba(59,130,246,.75),inset 0 2px 6px rgba(0,0,0,.2);
+      }
+      .men-cb-switch-wrap input:checked ~ .men-cb-switch::after{
+        right:calc(100% - 25px);background:#fff;
+        box-shadow:0 2px 8px rgba(255,255,255,.55);
+      }
+      .men-cb-body{
+        position:relative;z-index:3;
+        padding:0 22px 22px;
+        animation:menCbIn .4s ease;
+      }
       @keyframes menCbIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-      .men-cb-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px;flex-wrap:wrap}
-      .men-cb-row label{font-size:.78rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1px}
-      .men-cb-input{position:relative;display:flex;align-items:center;background:rgba(4,6,15,.5);border:1.5px solid rgba(59,130,246,.2);border-radius:12px;padding:0 14px;height:46px;min-width:180px;transition:all .3s}
-      .men-cb-input:focus-within{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.15)}
-      .men-cb-input input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1.05rem;text-align:right;direction:ltr;padding:0 6px}
-      .men-cb-input input::-webkit-outer-spin-button,.men-cb-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+      .men-cb-body::before{
+        content:'';display:block;height:1px;
+        background:linear-gradient(90deg,transparent,rgba(96,165,250,.4),transparent);
+        margin-bottom:18px;
+      }
+      .men-cb-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+      .men-cb-row label{font-size:.74rem;color:#93c5fd;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+      .men-cb-input{
+        position:relative;display:flex;align-items:center;
+        background:rgba(0,0,0,.35);
+        border:1.5px solid rgba(96,165,250,.25);
+        border-radius:14px;padding:0 16px;height:48px;min-width:200px;
+        transition:all .3s;backdrop-filter:blur(8px);
+      }
+      .men-cb-input:focus-within{
+        border-color:#60a5fa;background:rgba(0,0,0,.5);
+        box-shadow:0 0 0 4px rgba(96,165,250,.15),0 0 20px -4px rgba(59,130,246,.5);
+      }
+      .men-cb-input input{
+        flex:1;background:transparent;border:none;outline:none;
+        color:#fff;font-family:'Cairo',sans-serif;font-weight:900;font-size:1.15rem;
+        text-align:right;direction:ltr;padding:0 6px;letter-spacing:.5px;
+      }
+      .men-cb-input input::placeholder{color:#4a5680}
+      .men-cb-input input::-webkit-outer-spin-button,
+      .men-cb-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
       .men-cb-input input[type=number]{-moz-appearance:textfield}
-      .men-cb-input span{color:#60a5fa;font-weight:800;font-size:.8rem;flex-shrink:0}
-      .men-cb-quick{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-      .men-cb-quick button{flex:1;min-width:70px;padding:9px 12px;border-radius:10px;border:1.5px solid rgba(59,130,246,.25);background:rgba(37,99,235,.08);color:#60a5fa;font-family:'Cairo',sans-serif;font-weight:800;font-size:.78rem;cursor:pointer;transition:all .25s}
-      .men-cb-quick button:hover{background:linear-gradient(135deg,#0a1a5c,#1e40af);border-color:transparent;color:#fff;transform:translateY(-2px);box-shadow:0 6px 16px -6px rgba(37,99,235,.6)}
-      .men-cb-summary{background:rgba(4,6,15,.35);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;border:1px solid rgba(59,130,246,.1)}
-      .men-cb-summary > div{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;font-weight:700;color:#a8b0cc}
-      .men-cb-summary > div b{color:#fff;font-weight:900;direction:ltr}
+      .men-cb-input span{color:#93c5fd;font-weight:800;font-size:.82rem;flex-shrink:0}
+      .men-cb-quick{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+      .men-cb-quick button{
+        flex:1;min-width:70px;padding:10px 12px;border-radius:12px;
+        border:1.5px solid rgba(96,165,250,.25);
+        background:rgba(59,130,246,.08);
+        color:#93c5fd;font-family:'Cairo',sans-serif;font-weight:800;font-size:.78rem;
+        cursor:pointer;transition:all .25s;backdrop-filter:blur(8px);
+      }
+      .men-cb-quick button:hover{
+        background:linear-gradient(135deg,#2563eb,#3b82f6);
+        border-color:rgba(147,197,253,.5);color:#fff;
+        transform:translateY(-2px);
+        box-shadow:0 8px 20px -6px rgba(37,99,235,.7);
+      }
+      .men-cb-summary{
+        background:rgba(0,0,0,.32);
+        border-radius:16px;padding:16px 18px;
+        display:flex;flex-direction:column;gap:10px;
+        border:1px solid rgba(96,165,250,.15);
+        backdrop-filter:blur(8px);
+      }
+      .men-cb-summary > div{
+        display:flex;justify-content:space-between;align-items:center;
+        font-size:.85rem;font-weight:700;color:#a8b0cc;
+      }
+      .men-cb-summary > div b{color:#fff;font-weight:900;direction:ltr;letter-spacing:.3px}
       .men-cb-summary .discount b{color:#4ade80}
-      .men-cb-summary .total{padding-top:10px;border-top:1px dashed rgba(59,130,246,.25);font-size:.95rem}
-      .men-cb-summary .total b{font-size:1.15rem;color:#ffffff}
+      .men-cb-summary .total{
+        padding-top:12px;border-top:1px dashed rgba(96,165,250,.25);
+        font-size:.95rem;margin-top:2px;
+      }
+      .men-cb-summary .total b{font-size:1.2rem;color:#fff;text-shadow:0 0 20px rgba(96,165,250,.5)}
     `;
     document.head.appendChild(s);
   }
@@ -970,7 +1102,7 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 💬 Chat — Enhanced
+  // 💬 Chat
   // ═══════════════════════════════════════════════════════════
   const QUICK_ASKS = [
     'متى يوصل طلبي؟',
@@ -1006,7 +1138,6 @@
     const body = $('menChatBody');
     if (!body) return;
 
-    // هل كان المستخدم في الأسفل؟ (لعرض زر "جديد")
     const wasAtBottom = body.scrollHeight - body.scrollTop - body.clientHeight < 80;
 
     if (!msgs.length) {
@@ -1022,7 +1153,6 @@
       chatLastCount = 0;
       chatLastId = null;
 
-      // ربط الأزرار السريعة
       body.querySelectorAll('[data-quick]').forEach(btn => {
         btn.addEventListener('click', () => {
           const inp = $('menChatInput');
@@ -1032,22 +1162,19 @@
       return;
     }
 
-    // لا تُعِد الرسم لو ما تغير شي
     const lastMsg = msgs[msgs.length - 1];
     if (msgs.length === chatLastCount && lastMsg.id === chatLastId && body.querySelector('.men-acc-msg')) {
       return;
     }
 
-    // كشف رسالة جديدة من الدعم
     const hasNewFromSupport = chatLastId && lastMsg.id !== chatLastId && lastMsg.sender === 'admin';
 
     chatLastCount = msgs.length;
     chatLastId = lastMsg.id;
 
-    // تجميع حسب اليوم
     let currentDay = null;
     let html = '';
-    msgs.forEach((m, idx) => {
+    msgs.forEach((m) => {
       const date = new Date(m.created_at);
       const dayKey = date.toDateString();
       if (dayKey !== currentDay) {
@@ -1072,7 +1199,6 @@
       } else {
         const isCustomer = m.sender === 'customer';
         const cls = isCustomer ? 'customer' : 'admin';
-        // ⭐ لا نظهر اسم المشرف أبداً — دائماً "الدعم"
         const label = isCustomer ? 'أنت' : 'الدعم';
 
         const readIcon = isCustomer
@@ -1089,20 +1215,16 @@
 
     body.innerHTML = html;
 
-    // تمرير للأسفل
     if (wasAtBottom || showLoader !== undefined) {
       body.scrollTop = body.scrollHeight;
     }
 
-    // صوت لو في رسالة جديدة من الدعم
     if (hasNewFromSupport) {
       playPing();
-      // وميض خفيف
       body.classList.add('has-new');
       setTimeout(() => body.classList.remove('has-new'), 800);
     }
 
-    // تحديث شارة التبويب
     const unreadFromSupport = msgs.filter(m => m.sender === 'admin' && !m.is_read).length;
     updateChatBadge(unreadFromSupport);
   }
@@ -1126,7 +1248,6 @@
     const text = input?.value?.trim();
     if (!text) return;
 
-    // إرسال متفائل (Optimistic UI)
     const tempMsg = {
       id: 'temp-' + Date.now(),
       sender: 'customer',
@@ -1173,7 +1294,6 @@
     } catch (err) {
       console.error('sendCustomerChat error:', err);
       if (window.showToast) window.showToast('فشل الإرسال: ' + err.message, 'error');
-      // أزل الرسالة المؤقتة
       if (body) body.removeChild(body.lastElementChild);
       input.value = text;
     } finally {
@@ -1394,21 +1514,33 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 💰 Cashback on Cart
+  // 💳 Premium Cashback Card — HTML
   // ═══════════════════════════════════════════════════════════
   const CASHBACK_UI_HTML = `
     <div class="men-cb-box" id="menCbBox" style="display:none">
-      <div class="men-cb-head">
-        <div class="men-cb-icon"><i class="fas fa-wallet"></i></div>
-        <div class="men-cb-info">
-          <div class="men-cb-title">استخدم رصيد الكاش باك</div>
-          <div class="men-cb-bal">رصيدك المتاح: <b id="menCbBalance">0.00</b> ر.س</div>
+      <div class="men-cb-top">
+        <img class="men-cb-logo" src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN Store">
+        <div class="men-cb-badge">
+          <i class="fas fa-gift"></i>
+          <span>كاش باك</span>
+        </div>
+      </div>
+
+      <div class="men-cb-card-body">
+        <div class="men-cb-chip"><i class="fas fa-microchip"></i></div>
+        <div class="men-cb-balance-wrap">
+          <div class="men-cb-balance-label">رصيدك المتاح</div>
+          <div class="men-cb-balance">
+            <span id="menCbBalance">0.00</span>
+            <small>ر.س</small>
+          </div>
         </div>
         <label class="men-cb-switch-wrap">
           <input type="checkbox" id="menCbToggle">
           <span class="men-cb-switch"></span>
         </label>
       </div>
+
       <div class="men-cb-body" id="menCbBody" style="display:none">
         <div class="men-cb-row">
           <label>المبلغ المستخدم</label>
