@@ -1,6 +1,6 @@
 /* ============================================================
-   ✨ MEN Store — Auth v13
-   (Deep Blue Theme + Orders + Users + Customer Chat + Premium Cashback Card)
+   ✨ MEN Store — Auth v14
+   (Deep Blue Theme + Orders + Users + Customer Chat + Premium Cashback Card + Logo Fix)
    ============================================================ */
 (function () {
   'use strict';
@@ -8,6 +8,8 @@
   // ════════ 🔑 المفاتيح ════════
   const SUPABASE_URL      = 'https://xoqwzluyxynqpdpmidts.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
+
+  const LOGO_URL = 'https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png';
 
   const credsReady = SUPABASE_URL.startsWith('https://')
                   && SUPABASE_URL.includes('.supabase.co')
@@ -27,7 +29,7 @@
   });
   window.MEN_SUPABASE = sb;
 
-  console.log('%c✨ MEN AUTH v13 · Deep Blue', 'background:linear-gradient(135deg,#0a1a5c,#2563eb);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
+  console.log('%c✨ MEN AUTH v14 · Deep Blue + Logo Fix', 'background:linear-gradient(135deg,#0a1a5c,#2563eb);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
   const CASHBACK_RATE = 0.02;
   const PHONE_DOMAIN  = 'men-store.local';
@@ -104,7 +106,6 @@
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   }
 
-  // ═══ Sound notification ═══
   function playPing() {
     try {
       const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -125,12 +126,18 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🎨 CSS — Deep Blue Theme + Premium Cashback Card
+  // 🎨 CSS
   // ═══════════════════════════════════════════════════════════
   function injectCSS() {
-    if ($('menAuthStyles')) return;
+    if ($('menAuthStylesV14')) return;
+    // إزالة النسخ القديمة
+    ['menAuthStyles','menAuthStylesV12','menAuthStylesV13'].forEach(id => {
+      const old = document.getElementById(id);
+      if (old) old.remove();
+    });
+
     const s = document.createElement('style');
-    s.id = 'menAuthStyles';
+    s.id = 'menAuthStylesV14';
     s.textContent = `
       /* ═══ AUTH SCREEN ═══ */
       .men-screen{position:fixed;inset:0;z-index:9999;display:none;font-family:'Cairo','Outfit',sans-serif;background:#04060f;overflow-y:auto;overflow-x:hidden}
@@ -406,7 +413,7 @@
       }
 
       /* ═══════════════════════════════════════════════════════════
-         💳 Premium Cashback Card (Deep Blue + White Logo)
+         💳 Premium Cashback Card
          ═══════════════════════════════════════════════════════════ */
       .men-cb-box{
         position:relative;
@@ -452,11 +459,29 @@
         padding:20px 24px 8px;
         display:flex;align-items:center;justify-content:space-between;gap:16px;
       }
+      /* ⭐ الشعار — إصلاح كامل */
       .men-cb-logo{
-        height:34px;width:auto;object-fit:contain;
-        filter:brightness(0) invert(1) drop-shadow(0 4px 14px rgba(255,255,255,.25));
-        opacity:.95;
+        height:36px !important;
+        width:auto !important;
+        max-width:160px !important;
+        object-fit:contain !important;
+        display:block !important;
+        flex-shrink:0;
+        filter:brightness(0) invert(1) drop-shadow(0 4px 14px rgba(255,255,255,.35)) !important;
+        -webkit-filter:brightness(0) invert(1) drop-shadow(0 4px 14px rgba(255,255,255,.35)) !important;
+        opacity:1 !important;
+        visibility:visible !important;
       }
+      .men-cb-logo-text{
+        color:#fff;
+        font-weight:900;
+        font-size:1.15rem;
+        letter-spacing:2px;
+        text-shadow:0 4px 16px rgba(255,255,255,.35);
+        font-family:'Cairo','Outfit',sans-serif;
+        display:none;
+      }
+      .men-cb-logo-fallback .men-cb-logo-text{display:inline-block}
       .men-cb-badge{
         display:inline-flex;align-items:center;gap:6px;
         padding:6px 14px;border-radius:40px;
@@ -623,7 +648,7 @@
           <div class="men-showcase">
             <div class="men-showcase-top">
               <div class="men-logo-row">
-                <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN Store" style="height:70px;width:auto;object-fit:contain;filter:brightness(0) invert(1) drop-shadow(0 8px 24px rgba(37,99,235,.5))">
+                <img src="${LOGO_URL}" alt="MEN Store" style="height:70px;width:auto;object-fit:contain;filter:brightness(0) invert(1) drop-shadow(0 8px 24px rgba(37,99,235,.5))" crossorigin="anonymous" referrerpolicy="no-referrer">
               </div>
             </div>
             <div class="men-showcase-center">
@@ -1518,8 +1543,18 @@
   // ═══════════════════════════════════════════════════════════
   const CASHBACK_UI_HTML = `
     <div class="men-cb-box" id="menCbBox" style="display:none">
-      <div class="men-cb-top">
-        <img class="men-cb-logo" src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN Store">
+      <div class="men-cb-top" id="menCbTop">
+        <img
+          class="men-cb-logo"
+          id="menCbLogo"
+          src="${LOGO_URL}"
+          alt="MEN Store"
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+          loading="eager"
+          onerror="(function(img){img.style.display='none';var p=img.parentElement;if(p){p.classList.add('men-cb-logo-fallback');}})(this)"
+        >
+        <span class="men-cb-logo-text">MEN STORE</span>
         <div class="men-cb-badge">
           <i class="fas fa-gift"></i>
           <span>كاش باك</span>
@@ -1657,6 +1692,16 @@
     wrap.innerHTML = CASHBACK_UI_HTML;
     const box = wrap.firstElementChild;
     anchor.insertBefore(box, anchor.firstChild);
+
+    // فحص إضافي للشعار بعد الإدراج
+    setTimeout(() => {
+      const logo = $('menCbLogo');
+      if (logo && (!logo.complete || logo.naturalWidth === 0)) {
+        console.warn('[MEN_CB] الشعار لم يتحمّل — استخدام النص البديل');
+        logo.style.display = 'none';
+        $('menCbTop')?.classList.add('men-cb-logo-fallback');
+      }
+    }, 1200);
 
     $('menCbToggle').addEventListener('change', () => {
       const checked = $('menCbToggle').checked;
