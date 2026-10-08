@@ -5,9 +5,8 @@
 
 (function () {
     'use strict';
-
-    const USERS_KEY = 'menAuthUsers';
-    const SESSION_KEY = 'menAuthSession';
+    const USERS_KEY = 'https://xoqwzluyxynqpdpmidts.supabase.co';
+    const SESSION_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
 
     let currentUser = null;
     let currentMode = 'login';
