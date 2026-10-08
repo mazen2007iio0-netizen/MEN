@@ -717,7 +717,7 @@
                                     <div class="men-form-aura"></div>
                                     <div class="men-form-ring"></div>
                                     <div class="men-form-ring r2"></div>
-                                    <i class="men-form-icon"></i>
+                                    <i class="fas fa-user-shield men-form-icon"></i>
                                 </div>
                                 <h2 class="men-form-title" data-title>تسجيل الدخول</h2>
                                 <p class="men-form-sub" data-sub>أدخل بياناتك للمتابعة</p>
