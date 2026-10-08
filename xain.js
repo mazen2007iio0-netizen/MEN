@@ -331,6 +331,7 @@
     100% { transform: scale(1); }
 }
 
+/* ═══ الرأس — الحلقتان الدوّارتان بدون أيقونة ═══ */
 .men-form-logo {
     display: flex;
     flex-direction: column;
@@ -341,11 +342,12 @@
 }
 .men-form-logo-stage {
     position: relative;
-    width: 82px; height: 82px;
+    width: 82px;
+    height: 82px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 .men-form-aura {
     position: absolute;
@@ -375,30 +377,16 @@
     animation: menSpin 6s linear infinite reverse;
 }
 @keyframes menSpin { to { transform: rotate(360deg); } }
-.men-form-icon {
-    font-size: 1.7rem;
-    position: relative;
-    z-index: 3;
-    filter: drop-shadow(0 0 14px rgba(96, 165, 250, .9)) drop-shadow(0 0 28px rgba(37, 99, 235, .6));
-    animation: menIconFloat 4s ease-in-out infinite;
-    background: linear-gradient(135deg, #ffffff 0%, #93c5fd 55%, #60a5fa 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-@keyframes menIconFloat {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-6px) rotate(-5deg); }
-}
+
 .men-form-title {
-    font-size: 1.35rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #ffffff;
     letter-spacing: -.025em;
     margin: 0;
 }
 .men-form-sub {
-    font-size: .82rem;
+    font-size: .85rem;
     color: #9db0d0;
     margin: 0;
 }
@@ -636,16 +624,14 @@
 @media (max-width: 480px) {
     .men-auth-layer { padding: 20px 14px; }
     .men-form-card { padding: 30px 22px 22px; border-radius: 22px; }
-    .men-form-title { font-size: 1.2rem; }
+    .men-form-title { font-size: 1.3rem; }
     .men-form-logo-stage { width: 74px; height: 74px; }
-    .men-form-icon { font-size: 1.5rem; }
     .men-input-wrap input { font-size: 16px; }
 }
 @media (max-height: 640px) {
     .men-auth-layer { align-items: flex-start; padding-top: 30px; }
     .men-form-logo { margin-bottom: 18px; }
     .men-form-logo-stage { width: 68px; height: 68px; }
-    .men-form-icon { font-size: 1.4rem; }
     .men-form { gap: 11px; }
     .men-input-wrap { min-height: 46px; }
     .men-submit { padding: 13px 18px; }
@@ -717,7 +703,6 @@
                                     <div class="men-form-aura"></div>
                                     <div class="men-form-ring"></div>
                                     <div class="men-form-ring r2"></div>
-                                    <i class="fas fa-user-shield men-form-icon"></i>
                                 </div>
                                 <h2 class="men-form-title" data-title>تسجيل الدخول</h2>
                                 <p class="men-form-sub" data-sub>أدخل بياناتك للمتابعة</p>
@@ -874,7 +859,6 @@
                     return setError(translateError(error.message));
                 }
 
-                // إذا الحساب يحتاج تأكيد إيميل
                 if (data.user && !data.session) {
                     setLoading(false);
                     setMode('login');
@@ -882,7 +866,6 @@
                     return;
                 }
 
-                // دخول مباشر (لو التأكيد مغلق)
                 if (data.session && data.user) {
                     completeLogin(data.user);
                 }
@@ -986,11 +969,44 @@
         makeAvatar
     };
 
-    /* ══════════════ Init ══════════════ */
+    /* ══════════════ Init (سريع جداً) ══════════════ */
     async function init() {
         injectStyles();
+        buildScreen();
 
-        // انتظر تحميل مكتبة Supabase
+        const localSession = readLocalSession();
+
+        if (localSession && localSession.user) {
+            currentUser = {
+                id: localSession.user.id,
+                email: localSession.user.email,
+                user_metadata: localSession.user.user_metadata || {},
+                created_at: localSession.user.created_at
+            };
+            screenEl.style.display = 'none';
+            hideBoot();
+            setTimeout(notify, 0);
+            verifySessionInBackground();
+            return;
+        }
+
+        hideBoot();
+        showScreen();
+        setTimeout(notify, 0);
+        waitForSupabase();
+    }
+
+    function readLocalSession() {
+        try {
+            const raw = localStorage.getItem('men-ai-auth');
+            if (!raw) return null;
+            const data = JSON.parse(raw);
+            if (data && data.user && data.access_token) return data;
+        } catch (e) {}
+        return null;
+    }
+
+    async function waitForSupabase() {
         if (!window.supabase) {
             await new Promise(r => {
                 let tries = 0;
@@ -1002,25 +1018,25 @@
 
         if (!window.supabase) {
             console.error('[MEN_AUTH] Supabase library not loaded');
-            // اعرض الشاشة بأي حال مع رسالة
-            buildScreen();
-            showScreen();
             setError('تعذّر تحميل مكتبة المصادقة — تحقق من الاتصال');
             return;
         }
 
-        // إنشاء العميل
+        if (supabase) return;
+
         supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
             auth: {
                 persistSession: true,
                 autoRefreshToken: true,
                 detectSessionInUrl: true,
-                storageKey: 'men-ai-auth'
+                storageKey: 'men-ai-auth',
+                flowType: 'pkce'
             }
         });
 
-        // ربط حدث تغيير الحالة
         supabase.auth.onAuthStateChange((event, session) => {
+            if (event === 'INITIAL_SESSION') return;
+
             if (session && session.user) {
                 currentUser = {
                     id: session.user.id,
@@ -1028,36 +1044,63 @@
                     user_metadata: session.user.user_metadata || {},
                     created_at: session.user.created_at
                 };
-                // إخفاء الشاشة لو ظاهرة
-                if (screenEl && screenEl.classList.contains('show') && event === 'SIGNED_IN') {
+                if (event === 'SIGNED_IN') {
                     hideScreen();
                 }
                 notify();
-            } else {
+            } else if (event === 'SIGNED_OUT') {
                 currentUser = null;
                 notify();
+                showScreen();
             }
         });
+    }
 
-        // تحقق من الجلسة الحالية
-        const { data: { session } } = await supabase.auth.getSession();
+    async function verifySessionInBackground() {
+        try {
+            await waitForSupabase();
+            if (!supabase) return;
 
-        if (session && session.user) {
-            currentUser = {
-                id: session.user.id,
-                email: session.user.email,
-                user_metadata: session.user.user_metadata || {},
-                created_at: session.user.created_at
-            };
-            // لا تعرض الشاشة — المستخدم مسجل
-            setTimeout(notify, 0);
-        } else {
-            // ما فيه جلسة — أظهر الشاشة
-            showScreen();
-            setTimeout(notify, 0);
+            const timeout = new Promise(resolve => setTimeout(() => resolve({ timedOut: true }), 5000));
+
+            const checkPromise = supabase.auth.getSession().then(res => ({
+                session: res.data?.session
+            })).catch(() => ({ error: true }));
+
+            const result = await Promise.race([checkPromise, timeout]);
+
+            if (result.timedOut || result.error) {
+                console.warn('[MEN_AUTH] Session verification timed out — keeping local session');
+                return;
+            }
+
+            if (result.session && result.session.user) {
+                currentUser = {
+                    id: result.session.user.id,
+                    email: result.session.user.email,
+                    user_metadata: result.session.user.user_metadata || {},
+                    created_at: result.session.user.created_at
+                };
+                notify();
+            } else {
+                const stillThere = readLocalSession();
+                if (!stillThere) {
+                    currentUser = null;
+                    notify();
+                    showScreen();
+                }
+            }
+        } catch (e) {
+            console.warn('[MEN_AUTH] Background verification error:', e);
         }
+    }
 
-        bootDone = true;
+    function hideBoot() {
+        const boot = screenEl?.querySelector('[data-boot]');
+        if (boot) {
+            boot.classList.add('hide');
+            setTimeout(() => { if (boot.parentNode) boot.parentNode.removeChild(boot); }, 400);
+        }
     }
 
     if (document.readyState === 'loading') {
