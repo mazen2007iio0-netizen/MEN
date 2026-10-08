@@ -1,16 +1,14 @@
 /* ═══════════════════════════════════════════════════════════════
    MEN Ai — Full Screen Auth (xain.js)
-   شاشة تسجيل دخول كاملة بتصميم الشات + أنيميشن انسياب الخطوط
+   شاشة تسجيل دخول كاملة الحجم — تصميم سينمائي داكن فخم
    ═══════════════════════════════════════════════════════════════ */
 
 (function () {
     'use strict';
 
-    /* ═══ المفاتيح ═══ */
     const USERS_KEY = 'menAuthUsers';
     const SESSION_KEY = 'menAuthSession';
 
-    /* ═══ الحالة ═══ */
     let currentUser = null;
     let currentMode = 'login';
     let isLoading = false;
@@ -37,13 +35,10 @@
     }
     function hashPassword(pw) {
         let h = 5381;
-        for (let i = 0; i < pw.length; i++) {
-            h = ((h << 5) + h) ^ pw.charCodeAt(i);
-            h |= 0;
-        }
+        for (let i = 0; i < pw.length; i++) { h = ((h << 5) + h) ^ pw.charCodeAt(i); h |= 0; }
         return 'h_' + Math.abs(h).toString(36) + '_' + pw.length;
     }
-    function makeAvatar(name, size) {
+    function makeAvatar(name) {
         const seed = encodeURIComponent((name || 'user').trim());
         return `https://api.dicebear.com/7.x/initials/svg?seed=${seed}&backgroundColor=1e3a8a,2563eb,3b82f6,60a5fa&fontFamily=Cairo&fontSize=42&chars=1&textColor=ffffff`;
     }
@@ -52,332 +47,438 @@
         listeners.forEach(cb => { try { cb(currentUser); } catch (e) { console.error(e); } });
     }
 
-    /* ══════════════ CSS Injection ══════════════ */
+    /* ══════════════ CSS ══════════════ */
     function injectStyles() {
         if (document.getElementById('men-auth-styles')) return;
         const s = document.createElement('style');
         s.id = 'men-auth-styles';
         s.textContent = `
-/* ════════ شاشة تسجيل الدخول الكاملة ════════ */
+/* ═══════════════════════════════════════════════
+   شاشة تسجيل الدخول — كاملة الحجم، فخمة، داكنة
+   ═══════════════════════════════════════════════ */
 .men-auth-screen {
     position: fixed;
     inset: 0;
     z-index: 999999;
-    background: #050a14;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 20px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    background: #03060d;
+    overflow: hidden;
     font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: #e8eefc;
     -webkit-font-smoothing: antialiased;
-    overscroll-behavior: contain;
     opacity: 0;
     pointer-events: none;
-    transition: opacity .45s cubic-bezier(.16, 1, .3, 1);
+    transition: opacity .55s cubic-bezier(.16, 1, .3, 1);
 }
-.men-auth-screen.show {
-    opacity: 1;
-    pointer-events: auto;
-}
+.men-auth-screen.show { opacity: 1; pointer-events: auto; }
 .men-auth-screen.hiding {
     opacity: 0;
-    transform: scale(1.04);
-    transition: opacity .5s ease, transform .5s ease;
+    transform: scale(1.05);
+    transition: opacity .6s ease, transform .6s ease;
 }
 
-/* ═══ الخلفيات المتوهجة ═══ */
-.men-bg-glow {
+/* ═══ الخلفيات الضخمة ═══ */
+.men-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+.men-bg-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(120px);
-    pointer-events: none;
-    z-index: 0;
-    opacity: .35;
+    filter: blur(140px);
+    opacity: .45;
     will-change: transform;
 }
-.men-bg-glow.g1 {
-    width: 520px; height: 520px;
-    background: radial-gradient(circle, #1e3a8a 0%, transparent 70%);
-    top: -200px; right: -200px;
-    animation: menGlow1 22s ease-in-out infinite;
+.men-bg-orb.o1 {
+    width: 780px; height: 780px;
+    background: radial-gradient(circle, #1e40af 0%, #1e3a8a 40%, transparent 70%);
+    top: -320px; right: -280px;
+    animation: menOrb1 26s ease-in-out infinite;
 }
-.men-bg-glow.g2 {
+.men-bg-orb.o2 {
+    width: 660px; height: 660px;
+    background: radial-gradient(circle, #2563eb 0%, #1e40af 40%, transparent 70%);
+    bottom: -280px; left: -240px;
+    animation: menOrb2 32s ease-in-out infinite;
+    opacity: .35;
+}
+.men-bg-orb.o3 {
     width: 460px; height: 460px;
-    background: radial-gradient(circle, #2563eb 0%, transparent 70%);
-    bottom: -200px; left: -200px;
-    animation: menGlow2 26s ease-in-out infinite;
-    opacity: .28;
+    background: radial-gradient(circle, #3b82f6 0%, #2563eb 40%, transparent 70%);
+    top: 35%; left: 45%;
+    animation: menOrb3 24s ease-in-out infinite;
+    opacity: .18;
 }
-.men-bg-glow.g3 {
-    width: 340px; height: 340px;
-    background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
-    top: 40%; left: 50%;
-    transform: translateX(-50%);
-    animation: menGlow1 30s ease-in-out infinite reverse;
-    opacity: .15;
-}
-@keyframes menGlow1 {
+@keyframes menOrb1 {
     0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(60px, 60px) scale(1.15); }
+    50% { transform: translate(-80px, 90px) scale(1.15); }
 }
-@keyframes menGlow2 {
+@keyframes menOrb2 {
     0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-60px, -50px) scale(1.12); }
+    50% { transform: translate(90px, -70px) scale(1.2); }
+}
+@keyframes menOrb3 {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-45%, -55%) scale(1.3); }
 }
 
-/* ═══ شبكة خفيفة ═══ */
+/* شبكة خفيفة تغطي الشاشة كاملة */
 .men-bg-grid {
     position: absolute;
     inset: 0;
-    pointer-events: none;
-    z-index: 0;
     background-image:
-        linear-gradient(rgba(96, 165, 250, .025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(96, 165, 250, .025) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+        linear-gradient(rgba(96, 165, 250, .028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(96, 165, 250, .028) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 70% at center, black 10%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at center, black 10%, transparent 80%);
 }
 
-/* ═══ الحاوية ═══ */
-.men-auth-wrap {
+/* حبيبات ناعمة */
+.men-bg-noise {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+    opacity: .04;
+    mix-blend-mode: overlay;
+}
+
+/* ═══ الطبقة الأساسية ═══ */
+.men-auth-layer {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+/* ═══ الحاوية الرئيسية — تصميم أفقي فخم ═══ */
+.men-auth-grid {
+    width: 100%;
+    max-width: 1180px;
+    display: grid;
+    grid-template-columns: 1fr 460px;
+    gap: 60px;
+    align-items: center;
+    animation: menGridIn 1s cubic-bezier(.16, 1, .3, 1);
+}
+@keyframes menGridIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: none; }
+}
+
+/* ═══ الجانب الأيسر — البراندينج ═══ */
+.men-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    padding: 20px 0;
+    animation: menBrandIn 1.2s cubic-bezier(.16, 1, .3, 1) .1s both;
+}
+@keyframes menBrandIn {
+    from { opacity: 0; transform: translateX(-24px); filter: blur(6px); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+.men-brand-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 14px;
+    border-radius: 30px;
+    background: rgba(37, 99, 235, .12);
+    border: 1px solid rgba(96, 165, 250, .22);
+    font-size: .74rem;
+    font-weight: 700;
+    color: #93c5fd;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    width: fit-content;
+}
+.men-brand-tag i { font-size: .72rem; }
+
+.men-brand-title {
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -.035em;
+    color: #ffffff;
+}
+.men-brand-title .grad {
+    background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 50%, #ffffff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: block;
+}
+
+.men-brand-desc {
+    font-size: 1.02rem;
+    line-height: 1.85;
+    color: #9db0d0;
+    max-width: 520px;
+    font-weight: 500;
+}
+
+/* ═══ الخطوط المنسابة الطويلة ═══ */
+.men-brand-sweep {
     width: 100%;
     max-width: 460px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 6px;
+}
+.men-sweep-big {
+    height: 2px;
+    width: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(96, 165, 250, .08) 8%,
+        rgba(96, 165, 250, .9) 55%,
+        rgba(147, 197, 253, 1) 75%,
+        rgba(96, 165, 250, .3) 92%,
+        transparent 100%);
+    transform-origin: right;
+    transform: scaleX(0);
+    animation: menBigSweep 3s cubic-bezier(.4, 0, .2, 1) infinite;
     position: relative;
-    z-index: 2;
-    margin: auto;
+    box-shadow: 0 0 16px rgba(96, 165, 250, .6), 0 0 30px rgba(37, 99, 235, .4);
+}
+.men-sweep-big.short { width: 70%; height: 1.5px; animation-delay: .4s; opacity: .8; }
+.men-sweep-big.thin { width: 45%; height: 1px; animation-delay: .8s; opacity: .55; }
+@keyframes menBigSweep {
+    0% { transform: scaleX(0); opacity: 0; }
+    12% { opacity: 1; }
+    55% { transform: scaleX(1); opacity: 1; }
+    82% { transform: scaleX(1); opacity: .35; }
+    100% { transform: scaleX(1) translateX(-28%); opacity: 0; }
+}
+.men-sweep-big::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #ffffff;
+    transform: translate(0, -50%);
+    box-shadow: 0 0 14px #93c5fd, 0 0 28px #60a5fa, 0 0 42px rgba(96, 165, 250, .8);
+    animation: menBigSpark 3s cubic-bezier(.4, 0, .2, 1) infinite;
+    opacity: 0;
+}
+.men-sweep-big.short::after { animation-delay: .4s; width: 5px; height: 5px; }
+.men-sweep-big.thin::after { animation-delay: .8s; width: 4px; height: 4px; }
+@keyframes menBigSpark {
+    0% { opacity: 0; right: 0; }
+    12% { opacity: 1; right: 0; }
+    55% { opacity: 1; right: 100%; }
+    82% { opacity: .4; right: 100%; }
+    100% { opacity: 0; right: 100%; }
 }
 
-.men-auth-card {
-    background: #0d1a2e;
+/* ═══ مميزات صغيرة ═══ */
+.men-brand-feats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 26px;
+    margin-top: 8px;
+}
+.men-feat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: .84rem;
+    font-weight: 600;
+    color: #9db0d0;
+}
+.men-feat i {
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: rgba(37, 99, 235, .14);
+    border: 1px solid rgba(96, 165, 250, .2);
+    color: #60a5fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .7rem;
+}
+
+/* ═══ الجانب الأيمن — النموذج ═══ */
+.men-form-side {
+    width: 100%;
+    animation: menFormIn 1.2s cubic-bezier(.16, 1, .3, 1) .25s both;
+}
+@keyframes menFormIn {
+    from { opacity: 0; transform: translateX(24px); filter: blur(6px); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+.men-form-card {
+    background: linear-gradient(180deg, rgba(13, 26, 46, .95) 0%, rgba(8, 18, 34, .95) 100%);
     border: 1px solid rgba(96, 165, 250, .16);
     border-radius: 26px;
-    padding: 40px 34px 30px;
+    padding: 38px 34px 30px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     position: relative;
     overflow: hidden;
     box-shadow:
-        0 30px 80px rgba(0, 0, 0, .85),
-        0 0 60px rgba(37, 99, 235, .08);
-    animation: menCardIn .65s cubic-bezier(.16, 1, .3, 1);
+        0 40px 100px rgba(0, 0, 0, .85),
+        inset 0 1px 0 rgba(255, 255, 255, .04),
+        0 0 80px rgba(37, 99, 235, .12);
+    transition: transform .3s ease;
 }
-@keyframes menCardIn {
-    from { opacity: 0; transform: translateY(28px) scale(.95); }
-    to { opacity: 1; transform: none; }
+.men-form-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(96, 165, 250, .5), transparent);
 }
-.men-auth-card.success { animation: menCardSuccess .7s ease; }
+.men-form-card.success { animation: menCardSuccess .75s ease; }
 @keyframes menCardSuccess {
     0% { transform: scale(1); }
-    30% { transform: scale(1.025); box-shadow: 0 30px 80px rgba(0,0,0,.85), 0 0 110px rgba(37,99,235,.6); }
+    30% { transform: scale(1.025); box-shadow: 0 40px 100px rgba(0,0,0,.85), 0 0 130px rgba(37,99,235,.7); }
     100% { transform: scale(1); }
 }
 
-/* ═══ الرأس ═══ */
-.men-auth-head {
+/* ═══ شعار صغير في النموذج ═══ */
+.men-form-logo {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 12px;
+    gap: 10px;
     margin-bottom: 26px;
 }
-
-/* شعار متحرك */
-.men-logo-stage {
+.men-form-logo-stage {
     position: relative;
-    width: 108px;
-    height: 108px;
+    width: 82px; height: 82px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
-.men-aura {
+.men-form-aura {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(59, 130, 246, .35) 0%, rgba(37, 99, 235, .15) 35%, transparent 70%);
+    background: radial-gradient(circle, rgba(59, 130, 246, .4) 0%, rgba(37, 99, 235, .15) 40%, transparent 70%);
     animation: menAuraPulse 3.5s ease-in-out infinite;
     filter: blur(6px);
 }
 @keyframes menAuraPulse {
-    0%, 100% { transform: scale(.9); opacity: .5; }
-    50% { transform: scale(1.15); opacity: .9; }
+    0%, 100% { transform: scale(.9); opacity: .55; }
+    50% { transform: scale(1.18); opacity: 1; }
 }
-.men-ring {
+.men-form-ring {
     position: absolute;
-    inset: 10px;
+    inset: 8px;
     border-radius: 50%;
     border: 1.5px solid transparent;
-    border-top-color: rgba(96, 165, 250, .7);
-    border-right-color: rgba(96, 165, 250, .2);
+    border-top-color: rgba(96, 165, 250, .8);
+    border-right-color: rgba(96, 165, 250, .15);
     animation: menSpin 8s linear infinite;
 }
-.men-ring.r2 {
-    inset: 22px;
-    border-top-color: rgba(147, 197, 253, .5);
-    border-left-color: rgba(96, 165, 250, .2);
+.men-form-ring.r2 {
+    inset: 18px;
+    border-top-color: rgba(147, 197, 253, .55);
+    border-left-color: rgba(96, 165, 250, .15);
     animation: menSpin 6s linear infinite reverse;
 }
 @keyframes menSpin { to { transform: rotate(360deg); } }
-
-.men-logo-icon {
-    font-size: 2.3rem;
+.men-form-icon {
+    font-size: 1.7rem;
     position: relative;
     z-index: 3;
-    filter: drop-shadow(0 0 16px rgba(96, 165, 250, .9)) drop-shadow(0 0 32px rgba(37, 99, 235, .6));
+    filter: drop-shadow(0 0 14px rgba(96, 165, 250, .9)) drop-shadow(0 0 28px rgba(37, 99, 235, .6));
     animation: menIconFloat 4s ease-in-out infinite;
-    background: linear-gradient(135deg, #ffffff 0%, #93c5fd 60%, #60a5fa 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #93c5fd 55%, #60a5fa 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 @keyframes menIconFloat {
     0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-7px) rotate(-5deg); }
+    50% { transform: translateY(-6px) rotate(-5deg); }
 }
 
-/* العناوين */
-.men-title {
-    font-size: 1.5rem;
+.men-form-title {
+    font-size: 1.35rem;
     font-weight: 700;
-    color: #e8eefc;
+    color: #ffffff;
     letter-spacing: -.025em;
-    line-height: 1.3;
-    animation: menTextFade .8s ease .15s both;
+    margin: 0;
 }
-.men-sub {
-    font-size: .85rem;
+.men-form-sub {
+    font-size: .82rem;
     color: #9db0d0;
-    animation: menTextFade .8s ease .3s both;
-}
-@keyframes menTextFade {
-    from { opacity: 0; transform: translateY(8px); filter: blur(4px); }
-    to { opacity: 1; transform: none; filter: blur(0); }
+    margin: 0;
 }
 
-/* ═══════════════════════════════════════
-   ✨ أنيميشن انسياب الخطوط (يمين ← يسار)
-   ═══════════════════════════════════════ */
-.men-sweep-container {
-    width: 100%;
-    max-width: 260px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 7px;
-    margin-top: 6px;
-    animation: menTextFade .8s ease .45s both;
-}
-.men-sweep-line {
-    height: 1.5px;
-    width: 100%;
-    border-radius: 2px;
-    background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(96, 165, 250, .15) 10%,
-        rgba(96, 165, 250, .8) 50%,
-        rgba(147, 197, 253, 1) 70%,
-        rgba(96, 165, 250, .4) 90%,
-        transparent 100%);
-    transform-origin: right;
-    transform: scaleX(0);
-    animation: menSweep 2.6s cubic-bezier(.4, 0, .2, 1) infinite;
-    position: relative;
-    box-shadow: 0 0 12px rgba(96, 165, 250, .5);
-}
-.men-sweep-line.short {
-    width: 62%;
-    height: 1px;
-    animation-delay: .35s;
-    opacity: .75;
-}
-.men-sweep-line.thin {
-    width: 38%;
-    height: 1px;
-    animation-delay: .7s;
-    opacity: .5;
-}
-@keyframes menSweep {
-    0% { transform: scaleX(0); opacity: 0; }
-    15% { opacity: 1; }
-    60% { transform: scaleX(1); opacity: 1; }
-    85% { transform: scaleX(1); opacity: .4; }
-    100% { transform: scaleX(1) translateX(-30%); opacity: 0; }
-}
-.men-sweep-line::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: 0;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #93c5fd;
-    transform: translate(0, -50%);
-    box-shadow: 0 0 12px #60a5fa, 0 0 24px rgba(96, 165, 250, .7);
-    animation: menSpark 2.6s cubic-bezier(.4, 0, .2, 1) infinite;
-    opacity: 0;
-}
-.men-sweep-line.short::after { animation-delay: .35s; }
-.men-sweep-line.thin::after { animation-delay: .7s; }
-@keyframes menSpark {
-    0% { opacity: 0; right: 0; }
-    15% { opacity: 1; right: 0; }
-    60% { opacity: 1; right: 100%; }
-    85% { opacity: .4; right: 100%; }
-    100% { opacity: 0; right: 100%; }
-}
-
-/* ═══ النموذج ═══ */
+/* ═══ نموذج ═══ */
 .men-form {
     display: flex;
     flex-direction: column;
-    gap: 13px;
-    animation: menTextFade .8s ease .55s both;
+    gap: 14px;
 }
 .men-field {
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    transition: opacity .25s, max-height .35s;
+    gap: 8px;
+    animation: menFieldIn .55s cubic-bezier(.16, 1, .3, 1) both;
 }
-.men-field.hidden {
-    display: none;
+.men-field.hidden { display: none; }
+.men-field:nth-child(1) { animation-delay: .05s; }
+.men-field:nth-child(2) { animation-delay: .12s; }
+.men-field:nth-child(3) { animation-delay: .19s; }
+.men-field:nth-child(4) { animation-delay: .26s; }
+@keyframes menFieldIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
 }
+
 .men-field label {
-    font-size: .78rem;
-    font-weight: 600;
+    font-size: .76rem;
+    font-weight: 700;
     color: #9db0d0;
     padding-inline-start: 4px;
+    letter-spacing: .01em;
 }
 
 .men-input-wrap {
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: #0a1424;
-    border: 1px solid rgba(96, 165, 250, .14);
-    border-radius: 13px;
-    padding: 0 12px;
-    transition: border-color .18s, box-shadow .18s, background .18s;
+    gap: 12px;
+    background: rgba(5, 10, 20, .75);
+    border: 1px solid rgba(96, 165, 250, .13);
+    border-radius: 14px;
+    padding: 0 14px;
+    transition: border-color .2s, box-shadow .2s, background .2s, transform .2s;
     position: relative;
-    min-height: 48px;
+    min-height: 50px;
 }
 .men-input-wrap:focus-within {
-    border-color: rgba(96, 165, 250, .5);
-    background: #0f1e36;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, .14);
+    border-color: rgba(96, 165, 250, .55);
+    background: rgba(10, 22, 40, .95);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, .14), 0 8px 24px -8px rgba(37, 99, 235, .4);
+    transform: translateY(-1px);
 }
 .men-input-wrap > i {
     color: #5c6f92;
-    font-size: .85rem;
-    width: 16px;
+    font-size: .88rem;
+    width: 18px;
     text-align: center;
     flex-shrink: 0;
-    transition: color .18s;
+    transition: color .2s;
 }
 .men-input-wrap:focus-within > i { color: #60a5fa; }
 .men-input-wrap input {
@@ -388,19 +489,19 @@
     outline: none;
     color: #e8eefc;
     font-family: inherit;
-    font-size: .92rem;
-    padding: 13px 0;
+    font-size: .93rem;
+    padding: 14px 0;
 }
-.men-input-wrap input::placeholder { color: #475a7a; }
+.men-input-wrap input::placeholder { color: #455878; }
 .men-input-wrap input:-webkit-autofill {
     -webkit-text-fill-color: #e8eefc;
-    -webkit-box-shadow: 0 0 0 1000px #0a1424 inset;
+    -webkit-box-shadow: 0 0 0 1000px rgba(5, 10, 20, .9) inset;
     transition: background-color 9999s ease-in-out 0s;
 }
 
 .men-eye {
-    width: 32px; height: 32px;
-    border-radius: 8px;
+    width: 34px; height: 34px;
+    border-radius: 9px;
     border: none;
     background: transparent;
     color: #5c6f92;
@@ -408,25 +509,25 @@
     font-size: .82rem;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    transition: .15s;
+    transition: .18s;
 }
-.men-eye:hover { background: rgba(96, 165, 250, .08); color: #60a5fa; }
+.men-eye:hover { background: rgba(96, 165, 250, .1); color: #60a5fa; }
 
 /* ═══ الخطأ ═══ */
 .men-error {
     display: none;
     color: #f87171;
     background: rgba(239, 65, 70, .08);
-    border: 1px solid rgba(239, 65, 70, .22);
-    border-radius: 11px;
+    border: 1px solid rgba(239, 65, 70, .25);
+    border-radius: 12px;
     padding: 11px 14px;
     font-size: .82rem;
-    font-weight: 500;
+    font-weight: 600;
     text-align: center;
 }
-.men-error.show { display: block; animation: menErrIn .3s ease; }
+.men-error.show { display: block; animation: menErrIn .35s ease; }
 @keyframes menErrIn {
-    from { opacity: 0; transform: translateY(-4px); }
+    from { opacity: 0; transform: translateY(-6px) scale(.96); }
     to { opacity: 1; transform: none; }
 }
 
@@ -435,25 +536,43 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 9px;
-    margin-top: 6px;
-    padding: 14px 18px;
-    border-radius: 13px;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 15px 20px;
+    border-radius: 14px;
     border: none;
-    background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
-    color: #fff;
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 45%, #3b82f6 100%);
+    color: #ffffff;
     font-family: inherit;
     font-size: .95rem;
     font-weight: 700;
+    letter-spacing: .01em;
     cursor: pointer;
-    transition: transform .18s, box-shadow .18s;
-    box-shadow: 0 10px 30px -8px rgba(37, 99, 235, .8), inset 0 1px 0 rgba(255,255,255,.14);
+    position: relative;
+    overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow:
+        0 12px 34px -8px rgba(37, 99, 235, .9),
+        0 0 0 1px rgba(96, 165, 250, .2) inset,
+        0 1px 0 rgba(255,255,255,.14) inset;
 }
+.men-submit::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,.15) 50%, transparent 100%);
+    transform: translateX(-100%);
+    transition: transform .6s ease;
+}
+.men-submit:hover:not(:disabled)::before { transform: translateX(100%); }
 .men-submit:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 14px 36px -8px rgba(59, 130, 246, .9), inset 0 1px 0 rgba(255,255,255,.18);
+    transform: translateY(-2px);
+    box-shadow:
+        0 18px 42px -8px rgba(59, 130, 246, 1),
+        0 0 0 1px rgba(147, 197, 253, .3) inset,
+        0 1px 0 rgba(255,255,255,.18) inset;
 }
-.men-submit:active:not(:disabled) { transform: translateY(0) scale(.98); }
+.men-submit:active:not(:disabled) { transform: translateY(0) scale(.985); }
 .men-submit:disabled { opacity: .75; cursor: not-allowed; }
 
 .men-spinner {
@@ -473,39 +592,60 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    margin-top: 18px;
-    padding-top: 18px;
+    margin-top: 20px;
+    padding-top: 20px;
     border-top: 1px solid rgba(96, 165, 250, .1);
-    font-size: .82rem;
+    font-size: .83rem;
     color: #5c6f92;
-    animation: menTextFade .8s ease .65s both;
+    font-weight: 500;
 }
 .men-switch button {
     background: transparent;
     border: none;
     color: #60a5fa;
     font-family: inherit;
-    font-size: .82rem;
+    font-size: .83rem;
     font-weight: 700;
     cursor: pointer;
-    padding: 4px 6px;
+    padding: 5px 8px;
     border-radius: 8px;
-    transition: .15s;
+    transition: .18s;
 }
 .men-switch button:hover {
-    background: rgba(96, 165, 250, .1);
+    background: rgba(96, 165, 250, .12);
     color: #93c5fd;
 }
 
-/* ═══ Responsive ═══ */
+/* ═══ Responsive — الجوال ═══ */
+@media (max-width: 960px) {
+    .men-auth-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+        max-width: 480px;
+    }
+    .men-brand {
+        display: none;
+    }
+    .men-form-card {
+        padding: 34px 26px 26px;
+    }
+}
 @media (max-width: 480px) {
-    .men-auth-screen { padding: 16px 14px; }
-    .men-auth-card { padding: 32px 22px 24px; border-radius: 22px; }
-    .men-title { font-size: 1.28rem; }
-    .men-logo-stage { width: 92px; height: 92px; }
-    .men-logo-icon { font-size: 2rem; }
-    .men-sweep-container { max-width: 210px; gap: 6px; }
+    .men-auth-layer { padding: 20px 14px; }
+    .men-form-card { padding: 30px 22px 22px; border-radius: 22px; }
+    .men-form-title { font-size: 1.2rem; }
+    .men-form-logo-stage { width: 74px; height: 74px; }
+    .men-form-icon { font-size: 1.5rem; }
     .men-input-wrap input { font-size: 16px; }
+}
+@media (max-height: 640px) {
+    .men-auth-layer { align-items: flex-start; padding-top: 30px; }
+    .men-form-logo { margin-bottom: 18px; }
+    .men-form-logo-stage { width: 68px; height: 68px; }
+    .men-form-icon { font-size: 1.4rem; }
+    .men-form { gap: 11px; }
+    .men-input-wrap { min-height: 46px; }
+    .men-submit { padding: 13px 18px; }
 }
         `;
         document.head.appendChild(s);
@@ -518,79 +658,121 @@
         screenEl = document.createElement('div');
         screenEl.className = 'men-auth-screen';
         screenEl.innerHTML = `
-            <div class="men-bg-glow g1"></div>
-            <div class="men-bg-glow g2"></div>
-            <div class="men-bg-glow g3"></div>
-            <div class="men-bg-grid"></div>
+            <div class="men-bg">
+                <div class="men-bg-orb o1"></div>
+                <div class="men-bg-orb o2"></div>
+                <div class="men-bg-orb o3"></div>
+                <div class="men-bg-grid"></div>
+                <div class="men-bg-noise"></div>
+            </div>
 
-            <div class="men-auth-wrap">
-                <div class="men-auth-card">
-                    <div class="men-auth-head">
-                        <div class="men-logo-stage">
-                            <div class="men-aura"></div>
-                            <div class="men-ring"></div>
-                            <div class="men-ring r2"></div>
-                            <i class="fas fa-user-shield men-logo-icon"></i>
+            <div class="men-auth-layer">
+                <div class="men-auth-grid">
+
+                    <!-- ═══ الجانب الأيسر — براندينج ═══ -->
+                    <div class="men-brand">
+                        <span class="men-brand-tag">
+                            <i class="fas fa-sparkles"></i>
+                            مدعوم بالذكاء الاصطناعي
+                        </span>
+
+                        <h1 class="men-brand-title">
+                            مرحباً بك في
+                            <span class="grad">MEN Ai</span>
+                        </h1>
+
+                        <p class="men-brand-desc">
+                            مساعدك الذكي للإجابة على أسئلتك، تحليل ملفاتك، وإنجاز مهامك بسرعة ودقة واحترافية.
+                        </p>
+
+                        <div class="men-brand-sweep">
+                            <div class="men-sweep-big"></div>
+                            <div class="men-sweep-big short"></div>
+                            <div class="men-sweep-big thin"></div>
                         </div>
 
-                        <h2 class="men-title" data-title>تسجيل الدخول</h2>
-                        <p class="men-sub" data-sub>أدخل بياناتك للمتابعة إلى MEN Ai</p>
-
-                        <div class="men-sweep-container">
-                            <div class="men-sweep-line"></div>
-                            <div class="men-sweep-line short"></div>
-                            <div class="men-sweep-line thin"></div>
+                        <div class="men-brand-feats">
+                            <div class="men-feat">
+                                <i class="fas fa-bolt"></i>
+                                <span>ردود فورية</span>
+                            </div>
+                            <div class="men-feat">
+                                <i class="fas fa-shield-halved"></i>
+                                <span>خصوصية كاملة</span>
+                            </div>
+                            <div class="men-feat">
+                                <i class="fas fa-file-lines"></i>
+                                <span>تحليل الملفات</span>
+                            </div>
                         </div>
                     </div>
 
-                    <form class="men-form" novalidate>
-                        <div class="men-field hidden" data-field-name>
-                            <label>الاسم</label>
-                            <div class="men-input-wrap">
-                                <i class="fas fa-user"></i>
-                                <input type="text" name="name" autocomplete="name" placeholder="اسمك">
-                            </div>
-                        </div>
+                    <!-- ═══ الجانب الأيمن — نموذج ═══ -->
+                    <div class="men-form-side">
+                        <div class="men-form-card">
+                            <div class="men-form-logo">
+                                <div class="men-form-logo-stage">
+                                    <div class="men-form-aura"></div>
+                                    <div class="men-form-ring"></div>
+                                    <div class="men-form-ring r2"></div>
+                                    <i class="fas fa-user-shield men-form-icon"></i>
+                                </div>
 
-                        <div class="men-field">
-                            <label>البريد الإلكتروني</label>
-                            <div class="men-input-wrap">
-                                <i class="fas fa-envelope"></i>
-                                <input type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+                                <h2 class="men-form-title" data-title>تسجيل الدخول</h2>
+                                <p class="men-form-sub" data-sub>أدخل بياناتك للمتابعة</p>
                             </div>
-                        </div>
 
-                        <div class="men-field">
-                            <label>كلمة المرور</label>
-                            <div class="men-input-wrap">
-                                <i class="fas fa-lock"></i>
-                                <input type="password" name="password" autocomplete="current-password" placeholder="••••••••" required>
-                                <button class="men-eye" type="button" tabindex="-1" aria-label="إظهار">
-                                    <i class="fas fa-eye"></i>
+                            <form class="men-form" novalidate>
+                                <div class="men-field hidden" data-field-name>
+                                    <label>الاسم</label>
+                                    <div class="men-input-wrap">
+                                        <i class="fas fa-user"></i>
+                                        <input type="text" name="name" autocomplete="name" placeholder="اسمك الكامل">
+                                    </div>
+                                </div>
+
+                                <div class="men-field">
+                                    <label>البريد الإلكتروني</label>
+                                    <div class="men-input-wrap">
+                                        <i class="fas fa-envelope"></i>
+                                        <input type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+                                    </div>
+                                </div>
+
+                                <div class="men-field">
+                                    <label>كلمة المرور</label>
+                                    <div class="men-input-wrap">
+                                        <i class="fas fa-lock"></i>
+                                        <input type="password" name="password" autocomplete="current-password" placeholder="••••••••" required>
+                                        <button class="men-eye" type="button" tabindex="-1" aria-label="إظهار">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="men-field hidden" data-field-confirm>
+                                    <label>تأكيد كلمة المرور</label>
+                                    <div class="men-input-wrap">
+                                        <i class="fas fa-lock"></i>
+                                        <input type="password" name="confirm" autocomplete="new-password" placeholder="••••••••">
+                                    </div>
+                                </div>
+
+                                <div class="men-error" data-error></div>
+
+                                <button class="men-submit" type="submit">
+                                    <span data-submit-text>دخول</span>
+                                    <span class="men-spinner"></span>
                                 </button>
+                            </form>
+
+                            <div class="men-switch">
+                                <span data-switch-text>ليس لديك حساب؟</span>
+                                <button type="button" data-switch-btn>إنشاء حساب جديد</button>
                             </div>
                         </div>
-
-                        <div class="men-field hidden" data-field-confirm>
-                            <label>تأكيد كلمة المرور</label>
-                            <div class="men-input-wrap">
-                                <i class="fas fa-lock"></i>
-                                <input type="password" name="confirm" autocomplete="new-password" placeholder="••••••••">
-                            </div>
-                        </div>
-
-                        <div class="men-error" data-error></div>
-
-                        <button class="men-submit" type="submit">
-                            <span data-submit-text>دخول</span>
-                            <span class="men-spinner"></span>
-                        </button>
-                    </form>
-
-                    <div class="men-switch">
-                        <span data-switch-text>ليس لديك حساب؟</span>
-                        <button type="button" data-switch-btn>إنشاء حساب جديد</button>
                     </div>
+
                 </div>
             </div>
         `;
@@ -604,13 +786,8 @@
             btn.addEventListener('click', () => {
                 const input = btn.parentElement.querySelector('input');
                 const icon = btn.querySelector('i');
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    icon.className = 'fas fa-eye-slash';
-                } else {
-                    input.type = 'password';
-                    icon.className = 'fas fa-eye';
-                }
+                if (input.type === 'password') { input.type = 'text'; icon.className = 'fas fa-eye-slash'; }
+                else { input.type = 'password'; icon.className = 'fas fa-eye'; }
             });
         });
 
@@ -625,7 +802,7 @@
         currentMode = mode;
         const isLogin = mode === 'login';
         screenEl.querySelector('[data-title]').textContent = isLogin ? 'تسجيل الدخول' : 'إنشاء حساب';
-        screenEl.querySelector('[data-sub]').textContent = isLogin ? 'أدخل بياناتك للمتابعة إلى MEN Ai' : 'أنشئ حسابك للبدء في استخدام MEN Ai';
+        screenEl.querySelector('[data-sub]').textContent = isLogin ? 'أدخل بياناتك للمتابعة' : 'انشئ حسابك للبدء باستخدام MEN Ai';
         screenEl.querySelector('[data-submit-text]').textContent = isLogin ? 'دخول' : 'إنشاء الحساب';
         screenEl.querySelector('[data-switch-text]').textContent = isLogin ? 'ليس لديك حساب؟' : 'لديك حساب بالفعل؟';
         screenEl.querySelector('[data-switch-btn]').textContent = isLogin ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
@@ -659,7 +836,6 @@
         const confirm = form.confirm ? form.confirm.value : '';
 
         setError('');
-
         if (!email) return setError('الرجاء إدخال البريد الإلكتروني');
         if (!isValidEmail(email)) return setError('البريد الإلكتروني غير صحيح');
         if (!password) return setError('الرجاء إدخال كلمة المرور');
@@ -677,8 +853,7 @@
 
             const user = {
                 id: 'u_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
-                email,
-                user_metadata: { name },
+                email, user_metadata: { name },
                 created_at: new Date().toISOString(),
                 passwordHash: hashPassword(password)
             };
@@ -698,15 +873,14 @@
 
     function completeLogin(user) {
         currentUser = {
-            id: user.id,
-            email: user.email,
+            id: user.id, email: user.email,
             user_metadata: user.user_metadata || {},
             created_at: user.created_at
         };
         saveSession(currentUser);
         setLoading(false);
 
-        const card = screenEl.querySelector('.men-auth-card');
+        const card = screenEl.querySelector('.men-form-card');
         card.classList.add('success');
 
         setTimeout(() => {
@@ -717,9 +891,9 @@
 
     function showScreen() {
         buildScreen();
+        screenEl.style.display = '';
         screenEl.classList.remove('hiding');
         requestAnimationFrame(() => screenEl.classList.add('show'));
-        // امنع السكرول في الخلفية
         document.body.style.overflow = 'hidden';
     }
 
@@ -733,14 +907,13 @@
                 screenEl.classList.remove('hiding');
             }
             document.body.style.overflow = '';
-        }, 500);
+        }, 600);
     }
 
     function doLogout() {
         try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
         currentUser = null;
 
-        // إعادة عرض الشاشة
         if (screenEl) {
             screenEl.style.display = '';
             screenEl.querySelector('form').reset();
@@ -750,13 +923,14 @@
             });
             setMode('login');
             setError('');
+            showScreen();
         } else {
             showScreen();
         }
         notify();
     }
 
-    /* ══════════════ Public API ══════════════ */
+    /* ══════════════ API ══════════════ */
     window.MEN_AUTH = {
         isLoggedIn: () => !!currentUser,
         getUser: () => currentUser,
@@ -774,19 +948,15 @@
     /* ══════════════ Init ══════════════ */
     function init() {
         injectStyles();
-
         const session = getSession();
         if (session && session.email) {
             const users = getUsers();
             if (users[session.email]) {
                 currentUser = session;
-                // لا نعرض الشاشة
                 setTimeout(notify, 0);
                 return;
             }
         }
-
-        // ما فيه جلسة → أظهر الشاشة
         showScreen();
         setTimeout(notify, 0);
     }
