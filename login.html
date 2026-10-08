@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <link rel="icon" type="image/png" href="logo1.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#050a14">
+    <title>MEN Ai — تسجيل الدخول</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        :root {
+            --bg: #050a14;
+            --bg-elev: #0d1a2e;
+            --bg-composer: #0a1424;
+            --bg-hover: rgba(96, 165, 250, .08);
+            --txt: #e8eefc;
+            --txt-2: #9db0d0;
+            --txt-3: #5c6f92;
+            --line: rgba(96, 165, 250, .1);
+            --accent: #2563eb;
+            --accent-2: #3b82f6;
+            --accent-3: #60a5fa;
+        }
+
+        html, body {
+            min-height: 100%;
+            background: var(--bg);
+            color: var(--txt);
+            font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overscroll-behavior: none;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(96, 165, 250, .15); border-radius: 8px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(96, 165, 250, .28); }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 20px;
+            min-height: 100vh;
+            min-height: 100dvh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ═══════════ خلفية متحركة ═══════════ */
+        .bg-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: .35;
+            will-change: transform;
+        }
+        .bg-glow.g1 {
+            width: 520px; height: 520px;
+            background: radial-gradient(circle, #1e3a8a 0%, transparent 70%);
+            top: -200px; right: -200px;
+            animation: glowFloat1 22s ease-in-out infinite;
+        }
+        .bg-glow.g2 {
+            width: 460px; height: 460px;
+            background: radial-gradient(circle, #2563eb 0%, transparent 70%);
+            bottom: -200px; left: -200px;
+            animation: glowFloat2 26s ease-in-out infinite;
+            opacity: .28;
+        }
+        .bg-glow.g3 {
+            width: 340px; height: 340px;
+            background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+            top: 40%; left: 50%;
+            transform: translateX(-50%);
+            animation: glowFloat1 30s ease-in-out infinite reverse;
+            opacity: .15;
+        }
+        @keyframes glowFloat1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(60px, 60px) scale(1.15); }
+        }
+        @keyframes glowFloat2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-60px, -50px) scale(1.12); }
+        }
+
+        /* شبكة خفيفة */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(96, 165, 250, .025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(96, 165, 250, .025) 1px, transparent 1px);
+            background-size: 56px 56px;
+            mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+        }
+
+        /* ═══════════ الحاوية ═══════════ */
+        .page {
+            width: 100%;
+            max-width: 460px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .box {
+            background: var(--bg-elev);
+            border: 1px solid rgba(96, 165, 250, .16);
+            border-radius: 26px;
+            padding: 38px 32px 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, .85),
+                0 0 60px rgba(37, 99, 235, .08);
+            animation: boxIn .6s cubic-bezier(.16, 1, .3, 1);
+        }
+        @keyframes boxIn {
+            from { opacity: 0; transform: translateY(24px) scale(.96); }
+            to { opacity: 1; transform: none; }
+        }
+
+        .box.success { animation: boxSuccess .7s ease; }
+        @keyframes boxSuccess {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.02); box-shadow: 0 30px 80px rgba(0,0,0,.85), 0 0 100px rgba(37,99,235,.55); }
+            100% { transform: scale(1); }
+        }
+
+        /* ═══════════ الرأس ═══════════ */
+        .head {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .logo-stage {
+            position: relative;
+            width: 104px;
+            height: 104px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4px;
+        }
+        .aura {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, .35) 0%, rgba(37, 99, 235, .15) 35%, transparent 70%);
+            animation: auraPulse 3.5s ease-in-out infinite;
+            filter: blur(6px);
+        }
+        @keyframes auraPulse {
+            0%, 100% { transform: scale(.9); opacity: .5; }
+            50% { transform: scale(1.15); opacity: .9; }
+        }
+        .ring {
+            position: absolute;
+            inset: 10px;
+            border-radius: 50%;
+            border: 1.5px solid transparent;
+            border-top-color: rgba(96, 165, 250, .7);
+            border-right-color: rgba(96, 165, 250, .2);
+            animation: orbitSpin 8s linear infinite;
+        }
+        .ring.r2 {
+            inset: 22px;
+            border-top-color: rgba(147, 197, 253, .5);
+            border-left-color: rgba(96, 165, 250, .2);
+            animation: orbitSpin 6s linear infinite reverse;
+        }
+        @keyframes orbitSpin { to { transform: rotate(360deg); } }
+
+        .logo-icon {
+            font-size: 2.3rem;
+            position: relative;
+            z-index: 3;
+            filter: drop-shadow(0 0 16px rgba(96, 165, 250, .9)) drop-shadow(0 0 32px rgba(37, 99, 235, .6));
+            animation: iconFloat 4s ease-in-out infinite;
+            background: linear-gradient(135deg, #ffffff 0%, #93c5fd 60%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-7px) rotate(-5deg); }
+        }
+
+        /* ═══ العناوين ═══ */
+        h1 {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--txt);
+            letter-spacing: -.025em;
+            line-height: 1.3;
+            animation: textFade .8s ease .15s both;
+        }
+        .sub {
+            font-size: .85rem;
+            color: var(--txt-2);
+            animation: textFade .8s ease .3s both;
+        }
+        @keyframes textFade {
+            from { opacity: 0; transform: translateY(8px); filter: blur(4px); }
+            to { opacity: 1; transform: none; filter: blur(0); }
+        }
+
+        /* ═══════════════════════════════════════
+           ✨ أنيميشن انسياب الخطوط من اليمين لليسار
+           ═══════════════════════════════════════ */
+        .line-sweep-container {
+            width: 100%;
+            max-width: 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 7px;
+            margin-top: 6px;
+            animation: textFade .8s ease .45s both;
+        }
+        .sweep-line {
+            height: 1.5px;
+            width: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(96, 165, 250, .15) 10%,
+                rgba(96, 165, 250, .8) 50%,
+                rgba(147, 197, 253, 1) 70%,
+                rgba(96, 165, 250, .4) 90%,
+                transparent 100%);
+            transform-origin: right;
+            transform: scaleX(0);
+            animation: sweepRightToLeft 2.6s cubic-bezier(.4, 0, .2, 1) infinite;
+            position: relative;
+            box-shadow: 0 0 12px rgba(96, 165, 250, .5);
+        }
+        .sweep-line.short {
+            width: 62%;
+            height: 1px;
+            animation-delay: .35s;
+            opacity: .75;
+        }
+        .sweep-line.thin {
+            width: 38%;
+            height: 1px;
+            animation-delay: .7s;
+            opacity: .5;
+        }
+        @keyframes sweepRightToLeft {
+            0% { transform: scaleX(0); opacity: 0; }
+            15% { opacity: 1; }
+            60% { transform: scaleX(1); opacity: 1; }
+            85% { transform: scaleX(1); opacity: .4; }
+            100% { transform: scaleX(1) translateX(-30%); opacity: 0; }
+        }
+        .sweep-line::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #93c5fd;
+            transform: translate(0, -50%);
+            box-shadow: 0 0 12px #60a5fa, 0 0 24px rgba(96, 165, 250, .7);
+            animation: sparkMove 2.6s cubic-bezier(.4, 0, .2, 1) infinite;
+            opacity: 0;
+        }
+        .sweep-line.short::after { animation-delay: .35s; }
+        .sweep-line.thin::after { animation-delay: .7s; }
+        @keyframes sparkMove {
+            0% { opacity: 0; right: 0; }
+            15% { opacity: 1; right: 0; }
+            60% { opacity: 1; right: 100%; }
+            85% { opacity: .4; right: 100%; }
+            100% { opacity: 0; right: 100%; }
+        }
+
+        /* ═══════════ النموذج ═══════════ */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+            animation: textFade .8s ease .55s both;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+        .field.hidden { display: none; }
+        .field label {
+            font-size: .78rem;
+            font-weight: 600;
+            color: var(--txt-2);
+            padding-inline-start: 4px;
+        }
+
+        .input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-composer);
+            border: 1px solid rgba(96, 165, 250, .14);
+            border-radius: 13px;
+            padding: 0 12px;
+            transition: border-color .18s, box-shadow .18s, background .18s;
+            position: relative;
+            min-height: 48px;
+        }
+        .input-wrap:focus-within {
+            border-color: rgba(96, 165, 250, .5);
+            background: #0f1e36;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .14);
+        }
+        .input-wrap > i {
+            color: var(--txt-3);
+            font-size: .85rem;
+            width: 16px;
+            text-align: center;
+            flex-shrink: 0;
+            transition: color .18s;
+        }
+        .input-wrap:focus-within > i { color: var(--accent-3); }
+        .input-wrap input {
+            flex: 1;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--txt);
+            font-family: inherit;
+            font-size: .92rem;
+            padding: 13px 0;
+        }
+        .input-wrap input::placeholder { color: #475a7a; }
+        .input-wrap input:-webkit-autofill {
+            -webkit-text-fill-color: var(--txt);
+            -webkit-box-shadow: 0 0 0 1000px var(--bg-composer) inset;
+            transition: background-color 9999s ease-in-out 0s;
+        }
+
+        .eye {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--txt-3);
+            cursor: pointer;
+            font-size: .82rem;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            transition: .15s;
+        }
+        .eye:hover { background: var(--bg-hover); color: var(--accent-3); }
+
+        /* ═══ الخطأ ═══ */
+        .error-msg {
+            display: none;
+            color: #f87171;
+            background: rgba(239, 65, 70, .08);
+            border: 1px solid rgba(239, 65, 70, .22);
+            border-radius: 11px;
+            padding: 11px 14px;
+            font-size: .82rem;
+            font-weight: 500;
+            text-align: center;
+        }
+        .error-msg.show { display: block; animation: errIn .3s ease; }
+        @keyframes errIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        /* ═══ زر الإرسال ═══ */
+        .submit-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            margin-top: 6px;
+            padding: 14px 18px;
+            border-radius: 13px;
+            border: none;
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+            color: #fff;
+            font-family: inherit;
+            font-size: .95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform .18s, box-shadow .18s;
+            box-shadow: 0 10px 30px -8px rgba(37, 99, 235, .8), inset 0 1px 0 rgba(255,255,255,.14);
+        }
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 36px -8px rgba(59, 130, 246, .9), inset 0 1px 0 rgba(255,255,255,.18);
+        }
+        .submit-btn:active:not(:disabled) { transform: translateY(0) scale(.98); }
+        .submit-btn:disabled { opacity: .75; cursor: not-allowed; }
+
+        .spinner {
+            width: 15px; height: 15px;
+            border: 2px solid rgba(255, 255, 255, .3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spinBtn .65s linear infinite;
+            display: none;
+        }
+        .submit-btn.loading .spinner { display: inline-block; }
+        @keyframes spinBtn { to { transform: rotate(360deg); } }
+
+        /* ═══ التبديل ═══ */
+        .switch-mode {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(96, 165, 250, .1);
+            font-size: .82rem;
+            color: var(--txt-3);
+            animation: textFade .8s ease .65s both;
+        }
+        .switch-mode button {
+            background: transparent;
+            border: none;
+            color: var(--accent-3);
+            font-family: inherit;
+            font-size: .82rem;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 8px;
+            transition: .15s;
+        }
+        .switch-mode button:hover {
+            background: rgba(96, 165, 250, .1);
+            color: #93c5fd;
+        }
+
+        /* ═══ Responsive ═══ */
+        @media (max-width: 480px) {
+            body { padding: 16px 14px; }
+            .box { padding: 30px 22px 24px; border-radius: 22px; }
+            h1 { font-size: 1.25rem; }
+            .logo-stage { width: 88px; height: 88px; }
+            .logo-icon { font-size: 2rem; }
+            .line-sweep-container { max-width: 210px; gap: 6px; }
+            .input-wrap input { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- خلفيات متحركة -->
+    <div class="bg-glow g1"></div>
+    <div class="bg-glow g2"></div>
+    <div class="bg-glow g3"></div>
+    <div class="bg-grid"></div>
+
+    <div class="page">
+        <div class="box" id="authBox">
+            <div class="head">
+                <div class="logo-stage">
+                    <div class="aura"></div>
+                    <div class="ring"></div>
+                    <div class="ring r2"></div>
+                    <i class="fas fa-user-shield logo-icon"></i>
+                </div>
+
+                <h1 id="authTitle">تسجيل الدخول</h1>
+                <p class="sub" id="authSub">أدخل بياناتك للمتابعة إلى MEN Ai</p>
+
+                <div class="line-sweep-container">
+                    <div class="sweep-line"></div>
+                    <div class="sweep-line short"></div>
+                    <div class="sweep-line thin"></div>
+                </div>
+            </div>
+
+            <form id="authForm" novalidate>
+                <div class="field hidden" id="nameField">
+                    <label>الاسم</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="nameInput" autocomplete="name" placeholder="اسمك">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>البريد الإلكتروني</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="emailInput" autocomplete="email" placeholder="you@example.com" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>كلمة المرور</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="passwordInput" autocomplete="current-password" placeholder="••••••••" required>
+                        <button class="eye" type="button" id="eyeBtn" tabindex="-1" aria-label="إظهار">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="field hidden" id="confirmField">
+                    <label>تأكيد كلمة المرور</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirmInput" autocomplete="new-password" placeholder="••••••••">
+                    </div>
+                </div>
+
+                <div class="error-msg" id="errorMsg"></div>
+
+                <button class="submit-btn" type="submit" id="submitBtn">
+                    <span id="submitText">دخول</span>
+                    <span class="spinner"></span>
+                </button>
+            </form>
+
+            <div class="switch-mode">
+                <span id="switchText">ليس لديك حساب؟</span>
+                <button type="button" id="switchBtn">إنشاء حساب جديد</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        /* ═══ المفاتيح ═══ */
+        const USERS_KEY = 'menAuthUsers';
+        const SESSION_KEY = 'menAuthSession';
+
+        /* ═══ الحالة ═══ */
+        let mode = 'login';
+        let isLoading = false;
+
+        /* ═══ Helpers ═══ */
+        function getUsers() {
+            try { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}'); }
+            catch (e) { return {}; }
+        }
+        function saveUsers(u) {
+            try { localStorage.setItem(USERS_KEY, JSON.stringify(u)); } catch (e) {}
+        }
+        function saveSession(s) {
+            try {
+                if (s) localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+                else localStorage.removeItem(SESSION_KEY);
+            } catch (e) {}
+        }
+        function hashPassword(pw) {
+            let h = 5381;
+            for (let i = 0; i < pw.length; i++) {
+                h = ((h << 5) + h) ^ pw.charCodeAt(i);
+                h |= 0;
+            }
+            return 'h_' + Math.abs(h).toString(36) + '_' + pw.length;
+        }
+        function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+        /* ═══ عناصر DOM ═══ */
+        const box = document.getElementById('authBox');
+        const authTitle = document.getElementById('authTitle');
+        const authSub = document.getElementById('authSub');
+        const authForm = document.getElementById('authForm');
+        const nameField = document.getElementById('nameField');
+        const nameInput = document.getElementById('nameInput');
+        const emailInput = document.getElementById('emailInput');
+        const passwordInput = document.getElementById('passwordInput');
+        const confirmField = document.getElementById('confirmField');
+        const confirmInput = document.getElementById('confirmInput');
+        const eyeBtn = document.getElementById('eyeBtn');
+        const errorMsg = document.getElementById('errorMsg');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        const switchText = document.getElementById('switchText');
+        const switchBtn = document.getElementById('switchBtn');
+
+        /* ═══ تبديل الوضع ═══ */
+        function setMode(newMode) {
+            mode = newMode;
+            const isLogin = mode === 'login';
+            authTitle.textContent = isLogin ? 'تسجيل الدخول' : 'إنشاء حساب';
+            authSub.textContent = isLogin ? 'أدخل بياناتك للمتابعة إلى MEN Ai' : 'أنشئ حسابك للبدء في استخدام MEN Ai';
+            submitText.textContent = isLogin ? 'دخول' : 'إنشاء الحساب';
+            switchText.textContent = isLogin ? 'ليس لديك حساب؟' : 'لديك حساب بالفعل؟';
+            switchBtn.textContent = isLogin ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
+            nameField.classList.toggle('hidden', isLogin);
+            confirmField.classList.toggle('hidden', isLogin);
+            passwordInput.autocomplete = isLogin ? 'current-password' : 'new-password';
+            setError('');
+        }
+
+        function setError(msg) {
+            errorMsg.textContent = msg || '';
+            errorMsg.classList.toggle('show', !!msg);
+        }
+
+        function setLoading(v) {
+            isLoading = v;
+            submitBtn.disabled = v;
+            submitBtn.classList.toggle('loading', v);
+        }
+
+        /* ═══ زر إظهار/إخفاء كلمة المرور ═══ */
+        eyeBtn.addEventListener('click', () => {
+            const icon = eyeBtn.querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        });
+
+        /* ═══ التبديل بين الدخول والتسجيل ═══ */
+        switchBtn.addEventListener('click', () => {
+            setMode(mode === 'login' ? 'signup' : 'login');
+            authForm.reset();
+            eyeBtn.querySelector('i').className = 'fas fa-eye';
+            passwordInput.type = 'password';
+        });
+
+        /* ═══ الإرسال ═══ */
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (isLoading) return;
+
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim().toLowerCase();
+            const password = passwordInput.value;
+            const confirm = confirmInput.value;
+
+            setError('');
+
+            if (!email) return setError('الرجاء إدخال البريد الإلكتروني');
+            if (!isValidEmail(email)) return setError('البريد الإلكتروني غير صحيح');
+            if (!password) return setError('الرجاء إدخال كلمة المرور');
+            if (password.length < 6) return setError('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+
+            setLoading(true);
+            await new Promise(r => setTimeout(r, 550));
+
+            const users = getUsers();
+
+            if (mode === 'signup') {
+                if (!name) { setLoading(false); return setError('الرجاء إدخال الاسم'); }
+                if (password !== confirm) { setLoading(false); return setError('كلمتا المرور غير متطابقتين'); }
+                if (users[email]) { setLoading(false); return setError('هذا البريد مسجّل مسبقاً'); }
+
+                const user = {
+                    id: 'u_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+                    email,
+                    user_metadata: { name },
+                    created_at: new Date().toISOString(),
+                    passwordHash: hashPassword(password)
+                };
+                users[email] = user;
+                saveUsers(users);
+                finishLogin(user);
+            } else {
+                const user = users[email];
+                if (!user) { setLoading(false); return setError('لا يوجد حساب بهذا البريد'); }
+                if (user.passwordHash !== hashPassword(password)) {
+                    setLoading(false);
+                    return setError('كلمة المرور غير صحيحة');
+                }
+                finishLogin(user);
+            }
+        });
+
+        /* ═══ إتمام الدخول ═══ */
+        function finishLogin(user) {
+            const session = {
+                id: user.id,
+                email: user.email,
+                user_metadata: user.user_metadata || {},
+                created_at: user.created_at
+            };
+            saveSession(session);
+            setLoading(false);
+            box.classList.add('success');
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 800);
+        }
+
+        /* ═══ لو مسجّل دخول مسبقاً، انتقل مباشرة ═══ */
+        try {
+            const session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+            if (session && session.email) {
+                window.location.href = 'index.html';
+            }
+        } catch (e) {}
+
+        setMode('login');
+    })();
+    </script>
+</body>
+</html>
