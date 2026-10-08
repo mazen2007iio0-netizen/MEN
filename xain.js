@@ -1,49 +1,48 @@
 /* ═══════════════════════════════════════════════════════════════
-   MEN Ai — Full Screen Auth (xain.js)
-   شاشة تسجيل دخول كاملة الحجم — تصميم سينمائي داكن فخم
+   MEN Ai — Full Screen Auth with Supabase (xain.js)
+   شاشة تسجيل دخول كاملة الحجم — ربط مباشر مع Supabase
    ═══════════════════════════════════════════════════════════════ */
 
 (function () {
     'use strict';
-    const USERS_KEY = 'https://xoqwzluyxynqpdpmidts.supabase.co';
-    const SESSION_KEY = 'sb_publishable_rQvBPw08M9Q3bWTDfFseTQ_6SU3aN96';
 
+    /* ═══ Supabase Config ═══ */
+    const SUPABASE_URL      = 'https://xoqwzluyxynqpdpmidts.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
+
+    /* ═══ الحالة ═══ */
+    let supabase = null;
     let currentUser = null;
     let currentMode = 'login';
     let isLoading = false;
     let screenEl = null;
+    let bootDone = false;
     const listeners = [];
 
     /* ══════════════ Helpers ══════════════ */
-    function getUsers() {
-        try { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}'); }
-        catch (e) { return {}; }
+    function notify() {
+        listeners.forEach(cb => { try { cb(currentUser); } catch (e) { console.error(e); } });
     }
-    function saveUsers(u) {
-        try { localStorage.setItem(USERS_KEY, JSON.stringify(u)); } catch (e) {}
-    }
-    function getSession() {
-        try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); }
-        catch (e) { return null; }
-    }
-    function saveSession(s) {
-        try {
-            if (s) localStorage.setItem(SESSION_KEY, JSON.stringify(s));
-            else localStorage.removeItem(SESSION_KEY);
-        } catch (e) {}
-    }
-    function hashPassword(pw) {
-        let h = 5381;
-        for (let i = 0; i < pw.length; i++) { h = ((h << 5) + h) ^ pw.charCodeAt(i); h |= 0; }
-        return 'h_' + Math.abs(h).toString(36) + '_' + pw.length;
-    }
+    function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
     function makeAvatar(name) {
         const seed = encodeURIComponent((name || 'user').trim());
         return `https://api.dicebear.com/7.x/initials/svg?seed=${seed}&backgroundColor=1e3a8a,2563eb,3b82f6,60a5fa&fontFamily=Cairo&fontSize=42&chars=1&textColor=ffffff`;
     }
-    function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
-    function notify() {
-        listeners.forEach(cb => { try { cb(currentUser); } catch (e) { console.error(e); } });
+
+    /* ═══ ترجمة أخطاء Supabase للعربية ═══ */
+    function translateError(msg) {
+        if (!msg) return 'حدث خطأ غير متوقع';
+        const m = msg.toLowerCase();
+        if (m.includes('invalid login credentials'))   return 'البريد أو كلمة المرور غير صحيحة';
+        if (m.includes('email not confirmed'))         return 'يجب تأكيد البريد الإلكتروني أولاً';
+        if (m.includes('user already registered'))     return 'هذا البريد مسجّل مسبقاً';
+        if (m.includes('password should be at least')) return 'كلمة المرور قصيرة جداً';
+        if (m.includes('unable to validate email'))    return 'البريد الإلكتروني غير صحيح';
+        if (m.includes('email rate limit'))            return 'محاولات كثيرة — جرب لاحقاً';
+        if (m.includes('signup is disabled'))          return 'التسجيل معطّل حالياً';
+        if (m.includes('network'))                     return 'تعذّر الاتصال بالخادم';
+        if (m.includes('too many requests'))           return 'محاولات كثيرة — انتظر قليلاً';
+        return msg;
     }
 
     /* ══════════════ CSS ══════════════ */
@@ -52,9 +51,6 @@
         const s = document.createElement('style');
         s.id = 'men-auth-styles';
         s.textContent = `
-/* ═══════════════════════════════════════════════
-   شاشة تسجيل الدخول — كاملة الحجم، فخمة، داكنة
-   ═══════════════════════════════════════════════ */
 .men-auth-screen {
     position: fixed;
     inset: 0;
@@ -121,8 +117,6 @@
     0%, 100% { transform: translate(-50%, -50%) scale(1); }
     50% { transform: translate(-45%, -55%) scale(1.3); }
 }
-
-/* شبكة خفيفة تغطي الشاشة كاملة */
 .men-bg-grid {
     position: absolute;
     inset: 0;
@@ -133,8 +127,6 @@
     mask-image: radial-gradient(ellipse 80% 70% at center, black 10%, transparent 80%);
     -webkit-mask-image: radial-gradient(ellipse 80% 70% at center, black 10%, transparent 80%);
 }
-
-/* حبيبات ناعمة */
 .men-bg-noise {
     position: absolute;
     inset: 0;
@@ -143,7 +135,6 @@
     mix-blend-mode: overlay;
 }
 
-/* ═══ الطبقة الأساسية ═══ */
 .men-auth-layer {
     position: relative;
     z-index: 5;
@@ -157,7 +148,6 @@
     overscroll-behavior: contain;
 }
 
-/* ═══ الحاوية الرئيسية — تصميم أفقي فخم ═══ */
 .men-auth-grid {
     width: 100%;
     max-width: 1180px;
@@ -184,7 +174,6 @@
     from { opacity: 0; transform: translateX(-24px); filter: blur(6px); }
     to { opacity: 1; transform: none; filter: blur(0); }
 }
-
 .men-brand-tag {
     display: inline-flex;
     align-items: center;
@@ -201,7 +190,6 @@
     width: fit-content;
 }
 .men-brand-tag i { font-size: .72rem; }
-
 .men-brand-title {
     font-size: clamp(2rem, 4.5vw, 3.2rem);
     font-weight: 800;
@@ -216,7 +204,6 @@
     color: transparent;
     display: block;
 }
-
 .men-brand-desc {
     font-size: 1.02rem;
     line-height: 1.85;
@@ -224,8 +211,6 @@
     max-width: 520px;
     font-weight: 500;
 }
-
-/* ═══ الخطوط المنسابة الطويلة ═══ */
 .men-brand-sweep {
     width: 100%;
     max-width: 460px;
@@ -282,8 +267,6 @@
     82% { opacity: .4; right: 100%; }
     100% { opacity: 0; right: 100%; }
 }
-
-/* ═══ مميزات صغيرة ═══ */
 .men-brand-feats {
     display: flex;
     flex-wrap: wrap;
@@ -319,7 +302,6 @@
     from { opacity: 0; transform: translateX(24px); filter: blur(6px); }
     to { opacity: 1; transform: none; filter: blur(0); }
 }
-
 .men-form-card {
     background: linear-gradient(180deg, rgba(13, 26, 46, .95) 0%, rgba(8, 18, 34, .95) 100%);
     border: 1px solid rgba(96, 165, 250, .16);
@@ -349,7 +331,6 @@
     100% { transform: scale(1); }
 }
 
-/* ═══ شعار صغير في النموذج ═══ */
 .men-form-logo {
     display: flex;
     flex-direction: column;
@@ -409,7 +390,6 @@
     0%, 100% { transform: translateY(0) rotate(0deg); }
     50% { transform: translateY(-6px) rotate(-5deg); }
 }
-
 .men-form-title {
     font-size: 1.35rem;
     font-weight: 700;
@@ -423,7 +403,6 @@
     margin: 0;
 }
 
-/* ═══ نموذج ═══ */
 .men-form {
     display: flex;
     flex-direction: column;
@@ -444,7 +423,6 @@
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: none; }
 }
-
 .men-field label {
     font-size: .76rem;
     font-weight: 700;
@@ -452,7 +430,6 @@
     padding-inline-start: 4px;
     letter-spacing: .01em;
 }
-
 .men-input-wrap {
     display: flex;
     align-items: center;
@@ -497,7 +474,6 @@
     -webkit-box-shadow: 0 0 0 1000px rgba(5, 10, 20, .9) inset;
     transition: background-color 9999s ease-in-out 0s;
 }
-
 .men-eye {
     width: 34px; height: 34px;
     border-radius: 9px;
@@ -512,7 +488,6 @@
 }
 .men-eye:hover { background: rgba(96, 165, 250, .1); color: #60a5fa; }
 
-/* ═══ الخطأ ═══ */
 .men-error {
     display: none;
     color: #f87171;
@@ -530,7 +505,20 @@
     to { opacity: 1; transform: none; }
 }
 
-/* ═══ زر الإرسال ═══ */
+.men-info {
+    display: none;
+    color: #60a5fa;
+    background: rgba(37, 99, 235, .1);
+    border: 1px solid rgba(96, 165, 250, .25);
+    border-radius: 12px;
+    padding: 11px 14px;
+    font-size: .82rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.6;
+}
+.men-info.show { display: block; animation: menErrIn .35s ease; }
+
 .men-submit {
     display: flex;
     align-items: center;
@@ -573,7 +561,6 @@
 }
 .men-submit:active:not(:disabled) { transform: translateY(0) scale(.985); }
 .men-submit:disabled { opacity: .75; cursor: not-allowed; }
-
 .men-spinner {
     width: 15px; height: 15px;
     border: 2px solid rgba(255, 255, 255, .3);
@@ -585,7 +572,6 @@
 .men-submit.loading .men-spinner { display: inline-block; }
 @keyframes menSpinBtn { to { transform: rotate(360deg); } }
 
-/* ═══ التبديل ═══ */
 .men-switch {
     display: flex;
     align-items: center;
@@ -615,19 +601,37 @@
     color: #93c5fd;
 }
 
-/* ═══ Responsive — الجوال ═══ */
+/* ═══ شاشة التحميل الأولية ═══ */
+.men-boot {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 10;
+    transition: opacity .4s ease;
+}
+.men-boot.hide { opacity: 0; pointer-events: none; }
+.men-boot-spinner {
+    width: 42px; height: 42px;
+    border: 3px solid rgba(96, 165, 250, .15);
+    border-top-color: #60a5fa;
+    border-radius: 50%;
+    animation: menSpinBtn .8s linear infinite;
+}
+.men-boot-text {
+    font-size: .85rem;
+    color: #60a5fa;
+    font-weight: 600;
+    letter-spacing: .02em;
+}
+
 @media (max-width: 960px) {
-    .men-auth-grid {
-        grid-template-columns: 1fr;
-        gap: 0;
-        max-width: 480px;
-    }
-    .men-brand {
-        display: none;
-    }
-    .men-form-card {
-        padding: 34px 26px 26px;
-    }
+    .men-auth-grid { grid-template-columns: 1fr; gap: 0; max-width: 480px; }
+    .men-brand { display: none; }
+    .men-form-card { padding: 34px 26px 26px; }
 }
 @media (max-width: 480px) {
     .men-auth-layer { padding: 20px 14px; }
@@ -665,31 +669,31 @@
                 <div class="men-bg-noise"></div>
             </div>
 
+            <div class="men-boot" data-boot>
+                <div class="men-boot-spinner"></div>
+                <div class="men-boot-text">جارٍ التحقق من الجلسة...</div>
+            </div>
+
             <div class="men-auth-layer">
                 <div class="men-auth-grid">
 
-                    <!-- ═══ الجانب الأيسر — براندينج ═══ -->
                     <div class="men-brand">
                         <span class="men-brand-tag">
                             <i class="fas fa-sparkles"></i>
                             مدعوم بالذكاء الاصطناعي
                         </span>
-
                         <h1 class="men-brand-title">
                             مرحباً بك في
                             <span class="grad">MEN Ai</span>
                         </h1>
-
                         <p class="men-brand-desc">
                             مساعدك الذكي للإجابة على أسئلتك، تحليل ملفاتك، وإنجاز مهامك بسرعة ودقة واحترافية.
                         </p>
-
                         <div class="men-brand-sweep">
                             <div class="men-sweep-big"></div>
                             <div class="men-sweep-big short"></div>
                             <div class="men-sweep-big thin"></div>
                         </div>
-
                         <div class="men-brand-feats">
                             <div class="men-feat">
                                 <i class="fas fa-bolt"></i>
@@ -697,7 +701,7 @@
                             </div>
                             <div class="men-feat">
                                 <i class="fas fa-shield-halved"></i>
-                                <span>خصوصية كاملة</span>
+                                <span>حساب آمن</span>
                             </div>
                             <div class="men-feat">
                                 <i class="fas fa-file-lines"></i>
@@ -706,7 +710,6 @@
                         </div>
                     </div>
 
-                    <!-- ═══ الجانب الأيمن — نموذج ═══ -->
                     <div class="men-form-side">
                         <div class="men-form-card">
                             <div class="men-form-logo">
@@ -714,9 +717,8 @@
                                     <div class="men-form-aura"></div>
                                     <div class="men-form-ring"></div>
                                     <div class="men-form-ring r2"></div>
-                                    <i class=""></i>
+                                    <i class="men-form-icon"></i>
                                 </div>
-
                                 <h2 class="men-form-title" data-title>تسجيل الدخول</h2>
                                 <p class="men-form-sub" data-sub>أدخل بياناتك للمتابعة</p>
                             </div>
@@ -758,6 +760,7 @@
                                 </div>
 
                                 <div class="men-error" data-error></div>
+                                <div class="men-info" data-info></div>
 
                                 <button class="men-submit" type="submit">
                                     <span data-submit-text>دخول</span>
@@ -809,14 +812,20 @@
         screenEl.querySelector('[data-field-confirm]').classList.toggle('hidden', isLogin);
         screenEl.querySelector('input[name="password"]').autocomplete = isLogin ? 'current-password' : 'new-password';
         setError('');
+        setInfo('');
     }
 
     function setError(msg) {
         const el = screenEl.querySelector('[data-error]');
         el.textContent = msg || '';
         el.classList.toggle('show', !!msg);
+        if (msg) setInfo('');
     }
-
+    function setInfo(msg) {
+        const el = screenEl.querySelector('[data-info]');
+        el.textContent = msg || '';
+        el.classList.toggle('show', !!msg);
+    }
     function setLoading(v) {
         isLoading = v;
         const btn = screenEl.querySelector('.men-submit');
@@ -824,9 +833,11 @@
         btn.classList.toggle('loading', v);
     }
 
+    /* ══════════════ إرسال النموذج ══════════════ */
     async function handleSubmit(e) {
         e.preventDefault();
         if (isLoading) return;
+        if (!supabase) { setError('جارٍ التحميل...'); return; }
 
         const form = screenEl.querySelector('form');
         const name = form.name ? form.name.value.trim() : '';
@@ -835,48 +846,75 @@
         const confirm = form.confirm ? form.confirm.value : '';
 
         setError('');
+        setInfo('');
+
         if (!email) return setError('الرجاء إدخال البريد الإلكتروني');
         if (!isValidEmail(email)) return setError('البريد الإلكتروني غير صحيح');
         if (!password) return setError('الرجاء إدخال كلمة المرور');
         if (password.length < 6) return setError('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
 
         setLoading(true);
-        await new Promise(r => setTimeout(r, 550));
 
-        const users = getUsers();
+        try {
+            if (currentMode === 'signup') {
+                if (!name) { setLoading(false); return setError('الرجاء إدخال الاسم'); }
+                if (password !== confirm) { setLoading(false); return setError('كلمتا المرور غير متطابقتين'); }
 
-        if (currentMode === 'signup') {
-            if (!name) { setLoading(false); return setError('الرجاء إدخال الاسم'); }
-            if (password !== confirm) { setLoading(false); return setError('كلمتا المرور غير متطابقتين'); }
-            if (users[email]) { setLoading(false); return setError('هذا البريد مسجّل مسبقاً'); }
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: { name },
+                        emailRedirectTo: window.location.origin
+                    }
+                });
 
-            const user = {
-                id: 'u_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
-                email, user_metadata: { name },
-                created_at: new Date().toISOString(),
-                passwordHash: hashPassword(password)
-            };
-            users[email] = user;
-            saveUsers(users);
-            completeLogin(user);
-        } else {
-            const user = users[email];
-            if (!user) { setLoading(false); return setError('لا يوجد حساب بهذا البريد'); }
-            if (user.passwordHash !== hashPassword(password)) {
-                setLoading(false);
-                return setError('كلمة المرور غير صحيحة');
+                if (error) {
+                    setLoading(false);
+                    return setError(translateError(error.message));
+                }
+
+                // إذا الحساب يحتاج تأكيد إيميل
+                if (data.user && !data.session) {
+                    setLoading(false);
+                    setMode('login');
+                    setInfo('✅ تم إنشاء حسابك. تحقق من بريدك الإلكتروني لتأكيد الحساب.');
+                    return;
+                }
+
+                // دخول مباشر (لو التأكيد مغلق)
+                if (data.session && data.user) {
+                    completeLogin(data.user);
+                }
+            } else {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+
+                if (error) {
+                    setLoading(false);
+                    return setError(translateError(error.message));
+                }
+
+                if (data.user) completeLogin(data.user);
+                else { setLoading(false); setError('فشل تسجيل الدخول'); }
             }
-            completeLogin(user);
+        } catch (err) {
+            console.error(err);
+            setLoading(false);
+            setError('حدث خطأ — حاول مرة أخرى');
         }
     }
 
+    /* ══════════════ إتمام الدخول ══════════════ */
     function completeLogin(user) {
         currentUser = {
-            id: user.id, email: user.email,
+            id: user.id,
+            email: user.email,
             user_metadata: user.user_metadata || {},
             created_at: user.created_at
         };
-        saveSession(currentUser);
         setLoading(false);
 
         const card = screenEl.querySelector('.men-form-card');
@@ -909,8 +947,11 @@
         }, 600);
     }
 
-    function doLogout() {
-        try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+    async function doLogout() {
+        try {
+            if (supabase) await supabase.auth.signOut();
+        } catch (e) { console.error(e); }
+
         currentUser = null;
 
         if (screenEl) {
@@ -922,6 +963,7 @@
             });
             setMode('login');
             setError('');
+            setInfo('');
             showScreen();
         } else {
             showScreen();
@@ -945,19 +987,77 @@
     };
 
     /* ══════════════ Init ══════════════ */
-    function init() {
+    async function init() {
         injectStyles();
-        const session = getSession();
-        if (session && session.email) {
-            const users = getUsers();
-            if (users[session.email]) {
-                currentUser = session;
-                setTimeout(notify, 0);
-                return;
-            }
+
+        // انتظر تحميل مكتبة Supabase
+        if (!window.supabase) {
+            await new Promise(r => {
+                let tries = 0;
+                const iv = setInterval(() => {
+                    if (window.supabase || tries++ > 40) { clearInterval(iv); r(); }
+                }, 100);
+            });
         }
-        showScreen();
-        setTimeout(notify, 0);
+
+        if (!window.supabase) {
+            console.error('[MEN_AUTH] Supabase library not loaded');
+            // اعرض الشاشة بأي حال مع رسالة
+            buildScreen();
+            showScreen();
+            setError('تعذّر تحميل مكتبة المصادقة — تحقق من الاتصال');
+            return;
+        }
+
+        // إنشاء العميل
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true,
+                storageKey: 'men-ai-auth'
+            }
+        });
+
+        // ربط حدث تغيير الحالة
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (session && session.user) {
+                currentUser = {
+                    id: session.user.id,
+                    email: session.user.email,
+                    user_metadata: session.user.user_metadata || {},
+                    created_at: session.user.created_at
+                };
+                // إخفاء الشاشة لو ظاهرة
+                if (screenEl && screenEl.classList.contains('show') && event === 'SIGNED_IN') {
+                    hideScreen();
+                }
+                notify();
+            } else {
+                currentUser = null;
+                notify();
+            }
+        });
+
+        // تحقق من الجلسة الحالية
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session && session.user) {
+            currentUser = {
+                id: session.user.id,
+                email: session.user.email,
+                user_metadata: session.user.user_metadata || {},
+                created_at: session.user.created_at
+            };
+            // لا تعرض الشاشة — المستخدم مسجل
+            setTimeout(notify, 0);
+        } else {
+            // ما فيه جلسة — أظهر الشاشة
+            showScreen();
+            setTimeout(notify, 0);
+        }
+
+        bootDone = true;
     }
 
     if (document.readyState === 'loading') {
