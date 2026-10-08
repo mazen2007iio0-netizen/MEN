@@ -372,7 +372,6 @@
             z-index: 2;
         }
 
-        /* ═══ الأيقونة العائمة ═══ */
         .logo-stage {
             position: relative;
             width: 140px;
@@ -429,7 +428,6 @@
             50% { transform: translateY(-10px) rotate(-8deg) scale(1.08); }
         }
 
-        /* ═══ عنوان الترحيب ═══ */
         .welcome h1 {
             font-size: clamp(1.6rem, 5vw, 2.15rem);
             font-weight: 700;
@@ -457,9 +455,6 @@
             50% { filter: drop-shadow(0 0 14px rgba(96, 165, 250, .9)); }
         }
 
-        /* ═══════════════════════════════════════════
-           ✨ أنيميشن الخطوط من اليمين إلى اليسار
-           ═══════════════════════════════════════════ */
         .line-sweep-container {
             width: 100%;
             max-width: 480px;
@@ -525,7 +520,6 @@
             }
         }
 
-        /* نقطة لامعة على طرف الخط */
         .sweep-line::after {
             content: '';
             position: absolute;
@@ -551,7 +545,6 @@
             100% { opacity: 0; right: 100%; }
         }
 
-        /* ═══ السؤال ═══ */
         .welcome-question {
             font-size: 1.05rem;
             color: var(--txt-2);
@@ -1084,89 +1077,262 @@
             width: 100%;
             overflow-x: auto;
             overflow-y: hidden;
-            padding: 4px 0 10px;
+            padding: 10px 4px 16px;
             scrollbar-width: thin;
         }
         .products-row-wrapper::-webkit-scrollbar { height: 6px; }
-        .products-row-wrapper::-webkit-scrollbar-thumb { background: rgba(96, 165, 250, .22); border-radius: 6px; }
+        .products-row-wrapper::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, rgba(96,165,250,.4), rgba(37,99,235,.4));
+            border-radius: 6px;
+        }
         .products-row {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             width: max-content;
             min-width: 100%;
+            padding: 4px;
         }
+
         .men-product-card {
-            min-width: 235px;
-            max-width: 245px;
-            background: #0d1a2e;
-            border: 1px solid rgba(96, 165, 250, .13);
-            border-radius: 16px;
+            min-width: 262px;
+            max-width: 275px;
+            background: linear-gradient(165deg, #0f1f38 0%, #08111f 100%);
+            border: 1px solid rgba(96,165,250,.14);
+            border-radius: 20px;
             overflow: hidden;
             flex-shrink: 0;
-            transition: border-color .18s, transform .18s;
+            transition: transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s, border-color .4s;
+            position: relative;
+            box-shadow: 0 6px 24px rgba(0,0,0,.42);
         }
-        .men-product-card:hover { border-color: rgba(96, 165, 250, .4); transform: translateY(-2px); }
-        .men-product-card .product-image {
+        .men-product-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(160deg, rgba(96,165,250,.6), transparent 45%, transparent 55%, rgba(37,99,235,.4));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+            opacity: 0;
+            transition: opacity .35s;
+            pointer-events: none;
+            z-index: 3;
+        }
+        .men-product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 22px 48px rgba(37,99,235,.32);
+            border-color: rgba(96,165,250,.42);
+        }
+        .men-product-card:hover::before { opacity: 1; }
+
+        .men-product-card .product-image-wrap {
+            position: relative;
             width: 100%;
-            height: 140px;
-            object-fit: cover;
-            display: block;
+            height: 168px;
+            overflow: hidden;
             background: #050a14;
         }
-        .men-product-card .product-content { padding: 14px 15px 15px; }
+        .men-product-card .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .7s cubic-bezier(.16,1,.3,1);
+        }
+        .men-product-card:hover .product-image { transform: scale(1.09); }
+        .men-product-card .product-image-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 35%, rgba(5,10,20,.9) 100%);
+            pointer-events: none;
+        }
+
         .men-product-card .badge {
-            display: inline-block;
-            background: rgba(96, 165, 250, .13);
-            color: var(--accent-3);
-            padding: 3px 10px;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 2;
+            background: linear-gradient(135deg, rgba(59,130,246,.96), rgba(37,99,235,.9));
+            color: #fff;
+            padding: 4px 12px;
             border-radius: 20px;
             font-size: .67rem;
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: .02em;
+            box-shadow: 0 4px 14px rgba(37,99,235,.55);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .men-product-card .product-content {
+            padding: 14px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
         .men-product-card h2 {
-            margin: 9px 0 5px;
-            font-size: 1rem;
-            font-weight: 600;
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 700;
             color: var(--txt);
+            line-height: 1.35;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            letter-spacing: -.01em;
+        }
+        .men-product-card .rating {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            font-size: .72rem;
+            color: #fbbf24;
+            letter-spacing: 1px;
+            direction: ltr;
+            justify-content: flex-end;
+        }
+        .men-product-card .rating span {
+            color: var(--txt-3);
+            margin-inline-start: 6px;
+            font-weight: 600;
+            font-size: .68rem;
+            letter-spacing: 0;
         }
         .men-product-card p {
             color: var(--txt-3);
-            line-height: 1.6;
-            margin: 5px 0 12px;
-            font-size: .78rem;
+            line-height: 1.65;
+            margin: 2px 0 0;
+            font-size: .79rem;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            min-height: 2.6em;
         }
         .men-product-card .bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 10px;
+            padding-top: 11px;
+            border-top: 1px solid rgba(96,165,250,.1);
+            margin-top: 6px;
         }
         .men-product-card .price {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--txt);
+            font-size: 1.22rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #93c5fd 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            display: flex;
+            align-items: baseline;
+            gap: 3px;
+            letter-spacing: -.02em;
         }
-        .men-product-card .price small { font-size: .7rem; color: var(--txt-3); font-weight: 500; margin-right: 2px; }
+        .men-product-card .price small {
+            font-size: .68rem;
+            font-weight: 500;
+            color: var(--txt-3);
+            -webkit-text-fill-color: var(--txt-3);
+            letter-spacing: 0;
+        }
         .men-product-card .btn-product {
-            background: var(--accent);
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
             color: #fff;
             border: none;
-            padding: 7px 15px;
-            border-radius: 18px;
+            padding: 8px 15px;
+            border-radius: 20px;
             font-family: inherit;
             font-size: .75rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            transition: background .15s;
+            gap: 6px;
+            transition: all .25s cubic-bezier(.16,1,.3,1);
+            box-shadow: 0 4px 14px rgba(37,99,235,.4);
+            white-space: nowrap;
         }
-        .men-product-card .btn-product:hover { background: #1d4ed8; }
+        .men-product-card .btn-product:hover {
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            box-shadow: 0 6px 22px rgba(37,99,235,.65);
+            transform: translateY(-1px);
+        }
+        .men-product-card .btn-product i { transition: transform .25s; }
+        .men-product-card .btn-product:hover i { transform: translateX(-3px); }
+
+        /* ══════════════ DUAL RESPONSE (ردّان جنب بعض) ══════════════ */
+        .dual-response {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+            margin: 8px 0 4px;
+            animation: msgIn .32s ease;
+        }
+        .dual-option {
+            background: linear-gradient(165deg, rgba(13,26,46,.92) 0%, rgba(8,17,31,.92) 100%);
+            border: 1px solid rgba(96,165,250,.15);
+            border-radius: 16px;
+            padding: 14px 15px 16px;
+            position: relative;
+            transition: border-color .25s, transform .25s, box-shadow .25s;
+            overflow: hidden;
+        }
+        .dual-option::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 60%; height: 60%;
+            background: radial-gradient(circle at top right, rgba(96,165,250,.1), transparent 70%);
+            pointer-events: none;
+        }
+        .dual-option:hover {
+            border-color: rgba(96,165,250,.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(37,99,235,.25);
+        }
+        .dual-option:nth-child(1) {
+            border-color: rgba(96,165,250,.3);
+            background: linear-gradient(165deg, rgba(37,99,235,.18) 0%, rgba(13,26,46,.92) 100%);
+        }
+        .dual-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: .66rem;
+            font-weight: 700;
+            padding: 4px 11px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(59,130,246,.95), rgba(37,99,235,.95));
+            color: #fff;
+            margin-bottom: 11px;
+            box-shadow: 0 3px 12px rgba(37,99,235,.4);
+            letter-spacing: .02em;
+            position: relative;
+            z-index: 1;
+        }
+        .dual-badge.alt {
+            background: rgba(96,165,250,.16);
+            color: var(--accent-3);
+            box-shadow: none;
+            border: 1px solid rgba(96,165,250,.25);
+        }
+        .dual-badge i { font-size: .68rem; }
+        .dual-text {
+            font-size: .9rem;
+            line-height: 1.8;
+            color: var(--txt);
+            white-space: pre-wrap;
+            word-break: break-word;
+            position: relative;
+            z-index: 1;
+        }
 
         /* ══════════════ CODE ══════════════ */
         .code-response { display: flex; flex-direction: column; gap: 8px; width: 100%; }
@@ -1268,8 +1434,9 @@
             .line-sweep-container { max-width: 320px; gap: 8px; }
             .search-indicator { padding: 8px 14px 8px 50px; }
             .modal-box { padding: 18px 16px; border-radius: 18px; }
-            .men-product-card { min-width: 200px; max-width: 210px; }
-            .men-product-card .product-image { height: 120px; }
+            .men-product-card { min-width: 222px; max-width: 235px; }
+            .men-product-card .product-image-wrap { height: 140px; }
+            .dual-response { grid-template-columns: 1fr; gap: 10px; }
             .plus-menu { right: 12px; width: 240px; }
         }
 
@@ -1449,7 +1616,7 @@
 
     <script>
         // ============================================================
-        //  MEN Ai — Main Chat Logic (Line Sweep Animation)
+        //  MEN Ai — Main Chat Logic (Line Sweep Animation + Dual Replies)
         // ============================================================
         const TYPING_SPEED = 38;
         const CODE_TEXT_SPEED = 32;
@@ -1669,12 +1836,11 @@
                         <div class="aura"></div>
                         <div class="ring-orbit"></div>
                         <div class="ring-orbit r2"></div>
-                        <i class="fas fa-globe"></i>
+                        <i class="fas fa-sparkles logo-star"></i>
                     </div>
 
                     <h1>${greeting}</h1>
 
-                    <!--  خطوط ضوئية تنسحب من اليمين إلى اليسار -->
                     <div class="line-sweep-container">
                         <div class="sweep-line"></div>
                         <div class="sweep-line short"></div>
@@ -1743,6 +1909,20 @@
                     inner.innerHTML = buildAllProductsRow();
                 } else if (msg.role === 'bot' && msg.type === 'product' && msg.meta) {
                     inner.innerHTML = `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(msg.meta)}</div></div>`;
+                } else if (msg.role === 'bot' && msg.type === 'dual' && msg.meta) {
+                    const opts = msg.meta.options || [];
+                    inner.innerHTML = `
+                        <div class="dual-response">
+                            <div class="dual-option">
+                                <div class="dual-badge"><i class="fas fa-star"></i> ${escapeHtml(opts[0]?.label || 'الرد الأفضل')}</div>
+                                <div class="dual-text">${escapeHtml(opts[0]?.content || '')}</div>
+                            </div>
+                            <div class="dual-option">
+                                <div class="dual-badge alt"><i class="fas fa-shuffle"></i> ${escapeHtml(opts[1]?.label || 'رد بديل')}</div>
+                                <div class="dual-text">${escapeHtml(opts[1]?.content || '')}</div>
+                            </div>
+                        </div>
+                    `;
                 } else if (msg.role === 'bot' && msg.type === 'code' && msg.meta) {
                     const cr = msg.meta;
                     inner.innerHTML = buildCodeHtml(cr.text || '', cr.code || '', cr.language || 'code');
@@ -1820,6 +2000,24 @@
                 }
             }
             return 'default';
+        }
+
+        function getCategoryScores(text) {
+            const lower = text.trim().toLowerCase();
+            const m = mergeReplies();
+            const scores = [];
+            for (const [cat, obj] of Object.entries(m)) {
+                if (cat === 'default') continue;
+                let score = 0;
+                if (obj.keywords) {
+                    for (const p of obj.keywords.map(k => k.toLowerCase())) {
+                        if (lower.includes(p)) score += Math.max(1, p.length);
+                    }
+                }
+                if (score > 0) scores.push({ cat, score });
+            }
+            scores.sort((a, b) => b.score - a.score);
+            return scores;
         }
 
         function evaluateMath(text) {
@@ -1937,14 +2135,24 @@
             const cur = p.currency || 'ر.س';
             const badge = p.badge || 'منتج';
             const link = p.link || '#';
+
+            let ratingHtml = '';
+            if (p.rating) {
+                const r = Math.max(0, Math.min(5, Math.round(p.rating)));
+                ratingHtml = `<div class="rating">${'★'.repeat(r)}${'☆'.repeat(5 - r)}<span>${p.rating}</span></div>`;
+            }
+
             return `<div class="men-product-card">
-                <img src="${img}" class="product-image" alt="${name}" onerror="this.src='images/default.png'">
+                <div class="product-image-wrap">
+                    <img src="${img}" class="product-image" alt="${escapeHtml(name)}" onerror="this.src='images/default.png'">
+                    <span class="badge">${escapeHtml(badge)}</span>
+                </div>
                 <div class="product-content">
-                    <span class="badge">${badge}</span>
-                    <h2>${name}</h2>
-                    <p>${desc}</p>
+                    <h2>${escapeHtml(name)}</h2>
+                    ${ratingHtml}
+                    <p>${escapeHtml(desc)}</p>
                     <div class="bottom">
-                        <div class="price">${price} <small>${cur}</small></div>
+                        <div class="price">${escapeHtml(String(price))}<small>${escapeHtml(cur)}</small></div>
                         <button class="btn-product" onclick="window.location.href='${link}'"><i class="fas fa-arrow-left"></i> عرض</button>
                     </div>
                 </div>
@@ -2076,7 +2284,7 @@
             }
 
             if (lower.includes('وكيل') || lower.includes('معزز') || lower.includes('boost')) {
-                return { type: 'text', content: ' هذه الميزة ستكون متاحة قريباً.' };
+                return { type: 'text', content: '⏳ هذه الميزة ستكون متاحة قريباً.' };
             }
 
             const math = evaluateMath(text);
@@ -2097,8 +2305,26 @@
                 product: p
             };
 
-            const cat = getCategoryForText(text);
-            if (cat !== 'default') return { type: 'text', content: getReply(cat) };
+            const scores = getCategoryScores(text);
+
+            // ✨ إذا احتار (تطابق فئتان بقوة متقاربة) → عرض ردّين جنب بعض
+            if (scores.length >= 2) {
+                const top = scores[0].score;
+                const second = scores[1].score;
+                if (second >= top * 0.6) {
+                    return {
+                        type: 'dual',
+                        options: [
+                            { label: 'الرد الأفضل', content: getReply(scores[0].cat) },
+                            { label: 'رد بديل', content: getReply(scores[1].cat) }
+                        ]
+                    };
+                }
+            }
+
+            if (scores.length >= 1) {
+                return { type: 'text', content: getReply(scores[0].cat) };
+            }
 
             return { type: 'text', content: getReply('default') };
         }
@@ -2309,6 +2535,32 @@
                     a.innerHTML = buildBotActionsHTML(replyContent, msgId);
                     botInner.appendChild(a);
                 }
+                else if (reply.type === 'dual') {
+                    botInner.innerHTML = `
+                        <div class="dual-response">
+                            <div class="dual-option">
+                                <div class="dual-badge"><i class="fas fa-star"></i> ${reply.options[0].label}</div>
+                                <div class="dual-text"></div>
+                            </div>
+                            <div class="dual-option">
+                                <div class="dual-badge alt"><i class="fas fa-shuffle"></i> ${reply.options[1].label}</div>
+                                <div class="dual-text"></div>
+                            </div>
+                        </div>
+                    `;
+                    const dualTexts = botInner.querySelectorAll('.dual-text');
+                    await Promise.all([
+                        typeTextInto(dualTexts[0], reply.options[0].content, TYPING_SPEED),
+                        typeTextInto(dualTexts[1], reply.options[1].content, TYPING_SPEED)
+                    ]);
+                    botInner.insertAdjacentHTML('beforeend', `<span class="msg-time">${nowTime}</span>`);
+                    replyContent = reply.options.map(o => o.content).join('\n\n— بديل —\n\n');
+                    const a = document.createElement('div');
+                    a.className = 'bot-actions';
+                    a.innerHTML = buildBotActionsHTML(replyContent, msgId);
+                    botInner.appendChild(a);
+                    saveToMemory('bot', replyContent, 'dual', { options: reply.options });
+                }
                 else if (reply.type === 'code') {
                     const cr = reply.content;
                     botInner.innerHTML = buildCodeHtml('', '', cr.language);
@@ -2354,6 +2606,7 @@
                 if (reply.type === 'products') saveToMemory('bot', 'المنتجات', 'products');
                 else if (reply.type === 'product') saveToMemory('bot', 'المنتج', 'product', reply.product);
                 else if (reply.type === 'code') saveToMemory('bot', replyContent, 'code', reply.content);
+                else if (reply.type === 'dual') { /* already saved */ }
                 else saveToMemory('bot', replyContent, 'text');
 
                 if (autoBoostEnabled) {
