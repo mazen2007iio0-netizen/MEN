@@ -197,9 +197,6 @@
         }
         .side-item:hover { background: var(--bg-hover); }
         .side-item i { font-size: .85rem; color: var(--accent-3); width: 16px; text-align: center; }
-        .side-item.danger { color: var(--danger); }
-        .side-item.danger i { color: var(--danger); }
-        .side-item.danger:hover { background: rgba(239, 65, 70, .1); }
 
         .user-row {
             display: none;
@@ -483,41 +480,15 @@
             position: relative;
             box-shadow: 0 0 12px rgba(96, 165, 250, .5);
         }
-
-        .sweep-line.short {
-            width: 62%;
-            height: 1px;
-            animation-delay: .35s;
-            opacity: .75;
-        }
-
-        .sweep-line.thin {
-            width: 38%;
-            height: 1px;
-            animation-delay: .7s;
-            opacity: .5;
-        }
+        .sweep-line.short { width: 62%; height: 1px; animation-delay: .35s; opacity: .75; }
+        .sweep-line.thin { width: 38%; height: 1px; animation-delay: .7s; opacity: .5; }
 
         @keyframes sweepRightToLeft {
-            0% {
-                transform: scaleX(0);
-                opacity: 0;
-            }
-            15% {
-                opacity: 1;
-            }
-            60% {
-                transform: scaleX(1);
-                opacity: 1;
-            }
-            85% {
-                transform: scaleX(1);
-                opacity: .4;
-            }
-            100% {
-                transform: scaleX(1) translateX(-30%);
-                opacity: 0;
-            }
+            0% { transform: scaleX(0); opacity: 0; }
+            15% { opacity: 1; }
+            60% { transform: scaleX(1); opacity: 1; }
+            85% { transform: scaleX(1); opacity: .4; }
+            100% { transform: scaleX(1) translateX(-30%); opacity: 0; }
         }
 
         .sweep-line::after {
@@ -549,7 +520,6 @@
             font-size: 1.05rem;
             color: var(--txt-2);
             font-weight: 500;
-            letter-spacing: -.01em;
             animation: textFade 1s ease .7s both;
         }
 
@@ -607,10 +577,7 @@
             border: 1px solid rgba(96, 165, 250, .08);
         }
 
-        .msg.bot .msg-inner {
-            flex: 1;
-            padding-top: 2px;
-        }
+        .msg.bot .msg-inner { flex: 1; padding-top: 2px; }
 
         .msg.bot::before {
             content: '';
@@ -675,34 +642,14 @@
             font-size: .85rem;
             border-radius: 8px;
         }
-
-        .bot-actions button.like-btn.active {
-            color: var(--success);
-            background: rgba(74, 222, 128, .14);
-        }
-        .bot-actions button.like-btn.active:hover {
-            background: rgba(74, 222, 128, .22);
-            color: var(--success);
-        }
-
-        .bot-actions button.dislike-btn.active {
-            color: var(--danger);
-            background: rgba(248, 113, 113, .14);
-        }
-        .bot-actions button.dislike-btn.active:hover {
-            background: rgba(248, 113, 113, .22);
-            color: var(--danger);
-        }
-
-        .bot-actions button.pop {
-            animation: popBtn .4s cubic-bezier(.16, 1, .3, 1);
-        }
+        .bot-actions button.like-btn.active { color: var(--success); background: rgba(74, 222, 128, .14); }
+        .bot-actions button.dislike-btn.active { color: var(--danger); background: rgba(248, 113, 113, .14); }
+        .bot-actions button.pop { animation: popBtn .4s cubic-bezier(.16, 1, .3, 1); }
         @keyframes popBtn {
             0% { transform: scale(1); }
             40% { transform: scale(1.35); }
             100% { transform: scale(1); }
         }
-
         .bot-actions .divider-dot {
             color: var(--txt-3);
             opacity: .4;
@@ -825,7 +772,7 @@
             position: absolute;
             bottom: calc(100% + 6px);
             right: 16px;
-            width: 262px;
+            width: 240px;
             background: #0d1a2e;
             border: 1px solid rgba(96, 165, 250, .16);
             border-radius: 16px;
@@ -861,17 +808,6 @@
         }
         .menu-item:hover { background: var(--bg-hover); }
         .menu-item i { width: 18px; text-align: center; color: var(--accent-3); font-size: .9rem; }
-        .menu-item.disabled { opacity: .42; cursor: not-allowed; }
-        .menu-item.disabled:hover { background: transparent; }
-        .menu-badge {
-            margin-inline-start: auto;
-            font-size: .66rem;
-            background: rgba(96, 165, 250, .13);
-            padding: 3px 8px;
-            border-radius: 10px;
-            color: var(--accent-3);
-        }
-        .menu-divider { height: 1px; background: var(--line); margin: 5px 8px; }
 
         /* ── File preview ── */
         .file-preview {
@@ -957,11 +893,7 @@
             font-size: .95rem;
             flex-shrink: 0;
         }
-        .modal-head h3 {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: var(--txt);
-        }
+        .modal-head h3 { font-size: 1.05rem; font-weight: 600; color: var(--txt); }
 
         .modal-text {
             background: #050a14;
@@ -1072,266 +1004,337 @@
         .btn.danger { background: transparent; color: var(--danger); border: 1px solid rgba(239, 65, 70, .35); }
         .btn.danger:hover { background: rgba(239, 65, 70, .12); }
 
-        /* ══════════════ PRODUCTS ══════════════ */
+        /* ══════════════ PRODUCTS (تصميم فاخر) ══════════════ */
         .products-row-wrapper {
             width: 100%;
             overflow-x: auto;
             overflow-y: hidden;
-            padding: 10px 4px 16px;
+            padding: 10px 4px 18px;
             scrollbar-width: thin;
         }
         .products-row-wrapper::-webkit-scrollbar { height: 6px; }
         .products-row-wrapper::-webkit-scrollbar-thumb {
-            background: linear-gradient(90deg, rgba(96,165,250,.4), rgba(37,99,235,.4));
+            background: linear-gradient(90deg, rgba(96,165,250,.5), rgba(37,99,235,.5));
             border-radius: 6px;
+        }
+        .products-row-wrapper::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(90deg, rgba(96,165,250,.8), rgba(37,99,235,.8));
         }
         .products-row {
             display: flex;
-            gap: 16px;
+            gap: 18px;
             width: max-content;
             min-width: 100%;
-            padding: 4px;
+            padding: 6px 2px;
         }
 
         .men-product-card {
-            min-width: 262px;
-            max-width: 275px;
-            background: linear-gradient(165deg, #0f1f38 0%, #08111f 100%);
-            border: 1px solid rgba(96,165,250,.14);
-            border-radius: 20px;
+            min-width: 270px;
+            max-width: 282px;
+            background: linear-gradient(170deg, #101f39 0%, #08121f 100%);
+            border: 1px solid rgba(96,165,250,.12);
+            border-radius: 22px;
             overflow: hidden;
             flex-shrink: 0;
-            transition: transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s, border-color .4s;
+            transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s, border-color .3s;
             position: relative;
-            box-shadow: 0 6px 24px rgba(0,0,0,.42);
+            box-shadow: 0 8px 28px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.03);
         }
         .men-product-card::before {
             content: '';
             position: absolute;
             inset: 0;
-            border-radius: 20px;
+            border-radius: 22px;
             padding: 1px;
-            background: linear-gradient(160deg, rgba(96,165,250,.6), transparent 45%, transparent 55%, rgba(37,99,235,.4));
+            background: linear-gradient(160deg, rgba(96,165,250,.8), transparent 40%, transparent 60%, rgba(37,99,235,.6));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
                     mask-composite: exclude;
             opacity: 0;
             transition: opacity .35s;
             pointer-events: none;
-            z-index: 3;
+            z-index: 5;
         }
         .men-product-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 22px 48px rgba(37,99,235,.32);
-            border-color: rgba(96,165,250,.42);
+            transform: translateY(-8px);
+            box-shadow: 0 26px 55px rgba(37,99,235,.35), 0 8px 20px rgba(0,0,0,.55);
+            border-color: rgba(96,165,250,.45);
         }
         .men-product-card:hover::before { opacity: 1; }
 
         .men-product-card .product-image-wrap {
             position: relative;
             width: 100%;
-            height: 168px;
+            height: 178px;
             overflow: hidden;
-            background: #050a14;
+            background: linear-gradient(135deg, #08111f, #0d1a2e);
         }
         .men-product-card .product-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform .7s cubic-bezier(.16,1,.3,1);
+            transition: transform .8s cubic-bezier(.16,1,.3,1);
         }
-        .men-product-card:hover .product-image { transform: scale(1.09); }
+        .men-product-card:hover .product-image { transform: scale(1.12); }
         .men-product-card .product-image-wrap::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, transparent 35%, rgba(5,10,20,.9) 100%);
+            background: linear-gradient(180deg, transparent 30%, rgba(5,10,20,.95) 100%);
             pointer-events: none;
         }
 
         .men-product-card .badge {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            z-index: 2;
-            background: linear-gradient(135deg, rgba(59,130,246,.96), rgba(37,99,235,.9));
+            top: 14px;
+            right: 14px;
+            z-index: 3;
+            background: linear-gradient(135deg, rgba(59,130,246,.98), rgba(29,78,216,.95));
             color: #fff;
-            padding: 4px 12px;
+            padding: 5px 13px;
             border-radius: 20px;
-            font-size: .67rem;
+            font-size: .68rem;
             font-weight: 700;
-            letter-spacing: .02em;
-            box-shadow: 0 4px 14px rgba(37,99,235,.55);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            letter-spacing: .03em;
+            box-shadow: 0 6px 18px rgba(37,99,235,.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(147,197,253,.3);
         }
 
         .men-product-card .product-content {
-            padding: 14px 16px 16px;
+            padding: 16px 17px 18px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 7px;
         }
         .men-product-card h2 {
             margin: 0;
-            font-size: 1.05rem;
+            font-size: 1.08rem;
             font-weight: 700;
             color: var(--txt);
-            line-height: 1.35;
+            line-height: 1.4;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            letter-spacing: -.01em;
+            letter-spacing: -.015em;
         }
         .men-product-card .rating {
             display: flex;
             align-items: center;
-            gap: 1px;
-            font-size: .72rem;
+            gap: 2px;
+            font-size: .78rem;
             color: #fbbf24;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             direction: ltr;
             justify-content: flex-end;
+            filter: drop-shadow(0 0 4px rgba(251,191,36,.35));
         }
         .men-product-card .rating span {
             color: var(--txt-3);
-            margin-inline-start: 6px;
-            font-weight: 600;
-            font-size: .68rem;
+            margin-inline-start: 7px;
+            font-weight: 700;
+            font-size: .7rem;
             letter-spacing: 0;
+            filter: none;
         }
         .men-product-card p {
             color: var(--txt-3);
-            line-height: 1.65;
-            margin: 2px 0 0;
-            font-size: .79rem;
+            line-height: 1.7;
+            margin: 3px 0 0;
+            font-size: .8rem;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            min-height: 2.6em;
+            min-height: 2.7em;
         }
         .men-product-card .bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 10px;
-            padding-top: 11px;
-            border-top: 1px solid rgba(96,165,250,.1);
-            margin-top: 6px;
+            padding-top: 13px;
+            border-top: 1px solid rgba(96,165,250,.12);
+            margin-top: 8px;
         }
         .men-product-card .price {
-            font-size: 1.22rem;
+            font-size: 1.28rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #ffffff 0%, #93c5fd 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #93c5fd 60%, #60a5fa 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             color: transparent;
             display: flex;
             align-items: baseline;
-            gap: 3px;
-            letter-spacing: -.02em;
+            gap: 4px;
+            letter-spacing: -.03em;
+            filter: drop-shadow(0 0 8px rgba(96,165,250,.3));
         }
         .men-product-card .price small {
-            font-size: .68rem;
-            font-weight: 500;
+            font-size: .7rem;
+            font-weight: 600;
             color: var(--txt-3);
             -webkit-text-fill-color: var(--txt-3);
             letter-spacing: 0;
+            filter: none;
         }
         .men-product-card .btn-product {
             background: linear-gradient(135deg, #2563eb, #3b82f6);
             color: #fff;
             border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
+            padding: 9px 16px;
+            border-radius: 22px;
             font-family: inherit;
-            font-size: .75rem;
+            font-size: .76rem;
             font-weight: 700;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            transition: all .25s cubic-bezier(.16,1,.3,1);
-            box-shadow: 0 4px 14px rgba(37,99,235,.4);
+            transition: all .28s cubic-bezier(.16,1,.3,1);
+            box-shadow: 0 5px 16px rgba(37,99,235,.45);
             white-space: nowrap;
+            position: relative;
+            overflow: hidden;
         }
+        .men-product-card .btn-product::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+            transition: left .5s;
+        }
+        .men-product-card .btn-product:hover::before { left: 100%; }
         .men-product-card .btn-product:hover {
             background: linear-gradient(135deg, #1d4ed8, #2563eb);
-            box-shadow: 0 6px 22px rgba(37,99,235,.65);
-            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(37,99,235,.7);
+            transform: translateY(-2px);
         }
-        .men-product-card .btn-product i { transition: transform .25s; }
+        .men-product-card .btn-product i { transition: transform .28s; }
         .men-product-card .btn-product:hover i { transform: translateX(-3px); }
 
-        /* ══════════════ DUAL RESPONSE (ردّان جنب بعض) ══════════════ */
+        /* ══════════════ DUAL RESPONSE (خياران بينهما فاصل) ══════════════ */
         .dual-response {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 10px;
             width: 100%;
-            margin: 8px 0 4px;
-            animation: msgIn .32s ease;
+            margin: 10px 0 6px;
+            align-items: stretch;
+            animation: msgIn .35s ease;
         }
         .dual-option {
-            background: linear-gradient(165deg, rgba(13,26,46,.92) 0%, rgba(8,17,31,.92) 100%);
+            background: linear-gradient(165deg, rgba(13,26,46,.95) 0%, rgba(8,17,31,.95) 100%);
             border: 1px solid rgba(96,165,250,.15);
-            border-radius: 16px;
-            padding: 14px 15px 16px;
+            border-radius: 18px;
+            padding: 16px 17px 18px;
             position: relative;
-            transition: border-color .25s, transform .25s, box-shadow .25s;
+            transition: border-color .3s, transform .3s, box-shadow .3s;
             overflow: hidden;
         }
         .dual-option::after {
             content: '';
             position: absolute;
             top: 0; right: 0;
-            width: 60%; height: 60%;
-            background: radial-gradient(circle at top right, rgba(96,165,250,.1), transparent 70%);
+            width: 70%; height: 70%;
+            background: radial-gradient(circle at top right, rgba(96,165,250,.12), transparent 70%);
             pointer-events: none;
         }
         .dual-option:hover {
+            border-color: rgba(96,165,250,.45);
+            transform: translateY(-4px);
+            box-shadow: 0 14px 36px rgba(37,99,235,.28);
+        }
+        .dual-option.best {
             border-color: rgba(96,165,250,.4);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(37,99,235,.25);
+            background: linear-gradient(165deg, rgba(37,99,235,.22) 0%, rgba(13,26,46,.95) 100%);
+            box-shadow: 0 0 0 1px rgba(96,165,250,.15), 0 8px 28px rgba(37,99,235,.2);
         }
-        .dual-option:nth-child(1) {
-            border-color: rgba(96,165,250,.3);
-            background: linear-gradient(165deg, rgba(37,99,235,.18) 0%, rgba(13,26,46,.92) 100%);
+        .dual-option.best::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #60a5fa, transparent);
+            filter: blur(1px);
         }
+
         .dual-badge {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            font-size: .66rem;
+            gap: 6px;
+            font-size: .68rem;
             font-weight: 700;
-            padding: 4px 11px;
+            padding: 5px 12px;
             border-radius: 20px;
-            background: linear-gradient(135deg, rgba(59,130,246,.95), rgba(37,99,235,.95));
+            background: linear-gradient(135deg, rgba(59,130,246,.98), rgba(37,99,235,.95));
             color: #fff;
-            margin-bottom: 11px;
-            box-shadow: 0 3px 12px rgba(37,99,235,.4);
-            letter-spacing: .02em;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 14px rgba(37,99,235,.5);
+            letter-spacing: .03em;
             position: relative;
             z-index: 1;
+            border: 1px solid rgba(147,197,253,.25);
         }
         .dual-badge.alt {
-            background: rgba(96,165,250,.16);
+            background: rgba(96,165,250,.14);
             color: var(--accent-3);
             box-shadow: none;
-            border: 1px solid rgba(96,165,250,.25);
+            border: 1px solid rgba(96,165,250,.3);
         }
-        .dual-badge i { font-size: .68rem; }
+        .dual-badge i { font-size: .7rem; }
         .dual-text {
-            font-size: .9rem;
-            line-height: 1.8;
+            font-size: .92rem;
+            line-height: 1.85;
             color: var(--txt);
             white-space: pre-wrap;
             word-break: break-word;
             position: relative;
             z-index: 1;
+        }
+
+        /* ✨ الفاصل العمودي بين الخيارين ✨ */
+        .dual-divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 0;
+        }
+        .dual-divider-line {
+            width: 1.5px;
+            flex: 1;
+            background: linear-gradient(180deg, transparent, rgba(96,165,250,.35), transparent);
+            border-radius: 2px;
+            position: relative;
+            min-height: 24px;
+        }
+        .dual-divider-badge {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0d1a2e, #08111f);
+            border: 1.5px solid rgba(96,165,250,.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-3);
+            font-size: .78rem;
+            font-weight: 700;
+            box-shadow: 0 0 0 4px rgba(96,165,250,.06), 0 4px 14px rgba(0,0,0,.4);
+            flex-shrink: 0;
+            animation: dualPulse 3s ease-in-out infinite;
+        }
+        @keyframes dualPulse {
+            0%, 100% { box-shadow: 0 0 0 4px rgba(96,165,250,.06), 0 4px 14px rgba(0,0,0,.4); }
+            50% { box-shadow: 0 0 0 7px rgba(96,165,250,.12), 0 4px 20px rgba(37,99,235,.4); }
         }
 
         /* ══════════════ CODE ══════════════ */
@@ -1434,10 +1437,26 @@
             .line-sweep-container { max-width: 320px; gap: 8px; }
             .search-indicator { padding: 8px 14px 8px 50px; }
             .modal-box { padding: 18px 16px; border-radius: 18px; }
-            .men-product-card { min-width: 222px; max-width: 235px; }
-            .men-product-card .product-image-wrap { height: 140px; }
-            .dual-response { grid-template-columns: 1fr; gap: 10px; }
-            .plus-menu { right: 12px; width: 240px; }
+            .men-product-card { min-width: 232px; max-width: 245px; }
+            .men-product-card .product-image-wrap { height: 150px; }
+            .plus-menu { right: 12px; width: 220px; }
+
+            /* الردود المزدوجة → عمودية على الجوال */
+            .dual-response {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .dual-divider {
+                flex-direction: row;
+                padding: 0 8px;
+                min-height: 30px;
+            }
+            .dual-divider-line {
+                width: auto;
+                height: 1.5px;
+                flex: 1;
+                background: linear-gradient(90deg, transparent, rgba(96,165,250,.35), transparent);
+            }
         }
 
         @media (max-width: 380px) {
@@ -1519,18 +1538,10 @@
             </div>
 
             <div class="input-area">
+                <!-- ✅ قائمة مبسّطة: إرفاق فقط -->
                 <div class="plus-menu" id="plusMenu">
                     <button class="menu-item" id="attachOption" type="button">
                         <i class="fas fa-paperclip"></i> إرفاق ملف
-                    </button>
-                    <div class="menu-divider"></div>
-                    <button class="menu-item disabled" id="aiAgentOption" type="button">
-                        <i class="fas fa-hand-sparkles"></i> وكيل MEN Ai
-                        <span class="menu-badge">قريباً</span>
-                    </button>
-                    <button class="menu-item disabled" id="searchBoostOption" type="button">
-                        <i class="fas fa-magnifying-glass"></i> البحث المعزز
-                        <span class="menu-badge">قريباً</span>
                     </button>
                 </div>
 
@@ -1616,7 +1627,7 @@
 
     <script>
         // ============================================================
-        //  MEN Ai — Main Chat Logic (Line Sweep Animation + Dual Replies)
+        //  MEN Ai — Main Chat Logic (Design + Dual Replies + Divider)
         // ============================================================
         const TYPING_SPEED = 38;
         const CODE_TEXT_SPEED = 32;
@@ -1824,7 +1835,7 @@
             loadMemory();
         }
 
-        /* ═══════════════ WELCOME SCREEN (خط ضوئي) ═══════════════ */
+        /* ═══════════════ WELCOME SCREEN ═══════════════ */
         function buildWelcomeScreen() {
             const greeting = currentUserName
                 ? `كيف حالك يا <span class="user-name">${escapeHtml(currentUserName)}</span>؟`
@@ -1882,6 +1893,30 @@
             `;
         }
 
+        function buildDualHtml(options) {
+            const opt0 = options[0] || { label: 'الرد الأفضل', content: '' };
+            const opt1 = options[1] || { label: 'رد بديل', content: '' };
+            return `
+                <div class="dual-response">
+                    <div class="dual-option best">
+                        <div class="dual-badge"><i class="fas fa-star"></i> ${escapeHtml(opt0.label)}</div>
+                        <div class="dual-text">${escapeHtml(opt0.content)}</div>
+                    </div>
+
+                    <div class="dual-divider">
+                        <div class="dual-divider-line"></div>
+                        <div class="dual-divider-badge"><i class="fas fa-code-branch"></i></div>
+                        <div class="dual-divider-line"></div>
+                    </div>
+
+                    <div class="dual-option">
+                        <div class="dual-badge alt"><i class="fas fa-lightbulb"></i> ${escapeHtml(opt1.label)}</div>
+                        <div class="dual-text">${escapeHtml(opt1.content)}</div>
+                    </div>
+                </div>
+            `;
+        }
+
         function loadCurrentSession() {
             const session = getCurrentSession();
             if (!session) return;
@@ -1910,19 +1945,7 @@
                 } else if (msg.role === 'bot' && msg.type === 'product' && msg.meta) {
                     inner.innerHTML = `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(msg.meta)}</div></div>`;
                 } else if (msg.role === 'bot' && msg.type === 'dual' && msg.meta) {
-                    const opts = msg.meta.options || [];
-                    inner.innerHTML = `
-                        <div class="dual-response">
-                            <div class="dual-option">
-                                <div class="dual-badge"><i class="fas fa-star"></i> ${escapeHtml(opts[0]?.label || 'الرد الأفضل')}</div>
-                                <div class="dual-text">${escapeHtml(opts[0]?.content || '')}</div>
-                            </div>
-                            <div class="dual-option">
-                                <div class="dual-badge alt"><i class="fas fa-shuffle"></i> ${escapeHtml(opts[1]?.label || 'رد بديل')}</div>
-                                <div class="dual-text">${escapeHtml(opts[1]?.content || '')}</div>
-                            </div>
-                        </div>
-                    `;
+                    inner.innerHTML = buildDualHtml(msg.meta.options || []);
                 } else if (msg.role === 'bot' && msg.type === 'code' && msg.meta) {
                     const cr = msg.meta;
                     inner.innerHTML = buildCodeHtml(cr.text || '', cr.code || '', cr.language || 'code');
@@ -1987,19 +2010,6 @@
             let c = m[category] || m['default'];
             if (!c || !c.responses || !c.responses.length) c = m['default'] || { responses: ['عذراً، لا يوجد رد.'] };
             return c.responses[Math.floor(Math.random() * c.responses.length)];
-        }
-
-        function getCategoryForText(text) {
-            const lower = text.trim().toLowerCase();
-            const m = mergeReplies();
-            for (const [cat, obj] of Object.entries(m)) {
-                if (obj.keywords) {
-                    for (const p of obj.keywords.map(k => k.toLowerCase())) {
-                        if (lower.includes(p)) return cat;
-                    }
-                }
-            }
-            return 'default';
         }
 
         function getCategoryScores(text) {
@@ -2249,12 +2259,6 @@
         document.getElementById('attachOption').addEventListener('click', e => {
             e.stopPropagation(); document.getElementById('fileInput').click(); closeMenu();
         });
-        document.getElementById('aiAgentOption').addEventListener('click', e => {
-            e.stopPropagation(); alert('قريباً'); closeMenu();
-        });
-        document.getElementById('searchBoostOption').addEventListener('click', e => {
-            e.stopPropagation(); alert('قريباً'); closeMenu();
-        });
         document.addEventListener('click', e => { if (!e.target.closest('.input-area')) closeMenu(); });
 
         document.getElementById('settingsModalClose').addEventListener('click', () => document.getElementById('settingsModal').classList.remove('active'));
@@ -2283,10 +2287,6 @@
                 return { type: 'products', content: buildAllProductsRow() };
             }
 
-            if (lower.includes('وكيل') || lower.includes('معزز') || lower.includes('boost')) {
-                return { type: 'text', content: '⏳ هذه الميزة ستكون متاحة قريباً.' };
-            }
-
             const math = evaluateMath(text);
             if (math !== null) return { type: 'text', content: `النتيجة: **${math}**` };
 
@@ -2307,7 +2307,7 @@
 
             const scores = getCategoryScores(text);
 
-            // ✨ إذا احتار (تطابق فئتان بقوة متقاربة) → عرض ردّين جنب بعض
+            // ✨ كشف الحيرة → عرض ردّين جنب بعض
             if (scores.length >= 2) {
                 const top = scores[0].score;
                 const second = scores[1].score;
@@ -2411,16 +2411,10 @@
             }
 
             const likeBtn = e.target.closest('.like-btn');
-            if (likeBtn) {
-                handleFeedback(likeBtn, 'like');
-                return;
-            }
+            if (likeBtn) { handleFeedback(likeBtn, 'like'); return; }
 
             const dislikeBtn = e.target.closest('.dislike-btn');
-            if (dislikeBtn) {
-                handleFeedback(dislikeBtn, 'dislike');
-                return;
-            }
+            if (dislikeBtn) { handleFeedback(dislikeBtn, 'dislike'); return; }
         });
 
         function handleFeedback(btn, type) {
@@ -2534,20 +2528,11 @@
                     a.className = 'bot-actions';
                     a.innerHTML = buildBotActionsHTML(replyContent, msgId);
                     botInner.appendChild(a);
+                    if (reply.type === 'products') saveToMemory('bot', 'المنتجات', 'products');
+                    else saveToMemory('bot', 'المنتج', 'product', reply.product);
                 }
                 else if (reply.type === 'dual') {
-                    botInner.innerHTML = `
-                        <div class="dual-response">
-                            <div class="dual-option">
-                                <div class="dual-badge"><i class="fas fa-star"></i> ${reply.options[0].label}</div>
-                                <div class="dual-text"></div>
-                            </div>
-                            <div class="dual-option">
-                                <div class="dual-badge alt"><i class="fas fa-shuffle"></i> ${reply.options[1].label}</div>
-                                <div class="dual-text"></div>
-                            </div>
-                        </div>
-                    `;
+                    botInner.innerHTML = buildDualHtml(reply.options);
                     const dualTexts = botInner.querySelectorAll('.dual-text');
                     await Promise.all([
                         typeTextInto(dualTexts[0], reply.options[0].content, TYPING_SPEED),
@@ -2592,6 +2577,7 @@
                     a.className = 'bot-actions';
                     a.innerHTML = buildBotActionsHTML(replyContent, msgId);
                     botInner.appendChild(a);
+                    saveToMemory('bot', replyContent, 'code', reply.content);
                 }
                 else {
                     await typeText(botInner, reply.content, TYPING_SPEED);
@@ -2601,13 +2587,8 @@
                     a.className = 'bot-actions';
                     a.innerHTML = buildBotActionsHTML(replyContent, msgId);
                     botInner.appendChild(a);
+                    saveToMemory('bot', replyContent, 'text');
                 }
-
-                if (reply.type === 'products') saveToMemory('bot', 'المنتجات', 'products');
-                else if (reply.type === 'product') saveToMemory('bot', 'المنتج', 'product', reply.product);
-                else if (reply.type === 'code') saveToMemory('bot', replyContent, 'code', reply.content);
-                else if (reply.type === 'dual') { /* already saved */ }
-                else saveToMemory('bot', replyContent, 'text');
 
                 if (autoBoostEnabled) {
                     await delay(500);
