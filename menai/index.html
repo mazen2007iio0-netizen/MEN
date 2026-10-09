@@ -197,6 +197,9 @@
         }
         .side-item:hover { background: var(--bg-hover); }
         .side-item i { font-size: .85rem; color: var(--accent-3); width: 16px; text-align: center; }
+        .side-item.danger { color: var(--danger); }
+        .side-item.danger i { color: var(--danger); }
+        .side-item.danger:hover { background: rgba(239, 65, 70, .1); }
 
         .user-row {
             display: none;
@@ -369,6 +372,7 @@
             z-index: 2;
         }
 
+        /* ═══ الأيقونة العائمة ═══ */
         .logo-stage {
             position: relative;
             width: 140px;
@@ -425,6 +429,7 @@
             50% { transform: translateY(-10px) rotate(-8deg) scale(1.08); }
         }
 
+        /* ═══ عنوان الترحيب ═══ */
         .welcome h1 {
             font-size: clamp(1.6rem, 5vw, 2.15rem);
             font-weight: 700;
@@ -452,6 +457,9 @@
             50% { filter: drop-shadow(0 0 14px rgba(96, 165, 250, .9)); }
         }
 
+        /* ═══════════════════════════════════════════
+           ✨ أنيميشن الخطوط من اليمين إلى اليسار
+           ═══════════════════════════════════════════ */
         .line-sweep-container {
             width: 100%;
             max-width: 480px;
@@ -480,17 +488,44 @@
             position: relative;
             box-shadow: 0 0 12px rgba(96, 165, 250, .5);
         }
-        .sweep-line.short { width: 62%; height: 1px; animation-delay: .35s; opacity: .75; }
-        .sweep-line.thin { width: 38%; height: 1px; animation-delay: .7s; opacity: .5; }
 
-        @keyframes sweepRightToLeft {
-            0% { transform: scaleX(0); opacity: 0; }
-            15% { opacity: 1; }
-            60% { transform: scaleX(1); opacity: 1; }
-            85% { transform: scaleX(1); opacity: .4; }
-            100% { transform: scaleX(1) translateX(-30%); opacity: 0; }
+        .sweep-line.short {
+            width: 62%;
+            height: 1px;
+            animation-delay: .35s;
+            opacity: .75;
         }
 
+        .sweep-line.thin {
+            width: 38%;
+            height: 1px;
+            animation-delay: .7s;
+            opacity: .5;
+        }
+
+        @keyframes sweepRightToLeft {
+            0% {
+                transform: scaleX(0);
+                opacity: 0;
+            }
+            15% {
+                opacity: 1;
+            }
+            60% {
+                transform: scaleX(1);
+                opacity: 1;
+            }
+            85% {
+                transform: scaleX(1);
+                opacity: .4;
+            }
+            100% {
+                transform: scaleX(1) translateX(-30%);
+                opacity: 0;
+            }
+        }
+
+        /* نقطة لامعة على طرف الخط */
         .sweep-line::after {
             content: '';
             position: absolute;
@@ -516,10 +551,12 @@
             100% { opacity: 0; right: 100%; }
         }
 
+        /* ═══ السؤال ═══ */
         .welcome-question {
             font-size: 1.05rem;
             color: var(--txt-2);
             font-weight: 500;
+            letter-spacing: -.01em;
             animation: textFade 1s ease .7s both;
         }
 
@@ -577,7 +614,10 @@
             border: 1px solid rgba(96, 165, 250, .08);
         }
 
-        .msg.bot .msg-inner { flex: 1; padding-top: 2px; }
+        .msg.bot .msg-inner {
+            flex: 1;
+            padding-top: 2px;
+        }
 
         .msg.bot::before {
             content: '';
@@ -642,14 +682,34 @@
             font-size: .85rem;
             border-radius: 8px;
         }
-        .bot-actions button.like-btn.active { color: var(--success); background: rgba(74, 222, 128, .14); }
-        .bot-actions button.dislike-btn.active { color: var(--danger); background: rgba(248, 113, 113, .14); }
-        .bot-actions button.pop { animation: popBtn .4s cubic-bezier(.16, 1, .3, 1); }
+
+        .bot-actions button.like-btn.active {
+            color: var(--success);
+            background: rgba(74, 222, 128, .14);
+        }
+        .bot-actions button.like-btn.active:hover {
+            background: rgba(74, 222, 128, .22);
+            color: var(--success);
+        }
+
+        .bot-actions button.dislike-btn.active {
+            color: var(--danger);
+            background: rgba(248, 113, 113, .14);
+        }
+        .bot-actions button.dislike-btn.active:hover {
+            background: rgba(248, 113, 113, .22);
+            color: var(--danger);
+        }
+
+        .bot-actions button.pop {
+            animation: popBtn .4s cubic-bezier(.16, 1, .3, 1);
+        }
         @keyframes popBtn {
             0% { transform: scale(1); }
             40% { transform: scale(1.35); }
             100% { transform: scale(1); }
         }
+
         .bot-actions .divider-dot {
             color: var(--txt-3);
             opacity: .4;
@@ -772,7 +832,7 @@
             position: absolute;
             bottom: calc(100% + 6px);
             right: 16px;
-            width: 240px;
+            width: 262px;
             background: #0d1a2e;
             border: 1px solid rgba(96, 165, 250, .16);
             border-radius: 16px;
@@ -808,6 +868,17 @@
         }
         .menu-item:hover { background: var(--bg-hover); }
         .menu-item i { width: 18px; text-align: center; color: var(--accent-3); font-size: .9rem; }
+        .menu-item.disabled { opacity: .42; cursor: not-allowed; }
+        .menu-item.disabled:hover { background: transparent; }
+        .menu-badge {
+            margin-inline-start: auto;
+            font-size: .66rem;
+            background: rgba(96, 165, 250, .13);
+            padding: 3px 8px;
+            border-radius: 10px;
+            color: var(--accent-3);
+        }
+        .menu-divider { height: 1px; background: var(--line); margin: 5px 8px; }
 
         /* ── File preview ── */
         .file-preview {
@@ -893,7 +964,11 @@
             font-size: .95rem;
             flex-shrink: 0;
         }
-        .modal-head h3 { font-size: 1.05rem; font-weight: 600; color: var(--txt); }
+        .modal-head h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--txt);
+        }
 
         .modal-text {
             background: #050a14;
@@ -1004,338 +1079,94 @@
         .btn.danger { background: transparent; color: var(--danger); border: 1px solid rgba(239, 65, 70, .35); }
         .btn.danger:hover { background: rgba(239, 65, 70, .12); }
 
-        /* ══════════════ PRODUCTS (تصميم فاخر) ══════════════ */
+        /* ══════════════ PRODUCTS ══════════════ */
         .products-row-wrapper {
             width: 100%;
             overflow-x: auto;
             overflow-y: hidden;
-            padding: 10px 4px 18px;
+            padding: 4px 0 10px;
             scrollbar-width: thin;
         }
         .products-row-wrapper::-webkit-scrollbar { height: 6px; }
-        .products-row-wrapper::-webkit-scrollbar-thumb {
-            background: linear-gradient(90deg, rgba(96,165,250,.5), rgba(37,99,235,.5));
-            border-radius: 6px;
-        }
-        .products-row-wrapper::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(90deg, rgba(96,165,250,.8), rgba(37,99,235,.8));
-        }
+        .products-row-wrapper::-webkit-scrollbar-thumb { background: rgba(96, 165, 250, .22); border-radius: 6px; }
         .products-row {
             display: flex;
-            gap: 18px;
+            gap: 12px;
             width: max-content;
             min-width: 100%;
-            padding: 6px 2px;
         }
-
         .men-product-card {
-            min-width: 270px;
-            max-width: 282px;
-            background: linear-gradient(170deg, #101f39 0%, #08121f 100%);
-            border: 1px solid rgba(96,165,250,.12);
-            border-radius: 22px;
+            min-width: 235px;
+            max-width: 245px;
+            background: #0d1a2e;
+            border: 1px solid rgba(96, 165, 250, .13);
+            border-radius: 16px;
             overflow: hidden;
             flex-shrink: 0;
-            transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s, border-color .3s;
-            position: relative;
-            box-shadow: 0 8px 28px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.03);
+            transition: border-color .18s, transform .18s;
         }
-        .men-product-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 22px;
-            padding: 1px;
-            background: linear-gradient(160deg, rgba(96,165,250,.8), transparent 40%, transparent 60%, rgba(37,99,235,.6));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-                    mask-composite: exclude;
-            opacity: 0;
-            transition: opacity .35s;
-            pointer-events: none;
-            z-index: 5;
-        }
-        .men-product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 26px 55px rgba(37,99,235,.35), 0 8px 20px rgba(0,0,0,.55);
-            border-color: rgba(96,165,250,.45);
-        }
-        .men-product-card:hover::before { opacity: 1; }
-
-        .men-product-card .product-image-wrap {
-            position: relative;
-            width: 100%;
-            height: 178px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #08111f, #0d1a2e);
-        }
+        .men-product-card:hover { border-color: rgba(96, 165, 250, .4); transform: translateY(-2px); }
         .men-product-card .product-image {
             width: 100%;
-            height: 100%;
+            height: 140px;
             object-fit: cover;
             display: block;
-            transition: transform .8s cubic-bezier(.16,1,.3,1);
+            background: #050a14;
         }
-        .men-product-card:hover .product-image { transform: scale(1.12); }
-        .men-product-card .product-image-wrap::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, transparent 30%, rgba(5,10,20,.95) 100%);
-            pointer-events: none;
-        }
-
+        .men-product-card .product-content { padding: 14px 15px 15px; }
         .men-product-card .badge {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            z-index: 3;
-            background: linear-gradient(135deg, rgba(59,130,246,.98), rgba(29,78,216,.95));
-            color: #fff;
-            padding: 5px 13px;
+            display: inline-block;
+            background: rgba(96, 165, 250, .13);
+            color: var(--accent-3);
+            padding: 3px 10px;
             border-radius: 20px;
-            font-size: .68rem;
-            font-weight: 700;
-            letter-spacing: .03em;
-            box-shadow: 0 6px 18px rgba(37,99,235,.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(147,197,253,.3);
-        }
-
-        .men-product-card .product-content {
-            padding: 16px 17px 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
+            font-size: .67rem;
+            font-weight: 600;
         }
         .men-product-card h2 {
-            margin: 0;
-            font-size: 1.08rem;
-            font-weight: 700;
+            margin: 9px 0 5px;
+            font-size: 1rem;
+            font-weight: 600;
             color: var(--txt);
-            line-height: 1.4;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            letter-spacing: -.015em;
-        }
-        .men-product-card .rating {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            font-size: .78rem;
-            color: #fbbf24;
-            letter-spacing: 1.5px;
-            direction: ltr;
-            justify-content: flex-end;
-            filter: drop-shadow(0 0 4px rgba(251,191,36,.35));
-        }
-        .men-product-card .rating span {
-            color: var(--txt-3);
-            margin-inline-start: 7px;
-            font-weight: 700;
-            font-size: .7rem;
-            letter-spacing: 0;
-            filter: none;
         }
         .men-product-card p {
             color: var(--txt-3);
-            line-height: 1.7;
-            margin: 3px 0 0;
-            font-size: .8rem;
+            line-height: 1.6;
+            margin: 5px 0 12px;
+            font-size: .78rem;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            min-height: 2.7em;
         }
         .men-product-card .bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 10px;
-            padding-top: 13px;
-            border-top: 1px solid rgba(96,165,250,.12);
-            margin-top: 8px;
         }
         .men-product-card .price {
-            font-size: 1.28rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #ffffff 0%, #93c5fd 60%, #60a5fa 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: transparent;
-            display: flex;
-            align-items: baseline;
-            gap: 4px;
-            letter-spacing: -.03em;
-            filter: drop-shadow(0 0 8px rgba(96,165,250,.3));
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--txt);
         }
-        .men-product-card .price small {
-            font-size: .7rem;
-            font-weight: 600;
-            color: var(--txt-3);
-            -webkit-text-fill-color: var(--txt-3);
-            letter-spacing: 0;
-            filter: none;
-        }
+        .men-product-card .price small { font-size: .7rem; color: var(--txt-3); font-weight: 500; margin-right: 2px; }
         .men-product-card .btn-product {
-            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            background: var(--accent);
             color: #fff;
             border: none;
-            padding: 9px 16px;
-            border-radius: 22px;
+            padding: 7px 15px;
+            border-radius: 18px;
             font-family: inherit;
-            font-size: .76rem;
-            font-weight: 700;
+            font-size: .75rem;
+            font-weight: 600;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            transition: all .28s cubic-bezier(.16,1,.3,1);
-            box-shadow: 0 5px 16px rgba(37,99,235,.45);
-            white-space: nowrap;
-            position: relative;
-            overflow: hidden;
+            gap: 5px;
+            transition: background .15s;
         }
-        .men-product-card .btn-product::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
-            transition: left .5s;
-        }
-        .men-product-card .btn-product:hover::before { left: 100%; }
-        .men-product-card .btn-product:hover {
-            background: linear-gradient(135deg, #1d4ed8, #2563eb);
-            box-shadow: 0 8px 24px rgba(37,99,235,.7);
-            transform: translateY(-2px);
-        }
-        .men-product-card .btn-product i { transition: transform .28s; }
-        .men-product-card .btn-product:hover i { transform: translateX(-3px); }
-
-        /* ══════════════ DUAL RESPONSE (خياران بينهما فاصل) ══════════════ */
-        .dual-response {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 10px;
-            width: 100%;
-            margin: 10px 0 6px;
-            align-items: stretch;
-            animation: msgIn .35s ease;
-        }
-        .dual-option {
-            background: linear-gradient(165deg, rgba(13,26,46,.95) 0%, rgba(8,17,31,.95) 100%);
-            border: 1px solid rgba(96,165,250,.15);
-            border-radius: 18px;
-            padding: 16px 17px 18px;
-            position: relative;
-            transition: border-color .3s, transform .3s, box-shadow .3s;
-            overflow: hidden;
-        }
-        .dual-option::after {
-            content: '';
-            position: absolute;
-            top: 0; right: 0;
-            width: 70%; height: 70%;
-            background: radial-gradient(circle at top right, rgba(96,165,250,.12), transparent 70%);
-            pointer-events: none;
-        }
-        .dual-option:hover {
-            border-color: rgba(96,165,250,.45);
-            transform: translateY(-4px);
-            box-shadow: 0 14px 36px rgba(37,99,235,.28);
-        }
-        .dual-option.best {
-            border-color: rgba(96,165,250,.4);
-            background: linear-gradient(165deg, rgba(37,99,235,.22) 0%, rgba(13,26,46,.95) 100%);
-            box-shadow: 0 0 0 1px rgba(96,165,250,.15), 0 8px 28px rgba(37,99,235,.2);
-        }
-        .dual-option.best::before {
-            content: '';
-            position: absolute;
-            top: -1px;
-            left: 20px;
-            right: 20px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #60a5fa, transparent);
-            filter: blur(1px);
-        }
-
-        .dual-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: .68rem;
-            font-weight: 700;
-            padding: 5px 12px;
-            border-radius: 20px;
-            background: linear-gradient(135deg, rgba(59,130,246,.98), rgba(37,99,235,.95));
-            color: #fff;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 14px rgba(37,99,235,.5);
-            letter-spacing: .03em;
-            position: relative;
-            z-index: 1;
-            border: 1px solid rgba(147,197,253,.25);
-        }
-        .dual-badge.alt {
-            background: rgba(96,165,250,.14);
-            color: var(--accent-3);
-            box-shadow: none;
-            border: 1px solid rgba(96,165,250,.3);
-        }
-        .dual-badge i { font-size: .7rem; }
-        .dual-text {
-            font-size: .92rem;
-            line-height: 1.85;
-            color: var(--txt);
-            white-space: pre-wrap;
-            word-break: break-word;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ✨ الفاصل العمودي بين الخيارين ✨ */
-        .dual-divider {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 8px 0;
-        }
-        .dual-divider-line {
-            width: 1.5px;
-            flex: 1;
-            background: linear-gradient(180deg, transparent, rgba(96,165,250,.35), transparent);
-            border-radius: 2px;
-            position: relative;
-            min-height: 24px;
-        }
-        .dual-divider-badge {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #0d1a2e, #08111f);
-            border: 1.5px solid rgba(96,165,250,.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent-3);
-            font-size: .78rem;
-            font-weight: 700;
-            box-shadow: 0 0 0 4px rgba(96,165,250,.06), 0 4px 14px rgba(0,0,0,.4);
-            flex-shrink: 0;
-            animation: dualPulse 3s ease-in-out infinite;
-        }
-        @keyframes dualPulse {
-            0%, 100% { box-shadow: 0 0 0 4px rgba(96,165,250,.06), 0 4px 14px rgba(0,0,0,.4); }
-            50% { box-shadow: 0 0 0 7px rgba(96,165,250,.12), 0 4px 20px rgba(37,99,235,.4); }
-        }
+        .men-product-card .btn-product:hover { background: #1d4ed8; }
 
         /* ══════════════ CODE ══════════════ */
         .code-response { display: flex; flex-direction: column; gap: 8px; width: 100%; }
@@ -1437,26 +1268,9 @@
             .line-sweep-container { max-width: 320px; gap: 8px; }
             .search-indicator { padding: 8px 14px 8px 50px; }
             .modal-box { padding: 18px 16px; border-radius: 18px; }
-            .men-product-card { min-width: 232px; max-width: 245px; }
-            .men-product-card .product-image-wrap { height: 150px; }
-            .plus-menu { right: 12px; width: 220px; }
-
-            /* الردود المزدوجة → عمودية على الجوال */
-            .dual-response {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            .dual-divider {
-                flex-direction: row;
-                padding: 0 8px;
-                min-height: 30px;
-            }
-            .dual-divider-line {
-                width: auto;
-                height: 1.5px;
-                flex: 1;
-                background: linear-gradient(90deg, transparent, rgba(96,165,250,.35), transparent);
-            }
+            .men-product-card { min-width: 200px; max-width: 210px; }
+            .men-product-card .product-image { height: 120px; }
+            .plus-menu { right: 12px; width: 240px; }
         }
 
         @media (max-width: 380px) {
@@ -1538,10 +1352,18 @@
             </div>
 
             <div class="input-area">
-                <!-- ✅ قائمة مبسّطة: إرفاق فقط -->
                 <div class="plus-menu" id="plusMenu">
                     <button class="menu-item" id="attachOption" type="button">
                         <i class="fas fa-paperclip"></i> إرفاق ملف
+                    </button>
+                    <div class="menu-divider"></div>
+                    <button class="menu-item disabled" id="aiAgentOption" type="button">
+                        <i class="fas fa-hand-sparkles"></i> وكيل MEN Ai
+                        <span class="menu-badge">قريباً</span>
+                    </button>
+                    <button class="menu-item disabled" id="searchBoostOption" type="button">
+                        <i class="fas fa-magnifying-glass"></i> البحث المعزز
+                        <span class="menu-badge">قريباً</span>
                     </button>
                 </div>
 
@@ -1627,7 +1449,7 @@
 
     <script>
         // ============================================================
-        //  MEN Ai — Main Chat Logic (Design + Dual Replies + Divider)
+        //  MEN Ai — Main Chat Logic (Line Sweep Animation)
         // ============================================================
         const TYPING_SPEED = 38;
         const CODE_TEXT_SPEED = 32;
@@ -1835,7 +1657,7 @@
             loadMemory();
         }
 
-        /* ═══════════════ WELCOME SCREEN ═══════════════ */
+        /* ═══════════════ WELCOME SCREEN (خط ضوئي) ═══════════════ */
         function buildWelcomeScreen() {
             const greeting = currentUserName
                 ? `كيف حالك يا <span class="user-name">${escapeHtml(currentUserName)}</span>؟`
@@ -1852,6 +1674,7 @@
 
                     <h1>${greeting}</h1>
 
+                    <!--  خطوط ضوئية تنسحب من اليمين إلى اليسار -->
                     <div class="line-sweep-container">
                         <div class="sweep-line"></div>
                         <div class="sweep-line short"></div>
@@ -1893,30 +1716,6 @@
             `;
         }
 
-        function buildDualHtml(options) {
-            const opt0 = options[0] || { label: 'الرد الأفضل', content: '' };
-            const opt1 = options[1] || { label: 'رد بديل', content: '' };
-            return `
-                <div class="dual-response">
-                    <div class="dual-option best">
-                        <div class="dual-badge"><i class=""></i> ${escapeHtml(opt0.label)}</div>
-                        <div class="dual-text">${escapeHtml(opt0.content)}</div>
-                    </div>
-
-                    <div class="dual-divider">
-                        <div class="dual-divider-line"></div>
-                        <div class="dual-divider-badge"><i class="fas fa-code-branch"></i></div>
-                        <div class="dual-divider-line"></div>
-                    </div>
-
-                    <div class="dual-option">
-                        <div class="dual-badge alt"><i class=""></i> ${escapeHtml(opt1.label)}</div>
-                        <div class="dual-text">${escapeHtml(opt1.content)}</div>
-                    </div>
-                </div>
-            `;
-        }
-
         function loadCurrentSession() {
             const session = getCurrentSession();
             if (!session) return;
@@ -1944,8 +1743,6 @@
                     inner.innerHTML = buildAllProductsRow();
                 } else if (msg.role === 'bot' && msg.type === 'product' && msg.meta) {
                     inner.innerHTML = `<div class="products-row-wrapper"><div class="products-row">${buildProductCard(msg.meta)}</div></div>`;
-                } else if (msg.role === 'bot' && msg.type === 'dual' && msg.meta) {
-                    inner.innerHTML = buildDualHtml(msg.meta.options || []);
                 } else if (msg.role === 'bot' && msg.type === 'code' && msg.meta) {
                     const cr = msg.meta;
                     inner.innerHTML = buildCodeHtml(cr.text || '', cr.code || '', cr.language || 'code');
@@ -2012,22 +1809,17 @@
             return c.responses[Math.floor(Math.random() * c.responses.length)];
         }
 
-        function getCategoryScores(text) {
+        function getCategoryForText(text) {
             const lower = text.trim().toLowerCase();
             const m = mergeReplies();
-            const scores = [];
             for (const [cat, obj] of Object.entries(m)) {
-                if (cat === 'default') continue;
-                let score = 0;
                 if (obj.keywords) {
                     for (const p of obj.keywords.map(k => k.toLowerCase())) {
-                        if (lower.includes(p)) score += Math.max(1, p.length);
+                        if (lower.includes(p)) return cat;
                     }
                 }
-                if (score > 0) scores.push({ cat, score });
             }
-            scores.sort((a, b) => b.score - a.score);
-            return scores;
+            return 'default';
         }
 
         function evaluateMath(text) {
@@ -2145,24 +1937,14 @@
             const cur = p.currency || 'ر.س';
             const badge = p.badge || 'منتج';
             const link = p.link || '#';
-
-            let ratingHtml = '';
-            if (p.rating) {
-                const r = Math.max(0, Math.min(5, Math.round(p.rating)));
-                ratingHtml = `<div class="rating">${'★'.repeat(r)}${'☆'.repeat(5 - r)}<span>${p.rating}</span></div>`;
-            }
-
             return `<div class="men-product-card">
-                <div class="product-image-wrap">
-                    <img src="${img}" class="product-image" alt="${escapeHtml(name)}" onerror="this.src='images/default.png'">
-                    <span class="badge">${escapeHtml(badge)}</span>
-                </div>
+                <img src="${img}" class="product-image" alt="${name}" onerror="this.src='images/default.png'">
                 <div class="product-content">
-                    <h2>${escapeHtml(name)}</h2>
-                    ${ratingHtml}
-                    <p>${escapeHtml(desc)}</p>
+                    <span class="badge">${badge}</span>
+                    <h2>${name}</h2>
+                    <p>${desc}</p>
                     <div class="bottom">
-                        <div class="price">${escapeHtml(String(price))}<small>${escapeHtml(cur)}</small></div>
+                        <div class="price">${price} <small>${cur}</small></div>
                         <button class="btn-product" onclick="window.location.href='${link}'"><i class="fas fa-arrow-left"></i> عرض</button>
                     </div>
                 </div>
@@ -2259,6 +2041,12 @@
         document.getElementById('attachOption').addEventListener('click', e => {
             e.stopPropagation(); document.getElementById('fileInput').click(); closeMenu();
         });
+        document.getElementById('aiAgentOption').addEventListener('click', e => {
+            e.stopPropagation(); alert('قريباً'); closeMenu();
+        });
+        document.getElementById('searchBoostOption').addEventListener('click', e => {
+            e.stopPropagation(); alert('قريباً'); closeMenu();
+        });
         document.addEventListener('click', e => { if (!e.target.closest('.input-area')) closeMenu(); });
 
         document.getElementById('settingsModalClose').addEventListener('click', () => document.getElementById('settingsModal').classList.remove('active'));
@@ -2287,6 +2075,10 @@
                 return { type: 'products', content: buildAllProductsRow() };
             }
 
+            if (lower.includes('وكيل') || lower.includes('معزز') || lower.includes('boost')) {
+                return { type: 'text', content: '⏳ هذه الميزة ستكون متاحة قريباً.' };
+            }
+
             const math = evaluateMath(text);
             if (math !== null) return { type: 'text', content: `النتيجة: **${math}**` };
 
@@ -2305,26 +2097,8 @@
                 product: p
             };
 
-            const scores = getCategoryScores(text);
-
-            // ✨ كشف الحيرة → عرض ردّين جنب بعض
-            if (scores.length >= 2) {
-                const top = scores[0].score;
-                const second = scores[1].score;
-                if (second >= top * 0.6) {
-                    return {
-                        type: 'dual',
-                        options: [
-                            { label: 'الرد الأفضل', content: getReply(scores[0].cat) },
-                            { label: 'رد بديل', content: getReply(scores[1].cat) }
-                        ]
-                    };
-                }
-            }
-
-            if (scores.length >= 1) {
-                return { type: 'text', content: getReply(scores[0].cat) };
-            }
+            const cat = getCategoryForText(text);
+            if (cat !== 'default') return { type: 'text', content: getReply(cat) };
 
             return { type: 'text', content: getReply('default') };
         }
@@ -2411,10 +2185,16 @@
             }
 
             const likeBtn = e.target.closest('.like-btn');
-            if (likeBtn) { handleFeedback(likeBtn, 'like'); return; }
+            if (likeBtn) {
+                handleFeedback(likeBtn, 'like');
+                return;
+            }
 
             const dislikeBtn = e.target.closest('.dislike-btn');
-            if (dislikeBtn) { handleFeedback(dislikeBtn, 'dislike'); return; }
+            if (dislikeBtn) {
+                handleFeedback(dislikeBtn, 'dislike');
+                return;
+            }
         });
 
         function handleFeedback(btn, type) {
@@ -2528,23 +2308,6 @@
                     a.className = 'bot-actions';
                     a.innerHTML = buildBotActionsHTML(replyContent, msgId);
                     botInner.appendChild(a);
-                    if (reply.type === 'products') saveToMemory('bot', 'المنتجات', 'products');
-                    else saveToMemory('bot', 'المنتج', 'product', reply.product);
-                }
-                else if (reply.type === 'dual') {
-                    botInner.innerHTML = buildDualHtml(reply.options);
-                    const dualTexts = botInner.querySelectorAll('.dual-text');
-                    await Promise.all([
-                        typeTextInto(dualTexts[0], reply.options[0].content, TYPING_SPEED),
-                        typeTextInto(dualTexts[1], reply.options[1].content, TYPING_SPEED)
-                    ]);
-                    botInner.insertAdjacentHTML('beforeend', `<span class="msg-time">${nowTime}</span>`);
-                    replyContent = reply.options.map(o => o.content).join('\n\n— بديل —\n\n');
-                    const a = document.createElement('div');
-                    a.className = 'bot-actions';
-                    a.innerHTML = buildBotActionsHTML(replyContent, msgId);
-                    botInner.appendChild(a);
-                    saveToMemory('bot', replyContent, 'dual', { options: reply.options });
                 }
                 else if (reply.type === 'code') {
                     const cr = reply.content;
@@ -2577,7 +2340,6 @@
                     a.className = 'bot-actions';
                     a.innerHTML = buildBotActionsHTML(replyContent, msgId);
                     botInner.appendChild(a);
-                    saveToMemory('bot', replyContent, 'code', reply.content);
                 }
                 else {
                     await typeText(botInner, reply.content, TYPING_SPEED);
@@ -2587,8 +2349,12 @@
                     a.className = 'bot-actions';
                     a.innerHTML = buildBotActionsHTML(replyContent, msgId);
                     botInner.appendChild(a);
-                    saveToMemory('bot', replyContent, 'text');
                 }
+
+                if (reply.type === 'products') saveToMemory('bot', 'المنتجات', 'products');
+                else if (reply.type === 'product') saveToMemory('bot', 'المنتج', 'product', reply.product);
+                else if (reply.type === 'code') saveToMemory('bot', replyContent, 'code', reply.content);
+                else saveToMemory('bot', replyContent, 'text');
 
                 if (autoBoostEnabled) {
                     await delay(500);
