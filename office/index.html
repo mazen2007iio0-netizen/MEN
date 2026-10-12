@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEN Office — منصة العمل والإنجازات</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0a0a0a;--black2:#141414;--white:#fff;--off:#f7f7f7;
+  --line:#e5e5e5;--gray:#6b6b6b;--sh:0 8px 24px rgba(0,0,0,.06);
+  --sh-lg:0 20px 50px rgba(0,0,0,.14);--sh-glow:0 12px 34px rgba(0,0,0,.28);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow-x:hidden;scroll-behavior:smooth}
+body{font-family:'Tajawal',system-ui,sans-serif;background:var(--white);color:var(--black);line-height:1.6}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit}
+svg{display:block}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.hdr-in{max-width:1240px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;gap:20px}
+.logo{display:flex;align-items:center;gap:11px;cursor:pointer;flex-shrink:0}
+.logo-mark{width:42px;height:42px;border-radius:12px;background:var(--black);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;letter-spacing:-.5px;box-shadow:var(--sh-glow);transition:.3s}
+.logo:hover .logo-mark{transform:rotate(-6deg) scale(1.05)}
+.logo-txt{display:flex;flex-direction:column;line-height:1}
+.logo-txt b{font-size:16px;font-weight:900;letter-spacing:-.4px}
+.logo-txt span{font-size:10.5px;color:var(--gray);font-weight:700;letter-spacing:2px;margin-top:2px}
+.nav{display:flex;gap:4px;margin-right:auto;flex-wrap:wrap}
+.nav a{padding:9px 16px;border-radius:10px;font-size:14px;font-weight:800;color:var(--gray);cursor:pointer;transition:.2s;text-decoration:none;white-space:nowrap}
+.nav a:hover{background:var(--off);color:var(--black)}
+.nav a.on{background:var(--black);color:#fff}
+.hdr-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.btn{padding:11px 20px;border-radius:12px;font-weight:800;font-size:13.5px;display:inline-flex;align-items:center;gap:7px;transition:.25s;white-space:nowrap}
+.btn svg{width:15px;height:15px}
+.btn-dark{background:var(--black);color:#fff;box-shadow:0 8px 20px rgba(0,0,0,.22)}
+.btn-dark:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.3)}
+.btn-out{background:var(--white);border:1.5px solid var(--line);color:var(--black)}
+.btn-out:hover{border-color:var(--black)}
+.menu-toggle{display:none;width:42px;height:42px;border-radius:12px;background:var(--off);border:1.5px solid var(--line);align-items:center;justify-content:center}
+.menu-toggle svg{width:20px;height:20px}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;background:var(--black);color:#fff;padding:80px 22px 90px;text-align:center}
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(circle at 20% 20%,rgba(255,255,255,.08),transparent 45%),
+  radial-gradient(circle at 80% 80%,rgba(255,255,255,.05),transparent 45%);pointer-events:none}
+.hero::after{content:"";position:absolute;inset:0;background-image:
+  linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);pointer-events:none}
+.hero-in{position:relative;z-index:2;max-width:760px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:7px 16px;border-radius:40px;font-size:12.5px;font-weight:800;margin-bottom:22px;backdrop-filter:blur(8px)}
+.hero-badge .pip{width:8px;height:8px;background:#fff;border-radius:50%;animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.3)}}
+.hero h1{font-size:clamp(30px,5.2vw,54px);font-weight:900;line-height:1.15;letter-spacing:-2px;margin-bottom:18px}
+.hero h1 .hl{position:relative;display:inline-block}
+.hero h1 .hl::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:8px;background:rgba(255,255,255,.18);border-radius:4px;z-index:-1}
+.hero p{font-size:clamp(15px,2vw,18px);opacity:.72;max-width:580px;margin:0 auto 30px;font-weight:500}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero-cta .btn{padding:15px 30px;font-size:15px}
+.hero-cta .btn-w{background:#fff;color:var(--black);box-shadow:0 12px 30px rgba(255,255,255,.15)}
+.hero-cta .btn-w:hover{transform:translateY(-3px)}
+.hero-cta .btn-g{background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.22);backdrop-filter:blur(10px)}
+.hero-cta .btn-g:hover{background:rgba(255,255,255,.16);transform:translateY(-3px)}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:52px;max-width:620px;margin-left:auto;margin-right:auto;position:relative;z-index:2}
+.hero-stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:20px 14px;backdrop-filter:blur(10px)}
+.hero-stat b{display:block;font-size:26px;font-weight:900;line-height:1;letter-spacing:-1px}
+.hero-stat span{font-size:11.5px;opacity:.7;font-weight:700;margin-top:6px;display:block}
+
+/* MAIN */
+main{max-width:1240px;margin:0 auto;padding:0 22px 90px}
+section{padding:70px 0 20px;scroll-margin-top:90px}
+.sec-head{text-align:center;margin-bottom:44px}
+.sec-kicker{display:inline-block;font-size:12px;font-weight:900;letter-spacing:3px;color:var(--gray);margin-bottom:12px;text-transform:uppercase}
+.sec-head h2{font-size:clamp(26px,3.6vw,38px);font-weight:900;letter-spacing:-1.2px;line-height:1.15;margin-bottom:12px}
+.sec-head p{color:var(--gray);font-size:15px;max-width:560px;margin:0 auto;font-weight:500}
+
+/* GRID */
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+
+/* EMAIL */
+.email-wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:start}
+.form-card{background:#fff;border:1.5px solid var(--line);border-radius:24px;padding:32px}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:13px;font-weight:800;color:var(--gray);margin-bottom:8px}
+.field input,.field select,.field textarea{width:100%;padding:14px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--off);font-size:15px;color:var(--black);outline:none;transition:.25s;font-weight:600;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--black);background:#fff;box-shadow:0 0 0 4px rgba(0,0,0,.05)}
+.btn-full{width:100%;padding:16px;border-radius:14px;font-weight:900;font-size:15.5px;display:flex;align-items:center;justify-content:center;gap:9px;transition:.25s}
+.btn-dark.btn-full:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(0,0,0,.3)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.tag-chip{padding:7px 14px;border-radius:40px;background:var(--off);border:1.5px solid var(--line);font-size:12.5px;font-weight:800;cursor:pointer;transition:.2s}
+.tag-chip:hover,.tag-chip.on{background:var(--black);color:#fff;border-color:var(--black)}
+.preview{background:var(--black);color:#fff;border-radius:24px;padding:32px;position:sticky;top:100px;box-shadow:var(--sh-glow)}
+.preview h4{font-size:12px;font-weight:900;letter-spacing:3px;color:rgba(255,255,255,.5);margin-bottom:20px;text-transform:uppercase}
+.preview-to{display:flex;align-items:center;gap:12px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:20px}
+.preview-av{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;flex-shrink:0}
+.preview-to .info b{font-size:14.5px;display:block;line-height:1.2}
+.preview-to .info span{font-size:12px;color:rgba(255,255,255,.55)}
+.preview-subject{font-size:19px;font-weight:900;margin-bottom:14px;line-height:1.3;letter-spacing:-.4px;word-break:break-word}
+.preview-body{font-size:14px;line-height:1.85;color:rgba(255,255,255,.75);white-space:pre-wrap;word-break:break-word;min-height:110px}
+.preview-foot{margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12);font-size:11.5px;color:rgba(255,255,255,.45);font-weight:700;letter-spacing:1px}
+
+/* GROUPS */
+.group-card{background:#fff;border:1.5px solid var(--line);border-radius:22px;padding:24px;transition:.3s;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.group-card:hover{border-color:var(--black);transform:translateY(-5px);box-shadow:var(--sh-lg)}
+.group-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--black);transform:scaleX(0);transform-origin:right;transition:.4s}
+.group-card:hover::before{transform:scaleX(1)}
+.group-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.group-avatar{width:52px;height:52px;border-radius:16px;background:var(--black);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;flex-shrink:0}
+.group-head .gt{flex:1;min-width:0}
+.group-head .gt b{font-size:16px;font-weight:900;display:block;line-height:1.2;letter-spacing:-.3px}
+.group-head .gt span{font-size:12px;color:var(--gray);font-weight:700}
+.group-desc{font-size:13.5px;color:var(--gray);line-height:1.7;margin-bottom:18px;flex:1;font-weight:500}
+.group-meta{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px dashed var(--line);gap:10px;flex-wrap:wrap}
+.group-members{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;color:var(--gray)}
+.group-members svg{width:15px;height:15px}
+.group-members b{color:var(--black);font-weight:900}
+.join-btn{padding:9px 18px;border-radius:11px;background:var(--off);border:1.5px solid var(--line);font-weight:800;font-size:12.5px;transition:.2s}
+.join-btn:hover{background:var(--black);color:#fff;border-color:var(--black)}
+.join-btn.joined{background:var(--black);color:#fff;border-color:var(--black)}
+.join-btn.joined:hover{background:#c00;border-color:#c00}
+
+/* ACH */
+.ach-card{background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:22px;transition:.3s;display:flex;gap:16px;align-items:flex-start}
+.ach-card:hover{border-color:var(--black);transform:translateX(-4px);box-shadow:var(--sh-lg)}
+.ach-medal{width:56px;height:56px;border-radius:50%;background:var(--off);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid var(--line);transition:.3s}
+.ach-card:hover .ach-medal{background:var(--black);border-color:var(--black);transform:rotate(-8deg) scale(1.05)}
+.ach-card:hover .ach-medal svg{color:#fff}
+.ach-medal svg{width:26px;height:26px;color:var(--black);transition:.3s}
+.ach-body{flex:1;min-width:0}
+.ach-body h4{font-size:15.5px;font-weight:900;margin-bottom:5px;letter-spacing:-.2px}
+.ach-body p{font-size:13px;color:var(--gray);line-height:1.65;margin-bottom:12px;font-weight:500}
+.ach-bar{height:7px;background:var(--off);border-radius:8px;overflow:hidden;margin-bottom:7px}
+.ach-bar span{display:block;height:100%;background:var(--black);border-radius:8px;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.ach-info{display:flex;justify-content:space-between;font-size:11.5px;font-weight:800;color:var(--gray)}
+.ach-info b{color:var(--black)}
+
+/* EXCELLENCE */
+.podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;align-items:end;margin-bottom:34px}
+.pod{background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:22px 14px;text-align:center;transition:.3s}
+.pod:hover{transform:translateY(-6px);box-shadow:var(--sh-lg);border-color:var(--black)}
+.pod.p1{border-color:var(--black);background:var(--black);color:#fff;transform:scale(1.05);box-shadow:0 24px 60px rgba(0,0,0,.3)}
+.pod.p1:hover{transform:scale(1.05) translateY(-6px)}
+.pod-rank{font-size:11px;font-weight:900;letter-spacing:3px;color:var(--gray);margin-bottom:10px}
+.pod.p1 .pod-rank{color:rgba(255,255,255,.5)}
+.pod-av{width:66px;height:66px;border-radius:50%;background:var(--off);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;border:3px solid var(--line)}
+.pod.p1 .pod-av{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:#fff}
+.pod b{font-size:15px;font-weight:900;display:block;margin-bottom:4px}
+.pod span{font-size:12px;color:var(--gray);font-weight:700}
+.pod.p1 span{color:rgba(255,255,255,.65)}
+.pod-score{font-size:22px;font-weight:900;color:var(--black);margin-top:10px;letter-spacing:-1px}
+.pod.p1 .pod-score{color:#fff}
+.rank-list{background:#fff;border:1.5px solid var(--line);border-radius:22px;overflow:hidden}
+.rank-row{display:flex;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--line);transition:.2s}
+.rank-row:last-child{border-bottom:none}
+.rank-row:hover{background:var(--off)}
+.rank-num{width:32px;height:32px;border-radius:10px;background:var(--off);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13.5px;flex-shrink:0}
+.rank-av{width:42px;height:42px;border-radius:12px;background:var(--black);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;flex-shrink:0}
+.rank-info{flex:1;min-width:0}
+.rank-info b{font-size:14.5px;font-weight:900;display:block;line-height:1.2}
+.rank-info span{font-size:11.5px;color:var(--gray);font-weight:700}
+.rank-score{font-size:17px;font-weight:900;letter-spacing:-.5px}
+
+/* FOOTER */
+footer{background:var(--black);color:#fff;padding:60px 22px 30px;margin-top:40px}
+.foot-in{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.1)}
+.foot-in h5{font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:18px}
+.foot-in a{display:block;font-size:13.5px;color:rgba(255,255,255,.7);margin-bottom:11px;cursor:pointer;transition:.2s;font-weight:600}
+.foot-in a:hover{color:#fff;transform:translateX(-4px)}
+.foot-brand p{color:rgba(255,255,255,.6);font-size:13.5px;line-height:1.8;max-width:300px;margin-top:14px;font-weight:500}
+.foot-bot{max-width:1240px;margin:0 auto;padding-top:26px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:12.5px;color:rgba(255,255,255,.45);font-weight:700}
+.foot-social{display:flex;gap:10px}
+.foot-social a{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;transition:.25s}
+.foot-social a:hover{background:#fff;color:var(--black);transform:translateY(-3px)}
+.foot-social svg{width:16px;height:16px}
+
+/* TOAST */
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--black);color:#fff;padding:15px 26px;border-radius:14px;font-weight:800;font-size:14px;z-index:3000;opacity:0;pointer-events:none;transition:.35s;box-shadow:var(--sh-glow);max-width:88vw;text-align:center;display:flex;align-items:center;gap:10px}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast svg{width:18px;height:18px;flex-shrink:0}
+
+/* MODAL */
+.ov{position:fixed;inset:0;z-index:500;background:rgba(10,10,10,.6);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
+.ov.on{display:flex;animation:fade .25s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.modal{background:#fff;border-radius:26px;padding:32px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;animation:up .35s cubic-bezier(.2,.8,.2,1);position:relative}
+@keyframes up{from{transform:translateY(24px);opacity:.5}to{transform:translateY(0);opacity:1}}
+.modal-close{position:absolute;top:16px;left:16px;width:38px;height:38px;border-radius:12px;background:var(--off);border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;transition:.2s}
+.modal-close:hover{background:var(--black);color:#fff;border-color:var(--black)}
+.modal-close svg{width:15px;height:15px}
+.modal h3{font-size:22px;font-weight:900;margin-bottom:8px;letter-spacing:-.6px;padding-left:44px}
+.modal p.sub{color:var(--gray);font-size:13.5px;margin-bottom:24px;font-weight:500}
+
+/* USER CHIP */
+.user-chip{display:none;align-items:center;gap:8px;background:var(--off);border:1.5px solid var(--line);padding:6px 12px 6px 6px;border-radius:14px;cursor:pointer;transition:.2s}
+.user-chip:hover{border-color:var(--black)}
+.user-chip .av{width:32px;height:32px;border-radius:10px;background:var(--black);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px}
+.user-chip b{font-size:13px;font-weight:800;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* LOADING */
+.skeleton{background:linear-gradient(90deg,var(--off) 25%,#ececec 50%,var(--off) 75%);background-size:200% 100%;animation:sk 1.4s infinite;border-radius:14px}
+@keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+@media (max-width:960px){
+  .email-wrap{grid-template-columns:1fr}.preview{position:static}.foot-in{grid-template-columns:1fr 1fr}
+}
+@media (max-width:768px){
+  .nav{display:none}.menu-toggle{display:flex}
+  .nav.open{display:flex;position:absolute;top:100%;right:0;left:0;background:#fff;border-bottom:1px solid var(--line);padding:14px 22px;flex-direction:column;gap:4px;box-shadow:var(--sh-lg)}
+  .nav.open a{padding:12px 16px}
+  .hdr-actions .btn span.txt{display:none}
+  .hdr-actions .btn{padding:11px 14px}
+  .hero{padding:56px 20px 66px}
+  .hero-stats{grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:36px}
+  .hero-stat{padding:14px 8px}.hero-stat b{font-size:19px}.hero-stat span{font-size:10px}
+  section{padding:50px 0 12px}
+  .form-card,.preview{padding:22px}
+  .field-row{grid-template-columns:1fr}
+  .podium{grid-template-columns:1fr;gap:12px}
+  .pod.p1{transform:none;order:-1}
+  .foot-in{grid-template-columns:1fr;gap:28px}
+  .foot-bot{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="logo" onclick="MEN_APP.scrollTop()">
+      <div class="logo-mark">MO</div>
+      <div class="logo-txt"><b>MEN Office</b><span>OFFICE</span></div>
+    </div>
+    <nav class="nav" id="nav">
+      <a href="#home" class="on">الرئيسية</a>
+      <a href="#email">إرسال إيميل</a>
+      <a href="#groups">العمل الجماعي</a>
+      <a href="#achievements">الإنجازات</a>
+      <a href="#excellence">التفوق</a>
+    </nav>
+    <div class="hdr-actions">
+      <button class="btn btn-out" id="authBtn" onclick="MEN_APP.openModal('modalAuth')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="txt">دخول</span>
+      </button>
+      <div class="user-chip" id="userChip" onclick="MEN_APP.openModal('modalProfile')">
+        <div class="av" id="userAv">?</div>
+        <b id="userName">مستخدم</b>
+      </div>
+      <button class="btn btn-dark" onclick="MEN_APP.scrollTo('email')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+        <span class="txt">إرسال إيميل</span>
+      </button>
+      <button class="menu-toggle" onclick="MEN_APP.toggleMenu()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero" id="home">
+  <div class="hero-in">
+    <div class="hero-badge"><span class="pip"></span> منصة العمل والإنجازات الأولى</div>
+    <h1>نظّم فريقك، <span class="hl">حقّق إنجازاتك</span>، وتفوّق معاً</h1>
+    <p>MEN Office منصة متكاملة لإرسال الإيميلات، إدارة القروبات، تتبّع الإنجازات، وقياس التفوق — كل ذلك في تجربة واحدة أنيقة بالأبيض والأسود.</p>
+    <div class="hero-cta">
+      <button class="btn btn-w" onclick="MEN_APP.scrollTo('groups')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        ابدأ مع فريقك
+      </button>
+      <button class="btn btn-g" onclick="MEN_APP.scrollTo('email')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+        إرسال إيميل
+      </button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><b id="stat1">0</b><span>إيميل مرسل</span></div>
+      <div class="hero-stat"><b id="stat2">0</b><span>مجموعة نشطة</span></div>
+      <div class="hero-stat"><b id="stat3">0</b><span>إنجاز محقّق</span></div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <!-- EMAIL -->
+  <section id="email">
+    <div class="sec-head">
+      <div class="sec-kicker">SEND EMAIL</div>
+      <h2>إرسال الإيميلات</h2>
+      <p>أرسل رسائل احترافية لفريقك أو عملائك بضغطة زر — مع معاينة مباشرة قبل الإرسال.</p>
+    </div>
+    <div class="email-wrap">
+      <div class="form-card">
+        <form onsubmit="return false;">
+          <div class="field-row">
+            <div class="field"><label>المُرسل إليه (البريد)</label><input type="email" id="emTo" placeholder="name@example.com" dir="ltr" style="text-align:right"></div>
+            <div class="field"><label>الاسم</label><input type="text" id="emName" placeholder="الاسم الكامل"></div>
+          </div>
+          <div class="field"><label>موضوع الرسالة</label><input type="text" id="emSubject" placeholder="اكتب موضوع الرسالة..."></div>
+          <div class="field"><label>نص الرسالة</label><textarea id="emBody" rows="7" placeholder="اكتب رسالتك هنا..."></textarea></div>
+          <div class="field">
+            <label>قوالب سريعة</label>
+            <div class="tag-row" id="tagRow">
+              <button type="button" class="tag-chip" data-template="welcome">ترحيب</button>
+              <button type="button" class="tag-chip" data-template="meeting">دعوة اجتماع</button>
+              <button type="button" class="tag-chip" data-template="report">تقرير أسبوعي</button>
+              <button type="button" class="tag-chip" data-template="congrats">تهنئة</button>
+              <button type="button" class="tag-chip" data-template="followup">متابعة</button>
+            </div>
+          </div>
+          <button type="button" class="btn btn-dark btn-full" id="sendEmailBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            إرسال الإيميل الآن
+          </button>
+        </form>
+      </div>
+      <div class="preview">
+        <h4>Live Preview</h4>
+        <div class="preview-to">
+          <div class="preview-av" id="pvAv">?</div>
+          <div class="info"><b id="pvName">المستلم</b><span id="pvEmail">name@example.com</span></div>
+        </div>
+        <div class="preview-subject" id="pvSubject">بدون موضوع</div>
+        <div class="preview-body" id="pvBody">سيظهر نص الرسالة هنا أثناء الكتابة...</div>
+        <div class="preview-foot">M E N · O F F I C E · PROFESSIONAL EMAIL</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GROUPS -->
+  <section id="groups">
+    <div class="sec-head">
+      <div class="sec-kicker">TEAMWORK</div>
+      <h2>العمل الجماعي</h2>
+      <p>انضم إلى مجموعات العمل، تعاون مع زملائك، وحقّقوا الأهداف معاً.</p>
+    </div>
+    <div style="display:flex;justify-content:center;margin-bottom:34px">
+      <button class="btn btn-dark" onclick="MEN_APP.openModal('modalGroup')" style="padding:14px 28px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        إنشاء مجموعة جديدة
+      </button>
+    </div>
+    <div class="grid g3" id="groupsGrid"></div>
+  </section>
+
+  <!-- ACHIEVEMENTS -->
+  <section id="achievements">
+    <div class="sec-head">
+      <div class="sec-kicker">ACHIEVEMENTS</div>
+      <h2>الإنجازات</h2>
+      <p>تابع تقدّمك نحو أهدافك الشخصية والمهنية خطوة بخطوة.</p>
+    </div>
+    <div class="grid g2" id="achGrid"></div>
+  </section>
+
+  <!-- EXCELLENCE -->
+  <section id="excellence">
+    <div class="sec-head">
+      <div class="sec-kicker">EXCELLENCE</div>
+      <h2>لوحة التفوق</h2>
+      <p>أفضل الأعضاء أداءً هذا الشهر — بناءً على الإنجازات والمشاركة الفعّالة.</p>
+    </div>
+    <div class="podium" id="podium"></div>
+    <div class="rank-list" id="rankList"></div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-in">
+    <div class="foot-brand">
+      <div class="logo"><div class="logo-mark">MO</div><div class="logo-txt"><b style="color:#fff">MEN Office</b><span style="color:rgba(255,255,255,.5)">OFFICE</span></div></div>
+      <p>منصة متكاملة لإدارة العمل الجماعي، تتبّع الإنجازات، وتحقيق التفوق المهني.</p>
+    </div>
+    <div><h5>المنصة</h5>
+      <a onclick="MEN_APP.scrollTo('home')">الرئيسية</a>
+      <a onclick="MEN_APP.scrollTo('email')">إرسال إيميل</a>
+      <a onclick="MEN_APP.scrollTo('groups')">المجموعات</a>
+    </div>
+    <div><h5>الأقسام</h5>
+      <a onclick="MEN_APP.scrollTo('achievements')">الإنجازات</a>
+      <a onclick="MEN_APP.scrollTo('excellence')">التفوق</a>
+      <a onclick="MEN_APP.openModal('modalAuth')">حسابي</a>
+    </div>
+    <div><h5>تواصل</h5>
+      <a href="mailto:info@menoffice.com">info@menoffice.com</a>
+      <a>سياسة الخصوصية</a>
+      <a>الشروط والأحكام</a>
+    </div>
+  </div>
+  <div class="foot-bot">
+    <div>© 2025 MEN Office — جميع الحقوق محفوظة</div>
+    <div class="foot-social">
+      <a><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2h3.3l-7.2 8.3L23.5 22h-6.6l-5.2-6.8L5.8 22H2.5l7.7-8.8L1.2 2h6.8l4.7 6.2L18.9 2z"/></svg></a>
+      <a><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 20.4h-3.6v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9v5.7H9.2V9h3.4v1.6c.5-.9 1.6-1.9 3.4-1.9 3.6 0 4.3 2.4 4.3 5.5v6.2zM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2zM7.1 20.4H3.5V9h3.6v11.4z"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div class="ov" id="modalAuth" data-close-outside>
+  <div class="modal">
+    <button class="modal-close" data-close="modalAuth"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <h3 id="authTitle">تسجيل الدخول</h3>
+    <p class="sub" id="authSub">ادخل إلى حسابك للمتابعة</p>
+    <form onsubmit="return false;">
+      <div class="field" id="fName" style="display:none"><label>الاسم الكامل</label><input type="text" id="authName" placeholder="اسمك"></div>
+      <div class="field"><label>البريد الإلكتروني</label><input type="email" id="authEmail" placeholder="you@example.com" dir="ltr" style="text-align:right"></div>
+      <div class="field"><label>كلمة المرور</label><input type="password" id="authPass" placeholder="••••••••" dir="ltr" style="text-align:right"></div>
+      <button type="button" class="btn btn-dark btn-full" id="authSubmitBtn">دخول</button>
+    </form>
+    <div style="text-align:center;margin-top:16px;font-size:13px">
+      <a id="authToggle" style="color:var(--gray);cursor:pointer;text-decoration:underline">ليس لديك حساب؟ سجّل الآن</a>
+    </div>
+  </div>
+</div>
+
+<div class="ov" id="modalGroup" data-close-outside>
+  <div class="modal">
+    <button class="modal-close" data-close="modalGroup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <h3>إنشاء مجموعة عمل</h3>
+    <p class="sub">املأ بيانات المجموعة لإنشاء مساحة تعاون جديدة.</p>
+    <form onsubmit="return false;">
+      <div class="field"><label>اسم المجموعة</label><input type="text" id="grpName" placeholder="مثال: فريق التسويق"></div>
+      <div class="field"><label>الوصف</label><textarea id="grpDesc" rows="3" placeholder="عن ماذا تعمل هذه المجموعة؟"></textarea></div>
+      <div class="field"><label>التصنيف</label>
+        <select id="grpCat">
+          <option>تسويق</option><option>تقنية</option><option>تصميم</option>
+          <option>مبيعات</option><option>تعليم</option><option>أخرى</option>
+        </select>
+      </div>
+      <div class="field"><label>عدد الأعضاء المستهدف</label><input type="number" id="grpMax" value="10" min="2" max="100"></div>
+      <button type="button" class="btn btn-dark btn-full" id="createGroupBtn">إنشاء المجموعة</button>
+    </form>
+  </div>
+</div>
+
+<div class="ov" id="modalProfile" data-close-outside>
+  <div class="modal">
+    <button class="modal-close" data-close="modalProfile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <h3>ملفي الشخصي</h3>
+    <p class="sub">عدّل بياناتك لعرضها في لوحة التفوق.</p>
+    <form onsubmit="return false;">
+      <div class="field"><label>الاسم الكامل</label><input type="text" id="pfName" placeholder="اسمك"></div>
+      <div class="field"><label>البريد الإلكتروني</label><input type="email" id="pfEmail" disabled dir="ltr" style="text-align:right"></div>
+      <div class="field"><label>المسمى الوظيفي</label><input type="text" id="pfRole" placeholder="مثال: مطوّر واجهات"></div>
+      <button type="button" class="btn btn-dark btn-full" id="saveProfileBtn">حفظ التغييرات</button>
+      <button type="button" class="btn btn-out btn-full" id="logoutBtn" style="margin-top:10px">تسجيل الخروج</button>
+    </form>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+</body>
+</html>
