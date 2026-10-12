@@ -1,670 +1,1151 @@
-/* ============================================================
-   MEN Office — app.js (كامل)
-   ============================================================ */
+/* ═══════════════════════════════════════════
+   MEN Office — Supabase Integration
+   ═══════════════════════════════════════════ */
 (function(){
 'use strict';
 
-/* ════════ ⚙️ الإعدادات ════════ */
+/* ═══════════ Config ═══════════ */
 const SUPABASE_URL      = 'https://wziuzllafxjpiwcputwn.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6aXV6bGxhZnhqcGl3Y3B1dHduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxOTI0MDksImV4cCI6MjEwNTc2ODQwOX0.YfdTdXNydRI1olcQKAeLHn0-rOrbY-_P1gzndwhfIeU';
 
-/* ════════ 🔌 Supabase Init ════════ */
-let sb = null;
-try {
-  if(window.supabase?.createClient){
-    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        storageKey: 'menoffice-auth',
-        storage: localStorage
-      }
-    });
-  } else {
-    console.error('[MEN] Supabase SDK غير محمّل');
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    storageKey: 'menoffice-auth'
   }
-} catch(e){ console.error('[MEN] فشل الاتصال:', e); }
+});
 
-/* ════════ 🛠 Helpers ════════ */
+console.log('%c MEN Office · Supabase متصل ',
+  'background:#0a0a0a;color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;letter-spacing:1px');
+
+/* ═══════════ Helpers ═══════════ */
 const $ = id => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
 
+function initials(name){
+  if(!name) return '؟';
+  return String(name).trim().split(/\s+/).map(w => w[0]).slice(0,2).join('').toUpperCase();
+}
 function escapeHtml(s){
   return String(s == null ? '' : s)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
-
-function initials(name){
-  if(!name) return '?';
-  return name.trim().split(/\s+/).map(w => w[0]).slice(0,2).join('').toUpperCase();
+function formatDate(s){
+  try { return new Date(s).toLocaleDateString('ar-EG',{day:'numeric',month:'short'}); }
+  catch { return s; }
 }
 
-/* ════════ 🔔 Toast ════════ */
+/* ═══════════ State ═══════════ */
+const state = {
+  user: null,
+  profile: null,
+  page: 'dashboard',
+  currentEmail: 0,
+  currentChat: 0,
+  data: {
+    projects: [],
+    tasks: [],
+    emails: [],
+    employees: [],
+    files: [],
+    events: [],
+    chats: []
+  }
+};
+
+/* ═══════════ Icons ═══════════ */
+const ICONS = {
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  folder:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>',
+  users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>',
+  ai:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0-3 3v1a3 3 0 0 0 0 6 3 3 0 0 0 3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0 3-3 3 3 0 0 0 3-3 3 3 0 0 0 0-6 3 3 0 0 0-3-3 3 3 0 0 0-3-3 3 3 0 0 0-3-3z"/><circle cx="12" cy="12" r="2"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+  bell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+  file:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>',
+  more:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>',
+  arrowR:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>',
+  arrowL:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>',
+  trendUp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>',
+  trendDown:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m22 17-8.5-8.5-5 5L2 7"/><path d="M16 17h6v-6"/></svg>'
+};
+
+/* ═══════════ Toast ═══════════ */
 let toastTimer;
-function toast(msg, type='success'){
+function toast(msg){
   const t = $('toast');
-  if(!t) return;
-  const ico = type === 'success'
-    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>'
-    : type === 'error'
-    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>'
-    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>';
-  t.innerHTML = ico + '<span>' + msg + '</span>';
+  t.innerHTML = ICONS.check + '<span>' + msg + '</span>';
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
 }
 
-/* ════════ 🪟 Modal ════════ */
-function openModal(id){
-  const m = $(id);
-  if(!m) return;
-  m.classList.add('on');
-  document.body.style.overflow = 'hidden';
-  if(id === 'modalProfile') fillProfileForm();
-}
-function closeModal(id){
-  const m = $(id);
-  if(!m) return;
-  m.classList.remove('on');
-  document.body.style.overflow = '';
-}
-document.addEventListener('keydown', e => {
-  if(e.key === 'Escape') $$('.ov.on').forEach(o => closeModal(o.id));
-});
+/* ═══════════ Loading ═══════════ */
+function showLoading(){ $('loadingOverlay').classList.add('on'); }
+function hideLoading(){ $('loadingOverlay').classList.remove('on'); }
 
-/* ════════ 🧭 Navigation ════════ */
-function scrollTo(id){
-  const el = $(id);
-  if(el) el.scrollIntoView({ behavior:'smooth', block:'start' });
-}
-function scrollTop(){ window.scrollTo({ top:0, behavior:'smooth' }); }
-function toggleMenu(){ $('nav')?.classList.toggle('open'); }
-
-const SECTIONS = ['home','email','groups','achievements','excellence'];
-window.addEventListener('scroll', () => {
-  const y = window.scrollY + 120;
-  let active = 'home';
-  SECTIONS.forEach(id => {
-    const el = $(id);
-    if(el && el.offsetTop <= y) active = id;
-  });
-  $$('.nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + active));
-});
-
-/* ════════ 👤 Auth State ════════ */
-let currentUser = null;
-let currentProfile = null;
+/* ═══════════ AUTH ═══════════ */
 let authMode = 'login';
 
-async function getSession(){
-  if(!sb) return null;
-  const { data: { session } } = await sb.auth.getSession();
-  currentUser = session?.user || null;
-  updateAuthUI();
-  return session;
+function switchAuthMode(mode){
+  authMode = mode;
+  $$('.auth-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === mode));
+  $('nameField').style.display = mode === 'signup' ? 'block' : 'none';
+  $('authTitle').textContent = mode === 'signup' ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
+  $('authSub').textContent = mode === 'signup'
+    ? 'أنشئ حسابك للانضمام إلى منصة MEN Office'
+    : 'أدخل بياناتك للوصول إلى منصة إدارة الأعمال';
+  $('authSubmitText').textContent = mode === 'signup' ? 'إنشاء الحساب' : 'تسجيل الدخول';
+  $('authError').textContent = '';
 }
 
-async function signIn(email, pass){
-  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
-  if(error) throw error;
-  currentUser = data.user;
-  return data;
-}
+function showAuthError(msg){ $('authError').textContent = msg; }
 
-async function signUp(email, pass, name){
-  const { data, error } = await sb.auth.signUp({
-    email, password: pass,
-    options: { data: { name } }
-  });
-  if(error) throw error;
-  // إدخال البروفايل يدوياً في حال عدم وجود trigger
-  if(data.user){
-    try {
-      await sb.from('profiles').upsert({
-        id: data.user.id, name, email
-      }, { onConflict: 'id' });
-    } catch(e){ console.warn('profile insert:', e); }
-  }
-  return data;
-}
-
-async function signOut(){
-  await sb.auth.signOut();
-  currentUser = null; currentProfile = null;
-  updateAuthUI();
-  await loadGroups();
-  await loadAchievements();
-  await updateStats();
-  toast('تم تسجيل الخروج','info');
-}
-
-function updateAuthUI(){
-  const logged = !!currentUser;
-  $('authBtn').style.display = logged ? 'none' : 'inline-flex';
-  $('userChip').style.display = logged ? 'inline-flex' : 'none';
-  if(logged){
-    const name = currentUser.user_metadata?.name || currentUser.email?.split('@')[0] || 'مستخدم';
-    $('userName').textContent = name;
-    $('userAv').textContent = initials(name);
-  }
-}
-
-/* ════════ 📊 Data Operations ════════ */
-async function loadProfile(){
-  if(!currentUser) return null;
-  const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
-  currentProfile = data;
-  return data;
-}
-
-async function saveProfile(name, role){
-  if(!currentUser) throw new Error('غير مسجل');
-  const { error } = await sb.from('profiles').upsert({
-    id: currentUser.id,
-    name,
-    role,
-    email: currentUser.email,
-    updated_at: new Date().toISOString()
-  }, { onConflict: 'id' });
-  if(error) throw error;
-  currentProfile = { ...currentProfile, name, role };
-  updateAuthUI();
-}
-
-function fillProfileForm(){
-  if(!currentUser) return;
-  $('pfName').value = currentProfile?.name || currentUser.user_metadata?.name || '';
-  $('pfEmail').value = currentUser.email || '';
-  $('pfRole').value = currentProfile?.role || '';
-}
-
-/* ════════ 📧 Emails ════════ */
-async function sendEmailRecord({ to, name, subject, body }){
-  if(!currentUser) throw new Error('يجب تسجيل الدخول أولاً');
-  const { error } = await sb.from('emails').insert({
-    user_id: currentUser.id,
-    to_email: to, to_name: name || '',
-    subject, body, status: 'sent'
-  });
-  if(error) throw error;
-  await incrementAchievement('إنجاز الإيميلات', 1);
-}
-
-/* ════════ 👥 Groups ════════ */
-async function loadGroups(){
-  const grid = $('groupsGrid');
-  if(!grid) return;
-
-  grid.innerHTML = '<div class="skeleton" style="height:200px"></div><div class="skeleton" style="height:200px"></div><div class="skeleton" style="height:200px"></div>';
-
-  try {
-    const { data: groups } = await sb.from('groups')
-      .select('*, group_members(count)')
-      .order('created_at', { ascending: false });
-
-    let myIds = [];
-    if(currentUser){
-      const { data: mine } = await sb.from('group_members')
-        .select('group_id').eq('user_id', currentUser.id);
-      myIds = (mine || []).map(m => m.group_id);
-    }
-
-    if(!groups?.length){
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray)">لا توجد مجموعات بعد — كن أول من ينشئ واحدة!</div>';
-      return;
-    }
-
-    grid.innerHTML = groups.map(g => {
-      const joined = myIds.includes(g.id);
-      const count = g.group_members?.[0]?.count || 0;
-      return `
-        <div class="group-card">
-          <div class="group-head">
-            <div class="group-avatar">${initials(g.name)}</div>
-            <div class="gt">
-              <b>${escapeHtml(g.name)}</b>
-              <span>${escapeHtml(g.category||'')} · ${count}/${g.max_members} عضو</span>
-            </div>
-          </div>
-          <p class="group-desc">${escapeHtml(g.description||'')}</p>
-          <div class="group-meta">
-            <div class="group-members">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-              <b>${count}</b> عضو
-            </div>
-            <button class="join-btn ${joined?'joined':''}" data-join="${g.id}">
-              ${joined ? 'مغادرة' : 'انضمام'}
-            </button>
-          </div>
-        </div>`;
-    }).join('');
-
-    grid.querySelectorAll('[data-join]').forEach(btn => {
-      btn.addEventListener('click', () => toggleJoin(btn.dataset.join));
-    });
-  } catch(err){
-    console.error('loadGroups:', err);
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray)">تعذّر تحميل المجموعات</div>';
-  }
-}
-
-async function toggleJoin(id){
-  if(!currentUser){ toast('سجّل دخولك أولاً','error'); openModal('modalAuth'); return; }
-  try {
-    const { data: mine } = await sb.from('group_members')
-      .select('id').eq('group_id', id).eq('user_id', currentUser.id).maybeSingle();
-
-    if(mine){
-      await sb.from('group_members').delete().eq('id', mine.id);
-      toast('تم مغادرة المجموعة','info');
-    } else {
-      const { error } = await sb.from('group_members').insert({
-        group_id: id, user_id: currentUser.id
-      });
-      if(error) throw error;
-      toast('تم الانضمام للمجموعة ✓');
-      await incrementAchievement('قائد فريق', 1);
-    }
-    await loadGroups();
-    await updateStats();
-  } catch(err){
-    toast(err.message, 'error');
-  }
-}
-
-async function createGroup(){
-  if(!currentUser){ toast('سجّل دخولك أولاً','error'); return openModal('modalAuth'); }
-  const name = $('grpName').value.trim();
-  const desc = $('grpDesc').value.trim();
-  const cat  = $('grpCat').value;
-  const max  = Math.max(2, Math.min(100, Number($('grpMax').value) || 10));
-  if(!name || !desc){ toast('أكمل جميع الحقول','error'); return; }
-
-  try {
-    const { data, error } = await sb.from('groups').insert({
-      name, description: desc, category: cat,
-      max_members: max, owner_id: currentUser.id
-    }).select().single();
-    if(error) throw error;
-
-    await sb.from('group_members').insert({
-      group_id: data.id, user_id: currentUser.id
-    });
-
-    closeModal('modalGroup');
-    $('grpName').value = ''; $('grpDesc').value = '';
-    await loadGroups();
-    await updateStats();
-    toast('تم إنشاء المجموعة ✓');
-  } catch(err){
-    toast(err.message, 'error');
-  }
-}
-
-/* ════════ 🏆 Achievements ════════ */
-const ICONS = {
-  trophy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>',
-  users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
-  star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
-  target:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
-  zap:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
-  award:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>'
-};
-
-async function loadAchievements(){
-  const grid = $('achGrid');
-  if(!grid) return;
-
-  // عرض هيكلي افتراضي حتى لو لم يكن مسجل
-  let achs = [];
-  if(currentUser){
-    try {
-      const { data } = await sb.from('achievements')
-        .select('*').eq('user_id', currentUser.id);
-
-      if(data?.length){
-        achs = data;
-      } else {
-        // إنشاء الإنجازات الافتراضية
-        const defaults = [
-          { title:'إنجاز الإيميلات', description:'أرسل 100 إيميل احترافي', icon:'trophy', current_value:0, target_value:100 },
-          { title:'قائد فريق', description:'انضم إلى 5 مجموعات', icon:'users', current_value:0, target_value:5 },
-          { title:'الأداء المتفوّق', description:'حافظ على تقييم عالي', icon:'star', current_value:0, target_value:30 },
-          { title:'معدّل الإنجاز', description:'أكمل 20 مهمة', icon:'target', current_value:0, target_value:20 },
-          { title:'النشاط اليومي', description:'30 يوماً متتالياً', icon:'zap', current_value:0, target_value:30 },
-          { title:'وسام التفوق', description:'المركز الأول شهرياً', icon:'award', current_value:0, target_value:1 }
-        ].map(a => ({ ...a, user_id: currentUser.id }));
-
-        const { data: created } = await sb.from('achievements').insert(defaults).select();
-        achs = created || [];
-      }
-    } catch(err){ console.error('loadAchievements:', err); }
-  } else {
-    // عرض افتراضي للزوار
-    achs = [
-      { title:'إنجاز الإيميلات', description:'أرسل 100 إيميل احترافي', icon:'trophy', current_value:0, target_value:100 },
-      { title:'قائد فريق', description:'انضم إلى 5 مجموعات', icon:'users', current_value:0, target_value:5 },
-      { title:'الأداء المتفوّق', description:'حافظ على تقييم عالي', icon:'star', current_value:0, target_value:30 },
-      { title:'معدّل الإنجاز', description:'أكمل 20 مهمة', icon:'target', current_value:0, target_value:20 },
-      { title:'النشاط اليومي', description:'30 يوماً متتالياً', icon:'zap', current_value:0, target_value:30 },
-      { title:'وسام التفوق', description:'المركز الأول شهرياً', icon:'award', current_value:0, target_value:1 }
-    ];
-  }
-
-  grid.innerHTML = achs.map(a => {
-    const pct = Math.round((a.current_value / a.target_value) * 100);
-    return `
-      <div class="ach-card">
-        <div class="ach-medal">${ICONS[a.icon] || ICONS.trophy}</div>
-        <div class="ach-body">
-          <h4>${escapeHtml(a.title)} ${a.completed?'✅':''}</h4>
-          <p>${escapeHtml(a.description || '')}</p>
-          <div class="ach-bar"><span style="width:${pct}%"></span></div>
-          <div class="ach-info"><span>التقدّم</span><b>${a.current_value} / ${a.target_value} (${pct}%)</b></div>
-        </div>
-      </div>`;
-  }).join('');
-}
-
-async function incrementAchievement(title, amount){
-  if(!currentUser) return;
-  try {
-    const { data } = await sb.from('achievements')
-      .select('*').eq('user_id', currentUser.id).eq('title', title).maybeSingle();
-    if(!data) return;
-
-    const newVal = Math.min(data.target_value, data.current_value + amount);
-    await sb.from('achievements').update({
-      current_value: newVal,
-      completed: newVal >= data.target_value,
-      updated_at: new Date().toISOString()
-    }).eq('id', data.id);
-
-    await loadAchievements();
-    await updateStats();
-  } catch(e){ console.warn('increment:', e); }
-}
-
-/* ════════ ⭐ Excellence ════════ */
-const LEADERS = [
-  { name:'محمد العتيبي',   role:'قائد فريق التقنية', score:2480 },
-  { name:'سارة القحطاني',  role:'مصمّمة واجهات',     score:2310 },
-  { name:'عبدالله الشمري', role:'مطوّر برمجيات',     score:2150 },
-  { name:'نورة الدوسري',   role:'مسؤولة تسويق',      score:1980 },
-  { name:'خالد الحربي',    role:'محلّل بيانات',      score:1840 },
-  { name:'ريم السبيعي',    role:'مديرة مشاريع',      score:1720 },
-  { name:'فهد الغامدي',    role:'مهندس شبكات',       score:1590 },
-  { name:'هند المطيري',    role:'مصمّمة جرافيك',     score:1450 },
-  { name:'سلطان الزهراني', role:'منسّق مبيعات',      score:1310 },
-  { name:'لمى العنزي',     role:'كاتبة محتوى',       score:1180 }
-];
-
-function renderExcellence(){
-  const p = $('podium');
-  const r = $('rankList');
-  if(!p || !r) return;
-
-  const pod = (u,i) => `
-    <div class="pod ${i===0?'p1':''}">
-      <div class="pod-rank">#${i+1}</div>
-      <div class="pod-av">${initials(u.name)}</div>
-      <b>${escapeHtml(u.name)}</b>
-      <span>${escapeHtml(u.role)}</span>
-      <div class="pod-score">${u.score}</div>
-    </div>`;
-  p.innerHTML = [pod(LEADERS[1],1), pod(LEADERS[0],0), pod(LEADERS[2],2)].join('');
-
-  r.innerHTML = LEADERS.slice(3).map((u,i) => `
-    <div class="rank-row">
-      <div class="rank-num">${i+4}</div>
-      <div class="rank-av">${initials(u.name)}</div>
-      <div class="rank-info"><b>${escapeHtml(u.name)}</b><span>${escapeHtml(u.role)}</span></div>
-      <div class="rank-score">${u.score}</div>
-    </div>`).join('');
-}
-
-/* ════════ 📊 Stats ════════ */
-function animateNum(el, target){
-  if(!el) return;
-  const cur = Number(el.textContent) || 0;
-  const dur = 900;
-  const start = performance.now();
-  (function step(t){
-    const p = Math.min(1, (t - start) / dur);
-    const v = Math.round(cur + (target - cur) * (1 - Math.pow(1-p, 3)));
-    el.textContent = v;
-    if(p < 1) requestAnimationFrame(step);
-  })(start);
-}
-
-async function updateStats(){
-  let emails = 0, groups = 0, achs = 0;
-  if(currentUser){
-    try {
-      const [e,g,a] = await Promise.all([
-        sb.from('emails').select('id',{count:'exact',head:true}).eq('user_id', currentUser.id),
-        sb.from('group_members').select('id',{count:'exact',head:true}).eq('user_id', currentUser.id),
-        sb.from('achievements').select('id',{count:'exact',head:true}).eq('user_id', currentUser.id).eq('completed',true)
-      ]);
-      emails = e.count || 0;
-      groups = g.count || 0;
-      achs = a.count || 0;
-    } catch(err){ console.warn(err); }
-  }
-  animateNum($('stat1'), emails);
-  animateNum($('stat2'), groups);
-  animateNum($('stat3'), achs);
-}
-
-/* ════════ 📧 Email UI ════════ */
-const TEMPLATES = {
-  welcome:{ s:'مرحباً بك في MEN Office 🎉', b:'أهلاً بك في عائلتنا!\n\nيسعدنا انضمامك إلينا. نحن هنا لمساعدتك على تحقيق إنجازاتك والعمل مع فريقك بكل سهولة.\n\nمع تحيات فريق MEN Office' },
-  meeting:{ s:'دعوة لاجتماع فريق العمل', b:'السلام عليكم،\n\nيسعدنا دعوتكم لحضور اجتماع فريق العمل:\n\n📅 التاريخ:\n🕐 الوقت:\n📍 المكان:\n\nمحاور الاجتماع:\n• مراجعة ما تم إنجازه\n• مناقشة الخطط القادمة\n\nنرجو تأكيد الحضور.' },
-  report:{ s:'التقرير الأسبوعي', b:'السلام عليكم،\n\nإليكم ملخّص الإنجازات لهذا الأسبوع:\n\n✅ تم إكمال:\n⏳ قيد التنفيذ:\n📌 المتبقي:\n\nنسبة الإنجاز: 85%' },
-  congrats:{ s:'تهانينا على إنجازك 🎉', b:'السلام عليكم،\n\nنهنّئك بمناسبة تحقيق هذا الإنجاز الرائع!\n\nاستمر في التفوق! 🏆\n\nمع تحيات فريق MEN Office' },
-  followup:{ s:'متابعة بخصوص المشروع', b:'السلام عليكم،\n\nأرغب في متابعة آخر مستجدات المشروع:\n\n• هل هناك أي معوّقات؟\n• ما نسبة الإنجاز الحالية؟\n\nيرجى الرد في أقرب وقت.' }
-};
-
-function loadTemplate(key, btn){
-  const t = TEMPLATES[key];
-  if(!t) return;
-  $('emSubject').value = t.s;
-  $('emBody').value = t.b;
-  updatePreview();
-  $$('.tag-chip').forEach(c => c.classList.remove('on'));
-  btn?.classList.add('on');
-}
-
-function updatePreview(){
-  const name = $('emName').value.trim();
-  const email = $('emTo').value.trim();
-  const subject = $('emSubject').value.trim();
-  const body = $('emBody').value.trim();
-  const ini = name ? initials(name) : (email ? email[0].toUpperCase() : '?');
-  $('pvAv').textContent = ini;
-  $('pvName').textContent = name || 'المستلم';
-  $('pvEmail').textContent = email || 'name@example.com';
-  $('pvSubject').textContent = subject || 'بدون موضوع';
-  $('pvBody').textContent = body || 'سيظهر نص الرسالة هنا أثناء الكتابة...';
-}
-
-async function sendEmail(){
-  if(!currentUser){ toast('سجّل دخولك أولاً','error'); return openModal('modalAuth'); }
-  const to = $('emTo').value.trim();
-  const name = $('emName').value.trim();
-  const subject = $('emSubject').value.trim();
-  const body = $('emBody').value.trim();
-
-  if(!to || !subject || !body){ toast('أكمل جميع الحقول','error'); return; }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)){ toast('صيغة البريد غير صحيحة','error'); return; }
-
-  try {
-    await sendEmailRecord({ to, name, subject, body });
-    const greeting = name ? `السيد/ة ${name}،\n\n` : '';
-    const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(greeting + body)}`;
-    window.location.href = mailto;
-    toast('تم حفظ الإيميل وفتح برنامج البريد ✓');
-    await updateStats();
-  } catch(err){
-    console.error(err);
-    toast('فشل الإرسال: ' + err.message, 'error');
-  }
-}
-
-/* ════════ 🔐 Auth Form ════════ */
-function switchAuthMode(){
-  authMode = authMode === 'login' ? 'signup' : 'login';
-  const isSignup = authMode === 'signup';
-  $('fName').style.display = isSignup ? 'block' : 'none';
-  $('authTitle').textContent = isSignup ? 'حساب جديد' : 'تسجيل الدخول';
-  $('authSub').textContent = isSignup ? 'أنشئ حسابك في ثوانٍ' : 'ادخل إلى حسابك للمتابعة';
-  $('authSubmitBtn').textContent = isSignup ? 'إنشاء الحساب' : 'دخول';
-  $('authToggle').textContent = isSignup ? 'لديك حساب؟ سجّل الدخول' : 'ليس لديك حساب؟ سجّل الآن';
-}
-
-async function handleAuthSubmit(){
-  const email = $('authEmail').value.trim();
-  const pass = $('authPass').value;
+async function handleAuth(){
+  const email = $('authEmail').value.trim().toLowerCase();
+  const password = $('authPassword').value;
   const name = $('authName').value.trim();
-  const btn = $('authSubmitBtn');
+  const btn = $('authSubmit');
 
-  if(!email || !pass){ toast('أكمل جميع الحقول','error'); return; }
-  if(authMode === 'signup' && !name){ toast('الرجاء إدخال الاسم','error'); return; }
-  if(pass.length < 6){ toast('كلمة المرور 6 أحرف على الأقل','error'); return; }
+  if(!email || !password){ showAuthError('أكمل جميع الحقول'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showAuthError('صيغة البريد غير صحيحة'); return; }
+  if(password.length < 6){ showAuthError('كلمة المرور 6 أحرف على الأقل'); return; }
+  if(authMode === 'signup' && !name){ showAuthError('الرجاء إدخال الاسم الكامل'); return; }
 
   btn.disabled = true;
-  const origText = btn.textContent;
-  btn.textContent = 'جارٍ...';
+  const orig = $('authSubmitText').textContent;
+  $('authSubmitText').textContent = 'جارٍ...';
+  showAuthError('');
 
   try {
     if(authMode === 'signup'){
-      const data = await signUp(email, pass, name);
-      if(!data.session){
-        toast('تحقق من بريدك لتأكيد الحساب','info');
-      } else {
-        toast('تم إنشاء الحساب ✓');
-        closeModal('modalAuth');
-        await afterLogin();
+      const { data, error } = await sb.auth.signUp({
+        email, password,
+        options: { data: { name } }
+      });
+      if(error) throw error;
+
+      // إنشاء البروفايل
+      if(data.user){
+        await sb.from('profiles').upsert({
+          id: data.user.id,
+          name: name,
+          email: email
+        }, { onConflict: 'id' });
       }
-    } else {
-      await signIn(email, pass);
+
+      if(!data.session){
+        showAuthError('✓ تم إنشاء حسابك! تحقق من بريدك لتأكيد الحساب');
+        return;
+      }
       toast('مرحباً بك!');
-      closeModal('modalAuth');
-      await afterLogin();
+    } else {
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      if(error) throw error;
+      toast('مرحباً بعودتك!');
     }
-    $('authEmail').value = ''; $('authPass').value = ''; $('authName').value = '';
   } catch(err){
     console.error(err);
     const m = (err.message || '').toLowerCase();
-    if(m.includes('invalid')) toast('البيانات غير صحيحة','error');
-    else if(m.includes('already')) toast('البريد مسجّل بالفعل','error');
-    else toast(err.message || 'حدث خطأ', 'error');
+    if(m.includes('invalid')) showAuthError('بيانات الدخول غير صحيحة');
+    else if(m.includes('already')) showAuthError('هذا البريد مسجّل بالفعل');
+    else if(m.includes('rate')) showAuthError('محاولات كثيرة — انتظر قليلاً');
+    else showAuthError(err.message || 'حدث خطأ');
   } finally {
     btn.disabled = false;
-    btn.textContent = origText;
+    $('authSubmitText').textContent = orig;
   }
 }
 
-async function afterLogin(){
-  await loadProfile();
-  await loadGroups();
-  await loadAchievements();
-  await updateStats();
-  updateAuthUI();
+async function logout(){
+  if(!confirm('هل تريد تسجيل الخروج؟')) return;
+  await sb.auth.signOut();
+  state.user = null;
+  state.profile = null;
+  $('app').style.display = 'none';
+  $('authScreen').style.display = 'flex';
+  $('authEmail').value = '';
+  $('authPassword').value = '';
+  toast('تم تسجيل الخروج');
 }
 
-/* ════════ 🎁 Profile ════════ */
-async function saveProfileHandler(){
-  if(!currentUser) return;
-  const name = $('pfName').value.trim();
-  const role = $('pfRole').value.trim();
-  if(!name){ toast('الرجاء إدخال الاسم','error'); return; }
+/* ═══════════ Load Data from Supabase ═══════════ */
+async function loadAllData(){
+  if(!state.user) return;
+  showLoading();
+
   try {
-    await saveProfile(name, role);
-    toast('تم الحفظ ✓');
-    closeModal('modalProfile');
+    const uid = state.user.id;
+
+    // البروفايل
+    const { data: profile } = await sb.from('profiles').select('*').eq('id', uid).maybeSingle();
+    state.profile = profile || { name: state.user.user_metadata?.name || 'مستخدم', email: state.user.email };
+
+    // الموظفون
+    const { data: employees } = await sb.from('profiles').select('*');
+    state.data.employees = (employees || []).map(p => ({
+      id: p.id,
+      name: p.name || 'مستخدم',
+      role: p.role || 'موظف',
+      email: p.email,
+      tasks: 0,
+      projects: 0
+    }));
+
+    // المشاريع
+    const { data: projects } = await sb.from('projects').select('*').eq('user_id', uid).order('created_at', { ascending: false });
+    state.data.projects = (projects || []).map(p => ({
+      id: p.id,
+      name: p.name,
+      progress: p.progress || 0,
+      team: p.team || [],
+      deadline: p.deadline || new Date().toISOString(),
+      tasks: p.tasks_count || 0,
+      done: p.done_count || 0,
+      status: p.status || 'نشط'
+    }));
+
+    // المهام
+    const { data: tasks } = await sb.from('tasks').select('*').eq('user_id', uid).order('created_at', { ascending: false });
+    state.data.tasks = (tasks || []).map(t => ({
+      id: t.id,
+      title: t.title,
+      project: t.project || 'عام',
+      status: t.status || 'todo',
+      priority: t.priority || 'عادي',
+      assignee: t.assignee || 'غير محدد',
+      due: t.due_date,
+      tags: t.tags || []
+    }));
+
+    // الإيميلات
+    const { data: emails } = await sb.from('emails').select('*').eq('user_id', uid).order('created_at', { ascending: false });
+    state.data.emails = (emails || []).map(e => ({
+      id: e.id,
+      from: e.from_name || e.to_name || 'مستخدم',
+      email: e.from_email || e.to_email,
+      subject: e.subject,
+      preview: (e.body || '').slice(0, 60),
+      body: e.body || '',
+      time: formatDate(e.created_at),
+      unread: !e.is_read
+    }));
+
+    // الملفات
+    const { data: files } = await sb.from('files').select('*').eq('user_id', uid).order('created_at', { ascending: false });
+    state.data.files = (files || []).map(f => ({
+      id: f.id, name: f.name, type: f.type || 'doc',
+      size: f.size || '0 KB', date: formatDate(f.created_at)
+    }));
+
+    // المواعيد
+    const { data: events } = await sb.from('events').select('*').eq('user_id', uid).order('event_time');
+    state.data.events = (events || []).map(e => ({
+      id: e.id, time: e.event_time?.slice(0,5) || '00:00',
+      title: e.title, desc: e.description || ''
+    }));
+
+    // الرسائل
+    const { data: chats } = await sb.from('chats').select('*').eq('user_id', uid).order('created_at', { ascending: false });
+    if(chats && chats.length){
+      state.data.chats = await Promise.all(chats.map(async c => {
+        const { data: msgs } = await sb.from('messages').select('*').eq('chat_id', c.id).order('created_at');
+        return {
+          id: c.id, name: c.name, av: initials(c.name),
+          online: c.online || false,
+          last: msgs?.[msgs.length-1]?.text || 'لا توجد رسائل',
+          time: formatDate(c.created_at),
+          unread: 0,
+          messages: (msgs || []).map(m => ({
+            from: m.from_user === uid ? 'me' : 'them',
+            text: m.text,
+            time: new Date(m.created_at).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'})
+          }))
+        };
+      }));
+    }
+
+    // تحديث الأرقام في القائمة
+    $('navProjects').textContent = state.data.projects.length;
+    $('navTasks').textContent = state.data.tasks.length;
+    $('navEmails').textContent = state.data.emails.filter(e => e.unread).length || 0;
+
   } catch(err){
-    toast(err.message, 'error');
+    console.error('loadAllData:', err);
+    toast('فشل تحميل البيانات');
+  } finally {
+    hideLoading();
   }
 }
 
-/* ════════ 🔗 Bind ════════ */
-function bind(){
-  // Preview
-  ['emTo','emName','emSubject','emBody'].forEach(id => {
-    $(id)?.addEventListener('input', updatePreview);
+/* ═══════════ Sync user to UI ═══════════ */
+function syncUserUI(){
+  if(!state.user) return;
+  const name = state.profile?.name || state.user.user_metadata?.name || state.user.email?.split('@')[0] || 'مستخدم';
+  $('sbUserName').textContent = name;
+  $('sbUserAv').textContent = initials(name);
+  $('sbUserRole').textContent = state.profile?.role || 'مدير عام';
+}
+
+/* ═══════════ ROUTER ═══════════ */
+const PAGES = {
+  dashboard:    { title:'لوحة التحكم', sub:'نظرة عامة على أداء فريقك ومشاريعك', render:renderDashboard },
+  projects:     { title:'المشاريع', sub:'إدارة جميع مشاريع الشركة', render:renderProjects },
+  tasks:        { title:'المهام', sub:'متابعة المهام وتوزيعها على الفريق', render:renderTasks },
+  email:        { title:'البريد الإلكتروني', sub:'إرسال واستقبال الرسائل', render:renderEmail },
+  messages:     { title:'الرسائل الفورية', sub:'محادثات فردية وجماعية', render:renderMessages },
+  calendar:     { title:'التقويم والاجتماعات', sub:'تنظيم مواعيدك واجتماعاتك', render:renderCalendar },
+  employees:    { title:'الموظفون', sub:'إدارة الفريق والأدوار والصلاحيات', render:renderEmployees },
+  files:        { title:'الملفات', sub:'رفع المستندات وتخزينها ومشاركتها', render:renderFiles },
+  reports:      { title:'التقارير والإحصائيات', sub:'متابعة أداء المشاريع والموظفين', render:renderReports },
+  ai:           { title:'الذكاء الاصطناعي', sub:'مساعدك الذكي لإدارة المهام والرسائل', render:renderAI },
+  settings:     { title:'الإعدادات', sub:'تخصيص المنصة والأمان', render:renderSettings }
+};
+
+function navigate(page){
+  if(!PAGES[page]) return;
+  state.page = page;
+  $$('.sb-item').forEach(el => el.classList.toggle('active', el.dataset.page === page));
+  const info = PAGES[page];
+  $('pageTitle').textContent = info.title;
+  $('pageSub').textContent = info.sub;
+  const c = $('content');
+  c.innerHTML = '<div class="page-enter">' + info.render() + '</div>';
+  c.scrollTop = 0;
+  closeSidebar();
+  if(page === 'email')    setTimeout(bindEmailEvents, 30);
+  if(page === 'messages') setTimeout(bindMessagesEvents, 30);
+  if(page === 'ai')       setTimeout(bindAIEvents, 30);
+  if(page === 'settings') setTimeout(bindSettingsEvents, 30);
+  history.replaceState(null, '', '#' + page);
+}
+
+/* ═══════════ DASHBOARD ═══════════ */
+function renderDashboard(){
+  const P = state.data.projects;
+  const T = state.data.tasks;
+  const E = state.data.emails;
+
+  const stats = [
+    { label:'إجمالي المشاريع', value: P.length, trend:'+12%', up:true, icon:'folder' },
+    { label:'المهام', value: T.length, trend:'+8%', up:true, icon:'check' },
+    { label:'الإيميلات', value: E.length, trend:'+3', up:true, icon:'mail' },
+    { label:'الموظفون', value: state.data.employees.length, trend:'—', up:true, icon:'users' }
+  ];
+
+  const statCards = stats.map(s => `
+    <div class="stat">
+      <div class="stat-top">
+        <div class="stat-ico">${ICONS[s.icon]}</div>
+        <div class="stat-trend ${s.up ? 'up' : 'down'}">
+          ${s.up ? ICONS.trendUp : ICONS.trendDown} ${s.trend}
+        </div>
+      </div>
+      <div class="stat-val">${s.value}</div>
+      <div class="stat-lbl">${s.label}</div>
+    </div>`).join('');
+
+  const recentTasks = T.slice(0,5).map(t => `
+    <div class="list-item">
+      <div class="av">${initials(t.assignee)}</div>
+      <div class="li-body">
+        <b>${escapeHtml(t.title)}</b>
+        <span>${escapeHtml(t.project)} · ${escapeHtml(t.assignee)}</span>
+      </div>
+      <span class="badge">${escapeHtml(t.priority)}</span>
+    </div>`).join('') || '<div class="text-center text-muted" style="padding:30px">لا توجد مهام بعد</div>';
+
+  const projectRows = P.slice(0,5).map(p => `
+    <tr>
+      <td><b>${escapeHtml(p.name)}</b></td>
+      <td>${p.team.length || 0} أعضاء</td>
+      <td>
+        <div style="min-width:100px">
+          <div class="progress"><span style="width:${p.progress}%"></span></div>
+          <div style="font-size:11px;font-weight:800;color:var(--text-3);margin-top:5px">${p.progress}%</div>
+        </div>
+      </td>
+      <td><span class="badge ${p.status==='نشط'?'dark':''}">${escapeHtml(p.status)}</span></td>
+      <td class="text-2" style="font-size:12px;font-weight:700">${formatDate(p.deadline)}</td>
+    </tr>`).join('') || '<tr><td colspan="5" class="text-center text-muted" style="padding:30px">لا توجد مشاريع بعد</td></tr>';
+
+  const eventsList = state.data.events.slice(0,5).map(e => `
+    <div class="event">
+      <div class="event-time">${e.time}</div>
+      <div class="event-body"><b>${escapeHtml(e.title)}</b><span>${escapeHtml(e.desc)}</span></div>
+    </div>`).join('') || '<div class="text-center text-muted" style="padding:20px">لا توجد مواعيد</div>';
+
+  return `
+    <div class="grid g-4" style="margin-bottom:22px">${statCards}</div>
+
+    <div class="grid g-2-1" style="margin-bottom:22px">
+      <div class="card">
+        <div class="card-hd">
+          <div><h3>${ICONS.chart} أداء المشاريع</h3><p>مقارنة الإنجاز على مدار الأسبوع</p></div>
+          <span class="badge dark">+18% هذا الأسبوع</span>
+        </div>
+        <div class="bars-chart" style="display:flex;align-items:flex-end;justify-content:space-around;gap:10px;height:180px;padding:10px 0">
+          ${['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'].map((d,i) => {
+            const h = [45,68,52,80,62,88,54][i];
+            return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end">
+              <div style="width:100%;max-width:38px;border-radius:8px 8px 3px 3px;background:${i%2?'var(--text-3)':'var(--sidebar)'};height:${h}%;transition:height 1s"></div>
+              <div style="font-size:11px;color:var(--text-3);font-weight:800">${d}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd"><h3>${ICONS.cal} اجتماعات اليوم</h3></div>
+        ${eventsList}
+      </div>
+    </div>
+
+    <div class="grid g-1-2" style="margin-bottom:22px">
+      <div class="card">
+        <div class="card-hd"><h3>${ICONS.check} مهام قادمة</h3></div>
+        ${recentTasks}
+      </div>
+
+      <div class="card">
+        <div class="card-hd">
+          <div><h3>${ICONS.folder} المشاريع النشطة</h3></div>
+          <button class="btn btn-ghost" data-page="projects" style="padding:8px 14px;font-size:12.5px">عرض الكل</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>المشروع</th><th>الفريق</th><th>التقدم</th><th>الحالة</th><th>الموعد</th></tr></thead>
+            <tbody>${projectRows}</tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ═══════════ PROJECTS ═══════════ */
+function renderProjects(){
+  const cards = state.data.projects.map(p => `
+    <div class="card">
+      <div class="card-hd" style="margin-bottom:14px">
+        <div class="flex items-center gap-3">
+          <div class="av lg">${initials(p.name)}</div>
+          <div>
+            <h3 style="font-size:15px">${escapeHtml(p.name)}</h3>
+            <p>${p.tasks} مهمة · ${p.done} مكتملة</p>
+          </div>
+        </div>
+        <span class="badge ${p.status==='نشط'?'dark':'light'}">${escapeHtml(p.status)}</span>
+      </div>
+      <div style="margin:16px 0">
+        <div class="flex justify-between mb-2">
+          <span class="text-sm font-bold">التقدم</span>
+          <span class="text-sm font-black">${p.progress}%</span>
+        </div>
+        <div class="progress"><span style="width:${p.progress}%"></span></div>
+      </div>
+      <div class="flex justify-between items-center" style="padding-top:14px;border-top:1px solid var(--border-2)">
+        <div class="av-stack">${(p.team||[]).slice(0,4).map(m => `<div class="av sm">${initials(m)}</div>`).join('')}</div>
+        <div style="text-align:left">
+          <div class="text-sm text-muted" style="font-weight:700">الموعد النهائي</div>
+          <b style="font-size:13px">${formatDate(p.deadline)}</b>
+        </div>
+      </div>
+    </div>`).join('') || '<div class="card text-center" style="grid-column:1/-1;padding:60px;color:var(--text-3)"><h3>لا توجد مشاريع بعد</h3><p style="margin-top:8px">ابدأ بإنشاء أول مشروع لك</p></div>';
+
+  return `
+    <div class="flex justify-between items-center mb-4" style="flex-wrap:wrap;gap:12px">
+      <button class="btn btn-primary" id="newProjBtn">${ICONS.plus} مشروع جديد</button>
+    </div>
+    <div class="grid g-3">${cards}</div>
+  `;
+}
+
+/* ═══════════ TASKS ═══════════ */
+function renderTasks(){
+  const cols = {
+    todo:     { name:'بانتظار البدء', color:'#d0d0d0', items: state.data.tasks.filter(t => t.status === 'todo') },
+    progress: { name:'قيد التنفيذ',  color:'#0a0a0a', items: state.data.tasks.filter(t => t.status === 'progress') },
+    review:   { name:'قيد المراجعة', color:'#9a9a9a', items: state.data.tasks.filter(t => t.status === 'review') },
+    done:     { name:'مكتملة',       color:'#4a4a4a', items: state.data.tasks.filter(t => t.status === 'done') }
+  };
+
+  const kanban = Object.keys(cols).map(k => {
+    const c = cols[k];
+    return `
+      <div class="kanban-col">
+        <div class="kb-hd">
+          <b><span class="kb-dot" style="background:${c.color}"></span> ${c.name}</b>
+          <span class="count">${c.items.length}</span>
+        </div>
+        ${c.items.map(t => `
+          <div class="kb-card">
+            <b>${escapeHtml(t.title)}</b>
+            <div style="font-size:11.5px;color:var(--text-3);font-weight:700;margin-bottom:10px">${escapeHtml(t.project)}</div>
+            <div class="kb-meta">
+              <div class="kb-tags">${(t.tags||[]).slice(0,2).map(tg => `<span class="kb-tag">${escapeHtml(tg)}</span>`).join('')}</div>
+              <div class="av sm">${initials(t.assignee)}</div>
+            </div>
+          </div>`).join('') || '<div style="text-align:center;padding:20px;font-size:12px;color:var(--text-3)">لا مهام</div>'}
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="flex justify-between items-center mb-4" style="flex-wrap:wrap;gap:12px">
+      <button class="btn btn-primary" id="newTaskBtn2">${ICONS.plus} مهمة جديدة</button>
+    </div>
+    <div class="kanban">${kanban}</div>
+  `;
+}
+
+/* ═══════════ EMAIL ═══════════ */
+function renderEmail(){
+  const emails = state.data.emails.map((e, i) => `
+    <div class="email-item ${i === state.currentEmail ? 'active' : ''} ${e.unread ? 'unread' : ''}" data-idx="${i}">
+      <div class="email-item-hd">
+        <b>${escapeHtml(e.from)}</b>
+        <span>${e.time}</span>
+      </div>
+      <div class="subj">${escapeHtml(e.subject)}</div>
+      <div class="preview">${escapeHtml(e.preview)}</div>
+    </div>`).join('') || '<div style="padding:40px;text-align:center;color:var(--text-3);font-size:13px">لا توجد رسائل بعد</div>';
+
+  return `
+    <div style="margin-bottom:16px">
+      <button class="btn btn-primary" id="composeBtn">${ICONS.plus} رسالة جديدة</button>
+    </div>
+    <div class="email-layout">
+      <div class="email-list">
+        <div class="email-list-hd">
+          <b>البريد الوارد</b>
+          <span class="badge dark">${state.data.emails.filter(e => e.unread).length} غير مقروء</span>
+        </div>
+        <div class="email-items">${emails}</div>
+      </div>
+      <div class="email-view" id="emailView">${emailViewContent(state.data.emails[state.currentEmail])}</div>
+    </div>
+  `;
+}
+
+function emailViewContent(e){
+  if(!e) return '<div class="text-center text-muted" style="padding:60px 20px">اختر رسالة لعرضها</div>';
+  return `
+    <div class="email-view-hd">
+      <div class="av lg">${initials(e.from)}</div>
+      <div style="flex:1">
+        <b style="font-size:15px;font-weight:900;display:block">${escapeHtml(e.from)}</b>
+        <span class="text-sm text-muted">${escapeHtml(e.email)}</span>
+      </div>
+      <span class="text-sm text-muted">${e.time}</span>
+    </div>
+    <h2>${escapeHtml(e.subject)}</h2>
+    <div class="email-view-body">${escapeHtml(e.body)}</div>
+  `;
+}
+
+function bindEmailEvents(){
+  $$('.email-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const idx = +item.dataset.idx;
+      state.currentEmail = idx;
+      $$('.email-item').forEach(el => el.classList.toggle('active', +el.dataset.idx === idx));
+      $('emailView').innerHTML = emailViewContent(state.data.emails[idx]);
+    });
+  });
+  $('composeBtn')?.addEventListener('click', () => openModal('compose'));
+}
+
+/* ═══════════ MESSAGES ═══════════ */
+function renderMessages(){
+  if(!state.data.chats.length){
+    return '<div class="card text-center" style="padding:80px 20px"><h3>لا توجد محادثات بعد</h3><p style="color:var(--text-3);margin-top:8px">ابدأ محادثة جديدة مع فريقك</p></div>';
+  }
+
+  const contacts = state.data.chats.map((c, i) => `
+    <div class="msg-contact ${i === state.currentChat ? 'active' : ''}" data-idx="${i}">
+      <div class="av">${c.av}</div>
+      ${c.online ? '<span class="online"></span>' : ''}
+      <div class="mc-info">
+        <b>${escapeHtml(c.name)}</b>
+        <span>${escapeHtml(c.last)}</span>
+      </div>
+      <div class="mc-meta">
+        <span class="mc-time">${c.time}</span>
+        ${c.unread ? `<span class="mc-unread">${c.unread}</span>` : ''}
+      </div>
+    </div>`).join('');
+
+  const chat = state.data.chats[state.currentChat];
+  const bubbles = chat.messages.map(m => `
+    <div class="bubble ${m.from === 'me' ? 'me' : 'them'}">
+      ${escapeHtml(m.text)}
+      <div class="time">${m.time}</div>
+    </div>`).join('') || '<div style="text-align:center;color:var(--text-3);font-size:13px;margin:auto">لا توجد رسائل</div>';
+
+  return `
+    <div class="msg-layout">
+      <div class="msg-side">
+        <div class="msg-side-hd"><b>المحادثات</b></div>
+        <div class="msg-contacts" id="msgContacts">${contacts}</div>
+      </div>
+      <div class="msg-chat">
+        <div class="msg-chat-hd">
+          <div class="av">${chat.av}</div>
+          <div class="info" style="flex:1">
+            <b>${escapeHtml(chat.name)}</b>
+            <span>${chat.online ? '● متصل الآن' : 'آخر ظهور مؤخراً'}</span>
+          </div>
+          <button class="icon-btn">${ICONS.more}</button>
+        </div>
+        <div class="msg-body" id="msgBody">${bubbles}</div>
+        <div class="msg-foot">
+          <textarea placeholder="اكتب رسالتك..." id="msgInput" rows="1"></textarea>
+          <button class="msg-send" id="msgSend">${ICONS.send}</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function bindMessagesEvents(){
+  $$('.msg-contact').forEach(c => {
+    c.addEventListener('click', () => {
+      state.currentChat = +c.dataset.idx;
+      navigate('messages');
+    });
+  });
+  const body = $('msgBody');
+  if(body) body.scrollTop = body.scrollHeight;
+
+  $('msgSend')?.addEventListener('click', sendMsg);
+  $('msgInput')?.addEventListener('keydown', e => {
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMsg(); }
+  });
+}
+
+async function sendMsg(){
+  const inp = $('msgInput');
+  const text = inp.value.trim();
+  if(!text || !state.user) return;
+  const chat = state.data.chats[state.currentChat];
+
+  try {
+    await sb.from('messages').insert({
+      chat_id: chat.id,
+      from_user: state.user.id,
+      text: text
+    });
+    const time = new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
+    chat.messages.push({ from:'me', text, time });
+    chat.last = text;
+    inp.value = '';
+    navigate('messages');
+  } catch(err){
+    console.error(err);
+    toast('فشل إرسال الرسالة');
+  }
+}
+
+/* ═══════════ CALENDAR ═══════════ */
+function renderCalendar(){
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const today = now.getDate();
+  const monthNames = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  const dows = ['ح','ن','ث','ر','خ','ج','س'];
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const prevDays = new Date(year, month, 0).getDate();
+
+  let days = [];
+  for(let i = firstDay - 1; i >= 0; i--) days.push({ d: prevDays - i, muted: true });
+  for(let i = 1; i <= daysInMonth; i++) days.push({ d: i, muted: false, today: i === today, event: [3,7,12,15,18,22,25].includes(i) });
+  for(let i = 1; i <= 6; i++) days.push({ d: i, muted: true });
+
+  const calDays = days.map(d => `
+    <div class="cal-day ${d.muted?'muted':''} ${d.today?'today':''} ${d.event?'has-event':''}">${d.d}</div>
+  `).join('');
+
+  const eventsList = state.data.events.map(e => `
+    <div class="event">
+      <div class="event-time">${e.time}</div>
+      <div class="event-body"><b>${escapeHtml(e.title)}</b><span>${escapeHtml(e.desc)}</span></div>
+    </div>`).join('') || '<div class="text-center text-muted" style="padding:20px">لا توجد مواعيد</div>';
+
+  return `
+    <div class="calendar-wrap">
+      <div class="calendar">
+        <div class="cal-hd">
+          <b>${monthNames[month]} ${year}</b>
+          <div class="cal-nav">
+            <button>${ICONS.arrowR}</button>
+            <button>${ICONS.arrowL}</button>
+          </div>
+        </div>
+        <div class="cal-grid">
+          ${dows.map(d => `<div class="cal-dow">${d}</div>`).join('')}
+          ${calDays}
+        </div>
+      </div>
+      <div>
+        <div class="events-list">
+          <div class="card-hd"><h3>${ICONS.cal} مواعيد اليوم</h3></div>
+          ${eventsList}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ═══════════ EMPLOYEES ═══════════ */
+function renderEmployees(){
+  const cards = state.data.employees.map(e => `
+    <div class="emp-card">
+      <div class="av">${initials(e.name)}</div>
+      <b>${escapeHtml(e.name)}</b>
+      <span class="role">${escapeHtml(e.role)}</span>
+      <div class="emp-stats">
+        <div class="emp-stat"><b>${e.tasks}</b><span>مهام</span></div>
+        <div class="emp-stat"><b>${e.projects}</b><span>مشاريع</span></div>
+      </div>
+    </div>`).join('') || '<div class="card text-center" style="grid-column:1/-1;padding:60px"><h3>لا يوجد موظفون</h3></div>';
+
+  return `
+    <div class="flex justify-between items-center mb-4">
+      <span class="badge dark">${state.data.employees.length} موظف مسجّل</span>
+    </div>
+    <div class="emp-grid">${cards}</div>
+  `;
+}
+
+/* ═══════════ FILES ═══════════ */
+function renderFiles(){
+  const files = state.data.files.map(f => `
+    <div class="file-card">
+      <div class="file-ico">${ICONS.file}</div>
+      <b>${escapeHtml(f.name)}</b>
+      <span>${f.size} · ${f.date}</span>
+    </div>`).join('') || '<div class="card text-center" style="grid-column:1/-1;padding:60px"><h3>لا توجد ملفات</h3></div>';
+
+  return `
+    <div class="flex justify-between items-center mb-4">
+      <span class="badge dark">${state.data.files.length} ملف</span>
+    </div>
+    <div class="file-grid">${files}</div>
+  `;
+}
+
+/* ═══════════ REPORTS ═══════════ */
+function renderReports(){
+  const P = state.data.projects;
+  const T = state.data.tasks;
+  const E = state.data.emails;
+
+  const stats = [
+    { label:'إجمالي المشاريع', value: P.length, trend:'+12%', up:true, icon:'folder' },
+    { label:'المهام المكتملة', value: T.filter(t=>t.status==='done').length, trend:'+8%', up:true, icon:'check' },
+    { label:'الإيميلات', value: E.length, trend:'+3', up:true, icon:'mail' },
+    { label:'الموظفون', value: state.data.employees.length, trend:'—', up:true, icon:'users' }
+  ];
+
+  const teamBars = state.data.employees.slice(0,6).map(e => {
+    const pct = Math.min(100, (e.tasks || 0) * 4 || Math.floor(Math.random()*60)+30);
+    return `
+      <div style="margin-bottom:20px">
+        <div class="flex justify-between mb-2"><span style="font-size:12.5px;font-weight:800">${escapeHtml(e.name)}</span><span style="font-size:12.5px;font-weight:800;color:var(--text-3)">${pct}%</span></div>
+        <div class="progress"><span style="width:${pct}%"></span></div>
+      </div>`;
+  }).join('') || '<div class="text-center text-muted" style="padding:20px">لا توجد بيانات</div>';
+
+  return `
+    <div class="grid g-4" style="margin-bottom:22px">
+      ${stats.map(s => `
+        <div class="stat">
+          <div class="stat-top">
+            <div class="stat-ico">${ICONS[s.icon]}</div>
+            <div class="stat-trend ${s.up?'up':'down'}">${s.up?ICONS.trendUp:ICONS.trendDown} ${s.trend}</div>
+          </div>
+          <div class="stat-val">${s.value}</div>
+          <div class="stat-lbl">${s.label}</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="grid g-2">
+      <div class="card">
+        <div class="card-hd"><h3>${ICONS.chart} أداء الفريق</h3></div>
+        ${teamBars}
+      </div>
+      <div class="card">
+        <div class="card-hd"><h3>${ICONS.folder} تقرير المشاريع</h3></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>المشروع</th><th>التقدم</th><th>الحالة</th></tr></thead>
+            <tbody>${P.map(p => `
+              <tr>
+                <td><b>${escapeHtml(p.name)}</b></td>
+                <td>
+                  <div style="min-width:80px">
+                    <div class="progress"><span style="width:${p.progress}%"></span></div>
+                    <div style="font-size:11px;font-weight:800;color:var(--text-3);margin-top:5px">${p.progress}%</div>
+                  </div>
+                </td>
+                <td><span class="badge ${p.status==='نشط'?'dark':''}">${escapeHtml(p.status)}</span></td>
+              </tr>`).join('') || '<tr><td colspan="3" class="text-center text-muted" style="padding:30px">لا توجد بيانات</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ═══════════ AI ═══════════ */
+function renderAI(){
+  const name = state.profile?.name || 'مستخدم';
+  return `
+    <div class="ai-layout">
+      <div class="ai-chat">
+        <div class="ai-hd">
+          <div class="ai-av">${ICONS.ai}</div>
+          <div class="ai-info">
+            <b>مساعد MEN Office الذكي</b>
+            <span>● متاح دائماً</span>
+          </div>
+        </div>
+        <div class="ai-body" id="aiBody">
+          <div class="ai-msg">
+            <div class="av">AI</div>
+            <div class="bubble-ai">مرحباً ${escapeHtml(name)}! 👋<br>يمكنني مساعدتك في:<br>• كتابة الرسائل والإيميلات<br>• تلخيص المستندات والتقارير<br>• إدارة المهام وتنظيمها<br>• اقتراح أفكار إبداعية<br><br>كيف يمكنني مساعدتك اليوم؟</div>
+          </div>
+        </div>
+        <div class="msg-foot">
+          <textarea placeholder="اسألني أي شيء..." id="aiInput" rows="1"></textarea>
+          <button class="msg-send" id="aiSend">${ICONS.send}</button>
+        </div>
+      </div>
+      <div class="ai-suggest">
+        <h4>اقتراحات سريعة</h4>
+        <button data-prompt="اكتب لي إيميل احترافي لطلب اجتماع مع عميل جديد">📧 اكتب إيميل احترافي</button>
+        <button data-prompt="لخّص لي اجتماع فريق التطوير الأخير في 5 نقاط">📝 لخّص اجتماعاً</button>
+        <button data-prompt="اقترح عليّ خطة تسويقية لحملة جديدة">💡 خطة تسويقية</button>
+        <button data-prompt="أنشئ لي جدول مهام أسبوعي لفريق من 5 أشخاص">📅 نظّم مهام الفريق</button>
+        <button data-prompt="اكتب رسالة شكر احترافية لعميل قديم">💌 رسالة شكر</button>
+      </div>
+    </div>
+  `;
+}
+
+function bindAIEvents(){
+  const body = $('aiBody');
+  if(body) body.scrollTop = body.scrollHeight;
+
+  $('aiSend')?.addEventListener('click', sendAI);
+  $('aiInput')?.addEventListener('keydown', e => {
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendAI(); }
   });
 
-  // Send
-  $('sendEmailBtn')?.addEventListener('click', sendEmail);
-
-  // Templates
-  $$('.tag-chip').forEach(c => c.addEventListener('click', () => loadTemplate(c.dataset.template, c)));
-
-  // Create group
-  $('createGroupBtn')?.addEventListener('click', createGroup);
-
-  // Save profile
-  $('saveProfileBtn')?.addEventListener('click', saveProfileHandler);
-  $('logoutBtn')?.addEventListener('click', () => { closeModal('modalProfile'); signOut(); });
-
-  // Auth form
-  $('authSubmitBtn')?.addEventListener('click', handleAuthSubmit);
-  $('authToggle')?.addEventListener('click', switchAuthMode);
-  $('authPass')?.addEventListener('keydown', e => { if(e.key === 'Enter') handleAuthSubmit(); });
-
-  // Modals
-  $$('[data-close]').forEach(b => b.addEventListener('click', () => closeModal(b.dataset.close)));
-  $$('.ov[data-close-outside]').forEach(ov => ov.addEventListener('click', e => {
-    if(e.target === ov) closeModal(ov.id);
-  }));
-
-  // Nav mobile
-  $$('.nav a').forEach(a => a.addEventListener('click', () => $('nav').classList.remove('open')));
+  $$('.ai-suggest button').forEach(b => {
+    b.addEventListener('click', () => {
+      $('aiInput').value = b.dataset.prompt;
+      sendAI();
+    });
+  });
 }
 
-/* ════════ 🚀 Init ════════ */
-async function init(){
-  console.log('%c MEN Office · جاهز ',
-    'background:#0a0a0a;color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;letter-spacing:2px');
+function sendAI(){
+  const inp = $('aiInput');
+  const text = inp.value.trim();
+  if(!text) return;
+  const body = $('aiBody');
+  const name = state.profile?.name || 'أنا';
 
-  bind();
-  renderExcellence();
+  body.insertAdjacentHTML('beforeend', `
+    <div class="ai-msg user">
+      <div class="av">${initials(name)}</div>
+      <div class="bubble-ai">${escapeHtml(text)}</div>
+    </div>
+  `);
+  inp.value = '';
+  body.scrollTop = body.scrollHeight;
 
-  if(!sb){
-    console.error('[MEN] لا يمكن الاتصال بـ Supabase');
-    toast('فشل الاتصال بالخادم','error');
-    return;
+  setTimeout(() => {
+    const reply = getAIResponse(text);
+    body.insertAdjacentHTML('beforeend', `
+      <div class="ai-msg">
+        <div class="av">AI</div>
+        <div class="bubble-ai">${reply}</div>
+      </div>
+    `);
+    body.scrollTop = body.scrollHeight;
+  }, 700);
+}
+
+function getAIResponse(q){
+  const l = q.toLowerCase();
+  if(l.includes('إيميل') || l.includes('ايميل') || l.includes('بريد'))
+    return 'إليك مسودة إيميل احترافي:<br><br><b>الموضوع:</b> طلب اجتماع لمناقشة فرص التعاون<br><br>السلام عليكم،<br><br>أتمنى أن تكون بخير. أود أن أقترح عقد اجتماع لمناقشة سبل التعاون المستقبلية بيننا.<br><br>هل يناسبك يوم [التاريخ] الساعة [الوقت]؟<br><br>مع التقدير.';
+  if(l.includes('لخّص') || l.includes('ملخص'))
+    return '📝 <b>ملخص الاجتماع:</b><br>1. تمت مراجعة الإنجازات الأسبوعية<br>2. مناقشة تحديات الأداء وحلولها<br>3. إقرار خطة الأسبوع القادم<br>4. تحديد KPIs جديدة<br>5. الاتفاق على موعد الاجتماع القادم';
+  if(l.includes('تسويق') || l.includes('حملة'))
+    return '💡 <b>خطة تسويقية مقترحة:</b><br>1. <b>الوعي:</b> حملات على السوشيال ميديا (40%)<br>2. <b>التفاعل:</b> محتوى تعليمي (25%)<br>3. <b>التحويل:</b> إعلانات مدفوعة (25%)<br>4. <b>الاحتفاظ:</b> برنامج ولاء (10%)';
+  if(l.includes('جدول') || l.includes('مهام'))
+    return '📅 <b>جدول مهام أسبوعي:</b><br>• <b>الأحد:</b> اجتماع تخطيط<br>• <b>الاثنين-الثلاثاء:</b> تنفيذ المهام<br>• <b>الأربعاء:</b> مراجعة منتصف الأسبوع<br>• <b>الخميس:</b> إكمال وتسليم<br>• <b>الجمعة:</b> تقرير أسبوعي';
+  if(l.includes('شكر'))
+    return '💌 <b>رسالة شكر احترافية:</b><br><br>عزيزي [العميل]،<br><br>أتقدم إليكم بجزيل الشكر على ثقتكم الغالية وتعاونكم المثمر معنا. نتطلع لمواصلة تقديم أفضل الخدمات لكم.<br><br>مع خالص التقدير.';
+  return 'شكراً لك! يمكنني مساعدتك في:<br>• ✍️ كتابة الإيميلات<br>• 📝 تلخيص الاجتماعات<br>• 📊 إنشاء التقارير<br>• 💡 اقتراح الأفكار<br>• 📅 تنظيم المهام<br><br>اكتب طلبك بوضوح.';
+}
+
+/* ═══════════ SETTINGS ═══════════ */
+function renderSettings(){
+  const p = state.profile || {};
+  const u = state.user;
+  return `
+    <div class="settings-grid">
+      <div class="setting-card">
+        <h3>${ICONS.users} حسابي</h3>
+        <div class="setting-row">
+          <div class="sr-info"><b>الاسم</b><span>${escapeHtml(p.name || '—')}</span></div>
+        </div>
+        <div class="setting-row">
+          <div class="sr-info"><b>البريد الإلكتروني</b><span>${escapeHtml(u?.email || '—')}</span></div>
+        </div>
+        <div class="setting-row">
+          <div class="sr-info"><b>رقم العضوية</b><span>#${String(u?.id || '').slice(0,8).toUpperCase()}</span></div>
+        </div>
+        <div class="setting-row">
+          <div class="sr-info"><b>تاريخ الانضمام</b><span>${u?.created_at ? formatDate(u.created_at) : '—'}</span></div>
+        </div>
+      </div>
+
+      <div class="setting-card">
+        <h3>${ICONS.bell} الإشعارات</h3>
+        <div class="setting-row">
+          <div class="sr-info"><b>إشعارات البريد</b><span>عند وصول رسالة</span></div>
+          <div class="switch on"></div>
+        </div>
+        <div class="setting-row">
+          <div class="sr-info"><b>إشعارات المهام</b><span>عند إسناد مهمة</span></div>
+          <div class="switch on"></div>
+        </div>
+        <div class="setting-row">
+          <div class="sr-info"><b>الاجتماعات</b><span>قبل الموعد بـ 15 دقيقة</span></div>
+          <div class="switch on"></div>
+        </div>
+      </div>
+
+      <div class="setting-card">
+        <h3>${ICONS.shield} الأمان</h3>
+        <div class="setting-row">
+          <div class="sr-info"><b>الجلسة الحالية</b><span>جهازك الحالي</span></div>
+          <span class="badge dark">نشط</span>
+        </div>
+        <div class="setting-row">
+          <div class="sr-info"><b>آخر تسجيل دخول</b><span>${new Date().toLocaleDateString('ar-EG')}</span></div>
+        </div>
+        <div class="setting-row">
+          <div class="sr-info"><b>حذف الحساب</b><span>إجراء لا يمكن التراجع عنه</span></div>
+          <button class="btn btn-ghost" style="padding:8px 14px;font-size:12.5px;color:#dc2626">حذف</button>
+        </div>
+      </div>
+
+      <div class="setting-card">
+        <h3>${ICONS.check} عن المنصة</h3>
+        <div class="setting-row">
+          <div class="sr-info"><b>الإصدار</b><span>1.0.0</span></div>
+        </div>
+        <div class="setting-row">
+          <div class="sr-info"><b>اللغة</b><span>العربية (RTL)</span></div>
+          <span class="badge">عربي</span>
+        </div>
+        <div class="setting-row">
+          <div class="sr-info"><b>الوضع</b><span>فاتح</span></div>
+          <span class="badge">Light</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function bindSettingsEvents(){
+  $$('.switch').forEach(el => {
+    el.addEventListener('click', () => el.classList.toggle('on'));
+  });
+}
+
+/* ═══════════ MODAL ═══════════ */
+function openModal(type){
+  const m = $('modal');
+  if(type === 'task'){
+    m.innerHTML = `
+      <button class="icon-btn" style="position:absolute;top:16px;left:16px" onclick="MEN.closeModal()">${ICONS.close}</button>
+      <h2>مهمة جديدة</h2>
+      <p class="sub">أضف مهمة جديدة وحدّد تفاصيلها</p>
+      <div class="field"><label>عنوان المهمة</label><input type="text" id="mTaskTitle" placeholder="مثال: تصميم صفحة الهبوط"></div>
+      <div class="field"><label>المشروع</label><input type="text" id="mTaskProject" placeholder="عام"></div>
+      <div class="field"><label>المسؤول</label>
+        <select id="mTaskAssignee">${state.data.employees.map(e => `<option value="${escapeHtml(e.name)}">${escapeHtml(e.name)}</option>`).join('') || '<option>غير محدد</option>'}</select>
+      </div>
+      <div class="field"><label>الأولوية</label>
+        <select id="mTaskPriority"><option>عالية</option><option>متوسطة</option><option>عادية</option></select>
+      </div>
+      <button class="btn btn-primary w-full" id="mSaveTask">${ICONS.check} حفظ المهمة</button>
+    `;
+    setTimeout(() => {
+      $('mSaveTask')?.addEventListener('click', saveTask);
+    }, 30);
+  } else if(type === 'compose'){
+    m.innerHTML = `
+      <button class="icon-btn" style="position:absolute;top:16px;left:16px" onclick="MEN.closeModal()">${ICONS.close}</button>
+      <h2>رسالة جديدة</h2>
+      <p class="sub">أرسل رسالة بريد إلكتروني جديدة</p>
+      <div class="field"><label>إلى</label><input type="email" id="mEmailTo" placeholder="name@example.com" dir="ltr" style="text-align:right"></div>
+      <div class="field"><label>الاسم</label><input type="text" id="mEmailName" placeholder="الاسم"></div>
+      <div class="field"><label>الموضوع</label><input type="text" id="mEmailSubject" placeholder="موضوع الرسالة"></div>
+      <div class="field"><label>الرسالة</label><textarea id="mEmailBody" rows="6" placeholder="اكتب رسالتك..."></textarea></div>
+      <button class="btn btn-primary w-full" id="mSendEmail">${ICONS.send} إرسال</button>
+    `;
+    setTimeout(() => {
+      $('mSendEmail')?.addEventListener('click', sendEmail);
+    }, 30);
   }
+  $('modalOverlay').classList.add('on');
+}
+function closeModal(){ $('modalOverlay').classList.remove('on'); }
 
-  // راقب تغيرات المصادقة
-  sb.auth.onAuthStateChange(async (event, session) => {
-    console.log('[MEN Auth]', event);
-    currentUser = session?.user || null;
-    updateAuthUI();
-    if(event === 'SIGNED_IN' && currentUser){
-      await afterLogin();
+async function saveTask(){
+  const title = $('mTaskTitle').value.trim();
+  const project = $('mTaskProject').value.trim() || 'عام';
+  const assignee = $('mTaskAssignee').value;
+  const priority = $('mTaskPriority').value;
+  if(!title){ toast('أدخل عنوان المهمة'); return; }
+
+  try {
+    const { error } = await sb.from('tasks').insert({
+      user_id: state.user.id,
+      title, project, assignee, priority,
+      status: 'todo'
+    });
+    if(error) throw error;
+    closeModal();
+    toast('تمت إضافة المهمة ✓');
+    await loadAllData();
+    navigate('tasks');
+  } catch(err){
+    console.error(err);
+    toast('فشل الحفظ');
+  }
+}
+
+async function sendEmail(){
+  const to = $('mEmailTo').value.trim();
+  const toName = $('mEmailName').value.trim();
+  const subject = $('mEmailSubject').value.trim();
+  const body = $('mEmailBody').value.trim();
+  if(!to || !subject || !body){ toast('أكمل الحقول'); return; }
+
+  try {
+    const { error } = await sb.from('emails').insert({
+      user_id: state.user.id,
+      to_email: to,
+      to_name: toName,
+      from_name: state.profile?.name || state.user.email,
+      from_email: state.user.email,
+      subject, body,
+      is_read: true
+    });
+    if(error) throw error;
+    closeModal();
+    toast('تم إرسال الرسالة ✓');
+    window.location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    await loadAllData();
+    navigate('email');
+  } catch(err){
+    console.error(err);
+    toast('فشل الإرسال');
+  }
+}
+
+/* ═══════════ UI ═══════════ */
+function openSidebar(){ $('sidebar').classList.add('open'); $('sidebarOverlay').classList.add('on'); }
+function closeSidebar(){ $('sidebar').classList.remove('open'); $('sidebarOverlay').classList.remove('on'); }
+
+/* ═══════════ Bootstrap ═══════════ */
+async function handleSession(session){
+  if(session?.user){
+    state.user = session.user;
+    $('authScreen').style.display = 'none';
+    $('app').style.display = 'flex';
+    await loadAllData();
+    syncUserUI();
+    const hash = location.hash.replace('#','');
+    navigate(PAGES[hash] ? hash : 'dashboard');
+  } else {
+    state.user = null;
+    $('authScreen').style.display = 'flex';
+    $('app').style.display = 'none';
+  }
+}
+
+async function init(){
+  // ربط أزرار المصادقة
+  $$('.auth-tab').forEach(t => t.addEventListener('click', () => switchAuthMode(t.dataset.tab)));
+  $('authSubmit')?.addEventListener('click', handleAuth);
+  $('authPassword')?.addEventListener('keydown', e => { if(e.key === 'Enter') handleAuth(); });
+  $('authEmail')?.addEventListener('keydown', e => { if(e.key === 'Enter') $('authPassword').focus(); });
+
+  // ربط التنقل
+  $$('.sb-item').forEach(el => el.addEventListener('click', () => navigate(el.dataset.page)));
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('[data-page]');
+    if(btn && !btn.classList.contains('sb-item')) navigate(btn.dataset.page);
+  });
+
+  // ربط الأزرار العامة
+  $('menuBtn')?.addEventListener('click', openSidebar);
+  $('sidebarOverlay')?.addEventListener('click', closeSidebar);
+  $('logoutBtn')?.addEventListener('click', logout);
+  $('newTaskBtn')?.addEventListener('click', () => openModal('task'));
+
+  document.addEventListener('click', e => {
+    if(e.target.id === 'newTaskBtn2') openModal('task');
+    if(e.target.id === 'newProjBtn') toast('قريباً');
+  });
+
+  $('modalOverlay')?.addEventListener('click', e => {
+    if(e.target === $('modalOverlay')) closeModal();
+  });
+
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape') closeModal();
+  });
+
+  // الاستماع لتغيرات المصادقة
+  sb.auth.onAuthStateChange((event, session) => {
+    console.log('[Auth]', event);
+    if(event === 'SIGNED_OUT'){
+      state.user = null;
+      $('authScreen').style.display = 'flex';
+      $('app').style.display = 'none';
+    } else if(event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED'){
+      handleSession(session);
     }
   });
 
-  // جلسة حالية
-  await getSession();
-  if(currentUser) await afterLogin();
-  else {
-    await loadGroups();
-    await loadAchievements();
-    await updateStats();
-  }
+  // الجلسة الحالية
+  const { data: { session } } = await sb.auth.getSession();
+  await handleSession(session);
 }
 
-/* ════════ 🌐 Public API ════════ */
-window.MEN_APP = {
-  openModal, closeModal, scrollTo, scrollTop, toggleMenu,
-  signOut
-};
+window.MEN = { closeModal, saveTask, sendEmail, navigate };
 
 if(document.readyState === 'loading'){
   document.addEventListener('DOMContentLoaded', init);
