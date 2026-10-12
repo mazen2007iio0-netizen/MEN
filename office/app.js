@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   MEN Office — Application
+   MEN Office — Application (مع إصلاح التسجيل)
    ═══════════════════════════════════════════ */
 (function(){
 'use strict';
@@ -79,7 +79,7 @@ function toast(msg){
   t.innerHTML = ICONS.check + '<span>' + msg + '</span>';
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
 }
 const showLoading = () => $('loadingOverlay').classList.add('on');
 const hideLoading = () => $('loadingOverlay').classList.remove('on');
@@ -97,7 +97,24 @@ function switchAuthMode(mode){
     ? 'أنشئ حسابك المجاني وابدأ بإدارة فريقك'
     : 'سجّل دخولك للمتابعة إلى مساحة العمل الخاصة بك';
   $('authSubmitText').textContent = mode === 'signup' ? 'إنشاء الحساب' : 'دخول إلى المنصة';
-  $('authError').textContent = '';
+  clearAuthError();
+}
+
+function showAuthError(msg){
+  const el = $('authError');
+  if(!msg){ el.textContent = ''; el.innerHTML = ''; return; }
+  el.innerHTML = '<div style="text-align:center;font-weight:700">' + msg + '</div>';
+}
+
+function showAuthSuccess(html){
+  const el = $('authError');
+  el.innerHTML = html;
+}
+
+function clearAuthError(){
+  const el = $('authError');
+  el.textContent = '';
+  el.innerHTML = '';
 }
 
 async function handleAuth(){
@@ -106,53 +123,146 @@ async function handleAuth(){
   const name = $('authName').value.trim();
   const btn = $('authSubmit');
 
-  if(!email || !password){ showAuthError('أكمل جميع الحقول'); return; }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showAuthError('صيغة البريد غير صحيحة'); return; }
-  if(password.length < 6){ showAuthError('كلمة المرور 6 أحرف على الأقل'); return; }
-  if(authMode === 'signup' && !name){ showAuthError('الرجاء إدخال الاسم الكامل'); return; }
+  clearAuthError();
+
+  // ✅ التحقق من الحقول
+  if(!email || !password){ showAuthError('⚠️ أكمل جميع الحقول'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    showAuthError('⚠️ صيغة البريد الإلكتروني غير صحيحة');
+    return;
+  }
+  if(password.length < 6){
+    showAuthError('⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+    return;
+  }
+  if(authMode === 'signup' && !name){
+    showAuthError('⚠️ الرجاء إدخال الاسم الكامل');
+    return;
+  }
 
   btn.disabled = true;
   const orig = $('authSubmitText').textContent;
   $('authSubmitText').textContent = 'جارٍ...';
-  showAuthError('');
 
   try {
+    // ═══════ تسجيل حساب جديد ═══════
     if(authMode === 'signup'){
       const { data, error } = await sb.auth.signUp({
-        email, password,
-        options: { data: { name } }
+        email,
+        password,
+        options: {
+          data: { name, full_name: name }
+        }
       });
-      if(error) throw error;
 
-      if(data.user){
-        await sb.from('profiles').upsert({
-          id: data.user.id, name, email
-        }, { onConflict: 'id' });
-      }
-
-      if(!data.session){
-        showAuthError('✓ تم إنشاء حسابك! تحقق من بريدك للتأكيد');
+      if(error){
+        const msg = (error.message || '').toLowerCase();
+        if(msg.includes('already') || msg.includes('registered')){
+          showAuthError('📧 هذا البريد مسجّل بالفعل — جرّب تسجيل الدخول');
+        } else if(msg.includes('password')){
+          showAuthError('🔒 كلمة المرور ضعيفة جداً');
+        } else if(msg.includes('rate') || msg.includes('many')){
+          showAuthError('⏱️ محاولات كثيرة — انتظر دقيقة');
+        } else if(msg.includes('valid')){
+          showAuthError('📧 البريد الإلكتروني غير صالح');
+        } else {
+          showAuthError('❌ ' + error.message);
+        }
         return;
       }
-      toast('مرحباً بك!');
-    } else {
-      const { error } = await sb.auth.signInWithPassword({ email, password });
-      if(error) throw error;
-      toast('مرحباً بعودتك!');
+
+      // ✅ نجح التسجيل
+      if(data.user && !data.session){
+        // تأكيد البريد مُفعّل — المستخدم يحتاج تأكيد بريده
+        showAuthSuccess(`
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;padding:14px;border-radius:10px;text-align:right;font-weight:700;line-height:1.7;font-size:12.5px">
+            ✅ <b>تم إنشاء حسابك بنجاح!</b><br>
+            📧 أرسلنا رابط التفعيل إلى:<br>
+            <span style="direction:ltr;display:inline-block;color:#000;font-weight:800;margin-top:4px">${escapeHtml(email)}</span><br>
+            <span style="font-size:11.5px;color:#166534;font-weight:600;display:block;margin-top:6px">افتح بريدك واضغط على رابط التفعيل ثم عُد وسجّل الدخول</span>
+          </div>
+          <button id="resendBtn" type="button" style="margin-top:10px;width:100%;padding:11px;border-radius:10px;background:#000;color:#fff;font-weight:800;font-size:12.5px;cursor:pointer;font-family:inherit;border:none">
+            🔄 إعادة إرسال رابط التفعيل
+          </button>
+        `);
+
+        // زر إعادة الإرسال
+        setTimeout(() => {
+          const rb = $('resendBtn');
+          if(rb){
+            rb.addEventListener('click', async () => {
+              rb.disabled = true;
+              rb.textContent = 'جارٍ الإرسال...';
+              try {
+                const { error: rErr } = await sb.auth.resend({
+                  type: 'signup',
+                  email: email
+                });
+                if(rErr) throw rErr;
+                toast('تم إرسال رابط التفعيل ✓');
+              } catch(err){
+                toast('تعذّر الإرسال — انتظر قليلاً');
+              } finally {
+                rb.disabled = false;
+                rb.textContent = '🔄 إعادة إرسال رابط التفعيل';
+              }
+            });
+          }
+        }, 50);
+
+        // الانتقال لوضع تسجيل الدخول بعد 5 ثوان
+        setTimeout(() => {
+          switchAuthMode('login');
+          $('authEmail').value = email;
+          showAuthSuccess(`
+            <div style="background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;padding:11px;border-radius:10px;text-align:center;font-weight:700;font-size:12.5px">
+              ✅ تم إنشاء الحساب — تحقق من بريدك ثم سجّل الدخول
+            </div>
+          `);
+        }, 6000);
+
+        return;
+      }
+
+      if(data.session){
+        // تسجيل دخول تلقائي (تأكيد البريد مُعطّل)
+        toast('🎉 مرحباً بك في MEN Office!');
+        await handleSession(data.session);
+        return;
+      }
+
+      showAuthError('حدث خطأ غير متوقع — حاول مرة أخرى');
+    }
+
+    // ═══════ تسجيل الدخول ═══════
+    else {
+      const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+      if(error){
+        const msg = (error.message || '').toLowerCase();
+        if(msg.includes('invalid') || msg.includes('credentials')){
+          showAuthError('❌ البريد الإلكتروني أو كلمة المرور غير صحيحة');
+        } else if(msg.includes('confirm')){
+          showAuthError('📧 يرجى تأكيد بريدك الإلكتروني أولاً — تحقق من صندوق الوارد');
+        } else if(msg.includes('rate') || msg.includes('many')){
+          showAuthError('⏱️ محاولات كثيرة — انتظر قليلاً');
+        } else {
+          showAuthError('❌ ' + error.message);
+        }
+        return;
+      }
+
+      toast('🎉 مرحباً بعودتك!');
+      await handleSession(data.session);
     }
   } catch(err){
-    console.error(err);
-    const m = (err.message || '').toLowerCase();
-    if(m.includes('invalid')) showAuthError('بيانات الدخول غير صحيحة');
-    else if(m.includes('already')) showAuthError('هذا البريد مسجّل بالفعل');
-    else if(m.includes('rate')) showAuthError('محاولات كثيرة — انتظر قليلاً');
-    else showAuthError(err.message || 'حدث خطأ');
+    console.error('[Auth Error]', err);
+    showAuthError('❌ خطأ في الاتصال — تحقق من اتصالك بالإنترنت');
   } finally {
     btn.disabled = false;
     $('authSubmitText').textContent = orig;
   }
 }
-const showAuthError = msg => { $('authError').textContent = msg; };
 
 async function logout(){
   if(!confirm('هل تريد تسجيل الخروج؟')) return;
@@ -162,6 +272,8 @@ async function logout(){
   $('authScreen').style.display = 'grid';
   $('authEmail').value = '';
   $('authPassword').value = '';
+  clearAuthError();
+  switchAuthMode('login');
   toast('تم تسجيل الخروج');
 }
 
@@ -172,16 +284,25 @@ async function loadAllData(){
   try {
     const uid = state.user.id;
 
-    const { data: profile } = await sb.from('profiles').select('*').eq('id', uid).maybeSingle();
-    state.profile = profile || { name: state.user.user_metadata?.name || 'مستخدم' };
+    // البروفايل
+    const { data: profile, error: profErr } = await sb.from('profiles')
+      .select('*').eq('id', uid).maybeSingle();
+    if(profErr) console.warn('profile fetch:', profErr);
+    state.profile = profile || {
+      name: state.user.user_metadata?.name || state.user.email?.split('@')[0] || 'مستخدم',
+      role: 'مدير عام'
+    };
 
+    // الموظفون
     const { data: employees } = await sb.from('profiles').select('*');
     state.data.employees = (employees || []).map(p => ({
       id: p.id, name: p.name || 'مستخدم',
       role: p.role || 'موظف', email: p.email, tasks: 0, projects: 0
     }));
 
-    const { data: projects } = await sb.from('projects').select('*').eq('user_id', uid).order('created_at', { ascending: false });
+    // المشاريع
+    const { data: projects } = await sb.from('projects')
+      .select('*').eq('user_id', uid).order('created_at', { ascending: false });
     state.data.projects = (projects || []).map(p => ({
       id: p.id, name: p.name, progress: p.progress || 0,
       team: p.team || [], deadline: p.deadline || new Date().toISOString(),
@@ -189,14 +310,18 @@ async function loadAllData(){
       status: p.status || 'نشط'
     }));
 
-    const { data: tasks } = await sb.from('tasks').select('*').eq('user_id', uid).order('created_at', { ascending: false });
+    // المهام
+    const { data: tasks } = await sb.from('tasks')
+      .select('*').eq('user_id', uid).order('created_at', { ascending: false });
     state.data.tasks = (tasks || []).map(t => ({
       id: t.id, title: t.title, project: t.project || 'عام',
       status: t.status || 'todo', priority: t.priority || 'عادي',
       assignee: t.assignee || 'غير محدد', due: t.due_date, tags: t.tags || []
     }));
 
-    const { data: emails } = await sb.from('emails').select('*').eq('user_id', uid).order('created_at', { ascending: false });
+    // الإيميلات
+    const { data: emails } = await sb.from('emails')
+      .select('*').eq('user_id', uid).order('created_at', { ascending: false });
     state.data.emails = (emails || []).map(e => ({
       id: e.id, from: e.from_name || e.to_name || 'مستخدم',
       email: e.from_email || e.to_email, subject: e.subject,
@@ -204,22 +329,29 @@ async function loadAllData(){
       time: formatDate(e.created_at), unread: !e.is_read
     }));
 
-    const { data: files } = await sb.from('files').select('*').eq('user_id', uid).order('created_at', { ascending: false });
+    // الملفات
+    const { data: files } = await sb.from('files')
+      .select('*').eq('user_id', uid).order('created_at', { ascending: false });
     state.data.files = (files || []).map(f => ({
       id: f.id, name: f.name, type: f.type || 'doc',
       size: f.size || '0 KB', date: formatDate(f.created_at)
     }));
 
-    const { data: events } = await sb.from('events').select('*').eq('user_id', uid).order('event_time');
+    // الأحداث
+    const { data: events } = await sb.from('events')
+      .select('*').eq('user_id', uid).order('event_time');
     state.data.events = (events || []).map(e => ({
       id: e.id, time: e.event_time?.slice(0,5) || '00:00',
       title: e.title, desc: e.description || ''
     }));
 
-    const { data: chats } = await sb.from('chats').select('*').eq('user_id', uid).order('created_at', { ascending: false });
+    // المحادثات
+    const { data: chats } = await sb.from('chats')
+      .select('*').eq('user_id', uid).order('created_at', { ascending: false });
     if(chats && chats.length){
       state.data.chats = await Promise.all(chats.map(async c => {
-        const { data: msgs } = await sb.from('messages').select('*').eq('chat_id', c.id).order('created_at');
+        const { data: msgs } = await sb.from('messages')
+          .select('*').eq('chat_id', c.id).order('created_at');
         return {
           id: c.id, name: c.name, av: initials(c.name),
           online: c.online || false,
@@ -232,15 +364,17 @@ async function loadAllData(){
           }))
         };
       }));
+    } else {
+      state.data.chats = [];
     }
 
+    // تحديث الأرقام
     $('navProjects').textContent = state.data.projects.length;
     $('navTasks').textContent = state.data.tasks.length;
     $('navEmails').textContent = state.data.emails.filter(e => e.unread).length || 0;
 
   } catch(err){
     console.error('loadAllData:', err);
-    toast('فشل تحميل البيانات');
   } finally {
     hideLoading();
   }
@@ -333,7 +467,7 @@ function renderDashboard(){
         </div>
       </td>
       <td><span class="badge ${p.status==='نشط'?'dark':''}">${escapeHtml(p.status)}</span></td>
-      <td class="text-2" style="font-size:12px;font-weight:700">${formatDate(p.deadline)}</td>
+      <td style="color:var(--text-2);font-size:12px;font-weight:700">${formatDate(p.deadline)}</td>
     </tr>`).join('') || '<tr><td colspan="5" class="text-center text-muted" style="padding:30px">لا توجد مشاريع</td></tr>';
 
   const eventsList = state.data.events.slice(0,5).map(e => `
@@ -976,7 +1110,10 @@ async function saveTask(){
     toast('تمت إضافة المهمة ✓');
     await loadAllData();
     navigate('tasks');
-  } catch(err){ toast('فشل الحفظ'); }
+  } catch(err){
+    console.error(err);
+    toast('فشل الحفظ — تحقق من إعدادات قاعدة البيانات');
+  }
 }
 
 async function sendEmail(){
@@ -998,7 +1135,10 @@ async function sendEmail(){
     window.location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     await loadAllData();
     navigate('email');
-  } catch(err){ toast('فشل الإرسال'); }
+  } catch(err){
+    console.error(err);
+    toast('فشل الإرسال');
+  }
 }
 
 /* ═══════════ UI ═══════════ */
@@ -1036,6 +1176,7 @@ async function init(){
     const btn = e.target.closest('[data-page]');
     if(btn && !btn.classList.contains('sb-item')) navigate(btn.dataset.page);
     if(e.target.id === 'newTaskBtn2') openModal('task');
+    if(e.target.id === 'newProjBtn') toast('قريباً');
   });
 
   // UI
@@ -1054,13 +1195,19 @@ async function init(){
   });
 
   // Auth listener
-  sb.auth.onAuthStateChange((event, session) => {
+  sb.auth.onAuthStateChange(async (event, session) => {
+    console.log('[Auth]', event);
     if(event === 'SIGNED_OUT'){
       state.user = null;
       $('authScreen').style.display = 'grid';
       $('app').style.display = 'none';
-    } else if(event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED'){
-      handleSession(session);
+    } else if(event === 'SIGNED_IN' && session?.user){
+      // فقط نعالج SIGNED_IN لو ما كانت الجلسة معالجة مسبقاً
+      if(state.user?.id !== session.user.id){
+        await handleSession(session);
+      }
+    } else if(event === 'TOKEN_REFRESHED' && session?.user){
+      state.user = session.user;
     }
   });
 
