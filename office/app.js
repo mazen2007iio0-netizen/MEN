@@ -1,5 +1,5 @@
 /* ============================================================
-   ✨ MEN Office — App v1
+   ✨ MEN Office — App v1.1 (Fixed)
    (Business Management + Email + Tasks + Projects + AI)
    ============================================================ */
 (function () {
@@ -33,7 +33,7 @@
   });
   window.MEN_SUPABASE = sb;
 
-  console.log('%c✨ MEN OFFICE v1', 'background:linear-gradient(135deg,#000,#333);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
+  console.log('%c✨ MEN OFFICE v1.1', 'background:linear-gradient(135deg,#000,#333);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
   // ════════ 📋 الثوابت ════════
   const APP_NAME = 'MEN Office';
@@ -125,7 +125,6 @@
     logo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>'
   };
 
-  // ═══════ الصور ═══════
   const LOGO_URL = 'https://www.socialcreator.com/srv/imgs/ti_imgs/202842_332160.png';
 
   // ═══════════════════════════════════════════════════════════
@@ -189,8 +188,8 @@
       .mo-form-field input:hover{border-color:#d4d4d4}
       .mo-form-field input:focus{border-color:#000;box-shadow:0 0 0 4px rgba(0,0,0,.06)}
       .mo-form-field input::placeholder{color:#a3a3a3;font-weight:500}
-      .mo-auth-error{color:#dc2626;font-size:12.5px;font-weight:700;text-align:center;min-height:18px;padding:0;transition:all .3s}
-      .mo-auth-error.show{padding:10px 16px;background:#fef2f2;border-radius:10px;border:1px solid #fee2e2}
+      .mo-auth-error{color:#dc2626;font-size:13px;font-weight:800;text-align:center;min-height:0;padding:0;border-radius:10px;transition:all .3s;opacity:0;max-height:0;overflow:hidden}
+      .mo-auth-error.show{opacity:1;max-height:220px;overflow:auto;padding:12px 16px;background:#fef2f2;border:1px solid #fee2e2;margin:4px 0}
       .mo-auth-error.success{color:#15803d;background:#f0fdf4;border-color:#bbf7d0}
       .mo-auth-submit{padding:16px;border-radius:14px;background:#000;color:#fff;font-weight:900;font-size:15px;letter-spacing:.3px;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:6px;position:relative;overflow:hidden;border:none;cursor:pointer;font-family:inherit}
       .mo-auth-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 14px 30px rgba(0,0,0,.25)}
@@ -625,28 +624,78 @@
     `;
     document.body.appendChild(wrap);
 
-    wrap.querySelectorAll('.mo-auth-mode button').forEach(b => {
-      b.addEventListener('click', () => switchAuthMode(b.dataset.tab));
+    // ═══ Event Delegation (يضمن التقاط الضغط على أي عنصر داخل الزر) ═══
+    wrap.addEventListener('click', (e) => {
+      const modeBtn = e.target.closest('.mo-auth-mode button');
+      if (modeBtn) {
+        e.preventDefault();
+        console.log('🔵 [Auth] تبديل الوضع:', modeBtn.dataset.tab);
+        switchAuthMode(modeBtn.dataset.tab);
+        return;
+      }
+
+      const submitBtn = e.target.closest('#moAuthSubmit');
+      if (submitBtn) {
+        e.preventDefault();
+        handleAuthSubmit();
+        return;
+      }
+
+      const resendBtn = e.target.closest('#moResendBtn');
+      if (resendBtn && !resendBtn.disabled) {
+        e.preventDefault();
+        handleResend(resendBtn);
+        return;
+      }
     });
-    $('moAuthSubmit').addEventListener('click', handleAuthSubmit);
-    $('moAuthPassword').addEventListener('keydown', e => { if (e.key === 'Enter') handleAuthSubmit(); });
-    $('moAuthEmail').addEventListener('keydown', e => { if (e.key === 'Enter') $('moAuthPassword').focus(); });
+
+    // Enter يرسل النموذج
+    wrap.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.target.id === 'moAuthPassword' || e.target.id === 'moAuthEmail' || e.target.id === 'moAuthName')) {
+        e.preventDefault();
+        handleAuthSubmit();
+      }
+    });
+
+    console.log('✅ [Auth] تم ربط الأزرار بنجاح (Event Delegation)');
+  }
+
+  let _resendEmail = '';
+
+  async function handleResend(btn) {
+    if (!_resendEmail) { toast('لا يوجد بريد', 'error'); return; }
+    btn.disabled = true;
+    const orig = btn.textContent;
+    btn.textContent = 'جارٍ الإرسال...';
+    try {
+      const { error } = await sb.auth.resend({ type: 'signup', email: _resendEmail });
+      if (error) throw error;
+      toast('✅ تم إرسال رابط التفعيل');
+    } catch (err) {
+      console.error('[Resend]', err);
+      toast('تعذّر الإرسال — انتظر قليلاً', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = orig;
+    }
   }
 
   function switchAuthMode(mode) {
     authMode = mode === 'signup' ? 'signup' : 'login';
     const isSignup = authMode === 'signup';
     $$('.mo-auth-mode button').forEach(b => b.classList.toggle('active', b.dataset.tab === authMode));
-    $('moNameField').style.display = isSignup ? 'flex' : 'none';
-    $('moAuthKicker').textContent = isSignup ? 'CREATE ACCOUNT' : 'WELCOME BACK';
-    $('moAuthTitle').textContent = isSignup ? 'ابدأ رحلتك' : 'أهلاً بعودتك';
-    $('moAuthSub').textContent = isSignup ? 'أنشئ حسابك المجاني وابدأ بإدارة فريقك' : 'سجّل دخولك للمتابعة إلى مساحة العمل الخاصة بك';
-    $('moAuthSubmitText').textContent = isSignup ? 'إنشاء الحساب' : 'دخول إلى المنصة';
+    if ($('moNameField')) $('moNameField').style.display = isSignup ? 'flex' : 'none';
+    if ($('moAuthKicker')) $('moAuthKicker').textContent = isSignup ? 'CREATE ACCOUNT' : 'WELCOME BACK';
+    if ($('moAuthTitle')) $('moAuthTitle').textContent = isSignup ? 'ابدأ رحلتك' : 'أهلاً بعودتك';
+    if ($('moAuthSub')) $('moAuthSub').textContent = isSignup ? 'أنشئ حسابك المجاني وابدأ بإدارة فريقك' : 'سجّل دخولك للمتابعة إلى مساحة العمل الخاصة بك';
+    if ($('moAuthSubmitText')) $('moAuthSubmitText').textContent = isSignup ? 'إنشاء الحساب' : 'دخول إلى المنصة';
+    if ($('moAuthPassword')) $('moAuthPassword').setAttribute('autocomplete', isSignup ? 'new-password' : 'current-password');
     clearAuthMsg();
   }
 
   function showAuthMsg(msg, isSuccess = false) {
     const el = $('moAuthError');
+    if (!el) return;
     if (!msg) { el.textContent = ''; el.classList.remove('show', 'success'); return; }
     el.innerHTML = msg;
     el.classList.add('show');
@@ -654,16 +703,28 @@
   }
   function clearAuthMsg() {
     const el = $('moAuthError');
+    if (!el) return;
     el.textContent = '';
     el.innerHTML = '';
     el.classList.remove('show', 'success');
   }
 
   async function handleAuthSubmit() {
-    const email = $('moAuthEmail').value.trim().toLowerCase();
-    const password = $('moAuthPassword').value;
-    const name = $('moAuthName').value.trim();
+    console.log('🔵 [Auth] تم الضغط — الوضع:', authMode);
+
     const btn = $('moAuthSubmit');
+    const emailEl = $('moAuthEmail');
+    const passEl  = $('moAuthPassword');
+    const nameEl  = $('moAuthName');
+
+    if (!btn || !emailEl || !passEl) {
+      console.error('❌ عناصر النموذج غير موجودة');
+      return;
+    }
+
+    const email    = emailEl.value.trim().toLowerCase();
+    const password = passEl.value;
+    const name     = (nameEl?.value || '').trim();
 
     clearAuthMsg();
 
@@ -672,27 +733,36 @@
     if (password.length < 6) { showAuthMsg('⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل'); return; }
     if (authMode === 'signup' && !name) { showAuthMsg('⚠️ الرجاء إدخال الاسم الكامل'); return; }
 
+    const origText = $('moAuthSubmitText')?.textContent || '';
     btn.disabled = true;
-    const orig = $('moAuthSubmitText').textContent;
-    $('moAuthSubmitText').textContent = 'جارٍ...';
+    if ($('moAuthSubmitText')) $('moAuthSubmitText').textContent = 'جارٍ...';
 
     try {
       if (authMode === 'signup') {
+        console.log('🔵 [Auth] signup:', email);
+
         const { data, error } = await sb.auth.signUp({
-          email, password,
+          email,
+          password,
           options: { data: { name, full_name: name } }
         });
 
         if (error) {
+          console.error('❌ [Signup Error]', error);
           const m = (error.message || '').toLowerCase();
-          if (m.includes('already') || m.includes('registered')) showAuthMsg('📧 هذا البريد مسجّل بالفعل — جرّب تسجيل الدخول');
-          else if (m.includes('password')) showAuthMsg('🔒 كلمة المرور ضعيفة');
-          else if (m.includes('rate') || m.includes('many')) showAuthMsg('⏱️ محاولات كثيرة — انتظر دقيقة');
-          else showAuthMsg('❌ ' + error.message);
+          if (m.includes('already') || m.includes('registered'))
+            showAuthMsg('📧 هذا البريد مسجّل بالفعل — جرّب تسجيل الدخول');
+          else if (m.includes('password'))
+            showAuthMsg('🔒 كلمة المرور ضعيفة جداً');
+          else if (m.includes('rate') || m.includes('many'))
+            showAuthMsg('⏱️ محاولات كثيرة — انتظر دقيقة');
+          else
+            showAuthMsg('❌ ' + error.message);
           return;
         }
 
-        // إنشاء البروفايل يدوياً (احتياطي)
+        console.log('✅ [Signup] نجح', data);
+
         if (data.user) {
           try {
             await sb.from('profiles').upsert({
@@ -701,33 +771,22 @@
           } catch (e) { console.warn('[Profile create]', e); }
         }
 
-        // حالة: تأكيد بريد مطلوب
+        // حالة: تأكيد البريد مطلوب
         if (data.user && !data.session) {
+          _resendEmail = email;
           showAuthMsg(`
-            <div style="text-align:right;line-height:1.7">
+            <div style="text-align:right;line-height:1.8">
               ✅ <b>تم إنشاء حسابك بنجاح!</b><br>
               📧 أرسلنا رابط التفعيل إلى:<br>
               <span style="direction:ltr;display:inline-block;color:#000;font-weight:800;margin-top:4px">${escapeHtml(email)}</span><br>
-              <span style="font-size:11.5px;color:#166534;font-weight:600;display:block;margin-top:6px">افتح بريدك واضغط على رابط التفعيل ثم عُد وسجّل الدخول</span>
+              <span style="font-size:11.5px;color:#166534;font-weight:600;display:block;margin-top:8px">
+                افتح بريدك واضغط على رابط التفعيل ثم عُد وسجّل الدخول
+              </span>
             </div>
             <button id="moResendBtn" type="button" style="margin-top:10px;width:100%;padding:11px;border-radius:10px;background:#000;color:#fff;font-weight:800;font-size:12.5px;cursor:pointer;font-family:inherit;border:none">
               🔄 إعادة إرسال رابط التفعيل
             </button>
           `, true);
-
-          setTimeout(() => {
-            const rb = $('moResendBtn');
-            if (rb) rb.addEventListener('click', async () => {
-              rb.disabled = true;
-              rb.textContent = 'جارٍ الإرسال...';
-              try {
-                const { error: rErr } = await sb.auth.resend({ type: 'signup', email });
-                if (rErr) throw rErr;
-                toast('تم إرسال رابط التفعيل ✓');
-              } catch { toast('تعذّر الإرسال — انتظر قليلاً', 'error'); }
-              finally { rb.disabled = false; rb.textContent = '🔄 إعادة إرسال رابط التفعيل'; }
-            });
-          }, 50);
 
           setTimeout(() => {
             switchAuthMode('login');
@@ -738,31 +797,42 @@
           return;
         }
 
+        // حالة: تم تسجيل الدخول مباشرة
         if (data.session) {
           toast('🎉 مرحباً بك في MEN Office!');
           await handleSession(data.session);
         }
+
       } else {
+        console.log('🔵 [Auth] login:', email);
+
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
 
         if (error) {
+          console.error('❌ [Login Error]', error);
           const m = (error.message || '').toLowerCase();
-          if (m.includes('invalid') || m.includes('credentials')) showAuthMsg('❌ البريد أو كلمة المرور غير صحيحة');
-          else if (m.includes('confirm')) showAuthMsg('📧 يرجى تأكيد بريدك الإلكتروني أولاً');
-          else if (m.includes('rate') || m.includes('many')) showAuthMsg('⏱️ محاولات كثيرة — انتظر قليلاً');
-          else showAuthMsg('❌ ' + error.message);
+          if (m.includes('invalid') || m.includes('credentials'))
+            showAuthMsg('❌ البريد أو كلمة المرور غير صحيحة');
+          else if (m.includes('confirm') || m.includes('verified'))
+            showAuthMsg('📧 يرجى تأكيد بريدك الإلكتروني أولاً');
+          else if (m.includes('rate') || m.includes('many'))
+            showAuthMsg('⏱️ محاولات كثيرة — انتظر قليلاً');
+          else
+            showAuthMsg('❌ ' + error.message);
           return;
         }
 
+        console.log('✅ [Login] نجح');
         toast('🎉 مرحباً بعودتك!');
         await handleSession(data.session);
       }
+
     } catch (err) {
-      console.error('[Auth Error]', err);
-      showAuthMsg('❌ خطأ في الاتصال — تحقق من اتصالك');
+      console.error('❌ [Auth Exception]', err);
+      showAuthMsg('❌ خطأ: ' + (err.message || 'تحقق من الاتصال'));
     } finally {
       btn.disabled = false;
-      $('moAuthSubmitText').textContent = orig;
+      if ($('moAuthSubmitText')) $('moAuthSubmitText').textContent = origText;
     }
   }
 
@@ -896,15 +966,42 @@
     `;
     document.body.appendChild(wrap);
 
-    // Bind
-    $$('.mo-sb-item').forEach(el => el.addEventListener('click', () => navigate(el.dataset.page)));
-    $('moMenuBtn').addEventListener('click', openSidebar);
-    $('moSidebarOverlay').addEventListener('click', closeSidebar);
-    $('moLogoutBtn').addEventListener('click', logout);
-    $('moNewTaskBtn').addEventListener('click', () => openModal('task'));
-    $('moGlobalSearch').addEventListener('input', e => {
+    // Bind - Event Delegation للشريط الجانبي والأزرار
+    const appEl = $('mo-app');
+    appEl.addEventListener('click', (e) => {
+      // Nav
+      const navItem = e.target.closest('.mo-sb-item');
+      if (navItem && navItem.dataset.page) {
+        e.preventDefault();
+        navigate(navItem.dataset.page);
+        return;
+      }
+
+      // Menu btn
+      if (e.target.closest('#moMenuBtn')) { openSidebar(); return; }
+
+      // Sidebar overlay
+      if (e.target.closest('#moSidebarOverlay')) { closeSidebar(); return; }
+
+      // Logout
+      if (e.target.closest('#moLogoutBtn')) { logout(); return; }
+
+      // New Task (topbar)
+      if (e.target.closest('#moNewTaskBtn')) { openModal('task'); return; }
+
+      // Page-level actions
+      if (e.target.closest('#moNewTaskBtn2')) { openModal('task'); return; }
+      if (e.target.closest('#moNewProjBtn')) { toast('قريباً'); return; }
+      if (e.target.closest('#moComposeBtn')) { openModal('compose'); return; }
+
+      // data-goto
+      const goto = e.target.closest('[data-goto]');
+      if (goto) { navigate(goto.dataset.goto); return; }
+    });
+
+    $('moGlobalSearch')?.addEventListener('input', e => {
       searchTerm = e.target.value.trim().toLowerCase();
-      if (currentPage === 'email' || currentPage === 'tasks' || currentPage === 'projects') renderCurrentPage();
+      if (['email', 'tasks', 'projects'].includes(currentPage)) renderCurrentPage();
     });
   }
 
@@ -950,8 +1047,8 @@
   async function handleSession(session) {
     if (session?.user) {
       currentUser = session.user;
-      $('mo-auth-screen').classList.remove('active');
-      $('mo-app').classList.add('active');
+      $('mo-auth-screen')?.classList.remove('active');
+      $('mo-app')?.classList.add('active');
       await loadProfile();
       await loadAllData();
       syncUserUI();
@@ -960,20 +1057,20 @@
     } else {
       currentUser = null;
       currentProfile = null;
-      $('mo-auth-screen').classList.add('active');
-      $('mo-app').classList.remove('active');
+      $('mo-auth-screen')?.classList.add('active');
+      $('mo-app')?.classList.remove('active');
     }
   }
 
   async function logout() {
     if (!confirm('هل تريد تسجيل الخروج؟')) return;
-    await sb.auth.signOut();
+    try { await sb.auth.signOut(); } catch (e) { console.warn(e); }
     currentUser = null;
     currentProfile = null;
-    $('mo-app').classList.remove('active');
-    $('mo-auth-screen').classList.add('active');
-    $('moAuthEmail').value = '';
-    $('moAuthPassword').value = '';
+    $('mo-app')?.classList.remove('active');
+    $('mo-auth-screen')?.classList.add('active');
+    if ($('moAuthEmail')) $('moAuthEmail').value = '';
+    if ($('moAuthPassword')) $('moAuthPassword').value = '';
     clearAuthMsg();
     switchAuthMode('login');
     toast('تم تسجيل الخروج');
@@ -1031,6 +1128,15 @@
         sb.from('chats').select('*').eq('user_id', uid).order('created_at', { ascending: false }).limit(50)
       ]);
 
+      // ═══ Warn عن الجداول الناقصة ═══
+      if (profilesRes.error) console.warn('⚠️ profiles:', profilesRes.error.message);
+      if (projectsRes.error) console.warn('⚠️ projects:', projectsRes.error.message);
+      if (tasksRes.error)    console.warn('⚠️ tasks:',    tasksRes.error.message);
+      if (emailsRes.error)   console.warn('⚠️ emails:',   emailsRes.error.message);
+      if (filesRes.error)    console.warn('⚠️ files:',    filesRes.error.message);
+      if (eventsRes.error)   console.warn('⚠️ events:',   eventsRes.error.message);
+      if (chatsRes.error)    console.warn('⚠️ chats:',    chatsRes.error.message);
+
       store.employees = (profilesRes.data || []).map(p => ({
         id: p.id,
         name: p.name || 'مستخدم',
@@ -1087,11 +1193,12 @@
         desc: e.description || ''
       }));
 
-      // رسائل المحادثات
+      // Chats & Messages
       if (chatsRes.data?.length) {
         store.chats = await Promise.all(chatsRes.data.map(async c => {
-          const { data: msgs } = await sb.from('messages')
+          const { data: msgs, error: mErr } = await sb.from('messages')
             .select('*').eq('chat_id', c.id).order('created_at').limit(200);
+          if (mErr) console.warn('⚠️ messages:', mErr.message);
           const messages = (msgs || []).map(m => ({
             from: m.from_user === uid ? 'me' : 'them',
             text: m.text,
@@ -1113,8 +1220,8 @@
 
       // Nav badges
       if ($('moNavProjects')) $('moNavProjects').textContent = store.projects.length;
-      if ($('moNavTasks')) $('moNavTasks').textContent = store.tasks.length;
-      if ($('moNavEmails')) $('moNavEmails').textContent = store.emails.filter(e => e.unread).length;
+      if ($('moNavTasks'))    $('moNavTasks').textContent = store.tasks.length;
+      if ($('moNavEmails'))   $('moNavEmails').textContent = store.emails.filter(e => e.unread).length;
 
       store.loaded = true;
     } catch (e) {
@@ -1146,8 +1253,8 @@
     if (!PAGES[page]) return;
     currentPage = page;
     $$('.mo-sb-item').forEach(el => el.classList.toggle('active', el.dataset.page === page));
-    $('moPageTitle').textContent = PAGES[page].title;
-    $('moPageSub').textContent = PAGES[page].sub;
+    if ($('moPageTitle')) $('moPageTitle').textContent = PAGES[page].title;
+    if ($('moPageSub')) $('moPageSub').textContent = PAGES[page].sub;
     renderCurrentPage();
     closeSidebar();
     history.replaceState(null, '', '#' + page);
@@ -1243,7 +1350,7 @@
     const bars = days.map((d, i) => {
       const h = [45, 68, 52, 80, 62, 88, 54][i];
       return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;height:100%;justify-content:flex-end">
-        <div style="width:100%;max-width:38px;border-radius:8px 8px 3px 3px;background:${i % 2 ? '#d4d4d4' : '#000'};height:${h}%;transition:height 1s"></div>
+        <div style="width:100%;max-width:38px;border-radius:8px 8px 3px 3px;background:${i % 2 ? '#d4d4d4' : '#000'};height:${h}%"></div>
         <div style="font-size:11px;color:#a3a3a3;font-weight:800">${d}</div>
       </div>`;
     }).join('');
@@ -1376,6 +1483,8 @@
       ? store.emails.filter(e => (e.subject || '').toLowerCase().includes(searchTerm) || (e.from || '').toLowerCase().includes(searchTerm))
       : store.emails;
 
+    if (currentEmailIdx >= filtered.length) currentEmailIdx = 0;
+
     const items = filtered.map((e, i) => `
       <div class="mo-email-item ${i === currentEmailIdx ? 'active' : ''} ${e.unread ? 'unread' : ''}" data-email-idx="${i}">
         <div class="mo-email-item-hd">
@@ -1429,6 +1538,8 @@
     if (!store.chats.length) {
       return '<div class="mo-card mo-empty" style="padding:100px 20px"><h3>لا توجد محادثات بعد</h3><p>ابدأ محادثة جديدة مع فريقك</p></div>';
     }
+
+    if (currentChatIdx >= store.chats.length) currentChatIdx = 0;
 
     const contacts = store.chats.map((c, i) => `
       <div class="mo-msg-contact ${i === currentChatIdx ? 'active' : ''}" data-chat-idx="${i}">
@@ -1727,10 +1838,10 @@
           ? store.emails.filter(e => (e.subject || '').toLowerCase().includes(searchTerm) || (e.from || '').toLowerCase().includes(searchTerm))
           : store.emails;
         $$('.mo-email-item').forEach(el => el.classList.toggle('active', +el.dataset.emailIdx === currentEmailIdx));
-        $('moEmailView').innerHTML = emailViewContent(filtered[currentEmailIdx]);
+        const view = $('moEmailView');
+        if (view) view.innerHTML = emailViewContent(filtered[currentEmailIdx]);
       });
     });
-    $('moComposeBtn')?.addEventListener('click', () => openModal('compose'));
   }
 
   function bindMessagesEvents() {
@@ -1750,9 +1861,11 @@
 
   async function sendMsg() {
     const inp = $('moMsgInput');
+    if (!inp) return;
     const text = inp.value.trim();
     if (!text || !currentUser) return;
     const chat = store.chats[currentChatIdx];
+    if (!chat) return;
     try {
       await sb.from('messages').insert({ chat_id: chat.id, from_user: currentUser.id, text });
       const time = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
@@ -1760,7 +1873,7 @@
       chat.last = text;
       inp.value = '';
       renderCurrentPage();
-    } catch (e) { toast('فشل الإرسال', 'error'); }
+    } catch (e) { console.warn(e); toast('فشل الإرسال', 'error'); }
   }
 
   function bindAIEvents() {
@@ -1772,7 +1885,8 @@
     });
     $$('.mo-ai-suggest button').forEach(b => {
       b.addEventListener('click', () => {
-        $('moAiInput').value = b.dataset.prompt;
+        const inp = $('moAiInput');
+        if (inp) inp.value = b.dataset.prompt;
         sendAI();
       });
     });
@@ -1780,9 +1894,11 @@
 
   function sendAI() {
     const inp = $('moAiInput');
+    if (!inp) return;
     const text = inp.value.trim();
     if (!text) return;
     const body = $('moAiBody');
+    if (!body) return;
     const name = currentProfile?.name || 'أنا';
 
     body.insertAdjacentHTML('beforeend', `
@@ -1834,7 +1950,7 @@
 
     if (type === 'task') {
       m.innerHTML = `
-        <button class="mo-modal-close" type="button" onclick="MEN_OFFICE.closeModal()">${ICONS.close}</button>
+        <button class="mo-modal-close" type="button" id="moModalClose">${ICONS.close}</button>
         <h2>مهمة جديدة</h2>
         <p class="sub">أضف مهمة جديدة وحدّد تفاصيلها</p>
         <div class="mo-field"><label>عنوان المهمة</label><input type="text" id="moMTaskTitle" placeholder="مثال: تصميم صفحة الهبوط"></div>
@@ -1847,10 +1963,13 @@
         </div>
         <button class="mo-btn mo-btn-primary" id="moMSaveTask" type="button" style="width:100%;padding:15px;margin-top:8px">${ICONS.check} حفظ المهمة</button>
       `;
-      setTimeout(() => $('moMSaveTask')?.addEventListener('click', saveTask), 30);
+      setTimeout(() => {
+        $('moMSaveTask')?.addEventListener('click', saveTask);
+        $('moModalClose')?.addEventListener('click', closeModal);
+      }, 30);
     } else if (type === 'compose') {
       m.innerHTML = `
-        <button class="mo-modal-close" type="button" onclick="MEN_OFFICE.closeModal()">${ICONS.close}</button>
+        <button class="mo-modal-close" type="button" id="moModalClose">${ICONS.close}</button>
         <h2>رسالة جديدة</h2>
         <p class="sub">أرسل رسالة بريد إلكتروني</p>
         <div class="mo-field"><label>إلى</label><input type="email" id="moMEmailTo" placeholder="name@example.com" dir="ltr" style="text-align:right"></div>
@@ -1859,7 +1978,10 @@
         <div class="mo-field"><label>الرسالة</label><textarea id="moMEmailBody" rows="6" placeholder="اكتب رسالتك..."></textarea></div>
         <button class="mo-btn mo-btn-primary" id="moMSendEmail" type="button" style="width:100%;padding:15px;margin-top:8px">${ICONS.send} إرسال</button>
       `;
-      setTimeout(() => $('moMSendEmail')?.addEventListener('click', sendEmail), 30);
+      setTimeout(() => {
+        $('moMSendEmail')?.addEventListener('click', sendEmail);
+        $('moModalClose')?.addEventListener('click', closeModal);
+      }, 30);
     }
     $('mo-modal-overlay').classList.add('on');
     document.body.style.overflow = 'hidden';
@@ -1908,10 +2030,11 @@
       if (error) throw error;
       closeModal();
       toast('تم الإرسال ✓');
-      window.location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      // فتح العميل الخارجي في نافذة جديدة (بدون مغادرة التطبيق)
+      window.open(`mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
       await loadAllData();
       navigate('email');
-    } catch (e) { toast('فشل الإرسال', 'error'); }
+    } catch (e) { console.warn(e); toast('فشل الإرسال', 'error'); }
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -1935,38 +2058,37 @@
     injectAuthScreen();
     injectAppShell();
 
-    // Global page links
-    document.addEventListener('click', e => {
-      const btn = e.target.closest('[data-goto]');
-      if (btn) navigate(btn.dataset.goto);
-      if (e.target.id === 'moNewTaskBtn2') openModal('task');
-      if (e.target.id === 'moNewProjBtn') toast('قريباً');
-    });
-
     // Keyboard
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeModal();
     });
 
-    // Auth listener
-    sb.auth.onAuthStateChange(async (event, session) => {
+    // ═══ Auth state listener (بدون async!) ═══
+    sb.auth.onAuthStateChange((event, session) => {
       console.log('[MEN_OFFICE]', event);
       if (event === 'SIGNED_OUT') {
-        currentUser = null; currentProfile = null;
+        currentUser = null;
+        currentProfile = null;
         $('mo-auth-screen')?.classList.add('active');
         $('mo-app')?.classList.remove('active');
       } else if (event === 'SIGNED_IN' && session?.user) {
-        if (currentUser?.id !== session.user.id) await handleSession(session);
+        if (currentUser?.id !== session.user.id) {
+          setTimeout(() => handleSession(session), 0);
+        }
       } else if (event === 'TOKEN_REFRESHED' && session?.user) {
         currentUser = session.user;
       }
     });
 
     // Current session
-    const { data: { session } } = await sb.auth.getSession();
-    await handleSession(session);
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      await handleSession(session);
+    } catch (e) {
+      console.error('[Bootstrap] getSession:', e);
+      await handleSession(null);
+    }
 
-    // Handle hash
     if (location.hash === '#account' && currentUser) navigate('settings');
   }
 
@@ -1974,7 +2096,7 @@
   // 🌐 PUBLIC API
   // ═══════════════════════════════════════════════════════════
   window.MEN_OFFICE = {
-    open: (mode) => { $('mo-auth-screen').classList.add('active'); switchAuthMode(mode || 'login'); },
+    open: (mode) => { $('mo-auth-screen')?.classList.add('active'); switchAuthMode(mode || 'login'); },
     openModal,
     closeModal,
     navigate,
