@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MEN Office — منصة إدارة الأعمال المتكاملة</title>
+<title>MEN Office</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { height: 100%; overflow: hidden; }
-body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color: #0a0a0a; }
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a}
 #mo-loader{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:99999;transition:opacity .5s;flex-direction:column;gap:20px}
 #mo-loader.hide{opacity:0;pointer-events:none}
 #mo-loader .logo{font-size:32px;font-weight:900;color:#fff}
@@ -19,7 +19,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
 #mo-error.show{display:flex}
 #mo-error h2{font-size:24px;font-weight:900;color:#dc2626}
 #mo-error p{color:#525252;font-size:15px;max-width:500px;line-height:1.7}
-#mo-error code{background:#f5f5f5;padding:12px 20px;border-radius:10px;font-family:monospace;font-size:13px;color:#0a0a0a;display:block;max-width:90vw;overflow-x:auto}
+#mo-error code{background:#f5f5f5;padding:12px 20px;border-radius:10px;font-family:monospace;font-size:13px;display:block;max-width:90vw;overflow-x:auto}
 </style>
 </head>
 <body>
@@ -31,29 +31,28 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
 
 <div id="mo-error">
   <h2>⚠️ تعذّر التحميل</h2>
-  <p id="mo-error-msg">حدث خطأ غير متوقع</p>
+  <p id="mo-error-msg"></p>
   <code id="mo-error-code"></code>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 (function () {
   'use strict';
 
-  const SUPABASE_URL      = 'https://wziuzllafxjpiwcputwn.supabase.co';
+  const SUPABASE_URL = 'https://wziuzllafxjpiwcputwn.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6aXV6bGxhZnhqcGl3Y3B1dHduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxOTI0MDksImV4cCI6MjEwNTc2ODQwOX0.YfdTdXNydRI1olcQKAeLHn0-rOrbY-_P1gzndwhfIeU';
 
   function showError(msg, code) {
-    const loader = document.getElementById('mo-loader');
-    if (loader) loader.classList.add('hide');
+    const l = document.getElementById('mo-loader');
+    if (l) l.classList.add('hide');
     document.getElementById('mo-error-msg').textContent = msg;
     document.getElementById('mo-error-code').textContent = code || '';
     document.getElementById('mo-error').classList.add('show');
   }
 
   if (!window.supabase || typeof window.supabase.createClient !== 'function') {
-    showError('لم يتم تحميل مكتبة Supabase. تحقق من الإنترنت وأعد التحميل.');
+    showError('لم يتم تحميل مكتبة Supabase');
     return;
   }
 
@@ -63,46 +62,48 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'menoffice-auth', storage: window.localStorage }
     });
     window.MEN_SUPABASE = sb;
-  } catch (err) {
-    showError('فشل تهيئة Supabase: ' + err.message);
-    return;
-  }
+  } catch (e) { showError('فشل التهيئة: ' + e.message); return; }
 
-  console.log('%c✨ MEN OFFICE v2.0', 'background:linear-gradient(135deg,#000,#333);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px');
+  console.log('%c✨ MEN OFFICE v3.0', 'background:linear-gradient(135deg,#000,#333);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900');
 
-  const ADMIN_EMAILS = ['mkmkmkl24666606@gmail.com'];
   let currentUser = null, currentProfile = null, authMode = 'login', currentPage = 'dashboard';
   let currentEmailIdx = 0, currentChatIdx = 0, searchTerm = '', _resendEmail = '';
+  let pendingMsgFile = null, pendingChatFile = null, pendingEmailFiles = [];
+  let notifChannel = null, msgsChannel = null;
 
   const $ = id => document.getElementById(id);
   const $$ = sel => document.querySelectorAll(sel);
-  const isAdmin = () => !!currentUser && ADMIN_EMAILS.includes((currentUser.email || '').toLowerCase());
 
   function initials(name) {
     if (!name) return '؟';
-    const parts = String(name).trim().split(/\s+/).filter(Boolean);
-    if (!parts.length) return '؟';
-    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    const p = String(name).trim().split(/\s+/).filter(Boolean);
+    if (!p.length) return '؟';
+    if (p.length === 1) return p[0].substring(0,2).toUpperCase();
+    return (p[0][0] + p[p.length-1][0]).toUpperCase();
   }
 
   function escapeHtml(s) {
     return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
 
-  function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email||'').trim().toLowerCase()); }
+  function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e||'').trim().toLowerCase()); }
   function formatDate(s) { if (!s) return '—'; try { return new Date(s).toLocaleDateString('ar-EG',{day:'numeric',month:'short'}); } catch { return s; } }
   function formatTimeAgo(d) {
     if (!d) return '—';
     try {
-      const date = new Date(d), diffMs = new Date() - date;
-      const m = Math.floor(diffMs/60000), h = Math.floor(diffMs/3600000), day = Math.floor(diffMs/86400000);
+      const dt = new Date(d), ms = new Date() - dt;
+      const m = Math.floor(ms/60000), h = Math.floor(ms/3600000), dy = Math.floor(ms/86400000);
       if (m < 1) return 'الآن';
       if (m < 60) return `قبل ${m} د`;
       if (h < 24) return `قبل ${h} س`;
-      if (day < 7) return `قبل ${day} ي`;
-      return date.toLocaleDateString('ar-SA',{day:'numeric',month:'short'});
+      if (dy < 7) return `قبل ${dy} ي`;
+      return dt.toLocaleDateString('ar-SA',{day:'numeric',month:'short'});
     } catch { return '—'; }
+  }
+  function humanSize(bytes) {
+    if (!bytes) return '0 KB';
+    if (bytes > 1048576) return (bytes/1048576).toFixed(1)+' MB';
+    return (bytes/1024).toFixed(0)+' KB';
   }
 
   const ICONS = {
@@ -126,10 +127,11 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
     trendUp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>',
     trendDown:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m22 17-8.5-8.5-5 5L2 7"/><path d="M16 17h6v-6"/></svg>',
     logout:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>',
-    logo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>',
+    logo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>',
     upload:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>',
     download:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
-    trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>'
+    trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+    attach:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>'
   };
 
   const LOGO_URL = 'https://www.socialcreator.com/srv/imgs/ti_imgs/202842_332160.png';
@@ -141,36 +143,32 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
     s.id = 'menOfficeStyles';
     s.textContent = `
       .mo-screen{position:fixed;inset:0;z-index:9999;display:none;font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;overflow-y:auto;overflow-x:hidden}
-      .mo-screen.active{display:block;animation:moFade .3s ease}
+      .mo-screen.active{display:block;animation:moFade .3s}
       @keyframes moFade{from{opacity:0}to{opacity:1}}
-
       .mo-auth-grid{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;background:#000}
       .mo-auth-brand{position:relative;overflow:hidden;background:linear-gradient(135deg,#000,#0f0f0f 50%,#000);display:flex;flex-direction:column;padding:60px;color:#fff}
       .mo-auth-brand::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse at center,#000 10%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at center,#000 10%,transparent 75%)}
       .mo-auth-brand-inner{position:relative;z-index:2;display:flex;flex-direction:column;height:100%}
       .mo-auth-logo{display:flex;align-items:center;gap:16px;margin-bottom:auto}
-      .mo-auth-logo img{height:60px;width:auto;object-fit:contain;filter:brightness(0) invert(1)}
-      .mo-auth-logo-txt{display:flex;flex-direction:column;line-height:1}
-      .mo-auth-logo-txt b{font-size:24px;font-weight:900;color:#fff}
-      .mo-auth-logo-txt span{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:4px;margin-top:6px}
+      .mo-auth-logo img{height:60px;width:auto;filter:brightness(0) invert(1)}
+      .mo-auth-logo-txt b{font-size:24px;font-weight:900;color:#fff;display:block;line-height:1}
+      .mo-auth-logo-txt span{font-size:11px;color:rgba(255,255,255,.4);letter-spacing:4px;margin-top:6px;display:block}
       .mo-auth-hero{padding:60px 0}
-      .mo-auth-kicker{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:800;letter-spacing:4px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:26px;padding:8px 16px;border-radius:50px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);width:fit-content}
-      .mo-auth-kicker::before{content:'';width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 12px #fff;animation:moPulseDot 2s ease-in-out infinite}
-      @keyframes moPulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+      .mo-auth-kicker{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:800;letter-spacing:4px;color:rgba(255,255,255,.5);margin-bottom:26px;padding:8px 16px;border-radius:50px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);width:fit-content}
       .mo-auth-hero h1{font-size:clamp(36px,4vw,54px);font-weight:900;letter-spacing:-2px;line-height:1.05;margin-bottom:24px;color:#fff}
       .mo-auth-hero h1 em{font-style:normal;background:linear-gradient(120deg,#fff 30%,rgba(255,255,255,.4) 90%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-      .mo-auth-hero p{font-size:15px;color:rgba(255,255,255,.5);font-weight:500;line-height:1.9;max-width:420px}
-      .mo-auth-brand-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,.3);font-weight:600;padding-top:30px;border-top:1px solid rgba(255,255,255,.06)}
+      .mo-auth-hero p{font-size:15px;color:rgba(255,255,255,.5);line-height:1.9;max-width:420px}
+      .mo-auth-brand-foot{margin-top:auto;display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,.3);font-weight:600;padding-top:30px;border-top:1px solid rgba(255,255,255,.06)}
       .mo-auth-brand-foot .stats{display:flex;gap:30px}
       .mo-auth-brand-foot .stat b{color:#fff;font-size:16px;font-weight:900;display:block;line-height:1}
       .mo-auth-brand-foot .stat span{font-size:10.5px;color:rgba(255,255,255,.35);font-weight:600;margin-top:3px;display:block}
       .mo-auth-form-side{background:#fff;display:flex;align-items:center;justify-content:center;padding:60px;overflow-y:auto}
-      .mo-auth-form-wrap{width:100%;max-width:400px;animation:moFormIn .7s cubic-bezier(.2,.8,.2,1)}
+      .mo-auth-form-wrap{width:100%;max-width:400px;animation:moFormIn .7s}
       @keyframes moFormIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
       .mo-auth-head{margin-bottom:34px}
-      .mo-auth-head .kicker{font-size:10.5px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:#a3a3a3;margin-bottom:14px;display:block}
+      .mo-auth-head .kicker{font-size:10.5px;font-weight:800;letter-spacing:4px;color:#a3a3a3;margin-bottom:14px;display:block}
       .mo-auth-head h2{font-size:30px;font-weight:900;letter-spacing:-1px;margin-bottom:10px;color:#0a0a0a}
-      .mo-auth-head p{font-size:14px;color:#525252;font-weight:500;line-height:1.7}
+      .mo-auth-head p{font-size:14px;color:#525252;line-height:1.7}
       .mo-auth-mode{display:inline-flex;background:#f5f5f5;border-radius:60px;padding:5px;margin-bottom:28px}
       .mo-auth-mode button{padding:10px 24px;border-radius:60px;font-weight:800;font-size:13px;color:#a3a3a3;border:none;background:none;cursor:pointer;font-family:inherit;transition:all .3s}
       .mo-auth-mode button.active{background:#000;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.18)}
@@ -192,21 +190,23 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
 
       .mo-app{display:none;height:100vh;overflow:hidden;font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a;line-height:1.55;font-size:14.5px}
       .mo-app.active{display:flex}
-      .mo-sidebar{width:264px;flex-shrink:0;background:#0a0a0a;display:flex;flex-direction:column;border-left:1px solid #1a1a1a;transition:transform .4s cubic-bezier(.4,0,.2,1)}
+      .mo-sidebar{width:264px;flex-shrink:0;background:#0a0a0a;display:flex;flex-direction:column;border-left:1px solid #1a1a1a;transition:transform .4s}
       .mo-sb-brand{display:flex;align-items:center;gap:13px;padding:24px 22px;border-bottom:1px solid #1a1a1a}
       .mo-sb-logo{width:42px;height:42px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
-      .mo-sb-logo img{width:26px;height:26px;object-fit:contain;filter:brightness(0) invert(1)}
+      .mo-sb-logo img{width:26px;height:26px;filter:brightness(0) invert(1)}
       .mo-sb-brand-txt b{font-size:15px;font-weight:900;color:#fff;display:block;line-height:1}
       .mo-sb-brand-txt span{font-size:10px;color:rgba(255,255,255,.35);font-weight:700;letter-spacing:2px;margin-top:5px;display:block}
       .mo-sb-nav{flex:1;overflow-y:auto;padding:18px 14px}
       .mo-sb-nav::-webkit-scrollbar{width:0}
       .mo-sb-group{margin-bottom:20px}
-      .mo-sb-group-label{display:block;padding:6px 12px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,.28);letter-spacing:2.5px;text-transform:uppercase}
-      .mo-sb-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:11px;color:rgba(255,255,255,.55);font-weight:700;font-size:13.5px;cursor:pointer;position:relative;margin-bottom:2px;white-space:nowrap;text-decoration:none;transition:all .25s}
-      .mo-sb-item svg{width:18px;height:18px;flex-shrink:0}
+      .mo-sb-group-label{display:block;padding:6px 12px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,.28);letter-spacing:2.5px}
+      .mo-sb-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:11px;color:rgba(255,255,255,.55);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:2px;white-space:nowrap;text-decoration:none;transition:all .25s}
+      .mo-sb-item svg{width:18px;height:18px;flex-shrink:0;pointer-events:none}
+      .mo-sb-item span{pointer-events:none}
       .mo-sb-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.95)}
       .mo-sb-item.active{background:rgba(255,255,255,.09);color:#fff}
       .mo-sb-item.active::before{content:'';position:absolute;right:0;top:14px;bottom:14px;width:3px;background:#fff;border-radius:3px}
+      .mo-sb-item{position:relative}
       .mo-sb-badge{margin-inline-start:auto;background:rgba(255,255,255,.09);color:#fff;font-size:10.5px;font-weight:900;padding:2px 8px;border-radius:20px;min-width:22px;text-align:center}
       .mo-sb-tag{margin-inline-start:auto;background:#fff;color:#000;font-size:9.5px;font-weight:900;padding:2px 7px;border-radius:20px}
       .mo-sb-item.special{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
@@ -214,13 +214,13 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       .mo-sb-user-av{width:38px;height:38px;border-radius:11px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13.5px;flex-shrink:0}
       .mo-sb-user-info{flex:1;min-width:0}
       .mo-sb-user-info b{font-size:13px;font-weight:800;color:#fff;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-      .mo-sb-user-info span{font-size:10.5px;color:rgba(255,255,255,.4);font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-      .mo-sb-logout{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);flex-shrink:0;border:none;cursor:pointer;transition:all .25s}
+      .mo-sb-user-info span{font-size:10.5px;color:rgba(255,255,255,.4);font-weight:700;display:block}
+      .mo-sb-logout{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);border:none;cursor:pointer;transition:all .25s}
       .mo-sb-logout:hover{background:rgba(220,38,38,.15);color:#f87171}
       .mo-sb-logout svg{width:15px;height:15px;pointer-events:none}
 
       .mo-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-      .mo-topbar{display:flex;align-items:center;gap:16px;padding:16px 28px;background:#fff;border-bottom:1px solid #ebebeb;flex-shrink:0}
+      .mo-topbar{display:flex;align-items:center;gap:16px;padding:16px 28px;background:#fff;border-bottom:1px solid #ebebeb;flex-shrink:0;z-index:20}
       .mo-mobile-menu{display:none;width:42px;height:42px;border-radius:12px;background:#fff;border:1.5px solid #ebebeb;align-items:center;justify-content:center;color:#525252;cursor:pointer}
       .mo-mobile-menu svg{width:18px;height:18px;pointer-events:none}
       .mo-page-title h1{font-size:19px;font-weight:900;letter-spacing:-.5px}
@@ -233,12 +233,12 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       .mo-icon-btn{width:42px;height:42px;border-radius:12px;background:#fff;border:1.5px solid #ebebeb;display:flex;align-items:center;justify-content:center;color:#525252;transition:all .25s;position:relative;cursor:pointer}
       .mo-icon-btn svg{width:18px;height:18px;pointer-events:none}
       .mo-icon-btn:hover{border-color:#000;color:#000}
-      .mo-icon-btn.has-dot::after{content:'';position:absolute;top:9px;left:9px;width:8px;height:8px;background:#000;border-radius:50%;border:2px solid #fff}
       .mo-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:12px;font-weight:800;font-size:13.5px;border:1.5px solid transparent;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .25s}
       .mo-btn svg{width:15px;height:15px;flex-shrink:0;pointer-events:none}
       .mo-btn span{pointer-events:none}
       .mo-btn-primary{background:#000;color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.15)}
-      .mo-btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.25)}
+      .mo-btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.25)}
+      .mo-btn-primary:disabled{opacity:.6;cursor:not-allowed}
       .mo-btn-ghost{background:#f5f5f5;border-color:#ebebeb;color:#525252}
       .mo-btn-ghost:hover{color:#000;border-color:#000}
       .mo-content{flex:1;overflow-y:auto;padding:28px;background:#fafafa}
@@ -271,14 +271,14 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       .mo-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:900;background:#f5f5f5;color:#525252}
       .mo-badge.dark{background:#000;color:#fff}
       .mo-av{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:13.5px;flex-shrink:0;background:linear-gradient(135deg,#262626,#000)}
+      .mo-av svg{width:20px;height:20px}
       .mo-av.sm{width:30px;height:30px;font-size:11.5px;border-radius:9px}
       .mo-av.lg{width:52px;height:52px;font-size:17px;border-radius:14px}
-      .mo-av svg{width:20px;height:20px}
       .mo-av-stack{display:flex;align-items:center}
       .mo-av-stack .mo-av{margin-inline-start:-10px;border:2.5px solid #fff}
       .mo-av-stack .mo-av:first-child{margin-inline-start:0}
       .mo-progress{height:6px;background:#f5f5f5;border-radius:10px;overflow:hidden}
-      .mo-progress > span{display:block;height:100%;border-radius:10px;background:#000;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+      .mo-progress > span{display:block;height:100%;border-radius:10px;background:#000;transition:width 1s}
       .mo-list-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #f4f4f4}
       .mo-list-item:last-child{border-bottom:none;padding-bottom:0}
       .mo-list-body{flex:1;min-width:0}
@@ -312,7 +312,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       .mo-email-list-hd{padding:18px 20px;border-bottom:1px solid #ebebeb;display:flex;align-items:center;justify-content:space-between}
       .mo-email-list-hd b{font-size:14.5px;font-weight:900}
       .mo-email-items{flex:1;overflow-y:auto}
-      .mo-email-item{padding:16px 20px;border-bottom:1px solid #f4f4f4;cursor:pointer;transition:all .2s;position:relative}
+      .mo-email-item{padding:16px 20px;border-bottom:1px solid #f4f4f4;cursor:pointer;transition:all .2s}
       .mo-email-item:hover{background:#fafafa}
       .mo-email-item.active{background:#f5f5f5;border-right:3px solid #000}
       .mo-email-item-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
@@ -325,7 +325,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       .mo-email-view-hd{display:flex;align-items:center;gap:14px;padding-bottom:20px;border-bottom:1px solid #ebebeb;margin-bottom:22px}
       .mo-email-view-body{font-size:14px;line-height:1.95;color:#525252;white-space:pre-wrap}
 
-      .mo-msg-layout{display:grid;grid-template-columns:300px 1fr;gap:20px;height:calc(100vh - 135px)}
+      .mo-msg-layout{display:grid;grid-template-columns:300px 1fr;gap:20px;height:calc(100vh - 195px)}
       .mo-msg-side{background:#fff;border:1px solid #ebebeb;border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
       .mo-msg-side-hd{padding:18px 20px;border-bottom:1px solid #ebebeb}
       .mo-msg-side-hd b{font-size:14.5px;font-weight:900}
@@ -350,22 +350,19 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       .mo-msg-foot textarea:focus{background:#fff;border-color:#000}
       .mo-msg-send{width:46px;height:46px;border-radius:14px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:none;cursor:pointer}
       .mo-msg-send svg{width:18px;height:18px;pointer-events:none}
+      .mo-att-chip{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;text-decoration:none;color:inherit;margin-top:8px}
+      .mo-att-chip svg{width:16px;height:16px;flex-shrink:0}
 
       .mo-cal-wrap{display:grid;grid-template-columns:1.6fr 1fr;gap:20px}
       .mo-calendar{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:24px}
       .mo-cal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
       .mo-cal-hd b{font-size:17px;font-weight:900}
-      .mo-cal-nav{display:flex;gap:6px}
-      .mo-cal-nav button{width:34px;height:34px;border-radius:10px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;color:#525252;border:none;cursor:pointer}
-      .mo-cal-nav button svg{width:15px;height:15px;pointer-events:none}
       .mo-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
       .mo-cal-dow{text-align:center;padding:10px 0;font-size:11px;font-weight:900;color:#a3a3a3}
       .mo-cal-day{aspect-ratio:1;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;cursor:pointer;position:relative}
       .mo-cal-day:hover{background:#f5f5f5}
       .mo-cal-day.muted{color:#a3a3a3;opacity:.35}
       .mo-cal-day.today{background:#000;color:#fff}
-      .mo-cal-day.has-event::after{content:'';position:absolute;bottom:6px;width:5px;height:5px;border-radius:50%;background:#0a0a0a}
-      .mo-cal-day.today.has-event::after{background:#fff}
       .mo-events-list{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:22px}
       .mo-event{display:flex;gap:14px;padding:14px;border-radius:14px;background:#fafafa;margin-bottom:12px;border-inline-start:3px solid #000}
       .mo-event-time{font-size:12px;font-weight:900;color:#a3a3a3;min-width:56px}
@@ -484,7 +481,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🖼️ AUTH SCREEN
+  // AUTH SCREEN
   // ═══════════════════════════════════════════════════════════
   function injectAuthScreen() {
     if ($('mo-auth-screen')) return;
@@ -495,13 +492,13 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
           <div class="mo-auth-brand">
             <div class="mo-auth-brand-inner">
               <div class="mo-auth-logo">
-                <img src="${LOGO_URL}" alt="MEN Office">
+                <img src="${LOGO_URL}" alt="MEN">
                 <div class="mo-auth-logo-txt"><b>MEN Office</b><span>OFFICE</span></div>
               </div>
               <div class="mo-auth-hero">
                 <div class="mo-auth-kicker">منصة إدارة الأعمال المتكاملة</div>
                 <h1>أدر فريقك<br><em>بكل احترافية</em></h1>
-                <p>منصة رقمية متكاملة تجمع إدارة الأعمال والبريد الإلكتروني والرسائل في مكان واحد.</p>
+                <p>منصة رقمية متكاملة تجمع إدارة الأعمال والبريد الإلكتروني والرسائل والمرفقات في مكان واحد.</p>
               </div>
               <div class="mo-auth-brand-foot">
                 <div class="stats">
@@ -527,7 +524,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
               <div class="mo-auth-form">
                 <div class="mo-form-field" id="moNameField" style="display:none">
                   <label>الاسم الكامل</label>
-                  <input type="text" id="moAuthName" placeholder="مثال: محمد العتيبي">
+                  <input type="text" id="moAuthName" placeholder="محمد العتيبي">
                 </div>
                 <div class="mo-form-field">
                   <label>البريد الإلكتروني</label>
@@ -552,151 +549,106 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
     document.body.appendChild(wrap);
 
     setTimeout(() => {
-      const submitBtn  = document.getElementById('moAuthSubmit');
-      const tabLogin   = document.getElementById('moTabLogin');
-      const tabSignup  = document.getElementById('moTabSignup');
-      const passInput  = document.getElementById('moAuthPassword');
-      const emailInput = document.getElementById('moAuthEmail');
-      const nameInput  = document.getElementById('moAuthName');
-
-      console.log('🔍 [Bind] Submit:', !!submitBtn);
-
-      if (submitBtn) submitBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); handleAuthSubmit(); };
-      if (tabLogin)  tabLogin.onclick  = (e) => { e.preventDefault(); e.stopPropagation(); switchAuthMode('login'); };
-      if (tabSignup) tabSignup.onclick = (e) => { e.preventDefault(); e.stopPropagation(); switchAuthMode('signup'); };
-
-      [passInput, emailInput, nameInput].forEach(inp => {
+      const sub = $('moAuthSubmit'), tl = $('moTabLogin'), ts = $('moTabSignup');
+      const pi = $('moAuthPassword'), ei = $('moAuthEmail'), ni = $('moAuthName');
+      console.log('🔍 [Bind] Submit:', !!sub);
+      if (sub) sub.onclick = (e) => { e.preventDefault(); e.stopPropagation(); handleAuthSubmit(); };
+      if (tl) tl.onclick = (e) => { e.preventDefault(); e.stopPropagation(); switchAuthMode('login'); };
+      if (ts) ts.onclick = (e) => { e.preventDefault(); e.stopPropagation(); switchAuthMode('signup'); };
+      [pi, ei, ni].forEach(inp => {
         if (!inp) return;
-        inp.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') { e.preventDefault(); handleAuthSubmit(); }
-        });
+        inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); handleAuthSubmit(); } });
       });
-      console.log('✅ [Auth] الأزرار مربوطة');
+      console.log('✅ [Auth] مربوطة');
     }, 50);
   }
 
   function switchAuthMode(mode) {
     authMode = mode === 'signup' ? 'signup' : 'login';
-    const isSignup = authMode === 'signup';
-    const loginTab = $('moTabLogin'), signupTab = $('moTabSignup');
-    if (loginTab) loginTab.classList.toggle('active', !isSignup);
-    if (signupTab) signupTab.classList.toggle('active', isSignup);
-    if ($('moNameField')) $('moNameField').style.display = isSignup ? 'flex' : 'none';
-    if ($('moAuthKicker')) $('moAuthKicker').textContent = isSignup ? 'CREATE ACCOUNT' : 'WELCOME BACK';
-    if ($('moAuthTitle')) $('moAuthTitle').textContent = isSignup ? 'ابدأ رحلتك' : 'أهلاً بعودتك';
-    if ($('moAuthSub')) $('moAuthSub').textContent = isSignup ? 'أنشئ حسابك المجاني' : 'سجّل دخولك للمتابعة';
-    if ($('moAuthSubmitText')) $('moAuthSubmitText').textContent = isSignup ? 'إنشاء الحساب' : 'دخول إلى المنصة';
+    const s = authMode === 'signup';
+    if ($('moTabLogin')) $('moTabLogin').classList.toggle('active', !s);
+    if ($('moTabSignup')) $('moTabSignup').classList.toggle('active', s);
+    if ($('moNameField')) $('moNameField').style.display = s ? 'flex' : 'none';
+    if ($('moAuthKicker')) $('moAuthKicker').textContent = s ? 'CREATE ACCOUNT' : 'WELCOME BACK';
+    if ($('moAuthTitle')) $('moAuthTitle').textContent = s ? 'ابدأ رحلتك' : 'أهلاً بعودتك';
+    if ($('moAuthSub')) $('moAuthSub').textContent = s ? 'أنشئ حسابك المجاني' : 'سجّل دخولك للمتابعة';
+    if ($('moAuthSubmitText')) $('moAuthSubmitText').textContent = s ? 'إنشاء الحساب' : 'دخول إلى المنصة';
     clearAuthMsg();
   }
 
-  function showAuthMsg(msg, isSuccess = false) {
+  function showAuthMsg(msg, ok = false) {
     const el = $('moAuthError');
     if (!el) return;
     if (!msg) { el.textContent = ''; el.classList.remove('show', 'success'); return; }
     el.innerHTML = msg;
     el.classList.add('show');
-    el.classList.toggle('success', isSuccess);
+    el.classList.toggle('success', ok);
   }
-
   function clearAuthMsg() {
     const el = $('moAuthError');
     if (!el) return;
-    el.textContent = '';
-    el.classList.remove('show', 'success');
+    el.textContent = ''; el.classList.remove('show', 'success');
   }
 
   async function handleAuthSubmit() {
-    console.log('🔵 [Auth Submit] الوضع:', authMode);
-    const btn = $('moAuthSubmit');
-    const emailEl = $('moAuthEmail');
-    const passEl  = $('moAuthPassword');
-    const nameEl  = $('moAuthName');
-
+    const btn = $('moAuthSubmit'), emailEl = $('moAuthEmail'), passEl = $('moAuthPassword'), nameEl = $('moAuthName');
     if (!btn || !emailEl || !passEl) return;
-
-    const email    = emailEl.value.trim().toLowerCase();
+    const email = emailEl.value.trim().toLowerCase();
     const password = passEl.value;
-    const name     = (nameEl?.value || '').trim();
-
+    const name = (nameEl?.value || '').trim();
     clearAuthMsg();
-    if (!email || !password) { showAuthMsg('⚠️ أكمل جميع الحقول'); return; }
-    if (!isValidEmail(email)) { showAuthMsg('⚠️ صيغة البريد غير صحيحة'); return; }
-    if (password.length < 6) { showAuthMsg('⚠️ كلمة المرور 6 أحرف على الأقل'); return; }
-    if (authMode === 'signup' && !name) { showAuthMsg('⚠️ أدخل الاسم الكامل'); return; }
+    if (!email || !password) { showAuthMsg('⚠️ أكمل الحقول'); return; }
+    if (!isValidEmail(email)) { showAuthMsg('⚠️ صيغة البريد خاطئة'); return; }
+    if (password.length < 6) { showAuthMsg('⚠️ كلمة المرور 6 أحرف'); return; }
+    if (authMode === 'signup' && !name) { showAuthMsg('⚠️ أدخل الاسم'); return; }
 
-    const origText = $('moAuthSubmitText')?.textContent || '';
+    const orig = $('moAuthSubmitText')?.textContent || '';
     btn.disabled = true;
     if ($('moAuthSubmitText')) $('moAuthSubmitText').textContent = 'جارٍ...';
 
     try {
       if (authMode === 'signup') {
-        const { data, error } = await sb.auth.signUp({
-          email, password,
-          options: { data: { name, full_name: name } }
-        });
-
+        const { data, error } = await sb.auth.signUp({ email, password, options: { data: { name, full_name: name } } });
         if (error) {
           const m = (error.message || '').toLowerCase();
           if (m.includes('already') || m.includes('registered')) showAuthMsg('📧 البريد مسجّل — جرّب الدخول');
-          else if (m.includes('password')) showAuthMsg('🔒 كلمة المرور ضعيفة');
-          else if (m.includes('rate') || m.includes('many')) showAuthMsg('⏱️ محاولات كثيرة — انتظر');
+          else if (m.includes('password')) showAuthMsg('🔒 كلمة مرور ضعيفة');
+          else if (m.includes('rate') || m.includes('many')) showAuthMsg('⏱️ انتظر قليلاً');
           else showAuthMsg('❌ ' + error.message);
           return;
         }
-
         if (data.user) {
-          try {
-            await sb.from('profiles').upsert({ id: data.user.id, name, email, role: 'مدير عام' }, { onConflict: 'id' });
-          } catch (e) { console.warn('[Profile]', e); }
+          try { await sb.from('profiles').upsert({ id: data.user.id, name, email, role: 'مدير عام' }, { onConflict: 'id' }); } catch(e) {}
         }
-
         if (data.user && !data.session) {
           _resendEmail = email;
-          showAuthMsg(`
-            <div style="text-align:right;line-height:1.8">
-              ✅ <b>تم إنشاء حسابك!</b><br>
-              📧 رابط التفعيل أُرسل إلى:<br>
-              <span style="direction:ltr;display:inline-block;color:#000;font-weight:800;margin-top:4px">${escapeHtml(email)}</span>
-            </div>
-          `, true);
-          setTimeout(() => {
-            switchAuthMode('login');
-            if ($('moAuthEmail')) $('moAuthEmail').value = email;
-            showAuthMsg('✅ تحقق من بريدك ثم سجّل الدخول', true);
-          }, 5000);
+          showAuthMsg(`<div style="text-align:right;line-height:1.8">✅ <b>تم إنشاء حسابك!</b><br>📧 رابط التفعيل أُرسل إلى:<br><span style="direction:ltr;display:inline-block;color:#000;font-weight:800">${escapeHtml(email)}</span></div>`, true);
+          setTimeout(() => { switchAuthMode('login'); if ($('moAuthEmail')) $('moAuthEmail').value = email; showAuthMsg('✅ تحقق من بريدك', true); }, 5000);
           return;
         }
-
-        if (data.session) {
-          toast('🎉 مرحباً بك!');
-          await handleSession(data.session);
-        }
+        if (data.session) { toast('🎉 مرحباً بك!'); await handleSession(data.session); }
       } else {
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
-
         if (error) {
           const m = (error.message || '').toLowerCase();
-          if (m.includes('invalid') || m.includes('credentials')) showAuthMsg('❌ البريد أو كلمة المرور غير صحيحة');
-          else if (m.includes('confirm') || m.includes('verified')) showAuthMsg('📧 يرجى تأكيد بريدك أولاً');
-          else if (m.includes('rate') || m.includes('many')) showAuthMsg('⏱️ محاولات كثيرة');
+          if (m.includes('invalid') || m.includes('credentials')) showAuthMsg('❌ البريد أو كلمة المرور خاطئة');
+          else if (m.includes('confirm') || m.includes('verified')) showAuthMsg('📧 أكد بريدك أولاً');
           else showAuthMsg('❌ ' + error.message);
           return;
         }
-
         toast('🎉 مرحباً بعودتك!');
         await handleSession(data.session);
       }
     } catch (err) {
-      console.error('❌ [Auth]', err);
-      showAuthMsg('❌ خطأ: ' + (err.message || 'تحقق من الاتصال'));
+      showAuthMsg('❌ ' + (err.message || 'خطأ اتصال'));
     } finally {
       btn.disabled = false;
-      if ($('moAuthSubmitText')) $('moAuthSubmitText').textContent = origText;
+      if ($('moAuthSubmitText')) $('moAuthSubmitText').textContent = orig;
     }
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🏢 APP SHELL
+  // APP SHELL
   // ═══════════════════════════════════════════════════════════
   function injectAppShell() {
     if ($('mo-app')) return;
@@ -705,7 +657,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       <div id="mo-app" class="mo-app">
         <aside class="mo-sidebar" id="moSidebar">
           <div class="mo-sb-brand">
-            <div class="mo-sb-logo"><img src="${LOGO_URL}" alt="MEN Office"></div>
+            <div class="mo-sb-logo"><img src="${LOGO_URL}" alt="MEN"></div>
             <div class="mo-sb-brand-txt"><b>MEN Office</b><span>OFFICE</span></div>
           </div>
           <nav class="mo-sb-nav">
@@ -735,10 +687,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
           </nav>
           <div class="mo-sb-user">
             <div class="mo-sb-user-av" id="moSbUserAv">؟</div>
-            <div class="mo-sb-user-info">
-              <b id="moSbUserName">مستخدم</b>
-              <span id="moSbUserRole">مدير عام</span>
-            </div>
+            <div class="mo-sb-user-info"><b id="moSbUserName">مستخدم</b><span id="moSbUserRole">مدير</span></div>
             <button class="mo-sb-logout" id="moLogoutBtn" type="button">${ICONS.logout}</button>
           </div>
         </aside>
@@ -747,16 +696,25 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
             <button class="mo-mobile-menu" id="moMenuBtn" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
             </button>
-            <div class="mo-page-title">
-              <h1 id="moPageTitle">لوحة التحكم</h1>
-              <p id="moPageSub">نظرة عامة</p>
-            </div>
+            <div class="mo-page-title"><h1 id="moPageTitle">لوحة التحكم</h1><p id="moPageSub">نظرة عامة</p></div>
             <div class="mo-search">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
               <input type="text" placeholder="ابحث..." id="moGlobalSearch">
             </div>
             <div class="mo-top-actions">
-              <button class="mo-icon-btn has-dot" type="button">${ICONS.bell}</button>
+              <div style="position:relative">
+                <button class="mo-icon-btn" id="moNotifBtn" type="button">
+                  ${ICONS.bell}
+                  <span id="moNotifBadge" style="display:none;position:absolute;top:-4px;left:-4px;background:#dc2626;color:#fff;font-size:10px;font-weight:900;padding:2px 6px;border-radius:20px;min-width:18px;text-align:center;border:2px solid #fff">0</span>
+                </button>
+                <div id="moNotifPanel" style="display:none;position:absolute;top:calc(100% + 8px);left:0;width:min(360px,calc(100vw - 40px));max-height:480px;background:#fff;border:1px solid #ebebeb;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.15);z-index:100;overflow:hidden">
+                  <div style="padding:16px 20px;border-bottom:1px solid #ebebeb;display:flex;justify-content:space-between;align-items:center">
+                    <b style="font-size:14.5px;font-weight:900">الإشعارات</b>
+                    <button id="moMarkAllRead" type="button" style="background:none;border:none;color:#000;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit">تحديد الكل كمقروء</button>
+                  </div>
+                  <div id="moNotifList" style="overflow-y:auto;max-height:400px"></div>
+                </div>
+              </div>
               <button class="mo-btn mo-btn-primary" id="moNewTaskBtn" type="button">${ICONS.plus}<span>إضافة</span></button>
             </div>
           </header>
@@ -768,7 +726,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
     document.body.appendChild(wrap);
 
     setTimeout(() => {
-      const appEl = document.getElementById('mo-app');
+      const appEl = $('mo-app');
       if (!appEl) return;
 
       appEl.addEventListener('click', (e) => {
@@ -785,54 +743,78 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
         if (e.target.closest('#moUploadBtn')) { $('moFileInput')?.click(); return; }
         if (e.target.closest('#moNewChatBtn')) { openChatModal(); return; }
         if (e.target.closest('#moChatInfoBtn')) { showChatInfo(); return; }
+        if (e.target.closest('#moMsgAttBtn')) { $('moMsgFileInput')?.click(); return; }
+        if (e.target.closest('#moEmailAttBtn')) { $('moMEmailFiles')?.click(); return; }
 
         const goto = e.target.closest('[data-goto]');
         if (goto) { navigate(goto.dataset.goto); return; }
-
         const dl = e.target.closest('[data-download]');
         if (dl) { downloadFile(dl.dataset.download); return; }
-
         const del = e.target.closest('[data-delete]');
         if (del) { deleteFile(del.dataset.delete); return; }
-
         const taskCard = e.target.closest('.mo-kb-card[data-task-id]');
         if (taskCard) { openTaskStatusModal(taskCard.dataset.taskId); return; }
-
         const emailItem = e.target.closest('.mo-email-item[data-email-idx]');
         if (emailItem) { selectEmail(+emailItem.dataset.emailIdx); return; }
-
         const chatContact = e.target.closest('.mo-msg-contact[data-chat-idx]');
         if (chatContact) { currentChatIdx = +chatContact.dataset.chatIdx; renderCurrentPage(); return; }
       });
 
-      document.getElementById('moGlobalSearch')?.addEventListener('input', (e) => {
-        searchTerm = e.target.value.trim().toLowerCase();
-        if (['email', 'tasks', 'projects'].includes(currentPage)) renderCurrentPage();
-      });
-
-      // File input change
-      document.body.addEventListener('change', (e) => {
+      // Change events (file inputs)
+      appEl.addEventListener('change', (e) => {
         if (e.target.id === 'moFileInput') {
           const files = Array.from(e.target.files || []);
           if (files.length) uploadFiles(files);
           e.target.value = '';
         }
+        if (e.target.id === 'moMsgFileInput') {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          pendingMsgFile = file;
+          const inp = $('moMsgInput');
+          if (inp && !inp.value) inp.placeholder = '📎 ' + file.name;
+          toast('📎 مرفق جاهز: ' + file.name);
+          e.target.value = '';
+        }
+        if (e.target.id === 'moMEmailFiles') {
+          const files = Array.from(e.target.files || []);
+          pendingEmailFiles = pendingEmailFiles.concat(files);
+          renderEmailAttsList();
+          e.target.value = '';
+        }
+      });
+
+      $('moGlobalSearch')?.addEventListener('input', (e) => {
+        searchTerm = e.target.value.trim().toLowerCase();
+        if (['email', 'tasks', 'projects'].includes(currentPage)) renderCurrentPage();
+      });
+
+      // Notifications
+      const notifBtn = $('moNotifBtn'), notifPanel = $('moNotifPanel');
+      notifBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const hidden = notifPanel.style.display === 'none';
+        notifPanel.style.display = hidden ? 'block' : 'none';
+        if (hidden) renderNotifPanel();
+      });
+      document.addEventListener('click', (e) => {
+        if (notifPanel && notifBtn && !notifPanel.contains(e.target) && !notifBtn.contains(e.target)) {
+          notifPanel.style.display = 'none';
+        }
+      });
+      $('moMarkAllRead')?.addEventListener('click', async () => {
+        try {
+          await sb.from('notifications').update({ is_read: true }).eq('user_id', currentUser.id).eq('is_read', false);
+          toast('تم تحديد الكل كمقروء');
+          await loadNotifications();
+        } catch (e) {}
       });
     }, 50);
   }
 
   function injectToastAndLoading() {
-    if (!$('mo-toast')) {
-      const t = document.createElement('div');
-      t.id = 'mo-toast';
-      document.body.appendChild(t);
-    }
-    if (!$('mo-loading')) {
-      const l = document.createElement('div');
-      l.id = 'mo-loading';
-      l.innerHTML = '<div class="mo-spinner"></div>';
-      document.body.appendChild(l);
-    }
+    if (!$('mo-toast')) { const t = document.createElement('div'); t.id = 'mo-toast'; document.body.appendChild(t); }
+    if (!$('mo-loading')) { const l = document.createElement('div'); l.id = 'mo-loading'; l.innerHTML = '<div class="mo-spinner"></div>'; document.body.appendChild(l); }
     if (!$('mo-modal-overlay')) {
       const m = document.createElement('div');
       m.id = 'mo-modal-overlay';
@@ -858,7 +840,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
   const hideLoading = () => $('mo-loading')?.classList.remove('on');
 
   // ═══════════════════════════════════════════════════════════
-  // 🔐 SESSION
+  // SESSION
   // ═══════════════════════════════════════════════════════════
   async function handleSession(session) {
     if (session?.user) {
@@ -868,19 +850,21 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       await loadProfile();
       await loadAllData();
       syncUserUI();
+      subscribeRealtime();
       const hash = location.hash.replace('#', '');
       navigate(['dashboard','projects','tasks','email','messages','calendar','employees','files','reports','ai','settings'].includes(hash) ? hash : 'dashboard');
     } else {
-      currentUser = null;
-      currentProfile = null;
+      currentUser = null; currentProfile = null;
+      unsubscribeRealtime();
       $('mo-auth-screen')?.classList.add('active');
       $('mo-app')?.classList.remove('active');
     }
   }
 
   async function logout() {
-    if (!confirm('هل تريد تسجيل الخروج؟')) return;
-    try { await sb.auth.signOut(); } catch (e) { console.warn(e); }
+    if (!confirm('تسجيل الخروج؟')) return;
+    unsubscribeRealtime();
+    try { await sb.auth.signOut(); } catch (e) {}
     currentUser = null; currentProfile = null;
     $('mo-app')?.classList.remove('active');
     $('mo-auth-screen')?.classList.add('active');
@@ -898,33 +882,30 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       currentProfile = data || {
         id: currentUser.id,
         name: currentUser.user_metadata?.name || currentUser.email?.split('@')[0] || 'مستخدم',
-        email: currentUser.email,
-        role: 'مدير عام'
+        email: currentUser.email, role: 'مدير عام'
       };
-    } catch (e) { console.warn('[loadProfile]', e); }
+    } catch (e) {}
   }
 
   function syncUserUI() {
     if (!currentUser) return;
     const name = currentProfile?.name || currentUser.user_metadata?.name || currentUser.email?.split('@')[0] || 'مستخدم';
-    const ini = initials(name);
     if ($('moSbUserName')) $('moSbUserName').textContent = name;
-    if ($('moSbUserAv')) $('moSbUserAv').textContent = ini;
+    if ($('moSbUserAv')) $('moSbUserAv').textContent = initials(name);
     if ($('moSbUserRole')) $('moSbUserRole').textContent = currentProfile?.role || 'مدير عام';
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 📊 DATA STORE
+  // DATA STORE
   // ═══════════════════════════════════════════════════════════
-  const store = { projects: [], tasks: [], emails: [], employees: [], files: [], events: [], chats: [], loaded: false };
+  const store = { projects: [], tasks: [], emails: [], employees: [], files: [], events: [], chats: [], notifications: [], loaded: false };
 
   async function loadAllData() {
     if (!currentUser) return;
     showLoading();
     try {
       const uid = currentUser.id;
-
-      const [profilesRes, projectsRes, tasksRes, emailsRes, filesRes, eventsRes, chatsRes] = await Promise.all([
+      const [pR, prR, tR, eR, fR, evR, cR] = await Promise.all([
         sb.from('profiles').select('*').limit(100),
         sb.from('projects').select('*').eq('user_id', uid).order('created_at', { ascending: false }).limit(50),
         sb.from('tasks').select('*').eq('user_id', uid).order('created_at', { ascending: false }).limit(100),
@@ -934,60 +915,60 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
         sb.from('chats').select('*').eq('user_id', uid).order('created_at', { ascending: false }).limit(50)
       ]);
 
-      if (profilesRes.error) console.warn('⚠️ profiles:', profilesRes.error.message);
-      if (projectsRes.error) console.warn('⚠️ projects:', projectsRes.error.message);
-      if (tasksRes.error)    console.warn('⚠️ tasks:',    tasksRes.error.message);
-      if (emailsRes.error)   console.warn('⚠️ emails:',   emailsRes.error.message);
-      if (filesRes.error)    console.warn('⚠️ files:',    filesRes.error.message);
-      if (eventsRes.error)   console.warn('⚠️ events:',   eventsRes.error.message);
-      if (chatsRes.error)    console.warn('⚠️ chats:',    chatsRes.error.message);
+      if (pR.error) console.warn('⚠️ profiles:', pR.error.message);
+      if (prR.error) console.warn('⚠️ projects:', prR.error.message);
+      if (tR.error) console.warn('⚠️ tasks:', tR.error.message);
+      if (eR.error) console.warn('⚠️ emails:', eR.error.message);
+      if (fR.error) console.warn('⚠️ files:', fR.error.message);
+      if (evR.error) console.warn('⚠️ events:', evR.error.message);
+      if (cR.error) console.warn('⚠️ chats:', cR.error.message);
 
-      store.employees = (profilesRes.data || []).map(p => ({
-        id: p.id, name: p.name || 'مستخدم', role: p.role || 'موظف',
-        email: p.email, tasks: 0, projects: 0
+      store.employees = (pR.data || []).map(p => ({
+        id: p.id, name: p.name || 'مستخدم', role: p.role || 'موظف', email: p.email, tasks: 0, projects: 0
       }));
 
-      store.projects = (projectsRes.data || []).map(p => ({
+      store.projects = (prR.data || []).map(p => ({
         id: p.id, name: p.name, progress: p.progress || 0,
         team: Array.isArray(p.team) ? p.team : (Array.isArray(p.team_members) ? p.team_members : []),
-        description: p.description,
-        deadline: p.deadline, tasks: p.tasks_count || 0,
-        done: p.done_count || 0, status: p.status || 'نشط'
+        description: p.description, deadline: p.deadline,
+        tasks: p.tasks_count || 0, done: p.done_count || 0, status: p.status || 'نشط'
       }));
 
-      store.tasks = (tasksRes.data || []).map(t => ({
+      store.tasks = (tR.data || []).map(t => ({
         id: t.id, title: t.title, project: t.project || 'عام',
         status: t.status || 'todo', priority: t.priority || 'عادي',
         assignee: t.assignee || 'غير محدد', due: t.due_date,
         tags: Array.isArray(t.tags) ? t.tags : []
       }));
 
-      store.emails = (emailsRes.data || []).map(e => ({
+      store.emails = (eR.data || []).map(e => ({
         id: e.id, from: e.from_name || e.to_name || 'مستخدم',
         email: e.from_email || e.to_email || '',
         subject: e.subject || '',
         preview: (e.body || '').slice(0, 60),
         body: e.body || '', time: formatTimeAgo(e.created_at),
-        unread: !e.is_read
+        unread: !e.is_read,
+        attachments: Array.isArray(e.attachments) ? e.attachments : []
       }));
 
-      store.files = (filesRes.data || []).map(f => ({
+      store.files = (fR.data || []).map(f => ({
         id: f.id, name: f.name, size: f.size || '0 KB',
         url: f.url, mime_type: f.mime_type, user_id: f.user_id,
         date: formatTimeAgo(f.created_at)
       }));
 
-      store.events = (eventsRes.data || []).map(e => ({
+      store.events = (evR.data || []).map(e => ({
         id: e.id, time: (e.event_time || '00:00').toString().slice(0, 5),
         title: e.title, desc: e.description || ''
       }));
 
-      if (chatsRes.data?.length) {
-        store.chats = await Promise.all(chatsRes.data.map(async c => {
+      if (cR.data?.length) {
+        store.chats = await Promise.all(cR.data.map(async c => {
           const { data: msgs } = await sb.from('messages').select('*').eq('chat_id', c.id).order('created_at').limit(200);
           const messages = (msgs || []).map(m => ({
             from: m.from_user === uid ? 'me' : 'them',
             text: m.text,
+            attachment: m.attachment,
             time: new Date(m.created_at).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
           }));
           return {
@@ -995,41 +976,143 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
             online: c.online || false,
             is_group: c.is_group || false,
             members: Array.isArray(c.members) ? c.members : [],
-            last: messages[messages.length - 1]?.text || 'لا توجد رسائل',
+            last: messages[messages.length - 1]?.text || (messages[messages.length - 1]?.attachment ? '📎 مرفق' : 'لا توجد رسائل'),
             time: formatTimeAgo(c.created_at), messages
           };
         }));
-      } else {
-        store.chats = [];
-      }
+      } else { store.chats = []; }
+
+      await loadNotifications();
 
       if ($('moNavProjects')) $('moNavProjects').textContent = store.projects.length;
-      if ($('moNavTasks'))    $('moNavTasks').textContent = store.tasks.length;
-      if ($('moNavEmails'))   $('moNavEmails').textContent = store.emails.filter(e => e.unread).length;
+      if ($('moNavTasks')) $('moNavTasks').textContent = store.tasks.length;
+      if ($('moNavEmails')) $('moNavEmails').textContent = store.emails.filter(e => e.unread).length;
 
       store.loaded = true;
-    } catch (e) {
-      console.error('[loadAllData]', e);
-    } finally {
-      hideLoading();
-    }
+    } catch (e) { console.error('[loadAllData]', e); }
+    finally { hideLoading(); }
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🧭 ROUTER
+  // NOTIFICATIONS
+  // ═══════════════════════════════════════════════════════════
+  async function loadNotifications() {
+    if (!currentUser) return;
+    try {
+      const { data, error } = await sb.from('notifications')
+        .select('*').eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false }).limit(50);
+      if (error) throw error;
+      store.notifications = data || [];
+      updateNotifBadge();
+      if ($('moNotifPanel')?.style.display === 'block') renderNotifPanel();
+    } catch (e) { console.warn('[Notif]', e.message); }
+  }
+
+  function updateNotifBadge() {
+    const unread = (store.notifications || []).filter(n => !n.is_read).length;
+    const b = $('moNotifBadge');
+    if (!b) return;
+    if (unread > 0) { b.textContent = unread > 9 ? '9+' : unread; b.style.display = 'block'; }
+    else b.style.display = 'none';
+  }
+
+  function renderNotifPanel() {
+    const list = $('moNotifList');
+    if (!list) return;
+    const notifs = store.notifications || [];
+    if (!notifs.length) {
+      list.innerHTML = '<div style="padding:60px 20px;text-align:center;color:#a3a3a3"><div style="font-size:40px;margin-bottom:12px">🔔</div><div style="font-size:13px;font-weight:700">لا توجد إشعارات</div></div>';
+      return;
+    }
+    const icons = { task: '✅', message: '💬', email: '📧', project: '📊', file: '📁', info: '🔔' };
+    list.innerHTML = notifs.map(n => `
+      <div class="mo-notif-item" data-notif-id="${n.id}" style="padding:14px 20px;border-bottom:1px solid #f4f4f4;cursor:pointer;display:flex;gap:12px;align-items:flex-start;background:${n.is_read ? '#fff' : '#fafafa'};transition:all .2s">
+        <div style="width:36px;height:36px;border-radius:10px;background:${n.is_read ? '#f5f5f5' : '#000'};color:${n.is_read ? '#525252' : '#fff'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">${icons[n.type] || '🔔'}</div>
+        <div style="flex:1;min-width:0">
+          <b style="font-size:13px;font-weight:800;display:block;margin-bottom:3px">${escapeHtml(n.title)}</b>
+          ${n.body ? `<span style="font-size:11.5px;color:#525252;font-weight:600;display:block;line-height:1.5">${escapeHtml(n.body)}</span>` : ''}
+          <span style="font-size:10.5px;color:#a3a3a3;font-weight:700;display:block;margin-top:5px">${formatTimeAgo(n.created_at)}</span>
+        </div>
+        ${!n.is_read ? `<div style="width:8px;height:8px;background:#000;border-radius:50%;flex-shrink:0;margin-top:6px"></div>` : ''}
+      </div>
+    `).join('');
+
+    list.querySelectorAll('.mo-notif-item').forEach(el => {
+      el.addEventListener('click', async () => {
+        const id = el.dataset.notifId;
+        const n = notifs.find(x => x.id === id);
+        await sb.from('notifications').update({ is_read: true }).eq('id', id);
+        if (n?.link) {
+          const page = n.link.replace('#', '');
+          if (PAGES[page]) navigate(page);
+        }
+        $('moNotifPanel').style.display = 'none';
+        await loadNotifications();
+      });
+    });
+  }
+
+  async function createNotification(userId, title, body, type = 'info', link = null) {
+    try {
+      await sb.from('notifications').insert({ user_id: userId, title, body, type, link });
+    } catch (e) { console.warn('[Notif Create]', e.message); }
+  }
+
+  function subscribeRealtime() {
+    if (!currentUser) return;
+
+    notifChannel = sb.channel('notif-' + currentUser.id)
+      .on('postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_id=eq.${currentUser.id}` },
+        (payload) => {
+          console.log('🔔 إشعار:', payload.new.title);
+          store.notifications = [payload.new, ...(store.notifications || [])];
+          updateNotifBadge();
+          toast('🔔 ' + payload.new.title);
+          if ($('moNotifPanel')?.style.display === 'block') renderNotifPanel();
+        })
+      .subscribe();
+
+    msgsChannel = sb.channel('msg-' + currentUser.id)
+      .on('postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'messages' },
+        async (payload) => {
+          if (payload.new.from_user === currentUser.id) return;
+          const chat = store.chats.find(c => c.id === payload.new.chat_id);
+          if (!chat) return;
+          const time = new Date(payload.new.created_at).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+          chat.messages.push({ from: 'them', text: payload.new.text, attachment: payload.new.attachment, time });
+          chat.last = payload.new.text || '📎 مرفق';
+          if (currentPage === 'messages' && store.chats[currentChatIdx]?.id === chat.id) {
+            renderCurrentPage();
+          } else {
+            toast('💬 رسالة من ' + chat.name);
+          }
+        })
+      .subscribe();
+  }
+
+  function unsubscribeRealtime() {
+    if (notifChannel) { try { sb.removeChannel(notifChannel); } catch(e){} notifChannel = null; }
+    if (msgsChannel) { try { sb.removeChannel(msgsChannel); } catch(e){} msgsChannel = null; }
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // ROUTER
   // ═══════════════════════════════════════════════════════════
   const PAGES = {
-    dashboard: { title: 'لوحة التحكم', sub: 'نظرة عامة على أداء فريقك' },
+    dashboard: { title: 'لوحة التحكم', sub: 'نظرة عامة' },
     projects: { title: 'المشاريع', sub: 'إدارة المشاريع' },
     tasks: { title: 'المهام', sub: 'متابعة المهام' },
     email: { title: 'البريد', sub: 'إرسال واستقبال' },
-    messages: { title: 'الرسائل', sub: 'محادثات فردية وجماعية' },
-    calendar: { title: 'التقويم', sub: 'تنظيم مواعيدك' },
-    employees: { title: 'الموظفون', sub: 'إدارة الفريق' },
-    files: { title: 'الملفات', sub: 'رفع وتحميل الملفات' },
-    reports: { title: 'التقارير', sub: 'متابعة الأداء' },
-    ai: { title: 'الذكاء الاصطناعي', sub: 'مساعدك الذكي' },
-    settings: { title: 'الإعدادات', sub: 'تخصيص المنصة' }
+    messages: { title: 'الرسائل', sub: 'محادثات' },
+    calendar: { title: 'التقويم', sub: 'مواعيدك' },
+    employees: { title: 'الموظفون', sub: 'الفريق' },
+    files: { title: 'الملفات', sub: 'رفع وتحميل' },
+    reports: { title: 'التقارير', sub: 'الأداء' },
+    ai: { title: 'الذكاء الاصطناعي', sub: 'مساعد' },
+    settings: { title: 'الإعدادات', sub: 'المنصة' }
   };
 
   function navigate(page) {
@@ -1046,13 +1129,13 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
   function renderCurrentPage() {
     const c = $('moContent');
     if (!c) return;
-    const renderers = {
+    const map = {
       dashboard: renderDashboard, projects: renderProjects, tasks: renderTasks,
       email: renderEmail, messages: renderMessages, calendar: renderCalendar,
       employees: renderEmployees, files: renderFiles, reports: renderReports,
       ai: renderAI, settings: renderSettings
     };
-    const fn = renderers[currentPage] || renderDashboard;
+    const fn = map[currentPage] || renderDashboard;
     c.innerHTML = '<div style="animation:moFade .4s">' + fn() + '</div>';
     c.scrollTop = 0;
     bindPageEvents();
@@ -1088,7 +1171,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 📄 RENDERERS
+  // RENDERERS
   // ═══════════════════════════════════════════════════════════
   function renderDashboard() {
     const P = store.projects, T = store.tasks, E = store.emails;
@@ -1098,7 +1181,6 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       { label: 'الرسائل', value: E.length, trend: '+3', up: true, ico: 'mail' },
       { label: 'الموظفون', value: store.employees.length, trend: '—', up: true, ico: 'users' }
     ];
-
     const statCards = stats.map(s => `
       <div class="mo-stat">
         <div class="mo-stat-top">
@@ -1108,54 +1190,29 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
         <div class="mo-stat-val">${s.value}</div>
         <div class="mo-stat-lbl">${s.label}</div>
       </div>`).join('');
-
     const recentTasks = T.slice(0, 5).map(t => `
       <div class="mo-list-item">
         <div class="mo-av">${initials(t.assignee)}</div>
-        <div class="mo-list-body">
-          <b>${escapeHtml(t.title)}</b>
-          <span>${escapeHtml(t.project)} · ${escapeHtml(t.assignee)}</span>
-        </div>
+        <div class="mo-list-body"><b>${escapeHtml(t.title)}</b><span>${escapeHtml(t.project)} · ${escapeHtml(t.assignee)}</span></div>
         <span class="mo-badge ${t.priority.includes('عالي') ? 'dark' : ''}">${escapeHtml(t.priority)}</span>
-      </div>`).join('') || '<div class="mo-empty" style="padding:30px"><p>لا توجد مهام بعد</p></div>';
-
-    const projectRows = P.slice(0, 5).map(p => `
-      <tr>
-        <td><b>${escapeHtml(p.name)}</b></td>
-        <td>${p.team.length} أعضاء</td>
-        <td><div style="min-width:100px"><div class="mo-progress"><span style="width:${p.progress}%"></span></div><div style="font-size:11px;font-weight:800;color:#a3a3a3;margin-top:5px">${p.progress}%</div></div></td>
-        <td><span class="mo-badge ${p.status === 'نشط' ? 'dark' : ''}">${escapeHtml(p.status)}</span></td>
-        <td style="color:#525252;font-size:12px;font-weight:700">${formatDate(p.deadline)}</td>
-      </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:#a3a3a3;padding:30px">لا توجد مشاريع</td></tr>';
-
-    const days = ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+      </div>`).join('') || '<div class="mo-empty" style="padding:30px"><p>لا توجد مهام</p></div>';
+    const days = ['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
     const bars = days.map((d, i) => {
-      const h = [45, 68, 52, 80, 62, 88, 54][i];
+      const h = [45,68,52,80,62,88,54][i];
       return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;height:100%;justify-content:flex-end">
-        <div style="width:100%;max-width:38px;border-radius:8px 8px 3px 3px;background:${i % 2 ? '#d4d4d4' : '#000'};height:${h}%"></div>
-        <div style="font-size:11px;color:#a3a3a3;font-weight:800">${d}</div>
-      </div>`;
+        <div style="width:100%;max-width:38px;border-radius:8px 8px 3px 3px;background:${i%2?'#d4d4d4':'#000'};height:${h}%"></div>
+        <div style="font-size:11px;color:#a3a3a3;font-weight:800">${d}</div></div>`;
     }).join('');
-
     return `
       <div class="mo-grid mo-g4" style="margin-bottom:20px">${statCards}</div>
       <div class="mo-grid mo-g21" style="margin-bottom:20px">
         <div class="mo-card">
-          <div class="mo-card-hd"><div><h3>${ICONS.chart} أداء الأسبوع</h3><p>مقارنة الإنجاز اليومي</p></div><span class="mo-badge dark">+18%</span></div>
+          <div class="mo-card-hd"><div><h3>${ICONS.chart} أداء الأسبوع</h3><p>الإنجاز اليومي</p></div><span class="mo-badge dark">+18%</span></div>
           <div style="display:flex;align-items:flex-end;justify-content:space-around;gap:10px;height:180px;padding:10px 0">${bars}</div>
         </div>
         <div class="mo-card">
           <div class="mo-card-hd"><h3>${ICONS.check} مهام قادمة</h3></div>
           ${recentTasks}
-        </div>
-      </div>
-      <div class="mo-card">
-        <div class="mo-card-hd"><div><h3>${ICONS.folder} المشاريع النشطة</h3></div><button class="mo-btn mo-btn-ghost" data-goto="projects" style="padding:8px 14px;font-size:12.5px" type="button">عرض الكل</button></div>
-        <div class="mo-table-wrap">
-          <table class="mo-table">
-            <thead><tr><th>المشروع</th><th>الفريق</th><th>التقدم</th><th>الحالة</th><th>الموعد</th></tr></thead>
-            <tbody>${projectRows}</tbody>
-          </table>
         </div>
       </div>
     `;
@@ -1168,10 +1225,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
         <div class="mo-card-hd" style="margin-bottom:16px">
           <div style="display:flex;align-items:center;gap:12px">
             <div class="mo-av lg">${initials(p.name)}</div>
-            <div>
-              <h3 style="font-size:15px">${escapeHtml(p.name)}</h3>
-              <p>${p.team.length} عضو</p>
-            </div>
+            <div><h3 style="font-size:15px">${escapeHtml(p.name)}</h3><p>${p.team.length} عضو</p></div>
           </div>
           <span class="mo-badge ${p.status === 'نشط' ? 'dark' : ''}">${escapeHtml(p.status)}</span>
         </div>
@@ -1183,15 +1237,14 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
           </div>
           <div class="mo-progress"><span style="width:${p.progress}%"></span></div>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #f4f4f4;gap:8px">
-          <div class="mo-av-stack">${p.team.slice(0, 4).map(m => `<div class="mo-av sm" title="${escapeHtml(m)}">${initials(m)}</div>`).join('')}</div>
+        <div style="display:flex;justify-content:space-between;padding-top:16px;border-top:1px solid #f4f4f4">
+          <div class="mo-av-stack">${p.team.slice(0,4).map(m => `<div class="mo-av sm" title="${escapeHtml(m)}">${initials(m)}</div>`).join('')}</div>
           <div style="text-align:left">
             <div style="font-size:11px;color:#a3a3a3;font-weight:700">الموعد</div>
             <b style="font-size:13px">${formatDate(p.deadline)}</b>
           </div>
         </div>
       </div>`).join('') || '<div class="mo-card mo-empty" style="grid-column:1/-1"><h3>لا توجد مشاريع</h3><p>ابدأ بإنشاء أول مشروع</p></div>';
-
     return `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <button class="mo-btn mo-btn-primary" id="moNewProjBtn" type="button">${ICONS.plus} مشروع جديد</button>
@@ -1209,27 +1262,22 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       review: { name: 'قيد المراجعة', color: '#737373', items: filtered.filter(t => t.status === 'review') },
       done: { name: 'مكتملة', color: '#262626', items: filtered.filter(t => t.status === 'done') }
     };
-
     const kanban = Object.keys(cols).map(k => {
       const c = cols[k];
       return `
         <div class="mo-kanban-col">
-          <div class="mo-kb-hd">
-            <b><span class="mo-kb-dot" style="background:${c.color}"></span> ${c.name}</b>
-            <span class="count">${c.items.length}</span>
-          </div>
+          <div class="mo-kb-hd"><b><span class="mo-kb-dot" style="background:${c.color}"></span> ${c.name}</b><span class="count">${c.items.length}</span></div>
           ${c.items.map(t => `
             <div class="mo-kb-card" data-task-id="${t.id}">
               <b>${escapeHtml(t.title)}</b>
               <div style="font-size:11.5px;color:#a3a3a3;font-weight:700;margin-bottom:12px">${escapeHtml(t.project)}</div>
               <div class="mo-kb-meta">
-                <div class="mo-kb-tags">${t.tags.slice(0, 2).map(tg => `<span class="mo-kb-tag">${escapeHtml(tg)}</span>`).join('')}</div>
+                <div class="mo-kb-tags">${t.tags.slice(0,2).map(tg => `<span class="mo-kb-tag">${escapeHtml(tg)}</span>`).join('')}</div>
                 <div class="mo-av sm">${initials(t.assignee)}</div>
               </div>
             </div>`).join('') || '<div style="text-align:center;padding:24px;font-size:12px;color:#a3a3a3">لا مهام</div>'}
         </div>`;
     }).join('');
-
     return `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <button class="mo-btn mo-btn-primary" id="moNewTaskBtn2" type="button">${ICONS.plus} مهمة جديدة</button>
@@ -1241,18 +1289,15 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
 
   function renderEmail() {
     const filtered = searchTerm
-      ? store.emails.filter(e => (e.subject || '').toLowerCase().includes(searchTerm) || (e.from || '').toLowerCase().includes(searchTerm))
+      ? store.emails.filter(e => (e.subject||'').toLowerCase().includes(searchTerm) || (e.from||'').toLowerCase().includes(searchTerm))
       : store.emails;
-
     if (currentEmailIdx >= filtered.length) currentEmailIdx = 0;
-
     const items = filtered.map((e, i) => `
       <div class="mo-email-item ${i === currentEmailIdx ? 'active' : ''}" data-email-idx="${i}">
         <div class="mo-email-item-hd"><b>${escapeHtml(e.from)}</b><span>${e.time}</span></div>
         <div class="subj">${escapeHtml(e.subject)}</div>
-        <div class="preview">${escapeHtml(e.preview)}</div>
+        <div class="preview">${e.attachments?.length ? '📎 ' : ''}${escapeHtml(e.preview)}</div>
       </div>`).join('') || '<div style="padding:50px;text-align:center;color:#a3a3a3;font-size:13px">لا توجد رسائل</div>';
-
     return `
       <div style="margin-bottom:18px">
         <button class="mo-btn mo-btn-primary" id="moComposeBtn" type="button">${ICONS.plus} رسالة جديدة</button>
@@ -1270,15 +1315,34 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
   function selectEmail(idx) {
     currentEmailIdx = idx;
     const filtered = searchTerm
-      ? store.emails.filter(e => (e.subject || '').toLowerCase().includes(searchTerm) || (e.from || '').toLowerCase().includes(searchTerm))
+      ? store.emails.filter(e => (e.subject||'').toLowerCase().includes(searchTerm) || (e.from||'').toLowerCase().includes(searchTerm))
       : store.emails;
     $$('.mo-email-item').forEach(el => el.classList.toggle('active', +el.dataset.emailIdx === currentEmailIdx));
-    const view = $('moEmailView');
-    if (view) view.innerHTML = emailViewContent(filtered[currentEmailIdx]);
+    const v = $('moEmailView');
+    if (v) v.innerHTML = emailViewContent(filtered[currentEmailIdx]);
   }
 
   function emailViewContent(e) {
-    if (!e) return '<div style="text-align:center;color:#a3a3a3;padding:80px 20px;font-size:13px">اختر رسالة لعرضها</div>';
+    if (!e) return '<div style="text-align:center;color:#a3a3a3;padding:80px 20px;font-size:13px">اختر رسالة</div>';
+    const atts = Array.isArray(e.attachments) ? e.attachments : [];
+    const attsHtml = atts.length ? `
+      <div style="margin-top:24px;padding-top:20px;border-top:1px solid #ebebeb">
+        <div style="font-size:12px;font-weight:900;color:#525252;margin-bottom:12px">📎 المرفقات (${atts.length})</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${atts.map(a => `
+            <a href="${escapeHtml(a.url)}" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fafafa;border:1px solid #ebebeb;border-radius:12px;text-decoration:none;color:inherit;transition:all .2s"
+               onmouseover="this.style.borderColor='#000'" onmouseout="this.style.borderColor='#ebebeb'">
+              <div style="width:38px;height:38px;border-radius:10px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0">${ICONS.file}</div>
+              <div style="flex:1;min-width:0">
+                <b style="font-size:13px;font-weight:800;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(a.name)}</b>
+                <span style="font-size:11px;color:#a3a3a3;font-weight:700">${escapeHtml(a.size || '—')}</span>
+              </div>
+              <div style="color:#000">${ICONS.download}</div>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+    ` : '';
     return `
       <div class="mo-email-view-hd">
         <div class="mo-av lg">${initials(e.from)}</div>
@@ -1290,6 +1354,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       </div>
       <h2>${escapeHtml(e.subject)}</h2>
       <div class="mo-email-view-body">${escapeHtml(e.body)}</div>
+      ${attsHtml}
     `;
   }
 
@@ -1303,46 +1368,48 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
         </div>
       `;
     }
-
     if (currentChatIdx >= store.chats.length) currentChatIdx = 0;
-
     const contacts = store.chats.map((c, i) => `
       <div class="mo-msg-contact ${i === currentChatIdx ? 'active' : ''}" data-chat-idx="${i}">
-        <div class="mo-av" style="${c.is_group ? 'background:linear-gradient(135deg,#4f46e5,#7c3aed)' : ''}">
-          ${c.is_group ? ICONS.users : c.av}
-        </div>
+        <div class="mo-av" style="${c.is_group ? 'background:linear-gradient(135deg,#4f46e5,#7c3aed)' : ''}">${c.is_group ? ICONS.users : c.av}</div>
         <div class="mc-info">
-          <b>${escapeHtml(c.name)} ${c.is_group ? '<span style="font-size:10px;color:#7c3aed">👥</span>' : ''}</b>
+          <b>${escapeHtml(c.name)} ${c.is_group ? '👥' : ''}</b>
           <span>${escapeHtml(c.last)}</span>
         </div>
       </div>`).join('');
-
     const chat = store.chats[currentChatIdx];
-    const bubbles = chat.messages.map(m => `
-      <div class="mo-bubble ${m.from === 'me' ? 'me' : 'them'}">
-        ${escapeHtml(m.text)}
-        <div class="time">${m.time}</div>
-      </div>`).join('') || '<div style="text-align:center;color:#a3a3a3;font-size:13px;margin:auto">لا توجد رسائل</div>';
-
-    const membersInfo = chat.is_group && chat.members?.length
-      ? `${chat.members.length + 1} أعضاء`
-      : (chat.online ? '● متصل الآن' : 'آخر ظهور مؤخراً');
-
+    const bubbles = chat.messages.map(m => {
+      const att = m.attachment;
+      const attHtml = att ? `
+        <a href="${escapeHtml(att.url)}" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px;margin-top:8px;background:${m.from === 'me' ? 'rgba(255,255,255,.15)' : '#f5f5f5'};border-radius:10px;text-decoration:none;color:inherit">
+          <div style="width:32px;height:32px;border-radius:8px;background:${m.from === 'me' ? '#fff' : '#000'};color:${m.from === 'me' ? '#000' : '#fff'};display:flex;align-items:center;justify-content:center;flex-shrink:0">${ICONS.file}</div>
+          <div style="flex:1;min-width:0">
+            <b style="font-size:12px;font-weight:800;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(att.name)}</b>
+            <span style="font-size:10.5px;opacity:.7;font-weight:700">${escapeHtml(att.size || '—')}</span>
+          </div>
+        </a>
+      ` : '';
+      return `
+        <div class="mo-bubble ${m.from === 'me' ? 'me' : 'them'}">
+          ${m.text ? escapeHtml(m.text) : ''}
+          ${attHtml}
+          <div class="time">${m.time}</div>
+        </div>`;
+    }).join('') || '<div style="text-align:center;color:#a3a3a3;font-size:13px;margin:auto">لا توجد رسائل</div>';
+    const membersInfo = chat.is_group && chat.members?.length ? `${chat.members.length + 1} أعضاء` : (chat.online ? '● متصل' : 'آخر ظهور');
     return `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
         <button class="mo-btn mo-btn-primary" id="moNewChatBtn" type="button">${ICONS.plus} محادثة جديدة</button>
         <span class="mo-badge dark">${store.chats.length} محادثة</span>
       </div>
-      <div class="mo-msg-layout" style="height:calc(100vh - 195px)">
+      <div class="mo-msg-layout">
         <div class="mo-msg-side">
           <div class="mo-msg-side-hd"><b>المحادثات</b></div>
           <div class="mo-msg-contacts">${contacts}</div>
         </div>
         <div class="mo-msg-chat">
           <div class="mo-msg-chat-hd">
-            <div class="mo-av" style="${chat.is_group ? 'background:linear-gradient(135deg,#4f46e5,#7c3aed)' : ''}">
-              ${chat.is_group ? ICONS.users : chat.av}
-            </div>
+            <div class="mo-av" style="${chat.is_group ? 'background:linear-gradient(135deg,#4f46e5,#7c3aed)' : ''}">${chat.is_group ? ICONS.users : chat.av}</div>
             <div class="info" style="flex:1">
               <b>${escapeHtml(chat.name)}</b>
               <span>${membersInfo}</span>
@@ -1351,6 +1418,8 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
           </div>
           <div class="mo-msg-body" id="moMsgBody">${bubbles}</div>
           <div class="mo-msg-foot">
+            <input type="file" id="moMsgFileInput" style="display:none">
+            <button class="mo-icon-btn" id="moMsgAttBtn" type="button">${ICONS.attach}</button>
             <textarea placeholder="اكتب رسالتك..." id="moMsgInput" rows="1"></textarea>
             <button class="mo-msg-send" id="moMsgSend" type="button">${ICONS.send}</button>
           </div>
@@ -1363,43 +1432,60 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
     const inp = $('moMsgInput');
     if (!inp) return;
     const text = inp.value.trim();
-    if (!text || !currentUser) return;
+    if (!text && !pendingMsgFile) return;
+    if (!currentUser) return;
     const chat = store.chats[currentChatIdx];
     if (!chat) return;
+
+    let attachment = null;
     try {
-      await sb.from('messages').insert({ chat_id: chat.id, from_user: currentUser.id, text });
+      if (pendingMsgFile) {
+        const file = pendingMsgFile;
+        const path = `${currentUser.id}/messages/${Date.now()}_${file.name.replace(/[^\w.-]/g, '_')}`;
+        const { error: upErr } = await sb.storage.from('files').upload(path, file, { cacheControl: '3600' });
+        if (upErr) throw upErr;
+        const { data: { publicUrl } } = sb.storage.from('files').getPublicUrl(path);
+        attachment = { name: file.name, size: humanSize(file.size), url: publicUrl, mime: file.type };
+      }
+
       const time = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-      chat.messages.push({ from: 'me', text, time });
-      chat.last = text;
+      const msgText = text || '';
+
+      const { error } = await sb.from('messages').insert({
+        chat_id: chat.id, from_user: currentUser.id, text: msgText, attachment
+      });
+      if (error) throw error;
+
+      chat.messages.push({ from: 'me', text: msgText, attachment, time });
+      chat.last = msgText || '📎 مرفق';
       inp.value = '';
+      inp.placeholder = 'اكتب رسالتك...';
+      pendingMsgFile = null;
       renderCurrentPage();
-    } catch (e) { console.warn(e); toast('فشل الإرسال', 'error'); }
+    } catch (e) {
+      console.error('❌ [Send Msg]', e);
+      toast('فشل الإرسال: ' + e.message, 'error');
+    }
   }
 
   function renderCalendar() {
     const now = new Date();
     const year = now.getFullYear(), month = now.getMonth(), today = now.getDate();
-    const monthNames = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+    const months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
     const dows = ['ح','ن','ث','ر','خ','ج','س'];
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const prevDays = new Date(year, month, 0).getDate();
-
     let days = [];
     for (let i = firstDay - 1; i >= 0; i--) days.push({ d: prevDays - i, muted: true });
     for (let i = 1; i <= daysInMonth; i++) days.push({ d: i, muted: false, today: i === today });
-
-    const calDays = days.map(d => `<div class="mo-cal-day ${d.muted ? 'muted' : ''} ${d.today ? 'today' : ''}">${d.d}</div>`).join('');
-
     return `
       <div class="mo-cal-wrap">
         <div class="mo-calendar">
-          <div class="mo-cal-hd">
-            <b>${monthNames[month]} ${year}</b>
-          </div>
+          <div class="mo-cal-hd"><b>${months[month]} ${year}</b></div>
           <div class="mo-cal-grid">
             ${dows.map(d => `<div class="mo-cal-dow">${d}</div>`).join('')}
-            ${calDays}
+            ${days.map(d => `<div class="mo-cal-day ${d.muted ? 'muted' : ''} ${d.today ? 'today' : ''}">${d.d}</div>`).join('')}
           </div>
         </div>
         <div class="mo-events-list">
@@ -1425,11 +1511,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
           <div class="mo-emp-stat"><b>${e.projects}</b><span>مشاريع</span></div>
         </div>
       </div>`).join('') || '<div class="mo-card mo-empty" style="grid-column:1/-1"><h3>لا يوجد موظفون</h3></div>';
-
-    return `
-      <div style="margin-bottom:20px"><span class="mo-badge dark">${store.employees.length} موظف</span></div>
-      <div class="mo-emp-grid">${cards}</div>
-    `;
+    return `<div style="margin-bottom:20px"><span class="mo-badge dark">${store.employees.length} موظف</span></div><div class="mo-emp-grid">${cards}</div>`;
   }
 
   function renderFiles() {
@@ -1439,16 +1521,10 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
         <b>${escapeHtml(f.name)}</b>
         <span>${f.size} · ${f.date}</span>
         <div style="display:flex;gap:6px;margin-top:12px">
-          <button class="mo-btn mo-btn-ghost" data-download="${f.id}" style="flex:1;padding:8px;font-size:11.5px" type="button">
-            ${ICONS.download} تحميل
-          </button>
-          ${f.user_id === currentUser?.id ? `
-            <button class="mo-btn mo-btn-ghost" data-delete="${f.id}" style="padding:8px 10px;color:#dc2626" type="button">
-              ${ICONS.trash}
-            </button>` : ''}
+          <button class="mo-btn mo-btn-ghost" data-download="${f.id}" style="flex:1;padding:8px;font-size:11.5px" type="button">${ICONS.download} تحميل</button>
+          ${f.user_id === currentUser?.id ? `<button class="mo-btn mo-btn-ghost" data-delete="${f.id}" style="padding:8px 10px;color:#dc2626" type="button">${ICONS.trash}</button>` : ''}
         </div>
-      </div>`).join('') || '<div class="mo-card mo-empty" style="grid-column:1/-1"><h3>لا توجد ملفات</h3><p>ارفع أول ملف للبدء</p></div>';
-
+      </div>`).join('') || '<div class="mo-card mo-empty" style="grid-column:1/-1"><h3>لا توجد ملفات</h3><p>ارفع أول ملف</p></div>';
     return `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap">
         <button class="mo-btn mo-btn-primary" id="moUploadBtn" type="button">${ICONS.upload} رفع ملف</button>
@@ -1468,50 +1544,38 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
 
   async function uploadFiles(files) {
     const progress = $('moUploadProgress');
-    const bar = $('moUploadBar');
-    const pct = $('moUploadPct');
-    const nameEl = $('moUploadName');
+    const bar = $('moUploadBar'), pct = $('moUploadPct'), nameEl = $('moUploadName');
     if (progress) progress.style.display = 'block';
-
     let success = 0, failed = 0;
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      if (nameEl) nameEl.textContent = `(${i + 1}/${files.length}) ${file.name}`;
-
-      const path = `${currentUser.id}/${Date.now()}_${file.name.replace(/[^\w.-]/g, '_')}`;
-
+      if (nameEl) nameEl.textContent = `(${i+1}/${files.length}) ${file.name}`;
+      const path = `${currentUser.id}/files/${Date.now()}_${file.name.replace(/[^\w.-]/g, '_')}`;
       try {
         const { error: upErr } = await sb.storage.from('files').upload(path, file, { cacheControl: '3600', upsert: false });
         if (upErr) throw upErr;
-
         const { data: { publicUrl } } = sb.storage.from('files').getPublicUrl(path);
-        const sizeStr = file.size > 1048576
-          ? (file.size / 1048576).toFixed(1) + ' MB'
-          : (file.size / 1024).toFixed(1) + ' KB';
-
         const { error: dbErr } = await sb.from('files').insert({
-          user_id: currentUser.id,
-          name: file.name,
-          size: sizeStr,
-          url: publicUrl,
-          mime_type: file.type,
-          size_bytes: file.size
+          user_id: currentUser.id, name: file.name, size: humanSize(file.size),
+          url: publicUrl, mime_type: file.type, size_bytes: file.size
         });
         if (dbErr) throw dbErr;
-
         success++;
-        const p = Math.round(((i + 1) / files.length) * 100);
+        const p = Math.round(((i+1)/files.length)*100);
         if (bar) bar.style.width = `${p}%`;
         if (pct) pct.textContent = `${p}%`;
       } catch (err) {
         console.error('❌ [Upload]', err);
         failed++;
-        toast(`فشل رفع ${file.name}: ${err.message}`, 'error');
+        toast(`فشل رفع ${file.name}`, 'error');
       }
     }
 
-    if (success > 0) toast(`✅ تم رفع ${success} ملف${failed ? ` (${failed} فشل)` : ''}`);
+    if (success > 0) {
+      toast(`✅ تم رفع ${success} ملف${failed ? ` (${failed} فشل)` : ''}`);
+      await createNotification(currentUser.id, 'تم رفع ملفات', `تم رفع ${success} ملف`, 'file', '#files');
+    }
     setTimeout(() => { if (progress) progress.style.display = 'none'; }, 1200);
     await loadAllData();
     renderCurrentPage();
@@ -1524,19 +1588,18 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
   }
 
   async function deleteFile(id) {
-    if (!confirm('حذف الملف نهائياً؟')) return;
+    if (!confirm('حذف الملف؟')) return;
     try {
       const f = store.files.find(x => x.id === id);
       if (f?.url) {
         const path = f.url.split('/storage/v1/object/public/files/')[1];
         if (path) await sb.storage.from('files').remove([decodeURIComponent(path)]);
       }
-      const { error } = await sb.from('files').delete().eq('id', id);
-      if (error) throw error;
+      await sb.from('files').delete().eq('id', id);
       toast('تم الحذف');
       await loadAllData();
       renderCurrentPage();
-    } catch (e) { console.error(e); toast('فشل الحذف', 'error'); }
+    } catch (e) { toast('فشل الحذف', 'error'); }
   }
 
   function renderReports() {
@@ -1547,9 +1610,8 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       { label: 'الرسائل', value: store.emails.length, trend: '+3', up: true, ico: 'mail' },
       { label: 'الموظفون', value: store.employees.length, trend: '—', up: true, ico: 'users' }
     ];
-
     const teamBars = store.employees.slice(0, 6).map(e => {
-      const pct = Math.min(100, (e.tasks || 0) * 4 || 55);
+      const pct = Math.min(100, (e.tasks||0)*4 || 55);
       return `
         <div style="margin-bottom:22px">
           <div style="display:flex;justify-content:space-between;margin-bottom:8px">
@@ -1559,7 +1621,6 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
           <div class="mo-progress"><span style="width:${pct}%"></span></div>
         </div>`;
     }).join('') || '<div style="text-align:center;color:#a3a3a3;padding:20px;font-size:13px">لا توجد بيانات</div>';
-
     return `
       <div class="mo-grid mo-g4" style="margin-bottom:20px">
         ${stats.map(s => `
@@ -1586,12 +1647,12 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
         <div class="mo-ai-chat">
           <div class="mo-ai-hd">
             <div class="mo-ai-av">${ICONS.ai}</div>
-            <div class="ai-info"><b>مساعد MEN Office</b><span>● متاح دائماً</span></div>
+            <div class="ai-info"><b>مساعد MEN Office</b><span>● متاح</span></div>
           </div>
           <div class="mo-ai-body" id="moAiBody">
             <div class="mo-ai-msg">
               <div class="mo-av">AI</div>
-              <div class="mo-ai-bubble">مرحباً ${escapeHtml(name)}! 👋<br>كيف يمكنني مساعدتك اليوم؟</div>
+              <div class="mo-ai-bubble">مرحباً ${escapeHtml(name)}! 👋<br>كيف أساعدك؟</div>
             </div>
           </div>
           <div class="mo-msg-foot">
@@ -1601,7 +1662,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
         </div>
         <div class="mo-ai-suggest">
           <h4>اقتراحات</h4>
-          <button data-prompt="اكتب لي إيميل احترافي" type="button">📧 إيميل احترافي</button>
+          <button data-prompt="اكتب إيميل احترافي" type="button">📧 إيميل احترافي</button>
           <button data-prompt="لخّص اجتماعاً" type="button">📝 لخّص اجتماعاً</button>
           <button data-prompt="خطة تسويقية" type="button">💡 خطة تسويقية</button>
           <button data-prompt="جدول مهام أسبوعي" type="button">📅 جدول مهام</button>
@@ -1618,39 +1679,23 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
     const body = $('moAiBody');
     if (!body) return;
     const name = currentProfile?.name || 'أنا';
-
-    body.insertAdjacentHTML('beforeend', `
-      <div class="mo-ai-msg user">
-        <div class="mo-av">${initials(name)}</div>
-        <div class="mo-ai-bubble">${escapeHtml(text)}</div>
-      </div>
-    `);
+    body.insertAdjacentHTML('beforeend', `<div class="mo-ai-msg user"><div class="mo-av">${initials(name)}</div><div class="mo-ai-bubble">${escapeHtml(text)}</div></div>`);
     inp.value = '';
     body.scrollTop = body.scrollHeight;
-
     setTimeout(() => {
       const reply = getAIResponse(text);
-      body.insertAdjacentHTML('beforeend', `
-        <div class="mo-ai-msg">
-          <div class="mo-av">AI</div>
-          <div class="mo-ai-bubble">${reply}</div>
-        </div>
-      `);
+      body.insertAdjacentHTML('beforeend', `<div class="mo-ai-msg"><div class="mo-av">AI</div><div class="mo-ai-bubble">${reply}</div></div>`);
       body.scrollTop = body.scrollHeight;
     }, 700);
   }
 
   function getAIResponse(q) {
     const l = q.toLowerCase();
-    if (l.includes('إيميل') || l.includes('ايميل') || l.includes('بريد'))
-      return 'إليك مسودة إيميل:<br><br><b>الموضوع:</b> طلب اجتماع<br><br>السلام عليكم،<br><br>أود أن أقترح عقد اجتماع لمناقشة سبل التعاون.<br><br>مع التقدير.';
-    if (l.includes('لخّص') || l.includes('ملخص'))
-      return '📝 <b>ملخص:</b><br>1. مراجعة الإنجازات<br>2. مناقشة التحديات<br>3. خطة الأسبوع القادم';
-    if (l.includes('تسويق'))
-      return '💡 <b>خطة تسويقية:</b><br>1. سوشيال ميديا (40%)<br>2. محتوى تعليمي (25%)<br>3. إعلانات (25%)<br>4. ولاء (10%)';
-    if (l.includes('جدول') || l.includes('مهام'))
-      return '📅 <b>جدول أسبوعي:</b><br>• الأحد: تخطيط<br>• الاثنين-الثلاثاء: تنفيذ<br>• الأربعاء: مراجعة<br>• الخميس: تسليم<br>• الجمعة: تقرير';
-    return 'كيف أساعدك؟<br>• ✍️ كتابة الإيميلات<br>• 📝 تلخيص الاجتماعات<br>• 📊 التقارير<br>• 💡 أفكار<br>• 📅 تنظيم المهام';
+    if (l.includes('إيميل') || l.includes('ايميل') || l.includes('بريد')) return '📧 مسودة إيميل:<br><br><b>الموضوع:</b> طلب اجتماع<br><br>السلام عليكم،<br>أود أن أقترح عقد اجتماع لمناقشة التعاون.<br><br>مع التقدير.';
+    if (l.includes('لخّص') || l.includes('ملخص')) return '📝 <b>ملخص:</b><br>1. مراجعة الإنجازات<br>2. مناقشة التحديات<br>3. خطة الأسبوع';
+    if (l.includes('تسويق')) return '💡 <b>خطة:</b><br>1. سوشيال (40%)<br>2. محتوى (25%)<br>3. إعلانات (25%)<br>4. ولاء (10%)';
+    if (l.includes('جدول') || l.includes('مهام')) return '📅 <b>جدول:</b><br>• الأحد: تخطيط<br>• الاثنين-الثلاثاء: تنفيذ<br>• الأربعاء: مراجعة<br>• الخميس: تسليم<br>• الجمعة: تقرير';
+    return 'كيف أساعدك؟<br>• ✍️ الإيميلات<br>• 📝 التلخيص<br>• 📊 التقارير<br>• 💡 الأفكار<br>• 📅 المهام';
   }
 
   function renderSettings() {
@@ -1662,7 +1707,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
           <h3>${ICONS.users} حسابي</h3>
           <div class="mo-setting-row"><div class="sr-info"><b>الاسم</b><span>${escapeHtml(p.name || '—')}</span></div></div>
           <div class="mo-setting-row"><div class="sr-info"><b>البريد</b><span>${escapeHtml(u?.email || '—')}</span></div></div>
-          <div class="mo-setting-row"><div class="sr-info"><b>المعرف</b><span>#${String(u?.id || '').slice(0, 8).toUpperCase()}</span></div></div>
+          <div class="mo-setting-row"><div class="sr-info"><b>المعرف</b><span>#${String(u?.id || '').slice(0,8).toUpperCase()}</span></div></div>
         </div>
         <div class="mo-setting-card">
           <h3>${ICONS.bell} الإشعارات</h3>
@@ -1675,14 +1720,14 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
         </div>
         <div class="mo-setting-card">
           <h3>${ICONS.check} عن المنصة</h3>
-          <div class="mo-setting-row"><div class="sr-info"><b>الإصدار</b><span>2.0.0</span></div></div>
+          <div class="mo-setting-row"><div class="sr-info"><b>الإصدار</b><span>3.0.0</span></div></div>
         </div>
       </div>
     `;
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🪟 MODALS
+  // MODALS
   // ═══════════════════════════════════════════════════════════
   function openModal(type) {
     const m = $('mo-modal');
@@ -1692,8 +1737,8 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       m.innerHTML = `
         <button class="mo-modal-close" type="button" id="moModalClose">${ICONS.close}</button>
         <h2>مهمة جديدة</h2>
-        <p class="sub">أضف مهمة وحدّد تفاصيلها</p>
-        <div class="mo-field"><label>العنوان *</label><input type="text" id="moMTaskTitle" placeholder="مثال: تصميم الصفحة"></div>
+        <p class="sub">أضف مهمة</p>
+        <div class="mo-field"><label>العنوان *</label><input type="text" id="moMTaskTitle" placeholder="تصميم الصفحة"></div>
         <div class="mo-field"><label>المشروع</label><input type="text" id="moMTaskProject" placeholder="عام"></div>
         <div class="mo-field"><label>المسؤول</label>
           <select id="moMTaskAssignee">${store.employees.map(e => `<option value="${escapeHtml(e.name)}">${escapeHtml(e.name)}</option>`).join('') || '<option>غير محدد</option>'}</select>
@@ -1708,53 +1753,81 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
         $('moModalClose')?.addEventListener('click', closeModal);
       }, 30);
     } else if (type === 'compose') {
+      pendingEmailFiles = [];
       m.innerHTML = `
         <button class="mo-modal-close" type="button" id="moModalClose">${ICONS.close}</button>
         <h2>رسالة جديدة</h2>
-        <p class="sub">أرسل رسالة بريد</p>
-        <div class="mo-field"><label>إلى</label><input type="email" id="moMEmailTo" placeholder="name@example.com" dir="ltr" style="text-align:right"></div>
+        <p class="sub">أرسل رسالة مع مرفقات</p>
+        <div class="mo-field"><label>إلى *</label><input type="email" id="moMEmailTo" placeholder="name@example.com" dir="ltr" style="text-align:right"></div>
         <div class="mo-field"><label>الاسم</label><input type="text" id="moMEmailName" placeholder="الاسم"></div>
-        <div class="mo-field"><label>الموضوع</label><input type="text" id="moMEmailSubject" placeholder="الموضوع"></div>
-        <div class="mo-field"><label>الرسالة</label><textarea id="moMEmailBody" rows="6" placeholder="اكتب رسالتك..."></textarea></div>
+        <div class="mo-field"><label>الموضوع *</label><input type="text" id="moMEmailSubject" placeholder="الموضوع"></div>
+        <div class="mo-field"><label>الرسالة *</label><textarea id="moMEmailBody" rows="5" placeholder="اكتب رسالتك..."></textarea></div>
+        <div class="mo-field">
+          <label>المرفقات</label>
+          <input type="file" id="moMEmailFiles" multiple style="display:none">
+          <div id="moMEmailAttsList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
+          <button type="button" id="moEmailAttBtn" class="mo-btn mo-btn-ghost" style="width:100%;padding:12px;justify-content:center">${ICONS.attach} إضافة مرفقات</button>
+        </div>
         <button class="mo-btn mo-btn-primary" id="moMSendEmail" type="button" style="width:100%;padding:15px;margin-top:8px">${ICONS.send} إرسال</button>
       `;
       setTimeout(() => {
+        $('moMEmailFiles')?.addEventListener('change', (e) => {
+          const files = Array.from(e.target.files || []);
+          pendingEmailFiles = pendingEmailFiles.concat(files);
+          renderEmailAttsList();
+          e.target.value = '';
+        });
+        $('moEmailAttBtn')?.addEventListener('click', () => $('moMEmailFiles')?.click());
         $('moMSendEmail')?.addEventListener('click', sendEmail);
         $('moModalClose')?.addEventListener('click', closeModal);
+        renderEmailAttsList();
       }, 30);
     }
     $('mo-modal-overlay').classList.add('on');
     document.body.style.overflow = 'hidden';
   }
 
+  function renderEmailAttsList() {
+    const list = $('moMEmailAttsList');
+    if (!list) return;
+    if (!pendingEmailFiles.length) { list.innerHTML = ''; return; }
+    list.innerHTML = pendingEmailFiles.map((f, i) => `
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#f5f5f5;border-radius:10px;font-size:12.5px">
+        <div style="width:28px;height:28px;border-radius:8px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0">${ICONS.file}</div>
+        <span style="flex:1;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(f.name)}</span>
+        <span style="color:#a3a3a3;font-weight:700">${humanSize(f.size)}</span>
+        <button type="button" data-att-idx="${i}" style="background:none;border:none;color:#dc2626;cursor:pointer;padding:2px">${ICONS.close}</button>
+      </div>
+    `).join('');
+    list.querySelectorAll('[data-att-idx]').forEach(b => {
+      b.addEventListener('click', () => {
+        pendingEmailFiles.splice(+b.dataset.attIdx, 1);
+        renderEmailAttsList();
+      });
+    });
+  }
+
   function openProjectModal() {
     const m = $('mo-modal');
     if (!m) return;
-    const memberOptions = store.employees.map(e =>
-      `<option value="${escapeHtml(e.name)}">${escapeHtml(e.name)} (${escapeHtml(e.role)})</option>`
-    ).join('');
-
+    const memberOptions = store.employees.map(e => `<option value="${escapeHtml(e.name)}">${escapeHtml(e.name)} (${escapeHtml(e.role)})</option>`).join('');
     m.innerHTML = `
       <button class="mo-modal-close" type="button" id="moModalClose">${ICONS.close}</button>
       <h2>مشروع جديد</h2>
-      <p class="sub">أنشئ مشروعاً وحدّد فريقه</p>
-      <div class="mo-field"><label>اسم المشروع *</label><input type="text" id="moProjName" placeholder="مثال: تطبيق الجوال"></div>
-      <div class="mo-field"><label>الوصف</label><textarea id="moProjDesc" rows="3" placeholder="وصف مختصر..." style="min-height:80px"></textarea></div>
+      <p class="sub">حدّد التفاصيل والفريق</p>
+      <div class="mo-field"><label>اسم المشروع *</label><input type="text" id="moProjName" placeholder="تطبيق الجوال"></div>
+      <div class="mo-field"><label>الوصف</label><textarea id="moProjDesc" rows="3" placeholder="وصف..." style="min-height:80px"></textarea></div>
       <div class="mo-field"><label>الموعد النهائي</label><input type="date" id="moProjDeadline"></div>
       <div class="mo-field"><label>الفريق (Ctrl للاختيار المتعدد)</label>
-        <select id="moProjTeam" multiple style="min-height:100px">
-          ${memberOptions || '<option disabled>لا يوجد أعضاء</option>'}
-        </select>
+        <select id="moProjTeam" multiple style="min-height:100px">${memberOptions || '<option disabled>لا يوجد أعضاء</option>'}</select>
       </div>
       <div class="mo-field"><label>التقدم (%)</label><input type="number" id="moProjProgress" min="0" max="100" value="0"></div>
       <button class="mo-btn mo-btn-primary" id="moSaveProj" type="button" style="width:100%;padding:15px;margin-top:8px">${ICONS.check} إنشاء</button>
     `;
-
     setTimeout(() => {
       $('moSaveProj')?.addEventListener('click', saveProject);
       $('moModalClose')?.addEventListener('click', closeModal);
     }, 30);
-
     $('mo-modal-overlay').classList.add('on');
     document.body.style.overflow = 'hidden';
   }
@@ -1765,9 +1838,7 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
     const deadline = $('moProjDeadline').value || null;
     const progress = parseInt($('moProjProgress').value) || 0;
     const team = Array.from($('moProjTeam').selectedOptions).map(o => o.value);
-
     if (!name) { toast('أدخل اسم المشروع', 'error'); return; }
-
     try {
       const { error } = await sb.from('projects').insert({
         user_id: currentUser.id, name, description, deadline, progress,
@@ -1776,40 +1847,31 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       if (error) throw error;
       closeModal();
       toast('✅ تم إنشاء المشروع');
+      await createNotification(currentUser.id, 'مشروع جديد', name, 'project', '#projects');
       await loadAllData();
       renderCurrentPage();
-    } catch (e) {
-      console.error('❌ [Save Project]', e);
-      toast('فشل: ' + e.message, 'error');
-    }
+    } catch (e) { toast('فشل: ' + e.message, 'error'); }
   }
 
   function openChatModal() {
     const m = $('mo-modal');
     if (!m) return;
-    const memberOptions = store.employees
-      .filter(e => e.id !== currentUser.id)
-      .map(e => `<option value="${escapeHtml(e.name)}">${escapeHtml(e.name)} (${escapeHtml(e.role)})</option>`)
-      .join('');
-
+    const memberOptions = store.employees.filter(e => e.id !== currentUser.id)
+      .map(e => `<option value="${escapeHtml(e.name)}">${escapeHtml(e.name)} (${escapeHtml(e.role)})</option>`).join('');
     m.innerHTML = `
       <button class="mo-modal-close" type="button" id="moModalClose">${ICONS.close}</button>
       <h2>محادثة جديدة</h2>
-      <p class="sub">ابدأ محادثة فردية أو جماعية</p>
-      <div class="mo-field"><label>الاسم *</label><input type="text" id="moChatName" placeholder="مثال: فريق التطوير"></div>
+      <p class="sub">فردية أو جماعية</p>
+      <div class="mo-field"><label>الاسم *</label><input type="text" id="moChatName" placeholder="فريق التطوير"></div>
       <div class="mo-field"><label>الأعضاء (Ctrl للاختيار المتعدد)</label>
-        <select id="moChatMembers" multiple style="min-height:120px">
-          ${memberOptions || '<option disabled>لا يوجد أعضاء آخرون</option>'}
-        </select>
+        <select id="moChatMembers" multiple style="min-height:120px">${memberOptions || '<option disabled>لا يوجد أعضاء آخرون</option>'}</select>
       </div>
       <button class="mo-btn mo-btn-primary" id="moSaveChat" type="button" style="width:100%;padding:15px;margin-top:8px">${ICONS.check} إنشاء</button>
     `;
-
     setTimeout(() => {
       $('moSaveChat')?.addEventListener('click', saveChat);
       $('moModalClose')?.addEventListener('click', closeModal);
     }, 30);
-
     $('mo-modal-overlay').classList.add('on');
     document.body.style.overflow = 'hidden';
   }
@@ -1817,35 +1879,26 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
   async function saveChat() {
     const name = $('moChatName').value.trim();
     const members = Array.from($('moChatMembers').selectedOptions).map(o => o.value);
-
-    if (!name) { toast('أدخل اسم المحادثة', 'error'); return; }
-
+    if (!name) { toast('أدخل الاسم', 'error'); return; }
     try {
       const { error } = await sb.from('chats').insert({
-        user_id: currentUser.id,
-        created_by: currentUser.id,
-        name,
-        is_group: members.length > 0,
-        members,
-        online: false
+        user_id: currentUser.id, created_by: currentUser.id, name,
+        is_group: members.length > 0, members, online: false
       });
       if (error) throw error;
       closeModal();
-      toast('✅ تم إنشاء المحادثة');
+      toast('✅ تم الإنشاء');
       await loadAllData();
       const idx = store.chats.findIndex(c => c.name === name);
       if (idx >= 0) currentChatIdx = idx;
       renderCurrentPage();
-    } catch (e) {
-      console.error('❌ [Save Chat]', e);
-      toast('فشل: ' + e.message, 'error');
-    }
+    } catch (e) { toast('فشل: ' + e.message, 'error'); }
   }
 
   function showChatInfo() {
     const chat = store.chats[currentChatIdx];
     if (!chat) return;
-    const members = chat.members?.length ? chat.members.join('، ') : 'لا يوجد أعضاء آخرون';
+    const members = chat.members?.length ? chat.members.join('، ') : 'لا يوجد أعضاء';
     toast(`${chat.name} — ${members}`, 'success');
   }
 
@@ -1854,7 +1907,6 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
     if (!task) return;
     const m = $('mo-modal');
     if (!m) return;
-
     m.innerHTML = `
       <button class="mo-modal-close" type="button" id="moModalClose">${ICONS.close}</button>
       <h2>${escapeHtml(task.title)}</h2>
@@ -1870,11 +1922,9 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       <button class="mo-btn mo-btn-primary" id="moSaveTaskStatus" type="button" style="width:100%;padding:15px;margin-top:8px">${ICONS.check} تحديث</button>
       <button class="mo-btn mo-btn-ghost" id="moDeleteTask" type="button" style="width:100%;padding:15px;margin-top:8px;color:#dc2626">${ICONS.trash} حذف</button>
     `;
-
     setTimeout(() => {
       $('moSaveTaskStatus')?.addEventListener('click', async () => {
-        const status = $('moTaskStatus').value;
-        await sb.from('tasks').update({ status }).eq('id', taskId);
+        await sb.from('tasks').update({ status: $('moTaskStatus').value }).eq('id', taskId);
         closeModal();
         toast('✅ تم التحديث');
         await loadAllData();
@@ -1890,7 +1940,6 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       });
       $('moModalClose')?.addEventListener('click', closeModal);
     }, 30);
-
     $('mo-modal-overlay').classList.add('on');
     document.body.style.overflow = 'hidden';
   }
@@ -1913,12 +1962,10 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       if (error) throw error;
       closeModal();
       toast('✅ تمت الإضافة');
+      await createNotification(currentUser.id, 'مهمة جديدة', title + ' → ' + assignee, 'task', '#tasks');
       await loadAllData();
       navigate('tasks');
-    } catch (e) {
-      console.error(e);
-      toast('فشل: ' + e.message, 'error');
-    }
+    } catch (e) { toast('فشل: ' + e.message, 'error'); }
   }
 
   async function sendEmail() {
@@ -1928,24 +1975,43 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
     const body = $('moMEmailBody').value.trim();
     if (!to || !subject || !body) { toast('أكمل الحقول', 'error'); return; }
     if (!isValidEmail(to)) { toast('البريد غير صحيح', 'error'); return; }
+
+    const sendBtn = $('moMSendEmail');
+    const orig = sendBtn?.innerHTML;
+    if (sendBtn) { sendBtn.disabled = true; sendBtn.innerHTML = 'جارٍ الإرسال...'; }
+
     try {
+      const attachments = [];
+      for (const file of pendingEmailFiles) {
+        const path = `${currentUser.id}/emails/${Date.now()}_${file.name.replace(/[^\w.-]/g, '_')}`;
+        const { error: upErr } = await sb.storage.from('files').upload(path, file, { cacheControl: '3600' });
+        if (upErr) { console.warn('رفع فشل:', file.name); continue; }
+        const { data: { publicUrl } } = sb.storage.from('files').getPublicUrl(path);
+        attachments.push({ name: file.name, size: humanSize(file.size), url: publicUrl, mime: file.type });
+      }
+
       const { error } = await sb.from('emails').insert({
         user_id: currentUser.id, to_email: to, to_name: toName,
         from_name: currentProfile?.name || currentUser.email,
         from_email: currentUser.email,
-        subject, body, is_read: true
+        subject, body, is_read: true, attachments
       });
       if (error) throw error;
+
       closeModal();
-      toast('✅ تم الإرسال');
-      window.open(`mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+      toast(`✅ تم الإرسال${attachments.length ? ' مع ' + attachments.length + ' مرفق' : ''}`);
+      await createNotification(currentUser.id, 'تم إرسال بريد', subject, 'email', '#email');
       await loadAllData();
       navigate('email');
-    } catch (e) { console.warn(e); toast('فشل الإرسال', 'error'); }
+    } catch (e) {
+      toast('فشل: ' + e.message, 'error');
+    } finally {
+      if (sendBtn) { sendBtn.disabled = false; sendBtn.innerHTML = orig; }
+    }
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🎛 UI
+  // UI
   // ═══════════════════════════════════════════════════════════
   function openSidebar() {
     $('moSidebar')?.classList.add('open');
@@ -1957,12 +2023,11 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🚀 BOOTSTRAP
+  // BOOTSTRAP
   // ═══════════════════════════════════════════════════════════
   async function bootstrap() {
     window.addEventListener('error', (e) => console.error('💥', e.error || e.message));
     window.addEventListener('unhandledrejection', (e) => console.error('💥 Promise:', e.reason));
-
     console.log('🚀 [Boot] بدء التشغيل...');
 
     try {
@@ -1970,33 +2035,30 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
       injectToastAndLoading();
       injectAuthScreen();
       injectAppShell();
-      console.log('✅ [Boot] كل شيء جاهز');
+      console.log('✅ [Boot] جاهز');
     } catch (err) {
       console.error('❌ [Boot]', err);
-      showError('خطأ في التهيئة: ' + err.message);
+      showError('خطأ: ' + err.message);
       return;
     }
 
     setTimeout(() => {
-      const loader = document.getElementById('mo-loader');
-      if (loader) loader.classList.add('hide');
-      setTimeout(() => loader?.remove(), 600);
+      const l = document.getElementById('mo-loader');
+      if (l) l.classList.add('hide');
+      setTimeout(() => l?.remove(), 600);
     }, 400);
 
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeModal();
-    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
     sb.auth.onAuthStateChange((event, session) => {
       console.log('🔐 [Auth]', event);
       if (event === 'SIGNED_OUT') {
         currentUser = null; currentProfile = null;
+        unsubscribeRealtime();
         $('mo-auth-screen')?.classList.add('active');
         $('mo-app')?.classList.remove('active');
       } else if (event === 'SIGNED_IN' && session?.user) {
-        if (currentUser?.id !== session.user.id) {
-          setTimeout(() => handleSession(session), 0);
-        }
+        if (currentUser?.id !== session.user.id) setTimeout(() => handleSession(session), 0);
       } else if (event === 'TOKEN_REFRESHED' && session?.user) {
         currentUser = session.user;
       }
@@ -2005,25 +2067,18 @@ body { font-family: 'Tajawal', system-ui, sans-serif; background: #fafafa; color
     try {
       const { data: { session } } = await sb.auth.getSession();
       await handleSession(session);
-    } catch (e) {
-      console.error('[Bootstrap]', e);
-      await handleSession(null);
-    }
+    } catch (e) { await handleSession(null); }
   }
 
   window.MEN_OFFICE = {
-    open: (mode) => { $('mo-auth-screen')?.classList.add('active'); switchAuthMode(mode || 'login'); },
+    open: (m) => { $('mo-auth-screen')?.classList.add('active'); switchAuthMode(m || 'login'); },
     openModal, closeModal, navigate, logout,
     getCurrentUser: () => currentUser,
-    isAdmin,
     supabase: sb
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bootstrap);
-  } else {
-    bootstrap();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootstrap);
+  else bootstrap();
 })();
 </script>
 
