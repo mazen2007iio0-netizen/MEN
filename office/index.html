@@ -52,8 +52,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
   }
 
   if (!window.supabase || typeof window.supabase.createClient !== 'function') {
-    showError('لم يتم تحميل مكتبة Supabase');
-    return;
+    showError('لم يتم تحميل مكتبة Supabase'); return;
   }
 
   let sb;
@@ -64,12 +63,13 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     window.MEN_SUPABASE = sb;
   } catch (e) { showError('فشل التهيئة: ' + e.message); return; }
 
-  console.log('%c✨ MEN OFFICE v3.0', 'background:linear-gradient(135deg,#000,#333);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900');
+  console.log('%c✨ MEN OFFICE v4.0', 'background:linear-gradient(135deg,#000,#333);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900');
 
   let currentUser = null, currentProfile = null, authMode = 'login', currentPage = 'dashboard';
   let currentEmailIdx = 0, currentChatIdx = 0, searchTerm = '', _resendEmail = '';
-  let pendingMsgFile = null, pendingChatFile = null, pendingEmailFiles = [];
+  let pendingMsgFile = null, pendingEmailFiles = [];
   let notifChannel = null, msgsChannel = null;
+  let previewScale = 1;
 
   const $ = id => document.getElementById(id);
   const $$ = sel => document.querySelectorAll(sel);
@@ -106,6 +106,18 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     return (bytes/1024).toFixed(0)+' KB';
   }
 
+  // ✅ تحديد نوع الملف للمعاينة
+  function getFileKind(url, name, mime) {
+    const ext = (name || '').split('.').pop().toLowerCase();
+    const m = (mime || '').toLowerCase();
+    if (m.startsWith('image/') || ['jpg','jpeg','png','gif','webp','svg','bmp','ico'].includes(ext)) return 'image';
+    if (m.startsWith('video/') || ['mp4','webm','ogg','mov','avi','mkv'].includes(ext)) return 'video';
+    if (m.startsWith('audio/') || ['mp3','wav','ogg','m4a','aac'].includes(ext)) return 'audio';
+    if (m === 'application/pdf' || ext === 'pdf') return 'pdf';
+    if (['txt','md','json','xml','csv','log','html','css','js','ts','jsx','tsx'].includes(ext) || m.startsWith('text/')) return 'text';
+    return 'other';
+  }
+
   const ICONS = {
     check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>',
     close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
@@ -131,7 +143,11 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     upload:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>',
     download:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
     trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
-    attach:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>'
+    attach:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>',
+    eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+    zoomIn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg>',
+    zoomOut:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M8 11h6"/></svg>',
+    rotate:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>'
   };
 
   const LOGO_URL = 'https://www.socialcreator.com/srv/imgs/ti_imgs/202842_332160.png';
@@ -200,13 +216,12 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
       .mo-sb-nav::-webkit-scrollbar{width:0}
       .mo-sb-group{margin-bottom:20px}
       .mo-sb-group-label{display:block;padding:6px 12px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,.28);letter-spacing:2.5px}
-      .mo-sb-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:11px;color:rgba(255,255,255,.55);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:2px;white-space:nowrap;text-decoration:none;transition:all .25s}
+      .mo-sb-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:11px;color:rgba(255,255,255,.55);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:2px;white-space:nowrap;text-decoration:none;transition:all .25s;position:relative}
       .mo-sb-item svg{width:18px;height:18px;flex-shrink:0;pointer-events:none}
       .mo-sb-item span{pointer-events:none}
       .mo-sb-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.95)}
       .mo-sb-item.active{background:rgba(255,255,255,.09);color:#fff}
       .mo-sb-item.active::before{content:'';position:absolute;right:0;top:14px;bottom:14px;width:3px;background:#fff;border-radius:3px}
-      .mo-sb-item{position:relative}
       .mo-sb-badge{margin-inline-start:auto;background:rgba(255,255,255,.09);color:#fff;font-size:10.5px;font-weight:900;padding:2px 8px;border-radius:20px;min-width:22px;text-align:center}
       .mo-sb-tag{margin-inline-start:auto;background:#fff;color:#000;font-size:9.5px;font-weight:900;padding:2px 7px;border-radius:20px}
       .mo-sb-item.special{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
@@ -350,8 +365,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
       .mo-msg-foot textarea:focus{background:#fff;border-color:#000}
       .mo-msg-send{width:46px;height:46px;border-radius:14px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:none;cursor:pointer}
       .mo-msg-send svg{width:18px;height:18px;pointer-events:none}
-      .mo-att-chip{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;text-decoration:none;color:inherit;margin-top:8px}
-      .mo-att-chip svg{width:16px;height:16px;flex-shrink:0}
 
       .mo-cal-wrap{display:grid;grid-template-columns:1.6fr 1fr;gap:20px}
       .mo-calendar{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:24px}
@@ -359,7 +372,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
       .mo-cal-hd b{font-size:17px;font-weight:900}
       .mo-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
       .mo-cal-dow{text-align:center;padding:10px 0;font-size:11px;font-weight:900;color:#a3a3a3}
-      .mo-cal-day{aspect-ratio:1;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;cursor:pointer;position:relative}
+      .mo-cal-day{aspect-ratio:1;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;cursor:pointer}
       .mo-cal-day:hover{background:#f5f5f5}
       .mo-cal-day.muted{color:#a3a3a3;opacity:.35}
       .mo-cal-day.today{background:#000;color:#fff}
@@ -370,10 +383,11 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
       .mo-event-body span{font-size:11.5px;color:#a3a3a3;font-weight:600}
 
       .mo-file-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
-      .mo-file-card{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:20px;transition:all .3s}
+      .mo-file-card{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:20px;transition:all .3s;cursor:pointer}
       .mo-file-card:hover{border-color:#000;transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.08)}
-      .mo-file-ico{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;background:#f5f5f5;color:#000}
+      .mo-file-ico{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;background:#f5f5f5;color:#000;overflow:hidden}
       .mo-file-ico svg{width:24px;height:24px}
+      .mo-file-ico img{width:100%;height:100%;object-fit:cover}
       .mo-file-card b{font-size:13.5px;font-weight:800;display:block;margin-bottom:6px;word-break:break-word}
       .mo-file-card span{font-size:11.5px;color:#a3a3a3;font-weight:700;display:block}
 
@@ -428,9 +442,40 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
       .mo-field input,.mo-field select,.mo-field textarea{width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid #e8e8e8;background:#fff;color:#0a0a0a;font-size:14px;font-weight:600;outline:none;font-family:inherit}
       .mo-field input:focus,.mo-field select:focus,.mo-field textarea:focus{border-color:#000;box-shadow:0 0 0 4px rgba(0,0,0,.05)}
       .mo-field textarea{resize:vertical;min-height:100px}
-      .mo-modal-close{position:absolute;top:18px;left:18px;width:38px;height:38px;border-radius:12px;background:#f5f5f5;border:1px solid #ebebeb;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#525252}
+      .mo-modal-close{position:absolute;top:18px;left:18px;width:38px;height:38px;border-radius:12px;background:#f5f5f5;border:1px solid #ebebeb;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#525252;z-index:10}
       .mo-modal-close:hover{background:#000;color:#fff;border-color:#000}
       .mo-modal-close svg{width:15px;height:15px;pointer-events:none}
+
+      /* 🖼️ FILE PREVIEW */
+      .mo-preview-overlay{position:fixed;inset:0;background:rgba(0,0,0,.94);backdrop-filter:blur(12px);z-index:2000;display:none;flex-direction:column;font-family:'Tajawal',system-ui,sans-serif}
+      .mo-preview-overlay.on{display:flex;animation:moFade .25s}
+      .mo-preview-header{padding:16px 20px;display:flex;align-items:center;gap:14px;color:#fff;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;z-index:5}
+      .mo-preview-title{flex:1;min-width:0}
+      .mo-preview-title b{font-size:15px;font-weight:900;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .mo-preview-title span{font-size:11.5px;color:rgba(255,255,255,.5);font-weight:600}
+      .mo-preview-actions{display:flex;gap:6px;align-items:center;flex-shrink:0}
+      .mo-preview-btn{width:40px;height:40px;border-radius:11px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;transition:all .2s;text-decoration:none}
+      .mo-preview-btn:hover{background:rgba(255,255,255,.18);transform:translateY(-1px)}
+      .mo-preview-btn svg{width:17px;height:17px;pointer-events:none}
+      .mo-preview-btn.primary{background:#fff;color:#000;border-color:#fff}
+      .mo-preview-btn.primary:hover{background:rgba(255,255,255,.9)}
+      .mo-preview-btn.close{background:#dc2626;border-color:#dc2626}
+      .mo-preview-btn.close:hover{background:#b91c1c}
+      .mo-preview-body{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:24px;position:relative}
+      .mo-preview-body img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .25s;user-select:none;border-radius:8px}
+      .mo-preview-body iframe{width:100%;height:100%;border:none;background:#fff;border-radius:10px}
+      .mo-preview-body video,.mo-preview-body audio{max-width:100%;max-height:100%;border-radius:12px;background:#000}
+      .mo-preview-body audio{width:min(500px,100%);background:transparent}
+      .mo-preview-body pre{background:#0a0a0a;color:#e5e5e5;padding:24px;border-radius:12px;font-size:13px;line-height:1.7;font-family:'Courier New',monospace;max-width:900px;width:100%;max-height:100%;overflow:auto;white-space:pre-wrap;word-break:break-word;direction:ltr;text-align:left}
+      .mo-preview-body .mo-preview-unsupported{color:#fff;text-align:center;padding:60px 20px}
+      .mo-preview-body .mo-preview-unsupported svg{width:80px;height:80px;opacity:.3;margin-bottom:20px}
+      .mo-preview-body .mo-preview-unsupported h3{font-size:20px;font-weight:900;margin-bottom:10px}
+      .mo-preview-body .mo-preview-unsupported p{color:rgba(255,255,255,.5);font-size:14px;line-height:1.7;margin-bottom:20px}
+      .mo-preview-body .mo-preview-unsupported a{padding:12px 24px;background:#fff;color:#000;border-radius:12px;text-decoration:none;font-weight:900;font-size:14px;display:inline-flex;align-items:center;gap:8px;transition:all .2s}
+      .mo-preview-body .mo-preview-unsupported a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,255,255,.15)}
+      .mo-preview-loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-weight:700;font-size:14px;display:flex;flex-direction:column;align-items:center;gap:16px}
+      .mo-preview-loading .spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.15);border-top-color:#fff;border-radius:50%;animation:moSpin .8s linear infinite}
+      @keyframes moSpin{to{transform:rotate(360deg)}}
 
       #mo-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(30px);background:#000;color:#fff;padding:14px 26px;border-radius:14px;font-weight:800;font-size:13.5px;z-index:3000;opacity:0;pointer-events:none;transition:all .35s;box-shadow:0 32px 80px rgba(0,0,0,.15);max-width:88vw;display:flex;align-items:center;gap:10px;font-family:'Tajawal',system-ui,sans-serif}
       #mo-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -440,7 +485,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
       #mo-loading{position:fixed;inset:0;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);z-index:9999;display:none;align-items:center;justify-content:center}
       #mo-loading.on{display:flex}
       .mo-spinner{width:44px;height:44px;border-radius:50%;border:3px solid #e8e8e8;border-top-color:#000;animation:moSpin .8s linear infinite}
-      @keyframes moSpin{to{transform:rotate(360deg)}}
 
       .mo-sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:40;display:none}
       .mo-sidebar-overlay.on{display:block}
@@ -475,13 +519,18 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         .mo-kanban{grid-template-columns:1fr}
         .mo-card{padding:20px}
         .mo-icon-btn{width:38px;height:38px}
+        .mo-preview-header{padding:12px 14px;gap:8px}
+        .mo-preview-title b{font-size:13px}
+        .mo-preview-title span{display:none}
+        .mo-preview-btn{width:36px;height:36px}
+        .mo-preview-btn svg{width:15px;height:15px}
       }
     `;
     document.head.appendChild(s);
   }
 
   // ═══════════════════════════════════════════════════════════
-  // AUTH SCREEN
+  // AUTH
   // ═══════════════════════════════════════════════════════════
   function injectAuthScreen() {
     if ($('mo-auth-screen')) return;
@@ -551,7 +600,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     setTimeout(() => {
       const sub = $('moAuthSubmit'), tl = $('moTabLogin'), ts = $('moTabSignup');
       const pi = $('moAuthPassword'), ei = $('moAuthEmail'), ni = $('moAuthName');
-      console.log('🔍 [Bind] Submit:', !!sub);
       if (sub) sub.onclick = (e) => { e.preventDefault(); e.stopPropagation(); handleAuthSubmit(); };
       if (tl) tl.onclick = (e) => { e.preventDefault(); e.stopPropagation(); switchAuthMode('login'); };
       if (ts) ts.onclick = (e) => { e.preventDefault(); e.stopPropagation(); switchAuthMode('signup'); };
@@ -601,19 +649,16 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     if (!isValidEmail(email)) { showAuthMsg('⚠️ صيغة البريد خاطئة'); return; }
     if (password.length < 6) { showAuthMsg('⚠️ كلمة المرور 6 أحرف'); return; }
     if (authMode === 'signup' && !name) { showAuthMsg('⚠️ أدخل الاسم'); return; }
-
     const orig = $('moAuthSubmitText')?.textContent || '';
     btn.disabled = true;
     if ($('moAuthSubmitText')) $('moAuthSubmitText').textContent = 'جارٍ...';
-
     try {
       if (authMode === 'signup') {
         const { data, error } = await sb.auth.signUp({ email, password, options: { data: { name, full_name: name } } });
         if (error) {
           const m = (error.message || '').toLowerCase();
-          if (m.includes('already') || m.includes('registered')) showAuthMsg('📧 البريد مسجّل — جرّب الدخول');
+          if (m.includes('already') || m.includes('registered')) showAuthMsg('📧 البريد مسجّل');
           else if (m.includes('password')) showAuthMsg('🔒 كلمة مرور ضعيفة');
-          else if (m.includes('rate') || m.includes('many')) showAuthMsg('⏱️ انتظر قليلاً');
           else showAuthMsg('❌ ' + error.message);
           return;
         }
@@ -621,30 +666,19 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
           try { await sb.from('profiles').upsert({ id: data.user.id, name, email, role: 'مدير عام' }, { onConflict: 'id' }); } catch(e) {}
         }
         if (data.user && !data.session) {
-          _resendEmail = email;
-          showAuthMsg(`<div style="text-align:right;line-height:1.8">✅ <b>تم إنشاء حسابك!</b><br>📧 رابط التفعيل أُرسل إلى:<br><span style="direction:ltr;display:inline-block;color:#000;font-weight:800">${escapeHtml(email)}</span></div>`, true);
-          setTimeout(() => { switchAuthMode('login'); if ($('moAuthEmail')) $('moAuthEmail').value = email; showAuthMsg('✅ تحقق من بريدك', true); }, 5000);
+          showAuthMsg(`<div style="text-align:right;line-height:1.8">✅ <b>تم إنشاء حسابك!</b><br>📧 تحقق من: <span style="direction:ltr;display:inline-block;color:#000;font-weight:800">${escapeHtml(email)}</span></div>`, true);
+          setTimeout(() => { switchAuthMode('login'); if ($('moAuthEmail')) $('moAuthEmail').value = email; }, 5000);
           return;
         }
         if (data.session) { toast('🎉 مرحباً بك!'); await handleSession(data.session); }
       } else {
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
-        if (error) {
-          const m = (error.message || '').toLowerCase();
-          if (m.includes('invalid') || m.includes('credentials')) showAuthMsg('❌ البريد أو كلمة المرور خاطئة');
-          else if (m.includes('confirm') || m.includes('verified')) showAuthMsg('📧 أكد بريدك أولاً');
-          else showAuthMsg('❌ ' + error.message);
-          return;
-        }
+        if (error) { showAuthMsg('❌ البريد أو كلمة المرور خاطئة'); return; }
         toast('🎉 مرحباً بعودتك!');
         await handleSession(data.session);
       }
-    } catch (err) {
-      showAuthMsg('❌ ' + (err.message || 'خطأ اتصال'));
-    } finally {
-      btn.disabled = false;
-      if ($('moAuthSubmitText')) $('moAuthSubmitText').textContent = orig;
-    }
+    } catch (err) { showAuthMsg('❌ ' + (err.message || 'خطأ')); }
+    finally { btn.disabled = false; if ($('moAuthSubmitText')) $('moAuthSubmitText').textContent = orig; }
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -722,6 +756,19 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         </div>
         <div class="mo-sidebar-overlay" id="moSidebarOverlay"></div>
       </div>
+
+      <!-- 🖼️ PREVIEW MODAL -->
+      <div id="mo-preview" class="mo-preview-overlay">
+        <div class="mo-preview-header">
+          <div class="mo-preview-title">
+            <b id="moPreviewName">—</b>
+            <span id="moPreviewMeta">—</span>
+          </div>
+          <div class="mo-preview-actions" id="moPreviewActions"></div>
+          <button class="mo-preview-btn close" id="moPreviewClose" type="button" title="إغلاق">${ICONS.close}</button>
+        </div>
+        <div class="mo-preview-body" id="moPreviewBody"></div>
+      </div>
     `;
     document.body.appendChild(wrap);
 
@@ -748,6 +795,27 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
 
         const goto = e.target.closest('[data-goto]');
         if (goto) { navigate(goto.dataset.goto); return; }
+
+        // ✅ PREVIEW triggers (first priority)
+        const previewBtn = e.target.closest('[data-preview]');
+        if (previewBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          const id = previewBtn.dataset.preview;
+          // Try files store
+          const fromFiles = store.files.find(f => f.id === id);
+          if (fromFiles) { openFilePreview(fromFiles); return; }
+          // Try attachments embedded in data attributes
+          const url = previewBtn.dataset.url;
+          const name = previewBtn.dataset.name;
+          const size = previewBtn.dataset.size;
+          if (url) {
+            openFilePreview({ url, name: name || 'ملف', size: size || '—' });
+            return;
+          }
+          return;
+        }
+
         const dl = e.target.closest('[data-download]');
         if (dl) { downloadFile(dl.dataset.download); return; }
         const del = e.target.closest('[data-delete]');
@@ -758,9 +826,15 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         if (emailItem) { selectEmail(+emailItem.dataset.emailIdx); return; }
         const chatContact = e.target.closest('.mo-msg-contact[data-chat-idx]');
         if (chatContact) { currentChatIdx = +chatContact.dataset.chatIdx; renderCurrentPage(); return; }
+
+        // File card (whole card) — preview
+        const fileCard = e.target.closest('.mo-file-card[data-file-id]');
+        if (fileCard) {
+          const f = store.files.find(x => x.id === fileCard.dataset.fileId);
+          if (f) { openFilePreview(f); return; }
+        }
       });
 
-      // Change events (file inputs)
       appEl.addEventListener('change', (e) => {
         if (e.target.id === 'moFileInput') {
           const files = Array.from(e.target.files || []);
@@ -786,10 +860,9 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
 
       $('moGlobalSearch')?.addEventListener('input', (e) => {
         searchTerm = e.target.value.trim().toLowerCase();
-        if (['email', 'tasks', 'projects'].includes(currentPage)) renderCurrentPage();
+        if (['email', 'tasks', 'projects', 'files'].includes(currentPage)) renderCurrentPage();
       });
 
-      // Notifications
       const notifBtn = $('moNotifBtn'), notifPanel = $('moNotifPanel');
       notifBtn?.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -808,6 +881,12 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
           toast('تم تحديد الكل كمقروء');
           await loadNotifications();
         } catch (e) {}
+      });
+
+      // ✅ Preview modal events
+      $('moPreviewClose')?.addEventListener('click', closeFilePreview);
+      $('mo-preview')?.addEventListener('click', (e) => {
+        if (e.target.id === 'mo-preview') closeFilePreview();
       });
     }, 50);
   }
@@ -838,6 +917,102 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
 
   const showLoading = () => $('mo-loading')?.classList.add('on');
   const hideLoading = () => $('mo-loading')?.classList.remove('on');
+
+  // ═══════════════════════════════════════════════════════════
+  // 🖼️ FILE PREVIEW
+  // ═══════════════════════════════════════════════════════════
+  function openFilePreview(file) {
+    const overlay = $('mo-preview');
+    const body = $('moPreviewBody');
+    const nameEl = $('moPreviewName');
+    const metaEl = $('moPreviewMeta');
+    const actionsEl = $('moPreviewActions');
+    if (!overlay || !body) return;
+
+    previewScale = 1;
+    const kind = getFileKind(file.url, file.name, file.mime || file.mime_type);
+    const url = file.url;
+
+    nameEl.textContent = file.name || 'ملف';
+    metaEl.textContent = `${file.size || '—'} · ${kind.toUpperCase()}`;
+
+    // Buttons
+    let actionsHtml = '';
+    if (kind === 'image') {
+      actionsHtml += `
+        <button class="mo-preview-btn" id="moPrevZoomOut" type="button" title="تصغير">${ICONS.zoomOut}</button>
+        <button class="mo-preview-btn" id="moPrevZoomIn" type="button" title="تكبير">${ICONS.zoomIn}</button>
+        <button class="mo-preview-btn" id="moPrevReset" type="button" title="إعادة ضبط">${ICONS.rotate}</button>
+      `;
+    }
+    actionsHtml += `<a class="mo-preview-btn primary" href="${escapeHtml(url)}" download="${escapeHtml(file.name || '')}" title="تحميل">${ICONS.download}</a>`;
+    actionsEl.innerHTML = actionsHtml;
+
+    // Loading spinner
+    body.innerHTML = '<div class="mo-preview-loading"><div class="spinner"></div><span>جارٍ التحميل...</span></div>';
+
+    // Build content based on kind
+    const showContent = () => {
+      if (kind === 'image') {
+        body.innerHTML = `<img id="moPreviewImg" src="${escapeHtml(url)}" alt="${escapeHtml(file.name)}" style="transform:scale(1)">`;
+        const img = $('moPreviewImg');
+        img.addEventListener('load', () => {});
+        img.addEventListener('error', () => showUnsupported(file, url));
+        // Zoom buttons
+        setTimeout(() => {
+          $('moPrevZoomIn')?.addEventListener('click', () => { previewScale = Math.min(5, previewScale + 0.25); img.style.transform = `scale(${previewScale})`; });
+          $('moPrevZoomOut')?.addEventListener('click', () => { previewScale = Math.max(0.25, previewScale - 0.25); img.style.transform = `scale(${previewScale})`; });
+          $('moPrevReset')?.addEventListener('click', () => { previewScale = 1; img.style.transform = `scale(1)`; });
+        }, 20);
+      } else if (kind === 'video') {
+        body.innerHTML = `<video controls autoplay src="${escapeHtml(url)}" preload="metadata"></video>`;
+        body.querySelector('video').addEventListener('error', () => showUnsupported(file, url));
+      } else if (kind === 'audio') {
+        body.innerHTML = `
+          <div style="text-align:center">
+            <div style="width:120px;height:120px;border-radius:30px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;color:#fff">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:50px;height:50px"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <div style="color:#fff;font-weight:900;font-size:15px;margin-bottom:20px">${escapeHtml(file.name)}</div>
+            <audio controls autoplay src="${escapeHtml(url)}" style="width:min(500px,90vw)"></audio>
+          </div>
+        `;
+      } else if (kind === 'pdf') {
+        body.innerHTML = `<iframe src="${escapeHtml(url)}#toolbar=1" title="${escapeHtml(file.name)}"></iframe>`;
+      } else if (kind === 'text') {
+        fetch(url).then(r => r.text()).then(text => {
+          body.innerHTML = `<pre>${escapeHtml(text.slice(0, 50000))}</pre>`;
+        }).catch(() => showUnsupported(file, url));
+      } else {
+        showUnsupported(file, url);
+      }
+    };
+
+    const showUnsupported = (f, u) => {
+      body.innerHTML = `
+        <div class="mo-preview-unsupported">
+          ${ICONS.file}
+          <h3>لا يمكن معاينة هذا النوع</h3>
+          <p>${escapeHtml(f.name || 'ملف')}<br>${escapeHtml(f.size || '')}</p>
+          <a href="${escapeHtml(u)}" download="${escapeHtml(f.name || '')}" target="_blank">
+            ${ICONS.download} تحميل الملف
+          </a>
+        </div>
+      `;
+    };
+
+    overlay.classList.add('on');
+    document.body.style.overflow = 'hidden';
+    setTimeout(showContent, 100);
+  }
+
+  function closeFilePreview() {
+    const overlay = $('mo-preview');
+    const body = $('moPreviewBody');
+    if (overlay) overlay.classList.remove('on');
+    if (body) body.innerHTML = '';
+    document.body.style.overflow = '';
+  }
 
   // ═══════════════════════════════════════════════════════════
   // SESSION
@@ -896,7 +1071,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
   }
 
   // ═══════════════════════════════════════════════════════════
-  // DATA STORE
+  // STORE
   // ═══════════════════════════════════════════════════════════
   const store = { projects: [], tasks: [], emails: [], employees: [], files: [], events: [], chats: [], notifications: [], loaded: false };
 
@@ -914,14 +1089,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         sb.from('events').select('*').eq('user_id', uid).order('event_time').limit(50),
         sb.from('chats').select('*').eq('user_id', uid).order('created_at', { ascending: false }).limit(50)
       ]);
-
-      if (pR.error) console.warn('⚠️ profiles:', pR.error.message);
-      if (prR.error) console.warn('⚠️ projects:', prR.error.message);
-      if (tR.error) console.warn('⚠️ tasks:', tR.error.message);
-      if (eR.error) console.warn('⚠️ emails:', eR.error.message);
-      if (fR.error) console.warn('⚠️ files:', fR.error.message);
-      if (evR.error) console.warn('⚠️ events:', evR.error.message);
-      if (cR.error) console.warn('⚠️ chats:', cR.error.message);
 
       store.employees = (pR.data || []).map(p => ({
         id: p.id, name: p.name || 'مستخدم', role: p.role || 'موظف', email: p.email, tasks: 0, projects: 0
@@ -953,7 +1120,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
 
       store.files = (fR.data || []).map(f => ({
         id: f.id, name: f.name, size: f.size || '0 KB',
-        url: f.url, mime_type: f.mime_type, user_id: f.user_id,
+        url: f.url, mime: f.mime_type, mime_type: f.mime_type, user_id: f.user_id,
         date: formatTimeAgo(f.created_at)
       }));
 
@@ -1027,7 +1194,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     }
     const icons = { task: '✅', message: '💬', email: '📧', project: '📊', file: '📁', info: '🔔' };
     list.innerHTML = notifs.map(n => `
-      <div class="mo-notif-item" data-notif-id="${n.id}" style="padding:14px 20px;border-bottom:1px solid #f4f4f4;cursor:pointer;display:flex;gap:12px;align-items:flex-start;background:${n.is_read ? '#fff' : '#fafafa'};transition:all .2s">
+      <div class="mo-notif-item" data-notif-id="${n.id}" style="padding:14px 20px;border-bottom:1px solid #f4f4f4;cursor:pointer;display:flex;gap:12px;align-items:flex-start;background:${n.is_read ? '#fff' : '#fafafa'}">
         <div style="width:36px;height:36px;border-radius:10px;background:${n.is_read ? '#f5f5f5' : '#000'};color:${n.is_read ? '#525252' : '#fff'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">${icons[n.type] || '🔔'}</div>
         <div style="flex:1;min-width:0">
           <b style="font-size:13px;font-weight:800;display:block;margin-bottom:3px">${escapeHtml(n.title)}</b>
@@ -1037,16 +1204,12 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         ${!n.is_read ? `<div style="width:8px;height:8px;background:#000;border-radius:50%;flex-shrink:0;margin-top:6px"></div>` : ''}
       </div>
     `).join('');
-
     list.querySelectorAll('.mo-notif-item').forEach(el => {
       el.addEventListener('click', async () => {
         const id = el.dataset.notifId;
         const n = notifs.find(x => x.id === id);
         await sb.from('notifications').update({ is_read: true }).eq('id', id);
-        if (n?.link) {
-          const page = n.link.replace('#', '');
-          if (PAGES[page]) navigate(page);
-        }
+        if (n?.link) { const page = n.link.replace('#', ''); if (PAGES[page]) navigate(page); }
         $('moNotifPanel').style.display = 'none';
         await loadNotifications();
       });
@@ -1054,26 +1217,22 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
   }
 
   async function createNotification(userId, title, body, type = 'info', link = null) {
-    try {
-      await sb.from('notifications').insert({ user_id: userId, title, body, type, link });
-    } catch (e) { console.warn('[Notif Create]', e.message); }
+    try { await sb.from('notifications').insert({ user_id: userId, title, body, type, link }); }
+    catch (e) { console.warn('[Notif Create]', e.message); }
   }
 
   function subscribeRealtime() {
     if (!currentUser) return;
-
     notifChannel = sb.channel('notif-' + currentUser.id)
       .on('postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_id=eq.${currentUser.id}` },
         (payload) => {
-          console.log('🔔 إشعار:', payload.new.title);
           store.notifications = [payload.new, ...(store.notifications || [])];
           updateNotifBadge();
           toast('🔔 ' + payload.new.title);
           if ($('moNotifPanel')?.style.display === 'block') renderNotifPanel();
         })
       .subscribe();
-
     msgsChannel = sb.channel('msg-' + currentUser.id)
       .on('postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'messages' },
@@ -1084,11 +1243,8 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
           const time = new Date(payload.new.created_at).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
           chat.messages.push({ from: 'them', text: payload.new.text, attachment: payload.new.attachment, time });
           chat.last = payload.new.text || '📎 مرفق';
-          if (currentPage === 'messages' && store.chats[currentChatIdx]?.id === chat.id) {
-            renderCurrentPage();
-          } else {
-            toast('💬 رسالة من ' + chat.name);
-          }
+          if (currentPage === 'messages' && store.chats[currentChatIdx]?.id === chat.id) renderCurrentPage();
+          else toast('💬 رسالة من ' + chat.name);
         })
       .subscribe();
   }
@@ -1109,7 +1265,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     messages: { title: 'الرسائل', sub: 'محادثات' },
     calendar: { title: 'التقويم', sub: 'مواعيدك' },
     employees: { title: 'الموظفون', sub: 'الفريق' },
-    files: { title: 'الملفات', sub: 'رفع وتحميل' },
+    files: { title: 'الملفات', sub: 'رفع، معاينة، وتحميل' },
     reports: { title: 'التقارير', sub: 'الأداء' },
     ai: { title: 'الذكاء الاصطناعي', sub: 'مساعد' },
     settings: { title: 'الإعدادات', sub: 'المنصة' }
@@ -1179,7 +1335,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
       { label: 'المشاريع', value: P.length, trend: '+12%', up: true, ico: 'folder' },
       { label: 'المهام', value: T.length, trend: '+8%', up: true, ico: 'check' },
       { label: 'الرسائل', value: E.length, trend: '+3', up: true, ico: 'mail' },
-      { label: 'الموظفون', value: store.employees.length, trend: '—', up: true, ico: 'users' }
+      { label: 'الملفات', value: store.files.length, trend: '—', up: true, ico: 'file' }
     ];
     const statCards = stats.map(s => `
       <div class="mo-stat">
@@ -1196,6 +1352,11 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         <div class="mo-list-body"><b>${escapeHtml(t.title)}</b><span>${escapeHtml(t.project)} · ${escapeHtml(t.assignee)}</span></div>
         <span class="mo-badge ${t.priority.includes('عالي') ? 'dark' : ''}">${escapeHtml(t.priority)}</span>
       </div>`).join('') || '<div class="mo-empty" style="padding:30px"><p>لا توجد مهام</p></div>';
+    const recentFiles = store.files.slice(0, 4).map(f => `
+      <div class="mo-list-item" style="cursor:pointer" data-preview="${f.id}">
+        <div class="mo-av" style="background:linear-gradient(135deg,#4f46e5,#7c3aed)">${ICONS.file}</div>
+        <div class="mo-list-body"><b>${escapeHtml(f.name)}</b><span>${f.size} · ${f.date}</span></div>
+      </div>`).join('') || '<div class="mo-empty" style="padding:30px"><p>لا توجد ملفات</p></div>';
     const days = ['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
     const bars = days.map((d, i) => {
       const h = [45,68,52,80,62,88,54][i];
@@ -1214,6 +1375,10 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
           <div class="mo-card-hd"><h3>${ICONS.check} مهام قادمة</h3></div>
           ${recentTasks}
         </div>
+      </div>
+      <div class="mo-card">
+        <div class="mo-card-hd"><div><h3>${ICONS.file} أحدث الملفات</h3></div><button class="mo-btn mo-btn-ghost" data-goto="files" style="padding:8px 14px;font-size:12.5px" type="button">عرض الكل</button></div>
+        ${recentFiles}
       </div>
     `;
   }
@@ -1330,15 +1495,15 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         <div style="font-size:12px;font-weight:900;color:#525252;margin-bottom:12px">📎 المرفقات (${atts.length})</div>
         <div style="display:flex;flex-direction:column;gap:8px">
           ${atts.map(a => `
-            <a href="${escapeHtml(a.url)}" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fafafa;border:1px solid #ebebeb;border-radius:12px;text-decoration:none;color:inherit;transition:all .2s"
-               onmouseover="this.style.borderColor='#000'" onmouseout="this.style.borderColor='#ebebeb'">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fafafa;border:1px solid #ebebeb;border-radius:12px">
               <div style="width:38px;height:38px;border-radius:10px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0">${ICONS.file}</div>
-              <div style="flex:1;min-width:0">
+              <div style="flex:1;min-width:0;cursor:pointer" data-preview-email="${escapeHtml(a.url)}" data-name="${escapeHtml(a.name)}" data-size="${escapeHtml(a.size || '')}">
                 <b style="font-size:13px;font-weight:800;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(a.name)}</b>
                 <span style="font-size:11px;color:#a3a3a3;font-weight:700">${escapeHtml(a.size || '—')}</span>
               </div>
-              <div style="color:#000">${ICONS.download}</div>
-            </a>
+              <button class="mo-btn mo-btn-ghost" type="button" data-preview-email="${escapeHtml(a.url)}" data-name="${escapeHtml(a.name)}" data-size="${escapeHtml(a.size || '')}" style="padding:6px 12px;font-size:11.5px">${ICONS.eye} معاينة</button>
+              <a class="mo-btn mo-btn-ghost" href="${escapeHtml(a.url)}" download="${escapeHtml(a.name)}" style="padding:6px 12px;font-size:11.5px;text-decoration:none">${ICONS.download}</a>
+            </div>
           `).join('')}
         </div>
       </div>
@@ -1380,14 +1545,19 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     const chat = store.chats[currentChatIdx];
     const bubbles = chat.messages.map(m => {
       const att = m.attachment;
+      const kind = att ? getFileKind(att.url, att.name, att.mime) : '';
       const attHtml = att ? `
-        <a href="${escapeHtml(att.url)}" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px;margin-top:8px;background:${m.from === 'me' ? 'rgba(255,255,255,.15)' : '#f5f5f5'};border-radius:10px;text-decoration:none;color:inherit">
-          <div style="width:32px;height:32px;border-radius:8px;background:${m.from === 'me' ? '#fff' : '#000'};color:${m.from === 'me' ? '#000' : '#fff'};display:flex;align-items:center;justify-content:center;flex-shrink:0">${ICONS.file}</div>
-          <div style="flex:1;min-width:0">
+        <div style="margin-top:8px;background:${m.from === 'me' ? 'rgba(255,255,255,.12)' : '#f5f5f5'};border-radius:10px;padding:10px;display:flex;align-items:center;gap:10px">
+          ${kind === 'image' ? `
+            <img src="${escapeHtml(att.url)}" alt="" style="width:44px;height:44px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0" data-preview-msg="${escapeHtml(att.url)}" data-name="${escapeHtml(att.name)}" data-size="${escapeHtml(att.size || '')}">
+          ` : `
+            <div style="width:36px;height:36px;border-radius:8px;background:${m.from === 'me' ? '#fff' : '#000'};color:${m.from === 'me' ? '#000' : '#fff'};display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer" data-preview-msg="${escapeHtml(att.url)}" data-name="${escapeHtml(att.name)}" data-size="${escapeHtml(att.size || '')}">${ICONS.file}</div>
+          `}
+          <div style="flex:1;min-width:0;cursor:pointer" data-preview-msg="${escapeHtml(att.url)}" data-name="${escapeHtml(att.name)}" data-size="${escapeHtml(att.size || '')}">
             <b style="font-size:12px;font-weight:800;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(att.name)}</b>
             <span style="font-size:10.5px;opacity:.7;font-weight:700">${escapeHtml(att.size || '—')}</span>
           </div>
-        </a>
+        </div>
       ` : '';
       return `
         <div class="mo-bubble ${m.from === 'me' ? 'me' : 'them'}">
@@ -1436,7 +1606,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     if (!currentUser) return;
     const chat = store.chats[currentChatIdx];
     if (!chat) return;
-
     let attachment = null;
     try {
       if (pendingMsgFile) {
@@ -1447,15 +1616,12 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         const { data: { publicUrl } } = sb.storage.from('files').getPublicUrl(path);
         attachment = { name: file.name, size: humanSize(file.size), url: publicUrl, mime: file.type };
       }
-
       const time = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
       const msgText = text || '';
-
       const { error } = await sb.from('messages').insert({
         chat_id: chat.id, from_user: currentUser.id, text: msgText, attachment
       });
       if (error) throw error;
-
       chat.messages.push({ from: 'me', text: msgText, attachment, time });
       chat.last = msgText || '📎 مرفق';
       inp.value = '';
@@ -1515,16 +1681,24 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
   }
 
   function renderFiles() {
-    const cards = store.files.map(f => `
-      <div class="mo-file-card">
-        <div class="mo-file-ico">${ICONS.file}</div>
+    const filtered = searchTerm ? store.files.filter(f => f.name.toLowerCase().includes(searchTerm)) : store.files;
+    const cards = filtered.map(f => {
+      const kind = getFileKind(f.url, f.name, f.mime);
+      const ico = kind === 'image' && f.url
+        ? `<img src="${escapeHtml(f.url)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+        : ICONS.file;
+      return `
+      <div class="mo-file-card" data-file-id="${f.id}">
+        <div class="mo-file-ico">${ico}</div>
         <b>${escapeHtml(f.name)}</b>
         <span>${f.size} · ${f.date}</span>
         <div style="display:flex;gap:6px;margin-top:12px">
-          <button class="mo-btn mo-btn-ghost" data-download="${f.id}" style="flex:1;padding:8px;font-size:11.5px" type="button">${ICONS.download} تحميل</button>
-          ${f.user_id === currentUser?.id ? `<button class="mo-btn mo-btn-ghost" data-delete="${f.id}" style="padding:8px 10px;color:#dc2626" type="button">${ICONS.trash}</button>` : ''}
+          <button class="mo-btn mo-btn-ghost" data-preview="${f.id}" style="flex:1;padding:8px;font-size:11.5px" type="button">${ICONS.eye} معاينة</button>
+          <button class="mo-btn mo-btn-ghost" data-download="${f.id}" style="padding:8px 10px" type="button" title="تحميل">${ICONS.download}</button>
+          ${f.user_id === currentUser?.id ? `<button class="mo-btn mo-btn-ghost" data-delete="${f.id}" style="padding:8px 10px;color:#dc2626" type="button" title="حذف">${ICONS.trash}</button>` : ''}
         </div>
-      </div>`).join('') || '<div class="mo-card mo-empty" style="grid-column:1/-1"><h3>لا توجد ملفات</h3><p>ارفع أول ملف</p></div>';
+      </div>`;
+    }).join('') || '<div class="mo-card mo-empty" style="grid-column:1/-1"><h3>لا توجد ملفات</h3><p>ارفع أول ملف</p></div>';
     return `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap">
         <button class="mo-btn mo-btn-primary" id="moUploadBtn" type="button">${ICONS.upload} رفع ملف</button>
@@ -1547,7 +1721,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     const bar = $('moUploadBar'), pct = $('moUploadPct'), nameEl = $('moUploadName');
     if (progress) progress.style.display = 'block';
     let success = 0, failed = 0;
-
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (nameEl) nameEl.textContent = `(${i+1}/${files.length}) ${file.name}`;
@@ -1571,7 +1744,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         toast(`فشل رفع ${file.name}`, 'error');
       }
     }
-
     if (success > 0) {
       toast(`✅ تم رفع ${success} ملف${failed ? ` (${failed} فشل)` : ''}`);
       await createNotification(currentUser.id, 'تم رفع ملفات', `تم رفع ${success} ملف`, 'file', '#files');
@@ -1584,7 +1756,14 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
   async function downloadFile(id) {
     const f = store.files.find(x => x.id === id);
     if (!f?.url) { toast('الملف غير متاح', 'error'); return; }
-    window.open(f.url, '_blank');
+    const a = document.createElement('a');
+    a.href = f.url;
+    a.download = f.name || 'file';
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    toast('⬇️ جارٍ التحميل...');
   }
 
   async function deleteFile(id) {
@@ -1607,7 +1786,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     const stats = [
       { label: 'المشاريع', value: P.length, trend: '+12%', up: true, ico: 'folder' },
       { label: 'مكتملة', value: T.filter(t => t.status === 'done').length, trend: '+8%', up: true, ico: 'check' },
-      { label: 'الرسائل', value: store.emails.length, trend: '+3', up: true, ico: 'mail' },
+      { label: 'الملفات', value: store.files.length, trend: '+5', up: true, ico: 'file' },
       { label: 'الموظفون', value: store.employees.length, trend: '—', up: true, ico: 'users' }
     ];
     const teamBars = store.employees.slice(0, 6).map(e => {
@@ -1720,7 +1899,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         </div>
         <div class="mo-setting-card">
           <h3>${ICONS.check} عن المنصة</h3>
-          <div class="mo-setting-row"><div class="sr-info"><b>الإصدار</b><span>3.0.0</span></div></div>
+          <div class="mo-setting-row"><div class="sr-info"><b>الإصدار</b><span>4.0.0</span></div></div>
         </div>
       </div>
     `;
@@ -1732,7 +1911,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
   function openModal(type) {
     const m = $('mo-modal');
     if (!m) return;
-
     if (type === 'task') {
       m.innerHTML = `
         <button class="mo-modal-close" type="button" id="moModalClose">${ICONS.close}</button>
@@ -1975,11 +2153,9 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     const body = $('moMEmailBody').value.trim();
     if (!to || !subject || !body) { toast('أكمل الحقول', 'error'); return; }
     if (!isValidEmail(to)) { toast('البريد غير صحيح', 'error'); return; }
-
     const sendBtn = $('moMSendEmail');
     const orig = sendBtn?.innerHTML;
     if (sendBtn) { sendBtn.disabled = true; sendBtn.innerHTML = 'جارٍ الإرسال...'; }
-
     try {
       const attachments = [];
       for (const file of pendingEmailFiles) {
@@ -1989,7 +2165,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         const { data: { publicUrl } } = sb.storage.from('files').getPublicUrl(path);
         attachments.push({ name: file.name, size: humanSize(file.size), url: publicUrl, mime: file.type });
       }
-
       const { error } = await sb.from('emails').insert({
         user_id: currentUser.id, to_email: to, to_name: toName,
         from_name: currentProfile?.name || currentUser.email,
@@ -1997,17 +2172,13 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         subject, body, is_read: true, attachments
       });
       if (error) throw error;
-
       closeModal();
       toast(`✅ تم الإرسال${attachments.length ? ' مع ' + attachments.length + ' مرفق' : ''}`);
       await createNotification(currentUser.id, 'تم إرسال بريد', subject, 'email', '#email');
       await loadAllData();
       navigate('email');
-    } catch (e) {
-      toast('فشل: ' + e.message, 'error');
-    } finally {
-      if (sendBtn) { sendBtn.disabled = false; sendBtn.innerHTML = orig; }
-    }
+    } catch (e) { toast('فشل: ' + e.message, 'error'); }
+    finally { if (sendBtn) { sendBtn.disabled = false; sendBtn.innerHTML = orig; } }
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -2029,7 +2200,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     window.addEventListener('error', (e) => console.error('💥', e.error || e.message));
     window.addEventListener('unhandledrejection', (e) => console.error('💥 Promise:', e.reason));
     console.log('🚀 [Boot] بدء التشغيل...');
-
     try {
       injectCSS();
       injectToastAndLoading();
@@ -2041,17 +2211,33 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
       showError('خطأ: ' + err.message);
       return;
     }
-
     setTimeout(() => {
       const l = document.getElementById('mo-loader');
       if (l) l.classList.add('hide');
       setTimeout(() => l?.remove(), 600);
     }, 400);
 
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    // ✅ معالجة روابط المعاينة في البريد/الرسائل (Event Delegation عام)
+    document.body.addEventListener('click', (e) => {
+      const el = e.target.closest('[data-preview-email], [data-preview-msg]');
+      if (el) {
+        e.preventDefault();
+        e.stopPropagation();
+        const url = el.dataset.previewEmail || el.dataset.previewMsg;
+        const name = el.dataset.name || 'ملف';
+        const size = el.dataset.size || '—';
+        if (url) openFilePreview({ url, name, size });
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        if ($('mo-preview')?.classList.contains('on')) closeFilePreview();
+        else closeModal();
+      }
+    });
 
     sb.auth.onAuthStateChange((event, session) => {
-      console.log('🔐 [Auth]', event);
       if (event === 'SIGNED_OUT') {
         currentUser = null; currentProfile = null;
         unsubscribeRealtime();
@@ -2073,6 +2259,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
   window.MEN_OFFICE = {
     open: (m) => { $('mo-auth-screen')?.classList.add('active'); switchAuthMode(m || 'login'); },
     openModal, closeModal, navigate, logout,
+    openFilePreview, closeFilePreview,
     getCurrentUser: () => currentUser,
     supabase: sb
   };
