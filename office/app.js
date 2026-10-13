@@ -1,6 +1,5 @@
 /* ============================================================
-   ✨ MEN Office — App v1.1 (Fixed)
-   (Business Management + Email + Tasks + Projects + AI)
+   ✨ MEN Office — App v1.2 (Final Fix)
    ============================================================ */
 (function () {
   'use strict';
@@ -9,18 +8,10 @@
   const SUPABASE_URL      = 'https://wziuzllafxjpiwcputwn.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6aXV6bGxhZnhqcGl3Y3B1dHduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxOTI0MDksImV4cCI6MjEwNTc2ODQwOX0.YfdTdXNydRI1olcQKAeLHn0-rOrbY-_P1gzndwhfIeU';
 
-  const credsReady = SUPABASE_URL.startsWith('https://')
-                  && SUPABASE_URL.includes('.supabase.co')
-                  && SUPABASE_ANON_KEY.startsWith('eyJ')
-                  && SUPABASE_ANON_KEY.length > 100;
-
-  if (!credsReady) {
-    console.error('❌ ضع مفاتيح Supabase الصحيحة');
-    window.MEN_OFFICE = { open: () => alert('❌ أضف المفاتيح'), navigate: () => {}, logout: () => {} };
+  if (!window.supabase?.createClient) {
+    console.error('❌ [MEN_OFFICE] SDK Supabase غير محمّل! أضف: <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"><\/script>');
     return;
   }
-
-  if (!window.supabase?.createClient) { console.error('[MEN_OFFICE] SDK غير محمّل'); return; }
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: {
@@ -33,12 +24,9 @@
   });
   window.MEN_SUPABASE = sb;
 
-  console.log('%c✨ MEN OFFICE v1.1', 'background:linear-gradient(135deg,#000,#333);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
+  console.log('%c✨ MEN OFFICE v1.2', 'background:linear-gradient(135deg,#000,#333);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
   // ════════ 📋 الثوابت ════════
-  const APP_NAME = 'MEN Office';
-  const APP_TAGLINE = 'منصة إدارة الأعمال المتكاملة';
-  const SUPPORT_EMAIL = 'info@menoffice.com';
   const ADMIN_EMAILS = ['mkmkmkl24666606@gmail.com'];
 
   let currentUser = null;
@@ -48,6 +36,7 @@
   let currentEmailIdx = 0;
   let currentChatIdx = 0;
   let searchTerm = '';
+  let _resendEmail = '';
 
   const $ = id => document.getElementById(id);
   const $$ = sel => document.querySelectorAll(sel);
@@ -96,7 +85,7 @@
 
   function makeInitialsAvatar(name, size = 200) {
     const ini = initials(name);
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#262626"/><stop offset="100%" stop-color="#000"/></linearGradient></defs><rect width="${size}" height="${size}" fill="url(#g)"/><text x="50%" y="52%" text-anchor="middle" dominant-baseline="central" font-family="Tajawal,Arial,sans-serif" font-size="${Math.round(size * 0.44)}" font-weight="900" fill="#ffffff">${ini}</text></svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}"><rect width="${size}" height="${size}" fill="#000"/><text x="50%" y="52%" text-anchor="middle" dominant-baseline="central" font-family="Tajawal,Arial,sans-serif" font-size="${Math.round(size * 0.44)}" font-weight="900" fill="#ffffff">${ini}</text></svg>`;
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   }
 
@@ -128,24 +117,20 @@
   const LOGO_URL = 'https://www.socialcreator.com/srv/imgs/ti_imgs/202842_332160.png';
 
   // ═══════════════════════════════════════════════════════════
-  // 🎨 CSS Injection
+  // 🎨 CSS
   // ═══════════════════════════════════════════════════════════
   function injectCSS() {
     if ($('menOfficeStyles')) return;
     const s = document.createElement('style');
     s.id = 'menOfficeStyles';
     s.textContent = `
-      /* ═══ BASE ═══ */
       .mo-screen{position:fixed;inset:0;z-index:9999;display:none;font-family:'Tajawal',system-ui,-apple-system,sans-serif;background:#fafafa;overflow-y:auto;overflow-x:hidden}
       .mo-screen.active{display:block;animation:moFade .3s ease}
       @keyframes moFade{from{opacity:0}to{opacity:1}}
 
-      /* ═══ AUTH ═══ */
       .mo-auth-grid{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;background:#000}
       .mo-auth-brand{position:relative;overflow:hidden;background:linear-gradient(135deg,#000 0%,#0f0f0f 50%,#000 100%);display:flex;flex-direction:column;padding:60px;color:#fff}
       .mo-auth-brand::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse at center,#000 10%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at center,#000 10%,transparent 75%)}
-      .mo-auth-brand::after{content:'';position:absolute;top:-40%;left:-40%;width:80%;height:80%;background:radial-gradient(circle,rgba(255,255,255,.05),transparent 65%);border-radius:50%;pointer-events:none;animation:moGlow 20s ease-in-out infinite}
-      @keyframes moGlow{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(20%,20%) scale(1.15)}}
       .mo-auth-brand-inner{position:relative;z-index:2;display:flex;flex-direction:column;height:100%}
       .mo-auth-logo{display:flex;align-items:center;gap:16px;margin-bottom:auto}
       .mo-auth-logo img{height:60px;width:auto;object-fit:contain;filter:brightness(0) invert(1)}
@@ -159,19 +144,11 @@
       .mo-auth-hero h1{font-size:clamp(36px,4vw,54px);font-weight:900;letter-spacing:-2px;line-height:1.05;margin-bottom:24px;color:#fff}
       .mo-auth-hero h1 em{font-style:normal;background:linear-gradient(120deg,#fff 30%,rgba(255,255,255,.4) 90%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
       .mo-auth-hero p{font-size:15px;color:rgba(255,255,255,.5);font-weight:500;line-height:1.9;max-width:420px}
-      .mo-auth-features{display:flex;flex-direction:column;gap:14px;margin-top:34px}
-      .mo-auth-feature{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);backdrop-filter:blur(10px);width:fit-content;min-width:280px;transition:all .3s}
-      .mo-auth-feature:hover{background:rgba(255,255,255,.06);transform:translateX(-6px)}
-      .mo-auth-feature-ico{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
-      .mo-auth-feature-ico svg{width:17px;height:17px}
-      .mo-auth-feature-txt b{font-size:13px;font-weight:800;color:#fff;display:block;line-height:1.2}
-      .mo-auth-feature-txt span{font-size:11.5px;color:rgba(255,255,255,.4);font-weight:500}
       .mo-auth-brand-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,.3);font-weight:600;padding-top:30px;border-top:1px solid rgba(255,255,255,.06)}
       .mo-auth-brand-foot .stats{display:flex;gap:30px}
       .mo-auth-brand-foot .stat b{color:#fff;font-size:16px;font-weight:900;display:block;line-height:1}
       .mo-auth-brand-foot .stat span{font-size:10.5px;color:rgba(255,255,255,.35);font-weight:600;margin-top:3px;display:block}
       .mo-auth-form-side{background:#fff;display:flex;align-items:center;justify-content:center;padding:60px;overflow-y:auto}
-      .mo-auth-form-side::-webkit-scrollbar{width:0}
       .mo-auth-form-wrap{width:100%;max-width:400px;animation:moFormIn .7s cubic-bezier(.2,.8,.2,1)}
       @keyframes moFormIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
       .mo-auth-head{margin-bottom:34px}
@@ -183,73 +160,69 @@
       .mo-auth-mode button.active{background:#000;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.18)}
       .mo-auth-form{display:flex;flex-direction:column;gap:18px}
       .mo-form-field{display:flex;flex-direction:column;gap:8px}
-      .mo-form-field label{font-size:12.5px;font-weight:800;color:#525252;letter-spacing:.2px}
+      .mo-form-field label{font-size:12.5px;font-weight:800;color:#525252}
       .mo-form-field input{padding:15px 18px;border-radius:14px;border:1.5px solid #e8e8e8;background:#fff;color:#0a0a0a;font-size:14.5px;font-weight:600;transition:all .25s;outline:none;font-family:inherit}
-      .mo-form-field input:hover{border-color:#d4d4d4}
       .mo-form-field input:focus{border-color:#000;box-shadow:0 0 0 4px rgba(0,0,0,.06)}
       .mo-form-field input::placeholder{color:#a3a3a3;font-weight:500}
       .mo-auth-error{color:#dc2626;font-size:13px;font-weight:800;text-align:center;min-height:0;padding:0;border-radius:10px;transition:all .3s;opacity:0;max-height:0;overflow:hidden}
       .mo-auth-error.show{opacity:1;max-height:220px;overflow:auto;padding:12px 16px;background:#fef2f2;border:1px solid #fee2e2;margin:4px 0}
       .mo-auth-error.success{color:#15803d;background:#f0fdf4;border-color:#bbf7d0}
-      .mo-auth-submit{padding:16px;border-radius:14px;background:#000;color:#fff;font-weight:900;font-size:15px;letter-spacing:.3px;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:6px;position:relative;overflow:hidden;border:none;cursor:pointer;font-family:inherit}
+      .mo-auth-submit{padding:16px;border-radius:14px;background:#000;color:#fff;font-weight:900;font-size:15px;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:6px;border:none;cursor:pointer;font-family:inherit}
       .mo-auth-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 14px 30px rgba(0,0,0,.25)}
       .mo-auth-submit:disabled{opacity:.6;cursor:not-allowed}
-      .mo-auth-submit svg{width:16px;height:16px}
+      .mo-auth-submit svg{width:16px;height:16px;pointer-events:none}
+      .mo-auth-submit span{pointer-events:none}
       .mo-auth-foot{margin-top:24px;padding-top:20px;border-top:1px solid #ebebeb;font-size:11.5px;color:#a3a3a3;text-align:center;font-weight:600;line-height:1.8}
       .mo-auth-foot b{color:#0a0a0a;font-weight:800}
 
-      /* ═══ APP LAYOUT ═══ */
       .mo-app{display:none;height:100vh;overflow:hidden;font-family:'Tajawal',system-ui,-apple-system,sans-serif;background:#fafafa;color:#0a0a0a;line-height:1.55;font-size:14.5px}
       .mo-app.active{display:flex}
       .mo-sidebar{width:264px;flex-shrink:0;background:#0a0a0a;display:flex;flex-direction:column;position:relative;z-index:50;border-left:1px solid #1a1a1a;transition:transform .4s cubic-bezier(.4,0,.2,1)}
-      .mo-sidebar::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent)}
       .mo-sb-brand{display:flex;align-items:center;gap:13px;padding:24px 22px;border-bottom:1px solid #1a1a1a}
       .mo-sb-logo{width:42px;height:42px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
       .mo-sb-logo img{width:26px;height:26px;object-fit:contain;filter:brightness(0) invert(1)}
       .mo-sb-brand-txt{display:flex;flex-direction:column;line-height:1;min-width:0}
-      .mo-sb-brand-txt b{font-size:15px;font-weight:900;color:#fff;letter-spacing:-.3px}
+      .mo-sb-brand-txt b{font-size:15px;font-weight:900;color:#fff}
       .mo-sb-brand-txt span{font-size:10px;color:rgba(255,255,255,.35);font-weight:700;letter-spacing:2px;margin-top:5px}
       .mo-sb-nav{flex:1;overflow-y:auto;padding:18px 14px}
       .mo-sb-nav::-webkit-scrollbar{width:0}
       .mo-sb-group{margin-bottom:20px}
       .mo-sb-group-label{display:block;padding:6px 12px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,.28);letter-spacing:2.5px;text-transform:uppercase}
-      .mo-sb-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:11px;color:rgba(255,255,255,.55);font-weight:700;font-size:13.5px;transition:all .25s;cursor:pointer;position:relative;margin-bottom:2px;white-space:nowrap}
+      .mo-sb-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:11px;color:rgba(255,255,255,.55);font-weight:700;font-size:13.5px;transition:all .25s;cursor:pointer;position:relative;margin-bottom:2px;white-space:nowrap;text-decoration:none}
       .mo-sb-item svg{width:18px;height:18px;flex-shrink:0;stroke-width:2.2}
       .mo-sb-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.95)}
       .mo-sb-item.active{background:rgba(255,255,255,.09);color:#fff}
       .mo-sb-item.active::before{content:'';position:absolute;right:0;top:14px;bottom:14px;width:3px;background:#fff;border-radius:3px}
       .mo-sb-badge{margin-inline-start:auto;background:rgba(255,255,255,.09);color:#fff;font-size:10.5px;font-weight:900;padding:2px 8px;border-radius:20px;min-width:22px;text-align:center}
-      .mo-sb-tag{margin-inline-start:auto;background:#fff;color:#000;font-size:9.5px;font-weight:900;padding:2px 7px;border-radius:20px;letter-spacing:.5px}
+      .mo-sb-tag{margin-inline-start:auto;background:#fff;color:#000;font-size:9.5px;font-weight:900;padding:2px 7px;border-radius:20px}
       .mo-sb-item.special{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
       .mo-sb-user{display:flex;align-items:center;gap:11px;padding:16px 18px;border-top:1px solid #1a1a1a;background:rgba(255,255,255,.02)}
       .mo-sb-user-av{width:38px;height:38px;border-radius:11px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13.5px;flex-shrink:0}
       .mo-sb-user-info{flex:1;min-width:0}
-      .mo-sb-user-info b{font-size:13px;font-weight:800;color:#fff;display:block;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .mo-sb-user-info b{font-size:13px;font-weight:800;color:#fff;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       .mo-sb-user-info span{font-size:10.5px;color:rgba(255,255,255,.4);font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       .mo-sb-logout{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);transition:all .25s;flex-shrink:0;border:none;cursor:pointer}
       .mo-sb-logout:hover{background:rgba(220,38,38,.15);color:#f87171}
-      .mo-sb-logout svg{width:15px;height:15px}
+      .mo-sb-logout svg{width:15px;height:15px;pointer-events:none}
 
-      /* ═══ MAIN ═══ */
       .mo-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
       .mo-topbar{display:flex;align-items:center;gap:16px;padding:16px 28px;background:#fff;border-bottom:1px solid #ebebeb;flex-shrink:0;z-index:20}
       .mo-mobile-menu{display:none;width:42px;height:42px;border-radius:12px;background:#fff;border:1.5px solid #ebebeb;align-items:center;justify-content:center;color:#525252;cursor:pointer}
-      .mo-mobile-menu svg{width:18px;height:18px}
-      .mo-page-title{min-width:0;flex-shrink:0}
-      .mo-page-title h1{font-size:19px;font-weight:900;letter-spacing:-.5px;line-height:1.2}
+      .mo-mobile-menu svg{width:18px;height:18px;pointer-events:none}
+      .mo-page-title h1{font-size:19px;font-weight:900;letter-spacing:-.5px}
       .mo-page-title p{font-size:12px;color:#a3a3a3;font-weight:600;margin-top:3px}
       .mo-search{flex:1;max-width:420px;margin-inline-start:auto;position:relative;display:flex;align-items:center;background:#f5f5f5;border:1.5px solid transparent;border-radius:12px;padding:0 16px;height:42px;transition:all .25s}
-      .mo-search:focus-within{background:#fff;border-color:#000;box-shadow:0 0 0 4px rgba(0,0,0,.05)}
+      .mo-search:focus-within{background:#fff;border-color:#000}
       .mo-search svg{width:15px;height:15px;color:#a3a3a3;flex-shrink:0}
       .mo-search input{flex:1;background:transparent;border:none;color:#0a0a0a;font-size:13.5px;font-weight:600;padding:0 10px;min-width:0;outline:none;font-family:inherit}
-      .mo-search input::placeholder{color:#a3a3a3;font-weight:500}
       .mo-top-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
       .mo-icon-btn{width:42px;height:42px;border-radius:12px;background:#fff;border:1.5px solid #ebebeb;display:flex;align-items:center;justify-content:center;color:#525252;transition:all .25s;position:relative;cursor:pointer}
-      .mo-icon-btn svg{width:18px;height:18px}
-      .mo-icon-btn:hover{border-color:#000;color:#000;transform:translateY(-1px)}
+      .mo-icon-btn svg{width:18px;height:18px;pointer-events:none}
+      .mo-icon-btn:hover{border-color:#000;color:#000}
       .mo-icon-btn.has-dot::after{content:'';position:absolute;top:9px;left:9px;width:8px;height:8px;background:#000;border-radius:50%;border:2px solid #fff}
       .mo-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:12px;font-weight:800;font-size:13.5px;transition:all .25s;white-space:nowrap;border:1.5px solid transparent;cursor:pointer;font-family:inherit}
-      .mo-btn svg{width:15px;height:15px;flex-shrink:0}
+      .mo-btn svg{width:15px;height:15px;flex-shrink:0;pointer-events:none}
+      .mo-btn span{pointer-events:none}
       .mo-btn-primary{background:#000;color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.15)}
       .mo-btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.25)}
       .mo-btn-ghost{background:#f5f5f5;border-color:#ebebeb;color:#525252}
@@ -258,7 +231,6 @@
       .mo-content::-webkit-scrollbar{width:8px}
       .mo-content::-webkit-scrollbar-thumb{background:#d4d4d4;border-radius:8px}
 
-      /* ═══ GRID / CARDS ═══ */
       .mo-grid{display:grid;gap:20px}
       .mo-g2{grid-template-columns:repeat(2,1fr)}
       .mo-g3{grid-template-columns:repeat(3,1fr)}
@@ -268,14 +240,14 @@
       .mo-card{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:24px;transition:all .3s;position:relative}
       .mo-card:hover{border-color:#d4d4d4;box-shadow:0 12px 32px rgba(0,0,0,.08)}
       .mo-card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px}
-      .mo-card-hd h3{font-size:15.5px;font-weight:900;letter-spacing:-.3px;display:flex;align-items:center;gap:9px}
+      .mo-card-hd h3{font-size:15.5px;font-weight:900;display:flex;align-items:center;gap:9px}
       .mo-card-hd h3 svg{width:17px;height:17px;color:#000}
       .mo-card-hd p{font-size:12px;color:#a3a3a3;font-weight:600;margin-top:3px}
       .mo-stat{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:22px;position:relative;overflow:hidden;transition:all .3s}
-      .mo-stat:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.08);border-color:#d4d4d4}
+      .mo-stat:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.08)}
       .mo-stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
       .mo-stat-ico{width:44px;height:44px;border-radius:12px;background:#f5f5f5;color:#000;display:flex;align-items:center;justify-content:center}
-      .mo-stat-ico svg{width:20px;height:20px;stroke-width:2.2}
+      .mo-stat-ico svg{width:20px;height:20px}
       .mo-stat-trend{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:900;padding:4px 10px;border-radius:20px}
       .mo-stat-trend.up{background:#000;color:#fff}
       .mo-stat-trend.down{background:#f5f5f5;color:#525252}
@@ -295,13 +267,12 @@
       .mo-list-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #f4f4f4}
       .mo-list-item:last-child{border-bottom:none;padding-bottom:0}
       .mo-list-body{flex:1;min-width:0}
-      .mo-list-body b{font-size:13.5px;font-weight:800;display:block;line-height:1.3;margin-bottom:3px}
+      .mo-list-body b{font-size:13.5px;font-weight:800;display:block;margin-bottom:3px}
       .mo-list-body span{font-size:11.5px;color:#a3a3a3;font-weight:600}
       .mo-empty{text-align:center;padding:60px 20px;color:#a3a3a3}
       .mo-empty h3{color:#525252;font-size:15px;font-weight:900;margin-bottom:8px}
       .mo-empty p{font-size:13px;margin-bottom:18px}
 
-      /* ═══ TABLE ═══ */
       .mo-table-wrap{overflow-x:auto;border-radius:12px;border:1px solid #ebebeb}
       .mo-table{width:100%;border-collapse:collapse;min-width:640px}
       .mo-table thead{background:#fafafa}
@@ -310,7 +281,6 @@
       .mo-table tbody tr:last-child td{border-bottom:none}
       .mo-table tbody tr:hover{background:#fafafa}
 
-      /* ═══ KANBAN ═══ */
       .mo-kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:start}
       .mo-kanban-col{background:#f5f5f5;border-radius:18px;padding:18px;min-height:240px;border:1px solid #f4f4f4}
       .mo-kb-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #ebebeb}
@@ -318,13 +288,12 @@
       .mo-kb-hd .count{background:#fff;border:1px solid #ebebeb;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:900;color:#525252}
       .mo-kb-dot{width:8px;height:8px;border-radius:50%}
       .mo-kb-card{background:#fff;border:1px solid #ebebeb;border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;transition:all .25s}
-      .mo-kb-card:hover{border-color:#000;transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.05)}
-      .mo-kb-card b{font-size:13.5px;font-weight:800;display:block;margin-bottom:12px;line-height:1.4}
+      .mo-kb-card:hover{border-color:#000;transform:translateY(-2px)}
+      .mo-kb-card b{font-size:13.5px;font-weight:800;display:block;margin-bottom:12px}
       .mo-kb-meta{display:flex;align-items:center;justify-content:space-between;gap:8px}
       .mo-kb-tags{display:flex;gap:5px;flex-wrap:wrap}
       .mo-kb-tag{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:900;background:#f5f5f5;color:#525252}
 
-      /* ═══ EMAIL ═══ */
       .mo-email-layout{display:grid;grid-template-columns:340px 1fr;gap:20px;height:calc(100vh - 135px)}
       .mo-email-list{background:#fff;border:1px solid #ebebeb;border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
       .mo-email-list-hd{padding:18px 20px;border-bottom:1px solid #ebebeb;display:flex;align-items:center;justify-content:space-between}
@@ -340,25 +309,24 @@
       .mo-email-item .subj{font-size:12.5px;font-weight:800;color:#525252;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       .mo-email-item .preview{font-size:11.5px;color:#a3a3a3;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       .mo-email-view{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:30px;overflow-y:auto}
-      .mo-email-view h2{font-size:20px;font-weight:900;margin-bottom:16px;letter-spacing:-.5px}
+      .mo-email-view h2{font-size:20px;font-weight:900;margin-bottom:16px}
       .mo-email-view-hd{display:flex;align-items:center;gap:14px;padding-bottom:20px;border-bottom:1px solid #ebebeb;margin-bottom:22px}
       .mo-email-view-body{font-size:14px;line-height:1.95;color:#525252;white-space:pre-wrap}
 
-      /* ═══ MESSAGES ═══ */
       .mo-msg-layout{display:grid;grid-template-columns:300px 1fr;gap:20px;height:calc(100vh - 135px)}
       .mo-msg-side{background:#fff;border:1px solid #ebebeb;border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
       .mo-msg-side-hd{padding:18px 20px;border-bottom:1px solid #ebebeb}
       .mo-msg-side-hd b{font-size:14.5px;font-weight:900}
       .mo-msg-contacts{flex:1;overflow-y:auto;padding:10px}
-      .mo-msg-contact{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;cursor:pointer;transition:all .2s;position:relative}
+      .mo-msg-contact{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;cursor:pointer;transition:all .2s}
       .mo-msg-contact:hover{background:#fafafa}
       .mo-msg-contact.active{background:#f5f5f5;border:1px solid #ebebeb}
       .mo-msg-contact .mc-info{flex:1;min-width:0}
-      .mo-msg-contact .mc-info b{font-size:13px;font-weight:800;display:block;line-height:1.2;margin-bottom:3px}
+      .mo-msg-contact .mc-info b{font-size:13px;font-weight:800;display:block;margin-bottom:3px}
       .mo-msg-contact .mc-info span{font-size:11.5px;color:#a3a3a3;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
       .mo-msg-chat{background:#fff;border:1px solid #ebebeb;border-radius:18px;display:flex;flex-direction:column;overflow:hidden}
       .mo-msg-chat-hd{padding:18px 22px;border-bottom:1px solid #ebebeb;display:flex;align-items:center;gap:14px}
-      .mo-msg-chat-hd .info b{font-size:14.5px;font-weight:900;display:block;line-height:1.2}
+      .mo-msg-chat-hd .info b{font-size:14.5px;font-weight:900;display:block}
       .mo-msg-chat-hd .info span{font-size:11.5px;color:#525252;font-weight:700}
       .mo-msg-body{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:14px;background:#fafafa}
       .mo-bubble{max-width:65%;padding:12px 16px;border-radius:16px;font-size:13.5px;line-height:1.7;word-wrap:break-word}
@@ -366,66 +334,60 @@
       .mo-bubble.me{background:#000;color:#fff;border-bottom-right-radius:5px;align-self:flex-end}
       .mo-bubble .time{font-size:10px;opacity:.65;margin-top:6px;text-align:left}
       .mo-msg-foot{padding:16px 20px;border-top:1px solid #ebebeb;display:flex;gap:10px;align-items:flex-end}
-      .mo-msg-foot textarea{flex:1;padding:13px 18px;border-radius:14px;background:#f5f5f5;border:1.5px solid transparent;color:#0a0a0a;font-size:13.5px;font-weight:600;resize:none;max-height:110px;min-height:46px;transition:all .25s;outline:none;font-family:inherit}
-      .mo-msg-foot textarea:focus{background:#fff;border-color:#000;box-shadow:0 0 0 4px rgba(0,0,0,.05)}
-      .mo-msg-send{width:46px;height:46px;border-radius:14px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s;border:none;cursor:pointer}
-      .mo-msg-send:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.15)}
-      .mo-msg-send svg{width:18px;height:18px}
+      .mo-msg-foot textarea{flex:1;padding:13px 18px;border-radius:14px;background:#f5f5f5;border:1.5px solid transparent;color:#0a0a0a;font-size:13.5px;font-weight:600;resize:none;max-height:110px;min-height:46px;outline:none;font-family:inherit}
+      .mo-msg-foot textarea:focus{background:#fff;border-color:#000}
+      .mo-msg-send{width:46px;height:46px;border-radius:14px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:none;cursor:pointer}
+      .mo-msg-send svg{width:18px;height:18px;pointer-events:none}
+      .mo-msg-send:hover{transform:translateY(-2px)}
 
-      /* ═══ CALENDAR ═══ */
       .mo-cal-wrap{display:grid;grid-template-columns:1.6fr 1fr;gap:20px}
       .mo-calendar{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:24px}
       .mo-cal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
-      .mo-cal-hd b{font-size:17px;font-weight:900;letter-spacing:-.3px}
+      .mo-cal-hd b{font-size:17px;font-weight:900}
       .mo-cal-nav{display:flex;gap:6px}
-      .mo-cal-nav button{width:34px;height:34px;border-radius:10px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;color:#525252;transition:all .2s;border:none;cursor:pointer}
+      .mo-cal-nav button{width:34px;height:34px;border-radius:10px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;color:#525252;border:none;cursor:pointer}
       .mo-cal-nav button:hover{background:#000;color:#fff}
       .mo-cal-nav button svg{width:15px;height:15px}
       .mo-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
       .mo-cal-dow{text-align:center;padding:10px 0;font-size:11px;font-weight:900;color:#a3a3a3}
-      .mo-cal-day{aspect-ratio:1;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;cursor:pointer;transition:all .2s;position:relative;border:1.5px solid transparent}
+      .mo-cal-day{aspect-ratio:1;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;cursor:pointer;position:relative}
       .mo-cal-day:hover{background:#f5f5f5}
       .mo-cal-day.muted{color:#a3a3a3;opacity:.35}
       .mo-cal-day.today{background:#000;color:#fff}
       .mo-cal-day.has-event::after{content:'';position:absolute;bottom:6px;width:5px;height:5px;border-radius:50%;background:#0a0a0a}
       .mo-cal-day.today.has-event::after{background:#fff}
       .mo-events-list{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:22px}
-      .mo-event{display:flex;gap:14px;padding:14px;border-radius:14px;background:#fafafa;margin-bottom:12px;transition:all .25s;border-inline-start:3px solid #000}
-      .mo-event:hover{transform:translateX(-4px);box-shadow:0 4px 16px rgba(0,0,0,.05)}
+      .mo-event{display:flex;gap:14px;padding:14px;border-radius:14px;background:#fafafa;margin-bottom:12px;border-inline-start:3px solid #000}
       .mo-event-time{font-size:12px;font-weight:900;color:#a3a3a3;min-width:56px}
       .mo-event-body{flex:1;min-width:0}
       .mo-event-body b{font-size:13.5px;font-weight:900;display:block;margin-bottom:4px}
       .mo-event-body span{font-size:11.5px;color:#a3a3a3;font-weight:600}
 
-      /* ═══ FILES ═══ */
       .mo-file-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
       .mo-file-card{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:20px;transition:all .3s;cursor:pointer}
-      .mo-file-card:hover{border-color:#000;transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.08)}
+      .mo-file-card:hover{border-color:#000;transform:translateY(-4px)}
       .mo-file-ico{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;background:#f5f5f5;color:#000}
       .mo-file-ico svg{width:24px;height:24px}
       .mo-file-card b{font-size:13.5px;font-weight:800;display:block;margin-bottom:6px;word-break:break-word}
       .mo-file-card span{font-size:11.5px;color:#a3a3a3;font-weight:700;display:block}
 
-      /* ═══ EMPLOYEES ═══ */
       .mo-emp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
       .mo-emp-card{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:26px;text-align:center;transition:all .3s}
-      .mo-emp-card:hover{border-color:#000;transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.08)}
+      .mo-emp-card:hover{border-color:#000;transform:translateY(-4px)}
       .mo-emp-card .mo-av{margin:0 auto 16px;width:66px;height:66px;font-size:22px;border-radius:18px}
-      .mo-emp-card b{font-size:15px;font-weight:900;display:block;margin-bottom:5px;letter-spacing:-.3px}
+      .mo-emp-card b{font-size:15px;font-weight:900;display:block;margin-bottom:5px}
       .mo-emp-card .role{font-size:12px;color:#a3a3a3;font-weight:700;margin-bottom:16px;display:block}
       .mo-emp-stats{display:flex;justify-content:space-around;padding-top:16px;border-top:1px solid #f4f4f4;gap:12px}
-      .mo-emp-stat{text-align:center}
-      .mo-emp-stat b{font-size:17px;font-weight:900;color:#000;display:block;margin-bottom:3px}
+      .mo-emp-stat b{font-size:17px;font-weight:900;display:block;margin-bottom:3px}
       .mo-emp-stat span{font-size:10.5px;color:#a3a3a3;font-weight:700}
 
-      /* ═══ AI ═══ */
       .mo-ai-layout{display:grid;grid-template-columns:1fr 320px;gap:20px;height:calc(100vh - 135px)}
       .mo-ai-chat{background:#fff;border:1px solid #ebebeb;border-radius:18px;display:flex;flex-direction:column;overflow:hidden}
       .mo-ai-hd{padding:20px 24px;border-bottom:1px solid #ebebeb;display:flex;align-items:center;gap:14px;background:#fafafa}
       .mo-ai-av{width:42px;height:42px;border-radius:13px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center}
       .mo-ai-av svg{width:22px;height:22px}
       .mo-ai-hd .ai-info b{font-size:15px;font-weight:900;display:block}
-      .mo-ai-hd .ai-info span{font-size:11.5px;color:#525252;font-weight:700;display:flex;align-items:center;gap:5px}
+      .mo-ai-hd .ai-info span{font-size:11.5px;color:#525252;font-weight:700}
       .mo-ai-body{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:18px}
       .mo-ai-msg{display:flex;gap:12px;max-width:88%}
       .mo-ai-msg.user{margin-inline-start:auto;flex-direction:row-reverse}
@@ -433,10 +395,9 @@
       .mo-ai-msg.user .mo-ai-bubble{background:#000;color:#fff;border-bottom-right-radius:5px}
       .mo-ai-suggest{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:22px}
       .mo-ai-suggest h4{font-size:11px;font-weight:900;color:#a3a3a3;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
-      .mo-ai-suggest button{display:block;width:100%;text-align:right;padding:13px 16px;border-radius:12px;background:#f5f5f5;font-size:12.5px;font-weight:700;color:#525252;margin-bottom:8px;transition:all .25s;border:none;cursor:pointer;font-family:inherit}
-      .mo-ai-suggest button:hover{background:#000;color:#fff;transform:translateX(-3px)}
+      .mo-ai-suggest button{display:block;width:100%;text-align:right;padding:13px 16px;border-radius:12px;background:#f5f5f5;font-size:12.5px;font-weight:700;color:#525252;margin-bottom:8px;border:none;cursor:pointer;font-family:inherit}
+      .mo-ai-suggest button:hover{background:#000;color:#fff}
 
-      /* ═══ SETTINGS ═══ */
       .mo-settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
       .mo-setting-card{background:#fff;border:1px solid #ebebeb;border-radius:18px;padding:24px}
       .mo-setting-card h3{font-size:15px;font-weight:900;margin-bottom:20px;display:flex;align-items:center;gap:10px}
@@ -450,39 +411,34 @@
       .mo-switch.on{background:#000}
       .mo-switch.on::after{right:calc(100% - 23px)}
 
-      /* ═══ MODAL ═══ */
       .mo-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
       .mo-modal-overlay.on{display:flex;animation:moFade .25s}
-      .mo-modal{background:#fff;border-radius:24px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:32px;position:relative;animation:moSlideUp .4s cubic-bezier(.2,.8,.2,1);box-shadow:0 40px 100px rgba(0,0,0,.25);font-family:'Tajawal',system-ui,sans-serif;color:#0a0a0a}
+      .mo-modal{background:#fff;border-radius:24px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:32px;position:relative;animation:moSlideUp .4s;box-shadow:0 40px 100px rgba(0,0,0,.25);font-family:'Tajawal',system-ui,sans-serif;color:#0a0a0a}
       @keyframes moSlideUp{from{transform:translateY(30px);opacity:.5}to{transform:translateY(0);opacity:1}}
-      .mo-modal h2{font-size:22px;font-weight:900;margin-bottom:8px;letter-spacing:-.5px}
+      .mo-modal h2{font-size:22px;font-weight:900;margin-bottom:8px}
       .mo-modal .sub{font-size:13px;color:#a3a3a3;font-weight:600;margin-bottom:26px}
       .mo-field{margin-bottom:18px}
       .mo-field label{display:block;font-size:12.5px;font-weight:800;color:#525252;margin-bottom:8px}
-      .mo-field input,.mo-field select,.mo-field textarea{width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid #e8e8e8;background:#fff;color:#0a0a0a;font-size:14px;font-weight:600;transition:all .25s;outline:none;font-family:inherit}
+      .mo-field input,.mo-field select,.mo-field textarea{width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid #e8e8e8;background:#fff;color:#0a0a0a;font-size:14px;font-weight:600;outline:none;font-family:inherit}
       .mo-field input:focus,.mo-field select:focus,.mo-field textarea:focus{border-color:#000;box-shadow:0 0 0 4px rgba(0,0,0,.05)}
       .mo-field textarea{resize:vertical;min-height:100px}
-      .mo-modal-close{position:absolute;top:18px;left:18px;width:38px;height:38px;border-radius:12px;background:#f5f5f5;border:1px solid #ebebeb;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;color:#525252}
+      .mo-modal-close{position:absolute;top:18px;left:18px;width:38px;height:38px;border-radius:12px;background:#f5f5f5;border:1px solid #ebebeb;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#525252}
       .mo-modal-close:hover{background:#000;color:#fff;border-color:#000}
-      .mo-modal-close svg{width:15px;height:15px}
+      .mo-modal-close svg{width:15px;height:15px;pointer-events:none}
 
-      /* ═══ TOAST ═══ */
       #mo-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(30px);background:#000;color:#fff;padding:14px 26px;border-radius:14px;font-weight:800;font-size:13.5px;z-index:3000;opacity:0;pointer-events:none;transition:all .35s;box-shadow:0 32px 80px rgba(0,0,0,.15);max-width:88vw;display:flex;align-items:center;gap:10px;font-family:'Tajawal',system-ui,sans-serif}
       #mo-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
       #mo-toast svg{width:18px;height:18px;flex-shrink:0}
       #mo-toast.error{background:#dc2626}
 
-      /* ═══ LOADING ═══ */
       #mo-loading{position:fixed;inset:0;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);z-index:9999;display:none;align-items:center;justify-content:center}
       #mo-loading.on{display:flex}
       .mo-spinner{width:44px;height:44px;border-radius:50%;border:3px solid #e8e8e8;border-top-color:#000;animation:moSpin .8s linear infinite}
       @keyframes moSpin{to{transform:rotate(360deg)}}
 
-      /* ═══ SIDEBAR OVERLAY ═══ */
       .mo-sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:40;display:none}
       .mo-sidebar-overlay.on{display:block}
 
-      /* ═══ RESPONSIVE ═══ */
       @media (max-width:1024px){
         .mo-auth-grid{grid-template-columns:1fr}
         .mo-auth-brand{display:none}
@@ -522,7 +478,13 @@
   // 🖼️ AUTH SCREEN
   // ═══════════════════════════════════════════════════════════
   function injectAuthScreen() {
-    if ($('mo-auth-screen')) return;
+    if ($('mo-auth-screen')) {
+      console.warn('⚠️ [Auth] الشاشة موجودة مسبقاً');
+      return;
+    }
+
+    console.log('🔵 [Auth] بدء حقن شاشة الدخول...');
+
     const wrap = document.createElement('div');
     wrap.innerHTML = `
       <div id="mo-auth-screen" class="mo-screen active">
@@ -536,36 +498,11 @@
                   <span>OFFICE</span>
                 </div>
               </div>
-
               <div class="mo-auth-hero">
                 <div class="mo-auth-kicker">منصة إدارة الأعمال المتكاملة</div>
                 <h1>أدر فريقك<br><em>بكل احترافية</em></h1>
                 <p>منصة رقمية متكاملة تجمع إدارة الأعمال والبريد الإلكتروني والرسائل في مكان واحد — بواجهة أنيقة وأداء استثنائي.</p>
-                <div class="mo-auth-features">
-                  <div class="mo-auth-feature">
-                    <div class="mo-auth-feature-ico">${ICONS.mail}</div>
-                    <div class="mo-auth-feature-txt">
-                      <b>البريد الإلكتروني</b>
-                      <span>إرسال واستقبال باحترافية</span>
-                    </div>
-                  </div>
-                  <div class="mo-auth-feature">
-                    <div class="mo-auth-feature-ico">${ICONS.users}</div>
-                    <div class="mo-auth-feature-txt">
-                      <b>إدارة الفريق</b>
-                      <span>توزيع المهام ومتابعة الأداء</span>
-                    </div>
-                  </div>
-                  <div class="mo-auth-feature">
-                    <div class="mo-auth-feature-ico">${ICONS.ai}</div>
-                    <div class="mo-auth-feature-txt">
-                      <b>ذكاء اصطناعي</b>
-                      <span>مساعد ذكي لإدارة المهام</span>
-                    </div>
-                  </div>
-                </div>
               </div>
-
               <div class="mo-auth-brand-foot">
                 <div class="stats">
                   <div class="stat"><b>+5000</b><span>شركة</span></div>
@@ -586,11 +523,11 @@
               </div>
 
               <div class="mo-auth-mode">
-                <button class="active" data-tab="login" type="button">تسجيل الدخول</button>
-                <button data-tab="signup" type="button">حساب جديد</button>
+                <button class="active" id="moTabLogin" type="button">تسجيل الدخول</button>
+                <button id="moTabSignup" type="button">حساب جديد</button>
               </div>
 
-              <form class="mo-auth-form" id="moAuthForm" onsubmit="return false;">
+              <div class="mo-auth-form">
                 <div class="mo-form-field" id="moNameField" style="display:none">
                   <label>الاسم الكامل</label>
                   <input type="text" id="moAuthName" placeholder="مثال: محمد العتيبي" autocomplete="name">
@@ -610,9 +547,9 @@
 
                 <button class="mo-auth-submit" id="moAuthSubmit" type="button">
                   <span id="moAuthSubmitText">دخول إلى المنصة</span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
-              </form>
+              </div>
 
               <div class="mo-auth-foot">
                 بالدخول أنت توافق على <b>شروط الاستخدام</b> و <b>سياسة الخصوصية</b>
@@ -624,66 +561,71 @@
     `;
     document.body.appendChild(wrap);
 
-    // ═══ Event Delegation (يضمن التقاط الضغط على أي عنصر داخل الزر) ═══
-    wrap.addEventListener('click', (e) => {
-      const modeBtn = e.target.closest('.mo-auth-mode button');
-      if (modeBtn) {
-        e.preventDefault();
-        console.log('🔵 [Auth] تبديل الوضع:', modeBtn.dataset.tab);
-        switchAuthMode(modeBtn.dataset.tab);
+    // ═══ ربط مباشر بعد التأكد من وجود DOM ═══
+    setTimeout(() => {
+      const submitBtn  = document.getElementById('moAuthSubmit');
+      const tabLogin   = document.getElementById('moTabLogin');
+      const tabSignup  = document.getElementById('moTabSignup');
+      const passInput  = document.getElementById('moAuthPassword');
+      const emailInput = document.getElementById('moAuthEmail');
+      const nameInput  = document.getElementById('moAuthName');
+
+      console.log('🔍 [Bind] Submit:', !!submitBtn, '| LoginTab:', !!tabLogin, '| SignupTab:', !!tabSignup);
+
+      if (!submitBtn) {
+        console.error('❌ [Bind] زر الإرسال غير موجود!');
         return;
       }
 
-      const submitBtn = e.target.closest('#moAuthSubmit');
-      if (submitBtn) {
+      submitBtn.onclick = function (e) {
         e.preventDefault();
+        e.stopPropagation();
+        console.log('🟢 تم الضغط على زر الإرسال — الوضع:', authMode);
         handleAuthSubmit();
-        return;
+      };
+
+      if (tabLogin) {
+        tabLogin.onclick = function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('🟢 تبديل إلى: login');
+          switchAuthMode('login');
+        };
       }
 
-      const resendBtn = e.target.closest('#moResendBtn');
-      if (resendBtn && !resendBtn.disabled) {
-        e.preventDefault();
-        handleResend(resendBtn);
-        return;
+      if (tabSignup) {
+        tabSignup.onclick = function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('🟢 تبديل إلى: signup');
+          switchAuthMode('signup');
+        };
       }
-    });
 
-    // Enter يرسل النموذج
-    wrap.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && (e.target.id === 'moAuthPassword' || e.target.id === 'moAuthEmail' || e.target.id === 'moAuthName')) {
-        e.preventDefault();
-        handleAuthSubmit();
-      }
-    });
+      [passInput, emailInput, nameInput].forEach(inp => {
+        if (!inp) return;
+        inp.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            handleAuthSubmit();
+          }
+        });
+      });
 
-    console.log('✅ [Auth] تم ربط الأزرار بنجاح (Event Delegation)');
-  }
-
-  let _resendEmail = '';
-
-  async function handleResend(btn) {
-    if (!_resendEmail) { toast('لا يوجد بريد', 'error'); return; }
-    btn.disabled = true;
-    const orig = btn.textContent;
-    btn.textContent = 'جارٍ الإرسال...';
-    try {
-      const { error } = await sb.auth.resend({ type: 'signup', email: _resendEmail });
-      if (error) throw error;
-      toast('✅ تم إرسال رابط التفعيل');
-    } catch (err) {
-      console.error('[Resend]', err);
-      toast('تعذّر الإرسال — انتظر قليلاً', 'error');
-    } finally {
-      btn.disabled = false;
-      btn.textContent = orig;
-    }
+      console.log('✅ [Auth] تم ربط الأزرار بنجاح');
+    }, 50);
   }
 
   function switchAuthMode(mode) {
+    console.log('🔵 switchAuthMode:', mode);
     authMode = mode === 'signup' ? 'signup' : 'login';
     const isSignup = authMode === 'signup';
-    $$('.mo-auth-mode button').forEach(b => b.classList.toggle('active', b.dataset.tab === authMode));
+
+    const loginTab  = $('moTabLogin');
+    const signupTab = $('moTabSignup');
+    if (loginTab)  loginTab.classList.toggle('active', !isSignup);
+    if (signupTab) signupTab.classList.toggle('active', isSignup);
+
     if ($('moNameField')) $('moNameField').style.display = isSignup ? 'flex' : 'none';
     if ($('moAuthKicker')) $('moAuthKicker').textContent = isSignup ? 'CREATE ACCOUNT' : 'WELCOME BACK';
     if ($('moAuthTitle')) $('moAuthTitle').textContent = isSignup ? 'ابدأ رحلتك' : 'أهلاً بعودتك';
@@ -701,6 +643,7 @@
     el.classList.add('show');
     el.classList.toggle('success', isSuccess);
   }
+
   function clearAuthMsg() {
     const el = $('moAuthError');
     if (!el) return;
@@ -710,7 +653,7 @@
   }
 
   async function handleAuthSubmit() {
-    console.log('🔵 [Auth] تم الضغط — الوضع:', authMode);
+    console.log('🔵 [Auth Submit] الوضع:', authMode);
 
     const btn = $('moAuthSubmit');
     const emailEl = $('moAuthEmail');
@@ -718,7 +661,7 @@
     const nameEl  = $('moAuthName');
 
     if (!btn || !emailEl || !passEl) {
-      console.error('❌ عناصر النموذج غير موجودة');
+      console.error('❌ [Auth] عناصر النموذج مفقودة');
       return;
     }
 
@@ -739,16 +682,15 @@
 
     try {
       if (authMode === 'signup') {
-        console.log('🔵 [Auth] signup:', email);
+        console.log('🔵 [Signup] محاولة:', email);
 
         const { data, error } = await sb.auth.signUp({
-          email,
-          password,
+          email, password,
           options: { data: { name, full_name: name } }
         });
 
         if (error) {
-          console.error('❌ [Signup Error]', error);
+          console.error('❌ [Signup]', error);
           const m = (error.message || '').toLowerCase();
           if (m.includes('already') || m.includes('registered'))
             showAuthMsg('📧 هذا البريد مسجّل بالفعل — جرّب تسجيل الدخول');
@@ -761,17 +703,17 @@
           return;
         }
 
-        console.log('✅ [Signup] نجح', data);
+        console.log('✅ [Signup] نجح:', data);
 
         if (data.user) {
           try {
             await sb.from('profiles').upsert({
               id: data.user.id, name, email, role: 'مدير عام'
             }, { onConflict: 'id' });
-          } catch (e) { console.warn('[Profile create]', e); }
+          } catch (e) { console.warn('[Profile]', e); }
         }
 
-        // حالة: تأكيد البريد مطلوب
+        // تأكيد البريد مطلوب
         if (data.user && !data.session) {
           _resendEmail = email;
           showAuthMsg(`
@@ -789,27 +731,31 @@
           `, true);
 
           setTimeout(() => {
+            const rb = $('moResendBtn');
+            if (rb) rb.onclick = () => handleResend(rb);
+          }, 30);
+
+          setTimeout(() => {
             switchAuthMode('login');
-            $('moAuthEmail').value = email;
+            if ($('moAuthEmail')) $('moAuthEmail').value = email;
             showAuthMsg('✅ تم إنشاء الحساب — تحقق من بريدك ثم سجّل الدخول', true);
           }, 6000);
 
           return;
         }
 
-        // حالة: تم تسجيل الدخول مباشرة
         if (data.session) {
           toast('🎉 مرحباً بك في MEN Office!');
           await handleSession(data.session);
         }
 
       } else {
-        console.log('🔵 [Auth] login:', email);
+        console.log('🔵 [Login] محاولة:', email);
 
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
 
         if (error) {
-          console.error('❌ [Login Error]', error);
+          console.error('❌ [Login]', error);
           const m = (error.message || '').toLowerCase();
           if (m.includes('invalid') || m.includes('credentials'))
             showAuthMsg('❌ البريد أو كلمة المرور غير صحيحة');
@@ -836,6 +782,24 @@
     }
   }
 
+  async function handleResend(btn) {
+    if (!_resendEmail) { toast('لا يوجد بريد', 'error'); return; }
+    btn.disabled = true;
+    const orig = btn.textContent;
+    btn.textContent = 'جارٍ الإرسال...';
+    try {
+      const { error } = await sb.auth.resend({ type: 'signup', email: _resendEmail });
+      if (error) throw error;
+      toast('✅ تم إرسال رابط التفعيل');
+    } catch (err) {
+      console.error('[Resend]', err);
+      toast('تعذّر الإرسال — انتظر قليلاً', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = orig;
+    }
+  }
+
   // ═══════════════════════════════════════════════════════════
   // 🏢 APP SHELL
   // ═══════════════════════════════════════════════════════════
@@ -846,78 +810,33 @@
       <div id="mo-app" class="mo-app">
         <aside class="mo-sidebar" id="moSidebar">
           <div class="mo-sb-brand">
-            <div class="mo-sb-logo">
-              <img src="${LOGO_URL}" alt="MEN Office">
-            </div>
-            <div class="mo-sb-brand-txt">
-              <b>MEN Office</b>
-              <span>OFFICE</span>
-            </div>
+            <div class="mo-sb-logo"><img src="${LOGO_URL}" alt="MEN Office"></div>
+            <div class="mo-sb-brand-txt"><b>MEN Office</b><span>OFFICE</span></div>
           </div>
 
           <nav class="mo-sb-nav" id="moNav">
             <div class="mo-sb-group">
               <span class="mo-sb-group-label">الرئيسية</span>
-              <a data-page="dashboard" class="mo-sb-item active">
-                ${ICONS.logo}
-                <span>لوحة التحكم</span>
-              </a>
-              <a data-page="projects" class="mo-sb-item">
-                ${ICONS.folder}
-                <span>المشاريع</span>
-                <span class="mo-sb-badge" id="moNavProjects">0</span>
-              </a>
-              <a data-page="tasks" class="mo-sb-item">
-                ${ICONS.check}
-                <span>المهام</span>
-                <span class="mo-sb-badge" id="moNavTasks">0</span>
-              </a>
+              <a data-page="dashboard" class="mo-sb-item active">${ICONS.logo}<span>لوحة التحكم</span></a>
+              <a data-page="projects" class="mo-sb-item">${ICONS.folder}<span>المشاريع</span><span class="mo-sb-badge" id="moNavProjects">0</span></a>
+              <a data-page="tasks" class="mo-sb-item">${ICONS.check}<span>المهام</span><span class="mo-sb-badge" id="moNavTasks">0</span></a>
             </div>
-
             <div class="mo-sb-group">
               <span class="mo-sb-group-label">التواصل</span>
-              <a data-page="email" class="mo-sb-item">
-                ${ICONS.mail}
-                <span>البريد الإلكتروني</span>
-                <span class="mo-sb-badge" id="moNavEmails">0</span>
-              </a>
-              <a data-page="messages" class="mo-sb-item">
-                ${ICONS.msg}
-                <span>الرسائل</span>
-              </a>
-              <a data-page="calendar" class="mo-sb-item">
-                ${ICONS.cal}
-                <span>التقويم</span>
-              </a>
+              <a data-page="email" class="mo-sb-item">${ICONS.mail}<span>البريد الإلكتروني</span><span class="mo-sb-badge" id="moNavEmails">0</span></a>
+              <a data-page="messages" class="mo-sb-item">${ICONS.msg}<span>الرسائل</span></a>
+              <a data-page="calendar" class="mo-sb-item">${ICONS.cal}<span>التقويم</span></a>
             </div>
-
             <div class="mo-sb-group">
               <span class="mo-sb-group-label">الموارد</span>
-              <a data-page="employees" class="mo-sb-item">
-                ${ICONS.users}
-                <span>الموظفون</span>
-              </a>
-              <a data-page="files" class="mo-sb-item">
-                ${ICONS.file}
-                <span>الملفات</span>
-              </a>
-              <a data-page="reports" class="mo-sb-item">
-                ${ICONS.chart}
-                <span>التقارير</span>
-              </a>
+              <a data-page="employees" class="mo-sb-item">${ICONS.users}<span>الموظفون</span></a>
+              <a data-page="files" class="mo-sb-item">${ICONS.file}<span>الملفات</span></a>
+              <a data-page="reports" class="mo-sb-item">${ICONS.chart}<span>التقارير</span></a>
             </div>
-
             <div class="mo-sb-group">
               <span class="mo-sb-group-label">ذكي</span>
-              <a data-page="ai" class="mo-sb-item special">
-                ${ICONS.ai}
-                <span>الذكاء الاصطناعي</span>
-                <span class="mo-sb-tag">AI</span>
-              </a>
-              <a data-page="settings" class="mo-sb-item">
-                ${ICONS.shield}
-                <span>الإعدادات</span>
-              </a>
+              <a data-page="ai" class="mo-sb-item special">${ICONS.ai}<span>الذكاء الاصطناعي</span><span class="mo-sb-tag">AI</span></a>
+              <a data-page="settings" class="mo-sb-item">${ICONS.shield}<span>الإعدادات</span></a>
             </div>
           </nav>
 
@@ -936,28 +855,19 @@
             <button class="mo-mobile-menu" id="moMenuBtn" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
             </button>
-
             <div class="mo-page-title">
               <h1 id="moPageTitle">لوحة التحكم</h1>
               <p id="moPageSub">نظرة عامة على أداء فريقك</p>
             </div>
-
             <div class="mo-search">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
               <input type="text" placeholder="ابحث..." id="moGlobalSearch">
             </div>
-
             <div class="mo-top-actions">
-              <button class="mo-icon-btn has-dot" title="الإشعارات" type="button">
-                ${ICONS.bell}
-              </button>
-              <button class="mo-btn mo-btn-primary" id="moNewTaskBtn" type="button">
-                ${ICONS.plus}
-                <span>إضافة</span>
-              </button>
+              <button class="mo-icon-btn has-dot" title="الإشعارات" type="button">${ICONS.bell}</button>
+              <button class="mo-btn mo-btn-primary" id="moNewTaskBtn" type="button">${ICONS.plus}<span>إضافة</span></button>
             </div>
           </header>
-
           <main class="mo-content" id="moContent"></main>
         </div>
 
@@ -966,43 +876,39 @@
     `;
     document.body.appendChild(wrap);
 
-    // Bind - Event Delegation للشريط الجانبي والأزرار
-    const appEl = $('mo-app');
-    appEl.addEventListener('click', (e) => {
-      // Nav
-      const navItem = e.target.closest('.mo-sb-item');
-      if (navItem && navItem.dataset.page) {
-        e.preventDefault();
-        navigate(navItem.dataset.page);
-        return;
+    // Event delegation للتطبيق
+    setTimeout(() => {
+      const appEl = document.getElementById('mo-app');
+      if (!appEl) return;
+
+      appEl.addEventListener('click', (e) => {
+        const navItem = e.target.closest('.mo-sb-item');
+        if (navItem && navItem.dataset.page) {
+          e.preventDefault();
+          navigate(navItem.dataset.page);
+          return;
+        }
+
+        if (e.target.closest('#moMenuBtn')) { openSidebar(); return; }
+        if (e.target.closest('#moSidebarOverlay')) { closeSidebar(); return; }
+        if (e.target.closest('#moLogoutBtn')) { logout(); return; }
+        if (e.target.closest('#moNewTaskBtn')) { openModal('task'); return; }
+        if (e.target.closest('#moNewTaskBtn2')) { openModal('task'); return; }
+        if (e.target.closest('#moNewProjBtn')) { toast('قريباً'); return; }
+        if (e.target.closest('#moComposeBtn')) { openModal('compose'); return; }
+
+        const goto = e.target.closest('[data-goto]');
+        if (goto) { navigate(goto.dataset.goto); return; }
+      });
+
+      const search = document.getElementById('moGlobalSearch');
+      if (search) {
+        search.addEventListener('input', e => {
+          searchTerm = e.target.value.trim().toLowerCase();
+          if (['email', 'tasks', 'projects'].includes(currentPage)) renderCurrentPage();
+        });
       }
-
-      // Menu btn
-      if (e.target.closest('#moMenuBtn')) { openSidebar(); return; }
-
-      // Sidebar overlay
-      if (e.target.closest('#moSidebarOverlay')) { closeSidebar(); return; }
-
-      // Logout
-      if (e.target.closest('#moLogoutBtn')) { logout(); return; }
-
-      // New Task (topbar)
-      if (e.target.closest('#moNewTaskBtn')) { openModal('task'); return; }
-
-      // Page-level actions
-      if (e.target.closest('#moNewTaskBtn2')) { openModal('task'); return; }
-      if (e.target.closest('#moNewProjBtn')) { toast('قريباً'); return; }
-      if (e.target.closest('#moComposeBtn')) { openModal('compose'); return; }
-
-      // data-goto
-      const goto = e.target.closest('[data-goto]');
-      if (goto) { navigate(goto.dataset.goto); return; }
-    });
-
-    $('moGlobalSearch')?.addEventListener('input', e => {
-      searchTerm = e.target.value.trim().toLowerCase();
-      if (['email', 'tasks', 'projects'].includes(currentPage)) renderCurrentPage();
-    });
+    }, 50);
   }
 
   function injectToastAndLoading() {
@@ -1101,16 +1007,7 @@
   // ═══════════════════════════════════════════════════════════
   // 📊 DATA STORE
   // ═══════════════════════════════════════════════════════════
-  const store = {
-    projects: [],
-    tasks: [],
-    emails: [],
-    employees: [],
-    files: [],
-    events: [],
-    chats: [],
-    loaded: false
-  };
+  const store = { projects: [], tasks: [], emails: [], employees: [], files: [], events: [], chats: [], loaded: false };
 
   async function loadAllData() {
     if (!currentUser) return;
@@ -1128,7 +1025,6 @@
         sb.from('chats').select('*').eq('user_id', uid).order('created_at', { ascending: false }).limit(50)
       ]);
 
-      // ═══ Warn عن الجداول الناقصة ═══
       if (profilesRes.error) console.warn('⚠️ profiles:', profilesRes.error.message);
       if (projectsRes.error) console.warn('⚠️ projects:', projectsRes.error.message);
       if (tasksRes.error)    console.warn('⚠️ tasks:',    tasksRes.error.message);
@@ -1138,87 +1034,63 @@
       if (chatsRes.error)    console.warn('⚠️ chats:',    chatsRes.error.message);
 
       store.employees = (profilesRes.data || []).map(p => ({
-        id: p.id,
-        name: p.name || 'مستخدم',
-        role: p.role || 'موظف',
-        email: p.email,
-        tasks: 0,
-        projects: 0
+        id: p.id, name: p.name || 'مستخدم', role: p.role || 'موظف',
+        email: p.email, tasks: 0, projects: 0
       }));
 
       store.projects = (projectsRes.data || []).map(p => ({
-        id: p.id,
-        name: p.name,
-        progress: p.progress || 0,
+        id: p.id, name: p.name, progress: p.progress || 0,
         team: Array.isArray(p.team) ? p.team : [],
-        deadline: p.deadline,
-        tasks: p.tasks_count || 0,
-        done: p.done_count || 0,
-        status: p.status || 'نشط'
+        deadline: p.deadline, tasks: p.tasks_count || 0,
+        done: p.done_count || 0, status: p.status || 'نشط'
       }));
 
       store.tasks = (tasksRes.data || []).map(t => ({
-        id: t.id,
-        title: t.title,
-        project: t.project || 'عام',
-        status: t.status || 'todo',
-        priority: t.priority || 'عادي',
-        assignee: t.assignee || 'غير محدد',
-        due: t.due_date,
+        id: t.id, title: t.title, project: t.project || 'عام',
+        status: t.status || 'todo', priority: t.priority || 'عادي',
+        assignee: t.assignee || 'غير محدد', due: t.due_date,
         tags: Array.isArray(t.tags) ? t.tags : []
       }));
 
       store.emails = (emailsRes.data || []).map(e => ({
-        id: e.id,
-        from: e.from_name || e.to_name || 'مستخدم',
+        id: e.id, from: e.from_name || e.to_name || 'مستخدم',
         email: e.from_email || e.to_email || '',
         subject: e.subject || '',
         preview: (e.body || '').slice(0, 60),
-        body: e.body || '',
-        time: formatTimeAgo(e.created_at),
+        body: e.body || '', time: formatTimeAgo(e.created_at),
         unread: !e.is_read
       }));
 
       store.files = (filesRes.data || []).map(f => ({
-        id: f.id,
-        name: f.name,
-        size: f.size || '0 KB',
+        id: f.id, name: f.name, size: f.size || '0 KB',
         date: formatTimeAgo(f.created_at)
       }));
 
       store.events = (eventsRes.data || []).map(e => ({
-        id: e.id,
-        time: (e.event_time || '00:00').toString().slice(0, 5),
-        title: e.title,
-        desc: e.description || ''
+        id: e.id, time: (e.event_time || '00:00').toString().slice(0, 5),
+        title: e.title, desc: e.description || ''
       }));
 
-      // Chats & Messages
       if (chatsRes.data?.length) {
         store.chats = await Promise.all(chatsRes.data.map(async c => {
-          const { data: msgs, error: mErr } = await sb.from('messages')
+          const { data: msgs } = await sb.from('messages')
             .select('*').eq('chat_id', c.id).order('created_at').limit(200);
-          if (mErr) console.warn('⚠️ messages:', mErr.message);
           const messages = (msgs || []).map(m => ({
             from: m.from_user === uid ? 'me' : 'them',
             text: m.text,
             time: new Date(m.created_at).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
           }));
           return {
-            id: c.id,
-            name: c.name,
-            av: initials(c.name),
+            id: c.id, name: c.name, av: initials(c.name),
             online: c.online || false,
             last: messages[messages.length - 1]?.text || 'لا توجد رسائل',
-            time: formatTimeAgo(c.created_at),
-            messages
+            time: formatTimeAgo(c.created_at), messages
           };
         }));
       } else {
         store.chats = [];
       }
 
-      // Nav badges
       if ($('moNavProjects')) $('moNavProjects').textContent = store.projects.length;
       if ($('moNavTasks'))    $('moNavTasks').textContent = store.tasks.length;
       if ($('moNavEmails'))   $('moNavEmails').textContent = store.emails.filter(e => e.unread).length;
@@ -1264,17 +1136,10 @@
     const c = $('moContent');
     if (!c) return;
     const renderers = {
-      dashboard: renderDashboard,
-      projects: renderProjects,
-      tasks: renderTasks,
-      email: renderEmail,
-      messages: renderMessages,
-      calendar: renderCalendar,
-      employees: renderEmployees,
-      files: renderFiles,
-      reports: renderReports,
-      ai: renderAI,
-      settings: renderSettings
+      dashboard: renderDashboard, projects: renderProjects, tasks: renderTasks,
+      email: renderEmail, messages: renderMessages, calendar: renderCalendar,
+      employees: renderEmployees, files: renderFiles, reports: renderReports,
+      ai: renderAI, settings: renderSettings
     };
     const fn = renderers[currentPage] || renderDashboard;
     c.innerHTML = '<div style="animation:moFade .4s">' + fn() + '</div>';
@@ -1290,13 +1155,10 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 📄 PAGE RENDERERS
+  // 📄 RENDERERS
   // ═══════════════════════════════════════════════════════════
   function renderDashboard() {
-    const P = store.projects;
-    const T = store.tasks;
-    const E = store.emails;
-
+    const P = store.projects, T = store.tasks, E = store.emails;
     const stats = [
       { label: 'المشاريع', value: P.length, trend: '+12%', up: true, ico: 'folder' },
       { label: 'المهام', value: T.length, trend: '+8%', up: true, ico: 'check' },
@@ -1308,9 +1170,7 @@
       <div class="mo-stat">
         <div class="mo-stat-top">
           <div class="mo-stat-ico">${ICONS[s.ico]}</div>
-          <div class="mo-stat-trend ${s.up ? 'up' : 'down'}">
-            ${s.up ? ICONS.trendUp : ICONS.trendDown} ${s.trend}
-          </div>
+          <div class="mo-stat-trend ${s.up ? 'up' : 'down'}">${s.up ? ICONS.trendUp : ICONS.trendDown} ${s.trend}</div>
         </div>
         <div class="mo-stat-val">${s.value}</div>
         <div class="mo-stat-lbl">${s.label}</div>
@@ -1330,12 +1190,7 @@
       <tr>
         <td><b>${escapeHtml(p.name)}</b></td>
         <td>${p.team.length} أعضاء</td>
-        <td>
-          <div style="min-width:100px">
-            <div class="mo-progress"><span style="width:${p.progress}%"></span></div>
-            <div style="font-size:11px;font-weight:800;color:#a3a3a3;margin-top:5px">${p.progress}%</div>
-          </div>
-        </td>
+        <td><div style="min-width:100px"><div class="mo-progress"><span style="width:${p.progress}%"></span></div><div style="font-size:11px;font-weight:800;color:#a3a3a3;margin-top:5px">${p.progress}%</div></div></td>
         <td><span class="mo-badge ${p.status === 'نشط' ? 'dark' : ''}">${escapeHtml(p.status)}</span></td>
         <td style="color:#525252;font-size:12px;font-weight:700">${formatDate(p.deadline)}</td>
       </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:#a3a3a3;padding:30px">لا توجد مشاريع</td></tr>';
@@ -1357,7 +1212,6 @@
 
     return `
       <div class="mo-grid mo-g4" style="margin-bottom:20px">${statCards}</div>
-
       <div class="mo-grid mo-g21" style="margin-bottom:20px">
         <div class="mo-card">
           <div class="mo-card-hd">
@@ -1366,19 +1220,16 @@
           </div>
           <div style="display:flex;align-items:flex-end;justify-content:space-around;gap:10px;height:180px;padding:10px 0">${bars}</div>
         </div>
-
         <div class="mo-card">
           <div class="mo-card-hd"><h3>${ICONS.cal} اجتماعات اليوم</h3></div>
           ${eventsList}
         </div>
       </div>
-
       <div class="mo-grid mo-g12">
         <div class="mo-card">
           <div class="mo-card-hd"><h3>${ICONS.check} مهام قادمة</h3></div>
           ${recentTasks}
         </div>
-
         <div class="mo-card">
           <div class="mo-card-hd">
             <div><h3>${ICONS.folder} المشاريع النشطة</h3></div>
@@ -1396,10 +1247,7 @@
   }
 
   function renderProjects() {
-    const filtered = searchTerm
-      ? store.projects.filter(p => p.name.toLowerCase().includes(searchTerm))
-      : store.projects;
-
+    const filtered = searchTerm ? store.projects.filter(p => p.name.toLowerCase().includes(searchTerm)) : store.projects;
     const cards = filtered.map(p => `
       <div class="mo-card">
         <div class="mo-card-hd" style="margin-bottom:16px">
@@ -1438,10 +1286,7 @@
   }
 
   function renderTasks() {
-    const filtered = searchTerm
-      ? store.tasks.filter(t => t.title.toLowerCase().includes(searchTerm))
-      : store.tasks;
-
+    const filtered = searchTerm ? store.tasks.filter(t => t.title.toLowerCase().includes(searchTerm)) : store.tasks;
     const cols = {
       todo: { name: 'بانتظار البدء', color: '#d4d4d4', items: filtered.filter(t => t.status === 'todo') },
       progress: { name: 'قيد التنفيذ', color: '#000', items: filtered.filter(t => t.status === 'progress') },
@@ -1584,12 +1429,9 @@
 
   function renderCalendar() {
     const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const today = now.getDate();
+    const year = now.getFullYear(), month = now.getMonth(), today = now.getDate();
     const monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
     const dows = ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'];
-
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const prevDays = new Date(year, month, 0).getDate();
@@ -1669,9 +1511,7 @@
   }
 
   function renderReports() {
-    const P = store.projects;
-    const T = store.tasks;
-
+    const P = store.projects, T = store.tasks;
     const stats = [
       { label: 'المشاريع', value: P.length, trend: '+12%', up: true, ico: 'folder' },
       { label: 'مكتملة', value: T.filter(t => t.status === 'done').length, trend: '+8%', up: true, ico: 'check' },
@@ -1703,7 +1543,6 @@
             <div class="mo-stat-lbl">${s.label}</div>
           </div>`).join('')}
       </div>
-
       <div class="mo-grid mo-g2">
         <div class="mo-card">
           <div class="mo-card-hd"><h3>${ICONS.chart} أداء الفريق</h3></div>
@@ -1717,12 +1556,7 @@
               <tbody>${P.map(p => `
                 <tr>
                   <td><b>${escapeHtml(p.name)}</b></td>
-                  <td>
-                    <div style="min-width:80px">
-                      <div class="mo-progress"><span style="width:${p.progress}%"></span></div>
-                      <div style="font-size:11px;font-weight:800;color:#a3a3a3;margin-top:5px">${p.progress}%</div>
-                    </div>
-                  </td>
+                  <td><div style="min-width:80px"><div class="mo-progress"><span style="width:${p.progress}%"></span></div><div style="font-size:11px;font-weight:800;color:#a3a3a3;margin-top:5px">${p.progress}%</div></div></td>
                   <td><span class="mo-badge ${p.status === 'نشط' ? 'dark' : ''}">${escapeHtml(p.status)}</span></td>
                 </tr>`).join('') || '<tr><td colspan="3" style="text-align:center;color:#a3a3a3;padding:30px">لا توجد بيانات</td></tr>'}
               </tbody>
@@ -1775,60 +1609,32 @@
       <div class="mo-settings-grid">
         <div class="mo-setting-card">
           <h3>${ICONS.users} حسابي</h3>
-          <div class="mo-setting-row">
-            <div class="sr-info"><b>الاسم</b><span>${escapeHtml(p.name || '—')}</span></div>
-          </div>
-          <div class="mo-setting-row">
-            <div class="sr-info"><b>البريد</b><span>${escapeHtml(u?.email || '—')}</span></div>
-          </div>
-          <div class="mo-setting-row">
-            <div class="sr-info"><b>رقم العضوية</b><span>#${String(u?.id || '').slice(0, 8).toUpperCase()}</span></div>
-          </div>
+          <div class="mo-setting-row"><div class="sr-info"><b>الاسم</b><span>${escapeHtml(p.name || '—')}</span></div></div>
+          <div class="mo-setting-row"><div class="sr-info"><b>البريد</b><span>${escapeHtml(u?.email || '—')}</span></div></div>
+          <div class="mo-setting-row"><div class="sr-info"><b>رقم العضوية</b><span>#${String(u?.id || '').slice(0, 8).toUpperCase()}</span></div></div>
         </div>
-
         <div class="mo-setting-card">
           <h3>${ICONS.bell} الإشعارات</h3>
-          <div class="mo-setting-row">
-            <div class="sr-info"><b>إشعارات البريد</b><span>عند وصول رسالة</span></div>
-            <div class="mo-switch on"></div>
-          </div>
-          <div class="mo-setting-row">
-            <div class="sr-info"><b>إشعارات المهام</b><span>عند إسناد مهمة</span></div>
-            <div class="mo-switch on"></div>
-          </div>
-          <div class="mo-setting-row">
-            <div class="sr-info"><b>الاجتماعات</b><span>قبل الموعد بـ 15 دقيقة</span></div>
-            <div class="mo-switch on"></div>
-          </div>
+          <div class="mo-setting-row"><div class="sr-info"><b>إشعارات البريد</b><span>عند وصول رسالة</span></div><div class="mo-switch on"></div></div>
+          <div class="mo-setting-row"><div class="sr-info"><b>إشعارات المهام</b><span>عند إسناد مهمة</span></div><div class="mo-switch on"></div></div>
+          <div class="mo-setting-row"><div class="sr-info"><b>الاجتماعات</b><span>قبل الموعد بـ 15 دقيقة</span></div><div class="mo-switch on"></div></div>
         </div>
-
         <div class="mo-setting-card">
           <h3>${ICONS.shield} الأمان</h3>
-          <div class="mo-setting-row">
-            <div class="sr-info"><b>الجلسة الحالية</b><span>جهازك الحالي</span></div>
-            <span class="mo-badge dark">نشط</span>
-          </div>
-          <div class="mo-setting-row">
-            <div class="sr-info"><b>آخر تسجيل دخول</b><span>${new Date().toLocaleDateString('ar-EG')}</span></div>
-          </div>
+          <div class="mo-setting-row"><div class="sr-info"><b>الجلسة الحالية</b><span>جهازك الحالي</span></div><span class="mo-badge dark">نشط</span></div>
+          <div class="mo-setting-row"><div class="sr-info"><b>آخر تسجيل دخول</b><span>${new Date().toLocaleDateString('ar-EG')}</span></div></div>
         </div>
-
         <div class="mo-setting-card">
           <h3>${ICONS.check} عن المنصة</h3>
-          <div class="mo-setting-row">
-            <div class="sr-info"><b>الإصدار</b><span>1.0.0</span></div>
-          </div>
-          <div class="mo-setting-row">
-            <div class="sr-info"><b>اللغة</b><span>العربية (RTL)</span></div>
-            <span class="mo-badge">عربي</span>
-          </div>
+          <div class="mo-setting-row"><div class="sr-info"><b>الإصدار</b><span>1.2.0</span></div></div>
+          <div class="mo-setting-row"><div class="sr-info"><b>اللغة</b><span>العربية (RTL)</span></div><span class="mo-badge">عربي</span></div>
         </div>
       </div>
     `;
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🎯 PAGE EVENT BINDINGS
+  // 🎯 PAGE EVENTS
   // ═══════════════════════════════════════════════════════════
   function bindEmailEvents() {
     $$('.mo-email-item').forEach(item => {
@@ -2030,7 +1836,6 @@
       if (error) throw error;
       closeModal();
       toast('تم الإرسال ✓');
-      // فتح العميل الخارجي في نافذة جديدة (بدون مغادرة التطبيق)
       window.open(`mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
       await loadAllData();
       navigate('email');
@@ -2053,19 +1858,41 @@
   // 🚀 BOOTSTRAP
   // ═══════════════════════════════════════════════════════════
   async function bootstrap() {
-    injectCSS();
-    injectToastAndLoading();
-    injectAuthScreen();
-    injectAppShell();
+    // ═══ Global Error Handlers ═══
+    window.addEventListener('error', (e) => {
+      console.error('💥 [Global Error]', e.error || e.message);
+    });
+    window.addEventListener('unhandledrejection', (e) => {
+      console.error('💥 [Unhandled Promise]', e.reason);
+    });
 
-    // Keyboard
+    console.log('🚀 [Boot] بدء تشغيل MEN Office...');
+
+    try {
+      injectCSS();
+      console.log('✅ [Boot] CSS جاهز');
+
+      injectToastAndLoading();
+      console.log('✅ [Boot] Toast/Loading جاهز');
+
+      injectAuthScreen();
+      console.log('✅ [Boot] شاشة الدخول جاهزة');
+
+      injectAppShell();
+      console.log('✅ [Boot] هيكل التطبيق جاهز');
+    } catch (err) {
+      console.error('❌ [Boot Error]', err);
+      return;
+    }
+
+    // ESC لإغلاق المودال
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeModal();
     });
 
-    // ═══ Auth state listener (بدون async!) ═══
+    // ═══ Auth State Listener ═══
     sb.auth.onAuthStateChange((event, session) => {
-      console.log('[MEN_OFFICE]', event);
+      console.log('🔐 [Auth Event]', event);
       if (event === 'SIGNED_OUT') {
         currentUser = null;
         currentProfile = null;
