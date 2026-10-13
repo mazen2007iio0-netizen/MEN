@@ -63,7 +63,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     window.MEN_SUPABASE = sb;
   } catch (e) { showError('فشل التهيئة: ' + e.message); return; }
 
-  console.log('%c✨ MEN OFFICE v4.0', 'background:linear-gradient(135deg,#000,#333);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900');
+  console.log('%c✨ MEN OFFICE v5.0', 'background:linear-gradient(135deg,#000,#333);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900');
 
   let currentUser = null, currentProfile = null, authMode = 'login', currentPage = 'dashboard';
   let currentEmailIdx = 0, currentChatIdx = 0, searchTerm = '', _resendEmail = '';
@@ -106,7 +106,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     return (bytes/1024).toFixed(0)+' KB';
   }
 
-  // ✅ تحديد نوع الملف للمعاينة
   function getFileKind(url, name, mime) {
     const ext = (name || '').split('.').pop().toLowerCase();
     const m = (mime || '').toLowerCase();
@@ -147,7 +146,8 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
     zoomIn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg>',
     zoomOut:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M8 11h6"/></svg>',
-    rotate:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>'
+    rotate:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>',
+    external:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'
   };
 
   const LOGO_URL = 'https://www.socialcreator.com/srv/imgs/ti_imgs/202842_332160.png';
@@ -464,15 +464,9 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
       .mo-preview-body{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:24px;position:relative}
       .mo-preview-body img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .25s;user-select:none;border-radius:8px}
       .mo-preview-body iframe{width:100%;height:100%;border:none;background:#fff;border-radius:10px}
-      .mo-preview-body video,.mo-preview-body audio{max-width:100%;max-height:100%;border-radius:12px;background:#000}
-      .mo-preview-body audio{width:min(500px,100%);background:transparent}
-      .mo-preview-body pre{background:#0a0a0a;color:#e5e5e5;padding:24px;border-radius:12px;font-size:13px;line-height:1.7;font-family:'Courier New',monospace;max-width:900px;width:100%;max-height:100%;overflow:auto;white-space:pre-wrap;word-break:break-word;direction:ltr;text-align:left}
-      .mo-preview-body .mo-preview-unsupported{color:#fff;text-align:center;padding:60px 20px}
-      .mo-preview-body .mo-preview-unsupported svg{width:80px;height:80px;opacity:.3;margin-bottom:20px}
-      .mo-preview-body .mo-preview-unsupported h3{font-size:20px;font-weight:900;margin-bottom:10px}
-      .mo-preview-body .mo-preview-unsupported p{color:rgba(255,255,255,.5);font-size:14px;line-height:1.7;margin-bottom:20px}
-      .mo-preview-body .mo-preview-unsupported a{padding:12px 24px;background:#fff;color:#000;border-radius:12px;text-decoration:none;font-weight:900;font-size:14px;display:inline-flex;align-items:center;gap:8px;transition:all .2s}
-      .mo-preview-body .mo-preview-unsupported a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,255,255,.15)}
+      .mo-preview-body video{max-width:100%;max-height:100%;border-radius:12px;background:#000}
+      .mo-preview-body audio{width:min(500px,100%)}
+      .mo-preview-body pre{background:#0a0a0a;color:#e5e5e5;padding:24px;border-radius:12px;font-size:13px;line-height:1.7;font-family:'Courier New',monospace;max-width:900px;width:100%;max-height:100%;overflow:auto;white-space:pre-wrap;word-break:break-word;direction:ltr;text-align:left;margin:auto}
       .mo-preview-loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-weight:700;font-size:14px;display:flex;flex-direction:column;align-items:center;gap:16px}
       .mo-preview-loading .spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.15);border-top-color:#fff;border-radius:50%;animation:moSpin .8s linear infinite}
       @keyframes moSpin{to{transform:rotate(360deg)}}
@@ -519,9 +513,9 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         .mo-kanban{grid-template-columns:1fr}
         .mo-card{padding:20px}
         .mo-icon-btn{width:38px;height:38px}
-        .mo-preview-header{padding:12px 14px;gap:8px}
+        .mo-preview-header{padding:12px 14px;gap:8px;flex-wrap:wrap}
+        .mo-preview-title{flex:1 1 100%}
         .mo-preview-title b{font-size:13px}
-        .mo-preview-title span{display:none}
         .mo-preview-btn{width:36px;height:36px}
         .mo-preview-btn svg{width:15px;height:15px}
       }
@@ -757,7 +751,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         <div class="mo-sidebar-overlay" id="moSidebarOverlay"></div>
       </div>
 
-      <!-- 🖼️ PREVIEW MODAL -->
       <div id="mo-preview" class="mo-preview-overlay">
         <div class="mo-preview-header">
           <div class="mo-preview-title">
@@ -796,28 +789,20 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         const goto = e.target.closest('[data-goto]');
         if (goto) { navigate(goto.dataset.goto); return; }
 
-        // ✅ PREVIEW triggers (first priority)
+        // Preview button
         const previewBtn = e.target.closest('[data-preview]');
         if (previewBtn) {
-          e.preventDefault();
-          e.stopPropagation();
+          e.preventDefault(); e.stopPropagation();
           const id = previewBtn.dataset.preview;
-          // Try files store
           const fromFiles = store.files.find(f => f.id === id);
           if (fromFiles) { openFilePreview(fromFiles); return; }
-          // Try attachments embedded in data attributes
           const url = previewBtn.dataset.url;
-          const name = previewBtn.dataset.name;
-          const size = previewBtn.dataset.size;
-          if (url) {
-            openFilePreview({ url, name: name || 'ملف', size: size || '—' });
-            return;
-          }
+          if (url) openFilePreview({ url, name: previewBtn.dataset.name || 'ملف', size: previewBtn.dataset.size || '—' });
           return;
         }
 
         const dl = e.target.closest('[data-download]');
-        if (dl) { downloadFile(dl.dataset.download); return; }
+        if (dl) { e.preventDefault(); downloadFile(dl.dataset.download); return; }
         const del = e.target.closest('[data-delete]');
         if (del) { deleteFile(del.dataset.delete); return; }
         const taskCard = e.target.closest('.mo-kb-card[data-task-id]');
@@ -827,11 +812,11 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         const chatContact = e.target.closest('.mo-msg-contact[data-chat-idx]');
         if (chatContact) { currentChatIdx = +chatContact.dataset.chatIdx; renderCurrentPage(); return; }
 
-        // File card (whole card) — preview
         const fileCard = e.target.closest('.mo-file-card[data-file-id]');
-        if (fileCard) {
+        if (fileCard && !e.target.closest('button')) {
           const f = store.files.find(x => x.id === fileCard.dataset.fileId);
-          if (f) { openFilePreview(f); return; }
+          if (f) openFilePreview(f);
+          return;
         }
       });
 
@@ -883,7 +868,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         } catch (e) {}
       });
 
-      // ✅ Preview modal events
       $('moPreviewClose')?.addEventListener('click', closeFilePreview);
       $('mo-preview')?.addEventListener('click', (e) => {
         if (e.target.id === 'mo-preview') closeFilePreview();
@@ -919,91 +903,133 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
   const hideLoading = () => $('mo-loading')?.classList.remove('on');
 
   // ═══════════════════════════════════════════════════════════
-  // 🖼️ FILE PREVIEW
+  // 🖼️ FILE PREVIEW & DOWNLOAD
   // ═══════════════════════════════════════════════════════════
   function openFilePreview(file) {
+    console.log('👁️ [Preview] محاولة معاينة:', file);
     const overlay = $('mo-preview');
     const body = $('moPreviewBody');
     const nameEl = $('moPreviewName');
     const metaEl = $('moPreviewMeta');
     const actionsEl = $('moPreviewActions');
-    if (!overlay || !body) return;
+
+    if (!overlay || !body) {
+      console.error('❌ [Preview] عناصر المعاينة غير موجودة!');
+      alert('نافذة المعاينة غير جاهزة');
+      return;
+    }
+    if (!file?.url) {
+      console.error('❌ [Preview] لا يوجد رابط:', file);
+      toast('الملف لا يحتوي على رابط', 'error');
+      return;
+    }
 
     previewScale = 1;
     const kind = getFileKind(file.url, file.name, file.mime || file.mime_type);
     const url = file.url;
 
     nameEl.textContent = file.name || 'ملف';
-    metaEl.textContent = `${file.size || '—'} · ${kind.toUpperCase()}`;
+    metaEl.textContent = `${file.size || '—'} • ${kind.toUpperCase()}`;
 
-    // Buttons
     let actionsHtml = '';
     if (kind === 'image') {
       actionsHtml += `
         <button class="mo-preview-btn" id="moPrevZoomOut" type="button" title="تصغير">${ICONS.zoomOut}</button>
         <button class="mo-preview-btn" id="moPrevZoomIn" type="button" title="تكبير">${ICONS.zoomIn}</button>
-        <button class="mo-preview-btn" id="moPrevReset" type="button" title="إعادة ضبط">${ICONS.rotate}</button>
+        <button class="mo-preview-btn" id="moPrevReset" type="button" title="إعادة">${ICONS.rotate}</button>
       `;
     }
-    actionsHtml += `<a class="mo-preview-btn primary" href="${escapeHtml(url)}" download="${escapeHtml(file.name || '')}" title="تحميل">${ICONS.download}</a>`;
+    actionsHtml += `
+      <button class="mo-preview-btn" id="moPrevOpen" type="button" title="فتح في تبويب">${ICONS.external}</button>
+      <button class="mo-preview-btn primary" id="moPrevDownload" type="button" title="تحميل">${ICONS.download}</button>
+    `;
     actionsEl.innerHTML = actionsHtml;
-
-    // Loading spinner
-    body.innerHTML = '<div class="mo-preview-loading"><div class="spinner"></div><span>جارٍ التحميل...</span></div>';
-
-    // Build content based on kind
-    const showContent = () => {
-      if (kind === 'image') {
-        body.innerHTML = `<img id="moPreviewImg" src="${escapeHtml(url)}" alt="${escapeHtml(file.name)}" style="transform:scale(1)">`;
-        const img = $('moPreviewImg');
-        img.addEventListener('load', () => {});
-        img.addEventListener('error', () => showUnsupported(file, url));
-        // Zoom buttons
-        setTimeout(() => {
-          $('moPrevZoomIn')?.addEventListener('click', () => { previewScale = Math.min(5, previewScale + 0.25); img.style.transform = `scale(${previewScale})`; });
-          $('moPrevZoomOut')?.addEventListener('click', () => { previewScale = Math.max(0.25, previewScale - 0.25); img.style.transform = `scale(${previewScale})`; });
-          $('moPrevReset')?.addEventListener('click', () => { previewScale = 1; img.style.transform = `scale(1)`; });
-        }, 20);
-      } else if (kind === 'video') {
-        body.innerHTML = `<video controls autoplay src="${escapeHtml(url)}" preload="metadata"></video>`;
-        body.querySelector('video').addEventListener('error', () => showUnsupported(file, url));
-      } else if (kind === 'audio') {
-        body.innerHTML = `
-          <div style="text-align:center">
-            <div style="width:120px;height:120px;border-radius:30px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;color:#fff">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:50px;height:50px"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-            </div>
-            <div style="color:#fff;font-weight:900;font-size:15px;margin-bottom:20px">${escapeHtml(file.name)}</div>
-            <audio controls autoplay src="${escapeHtml(url)}" style="width:min(500px,90vw)"></audio>
-          </div>
-        `;
-      } else if (kind === 'pdf') {
-        body.innerHTML = `<iframe src="${escapeHtml(url)}#toolbar=1" title="${escapeHtml(file.name)}"></iframe>`;
-      } else if (kind === 'text') {
-        fetch(url).then(r => r.text()).then(text => {
-          body.innerHTML = `<pre>${escapeHtml(text.slice(0, 50000))}</pre>`;
-        }).catch(() => showUnsupported(file, url));
-      } else {
-        showUnsupported(file, url);
-      }
-    };
-
-    const showUnsupported = (f, u) => {
-      body.innerHTML = `
-        <div class="mo-preview-unsupported">
-          ${ICONS.file}
-          <h3>لا يمكن معاينة هذا النوع</h3>
-          <p>${escapeHtml(f.name || 'ملف')}<br>${escapeHtml(f.size || '')}</p>
-          <a href="${escapeHtml(u)}" download="${escapeHtml(f.name || '')}" target="_blank">
-            ${ICONS.download} تحميل الملف
-          </a>
-        </div>
-      `;
-    };
 
     overlay.classList.add('on');
     document.body.style.overflow = 'hidden';
-    setTimeout(showContent, 100);
+
+    setTimeout(() => {
+      $('moPrevOpen')?.addEventListener('click', () => window.open(url, '_blank'));
+      $('moPrevDownload')?.addEventListener('click', () => downloadFileFromUrl(url, file.name));
+    }, 30);
+
+    if (kind === 'image') {
+      body.innerHTML = '<div class="mo-preview-loading"><div class="spinner"></div><span>جارٍ التحميل...</span></div>';
+      const img = new Image();
+      img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;transition:transform .25s;user-select:none';
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        body.innerHTML = '';
+        body.appendChild(img);
+        setTimeout(() => {
+          $('moPrevZoomIn')?.addEventListener('click', () => { previewScale = Math.min(5, previewScale + 0.25); img.style.transform = `scale(${previewScale})`; });
+          $('moPrevZoomOut')?.addEventListener('click', () => { previewScale = Math.max(0.25, previewScale - 0.25); img.style.transform = `scale(${previewScale})`; });
+          $('moPrevReset')?.addEventListener('click', () => { previewScale = 1; img.style.transform = 'scale(1)'; });
+        }, 20);
+        console.log('✅ [Preview] الصورة محمّلة');
+      };
+      img.onerror = () => {
+        console.error('❌ [Preview] فشل تحميل الصورة:', url);
+        showPreviewFallback(body, file, url, 'تعذّر عرض الصورة');
+      };
+      img.src = url;
+    } else if (kind === 'video') {
+      body.innerHTML = `<video controls autoplay src="${escapeHtml(url)}" preload="metadata" style="max-width:100%;max-height:100%;border-radius:12px;background:#000"></video>`;
+      body.querySelector('video')?.addEventListener('error', () => showPreviewFallback(body, file, url, 'تعذّر عرض الفيديو'));
+    } else if (kind === 'audio') {
+      body.innerHTML = `
+        <div style="text-align:center;width:100%">
+          <div style="width:120px;height:120px;border-radius:30px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;color:#fff">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:50px;height:50px"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <div style="color:#fff;font-weight:900;font-size:15px;margin-bottom:20px">${escapeHtml(file.name)}</div>
+          <audio controls autoplay src="${escapeHtml(url)}" style="width:min(500px,90vw)"></audio>
+        </div>
+      `;
+    } else if (kind === 'pdf') {
+      body.innerHTML = `<iframe src="${escapeHtml(url)}#toolbar=1&view=FitH" title="${escapeHtml(file.name)}" style="width:100%;height:100%;border:none;background:#fff;border-radius:10px"></iframe>`;
+    } else if (kind === 'text') {
+      body.innerHTML = '<div class="mo-preview-loading"><div class="spinner"></div><span>جارٍ التحميل...</span></div>';
+      fetch(url)
+        .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+        .then(text => {
+          body.innerHTML = `<pre>${escapeHtml(text.slice(0, 50000))}</pre>`;
+          console.log('✅ [Preview] النص محمّل');
+        })
+        .catch(err => {
+          console.error('❌ [Preview] فشل النص:', err);
+          showPreviewFallback(body, file, url, 'تعذّر تحميل محتوى الملف');
+        });
+    } else {
+      showPreviewFallback(body, file, url, 'لا يمكن معاينة هذا النوع');
+    }
+  }
+
+  function showPreviewFallback(body, file, url, message) {
+    body.innerHTML = `
+      <div style="color:#fff;text-align:center;padding:60px 20px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:80px;height:80px;opacity:.3;margin-bottom:20px;display:inline-block">
+          <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+          <polyline points="13 2 13 9 20 9"/>
+        </svg>
+        <h3 style="font-size:20px;font-weight:900;margin-bottom:10px">${escapeHtml(message)}</h3>
+        <p style="color:rgba(255,255,255,.5);font-size:14px;line-height:1.7;margin-bottom:20px">
+          ${escapeHtml(file.name || 'ملف')}<br>${escapeHtml(file.size || '')}
+        </p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button id="moFallbackDownload" style="padding:12px 24px;background:#fff;color:#000;border-radius:12px;font-weight:900;font-size:14px;cursor:pointer;border:none;font-family:inherit;display:inline-flex;align-items:center;gap:8px">
+            ${ICONS.download} تحميل
+          </button>
+          <button id="moFallbackOpen" style="padding:12px 24px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:12px;font-weight:900;font-size:14px;cursor:pointer;font-family:inherit">
+            فتح في تبويب جديد
+          </button>
+        </div>
+      </div>
+    `;
+    setTimeout(() => {
+      $('moFallbackDownload')?.addEventListener('click', () => downloadFileFromUrl(url, file.name));
+      $('moFallbackOpen')?.addEventListener('click', () => window.open(url, '_blank'));
+    }, 30);
   }
 
   function closeFilePreview() {
@@ -1012,6 +1038,39 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     if (overlay) overlay.classList.remove('on');
     if (body) body.innerHTML = '';
     document.body.style.overflow = '';
+  }
+
+  // ✅ التحميل من URL مباشرة (يعمل مع cross-origin)
+  async function downloadFileFromUrl(url, name) {
+    if (!url) { toast('لا يوجد رابط', 'error'); return; }
+    console.log('⬇️ [Download] جارٍ التحميل:', name, url);
+    toast('⬇️ جارٍ التحميل...');
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = name || 'file';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+      toast('✅ تم التحميل');
+      console.log('✅ [Download] نجح');
+    } catch (err) {
+      console.error('❌ [Download] فشل:', err);
+      // Fallback
+      window.open(url, '_blank');
+      toast('تم الفتح في تبويب جديد', 'success');
+    }
+  }
+
+  async function downloadFile(id) {
+    const f = store.files.find(x => x.id === id);
+    if (!f?.url) { toast('الملف غير متاح', 'error'); return; }
+    await downloadFileFromUrl(f.url, f.name);
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -1074,6 +1133,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
   // STORE
   // ═══════════════════════════════════════════════════════════
   const store = { projects: [], tasks: [], emails: [], employees: [], files: [], events: [], chats: [], notifications: [], loaded: false };
+  window.MEN_OFFICE_STORE = store;
 
   async function loadAllData() {
     if (!currentUser) return;
@@ -1089,6 +1149,8 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         sb.from('events').select('*').eq('user_id', uid).order('event_time').limit(50),
         sb.from('chats').select('*').eq('user_id', uid).order('created_at', { ascending: false }).limit(50)
       ]);
+
+      if (fR.error) console.warn('⚠️ files:', fR.error.message);
 
       store.employees = (pR.data || []).map(p => ({
         id: p.id, name: p.name || 'مستخدم', role: p.role || 'موظف', email: p.email, tasks: 0, projects: 0
@@ -1124,6 +1186,9 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         date: formatTimeAgo(f.created_at)
       }));
 
+      console.log('📁 [Files] عدد الملفات:', store.files.length);
+      if (store.files.length) console.log('📁 [Files] أول ملف:', store.files[0]);
+
       store.events = (evR.data || []).map(e => ({
         id: e.id, time: (e.event_time || '00:00').toString().slice(0, 5),
         title: e.title, desc: e.description || ''
@@ -1134,8 +1199,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
           const { data: msgs } = await sb.from('messages').select('*').eq('chat_id', c.id).order('created_at').limit(200);
           const messages = (msgs || []).map(m => ({
             from: m.from_user === uid ? 'me' : 'them',
-            text: m.text,
-            attachment: m.attachment,
+            text: m.text, attachment: m.attachment,
             time: new Date(m.created_at).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
           }));
           return {
@@ -1502,7 +1566,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
                 <span style="font-size:11px;color:#a3a3a3;font-weight:700">${escapeHtml(a.size || '—')}</span>
               </div>
               <button class="mo-btn mo-btn-ghost" type="button" data-preview-email="${escapeHtml(a.url)}" data-name="${escapeHtml(a.name)}" data-size="${escapeHtml(a.size || '')}" style="padding:6px 12px;font-size:11.5px">${ICONS.eye} معاينة</button>
-              <a class="mo-btn mo-btn-ghost" href="${escapeHtml(a.url)}" download="${escapeHtml(a.name)}" style="padding:6px 12px;font-size:11.5px;text-decoration:none">${ICONS.download}</a>
+              <button class="mo-btn mo-btn-ghost" type="button" data-download-url="${escapeHtml(a.url)}" data-download-name="${escapeHtml(a.name)}" style="padding:6px 12px;font-size:11.5px">${ICONS.download}</button>
             </div>
           `).join('')}
         </div>
@@ -1549,11 +1613,11 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
       const attHtml = att ? `
         <div style="margin-top:8px;background:${m.from === 'me' ? 'rgba(255,255,255,.12)' : '#f5f5f5'};border-radius:10px;padding:10px;display:flex;align-items:center;gap:10px">
           ${kind === 'image' ? `
-            <img src="${escapeHtml(att.url)}" alt="" style="width:44px;height:44px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0" data-preview-msg="${escapeHtml(att.url)}" data-name="${escapeHtml(att.name)}" data-size="${escapeHtml(att.size || '')}">
+            <img src="${escapeHtml(att.url)}" alt="" style="width:44px;height:44px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0" data-preview-email="${escapeHtml(att.url)}" data-name="${escapeHtml(att.name)}" data-size="${escapeHtml(att.size || '')}">
           ` : `
-            <div style="width:36px;height:36px;border-radius:8px;background:${m.from === 'me' ? '#fff' : '#000'};color:${m.from === 'me' ? '#000' : '#fff'};display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer" data-preview-msg="${escapeHtml(att.url)}" data-name="${escapeHtml(att.name)}" data-size="${escapeHtml(att.size || '')}">${ICONS.file}</div>
+            <div style="width:36px;height:36px;border-radius:8px;background:${m.from === 'me' ? '#fff' : '#000'};color:${m.from === 'me' ? '#000' : '#fff'};display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer" data-preview-email="${escapeHtml(att.url)}" data-name="${escapeHtml(att.name)}" data-size="${escapeHtml(att.size || '')}">${ICONS.file}</div>
           `}
-          <div style="flex:1;min-width:0;cursor:pointer" data-preview-msg="${escapeHtml(att.url)}" data-name="${escapeHtml(att.name)}" data-size="${escapeHtml(att.size || '')}">
+          <div style="flex:1;min-width:0;cursor:pointer" data-preview-email="${escapeHtml(att.url)}" data-name="${escapeHtml(att.name)}" data-size="${escapeHtml(att.size || '')}">
             <b style="font-size:12px;font-weight:800;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(att.name)}</b>
             <span style="font-size:10.5px;opacity:.7;font-weight:700">${escapeHtml(att.size || '—')}</span>
           </div>
@@ -1753,19 +1817,6 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
     renderCurrentPage();
   }
 
-  async function downloadFile(id) {
-    const f = store.files.find(x => x.id === id);
-    if (!f?.url) { toast('الملف غير متاح', 'error'); return; }
-    const a = document.createElement('a');
-    a.href = f.url;
-    a.download = f.name || 'file';
-    a.target = '_blank';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    toast('⬇️ جارٍ التحميل...');
-  }
-
   async function deleteFile(id) {
     if (!confirm('حذف الملف؟')) return;
     try {
@@ -1899,7 +1950,7 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
         </div>
         <div class="mo-setting-card">
           <h3>${ICONS.check} عن المنصة</h3>
-          <div class="mo-setting-row"><div class="sr-info"><b>الإصدار</b><span>4.0.0</span></div></div>
+          <div class="mo-setting-row"><div class="sr-info"><b>الإصدار</b><span>5.0.0</span></div></div>
         </div>
       </div>
     `;
@@ -2217,16 +2268,24 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
       setTimeout(() => l?.remove(), 600);
     }, 400);
 
-    // ✅ معالجة روابط المعاينة في البريد/الرسائل (Event Delegation عام)
+    // ✅ Event Delegation عام للمعاينة والتحميل من URL
     document.body.addEventListener('click', (e) => {
-      const el = e.target.closest('[data-preview-email], [data-preview-msg]');
-      if (el) {
-        e.preventDefault();
-        e.stopPropagation();
-        const url = el.dataset.previewEmail || el.dataset.previewMsg;
-        const name = el.dataset.name || 'ملف';
-        const size = el.dataset.size || '—';
+      // Preview
+      const previewEl = e.target.closest('[data-preview-email], [data-preview-msg]');
+      if (previewEl) {
+        e.preventDefault(); e.stopPropagation();
+        const url = previewEl.dataset.previewEmail || previewEl.dataset.previewMsg;
+        const name = previewEl.dataset.name || 'ملف';
+        const size = previewEl.dataset.size || '—';
         if (url) openFilePreview({ url, name, size });
+        return;
+      }
+      // Download from URL
+      const dlUrl = e.target.closest('[data-download-url]');
+      if (dlUrl) {
+        e.preventDefault(); e.stopPropagation();
+        downloadFileFromUrl(dlUrl.dataset.downloadUrl, dlUrl.dataset.downloadName);
+        return;
       }
     });
 
@@ -2259,7 +2318,8 @@ body{font-family:'Tajawal',system-ui,sans-serif;background:#fafafa;color:#0a0a0a
   window.MEN_OFFICE = {
     open: (m) => { $('mo-auth-screen')?.classList.add('active'); switchAuthMode(m || 'login'); },
     openModal, closeModal, navigate, logout,
-    openFilePreview, closeFilePreview,
+    openFilePreview, closeFilePreview, downloadFileFromUrl,
+    store,
     getCurrentUser: () => currentUser,
     supabase: sb
   };
