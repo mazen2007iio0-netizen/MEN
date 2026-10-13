@@ -3,2110 +3,790 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MEN OS - Aquatic Edition</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<title>قياس القدرات | اختبار تجريبي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Cairo',sans-serif; user-select:none; -webkit-tap-highlight-color:transparent; }
-:root {
-    --aqua-1: #0ea5e9;
-    --aqua-2: #06b6d4;
-    --aqua-3: #22d3ee;
-    --aqua-4: #67e8f9;
-    --deep: #082f49;
-    --glass: rgba(8, 47, 73, 0.55);
-    --glass-light: rgba(255,255,255,0.08);
-    --glass-border: rgba(103, 232, 249, 0.25);
-    --shadow-glow: 0 0 40px rgba(34, 211, 238, 0.35);
-}
-html, body { overflow:hidden; height:100vh; width:100vw; color:#fff; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --primary:#0d9488;
+    --primary-d:#0f766e;
+    --primary-l:#ccfbf1;
+    --accent:#f59e0b;
+    --bg:#eef2f6;
+    --card:#ffffff;
+    --text:#1e293b;
+    --muted:#64748b;
+    --border:#e2e8f0;
+    --green:#16a34a;
+    --red:#dc2626;
+    --shadow:0 4px 20px rgba(15,23,42,.07);
+  }
+  body{
+    font-family:'Tajawal',system-ui,sans-serif;
+    background:var(--bg);
+    background-image:radial-gradient(circle at 10% 0%, #ccfbf1 0%, transparent 45%),
+                     radial-gradient(circle at 90% 10%, #dbeafe 0%, transparent 40%);
+    background-attachment:fixed;
+    color:var(--text);
+    min-height:100vh;
+    line-height:1.7;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:20px 16px 60px}
 
-/* ========== خلفية مائية متحركة ========== */
-#water-bg {
-    position:fixed; inset:0; z-index:0;
-    background: linear-gradient(180deg, #001f3f 0%, #0a3d62 40%, #0c5c8e 70%, #06b6d4 100%);
-    overflow:hidden;
-}
-.wave {
-    position:absolute; left:0; width:200%; height:200px;
-    background:radial-gradient(ellipse at center, rgba(103,232,249,0.4) 0%, transparent 70%);
-    border-radius:45%;
-    animation:waveMove 18s linear infinite;
-}
-.wave:nth-child(1) { bottom:-100px; opacity:0.5; animation-duration:15s; }
-.wave:nth-child(2) { bottom:-120px; opacity:0.3; animation-duration:22s; animation-direction:reverse; background:radial-gradient(ellipse at center, rgba(14,165,233,0.5) 0%, transparent 70%); }
-.wave:nth-child(3) { bottom:-80px; opacity:0.4; animation-duration:28s; background:radial-gradient(ellipse at center, rgba(34,211,238,0.4) 0%, transparent 70%); }
-@keyframes waveMove {
-    0%   { transform: translateX(0) rotate(0deg); }
-    100% { transform: translateX(-50%) rotate(360deg); }
-}
-
-/* فقاعات */
-.bubble {
-    position:absolute; border-radius:50%;
-    background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.7), rgba(103,232,249,0.15) 60%, transparent);
-    pointer-events:none;
-    animation:bubbleRise linear infinite;
-    box-shadow:inset -3px -3px 8px rgba(255,255,255,0.3), 0 0 15px rgba(103,232,249,0.4);
-}
-@keyframes bubbleRise {
-    0%   { transform:translateY(100vh) scale(0.5); opacity:0; }
-    10%  { opacity:0.8; }
-    90%  { opacity:0.8; }
-    100% { transform:translateY(-100px) scale(1.2); opacity:0; }
-}
-
-/* ========== شاشة الإقلاع ========== */
-#boot {
-    position:fixed; inset:0; z-index:99999;
-    background:radial-gradient(circle at 50% 50%, #0a3d62 0%, #001f3f 70%);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    transition:opacity 1s, transform 1s;
-    overflow:hidden;
-}
-#boot::before {
-    content:''; position:absolute; inset:0;
-    background:
-        radial-gradient(circle at 20% 30%, rgba(34,211,238,0.25), transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(14,165,233,0.2), transparent 40%);
-    animation:pulseGlow 3s ease-in-out infinite;
-}
-@keyframes pulseGlow { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
-#boot .logo {
-    position:relative;
-    font-size:96px; font-weight:900; letter-spacing:12px;
-    background:linear-gradient(135deg,#67e8f9,#06b6d4,#0ea5e9,#22d3ee);
-    background-size:300% 300%;
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    animation:logoFlow 4s ease infinite, dropIn 1.2s cubic-bezier(0.34,1.56,0.64,1);
-    filter:drop-shadow(0 0 30px rgba(103,232,249,0.6));
-}
-@keyframes logoFlow { 0%,100%{background-position:0% 50%;} 50%{background-position:100% 50%;} }
-@keyframes dropIn { from{opacity:0;transform:scale(0.3) translateY(-100px);} to{opacity:1;transform:scale(1) translateY(0);} }
-#boot .subtitle { color:#67e8f9; margin-top:20px; font-size:14px; letter-spacing:8px; opacity:0.9; animation:fadeIn 2s 0.8s both; }
-@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-#boot .loader {
-    width:280px; height:4px; background:rgba(103,232,249,0.15);
-    border-radius:4px; margin-top:50px; overflow:hidden;
-    box-shadow:0 0 20px rgba(103,232,249,0.3);
-    animation:fadeIn 1s 1s both;
-}
-#boot .loader-bar {
-    height:100%; width:0;
-    background:linear-gradient(90deg,#67e8f9,#06b6d4,#0ea5e9);
-    animation:load 2.8s ease-in-out forwards;
-    border-radius:4px;
-    box-shadow:0 0 15px #22d3ee;
-}
-@keyframes load { to { width:100%; } }
-#boot .status { margin-top:20px; color:#67e8f9; font-size:11px; letter-spacing:2px; opacity:0.7; animation:fadeIn 1s 1.5s both; }
-
-/* ========== سطح المكتب ========== */
-#desktop {
-    position:fixed; inset:0; z-index:10;
-    padding:60px 20px 100px;
-    display:grid;
-    grid-template-columns:repeat(auto-fill,110px);
-    grid-auto-rows:115px;
-    gap:8px;
-    align-content:start;
-}
-
-.desktop-icon {
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    cursor:pointer; border-radius:18px; padding:10px;
-    transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    text-align:center;
-    background:rgba(255,255,255,0.03);
+  /* ===== Header ===== */
+  header{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 18px;margin-bottom:22px;
+    background:rgba(255,255,255,.8);
     backdrop-filter:blur(10px);
-    border:1px solid rgba(103,232,249,0.1);
-}
-.desktop-icon:hover {
-    background:rgba(103,232,249,0.15);
-    border-color:rgba(103,232,249,0.5);
-    transform:translateY(-6px) scale(1.05);
-    box-shadow:0 15px 30px rgba(34,211,238,0.4), 0 0 20px rgba(103,232,249,0.3);
-}
-.desktop-icon:active { transform:translateY(-2px) scale(0.98); }
-.desktop-icon .icon-wrap {
-    width:56px; height:56px; display:flex; align-items:center; justify-content:center;
-    border-radius:14px; margin-bottom:6px;
-    background:linear-gradient(135deg, rgba(103,232,249,0.2), rgba(14,165,233,0.3));
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.3), 0 4px 12px rgba(0,0,0,0.3);
-}
-.desktop-icon .icon-wrap svg { width:32px; height:32px; }
-.desktop-icon span {
-    font-size:11px; color:#e0f7ff; font-weight:600;
-    text-shadow:0 2px 6px rgba(0,0,0,0.8);
-}
+    border:1px solid rgba(255,255,255,.9);
+    border-radius:18px;box-shadow:var(--shadow);
+  }
+  .logo{
+    width:44px;height:44px;flex:none;border-radius:13px;
+    background:linear-gradient(135deg,var(--primary),#0ea5e9);
+    display:grid;place-items:center;color:#fff;font-size:22px;
+    box-shadow:0 4px 12px rgba(13,148,136,.35);
+  }
+  header h1{font-size:20px;font-weight:800;letter-spacing:-.3px}
+  header p{font-size:12.5px;color:var(--muted);font-weight:500}
 
-/* ========== شريط العلوي ========== */
-#topbar {
-    position:fixed; top:0; left:0; right:0; height:34px; z-index:8000;
-    background:rgba(8,47,73,0.6);
-    backdrop-filter:blur(20px) saturate(180%);
-    border-bottom:1px solid rgba(103,232,249,0.15);
-    display:flex; align-items:center; justify-content:space-between;
-    padding:0 20px; font-size:11px; color:#a5f3fc;
-}
-#topbar .left, #topbar .right { display:flex; align-items:center; gap:18px; }
-#topbar .item { display:flex; align-items:center; gap:6px; }
-.status-dot { width:7px; height:7px; background:#22d3ee; border-radius:50%; box-shadow:0 0 10px #22d3ee; animation:pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1; transform:scale(1);} 50%{opacity:0.6; transform:scale(1.3);} }
+  /* ===== Cards ===== */
+  .card{
+    background:var(--card);border-radius:20px;padding:26px;
+    box-shadow:var(--shadow);border:1px solid rgba(226,232,240,.8);
+  }
 
-/* ========== شريط المهام ========== */
-#taskbar {
-    position:fixed; bottom:15px; left:50%; transform:translateX(-50%);
-    height:64px; min-width:500px; max-width:95vw;
-    background:linear-gradient(135deg, rgba(8,47,73,0.75), rgba(12,92,142,0.65));
-    backdrop-filter:blur(30px) saturate(180%);
-    border:1px solid rgba(103,232,249,0.3);
-    border-radius:22px;
-    display:flex; align-items:center; padding:0 15px; gap:10px;
-    z-index:9000;
-    box-shadow:
-        0 15px 50px rgba(0,0,0,0.6),
-        0 0 60px rgba(34,211,238,0.25),
-        inset 0 1px 0 rgba(255,255,255,0.15),
-        inset 0 -1px 0 rgba(103,232,249,0.2);
-}
-#taskbar::before {
-    content:''; position:absolute; top:0; left:20px; right:20px; height:1px;
-    background:linear-gradient(90deg, transparent, rgba(103,232,249,0.8), transparent);
-}
+  /* ===== Start screen ===== */
+  .hero{text-align:center;padding:8px 0 22px}
+  .hero .icon{
+    font-size:52px;margin-bottom:6px;
+  }
+  .hero h2{font-size:26px;font-weight:800;margin-bottom:8px}
+  .hero p{color:var(--muted);font-size:15px;max-width:520px;margin:0 auto}
 
-#start-button {
-    display:flex; align-items:center; gap:10px;
-    padding:10px 18px; border-radius:14px;
-    cursor:pointer;
-    background:linear-gradient(135deg,#06b6d4,#0ea5e9,#22d3ee);
-    background-size:200% 200%;
-    font-weight:700; color:#fff; border:none; font-size:14px;
-    transition:all 0.3s;
-    box-shadow:0 6px 20px rgba(34,211,238,0.5), inset 0 1px 0 rgba(255,255,255,0.4);
-    animation:btnFlow 4s ease infinite;
-    position:relative;
-    overflow:hidden;
-}
-@keyframes btnFlow { 0%,100%{background-position:0% 50%;} 50%{background-position:100% 50%;} }
-#start-button::after {
-    content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
-    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    transition:left 0.6s;
-}
-#start-button:hover::after { left:100%; }
-#start-button:hover { transform:scale(1.05); box-shadow:0 10px 30px rgba(34,211,238,0.7); }
-#start-button:active { transform:scale(0.97); }
-#start-button svg { width:22px; height:22px; }
+  .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}
+  .stat{
+    background:linear-gradient(160deg,#f8fafc,#f1f5f9);
+    border:1px solid var(--border);border-radius:16px;
+    padding:16px 10px;text-align:center;
+  }
+  .stat b{display:block;font-size:26px;font-weight:800;color:var(--primary-d);line-height:1.3}
+  .stat span{font-size:12.5px;color:var(--muted);font-weight:500}
 
-#taskbar-apps { flex:1; display:flex; gap:8px; margin:0 10px; overflow-x:auto; padding:4px; }
-#taskbar-apps::-webkit-scrollbar { display:none; }
+  .mode-list{display:grid;gap:12px;margin-top:6px}
+  .mode-btn{
+    display:flex;align-items:center;gap:14px;width:100%;text-align:right;
+    padding:16px 18px;border-radius:16px;cursor:pointer;
+    background:#fff;border:2px solid var(--border);
+    font-family:inherit;transition:.18s;color:var(--text);
+  }
+  .mode-btn:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 22px rgba(13,148,136,.14)}
+  .mode-btn .mi{
+    width:42px;height:42px;flex:none;border-radius:12px;display:grid;place-items:center;
+    background:var(--primary-l);color:var(--primary-d);font-size:20px;font-weight:700;
+  }
+  .mode-btn .mt{flex:1}
+  .mode-btn .mt strong{display:block;font-size:16px;font-weight:700}
+  .mode-btn .mt small{color:var(--muted);font-size:12.5px}
+  .mode-btn .arrow{color:var(--muted);font-size:18px}
 
-.taskbar-app {
-    display:flex; align-items:center; gap:8px;
-    padding:8px 14px;
-    background:rgba(103,232,249,0.08);
-    border:1px solid rgba(103,232,249,0.2);
-    border-radius:12px; font-size:12px; cursor:pointer;
-    white-space:nowrap; transition:all 0.2s;
-    color:#e0f7ff;
-}
-.taskbar-app:hover { background:rgba(103,232,249,0.2); transform:translateY(-2px); }
-.taskbar-app.active {
-    background:linear-gradient(135deg, rgba(34,211,238,0.35), rgba(14,165,233,0.35));
-    border-color:rgba(103,232,249,0.6);
-    box-shadow:0 0 15px rgba(34,211,238,0.5);
-}
-.taskbar-app svg { width:16px; height:16px; }
+  .note{
+    margin-top:18px;padding:14px 16px;border-radius:14px;
+    background:#fffbeb;border:1px solid #fde68a;
+    font-size:13.5px;color:#92400e;
+  }
 
-#clock-box {
-    display:flex; flex-direction:column; align-items:flex-end; gap:2px;
-    padding:0 15px; border-right:1px solid rgba(103,232,249,0.2);
-    padding-right:20px;
-}
-#clock { font-size:15px; font-weight:700; color:#fff; letter-spacing:1px; }
-#clock-date { font-size:10px; color:#67e8f9; }
+  /* ===== Quiz ===== */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:10px;margin-bottom:14px;flex-wrap:wrap;
+  }
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:6px 13px;border-radius:999px;font-size:13px;font-weight:700;
+    background:#fff;border:1px solid var(--border);color:var(--muted);
+  }
+  .pill.badge-q{background:var(--primary-l);color:var(--primary-d);border-color:#99f6e4}
+  .pill.badge-v{background:#ede9fe;color:#6d28d9;border-color:#ddd6fe}
+  .pill.timer{font-variant-numeric:tabular-nums;color:var(--text)}
 
-/* ========== قائمة ابدأ ========== */
-#start-menu {
-    position:fixed; bottom:92px; left:50%;
-    transform:translateX(-50%) scale(0.85) translateY(30px);
-    width:420px; max-height:560px;
-    background:linear-gradient(160deg, rgba(8,47,73,0.92), rgba(12,92,142,0.85));
-    backdrop-filter:blur(30px) saturate(180%);
-    border-radius:24px; padding:22px;
-    border:1px solid rgba(103,232,249,0.3);
-    box-shadow:
-        0 25px 80px rgba(0,0,0,0.7),
-        0 0 80px rgba(34,211,238,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.15);
-    display:flex; flex-direction:column; gap:6px;
-    z-index:9001;
-    opacity:0; pointer-events:none;
-    transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);
-    overflow:hidden;
-}
-#start-menu.show { opacity:1; pointer-events:auto; transform:translateX(-50%) scale(1) translateY(0); }
-#start-menu::before {
-    content:''; position:absolute; top:0; left:30px; right:30px; height:1px;
-    background:linear-gradient(90deg, transparent, rgba(103,232,249,0.8), transparent);
-}
+  .progress-track{
+    height:8px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-bottom:20px;
+  }
+  .progress-fill{
+    height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,var(--primary),#0ea5e9);
+    transition:width .35s ease;
+  }
 
-.sm-header { padding:8px 6px 18px; text-align:center; border-bottom:1px solid rgba(103,232,249,0.15); margin-bottom:12px; }
-.sm-header .avatar {
-    width:70px; height:70px; margin:0 auto 12px; border-radius:50%;
-    background:linear-gradient(135deg,#06b6d4,#0ea5e9,#22d3ee);
-    display:flex; align-items:center; justify-content:center;
-    font-size:32px; font-weight:900; color:#fff;
-    box-shadow:0 8px 30px rgba(34,211,238,0.5), inset 0 2px 0 rgba(255,255,255,0.4);
-}
-.sm-header h3 { font-size:17px; color:#fff; font-weight:700; }
-.sm-header p { font-size:11px; color:#67e8f9; margin-top:4px; }
+  .q-num{font-size:13px;font-weight:700;color:var(--primary-d);margin-bottom:8px}
+  .q-text{font-size:19px;font-weight:700;line-height:1.85;margin-bottom:20px}
 
-.sm-search {
-    width:100%; padding:12px 16px; margin-bottom:10px;
-    background:rgba(103,232,249,0.08);
-    border:1px solid rgba(103,232,249,0.2);
-    border-radius:12px; color:#fff; font-size:13px;
-    outline:none; transition:all 0.2s;
-    font-family:inherit;
-}
-.sm-search::placeholder { color:rgba(165,243,252,0.5); }
-.sm-search:focus {
-    background:rgba(103,232,249,0.15);
-    border-color:rgba(103,232,249,0.5);
-    box-shadow:0 0 20px rgba(34,211,238,0.3);
-}
+  .options{display:grid;gap:10px}
+  .opt{
+    display:flex;align-items:center;gap:12px;width:100%;text-align:right;
+    padding:14px 16px;border-radius:14px;cursor:pointer;
+    background:#f8fafc;border:2px solid var(--border);
+    font-family:inherit;font-size:15.5px;font-weight:500;color:var(--text);
+    transition:.15s;
+  }
+  .opt:hover{border-color:#94a3b8;background:#fff}
+  .opt .key{
+    width:30px;height:30px;flex:none;border-radius:9px;
+    display:grid;place-items:center;font-size:13.5px;font-weight:800;
+    background:#fff;border:1.5px solid var(--border);color:var(--muted);
+    transition:.15s;
+  }
+  .opt.selected{
+    border-color:var(--primary);background:var(--primary-l);
+  }
+  .opt.selected .key{background:var(--primary);border-color:var(--primary);color:#fff}
 
-.sm-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; overflow-y:auto; padding:4px; flex:1; }
-.sm-grid::-webkit-scrollbar { width:6px; }
-.sm-grid::-webkit-scrollbar-thumb { background:rgba(103,232,249,0.4); border-radius:3px; }
+  .nav{display:flex;gap:10px;margin-top:22px}
+  .btn{
+    flex:1;padding:13px 18px;border-radius:14px;border:none;cursor:pointer;
+    font-family:inherit;font-size:15px;font-weight:700;transition:.18s;
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  }
+  .btn-primary{background:var(--primary);color:#fff;box-shadow:0 4px 14px rgba(13,148,136,.3)}
+  .btn-primary:hover{background:var(--primary-d);transform:translateY(-1px)}
+  .btn-ghost{background:#fff;color:var(--text);border:1.5px solid var(--border)}
+  .btn-ghost:hover{background:#f1f5f9}
+  .btn-warn{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(245,158,11,.3)}
+  .btn-warn:hover{background:#d97706}
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important}
+  .btn-sm{flex:none;padding:9px 16px;font-size:13.5px}
 
-.sm-item {
-    display:flex; flex-direction:column; align-items:center; gap:8px;
-    padding:14px 8px; border-radius:14px; cursor:pointer;
-    transition:all 0.25s;
-    background:rgba(103,232,249,0.04);
-    border:1px solid transparent;
-}
-.sm-item:hover {
-    background:linear-gradient(135deg, rgba(34,211,238,0.25), rgba(14,165,233,0.2));
-    border-color:rgba(103,232,249,0.4);
-    transform:translateY(-3px) scale(1.03);
-    box-shadow:0 8px 20px rgba(34,211,238,0.3);
-}
-.sm-item .sm-icon {
-    width:44px; height:44px; border-radius:12px;
-    background:linear-gradient(135deg, rgba(103,232,249,0.25), rgba(14,165,233,0.35));
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.3);
-}
-.sm-item .sm-icon svg { width:26px; height:26px; }
-.sm-item span { font-size:11px; color:#e0f7ff; font-weight:600; }
+  .grid-toggle{
+    margin-top:18px;display:flex;justify-content:center;
+  }
+  .qgrid{
+    display:none;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));
+    gap:7px;margin-top:14px;padding:16px;border-radius:16px;
+    background:#f8fafc;border:1px solid var(--border);
+    max-height:260px;overflow-y:auto;
+  }
+  .qgrid.open{display:grid}
+  .qgrid button{
+    aspect-ratio:1;border-radius:9px;border:1.5px solid var(--border);
+    background:#fff;font-family:inherit;font-size:13px;font-weight:700;
+    color:var(--muted);cursor:pointer;transition:.13s;
+  }
+  .qgrid button:hover{border-color:var(--primary)}
+  .qgrid button.done{background:var(--primary-l);border-color:#5eead4;color:var(--primary-d)}
+  .qgrid button.now{background:var(--primary);border-color:var(--primary);color:#fff}
 
-/* ========== النوافذ ========== */
-.window {
-    position:fixed;
-    background:linear-gradient(160deg, rgba(8,47,73,0.92), rgba(12,92,142,0.85));
-    backdrop-filter:blur(30px) saturate(180%);
-    border-radius:18px;
-    border:1px solid rgba(103,232,249,0.3);
-    box-shadow:
-        0 25px 80px rgba(0,0,0,0.7),
-        0 0 60px rgba(34,211,238,0.2),
-        inset 0 1px 0 rgba(255,255,255,0.1);
-    min-width:320px; min-height:220px;
-    display:flex; flex-direction:column;
-    z-index:100; overflow:hidden;
-    animation:winOpen 0.35s cubic-bezier(0.34,1.56,0.64,1);
-    transform-origin:center;
-}
-@keyframes winOpen { from{opacity:0;transform:scale(0.85) translateY(20px);} to{opacity:1;transform:scale(1) translateY(0);} }
-.window.closing { animation:winClose 0.25s forwards; }
-@keyframes winClose { to{opacity:0;transform:scale(0.9);} }
-.window::before {
-    content:''; position:absolute; top:0; left:0; right:0; height:1px;
-    background:linear-gradient(90deg, transparent, rgba(103,232,249,0.6), transparent);
-    z-index:2;
-}
+  /* ===== Results ===== */
+  .res-hero{text-align:center;padding:10px 0 4px}
+  .ring{
+    width:170px;height:170px;margin:0 auto 18px;border-radius:50%;
+    display:grid;place-items:center;position:relative;
+    background:conic-gradient(var(--primary) 0deg, var(--primary) 0deg, #e2e8f0 0deg);
+    transition:background .8s ease;
+  }
+  .ring::after{
+    content:'';position:absolute;inset:11px;border-radius:50%;background:#fff;
+  }
+  .ring .val{position:relative;z-index:2;text-align:center}
+  .ring .val b{display:block;font-size:40px;font-weight:800;line-height:1.1;color:var(--primary-d)}
+  .ring .val span{font-size:12.5px;color:var(--muted);font-weight:600}
 
-.window-header {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:12px 16px;
-    background:linear-gradient(180deg, rgba(103,232,249,0.08), transparent);
-    cursor:move;
-    border-bottom:1px solid rgba(103,232,249,0.15);
-    flex-shrink:0;
-}
-.window-title { display:flex; align-items:center; gap:10px; font-size:13px; font-weight:700; color:#e0f7ff; }
-.window-title svg { width:18px; height:18px; }
-.window-controls { display:flex; gap:10px; }
-.window-control {
-    width:14px; height:14px; border-radius:50%; cursor:pointer; border:none;
-    transition:all 0.2s;
-    box-shadow:inset 0 1px 2px rgba(255,255,255,0.4);
-}
-.window-control:hover { transform:scale(1.25); filter:brightness(1.2); }
-.win-close { background:linear-gradient(135deg,#ff6b6b,#ee5a52); }
-.win-min   { background:linear-gradient(135deg,#feca57,#f39c12); }
-.win-max   { background:linear-gradient(135deg,#48dbfb,#0abde3); }
+  .res-title{font-size:23px;font-weight:800;margin-bottom:6px}
+  .res-sub{color:var(--muted);font-size:14.5px;margin-bottom:22px}
 
-.window-content { flex:1; overflow:auto; color:#e0f7ff; font-size:13px; position:relative; }
-.window-content::-webkit-scrollbar { width:8px; }
-.window-content::-webkit-scrollbar-track { background:rgba(103,232,249,0.05); }
-.window-content::-webkit-scrollbar-thumb { background:rgba(103,232,249,0.4); border-radius:4px; }
-.window-content::-webkit-scrollbar-thumb:hover { background:rgba(103,232,249,0.6); }
+  .res-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
+  .res-box{
+    padding:16px;border-radius:16px;text-align:center;
+    background:#f8fafc;border:1px solid var(--border);
+  }
+  .res-box b{display:block;font-size:24px;font-weight:800;line-height:1.3}
+  .res-box span{font-size:12.5px;color:var(--muted);font-weight:600}
+  .c-green b{color:var(--green)}
+  .c-red b{color:var(--red)}
+  .c-teal b{color:var(--primary-d)}
+  .c-violet b{color:#6d28d9}
 
-/* ========== التطبيقات ========== */
-/* الملفات */
-.files-grid { display:grid; grid-template-columns:repeat(auto-fill,100px); gap:12px; padding:18px; }
-.file-item {
-    display:flex; flex-direction:column; align-items:center; padding:12px 8px; gap:8px;
-    border-radius:12px; cursor:pointer; transition:all 0.25s; text-align:center;
-    border:1px solid transparent;
-}
-.file-item:hover {
-    background:rgba(103,232,249,0.15);
-    border-color:rgba(103,232,249,0.3);
-    transform:translateY(-3px);
-}
-.file-item svg { width:42px; height:42px; }
-.file-item span { font-size:11px; color:#e0f7ff; word-break:break-all; }
+  .filters{display:flex;gap:8px;margin:26px 0 14px;flex-wrap:wrap}
+  .fbtn{
+    padding:8px 16px;border-radius:999px;border:1.5px solid var(--border);
+    background:#fff;font-family:inherit;font-size:13.5px;font-weight:700;
+    color:var(--muted);cursor:pointer;transition:.15s;
+  }
+  .fbtn.active{background:var(--primary);border-color:var(--primary);color:#fff}
 
-/* الطرفية */
-.terminal {
-    background:linear-gradient(180deg, #001a2e, #00111f);
-    font-family:'Courier New',monospace; padding:16px; font-size:13px;
-    color:#67e8f9; height:100%; display:flex; flex-direction:column;
-}
-.term-output { flex:1; overflow-y:auto; white-space:pre-wrap; line-height:1.6; }
-.term-output::-webkit-scrollbar { width:6px; }
-.term-output::-webkit-scrollbar-thumb { background:rgba(103,232,249,0.4); }
-.term-input-line { display:flex; gap:10px; padding-top:10px; border-top:1px solid rgba(103,232,249,0.2); align-items:center; }
-.term-prompt { color:#22d3ee; font-weight:bold; }
-.term-input {
-    flex:1; background:transparent; border:none; outline:none;
-    color:#67e8f9; font-family:inherit; font-size:13px;
-    caret-color:#22d3ee;
-}
+  .rev-item{
+    border:1px solid var(--border);border-radius:16px;padding:18px;
+    margin-bottom:12px;background:#fff;
+  }
+  .rev-item.wrong{border-color:#fecaca;background:#fff7f7}
+  .rev-item.skipped{border-color:#fde68a;background:#fffdf5}
+  .rev-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+  .rev-num{
+    font-size:12.5px;font-weight:800;color:var(--muted);
+    background:#f1f5f9;padding:3px 10px;border-radius:8px;
+  }
+  .tag{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:8px}
+  .tag.q{background:var(--primary-l);color:var(--primary-d)}
+  .tag.v{background:#ede9fe;color:#6d28d9}
+  .tag.ok{background:#dcfce7;color:#15803d}
+  .tag.no{background:#fee2e2;color:#b91c1c}
+  .tag.sk{background:#fef3c7;color:#b45309}
+  .rev-q{font-size:15.5px;font-weight:700;margin-bottom:12px;line-height:1.8}
+  .rev-opts{display:grid;gap:7px}
+  .rev-opt{
+    padding:10px 14px;border-radius:11px;font-size:14px;
+    background:#f8fafc;border:1.5px solid var(--border);color:var(--muted);
+  }
+  .rev-opt.correct{background:#f0fdf4;border-color:#86efac;color:#15803d;font-weight:700}
+  .rev-opt.chosen-wrong{background:#fef2f2;border-color:#fca5a5;color:#b91c1c;font-weight:700}
+  .rev-opt .mark{font-weight:800;margin-inline-start:6px}
 
-/* الحاسبة */
-.calc { display:flex; flex-direction:column; height:100%; background:linear-gradient(180deg, rgba(8,47,73,0.5), rgba(12,92,142,0.3)); }
-.calc-display {
-    padding:22px; text-align:left; font-size:40px; font-weight:300;
-    background:linear-gradient(180deg, rgba(103,232,249,0.15), transparent);
-    word-wrap:break-word; overflow:hidden; min-height:110px;
-    display:flex; align-items:flex-end; justify-content:flex-end;
-    color:#fff;
-    text-shadow:0 0 20px rgba(103,232,249,0.5);
-}
-.calc-buttons { flex:1; display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(103,232,249,0.1); }
-.calc-btn {
-    background:rgba(8,47,73,0.7); border:none; color:#e0f7ff;
-    font-size:22px; cursor:pointer; transition:all 0.15s; font-weight:500;
-    font-family:inherit;
-}
-.calc-btn:hover { background:rgba(103,232,249,0.25); }
-.calc-btn:active { background:rgba(103,232,249,0.4); transform:scale(0.98); }
-.calc-btn.op { color:#67e8f9; font-weight:700; }
-.calc-btn.eq { background:linear-gradient(135deg,#06b6d4,#0ea5e9); color:#fff; font-weight:700; }
-.calc-btn.eq:hover { background:linear-gradient(135deg,#22d3ee,#06b6d4); box-shadow:0 0 20px rgba(34,211,238,0.6); }
+  .hidden{display:none!important}
 
-/* الملاحظات */
-.notes-wrapper { position:relative; height:100%; }
-.notes-area {
-    width:100%; height:100%; background:transparent; border:none; color:#e0f7ff;
-    padding:22px; resize:none; outline:none; font-family:inherit; font-size:14px;
-    line-height:1.8;
-}
-.notes-area::placeholder { color:rgba(165,243,252,0.4); }
-.notes-saved {
-    position:absolute; top:12px; left:18px; font-size:11px; color:#67e8f9;
-    opacity:0; transition:opacity 0.4s; font-weight:700;
-    display:flex; align-items:center; gap:5px;
-}
-.notes-saved.show { opacity:1; }
+  .empty{
+    text-align:center;padding:40px 20px;color:var(--muted);font-size:15px;
+  }
 
-/* الإعدادات */
-.settings-panel { padding:22px; }
-.settings-section { margin-bottom:28px; }
-.settings-section h4 {
-    font-size:13px; color:#67e8f9; margin-bottom:14px; font-weight:700;
-    display:flex; align-items:center; gap:8px;
-    padding-bottom:8px; border-bottom:1px solid rgba(103,232,249,0.15);
-}
-.wallpaper-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-.wallpaper-opt {
-    height:70px; border-radius:12px; cursor:pointer;
-    border:2px solid transparent; transition:all 0.25s;
-    box-shadow:0 4px 12px rgba(0,0,0,0.3);
-}
-.wallpaper-opt:hover { transform:scale(1.05); }
-.wallpaper-opt.active {
-    border-color:#67e8f9;
-    box-shadow:0 0 25px rgba(34,211,238,0.6);
-    transform:scale(1.05);
-}
-.accent-grid { display:flex; gap:12px; flex-wrap:wrap; }
-.accent-opt {
-    width:38px; height:38px; border-radius:50%; cursor:pointer;
-    border:3px solid transparent; transition:all 0.25s;
-    box-shadow:0 4px 12px rgba(0,0,0,0.3);
-}
-.accent-opt:hover { transform:scale(1.1); }
-.accent-opt.active { border-color:#fff; transform:scale(1.15); box-shadow:0 0 20px currentColor; }
-.info-row { display:flex; justify-content:space-between; padding:10px 0; font-size:12px; border-bottom:1px solid rgba(103,232,249,0.08); }
-.info-row b { color:#67e8f9; font-weight:700; }
-
-/* المتصفح */
-.browser-bar { display:flex; gap:8px; padding:10px; background:rgba(8,47,73,0.6); border-bottom:1px solid rgba(103,232,249,0.15); }
-.browser-bar input {
-    flex:1; padding:10px 15px; border-radius:10px;
-    background:rgba(103,232,249,0.1);
-    border:1px solid rgba(103,232,249,0.25);
-    color:#fff; font-size:12px; outline:none; font-family:inherit;
-}
-.browser-bar input:focus { border-color:rgba(103,232,249,0.6); box-shadow:0 0 15px rgba(34,211,238,0.3); }
-.browser-bar button {
-    padding:10px 18px; border-radius:10px; border:none; cursor:pointer;
-    background:linear-gradient(135deg,#06b6d4,#0ea5e9);
-    color:#fff; font-weight:700; font-size:12px; font-family:inherit;
-    transition:all 0.2s;
-}
-.browser-bar button:hover { transform:translateY(-1px); box-shadow:0 5px 15px rgba(34,211,238,0.5); }
-.browser-frame { flex:1; border:none; background:#fff; }
-
-/* الموسيقى */
-.music-player { padding:25px; display:flex; flex-direction:column; align-items:center; gap:20px; }
-.music-disc {
-    width:160px; height:160px; border-radius:50%;
-    background:conic-gradient(from 0deg, #06b6d4, #0ea5e9, #22d3ee, #67e8f9, #06b6d4);
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 15px 50px rgba(34,211,238,0.5), inset 0 0 30px rgba(0,0,0,0.4);
-    position:relative;
-    animation:discSpin 8s linear infinite;
-    animation-play-state:paused;
-}
-.music-disc.playing { animation-play-state:running; }
-@keyframes discSpin { to{transform:rotate(360deg);} }
-.music-disc::after {
-    content:''; position:absolute; width:35px; height:35px; border-radius:50%;
-    background:#001f3f; box-shadow:inset 0 0 10px rgba(103,232,249,0.5);
-}
-.music-info { text-align:center; }
-.music-info h3 { font-size:16px; color:#fff; margin-bottom:5px; }
-.music-info p { font-size:11px; color:#67e8f9; }
-.music-controls { display:flex; gap:15px; align-items:center; }
-.music-btn {
-    width:48px; height:48px; border-radius:50%; border:none; cursor:pointer;
-    background:rgba(103,232,249,0.15); color:#67e8f9;
-    display:flex; align-items:center; justify-content:center;
-    transition:all 0.2s;
-    border:1px solid rgba(103,232,249,0.3);
-}
-.music-btn:hover { background:rgba(103,232,249,0.3); transform:scale(1.1); }
-.music-btn.play {
-    width:60px; height:60px;
-    background:linear-gradient(135deg,#06b6d4,#0ea5e9);
-    color:#fff;
-    box-shadow:0 8px 25px rgba(34,211,238,0.6);
-}
-.music-btn svg { width:22px; height:22px; }
-.music-btn.play svg { width:26px; height:26px; }
-.music-progress {
-    width:100%; height:5px; background:rgba(103,232,249,0.15);
-    border-radius:3px; overflow:hidden; cursor:pointer;
-}
-.music-progress-fill {
-    height:100%; width:0%; background:linear-gradient(90deg,#06b6d4,#67e8f9);
-    border-radius:3px; transition:width 0.3s;
-    box-shadow:0 0 10px rgba(103,232,249,0.6);
-}
-.music-list { width:100%; display:flex; flex-direction:column; gap:6px; max-height:180px; overflow-y:auto; padding:4px; }
-.music-list::-webkit-scrollbar { width:6px; }
-.music-list::-webkit-scrollbar-thumb { background:rgba(103,232,249,0.4); border-radius:3px; }
-.music-track {
-    padding:10px 14px; border-radius:10px; cursor:pointer;
-    background:rgba(103,232,249,0.05);
-    font-size:12px; transition:all 0.2s;
-    display:flex; align-items:center; gap:10px;
-    border:1px solid transparent;
-}
-.music-track:hover { background:rgba(103,232,249,0.15); border-color:rgba(103,232,249,0.3); }
-.music-track.active {
-    background:linear-gradient(135deg, rgba(34,211,238,0.3), rgba(14,165,233,0.25));
-    border-color:rgba(103,232,249,0.5);
-}
-.music-track .num { opacity:0.6; min-width:20px; }
-
-/* الكاميرا */
-.camera-view {
-    height:100%; background:#000; position:relative;
-    display:flex; align-items:center; justify-content:center;
-    overflow:hidden;
-}
-.camera-view video, .camera-view canvas {
-    width:100%; height:100%; object-fit:cover;
-}
-.camera-controls {
-    position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
-    display:flex; gap:15px;
-}
-.cam-btn {
-    width:60px; height:60px; border-radius:50%; border:3px solid rgba(255,255,255,0.8);
-    background:rgba(255,255,255,0.2); cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    transition:all 0.2s; backdrop-filter:blur(10px);
-}
-.cam-btn:hover { transform:scale(1.1); background:rgba(103,232,249,0.4); }
-.cam-btn svg { width:26px; height:26px; }
-.cam-placeholder {
-    display:flex; flex-direction:column; align-items:center; gap:18px;
-    padding:30px; text-align:center; color:#67e8f9;
-}
-.cam-placeholder svg { width:80px; height:80px; opacity:0.5; }
-
-/* المتجر */
-.store-apps { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:20px; }
-.store-app {
-    background:linear-gradient(160deg, rgba(103,232,249,0.08), rgba(14,165,233,0.05));
-    border:1px solid rgba(103,232,249,0.2);
-    border-radius:14px; padding:16px; display:flex; gap:14px; align-items:center;
-    transition:all 0.25s;
-}
-.store-app:hover { transform:translateY(-3px); border-color:rgba(103,232,249,0.5); box-shadow:0 10px 30px rgba(34,211,238,0.3); }
-.store-app .app-icon {
-    width:48px; height:48px; border-radius:12px;
-    background:linear-gradient(135deg,#06b6d4,#0ea5e9);
-    display:flex; align-items:center; justify-content:center;
-    flex-shrink:0;
-    box-shadow:0 5px 15px rgba(34,211,238,0.4);
-}
-.store-app .app-icon svg { width:26px; height:26px; }
-.store-app .app-info { flex:1; min-width:0; }
-.store-app .app-info h5 { font-size:13px; color:#fff; margin-bottom:3px; font-weight:700; }
-.store-app .app-info p { font-size:10px; color:#67e8f9; opacity:0.8; }
-.store-install {
-    padding:7px 14px; border-radius:8px; border:none; cursor:pointer;
-    background:linear-gradient(135deg,#06b6d4,#0ea5e9);
-    color:#fff; font-size:11px; font-weight:700; font-family:inherit;
-    transition:all 0.2s; flex-shrink:0;
-}
-.store-install:hover { transform:scale(1.05); box-shadow:0 5px 15px rgba(34,211,238,0.5); }
-.store-install.installed { background:rgba(103,232,249,0.2); cursor:default; }
-
-/* الطقس */
-.weather-app { padding:25px; display:flex; flex-direction:column; gap:20px; }
-.weather-main { display:flex; align-items:center; gap:20px; padding:20px; border-radius:16px; background:linear-gradient(135deg, rgba(34,211,238,0.15), rgba(14,165,233,0.1)); }
-.weather-icon { font-size:64px; }
-.weather-temp { font-size:48px; font-weight:300; color:#fff; }
-.weather-desc { font-size:14px; color:#67e8f9; }
-.weather-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-.weather-day { padding:15px; border-radius:12px; background:rgba(103,232,249,0.08); text-align:center; border:1px solid rgba(103,232,249,0.15); }
-.weather-day .d { font-size:11px; color:#67e8f9; margin-bottom:5px; }
-.weather-day .t { font-size:16px; font-weight:700; color:#fff; }
-
-/* الرسام */
-.paint-toolbar { display:flex; gap:8px; padding:10px; background:rgba(8,47,73,0.6); border-bottom:1px solid rgba(103,232,249,0.15); flex-wrap:wrap; align-items:center; }
-.paint-color { width:26px; height:26px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:all 0.2s; }
-.paint-color.active { border-color:#fff; transform:scale(1.15); box-shadow:0 0 12px currentColor; }
-.paint-canvas { display:block; cursor:crosshair; background:#fff; }
-
-/* ========== الإشعارات ========== */
-#notifications { position:fixed; top:45px; left:20px; z-index:99999; display:flex; flex-direction:column; gap:10px; }
-.notification {
-    background:linear-gradient(160deg, rgba(8,47,73,0.92), rgba(12,92,142,0.85));
-    backdrop-filter:blur(20px);
-    border:1px solid rgba(103,232,249,0.35);
-    border-radius:14px;
-    padding:14px 18px; min-width:280px;
-    box-shadow:0 15px 40px rgba(0,0,0,0.6), 0 0 30px rgba(34,211,238,0.3);
-    animation:notifIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
-    display:flex; align-items:center; gap:12px;
-    position:relative;
-    overflow:hidden;
-}
-.notification::before {
-    content:''; position:absolute; left:0; top:0; bottom:0; width:4px;
-    background:linear-gradient(180deg,#67e8f9,#0ea5e9);
-    box-shadow:0 0 15px #22d3ee;
-}
-@keyframes notifIn { from{opacity:0;transform:translateX(-80px) scale(0.9);} to{opacity:1;transform:translateX(0) scale(1);} }
-.notification.out { animation:notifOut 0.35s forwards; }
-@keyframes notifOut { to{opacity:0;transform:translateX(-80px);} }
-.notification .n-icon {
-    width:36px; height:36px; border-radius:10px;
-    background:linear-gradient(135deg,#06b6d4,#0ea5e9);
-    display:flex; align-items:center; justify-content:center;
-    flex-shrink:0;
-}
-.notification .n-icon svg { width:20px; height:20px; }
-.notification .n-body { flex:1; min-width:0; }
-.notification .n-body strong { font-size:12px; display:block; color:#fff; }
-.notification .n-body small { font-size:11px; color:#67e8f9; }
-
-/* ========== القائمة اليمنى ========== */
-#context-menu {
-    position:fixed;
-    background:linear-gradient(160deg, rgba(8,47,73,0.95), rgba(12,92,142,0.9));
-    backdrop-filter:blur(25px);
-    border:1px solid rgba(103,232,249,0.35);
-    border-radius:14px;
-    padding:8px; z-index:99998; display:none; min-width:200px;
-    box-shadow:0 20px 50px rgba(0,0,0,0.7), 0 0 40px rgba(34,211,238,0.25);
-}
-#context-menu.show { display:block; animation:winOpen 0.2s; }
-.ctx-item {
-    padding:10px 14px; border-radius:8px; cursor:pointer; font-size:12px;
-    display:flex; align-items:center; gap:12px;
-    transition:all 0.15s;
-}
-.ctx-item:hover { background:rgba(103,232,249,0.2); padding-right:18px; }
-.ctx-item svg { width:16px; height:16px; }
-.ctx-divider { height:1px; background:rgba(103,232,249,0.15); margin:6px 4px; }
-
-/* ========== شاشة القفل ========== */
-#lockscreen {
-    position:fixed; inset:0; z-index:99998;
-    background:linear-gradient(180deg, rgba(8,47,73,0.9), rgba(12,92,142,0.85));
-    backdrop-filter:blur(30px);
-    display:none; flex-direction:column; align-items:center; justify-content:center;
-    gap:30px;
-}
-#lockscreen.show { display:flex; animation:fadeIn 0.4s; }
-.lock-clock { font-size:96px; font-weight:200; color:#fff; text-shadow:0 0 40px rgba(103,232,249,0.6); }
-.lock-date { font-size:18px; color:#67e8f9; margin-top:-15px; }
-.lock-hint { font-size:13px; color:#a5f3fc; opacity:0.7; }
-.lock-btn {
-    padding:14px 40px; border-radius:14px; border:none; cursor:pointer;
-    background:linear-gradient(135deg,#06b6d4,#0ea5e9);
-    color:#fff; font-weight:700; font-size:14px; font-family:inherit;
-    box-shadow:0 10px 30px rgba(34,211,238,0.5);
-    transition:all 0.3s;
-}
-.lock-btn:hover { transform:scale(1.05); box-shadow:0 15px 40px rgba(34,211,238,0.7); }
-
-/* ========== تأثير التحميل ========== */
-.spinner {
-    width:40px; height:40px; border:3px solid rgba(103,232,249,0.2);
-    border-top-color:#67e8f9; border-radius:50%;
-    animation:spin 0.8s linear infinite;
-    margin:20px auto;
-}
-@keyframes spin { to{transform:rotate(360deg);} }
-
-/* تحسينات عامة */
-.btn-primary {
-    padding:10px 20px; border-radius:10px; border:none; cursor:pointer;
-    background:linear-gradient(135deg,#06b6d4,#0ea5e9);
-    color:#fff; font-weight:700; font-size:13px; font-family:inherit;
-    transition:all 0.2s;
-    box-shadow:0 5px 15px rgba(34,211,238,0.4);
-}
-.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(34,211,238,0.6); }
-
-@media (max-width: 600px) {
-    #boot .logo { font-size:56px; letter-spacing:6px; }
-    #taskbar { min-width:auto; width:95vw; height:58px; }
-    #start-menu { width:90vw; }
-    .sm-grid { grid-template-columns:repeat(3,1fr); }
-    .store-apps { grid-template-columns:1fr; }
-}
+  @media(max-width:560px){
+    .wrap{padding:12px 12px 50px}
+    .card{padding:20px 16px;border-radius:17px}
+    .hero h2{font-size:22px}
+    .q-text{font-size:17px}
+    .opt{font-size:14.5px;padding:12px 14px}
+    .res-grid{grid-template-columns:repeat(2,1fr)}
+    .stats-row{gap:8px}
+    .stat b{font-size:21px}
+    .ring{width:145px;height:145px}
+    .ring .val b{font-size:34px}
+    .btn{font-size:14px;padding:12px 14px}
+  }
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<!-- خلفية الماء -->
-<div id="water-bg">
-    <div class="wave"></div>
-    <div class="wave"></div>
-    <div class="wave"></div>
-</div>
-
-<!-- شاشة الإقلاع -->
-<div id="boot">
-    <div class="logo">MEN OS</div>
-    <div class="subtitle">AQUATIC EDITION</div>
-    <div class="loader"><div class="loader-bar"></div></div>
-    <div class="status" id="boot-status">جاري تحميل النظام...</div>
-</div>
-
-<!-- الشريط العلوي -->
-<div id="topbar">
-    <div class="left">
-        <div class="item"><span class="status-dot"></span> MEN OS v2.0</div>
-        <div class="item" id="topbar-app">سطح المكتب</div>
+  <header>
+    <div class="logo">📊</div>
+    <div>
+      <h1>قياس القدرات</h1>
+      <p>اختبار تجريبي شامل — كمي ولفظي</p>
     </div>
-    <div class="right">
-        <div class="item" id="battery">🔋 100%</div>
-        <div class="item" id="wifi">📶 متصل</div>
-        <div class="item" id="topbar-time">--:--:--</div>
+  </header>
+
+  <!-- ============ شاشة البداية ============ -->
+  <section id="startScreen">
+    <div class="card">
+      <div class="hero">
+        <div class="icon">🎯</div>
+        <h2>استعد لاختبار القدرات</h2>
+        <p>بنك أسئلة تجريبي يحتوي على 100 سؤال موزعة بين القسم الكمي واللفظي، مع تصحيح فوري وتحليل للنتائج.</p>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat"><b>100</b><span>سؤال</span></div>
+        <div class="stat"><b>58</b><span>كمي</span></div>
+        <div class="stat"><b>42</b><span>لفظي</span></div>
+      </div>
+
+      <div class="mode-list">
+        <button class="mode-btn" onclick="startQuiz('all')">
+          <span class="mi">★</span>
+          <span class="mt"><strong>الاختبار الكامل</strong><small>100 سؤال — كمي ولفظي</small></span>
+          <span class="arrow">‹</span>
+        </button>
+        <button class="mode-btn" onclick="startQuiz('quant')">
+          <span class="mi">➗</span>
+          <span class="mt"><strong>القسم الكمي فقط</strong><small>58 سؤال — حساب وجبر وهندسة</small></span>
+          <span class="arrow">‹</span>
+        </button>
+        <button class="mode-btn" onclick="startQuiz('verbal')">
+          <span class="mi">📖</span>
+          <span class="mt"><strong>القسم اللفظي فقط</strong><small>42 سؤال — مفردات وتناظر وإكمال</small></span>
+          <span class="arrow">‹</span>
+        </button>
+      </div>
+
+      <div class="note">
+        💡 <strong>ملاحظة:</strong> يمكنك التنقل بين الأسئلة بحرية، واستخدام أرقام لوحة المفاتيح 1–4 لاختيار الإجابة. النتيجة تُعرض في نهاية الاختبار مع مراجعة كاملة للأخطاء.
+      </div>
     </div>
-</div>
+  </section>
 
-<!-- سطح المكتب -->
-<div id="desktop"></div>
+  <!-- ============ شاشة الاختبار ============ -->
+  <section id="quizScreen" class="hidden">
+    <div class="card">
+      <div class="topbar">
+        <span class="pill" id="counterPill">السؤال 1 من 100</span>
+        <span class="pill badge-q" id="sectionPill">كمي</span>
+        <span class="pill timer" id="timerPill">⏱ 00:00</span>
+      </div>
 
-<!-- قائمة ابدأ -->
-<div id="start-menu">
-    <div class="sm-header">
-        <div class="avatar">M</div>
-        <h3>مرحباً بك</h3>
-        <p>MEN OS • Aquatic Edition</p>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+      <div class="q-num" id="qNum"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsBox"></div>
+
+      <div class="nav">
+        <button class="btn btn-ghost" id="prevBtn" onclick="go(-1)">السابق</button>
+        <button class="btn btn-primary" id="nextBtn" onclick="go(1)">التالي</button>
+      </div>
+      <div class="nav" style="margin-top:10px">
+        <button class="btn btn-warn" onclick="finishQuiz()">إنهاء الاختبار وعرض النتيجة</button>
+      </div>
+
+      <div class="grid-toggle">
+        <button class="btn btn-ghost btn-sm" onclick="toggleGrid()">🗂️ لوحة الأسئلة</button>
+      </div>
+      <div class="qgrid" id="qGrid"></div>
     </div>
-    <input type="text" class="sm-search" id="sm-search" placeholder="🔍 ابحث عن تطبيق...">
-    <div class="sm-grid" id="sm-grid"></div>
-</div>
+  </section>
 
-<!-- شريط المهام -->
-<div id="taskbar">
-    <button id="start-button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
-        القائمة
-    </button>
-    <div id="taskbar-apps"></div>
-    <div id="clock-box">
-        <div id="clock">--:--</div>
-        <div id="clock-date">---</div>
+  <!-- ============ شاشة النتائج ============ -->
+  <section id="resultScreen" class="hidden">
+    <div class="card">
+      <div class="res-hero">
+        <div class="ring" id="ring">
+          <div class="val"><b id="ringPct">0%</b><span id="ringLabel">النسبة</span></div>
+        </div>
+        <div class="res-title" id="resTitle"></div>
+        <div class="res-sub" id="resSub"></div>
+      </div>
+
+      <div class="res-grid">
+        <div class="res-box c-green"><b id="rCorrect">0</b><span>إجابة صحيحة</span></div>
+        <div class="res-box c-red"><b id="rWrong">0</b><span>إجابة خاطئة</span></div>
+        <div class="res-box c-teal"><b id="rQuant">0</b><span>الكمي</span></div>
+        <div class="res-box c-violet"><b id="rVerbal">0</b><span>اللفظي</span></div>
+      </div>
+
+      <div class="res-box" style="margin-bottom:6px">
+        <b id="rTime" style="font-size:20px">00:00</b><span>الزمن المستغرق</span>
+      </div>
+
+      <div class="nav" style="margin-top:20px">
+        <button class="btn btn-primary" onclick="location.reload()">🔄 اختبار جديد</button>
+      </div>
     </div>
-</div>
 
-<!-- شاشة القفل -->
-<div id="lockscreen">
-    <div class="lock-clock" id="lock-clock">--:--</div>
-    <div class="lock-date" id="lock-date">---</div>
-    <div class="lock-hint">اضغط للدخول إلى النظام</div>
-    <button class="lock-btn" id="lock-enter">دخول 🚀</button>
-</div>
+    <div class="card" style="margin-top:18px">
+      <h3 style="font-size:18px;font-weight:800;margin-bottom:4px">مراجعة الأسئلة</h3>
+      <p style="font-size:13.5px;color:var(--muted)">راجع إجاباتك وتعرّف على الإجابة الصحيحة لكل سؤال.</p>
 
-<!-- الإشعارات -->
-<div id="notifications"></div>
-<div id="context-menu"></div>
+      <div class="filters">
+        <button class="fbtn active" data-f="all" onclick="filterReview('all',this)">الكل</button>
+        <button class="fbtn" data-f="wrong" onclick="filterReview('wrong',this)">الأخطاء فقط</button>
+        <button class="fbtn" data-f="skipped" onclick="filterReview('skipped',this)">المتروكة</button>
+      </div>
+
+      <div id="reviewBox"></div>
+    </div>
+  </section>
+
+</div>
 
 <script>
-// ================== الأيقونات SVG ==================
-const SVG = {
-    files: `<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`,
-    folder: `<svg viewBox="0 0 24 24" fill="#0ea5e9" stroke="#67e8f9" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`,
-    text: `<svg viewBox="0 0 24 24" fill="#e0f7ff" stroke="#67e8f9" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
-    image: `<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`,
-    terminal: `<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>`,
-    notes: `<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>`,
-    calc: `<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8" y2="10"/><line x1="12" y1="10" x2="12" y2="10"/><line x1="16" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="16" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>`,
-    settings: `<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`,
-    browser: `<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
-    music: `<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
-    camera: `<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`,
-    store: `<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`,
-    weather: `<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`,
-    paint: `<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/><circle cx="8.5" cy="8.5" r="1.5" fill="#67e8f9"/><circle cx="15.5" cy="8.5" r="1.5" fill="#0ea5e9"/><circle cx="8.5" cy="15.5" r="1.5" fill="#22d3ee"/></svg>`,
-    clock: `<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
-    play: `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`,
-    pause: `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`,
-    prev: `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg>`,
-    next: `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg>`,
-    refresh: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`,
-    lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
-    power: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>`,
-    check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`
-};
+/* =========================================================
+   بنك الأسئلة — الخيار الأول في كل سؤال هو الإجابة الصحيحة
+   (يتم خلط الخيارات عشوائيًا عند بدء الاختبار)
+   ========================================================= */
+const QUESTIONS = [
 
-// ================== التطبيقات ==================
-const APPS = {
-    files:    { title:'الملفات',      icon:SVG.files,    color:'#0ea5e9' },
-    browser:  { title:'المتصفح',      icon:SVG.browser,  color:'#06b6d4' },
-    terminal: { title:'الطرفية',      icon:SVG.terminal, color:'#22d3ee' },
-    notes:    { title:'الملاحظات',    icon:SVG.notes,    color:'#67e8f9' },
-    calc:     { title:'الحاسبة',      icon:SVG.calc,     color:'#0ea5e9' },
-    paint:    { title:'الرسام',       icon:SVG.paint,    color:'#22d3ee' },
-    music:    { title:'الموسيقى',     icon:SVG.music,    color:'#06b6d4' },
-    camera:   { title:'الكاميرا',     icon:SVG.camera,   color:'#67e8f9' },
-    weather:  { title:'الطقس',        icon:SVG.weather,  color:'#0ea5e9' },
-    clock:    { title:'الساعة',       icon:SVG.clock,    color:'#22d3ee' },
-    store:    { title:'المتجر',       icon:SVG.store,    color:'#06b6d4' },
-    settings: { title:'الإعدادات',    icon:SVG.settings, color:'#67e8f9' }
-};
+/* ============ القسم الكمي (58 سؤال) ============ */
+{s:'كمي', q:'إذا كان 3س + 5 = 20، فما قيمة س؟', o:['5','3','15','4']},
+{s:'كمي', q:'ما هو 25% من العدد 480؟', o:['120','96','140','110']},
+{s:'كمي', q:'ما هو المتوسط الحسابي للأعداد: 5، 9، 13، 17؟', o:['11','10','12','13']},
+{s:'كمي', q:'مستطيل طوله 12 سم وعرضه 7 سم، فما مساحته؟', o:['84 سم²','38 سم²','19 سم²','42 سم²']},
+{s:'كمي', q:'إذا كانت النسبة بين عددين 3 : 5 وكان العدد الأول 15، فما العدد الثاني؟', o:['25','20','30','18']},
+{s:'كمي', q:'مكعب حجمه 125 سم³، فما طول حرفه؟', o:['5 سم','25 سم','15 سم','12 سم']},
+{s:'كمي', q:'ما ناتج 0.4 × 0.5؟', o:['0.2','2','0.02','0.25']},
+{s:'كمي', q:'ما هو الجذر التربيعي للعدد 144؟', o:['12','14','16','11']},
+{s:'كمي', q:'أكمل المتتالية: 2، 6، 12، 20، 30، ...', o:['42','40','44','36']},
+{s:'كمي', q:'إذا كان س ÷ 4 = 9، فما قيمة س؟', o:['36','13','45','32']},
+{s:'كمي', q:'سلعة ثمنها 80 ريالًا وعليها خصم 20%، فما ثمنها بعد الخصم؟', o:['64 ريالًا','60 ريالًا','68 ريالًا','70 ريالًا']},
+{s:'كمي', q:'مجموع قياسات زوايا المثلث يساوي:', o:['180 درجة','360 درجة','90 درجة','270 درجة']},
+{s:'كمي', q:'ما ناتج 3³؟', o:['27','9','18','81']},
+{s:'كمي', q:'أي من الأعداد التالية عدد أولي؟', o:['23','21','27','25']},
+{s:'كمي', q:'ما النسبة المئوية للعدد 40 من العدد 200؟', o:['20%','25%','40%','15%']},
+{s:'كمي', q:'دائرة نصف قطرها 7 سم، فما مساحتها؟ (ط = 22/7)', o:['154 سم²','44 سم²','49 سم²','144 سم²']},
+{s:'كمي', q:'مربع مساحته 64 سم²، فما محيطه؟', o:['32 سم','16 سم','64 سم','24 سم']},
+{s:'كمي', q:'إذا كان 2س − 7 = 11، فما قيمة س؟', o:['9','8','2','18']},
+{s:'كمي', q:'ما هو 15% من العدد 200؟', o:['30','15','20','35']},
+{s:'كمي', q:'سيارة تقطع 180 كم في 3 ساعات، فما سرعتها المتوسطة؟', o:['60 كم/س','90 كم/س','45 كم/س','55 كم/س']},
+{s:'كمي', q:'إذا كان ثلث عدد يساوي 12، فما هو العدد؟', o:['36','4','24','48']},
+{s:'كمي', q:'ما ناتج 5/8 + 1/8؟', o:['3/4','6/16','1/2','5/16']},
+{s:'كمي', q:'مثلث قاعدته 10 سم وارتفاعه 6 سم، فما مساحته؟', o:['30 سم²','60 سم²','16 سم²','32 سم²']},
+{s:'كمي', q:'ما هو 20% من 20% من العدد 500؟', o:['20','100','40','25']},
+{s:'كمي', q:'إذا كان س + ص = 10 و س − ص = 4، فما قيمة س؟', o:['7','3','6','5']},
+{s:'كمي', q:'ما ناتج 1/2 ÷ 1/4؟', o:['2','1/8','4','1/2']},
+{s:'كمي', q:'ما ناتج 7 × 8 − 6 × 9؟', o:['2','10','14','−2']},
+{s:'كمي', q:'مربع محيطه 48 سم، فما طول ضلعه؟', o:['12 سم','24 سم','16 سم','8 سم']},
+{s:'كمي', q:'ما قيمة 3/5 من العدد 60؟', o:['36','30','40','45']},
+{s:'كمي', q:'إذا كان 4س = 20، فما قيمة 3س؟', o:['15','12','20','5']},
+{s:'كمي', q:'ما النسبة المئوية للعدد 15 من العدد 60؟', o:['25%','15%','30%','20%']},
+{s:'كمي', q:'ثمن 5 أقلام 15 ريالًا، فما ثمن 8 أقلام؟', o:['24 ريالًا','20 ريالًا','30 ريالًا','18 ريالًا']},
+{s:'كمي', q:'ما مجموع الأعداد من 1 إلى 10؟', o:['55','50','45','60']},
+{s:'كمي', q:'كم دقيقة في ثلاثة أرباع الساعة؟', o:['45 دقيقة','30 دقيقة','40 دقيقة','50 دقيقة']},
+{s:'كمي', q:'ثمن 3 كتب 45 ريالًا، فما ثمن 7 كتب؟', o:['105 ريالًا','90 ريالًا','115 ريالًا','100 ريالًا']},
+{s:'كمي', q:'ما هو العدد التالي في المتتالية: 1، 4، 9، 16، ...؟', o:['25','20','24','36']},
+{s:'كمي', q:'عمر أحمد ضعف عمر أخيه، ومجموع أعمارهما 27 سنة، فما عمر أحمد؟', o:['18 سنة','9 سنوات','15 سنة','12 سنة']},
+{s:'كمي', q:'60% من عدد يساوي 42، فما هو العدد؟', o:['70','60','80','65']},
+{s:'كمي', q:'حل المعادلة: 5(س − 2) = 15', o:['5','3','1','7']},
+{s:'كمي', q:'محيط دائرة نصف قطرها 7 سم (ط = 22/7) يساوي:', o:['44 سم','22 سم','154 سم','49 سم']},
+{s:'كمي', q:'إذا كانت زاوية قياسها 60 درجة، فما قياس الزاوية المكملة لها؟', o:['120 درجة','30 درجة','90 درجة','60 درجة']},
+{s:'كمي', q:'ما ناتج 2 + 2 × 2؟', o:['6','8','4','10']},
+{s:'كمي', q:'كم عدد الأعداد الأولية بين 1 و 10؟', o:['4','3','5','6']},
+{s:'كمي', q:'إذا كان 3س + 2ص = 16 وكانت س = 2، فما قيمة ص؟', o:['5','4','6','3']},
+{s:'كمي', q:'ما متوسط الأعداد: 3، 7، 11؟', o:['7','6','8','9']},
+{s:'كمي', q:'كم يساوي نصف الربع؟', o:['1/8','1/4','1/2','1/6']},
+{s:'كمي', q:'ساعة و20 دقيقة تساوي كم دقيقة؟', o:['80 دقيقة','70 دقيقة','90 دقيقة','100 دقيقة']},
+{s:'كمي', q:'كم عدد أوجه المكعب؟', o:['6','8','12','4']},
+{s:'كمي', q:'ما ناتج 200 × 0.05؟', o:['10','100','1','20']},
+{s:'كمي', q:'إذا كان 12 ÷ س = 3، فما قيمة س؟', o:['4','6','3','9']},
+{s:'كمي', q:'مكعب مساحته الكلية 54 سم²، فما طول حرفه؟', o:['3 سم','9 سم','6 سم','4 سم']},
+{s:'كمي', q:'ما هو العدد الذي إذا أضفنا إليه 8 كان الناتج 15؟', o:['7','8','23','6']},
+{s:'كمي', q:'إذا كان ثمن 4 تفاحات 12 ريالًا، فما ثمن 10 تفاحات؟', o:['30 ريالًا','25 ريالًا','40 ريالًا','28 ريالًا']},
+{s:'كمي', q:'ما هو 40% من العدد 250؟', o:['100','80','120','90']},
+{s:'كمي', q:'ما ناتج (12 + 8) ÷ 4؟', o:['5','8','20','4']},
+{s:'كمي', q:'إذا كان متوسط 5 أعداد هو 12، فما مجموعها؟', o:['60','24','50','17']},
+{s:'كمي', q:'الزاوية القائمة قياسها:', o:['90 درجة','180 درجة','45 درجة','60 درجة']},
+{s:'كمي', q:'إذا كان نصف عدد يساوي 25، فما هو العدد؟', o:['50','25','75','100']},
 
-// ================== إعدادات النظام ==================
-let systemSettings = JSON.parse(localStorage.getItem('men_os_settings') || '{}');
-systemSettings.wallpaper = systemSettings.wallpaper ?? 0;
-systemSettings.accent = systemSettings.accent ?? 'aqua';
-
-const WALLPAPERS = [
-    'linear-gradient(180deg, #001f3f 0%, #0a3d62 40%, #0c5c8e 70%, #06b6d4 100%)',
-    'linear-gradient(160deg, #020024 0%, #090979 50%, #00d4ff 100%)',
-    'linear-gradient(140deg, #0f2027 0%, #203a43 50%, #2c5364 100%)',
-    'linear-gradient(135deg, #134e5e 0%, #71b280 100%)',
-    'linear-gradient(135deg, #00b4db 0%, #0083b0 100%)',
-    'radial-gradient(circle at 50% 50%, #0a3d62, #001f3f)'
+/* ============ القسم اللفظي (42 سؤال) ============ */
+{s:'لفظي', q:'ما مرادف كلمة «الوَجَل»؟', o:['الخوف','الفرح','الغضب','الأمل']},
+{s:'لفظي', q:'ما مضاد كلمة «البُخل»؟', o:['الكرم','الشح','الحرص','الاقتصاد']},
+{s:'لفظي', q:'العلاقة: قلم : كتابة :: سكين : ......', o:['قطع','طعام','مطبخ','حديد']},
+{s:'لفظي', q:'ما مرادف كلمة «الدهاء»؟', o:['المكر','الصدق','الكرم','الجهل']},
+{s:'لفظي', q:'ما مضاد كلمة «الوفرة»؟', o:['القلة','الكثرة','الزيادة','النمو']},
+{s:'لفظي', q:'أكمل الجملة: كان الطالب ...... في دراسته حتى نال الجائزة.', o:['مجتهدًا','مهملًا','متكاسلًا','غافلًا']},
+{s:'لفظي', q:'ما مرادف كلمة «الفُتور»؟', o:['الضعف','القوة','النشاط','الحرارة']},
+{s:'لفظي', q:'العلاقة: طبيب : مستشفى :: معلم : ......', o:['مدرسة','كتاب','طالب','درس']},
+{s:'لفظي', q:'ما مضاد كلمة «الشُّح»؟', o:['الجود','البخل','الحرص','التقتير']},
+{s:'لفظي', q:'ما مرادف كلمة «الحصافة»؟', o:['العقل','الحماقة','الجهل','التسرع']},
+{s:'لفظي', q:'أكمل الجملة: لا يتحقق النجاح إلا بـ......', o:['المثابرة','التكاسل','التردد','اليأس']},
+{s:'لفظي', q:'ما مضاد كلمة «الطغيان»؟', o:['العدل','الظلم','الجور','القهر']},
+{s:'لفظي', q:'العلاقة: عين : رؤية :: أذن : ......', o:['سمع','صوت','لمس','شم']},
+{s:'لفظي', q:'ما مرادف كلمة «البراعة»؟', o:['المهارة','العجز','الضعف','البطء']},
+{s:'لفظي', q:'ما مضاد كلمة «الخمول»؟', o:['النشاط','الكسل','الفتور','التراخي']},
+{s:'لفظي', q:'ما مرادف كلمة «الأنَفة»؟', o:['العزة','الذل','الخوف','الحزن']},
+{s:'لفظي', q:'العلاقة: ماء : عطش :: طعام : ......', o:['جوع','شبع','أكل','طبخ']},
+{s:'لفظي', q:'ما مضاد كلمة «الندرة»؟', o:['الكثرة','القلة','الشح','النقص']},
+{s:'لفظي', q:'ما مرادف كلمة «الرزانة»؟', o:['الوقار','الطيش','الخفة','العجلة']},
+{s:'لفظي', q:'أكمل الجملة: يجب على الإنسان أن ...... بوقته.', o:['يستفيد','يضيع','يفرط','يهمل']},
+{s:'لفظي', q:'ما مضاد كلمة «التشتت»؟', o:['التركيز','الفوضى','الاضطراب','الإهمال']},
+{s:'لفظي', q:'ما مرادف كلمة «الجَلِيّ»؟', o:['الواضح','الغامض','الخفي','المبهم']},
+{s:'لفظي', q:'العلاقة: شمس : نهار :: قمر : ......', o:['ليل','نجوم','ضوء','سماء']},
+{s:'لفظي', q:'ما مضاد كلمة «الوفاء»؟', o:['الغدر','الصدق','الإخلاص','الأمانة']},
+{s:'لفظي', q:'ما مرادف كلمة «الشَّذا»؟', o:['الرائحة الطيبة','الصوت العالي','اللون الزاهي','الطعم الحلو']},
+{s:'لفظي', q:'ما مضاد كلمة «الصعود»؟', o:['الهبوط','الارتفاع','الطلوع','العلو']},
+{s:'لفظي', q:'العلاقة: مطرقة : مسمار :: منشار : ......', o:['خشب','حديد','حجر','زجاج']},
+{s:'لفظي', q:'ما مرادف كلمة «العَناء»؟', o:['التعب','الراحة','الفرح','السهولة']},
+{s:'لفظي', q:'ما مضاد كلمة «الإسراف»؟', o:['الاقتصاد','التبذير','البذخ','الكرم']},
+{s:'لفظي', q:'أكمل المثل: من ...... الناس ساد.', o:['خدَم','ظلم','ترك','هجر']},
+{s:'لفظي', q:'ما مرادف كلمة «الطلاقة»؟', o:['الفصاحة','العُجمة','البطء','الصمت']},
+{s:'لفظي', q:'العلاقة: جوهر : خاتم :: قماش : ......', o:['ثوب','قطن','لون','خيط']},
+{s:'لفظي', q:'ما مضاد كلمة «الغموض»؟', o:['الوضوح','الإبهام','الخفاء','التعقيد']},
+{s:'لفظي', q:'ما مرادف كلمة «الحَدَب»؟', o:['العطف','القسوة','البغض','الجفاء']},
+{s:'لفظي', q:'أكمل الجملة: الصدق ...... إلى الخير.', o:['يهدي','يُضل','يُبعد','يصرف']},
+{s:'لفظي', q:'ما مضاد كلمة «التراخي»؟', o:['الحزم','اللين','التساهل','التهاون']},
+{s:'لفظي', q:'ما مرادف كلمة «الوَسَن»؟', o:['النعاس','اليقظة','النشاط','الانتباه']},
+{s:'لفظي', q:'العلاقة: قوس : سهم :: بندقية : ......', o:['رصاصة','هدف','صياد','صوت']},
+{s:'لفظي', q:'ما مضاد كلمة «البؤس»؟', o:['السعادة','الشقاء','الحزن','التعاسة']},
+{s:'لفظي', q:'أكمل الجملة: ...... الطالب في الامتحان ليحصل على درجة عالية.', o:['يجتهد','يتكاسل','يهمل','يتردد']},
+{s:'لفظي', q:'ما مرادف كلمة «الزهد»؟', o:['الإعراض عن الدنيا','الحرص','الطمع','الجمع']},
+{s:'لفظي', q:'العلاقة: مدرس : تلميذ :: طبيب : ......', o:['مريض','دواء','مستشفى','مرض']}
 ];
 
-const ACCENTS = {
-    aqua:   { c1:'#06b6d4', c2:'#0ea5e9', c3:'#22d3ee' },
-    teal:   { c1:'#14b8a6', c2:'#0d9488', c3:'#5eead4' },
-    blue:   { c1:'#3b82f6', c2:'#2563eb', c3:'#60a5fa' },
-    purple: { c1:'#8b5cf6', c2:'#7c3aed', c3:'#a78bfa' },
-    pink:   { c1:'#ec4899', c2:'#db2777', c3:'#f472b6' },
-    emerald:{ c1:'#10b981', c2:'#059669', c3:'#34d399' }
+/* =========================================================
+   الحالة العامة
+   ========================================================= */
+let state = {
+  items: [],        // الأسئلة بعد الخلط
+  answers: [],      // فهرس الخيار المختار أو null
+  current: 0,
+  startTime: 0,
+  timerId: null,
+  reviewFilter: 'all'
 };
 
-// ================== شاشة الإقلاع ==================
-const bootMessages = [
-    'جاري تحميل النظام...',
-    'تهيئة النواة المائية...',
-    'تحميل التعريفات...',
-    'الاتصال بالشبكة...',
-    'تحضير سطح المكتب...'
-];
-let bootIdx = 0;
-const bootStatus = document.getElementById('boot-status');
-const bootInterval = setInterval(() => {
-    bootIdx = (bootIdx + 1) % bootMessages.length;
-    bootStatus.textContent = bootMessages[bootIdx];
-}, 550);
-
-setTimeout(() => {
-    clearInterval(bootInterval);
-    const boot = document.getElementById('boot');
-    boot.style.opacity = '0';
-    boot.style.transform = 'scale(1.1)';
-    setTimeout(() => {
-        boot.remove();
-        // عرض شاشة القفل
-        showLockScreen();
-    }, 1000);
-}, 3000);
-
-// ================== الساعة ==================
-function updateClock() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2,'0');
-    const m = String(now.getMinutes()).padStart(2,'0');
-    const s = String(now.getSeconds()).padStart(2,'0');
-    const clockEl = document.getElementById('clock');
-    const topTimeEl = document.getElementById('topbar-time');
-    const lockClock = document.getElementById('lock-clock');
-    if (clockEl) clockEl.textContent = `${h}:${m}`;
-    if (topTimeEl) topTimeEl.textContent = `${h}:${m}:${s}`;
-    if (lockClock) lockClock.textContent = `${h}:${m}`;
-    
-    const days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-    const months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-    const dateStr = `${days[now.getDay()]}، ${now.getDate()} ${months[now.getMonth()]}`;
-    const clockDateEl = document.getElementById('clock-date');
-    const lockDate = document.getElementById('lock-date');
-    if (clockDateEl) clockDateEl.textContent = days[now.getDay()];
-    if (lockDate) lockDate.textContent = dateStr;
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-// ================== شاشة القفل ==================
-function showLockScreen() {
-    const lock = document.getElementById('lockscreen');
-    lock.classList.add('show');
-    updateClock();
-}
-document.getElementById('lock-enter').addEventListener('click', () => {
-    const lock = document.getElementById('lockscreen');
-    lock.style.opacity = '0';
-    lock.style.transform = 'scale(1.1)';
-    setTimeout(() => {
-        lock.classList.remove('show');
-        lock.style.opacity = '';
-        lock.style.transform = '';
-        notify('مرحباً', 'استمتع بتجربة MEN OS المائية', SVG.check);
-    }, 400);
-});
-
-// ================== الإشعارات ==================
-function notify(title, msg, icon = SVG.check) {
-    const el = document.createElement('div');
-    el.className = 'notification';
-    el.innerHTML = `
-        <div class="n-icon">${icon}</div>
-        <div class="n-body"><strong>${title}</strong><small>${msg}</small></div>
-    `;
-    document.getElementById('notifications').appendChild(el);
-    setTimeout(() => {
-        el.classList.add('out');
-        setTimeout(() => el.remove(), 350);
-    }, 3500);
+/* ---------- أدوات مساعدة ---------- */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }
 
-// ================== سطح المكتب ==================
-const desktopApps = ['files','browser','terminal','notes','calc','paint','music','camera','weather','clock','store','settings'];
-const desktop = document.getElementById('desktop');
-
-function renderDesktop() {
-    desktop.innerHTML = '';
-    desktopApps.forEach(id => {
-        const app = APPS[id];
-        const el = document.createElement('div');
-        el.className = 'desktop-icon';
-        el.dataset.app = id;
-        el.innerHTML = `
-            <div class="icon-wrap">${app.icon}</div>
-            <span>${app.title}</span>
-        `;
-        el.addEventListener('dblclick', () => openApp(id));
-        el.addEventListener('click', (e) => {
-            if (window.innerWidth < 768) openApp(id);
-        });
-        desktop.appendChild(el);
-    });
+function fmtTime(ms){
+  const total = Math.floor(ms / 1000);
+  const m = String(Math.floor(total / 60)).padStart(2,'0');
+  const s = String(total % 60).padStart(2,'0');
+  return m + ':' + s;
 }
-renderDesktop();
 
-// ================== قائمة ابدأ ==================
-const startBtn = document.getElementById('start-button');
-const startMenu = document.getElementById('start-menu');
-const smGrid = document.getElementById('sm-grid');
-const smSearch = document.getElementById('sm-search');
+const $ = id => document.getElementById(id);
 
-function renderStartMenu(filter = '') {
-    smGrid.innerHTML = '';
-    Object.entries(APPS).forEach(([id, app]) => {
-        if (filter && !app.title.includes(filter) && !id.includes(filter.toLowerCase())) return;
-        const item = document.createElement('div');
-        item.className = 'sm-item';
-        item.innerHTML = `<div class="sm-icon">${app.icon}</div><span>${app.title}</span>`;
-        item.addEventListener('click', () => {
-            openApp(id);
-            startMenu.classList.remove('show');
-            smSearch.value = '';
-        });
-        smGrid.appendChild(item);
-    });
+/* =========================================================
+   بدء الاختبار
+   ========================================================= */
+function startQuiz(mode){
+  let pool = QUESTIONS;
+  if(mode === 'quant')  pool = QUESTIONS.filter(q => q.s === 'كمي');
+  if(mode === 'verbal') pool = QUESTIONS.filter(q => q.s === 'لفظي');
+
+  state.items = shuffle(pool).map(q => {
+    const opts = shuffle(q.o.map((text, i) => ({ text, correct: i === 0 })));
+    return {
+      section: q.s,
+      question: q.q,
+      options: opts,
+      correctIndex: opts.findIndex(o => o.correct)
+    };
+  });
+
+  state.answers = new Array(state.items.length).fill(null);
+  state.current = 0;
+  state.startTime = Date.now();
+
+  $('startScreen').classList.add('hidden');
+  $('resultScreen').classList.add('hidden');
+  $('quizScreen').classList.remove('hidden');
+
+  buildGrid();
+  renderQuestion();
+
+  clearInterval(state.timerId);
+  state.timerId = setInterval(() => {
+    $('timerPill').textContent = '⏱ ' + fmtTime(Date.now() - state.startTime);
+  }, 1000);
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-renderStartMenu();
 
-smSearch.addEventListener('input', e => renderStartMenu(e.target.value));
+/* =========================================================
+   عرض السؤال
+   ========================================================= */
+function renderQuestion(){
+  const total = state.items.length;
+  const item  = state.items[state.current];
+  const chosen = state.answers[state.current];
 
-startBtn.addEventListener('click', e => {
-    e.stopPropagation();
-    startMenu.classList.toggle('show');
-    if (startMenu.classList.contains('show')) setTimeout(() => smSearch.focus(), 100);
-});
-document.addEventListener('click', e => {
-    if (!startMenu.contains(e.target) && !startBtn.contains(e.target)) {
-        startMenu.classList.remove('show');
+  $('counterPill').textContent = `السؤال ${state.current + 1} من ${total}`;
+
+  const secPill = $('sectionPill');
+  secPill.textContent = item.section;
+  secPill.className = 'pill ' + (item.section === 'كمي' ? 'badge-q' : 'badge-v');
+
+  $('qNum').textContent = `سؤال رقم ${state.current + 1}`;
+  $('qText').textContent = item.question;
+
+  const answered = state.answers.filter(a => a !== null).length;
+  $('progressFill').style.width = (answered / total * 100) + '%';
+
+  // الخيارات
+  const box = $('optionsBox');
+  box.innerHTML = '';
+  item.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt' + (chosen === i ? ' selected' : '');
+    btn.innerHTML = `<span class="key">${i + 1}</span><span>${opt.text}</span>`;
+    btn.onclick = () => selectOption(i);
+    box.appendChild(btn);
+  });
+
+  // أزرار التنقل
+  $('prevBtn').disabled = state.current === 0;
+  const nextBtn = $('nextBtn');
+  if(state.current === total - 1){
+    nextBtn.textContent = 'آخر سؤال';
+    nextBtn.disabled = true;
+  } else {
+    nextBtn.textContent = 'التالي';
+    nextBtn.disabled = false;
+  }
+
+  updateGrid();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectOption(i){
+  state.answers[state.current] = i;
+  renderQuestion();
+}
+
+function go(step){
+  const next = state.current + step;
+  if(next < 0 || next >= state.items.length) return;
+  state.current = next;
+  renderQuestion();
+}
+
+/* =========================================================
+   لوحة الأسئلة
+   ========================================================= */
+function buildGrid(){
+  const grid = $('qGrid');
+  grid.innerHTML = '';
+  state.items.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.textContent = i + 1;
+    b.onclick = () => { state.current = i; renderQuestion(); };
+    grid.appendChild(b);
+  });
+}
+
+function updateGrid(){
+  const btns = $('qGrid').children;
+  for(let i = 0; i < btns.length; i++){
+    btns[i].className = '';
+    if(state.answers[i] !== null) btns[i].classList.add('done');
+    if(i === state.current) btns[i].classList.add('now');
+  }
+}
+
+function toggleGrid(){
+  $('qGrid').classList.toggle('open');
+}
+
+/* =========================================================
+   إنهاء الاختبار والنتائج
+   ========================================================= */
+function finishQuiz(){
+  const unanswered = state.answers.filter(a => a === null).length;
+  if(unanswered > 0){
+    const ok = confirm(`لديك ${unanswered} سؤال لم تُجب عليه. هل تريد إنهاء الاختبار الآن؟`);
+    if(!ok) return;
+  }
+
+  clearInterval(state.timerId);
+  const elapsed = Date.now() - state.startTime;
+
+  let correct = 0, wrong = 0, skipped = 0;
+  let qTotal = 0, qCorrect = 0, vTotal = 0, vCorrect = 0;
+
+  state.items.forEach((item, i) => {
+    const a = state.answers[i];
+    const isQ = item.section === 'كمي';
+    if(isQ) qTotal++; else vTotal++;
+
+    if(a === null){ skipped++; return; }
+    if(a === item.correctIndex){
+      correct++;
+      if(isQ) qCorrect++; else vCorrect++;
+    } else {
+      wrong++;
     }
-});
+  });
 
-// ================== إدارة النوافذ ==================
-let zIndex = 100;
-const openWindows = {};
+  const total = state.items.length;
+  const pct = Math.round(correct / total * 100);
 
-function createWindow(id, title, contentHTML, opts = {}) {
-    if (openWindows[id]) {
-        openWindows[id].el.style.display = 'flex';
-        openWindows[id].el.style.zIndex = ++zIndex;
-        focusWindow(id);
-        return openWindows[id].el;
-    }
+  // الدائرة
+  const ring = $('ring');
+  const color = pct >= 80 ? '#16a34a' : pct >= 50 ? '#0d9488' : '#dc2626';
+  ring.style.background = `conic-gradient(${color} 0deg, ${color} ${pct * 3.6}deg, #e2e8f0 ${pct * 3.6}deg)`;
+  $('ringPct').textContent = pct + '%';
+  $('ringPct').style.color = color;
 
-    const win = document.createElement('div');
-    win.className = 'window';
-    win.dataset.app = id;
-    win.style.zIndex = ++zIndex;
-    const w = Math.min(opts.width || 550, window.innerWidth - 40);
-    const h = Math.min(opts.height || 400, window.innerHeight - 120);
-    win.style.width = w + 'px';
-    win.style.height = h + 'px';
-    win.style.top = (60 + Math.random()*60) + 'px';
-    win.style.left = (60 + Math.random()*120) + 'px';
+  // العنوان
+  let title = '', sub = '';
+  if(pct >= 90){ title = '🎉 ممتاز جدًا!'; sub = 'أداء استثنائي، أنت جاهز تمامًا لاختبار القدرات.'; }
+  else if(pct >= 80){ title = '🌟 ممتاز!'; sub = 'مستوى عالٍ جدًا، واصل التدريب للحفاظ عليه.'; }
+  else if(pct >= 70){ title = '👍 جيد جدًا'; sub = 'أداء قوي، مع قليل من التدريب ستصل للقمة.'; }
+  else if(pct >= 50){ title = '📚 جيد'; sub = 'أساس جيد، ركّز على مراجعة الأخطاء وتقوية نقاط الضعف.'; }
+  else { title = '💪 تحتاج مزيدًا من التدريب'; sub = 'لا تقلق، راجع الأسئلة أدناه وأعد المحاولة.'; }
 
-    win.innerHTML = `
-        <div class="window-header">
-            <div class="window-title">${APPS[id]?.icon || ''} ${title}</div>
-            <div class="window-controls">
-                <button class="window-control win-min" title="تصغير"></button>
-                <button class="window-control win-max" title="تكبير"></button>
-                <button class="window-control win-close" title="إغلاق"></button>
-            </div>
-        </div>
-        <div class="window-content"></div>
+  $('resTitle').textContent = title;
+  $('resSub').textContent = sub;
+
+  $('rCorrect').textContent = correct;
+  $('rWrong').textContent = wrong;
+  $('rQuant').textContent = qCorrect + ' / ' + qTotal;
+  $('rVerbal').textContent = vCorrect + ' / ' + vTotal;
+  $('rTime').textContent = fmtTime(elapsed);
+
+  buildReview();
+
+  $('quizScreen').classList.add('hidden');
+  $('resultScreen').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* =========================================================
+   مراجعة الأسئلة
+   ========================================================= */
+function buildReview(){
+  const box = $('reviewBox');
+  box.innerHTML = '';
+
+  state.items.forEach((item, i) => {
+    const a = state.answers[i];
+    let status;
+    if(a === null) status = 'skipped';
+    else if(a === item.correctIndex) status = 'correct';
+    else status = 'wrong';
+
+    if(state.reviewFilter === 'wrong' && status !== 'wrong') return;
+    if(state.reviewFilter === 'skipped' && status !== 'skipped') return;
+
+    const div = document.createElement('div');
+    div.className = 'rev-item ' + (status === 'correct' ? '' : status);
+
+    const statusTag =
+      status === 'correct' ? '<span class="tag ok">✓ صحيحة</span>' :
+      status === 'wrong'   ? '<span class="tag no">✗ خاطئة</span>' :
+                             '<span class="tag sk">— متروكة</span>';
+
+    let optsHtml = '';
+    item.options.forEach((opt, oi) => {
+      let cls = 'rev-opt';
+      let mark = '';
+      if(oi === item.correctIndex){ cls += ' correct'; mark = '<span class="mark">✓</span>'; }
+      else if(oi === a){ cls += ' chosen-wrong'; mark = '<span class="mark">✗</span>'; }
+      optsHtml += `<div class="${cls}">${opt.text}${mark}</div>`;
+    });
+
+    div.innerHTML = `
+      <div class="rev-head">
+        <span class="rev-num">سؤال ${i + 1}</span>
+        <span class="tag ${item.section === 'كمي' ? 'q' : 'v'}">${item.section}</span>
+        ${statusTag}
+      </div>
+      <div class="rev-q">${item.question}</div>
+      <div class="rev-opts">${optsHtml}</div>
     `;
-    win.querySelector('.window-content').innerHTML = contentHTML;
+    box.appendChild(div);
+  });
 
-    document.body.appendChild(win);
-
-    win.querySelector('.win-close').addEventListener('click', e => {
-        e.stopPropagation(); closeWindow(id);
-    });
-    win.querySelector('.win-min').addEventListener('click', e => {
-        e.stopPropagation();
-        win.style.display = 'none';
-        updateTaskbar();
-    });
-    win.querySelector('.win-max').addEventListener('click', e => {
-        e.stopPropagation();
-        if (win.dataset.max === 'true') {
-            Object.assign(win.style, {
-                width: win.dataset.pw, height: win.dataset.ph,
-                top: win.dataset.pt, left: win.dataset.pl, borderRadius: '18px'
-            });
-            win.dataset.max = 'false';
-        } else {
-            win.dataset.pw = win.style.width;
-            win.dataset.ph = win.style.height;
-            win.dataset.pt = win.style.top;
-            win.dataset.pl = win.style.left;
-            Object.assign(win.style, {
-                width: '100vw', height: 'calc(100vh - 110px)',
-                top: '34px', left: '0', borderRadius: '0'
-            });
-            win.dataset.max = 'true';
-        }
-    });
-
-    // Drag
-    const header = win.querySelector('.window-header');
-    let drag = false, offX, offY;
-    header.addEventListener('mousedown', e => {
-        if (e.target.closest('.window-controls')) return;
-        drag = true;
-        offX = e.clientX - win.offsetLeft;
-        offY = e.clientY - win.offsetTop;
-        win.style.zIndex = ++zIndex;
-        focusWindow(id);
-    });
-    document.addEventListener('mousemove', e => {
-        if (!drag) return;
-        win.style.left = Math.max(-w + 100, Math.min(window.innerWidth - 100, e.clientX - offX)) + 'px';
-        win.style.top = Math.max(34, Math.min(window.innerHeight - 50, e.clientY - offY)) + 'px';
-    });
-    document.addEventListener('mouseup', () => drag = false);
-
-    // Touch drag
-    header.addEventListener('touchstart', e => {
-        if (e.target.closest('.window-controls')) return;
-        const t = e.touches[0];
-        drag = true;
-        offX = t.clientX - win.offsetLeft;
-        offY = t.clientY - win.offsetTop;
-        win.style.zIndex = ++zIndex;
-        focusWindow(id);
-    }, { passive: true });
-    document.addEventListener('touchmove', e => {
-        if (!drag) return;
-        const t = e.touches[0];
-        win.style.left = Math.max(0, t.clientX - offX) + 'px';
-        win.style.top = Math.max(34, t.clientY - offY) + 'px';
-    }, { passive: true });
-    document.addEventListener('touchend', () => drag = false);
-
-    win.addEventListener('mousedown', () => { win.style.zIndex = ++zIndex; focusWindow(id); });
-
-    openWindows[id] = { el: win, title };
-    updateTaskbar();
-
-    if (opts.init) opts.init(win.querySelector('.window-content'));
-    return win;
+  if(!box.children.length){
+    box.innerHTML = '<div class="empty">لا توجد أسئلة في هذا التصنيف 🎉</div>';
+  }
 }
 
-function focusWindow(id) {
-    Object.entries(openWindows).forEach(([k, w]) => {
-        w.el.querySelector('.window-header').style.background = '';
-    });
-    if (openWindows[id]) {
-        openWindows[id].el.querySelector('.window-header').style.background = 'linear-gradient(180deg, rgba(103,232,249,0.15), transparent)';
-    }
-    updateTaskbar();
+function filterReview(f, btn){
+  state.reviewFilter = f;
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildReview();
 }
 
-function closeWindow(id) {
-    const w = openWindows[id];
-    if (!w) return;
-    w.el.classList.add('closing');
-    setTimeout(() => {
-        w.el.remove();
-        delete openWindows[id];
-        updateTaskbar();
-    }, 250);
-}
-
-function updateTaskbar() {
-    const tb = document.getElementById('taskbar-apps');
-    tb.innerHTML = '';
-    Object.entries(openWindows).forEach(([id, w]) => {
-        const btn = document.createElement('div');
-        btn.className = 'taskbar-app';
-        if (w.el.style.display !== 'none') btn.classList.add('active');
-        btn.innerHTML = `${APPS[id]?.icon || ''}${w.title}`;
-        btn.addEventListener('click', () => {
-            if (w.el.style.display === 'none') {
-                w.el.style.display = 'flex';
-                w.el.style.zIndex = ++zIndex;
-                focusWindow(id);
-            } else if (w.el.style.zIndex == zIndex) {
-                w.el.style.display = 'none';
-            } else {
-                w.el.style.zIndex = ++zIndex;
-                focusWindow(id);
-            }
-            updateTaskbar();
-        });
-        tb.appendChild(btn);
-    });
-}
-
-// ================== فتح التطبيقات ==================
-function openApp(id) {
-    switch(id) {
-        case 'files':   return openFiles();
-        case 'browser': return openBrowser();
-        case 'terminal':return openTerminal();
-        case 'notes':   return openNotes();
-        case 'calc':    return openCalc();
-        case 'paint':   return openPaint();
-        case 'music':   return openMusic();
-        case 'camera':  return openCamera();
-        case 'weather': return openWeather();
-        case 'clock':   return openClock();
-        case 'store':   return openStore();
-        case 'settings':return openSettings();
-    }
-}
-
-// ---------- الملفات ----------
-function openFiles() {
-    const items = [
-        { name:'المستندات', icon:SVG.folder, type:'folder' },
-        { name:'الصور',     icon:SVG.folder, type:'folder' },
-        { name:'التنزيلات', icon:SVG.folder, type:'folder' },
-        { name:'الموسيقى',  icon:SVG.folder, type:'folder' },
-        { name:'الفيديو',   icon:SVG.folder, type:'folder' },
-        { name:'ملاحظة.txt', icon:SVG.text,  type:'file' },
-        { name:'صورة.png',  icon:SVG.image, type:'file' },
-        { name:'تقرير.pdf', icon:SVG.text,  type:'file' }
-    ];
-    const html = `<div class="files-grid">${items.map(i =>
-        `<div class="file-item" data-name="${i.name}">${i.icon}<span>${i.name}</span></div>`
-    ).join('')}</div>`;
-    createWindow('files', 'مستكشف الملفات', html, {
-        width:600, height:450,
-        init: content => {
-            content.querySelectorAll('.file-item').forEach(el => {
-                el.addEventListener('dblclick', () => {
-                    notify('الملفات', 'فتح: ' + el.dataset.name, SVG.folder);
-                });
-            });
-        }
-    });
-}
-
-// ---------- المتصفح ----------
-function openBrowser() {
-    const html = `
-        <div class="browser-bar">
-            <input type="text" id="url-input" placeholder="اكتب عنوان الموقع..." value="https://example.com">
-            <button id="go-btn">اذهب</button>
-            <button id="refresh-btn" style="padding:10px 14px;">${SVG.refresh}</button>
-        </div>
-        <iframe class="browser-frame" id="browser-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" src="about:blank"></iframe>
-    `;
-    createWindow('browser', 'المتصفح المائي', html, {
-        width:800, height:550,
-        init: content => {
-            const input = content.querySelector('#url-input');
-            const frame = content.querySelector('#browser-frame');
-            const go = () => {
-                let url = input.value.trim();
-                if (!url) return;
-                if (!/^https?:\/\//.test(url)) url = 'https://' + url;
-                frame.src = url;
-                notify('المتصفح', 'جاري تحميل: ' + url, SVG.browser);
-            };
-            content.querySelector('#go-btn').addEventListener('click', go);
-            content.querySelector('#refresh-btn').addEventListener('click', () => {
-                frame.src = frame.src;
-            });
-            input.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
-        }
-    });
-}
-
-// ---------- الطرفية ----------
-function openTerminal() {
-    const html = `
-        <div class="terminal">
-            <div class="term-output" id="term-out">
-╔══════════════════════════════════╗
-║   MEN OS - Terminal v2.0         ║
-║   Aquatic Edition                ║
-╚══════════════════════════════════╝
-اكتب "help" لعرض الأوامر المتاحة.
-</div>
-            <div class="term-input-line">
-                <span class="term-prompt">men@os:~$</span>
-                <input class="term-input" id="term-in" autofocus autocomplete="off">
-            </div>
-        </div>`;
-    createWindow('terminal', 'الطرفية', html, {
-        width:650, height:450,
-        init: content => {
-            const input = content.querySelector('#term-in');
-            const out = content.querySelector('#term-out');
-            const history = [];
-            let histIdx = -1;
-            const commands = {
-                help: () => `الأوامر المتاحة:
-  help         - عرض المساعدة
-  ls           - عرض الملفات
-  pwd          - المسار الحالي
-  date         - التاريخ والوقت
-  whoami       - اسم المستخدم
-  clear        - مسح الشاشة
-  echo <نص>    - طباعة نص
-  neofetch     - معلومات النظام
-  calc <عملية> - حاسبة سريعة
-  color        - تغيير لون الطرفية
-  matrix       - وضع المصفوفة
-  banner <نص>  - إطار للنص`,
-                ls: () => `📁 المستندات/   📁 الصور/   📁 التنزيلات/   📁 الموسيقى/
-📄 ملاحظة.txt    🖼️ صورة.png    📄 تقرير.pdf`,
-                pwd: () => '/home/men',
-                date: () => new Date().toLocaleString('ar-SA'),
-                whoami: () => 'men-user',
-                neofetch: () => `
-   ███╗   ███╗███████╗███╗   ██╗    من@men
-   ████╗ ████║██╔════╝████╗  ██║    ─────────
-   ██╔████╔██║█████╗  ██╔██╗ ██║    OS: MEN OS 2.0
-   ██║╚██╔╝██║██╔══╝  ██║╚██╗██║    Kernel: Aquatic 2.0
-   ██║ ╚═╝ ██║███████╗██║ ╚████║    Shell: mensh
-   ╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝    Uptime: ${Math.floor(performance.now()/1000)}s
-                                     Theme: Aqua
-                                     Resolution: ${window.innerWidth}x${window.innerHeight}`,
-                matrix: () => {
-                    let s = '';
-                    const chars = '01アイウエオカキクケコサシスセソ';
-                    for (let i = 0; i < 15; i++) {
-                        let line = '';
-                        for (let j = 0; j < 60; j++) line += chars[Math.floor(Math.random()*chars.length)] + ' ';
-                        s += line + '\n';
-                    }
-                    return s;
-                }
-            };
-            input.addEventListener('keydown', e => {
-                if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    if (history.length) {
-                        histIdx = Math.min(histIdx + 1, history.length - 1);
-                        input.value = history[history.length - 1 - histIdx];
-                    }
-                } else if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    histIdx = Math.max(histIdx - 1, -1);
-                    input.value = histIdx === -1 ? '' : history[history.length - 1 - histIdx];
-                } else if (e.key === 'Enter') {
-                    const cmd = input.value.trim();
-                    if (!cmd) return;
-                    history.push(cmd);
-                    histIdx = -1;
-                    let response = '';
-                    const [c, ...args] = cmd.split(' ');
-                    if (c === 'clear') {
-                        out.textContent = '';
-                        input.value = '';
-                        return;
-                    } else if (c === 'echo') {
-                        response = args.join(' ');
-                    } else if (c === 'banner') {
-                        const text = args.join(' ');
-                        const border = '═'.repeat(text.length + 4);
-                        response = `╔${border}╗\n║  ${text}  ║\n╚${border}╝`;
-                    } else if (c === 'calc') {
-                        try {
-                            response = '= ' + Function('"use strict";return(' + args.join(' ') + ')')();
-                        } catch { response = 'خطأ في العملية'; }
-                    } else if (c === 'color') {
-                        const colors = ['#67e8f9','#22d3ee','#06b6d4','#0ea5e9','#a5f3fc','#00ff88','#ff6b6b','#feca57'];
-                        const col = colors[Math.floor(Math.random()*colors.length)];
-                        content.querySelector('.terminal').style.color = col;
-                        response = 'تم تغيير اللون إلى: ' + col;
-                    } else if (commands[c]) {
-                        response = commands[c]();
-                    } else {
-                        response = `الأمر غير موجود: ${c}. اكتب "help" للمساعدة.`;
-                    }
-                    if (response) out.textContent += `\nmen@os:~$ ${cmd}\n${response}\n`;
-                    input.value = '';
-                    out.scrollTop = out.scrollHeight;
-                }
-            });
-            setTimeout(() => input.focus(), 100);
-            content.querySelector('.terminal').addEventListener('click', () => input.focus());
-        }
-    });
-}
-
-// ---------- الملاحظات ----------
-function openNotes() {
-    const saved = localStorage.getItem('men_notes_v2') || '';
-    const html = `
-        <div class="notes-wrapper">
-            <div class="notes-saved" id="notes-saved">${SVG.check} تم الحفظ</div>
-            <textarea class="notes-area" id="notes-text" placeholder="✍️ اكتب أفكارك هنا...">${saved}</textarea>
-        </div>`;
-    createWindow('notes', 'الملاحظات', html, {
-        width:550, height:450,
-        init: content => {
-            const ta = content.querySelector('#notes-text');
-            const ind = content.querySelector('#notes-saved');
-            let t;
-            ta.addEventListener('input', () => {
-                clearTimeout(t);
-                t = setTimeout(() => {
-                    localStorage.setItem('men_notes_v2', ta.value);
-                    ind.classList.add('show');
-                    setTimeout(() => ind.classList.remove('show'), 1200);
-                }, 500);
-            });
-            setTimeout(() => ta.focus(), 100);
-        }
-    });
-}
-
-// ---------- الحاسبة ----------
-function openCalc() {
-    const html = `
-        <div class="calc">
-            <div class="calc-display" id="calc-disp">0</div>
-            <div class="calc-buttons">
-                <button class="calc-btn" data-k="C">C</button>
-                <button class="calc-btn" data-k="±">±</button>
-                <button class="calc-btn" data-k="%">%</button>
-                <button class="calc-btn op" data-k="/">÷</button>
-                <button class="calc-btn" data-k="7">7</button>
-                <button class="calc-btn" data-k="8">8</button>
-                <button class="calc-btn" data-k="9">9</button>
-                <button class="calc-btn op" data-k="*">×</button>
-                <button class="calc-btn" data-k="4">4</button>
-                <button class="calc-btn" data-k="5">5</button>
-                <button class="calc-btn" data-k="6">6</button>
-                <button class="calc-btn op" data-k="-">−</button>
-                <button class="calc-btn" data-k="1">1</button>
-                <button class="calc-btn" data-k="2">2</button>
-                <button class="calc-btn" data-k="3">3</button>
-                <button class="calc-btn op" data-k="+">+</button>
-                <button class="calc-btn" data-k="0" style="grid-column:span 2;">0</button>
-                <button class="calc-btn" data-k=".">.</button>
-                <button class="calc-btn eq" data-k="=">=</button>
-            </div>
-        </div>`;
-    createWindow('calc', 'الحاسبة', html, {
-        width:340, height:490,
-        init: content => {
-            const disp = content.querySelector('#calc-disp');
-            let expr = '';
-            content.querySelectorAll('.calc-btn').forEach(b => {
-                b.addEventListener('click', () => {
-                    const k = b.dataset.k;
-                    if (k === 'C') { expr = ''; disp.textContent = '0'; }
-                    else if (k === '=') {
-                        try {
-                            const r = Function('"use strict";return(' + expr + ')')();
-                            disp.textContent = Number.isFinite(r) ? Number(r.toFixed(10)) : 'خطأ';
-                            expr = String(r);
-                        } catch { disp.textContent = 'خطأ'; expr = ''; }
-                    }
-                    else if (k === '±') { expr = String(-parseFloat(expr || 0)); disp.textContent = expr; }
-                    else if (k === '%') { expr = String(parseFloat(expr || 0) / 100); disp.textContent = expr; }
-                    else { expr += k; disp.textContent = expr; }
-                });
-            });
-            // دعم لوحة المفاتيح
-            const keyHandler = e => {
-                if (!openWindows.calc) return;
-                const k = e.key;
-                if (/[0-9+\-*/.]/.test(k)) {
-                    expr += k; disp.textContent = expr;
-                } else if (k === 'Enter' || k === '=') {
-                    try {
-                        const r = Function('"use strict";return(' + expr + ')')();
-                        disp.textContent = Number.isFinite(r) ? Number(r.toFixed(10)) : 'خطأ';
-                        expr = String(r);
-                    } catch { disp.textContent = 'خطأ'; expr = ''; }
-                } else if (k === 'Escape') { expr = ''; disp.textContent = '0'; }
-                else if (k === 'Backspace') { expr = expr.slice(0, -1) || ''; disp.textContent = expr || '0'; }
-            };
-            document.addEventListener('keydown', keyHandler);
-            const obs = new MutationObserver(() => {
-                if (!document.body.contains(content)) {
-                    document.removeEventListener('keydown', keyHandler);
-                    obs.disconnect();
-                }
-            });
-            obs.observe(document.body, { childList: true, subtree: true });
-        }
-    });
-}
-
-// ---------- الرسام ----------
-function openPaint() {
-    const colors = ['#000000','#ffffff','#ff0000','#00ff00','#0000ff','#ffff00','#ff00ff','#00ffff','#ff6b6b','#67e8f9','#0ea5e9','#22d3ee','#feca57','#8b5cf6','#10b981'];
-    const html = `
-        <div class="paint-toolbar">
-            ${colors.map((c, i) => `<div class="paint-color${i===0?' active':''}" data-color="${c}" style="background:${c};color:${c};border:${c==='#ffffff'?'1px solid #444':'2px solid transparent'};"></div>`).join('')}
-            <input type="range" id="brush-size" min="1" max="50" value="4" style="flex:1;min-width:80px;max-width:150px;">
-            <button class="btn-primary" id="clear-canvas" style="padding:6px 14px;font-size:11px;">مسح</button>
-        </div>
-        <canvas class="paint-canvas" id="paint-canvas"></canvas>
-    `;
-    createWindow('paint', 'الرسام المائي', html, {
-        width:700, height:500,
-        init: content => {
-            const canvas = content.querySelector('#paint-canvas');
-            const ctx = canvas.getContext('2d');
-            const resizeCanvas = () => {
-                const parent = canvas.parentElement;
-                canvas.width = parent.clientWidth;
-                canvas.height = parent.clientHeight - 52;
-                ctx.fillStyle = '#fff';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-            };
-            resizeCanvas();
-            
-            let drawing = false;
-            let currentColor = '#000000';
-            let brushSize = 4;
-            
-            const getPos = e => {
-                const rect = canvas.getBoundingClientRect();
-                const t = e.touches ? e.touches[0] : e;
-                return { x: t.clientX - rect.left, y: t.clientY - rect.top };
-            };
-            
-            const start = e => {
-                drawing = true;
-                const p = getPos(e);
-                ctx.beginPath();
-                ctx.moveTo(p.x, p.y);
-            };
-            const move = e => {
-                if (!drawing) return;
-                e.preventDefault();
-                const p = getPos(e);
-                ctx.lineTo(p.x, p.y);
-                ctx.strokeStyle = currentColor;
-                ctx.lineWidth = brushSize;
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
-                ctx.stroke();
-            };
-            const end = () => { drawing = false; };
-            
-            canvas.addEventListener('mousedown', start);
-            canvas.addEventListener('mousemove', move);
-            canvas.addEventListener('mouseup', end);
-            canvas.addEventListener('mouseleave', end);
-            canvas.addEventListener('touchstart', start, { passive: true });
-            canvas.addEventListener('touchmove', move, { passive: false });
-            canvas.addEventListener('touchend', end);
-            
-            content.querySelectorAll('.paint-color').forEach(el => {
-                el.addEventListener('click', () => {
-                    content.querySelectorAll('.paint-color').forEach(c => { c.style.border = '2px solid transparent'; c.classList.remove('active'); });
-                    el.classList.add('active');
-                    el.style.border = '2px solid #fff';
-                    currentColor = el.dataset.color;
-                });
-            });
-            content.querySelector('#brush-size').addEventListener('input', e => {
-                brushSize = +e.target.value;
-            });
-            content.querySelector('#clear-canvas').addEventListener('click', () => {
-                ctx.fillStyle = '#fff';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                notify('الرسام', 'تم مسح اللوحة', SVG.paint);
-            });
-        }
-    });
-}
-
-// ---------- الموسيقى ----------
-function openMusic() {
-    const tracks = [
-        { name:'أمواج البحر', artist:'MEN Sounds', duration:180 },
-        { name:'قطرات المطر', artist:'Aqua Beats', duration:220 },
-        { name:'النهر الهادئ', artist:'Ocean Studio', duration:195 },
-        { name:'الشلال الأزرق', artist:'Wave Music', duration:240 },
-        { name:'لحن الفجر', artist:'Sunrise', duration:205 }
-    ];
-    const html = `
-        <div class="music-player">
-            <div class="music-disc" id="music-disc">🎵</div>
-            <div class="music-info">
-                <h3 id="music-title">اختر أغنية</h3>
-                <p id="music-artist">MEN OS Music</p>
-            </div>
-            <div class="music-progress" id="music-progress">
-                <div class="music-progress-fill" id="music-fill"></div>
-            </div>
-            <div style="font-size:11px;color:#67e8f9;display:flex;justify-content:space-between;width:100%;">
-                <span id="music-current">0:00</span>
-                <span id="music-duration">0:00</span>
-            </div>
-            <div class="music-controls">
-                <button class="music-btn" id="music-prev">${SVG.prev}</button>
-                <button class="music-btn play" id="music-play">${SVG.play}</button>
-                <button class="music-btn" id="music-next">${SVG.next}</button>
-            </div>
-            <div class="music-list" id="music-list"></div>
-        </div>
-    `;
-    createWindow('music', 'مشغل الموسيقى', html, {
-        width:450, height:620,
-        init: content => {
-            const list = content.querySelector('#music-list');
-            const disc = content.querySelector('#music-disc');
-            const titleEl = content.querySelector('#music-title');
-            const artistEl = content.querySelector('#music-artist');
-            const playBtn = content.querySelector('#music-play');
-            const fill = content.querySelector('#music-fill');
-            const curEl = content.querySelector('#music-current');
-            const durEl = content.querySelector('#music-duration');
-            
-            let current = -1;
-            let playing = false;
-            let interval = null;
-            let elapsed = 0;
-            
-            const fmt = s => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
-            
-            function renderList() {
-                list.innerHTML = tracks.map((t, i) =>
-                    `<div class="music-track${i===current?' active':''}" data-i="${i}">
-                        <span class="num">${i+1}</span>
-                        <div style="flex:1;">
-                            <div style="font-weight:600;">${t.name}</div>
-                            <div style="font-size:10px;opacity:0.7;">${t.artist}</div>
-                        </div>
-                        <span style="opacity:0.6;font-size:11px;">${fmt(t.duration)}</span>
-                    </div>`
-                ).join('');
-                list.querySelectorAll('.music-track').forEach(el => {
-                    el.addEventListener('click', () => selectTrack(+el.dataset.i));
-                });
-            }
-            
-            function selectTrack(i) {
-                current = i;
-                elapsed = 0;
-                const t = tracks[i];
-                titleEl.textContent = t.name;
-                artistEl.textContent = t.artist;
-                durEl.textContent = fmt(t.duration);
-                curEl.textContent = '0:00';
-                fill.style.width = '0%';
-                renderList();
-                play();
-                notify('الموسيقى', 'تشغيل: ' + t.name, SVG.music);
-            }
-            
-            function play() {
-                playing = true;
-                playBtn.innerHTML = SVG.pause;
-                disc.classList.add('playing');
-                clearInterval(interval);
-                interval = setInterval(() => {
-                    if (!playing || current < 0) return;
-                    elapsed++;
-                    if (elapsed >= tracks[current].duration) {
-                        if (current < tracks.length - 1) selectTrack(current + 1);
-                        else { pause(); elapsed = 0; }
-                        return;
-                    }
-                    fill.style.width = (elapsed / tracks[current].duration * 100) + '%';
-                    curEl.textContent = fmt(elapsed);
-                }, 1000);
-            }
-            
-            function pause() {
-                playing = false;
-                playBtn.innerHTML = SVG.play;
-                disc.classList.remove('playing');
-                clearInterval(interval);
-            }
-            
-            function toggle() {
-                if (current < 0) { selectTrack(0); return; }
-                playing ? pause() : play();
-            }
-            
-            playBtn.addEventListener('click', toggle);
-            content.querySelector('#music-prev').addEventListener('click', () => {
-                if (current > 0) selectTrack(current - 1);
-            });
-            content.querySelector('#music-next').addEventListener('click', () => {
-                if (current < tracks.length - 1) selectTrack(current + 1);
-                else selectTrack(0);
-            });
-            content.querySelector('#music-progress').addEventListener('click', e => {
-                if (current < 0) return;
-                const rect = e.currentTarget.getBoundingClientRect();
-                const pct = (e.clientX - rect.left) / rect.width;
-                elapsed = Math.floor(tracks[current].duration * pct);
-                fill.style.width = (pct * 100) + '%';
-                curEl.textContent = fmt(elapsed);
-            });
-            
-            renderList();
-            
-            // cleanup
-            const obs = new MutationObserver(() => {
-                if (!document.body.contains(content)) {
-                    clearInterval(interval);
-                    obs.disconnect();
-                }
-            });
-            obs.observe(document.body, { childList: true, subtree: true });
-        }
-    });
-}
-
-// ---------- الكاميرا ----------
-function openCamera() {
-    const html = `
-        <div class="camera-view" id="cam-view">
-            <div class="cam-placeholder">
-                ${SVG.camera}
-                <div style="font-size:14px;font-weight:600;">الكاميرا جاهزة للتشغيل</div>
-                <div style="font-size:11px;opacity:0.7;">تحتاج إذن المتصفح</div>
-                <button class="btn-primary" id="cam-start">🎥 تشغيل الكاميرا</button>
-            </div>
-        </div>
-    `;
-    createWindow('camera', 'الكاميرا', html, {
-        width:600, height:450,
-        init: content => {
-            const view = content.querySelector('#cam-view');
-            let stream = null;
-            
-            content.querySelector('#cam-start').addEventListener('click', async () => {
-                try {
-                    stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 }, audio: false });
-                    view.innerHTML = '';
-                    const video = document.createElement('video');
-                    video.autoplay = true;
-                    video.playsInline = true;
-                    video.muted = true;
-                    video.srcObject = stream;
-                    video.style.cssText = 'width:100%;height:100%;object-fit:cover;';
-                    view.appendChild(video);
-                    
-                    const controls = document.createElement('div');
-                    controls.className = 'camera-controls';
-                    const snapBtn = document.createElement('button');
-                    snapBtn.className = 'cam-btn';
-                    snapBtn.innerHTML = SVG.camera;
-                    snapBtn.title = 'التقاط صورة';
-                    controls.appendChild(snapBtn);
-                    view.appendChild(controls);
-                    
-                    snapBtn.addEventListener('click', () => {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = video.videoWidth;
-                        canvas.height = video.videoHeight;
-                        canvas.getContext('2d').drawImage(video, 0, 0);
-                        const url = canvas.toDataURL('image/png');
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = 'men_os_photo_' + Date.now() + '.png';
-                        a.click();
-                        // وميض
-                        const flash = document.createElement('div');
-                        flash.style.cssText = 'position:absolute;inset:0;background:#fff;animation:flash 0.3s;';
-                        view.appendChild(flash);
-                        setTimeout(() => flash.remove(), 300);
-                        notify('الكاميرا', 'تم حفظ الصورة', SVG.check);
-                    });
-                    
-                    notify('الكاميرا', 'الكاميرا تعمل الآن', SVG.check);
-                    
-                    // cleanup
-                    const obs = new MutationObserver(() => {
-                        if (!document.body.contains(content) && stream) {
-                            stream.getTracks().forEach(t => t.stop());
-                            obs.disconnect();
-                        }
-                    });
-                    obs.observe(document.body, { childList: true, subtree: true });
-                    
-                } catch (err) {
-                    notify('الكاميرا', 'لم يتم السماح بالوصول للكاميرا', SVG.camera);
-                    view.querySelector('.cam-placeholder').innerHTML = `
-                        ${SVG.camera}
-                        <div style="font-size:14px;font-weight:600;">تعذر الوصول للكاميرا</div>
-                        <div style="font-size:11px;opacity:0.7;">تحقق من أذونات المتصفح</div>
-                    `;
-                }
-            });
-        }
-    });
-}
-// إضافة animation الوميض
-const style = document.createElement('style');
-style.textContent = '@keyframes flash { from{opacity:1;} to{opacity:0;} }';
-document.head.appendChild(style);
-
-// ---------- الطقس ----------
-function openWeather() {
-    const html = `
-        <div class="weather-app">
-            <div class="weather-main">
-                <div class="weather-icon">🌊</div>
-                <div>
-                    <div class="weather-temp">24°</div>
-                    <div class="weather-desc">مشمس جزئياً • الرياض</div>
-                </div>
-            </div>
-            <div class="weather-grid">
-                <div class="weather-day"><div class="d">اليوم</div><div class="t">☀️ 26°</div></div>
-                <div class="weather-day"><div class="d">غداً</div><div class="t">🌤️ 25°</div></div>
-                <div class="weather-day"><div class="d">الاثنين</div><div class="t">☁️ 23°</div></div>
-                <div class="weather-day"><div class="d">الثلاثاء</div><div class="t">🌧️ 21°</div></div>
-                <div class="weather-day"><div class="d">الأربعاء</div><div class="t">☀️ 27°</div></div>
-                <div class="weather-day"><div class="d">الخميس</div><div class="t">🌤️ 26°</div></div>
-            </div>
-            <button class="btn-primary" id="refresh-weather">${SVG.refresh} تحديث</button>
-        </div>
-    `;
-    createWindow('weather', 'الطقس', html, {
-        width:480, height:480,
-        init: content => {
-            content.querySelector('#refresh-weather').addEventListener('click', () => {
-                const tempEl = content.querySelector('.weather-temp');
-                const t = 20 + Math.floor(Math.random()*10);
-                tempEl.textContent = t + '°';
-                notify('الطقس', 'تم تحديث البيانات', SVG.weather);
-            });
-        }
-    });
-}
-
-// ---------- الساعة ----------
-function openClock() {
-    const html = `
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:25px;padding:30px;">
-            <div id="clock-display" style="font-size:72px;font-weight:200;color:#fff;text-shadow:0 0 40px rgba(103,232,249,0.6);font-variant-numeric:tabular-nums;">--:--:--</div>
-            <div id="clock-date-full" style="font-size:16px;color:#67e8f9;">---</div>
-            <div style="display:flex;gap:15px;margin-top:20px;">
-                <button class="btn-primary" id="timer-start">⏱️ مؤقت 60ث</button>
-                <button class="btn-primary" id="timer-stop" style="background:linear-gradient(135deg,#ef4444,#dc2626);">إيقاف</button>
-            </div>
-            <div id="timer-display" style="font-size:40px;font-weight:300;color:#22d3ee;display:none;">60</div>
-        </div>
-    `;
-    createWindow('clock', 'الساعة', html, {
-        width:500, height:400,
-        init: content => {
-            const disp = content.querySelector('#clock-display');
-            const dateFull = content.querySelector('#clock-date-full');
-            const days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-            const months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-            const tick = () => {
-                const now = new Date();
-                disp.textContent = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-                dateFull.textContent = `${days[now.getDay()]}، ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-            };
-            tick();
-            const interval = setInterval(tick, 1000);
-            
-            let timer = null, remaining = 60;
-            const timerDisp = content.querySelector('#timer-display');
-            content.querySelector('#timer-start').addEventListener('click', () => {
-                remaining = 60;
-                timerDisp.style.display = 'block';
-                timerDisp.textContent = remaining;
-                clearInterval(timer);
-                timer = setInterval(() => {
-                    remaining--;
-                    timerDisp.textContent = remaining;
-                    if (remaining <= 0) {
-                        clearInterval(timer);
-                        timerDisp.textContent = '⏰ انتهى!';
-                        notify('الساعة', 'انتهى المؤقت!', SVG.clock);
-                    }
-                }, 1000);
-            });
-            content.querySelector('#timer-stop').addEventListener('click', () => {
-                clearInterval(timer);
-                timerDisp.textContent = 'متوقف';
-                setTimeout(() => timerDisp.style.display = 'none', 1000);
-            });
-            
-            const obs = new MutationObserver(() => {
-                if (!document.body.contains(content)) {
-                    clearInterval(interval); clearInterval(timer);
-                    obs.disconnect();
-                }
-            });
-            obs.observe(document.body, { childList: true, subtree: true });
-        }
-    });
-}
-
-// ---------- المتجر ----------
-function openStore() {
-    const apps = [
-        { n:'محرر الصور Pro', i:SVG.image, s:'2.3 MB', d:'تعديل احترافي للصور' },
-        { n:'مشغل الفيديو',   i:SVG.music, s:'1.8 MB', d:'مشاهدة جميع الصيغ' },
-        { n:'لعبة الأفعى',    i:SVG.store, s:'0.5 MB', d:'لعبة كلاسيكية ممتعة' },
-        { n:'آلة حاسبة علمية',i:SVG.calc,  s:'0.9 MB', d:'حسابات متقدمة' },
-        { n:'محرر النصوص',    i:SVG.notes, s:'1.2 MB', d:'تحرير متقدم' },
-        { n:'موزع الملفات',   i:SVG.files, s:'0.7 MB', d:'إدارة احترافية' },
-        { n:'مسجل الشاشة',    i:SVG.camera,s:'3.1 MB', d:'تسجيل فيديو' },
-        { n:'محول الصيغ',     i:SVG.settings,s:'1.5 MB',d:'تحويل بين الصيغ' }
-    ];
-    const html = `
-        <div class="store-apps">
-            ${apps.map((a, i) => `
-                <div class="store-app">
-                    <div class="app-icon">${a.i}</div>
-                    <div class="app-info">
-                        <h5>${a.n}</h5>
-                        <p>${a.d} • ${a.s}</p>
-                    </div>
-                    <button class="store-install" data-i="${i}">تثبيت</button>
-                </div>
-            `).join('')}
-        </div>
-    `;
-    createWindow('store', 'متجر التطبيقات', html, {
-        width:700, height:520,
-        init: content => {
-            content.querySelectorAll('.store-install').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (btn.classList.contains('installed')) return;
-                    btn.textContent = 'جاري...';
-                    btn.disabled = true;
-                    setTimeout(() => {
-                        btn.textContent = '✓ مثبت';
-                        btn.classList.add('installed');
-                        notify('المتجر', 'تم تثبيت: ' + apps[+btn.dataset.i].n, SVG.check);
-                    }, 1200);
-                });
-            });
-        }
-    });
-}
-
-// ---------- الإعدادات ----------
-function openSettings() {
-    const html = `
-        <div class="settings-panel">
-            <div class="settings-section">
-                <h4>🖼️ الخلفية</h4>
-                <div class="wallpaper-grid" id="wp-grid"></div>
-            </div>
-            <div class="settings-section">
-                <h4>🎨 الألوان</h4>
-                <div class="accent-grid" id="accent-grid"></div>
-            </div>
-            <div class="settings-section">
-                <h4>ℹ️ معلومات النظام</h4>
-                <div class="info-row"><span>النظام:</span><b>MEN OS v2.0</b></div>
-                <div class="info-row"><span>الإصدار:</span><b>Aquatic Edition</b></div>
-                <div class="info-row"><span>النواة:</span><b>Web Kernel 2.0</b></div>
-                <div class="info-row"><span>المعالج:</span><b>JS Engine</b></div>
-                <div class="info-row"><span>الذاكرة:</span><b>${navigator.deviceMemory || 8} GB</b></div>
-                <div class="info-row"><span>الدقة:</span><b>${window.innerWidth}x${window.innerHeight}</b></div>
-                <div class="info-row"><span>وقت التشغيل:</span><b id="uptime">0s</b></div>
-            </div>
-            <div class="settings-section">
-                <h4>⚙️ إجراءات</h4>
-                <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                    <button class="btn-primary" id="lock-now">🔒 قفل الشاشة</button>
-                    <button class="btn-primary" id="reset-settings" style="background:linear-gradient(135deg,#ef4444,#dc2626);">↻ إعادة تعيين</button>
-                </div>
-            </div>
-        </div>
-    `;
-    createWindow('settings', 'الإعدادات', html, {
-        width:560, height:620,
-        init: content => {
-            const wg = content.querySelector('#wp-grid');
-            WALLPAPERS.forEach((wp, i) => {
-                const opt = document.createElement('div');
-                opt.className = 'wallpaper-opt' + (i === systemSettings.wallpaper ? ' active' : '');
-                opt.style.background = wp;
-                opt.addEventListener('click', () => {
-                    systemSettings.wallpaper = i;
-                    applySettings();
-                    saveSettings();
-                    wg.querySelectorAll('.wallpaper-opt').forEach(o => o.classList.remove('active'));
-                    opt.classList.add('active');
-                    notify('الإعدادات', 'تم تغيير الخلفية', SVG.settings);
-                });
-                wg.appendChild(opt);
-            });
-            
-            const ag = content.querySelector('#accent-grid');
-            Object.entries(ACCENTS).forEach(([key, col]) => {
-                const opt = document.createElement('div');
-                opt.className = 'accent-opt' + (key === systemSettings.accent ? ' active' : '');
-                opt.style.background = `linear-gradient(135deg, ${col.c1}, ${col.c2})`;
-                opt.style.color = col.c1;
-                opt.title = key;
-                opt.addEventListener('click', () => {
-                    systemSettings.accent = key;
-                    applyAccent(key);
-                    saveSettings();
-                    ag.querySelectorAll('.accent-opt').forEach(o => o.classList.remove('active'));
-                    opt.classList.add('active');
-                    notify('الإعدادات', 'تم تغيير الألوان', SVG.settings);
-                });
-                ag.appendChild(opt);
-            });
-            
-            const startTime = Date.now() - performance.now();
-            const uptEl = content.querySelector('#uptime');
-            const upInterval = setInterval(() => {
-                const s = Math.floor((Date.now() - startTime) / 1000);
-                if (uptEl) uptEl.textContent = s + 's';
-            }, 1000);
-            
-            content.querySelector('#lock-now').addEventListener('click', () => {
-                showLockScreen();
-            });
-            content.querySelector('#reset-settings').addEventListener('click', () => {
-                if (confirm('إعادة تعيين كل الإعدادات؟')) {
-                    systemSettings = { wallpaper: 0, accent: 'aqua' };
-                    saveSettings();
-                    applySettings();
-                    applyAccent('aqua');
-                    notify('الإعدادات', 'تم إعادة التعيين', SVG.check);
-                }
-            });
-            
-            const obs = new MutationObserver(() => {
-                if (!document.body.contains(content)) {
-                    clearInterval(upInterval);
-                    obs.disconnect();
-                }
-            });
-            obs.observe(document.body, { childList: true, subtree: true });
-        }
-    });
-}
-
-// ================== تطبيق الإعدادات ==================
-function applySettings() {
-    const bg = document.getElementById('water-bg');
-    if (bg) bg.style.background = WALLPAPERS[systemSettings.wallpaper];
-}
-function applyAccent(key) {
-    const col = ACCENTS[key];
-    document.documentElement.style.setProperty('--aqua-1', col.c1);
-    document.documentElement.style.setProperty('--aqua-2', col.c2);
-    document.documentElement.style.setProperty('--aqua-3', col.c3);
-    document.documentElement.style.setProperty('--aqua-4', col.c3);
-}
-function saveSettings() {
-    localStorage.setItem('men_os_settings', JSON.stringify(systemSettings));
-}
-
-// تطبيق الإعدادات عند التحميل
-applySettings();
-applyAccent(systemSettings.accent);
-
-// ================== القائمة اليمنى ==================
-const ctx = document.getElementById('context-menu');
-const ctxItems = [
-    { label:'تحديث سطح المكتب', icon:SVG.refresh, action: () => location.reload() },
-    { label:'خلفية جديدة',       icon:SVG.image,   action: () => {
-        systemSettings.wallpaper = (systemSettings.wallpaper + 1) % WALLPAPERS.length;
-        applySettings(); saveSettings();
-        notify('سطح المكتب', 'تم تغيير الخلفية', SVG.image);
-    }},
-    { type:'divider' },
-    { label:'فتح الطرفية',       icon:SVG.terminal, action: () => openTerminal() },
-    { label:'فتح الإعدادات',     icon:SVG.settings, action: () => openSettings() },
-    { label:'فتح المتصفح',       icon:SVG.browser,  action: () => openBrowser() },
-    { type:'divider' },
-    { label:'قفل الشاشة',        icon:SVG.lock,    action: () => showLockScreen() }
-];
-
-ctx.innerHTML = ctxItems.map((it, i) => {
-    if (it.type === 'divider') return '<div class="ctx-divider"></div>';
-    return `<div class="ctx-item" data-i="${i}">${it.icon}${it.label}</div>`;
-}).join('');
-
-document.addEventListener('contextmenu', e => {
-    if (e.target.closest('.window')) return;
-    e.preventDefault();
-    ctx.style.left = Math.min(e.clientX, window.innerWidth - 220) + 'px';
-    ctx.style.top = Math.min(e.clientY, window.innerHeight - 300) + 'px';
-    ctx.classList.add('show');
-});
-document.addEventListener('click', () => ctx.classList.remove('show'));
-
-ctx.querySelectorAll('.ctx-item').forEach(el => {
-    el.addEventListener('click', () => {
-        ctxItems[+el.dataset.i].action();
-        ctx.classList.remove('show');
-    });
-});
-
-// ================== فقاعات ==================
-function createBubbles() {
-    const bg = document.getElementById('water-bg');
-    for (let i = 0; i < 25; i++) {
-        const b = document.createElement('div');
-        b.className = 'bubble';
-        const size = 8 + Math.random() * 35;
-        b.style.width = size + 'px';
-        b.style.height = size + 'px';
-        b.style.left = Math.random() * 100 + '%';
-        b.style.animationDuration = (10 + Math.random() * 15) + 's';
-        b.style.animationDelay = (Math.random() * 15) + 's';
-        bg.appendChild(b);
-    }
-}
-createBubbles();
-
-// ================== اختصارات لوحة المفاتيح ==================
+/* =========================================================
+   اختصارات لوحة المفاتيح
+   ========================================================= */
 document.addEventListener('keydown', e => {
-    // Ctrl + Alt + T = Terminal
-    if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 't') {
-        e.preventDefault();
-        openTerminal();
-    }
-    // Ctrl + Alt + L = قفل
-    if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'l') {
-        e.preventDefault();
-        showLockScreen();
-    }
-    // Escape = إغلاق القائمة
-    if (e.key === 'Escape') {
-        startMenu.classList.remove('show');
-        ctx.classList.remove('show');
-    }
-});
+  if($('quizScreen').classList.contains('hidden')) return;
 
-// ================== ترحيب ==================
-setTimeout(() => {
-    notify('مرحباً بك في MEN OS', 'انقر نقراً مزدوجاً على الأيقونات لفتح التطبيقات', SVG.check);
-}, 500);
-
-// ================== مراقبة الأداء ==================
-setInterval(() => {
-    const b = document.getElementById('battery');
-    if (b) {
-        const pct = 85 + Math.floor(Math.random() * 15);
-        b.textContent = '🔋 ' + pct + '%';
-    }
-}, 30000);
-
-// ================== قبل الإغلاق ==================
-window.addEventListener('beforeunload', e => {
-    if (Object.keys(openWindows).length > 0) {
-        e.preventDefault();
-        e.returnValue = '';
-    }
+  if(e.key >= '1' && e.key <= '4'){
+    const idx = parseInt(e.key) - 1;
+    if(idx < state.items[state.current].options.length) selectOption(idx);
+  }
+  if(e.key === 'ArrowLeft') go(1);   // RTL: يسار = التالي
+  if(e.key === 'ArrowRight') go(-1);
 });
 </script>
 </body>
