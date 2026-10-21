@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#060812">
-<title>لوحة الطلبات — MEN Store Admin</title>
+<title>لوحة إدارة — MEN Store Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -13,18 +12,10 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-height:100vh}
-.ma-root{position:fixed;inset:0;z-index:99999;background:#060812;color:#fff;overflow-y:auto;overflow-x:hidden;display:block}
-.ma-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:
-  radial-gradient(ellipse at 15% 20%,rgba(2,28,164,.35) 0%,transparent 55%),
-  radial-gradient(ellipse at 85% 80%,rgba(74,122,255,.25) 0%,transparent 50%),
-  radial-gradient(ellipse at 50% 50%,#060812 0%,#030510 100%)}
-.ma-bg::after{content:'';position:absolute;inset:0;background-image:
-  linear-gradient(rgba(74,122,255,.04) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(74,122,255,.04) 1px,transparent 1px);
-  background-size:60px 60px;
-  mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);
-  -webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%)}
+html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-height:100vh;overflow-x:hidden}
+body{position:relative}
+.ma-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 15% 20%,rgba(2,28,164,.35) 0%,transparent 55%),radial-gradient(ellipse at 85% 80%,rgba(74,122,255,.25) 0%,transparent 50%),radial-gradient(ellipse at 50% 50%,#060812 0%,#030510 100%)}
+.ma-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(74,122,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,122,255,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%)}
 
 /* LOGIN */
 .ma-gate{position:relative;z-index:10;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
@@ -34,7 +25,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-gate-card p{color:#8a92b0;font-weight:600;margin-bottom:26px;line-height:1.7}
 .ma-field{margin-bottom:14px;text-align:right}
 .ma-field label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
-.ma-field input{width:100%;height:52px;padding:0 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-size:.94rem;font-weight:600;outline:none;transition:all .3s;direction:ltr;text-align:right}
+.ma-field input{width:100%;height:52px;padding:0 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-size:.94rem;font-weight:600;outline:none;transition:all .3s;direction:ltr;text-align:right;box-sizing:border-box}
 .ma-field input:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.15)}
 .ma-gate-btn{width:100%;height:54px;border:none;border-radius:14px;margin-top:8px;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;transition:all .3s;box-shadow:0 14px 34px -12px rgba(74,122,255,.8);display:flex;align-items:center;justify-content:center;gap:10px}
 .ma-gate-btn:hover:not(:disabled){transform:translateY(-2px)}
@@ -42,138 +33,150 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-gate-err{display:none;margin-top:14px;padding:12px;border-radius:12px;background:rgba(217,4,41,.1);border:1px solid rgba(217,4,41,.3);color:#ff8a8a;font-size:.85rem;font-weight:700}
 .ma-gate-err.show{display:block}
 
-/* DASHBOARD */
-.ma-dash{position:relative;z-index:10;display:none;padding:24px 0 80px}
-.ma-dash.active{display:block}
-.ma-header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,rgba(6,8,18,.98),rgba(6,8,18,.9));backdrop-filter:blur(20px);border-bottom:1px solid rgba(74,122,255,.14);padding:16px 0;margin-bottom:28px}
-.ma-header-inner{max-width:1560px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.ma-brand{display:flex;align-items:center;gap:14px}
-.ma-brand img{height:44px;width:auto;filter:brightness(0) invert(1) drop-shadow(0 6px 18px rgba(74,122,255,.5))}
-.ma-brand-text .t{font-size:1.05rem;font-weight:900;letter-spacing:-.3px;line-height:1.2}
-.ma-brand-text .s{font-size:.72rem;color:#8a92b0;font-weight:700;letter-spacing:1px;text-transform:uppercase}
-.ma-user{display:flex;align-items:center;gap:12px}
-.ma-user-info{text-align:left}
-.ma-user-info .n{font-weight:800;font-size:.9rem}
-.ma-user-info .e{font-size:.72rem;color:#8a92b0;font-weight:600}
-.ma-btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:60px;background:rgba(217,4,41,.12);border:1px solid rgba(217,4,41,.3);color:#ff6b6b;font-family:'Cairo',sans-serif;font-weight:800;font-size:.84rem;cursor:pointer;transition:all .3s}
-.ma-btn-ghost:hover{background:rgba(217,4,41,.22);transform:translateY(-2px)}
-.ma-btn-users{background:rgba(74,122,255,.12)!important;border-color:rgba(74,122,255,.3)!important;color:#6a9aff!important}
-.ma-btn-users:hover{background:rgba(74,122,255,.22)!important}
-.ma-container{max-width:1560px;margin:0 auto;padding:0 32px}
+/* APP */
+.ma-app{position:relative;z-index:10;display:none;min-height:100vh}
+.ma-app.active{display:block}
+
+/* NAV */
+.ma-nav{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,rgba(6,8,18,.99),rgba(6,8,18,.92));backdrop-filter:blur(20px);border-bottom:1px solid rgba(74,122,255,.14)}
+.ma-nav-inner{max-width:1600px;margin:0 auto;padding:0 28px;height:68px;display:flex;align-items:center;gap:16px}
+.ma-nav-brand{display:flex;align-items:center;gap:12px;flex-shrink:0;margin-left:20px}
+.ma-nav-brand img{height:40px;filter:brightness(0) invert(1) drop-shadow(0 4px 12px rgba(74,122,255,.4))}
+.ma-nav-brand .name{font-size:.95rem;font-weight:900;line-height:1.15}
+.ma-nav-brand .sub{font-size:.64rem;color:#8a92b0;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.ma-nav-menu{display:flex;align-items:center;gap:2px;flex:1}
+.ma-nav-item{position:relative}
+.ma-nav-link{display:inline-flex;align-items:center;gap:7px;padding:10px 15px;border-radius:10px;background:transparent;border:none;color:#a8b0cc;font-family:'Cairo',sans-serif;font-weight:800;font-size:.84rem;cursor:pointer;transition:all .2s;white-space:nowrap}
+.ma-nav-link .caret{font-size:.6rem;margin-right:3px;transition:transform .2s;opacity:.6}
+.ma-nav-item.open .ma-nav-link .caret{transform:rotate(180deg)}
+.ma-nav-link:hover{background:rgba(74,122,255,.1);color:#fff}
+.ma-nav-item.open>.ma-nav-link,.ma-nav-link.active{background:linear-gradient(135deg,rgba(2,28,164,.5),rgba(74,122,255,.35));color:#fff;box-shadow:0 4px 14px -4px rgba(74,122,255,.6)}
+.ma-nav-dropdown{position:absolute;top:calc(100% + 8px);right:0;min-width:230px;background:linear-gradient(145deg,rgba(14,20,38,.99),rgba(8,12,24,1));border:1px solid rgba(74,122,255,.25);border-radius:14px;padding:8px;box-shadow:0 20px 50px -12px rgba(2,28,164,.9);opacity:0;visibility:hidden;transform:translateY(-8px);transition:all .2s;z-index:101}
+.ma-nav-item.open .ma-nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+.ma-nav-dropdown a{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;color:#a8b0cc;text-decoration:none;font-weight:800;font-size:.85rem;transition:all .2s;cursor:pointer}
+.ma-nav-dropdown a:hover{background:rgba(74,122,255,.15);color:#fff}
+.ma-nav-dropdown a.active{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff}
+.ma-nav-dropdown a i{width:18px;font-size:.8rem;opacity:.85}
+.ma-nav-user{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.ma-nav-user-info{text-align:left}
+.ma-nav-user-info .n{font-size:.82rem;font-weight:900}
+.ma-nav-user-info .e{font-size:.68rem;color:#8a92b0;font-weight:600}
+.ma-btn-ghost{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;background:rgba(217,4,41,.12);border:1px solid rgba(217,4,41,.3);color:#ff6b6b;font-family:'Cairo',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;transition:all .2s}
+.ma-btn-ghost:hover{background:rgba(217,4,41,.22);transform:translateY(-1px)}
+
+/* CONTENT */
+.ma-content{max-width:1600px;margin:0 auto;padding:32px 28px 80px;position:relative;z-index:5}
+.ma-view{display:none}
+.ma-view.active{display:block;animation:maFade .3s}
+@keyframes maFade{from{opacity:0}to{opacity:1}}
+.ma-page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.ma-page-title{font-size:1.55rem;font-weight:900;letter-spacing:-.5px;display:flex;align-items:center;gap:12px}
+.ma-page-title i{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 12px 26px -10px rgba(74,122,255,.8)}
+.ma-page-sub{color:#8a92b0;font-size:.82rem;font-weight:600;margin-top:6px}
 
 /* STATS */
-.ma-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
-.ma-stat{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:22px;padding:24px;position:relative;overflow:hidden;transition:all .35s}
-.ma-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,#4a7aff);opacity:.9}
-.ma-stat:hover{transform:translateY(-5px);border-color:rgba(74,122,255,.35);box-shadow:0 22px 50px -15px rgba(2,28,164,.6)}
-.ma-stat-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:14px;background:var(--icon-bg);color:var(--accent)}
-.ma-stat-val{font-size:2rem;font-weight:900;line-height:1.1;margin-bottom:4px;letter-spacing:-1px}
-.ma-stat-lbl{font-size:.8rem;color:#8a92b0;font-weight:700}
-.ma-stats-sm{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
-.ma-stat-sm{background:linear-gradient(145deg,rgba(14,20,38,.6),rgba(8,12,24,.8));border:1px solid rgba(74,122,255,.1);border-radius:18px;padding:18px 20px;display:flex;align-items:center;gap:14px;transition:all .3s}
-.ma-stat-sm:hover{border-color:rgba(74,122,255,.28);transform:translateY(-3px)}
-.ma-stat-sm-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;background:var(--icon-bg);color:var(--accent)}
-.ma-stat-sm-val{font-size:1.15rem;font-weight:900;line-height:1.2}
-.ma-stat-sm-lbl{font-size:.72rem;color:#8a92b0;font-weight:700;margin-top:2px}
+.ma-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.ma-stat{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:20px;padding:22px;position:relative;overflow:hidden;transition:all .3s}
+.ma-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,#4a7aff)}
+.ma-stat:hover{transform:translateY(-4px);border-color:rgba(74,122,255,.35);box-shadow:0 20px 45px -15px rgba(2,28,164,.6)}
+.ma-stat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;margin-bottom:12px;background:var(--icon-bg);color:var(--accent)}
+.ma-stat-val{font-size:1.9rem;font-weight:900;line-height:1.1;margin-bottom:3px;letter-spacing:-1px}
+.ma-stat-lbl{font-size:.76rem;color:#8a92b0;font-weight:700}
 
-/* FILTERS */
-.ma-filters{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:22px;padding:20px 24px;margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.ma-search{flex:1;min-width:260px;position:relative}
-.ma-search input{width:100%;height:48px;padding:0 44px 0 16px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.9rem;outline:none;transition:all .3s}
-.ma-search input:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.15)}
-.ma-search i{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#4a7aff;pointer-events:none}
-.ma-filters select{height:48px;padding:0 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.88rem;outline:none;cursor:pointer;min-width:180px}
-.ma-filters select:focus{border-color:#4a7aff}
-.ma-refresh{height:48px;padding:0 22px;border-radius:14px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .3s;box-shadow:0 10px 26px -10px rgba(74,122,255,.8)}
-.ma-refresh:hover{transform:translateY(-2px)}
+/* CARDS */
+.ma-card{background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));border:1px solid rgba(74,122,255,.14);border-radius:18px;padding:22px;margin-bottom:16px}
+.ma-card-title{font-size:.95rem;font-weight:900;color:#6a9aff;margin-bottom:16px;display:flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.5px}
 
-/* ORDER CARD */
-.ma-orders{display:flex;flex-direction:column;gap:16px}
-.ma-order{background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));border:1px solid rgba(74,122,255,.14);border-radius:22px;padding:26px 30px;transition:all .35s;position:relative;overflow:hidden}
-.ma-order:hover{transform:translateY(-3px);border-color:rgba(74,122,255,.35);box-shadow:0 20px 50px -15px rgba(2,28,164,.6)}
-.ma-order-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px}
-.ma-order-id{font-weight:900;font-size:1.05rem;display:flex;align-items:center;gap:10px}
-.ma-order-id .dot{width:10px;height:10px;border-radius:50%;background:var(--st-color,#4caf50);box-shadow:0 0 14px var(--st-color,#4caf50)}
-.ma-order-date{color:#8a92b0;font-size:.8rem;font-weight:600;display:flex;align-items:center;gap:6px;margin-top:6px}
-.ma-order-badge{color:#fff;font-size:.74rem;font-weight:800;padding:7px 16px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 6px 18px -6px rgba(0,0,0,.6)}
-.ma-customer{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;padding:16px 18px;background:rgba(74,122,255,.05);border:1px solid rgba(74,122,255,.14);border-radius:16px;margin-bottom:14px}
-.ma-cust-item{display:flex;align-items:center;gap:10px}
-.ma-cust-item i{width:34px;height:34px;border-radius:10px;background:rgba(74,122,255,.15);color:#6a9aff;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
-.ma-cust-item .lbl{font-size:.68rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1px}
-.ma-cust-item .val{font-size:.88rem;font-weight:700;color:#fff;word-break:break-all}
-.ma-items{padding:14px 18px;background:rgba(0,0,0,.2);border-radius:14px;margin-bottom:14px;font-size:.87rem;color:#a8b0cc;line-height:1.9}
-.ma-items .name{color:#fff;font-weight:700}
-.ma-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 0;border-top:1px solid rgba(74,122,255,.1);border-bottom:1px solid rgba(74,122,255,.1);margin-bottom:16px}
-.ma-total-wrap{display:flex;flex-direction:column;gap:2px}
-.ma-total-lbl{font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1px}
-.ma-total{font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,#fff,#6a9aff);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
-.ma-cb-info{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:20px;font-size:.82rem;font-weight:800}
-.ma-cb-info.pending{background:rgba(245,179,66,.1);border:1px solid rgba(245,179,66,.3);color:#f5b342}
-.ma-cb-info.paid{background:rgba(76,175,80,.18);border:1px solid rgba(76,175,80,.5);color:#66bb6a}
-.ma-cb-info.unpaid{background:rgba(245,179,66,.15);border:1px solid rgba(245,179,66,.5);color:#f5b342}
-.ma-cb-info .cb-date{font-size:.7rem;opacity:.85;font-weight:700;margin-right:4px}
+/* TOOLBAR */
+.ma-toolbar{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:16px;padding:16px 20px;margin-bottom:18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.ma-search{flex:1;min-width:220px;position:relative}
+.ma-search input{width:100%;height:44px;padding:0 42px 0 14px;border-radius:11px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.88rem;outline:none;transition:all .3s;box-sizing:border-box}
+.ma-search input:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
+.ma-search i{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#4a7aff;pointer-events:none;font-size:.85rem}
+.ma-toolbar select{height:44px;padding:0 16px;border-radius:11px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.85rem;outline:none;cursor:pointer;min-width:150px}
+.ma-toolbar select:focus{border-color:#4a7aff}
+.ma-btn{height:44px;padding:0 18px;border-radius:11px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.84rem;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .3s;white-space:nowrap}
+.ma-btn-primary{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;box-shadow:0 8px 22px -8px rgba(74,122,255,.8)}
+.ma-btn-primary:hover{transform:translateY(-2px)}
+.ma-btn-success{background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;box-shadow:0 8px 22px -8px rgba(76,175,80,.8)}
+.ma-btn-success:hover{transform:translateY(-2px)}
+.ma-btn-gold{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 8px 22px -8px rgba(245,179,66,.8)}
+.ma-btn-gold:hover{transform:translateY(-2px)}
+.ma-btn-danger{background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff;box-shadow:0 8px 22px -8px rgba(139,0,24,.9)}
+.ma-btn-danger:hover{transform:translateY(-2px)}
+.ma-btn-soft{background:rgba(74,122,255,.1);border:1px solid rgba(74,122,255,.25);color:#6a9aff}
+.ma-btn-soft:hover{background:rgba(74,122,255,.2)}
 
-/* ACTIONS */
-.ma-actions{display:flex;gap:8px;flex-wrap:wrap}
-.ma-actions select{flex:1;min-width:170px;height:44px;padding:0 14px;border-radius:12px;background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.25);color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.85rem;outline:none;cursor:pointer}
-.ma-actions select:focus{border-color:#4a7aff}
-.ma-btn-action{padding:11px 20px;border-radius:12px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .3s;white-space:nowrap}
-.ma-btn-apply{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;box-shadow:0 8px 22px -8px rgba(74,122,255,.8)}
-.ma-btn-apply:hover:not(:disabled){transform:translateY(-2px)}
-.ma-btn-detail{background:linear-gradient(135deg,#00c9a7,#008f77);color:#fff;box-shadow:0 8px 22px -8px rgba(0,201,167,.8)}
-.ma-btn-detail:hover{transform:translateY(-2px)}
-.ma-btn-cb{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 8px 22px -8px rgba(245,179,66,.8)}
-.ma-btn-cb:hover{transform:translateY(-2px)}
-.ma-btn-deduct{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff;box-shadow:0 8px 22px -8px rgba(217,4,41,.8)}
-.ma-btn-deduct:hover{transform:translateY(-2px)}
-.ma-btn-delete{background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff;box-shadow:0 8px 22px -8px rgba(139,0,24,.9)}
-.ma-btn-delete:hover{transform:translateY(-2px)}
-.ma-btn-chat{background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff;box-shadow:0 8px 22px -8px rgba(74,122,255,.9)}
-.ma-btn-chat:hover{transform:translateY(-2px)}
-.ma-btn-note{background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff;box-shadow:0 8px 22px -8px rgba(147,51,234,.8)}
-.ma-btn-note:hover{transform:translateY(-2px)}
-.ma-btn-paid{background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;box-shadow:0 8px 22px -8px rgba(76,175,80,.8)}
-.ma-btn-paid:hover{transform:translateY(-2px)}
-.ma-btn-unpaid{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:#8a92b0}
-.ma-btn-unpaid:hover{background:rgba(255,255,255,.12)}
-.ma-btn-action:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
+/* TABLE */
+.ma-table-wrap{background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));border:1px solid rgba(74,122,255,.14);border-radius:16px;overflow:hidden}
+.ma-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.ma-table thead{background:rgba(74,122,255,.06)}
+.ma-table thead th{padding:14px 14px;text-align:right;font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;color:#8a92b0;font-weight:800;border-bottom:1px solid rgba(74,122,255,.15);white-space:nowrap}
+.ma-table tbody td{padding:13px 14px;border-bottom:1px solid rgba(74,122,255,.06);color:#e0e6f4;font-weight:600;vertical-align:middle}
+.ma-table tbody tr{transition:background .2s}
+.ma-table tbody tr:hover{background:rgba(74,122,255,.05)}
+.ma-table tbody tr:last-child td{border-bottom:none}
+.ma-table .mono{font-family:'Courier New',monospace;direction:ltr;text-align:left;font-weight:800}
+.ma-table .price{color:#6a9aff;font-weight:900}
+.ma-table .actions-cell{display:flex;gap:6px;flex-wrap:wrap}
+.ma-mini-btn{padding:7px 12px;border-radius:8px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.72rem;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .2s}
+.ma-mini-btn:hover{transform:translateY(-1px)}
+.ma-mini-detail{background:linear-gradient(135deg,#00c9a7,#008f77);color:#fff}
+.ma-mini-cb{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000}
+.ma-mini-delete{background:rgba(217,4,41,.15);border:1px solid rgba(217,4,41,.35);color:#ff6b6b}
+.ma-mini-chat{background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.35);color:#6a9aff}
+.ma-mini-note{background:rgba(147,51,234,.15);border:1px solid rgba(147,51,234,.35);color:#c084fc}
 
-/* USER STATS */
-.ma-user-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px;background:linear-gradient(135deg,rgba(74,122,255,.08),rgba(2,28,164,.05));border:1px solid rgba(74,122,255,.18);border-radius:16px;margin-bottom:14px}
-.ma-us-item{text-align:center;padding:6px 4px;border-left:1px dashed rgba(74,122,255,.2)}
-.ma-us-item:first-child{border-left:none}
-.ma-us-val{font-size:1.1rem;font-weight:900;background:linear-gradient(135deg,#fff,#6a9aff);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.2}
-.ma-us-lbl{font-size:.68rem;color:#8a92b0;font-weight:800;margin-top:4px;text-transform:uppercase;letter-spacing:.6px}
+/* BADGE */
+.ma-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:.7rem;font-weight:800;white-space:nowrap}
 
-/* EMPTY / LOADER */
-.ma-empty{text-align:center;padding:80px 24px;background:rgba(74,122,255,.04);border:1.5px dashed rgba(74,122,255,.25);border-radius:24px}
-.ma-empty i{font-size:3rem;color:#4a7aff;margin-bottom:16px;opacity:.7}
-.ma-empty h3{font-size:1.2rem;font-weight:900;margin-bottom:8px}
-.ma-empty p{color:#8a92b0;font-weight:600}
-.ma-loader{text-align:center;padding:60px}
-.ma-spin{width:44px;height:44px;margin:0 auto 16px;border-radius:50%;border:3px solid rgba(74,122,255,.2);border-top-color:#4a7aff;animation:maSpin .8s linear infinite}
-@keyframes maSpin{to{transform:rotate(360deg)}}
+/* CHART */
+.ma-chart-bar{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.ma-chart-label{min-width:100px;font-size:.78rem;color:#a8b0cc;font-weight:700;text-align:right}
+.ma-chart-track{flex:1;height:26px;background:rgba(74,122,255,.08);border-radius:10px;overflow:hidden;position:relative}
+.ma-chart-fill{height:100%;background:linear-gradient(90deg,#4a7aff,#021ca4);border-radius:10px;transition:width .8s ease;display:flex;align-items:center;justify-content:flex-end;padding:0 10px;color:#fff;font-size:.72rem;font-weight:800}
+.ma-chart-fill.gold{background:linear-gradient(90deg,#f5b342,#c98a1e);color:#000}
+.ma-chart-fill.green{background:linear-gradient(90deg,#4caf50,#2e7d32)}
+.ma-chart-value{min-width:80px;text-align:left;font-weight:800;font-size:.85rem;font-family:'Courier New',monospace;direction:ltr}
 
-/* MODAL BASE */
-.ma-modal-back{display:none;position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+/* RATE */
+.ma-rate-card{background:linear-gradient(145deg,rgba(245,179,66,.08),rgba(201,138,30,.03));border:2px solid rgba(245,179,66,.3);border-radius:20px;padding:26px;margin-bottom:20px}
+.ma-rate-title{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.ma-rate-title i{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.ma-rate-title .t{font-size:1.1rem;font-weight:900}
+.ma-rate-title .s{font-size:.78rem;color:#8a92b0;font-weight:700;margin-top:3px}
+.ma-rate-display{font-size:3rem;font-weight:900;background:linear-gradient(135deg,#f5b342,#c98a1e);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-2px;line-height:1;margin:18px 0 8px}
+.ma-rate-form{display:flex;gap:10px;align-items:center;margin-top:16px;flex-wrap:wrap}
+.ma-rate-form input{height:52px;width:160px;padding:0 18px;border-radius:12px;background:rgba(0,0,0,.4);border:2px solid rgba(245,179,66,.3);color:#f5b342;font-family:'Cairo',sans-serif;font-weight:900;font-size:1.3rem;text-align:center;outline:none;direction:ltr}
+.ma-rate-form input:focus{border-color:#f5b342;box-shadow:0 0 0 4px rgba(245,179,66,.15)}
+.ma-rate-hint{font-size:.8rem;color:#8a92b0;font-weight:700;line-height:1.7;margin-top:12px}
+
+/* EMPTY/LOADER */
+.ma-empty{text-align:center;padding:60px 24px}
+.ma-empty i{font-size:2.8rem;color:#4a7aff;margin-bottom:14px;opacity:.6;display:block}
+.ma-empty h3{font-size:1.05rem;font-weight:900;margin-bottom:6px}
+.ma-empty p{color:#8a92b0;font-weight:600;font-size:.88rem}
+
+/* MODALS */
+.ma-modal-back{display:none;position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
 .ma-modal-back.show{display:flex}
-.ma-modal{background:linear-gradient(145deg,rgba(14,20,38,.98),rgba(8,12,24,1));border:1px solid rgba(74,122,255,.14);border-radius:24px;max-width:440px;width:100%;padding:30px 28px;box-shadow:0 40px 100px -30px rgba(2,28,164,.9)}
-.ma-modal.ma-modal-lg{max-width:580px;display:flex;flex-direction:column;max-height:90vh;padding:0;overflow:hidden}
-.ma-modal.ma-modal-xl{max-width:960px;width:100%;max-height:92vh;padding:0;display:flex;flex-direction:column;overflow:hidden}
-.ma-modal-title{display:flex;align-items:center;gap:12px;font-size:1.15rem;font-weight:900;margin-bottom:8px}
-.ma-modal-title i{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .3s;flex-shrink:0}
-.ma-modal-sub{color:#8a92b0;font-size:.85rem;font-weight:600;margin-bottom:22px;line-height:1.8}
+.ma-modal{background:linear-gradient(145deg,rgba(14,20,38,.98),rgba(8,12,24,1));border:1px solid rgba(74,122,255,.18);border-radius:20px;max-width:460px;width:100%;padding:28px;box-shadow:0 40px 100px -30px rgba(2,28,164,.9)}
+.ma-modal.ma-modal-lg{max-width:600px;display:flex;flex-direction:column;max-height:90vh;padding:0;overflow:hidden}
+.ma-modal.ma-modal-xl{max-width:980px;width:100%;max-height:92vh;padding:0;display:flex;flex-direction:column;overflow:hidden}
+.ma-modal-title{display:flex;align-items:center;gap:12px;font-size:1.05rem;font-weight:900;margin-bottom:8px}
+.ma-modal-title i{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.ma-modal-sub{color:#8a92b0;font-size:.85rem;font-weight:600;margin-bottom:20px;line-height:1.8}
 .ma-modal-field{margin-bottom:14px}
 .ma-modal-field label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
-.ma-modal-field input,.ma-modal-field textarea{width:100%;padding:14px 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.94rem;outline:none;transition:all .3s;resize:none}
-.ma-modal-field textarea{min-height:120px;line-height:1.7}
-.ma-modal-field input:focus,.ma-modal-field textarea:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.15)}
-.ma-modal-field input[type=number]{direction:ltr;text-align:right;font-size:1.1rem;font-weight:800}
+.ma-modal-field input,.ma-modal-field textarea{width:100%;padding:13px 16px;border-radius:12px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.92rem;outline:none;transition:all .3s;box-sizing:border-box}
+.ma-modal-field textarea{min-height:110px;line-height:1.7;resize:none}
+.ma-modal-field input:focus,.ma-modal-field textarea:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
+.ma-modal-field input[type=number]{direction:ltr;text-align:right;font-size:1.05rem;font-weight:800}
 .ma-quick{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.ma-quick button{padding:8px 16px;border-radius:20px;border:1.5px solid rgba(74,122,255,.14);background:rgba(74,122,255,.08);color:#6a9aff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;transition:all .3s}
+.ma-quick button{padding:7px 14px;border-radius:18px;border:1.5px solid rgba(74,122,255,.14);background:rgba(74,122,255,.08);color:#6a9aff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.78rem;cursor:pointer;transition:all .3s}
 .ma-quick button:hover{background:rgba(74,122,255,.2);border-color:#4a7aff}
-.ma-modal-actions{display:flex;gap:10px;margin-top:22px}
-.ma-modal-actions button{flex:1;height:50px;border-radius:14px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.92rem;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.ma-modal-actions{display:flex;gap:10px;margin-top:20px}
+.ma-modal-actions button{flex:1;height:48px;border-radius:12px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .ma-modal-actions .cancel{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:#e0e6f4}
 .ma-modal-actions .cancel:hover{background:rgba(255,255,255,.12)}
 .ma-modal-actions .confirm{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 12px 30px -10px rgba(245,179,66,.9)}
@@ -181,1451 +184,1319 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-modal-actions .confirm.deduct{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff}
 .ma-modal-actions .confirm.danger{background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff}
 .ma-modal-actions .confirm.purple{background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff}
-.ma-modal-actions .confirm:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.ma-warn-box{margin-top:16px;padding:14px 16px;border-radius:14px;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.28);color:#ff9a9a;font-size:.82rem;font-weight:700;line-height:1.8;display:flex;gap:10px;align-items:flex-start}
-.ma-warn-box i{color:#d90429;font-size:1.1rem;flex-shrink:0;margin-top:2px}
+.ma-modal-actions .confirm:disabled{opacity:.6;cursor:not-allowed}
+.ma-warn-box{margin-top:14px;padding:13px 15px;border-radius:12px;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.28);color:#ff9a9a;font-size:.8rem;font-weight:700;line-height:1.8;display:flex;gap:10px;align-items:flex-start}
+.ma-warn-box i{color:#d90429;font-size:1rem;flex-shrink:0;margin-top:2px}
 
 /* DETAIL MODAL */
-.ma-detail-head{padding:22px 28px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;justify-content:space-between;gap:16px;background:linear-gradient(180deg,rgba(74,122,255,.06),transparent);flex-shrink:0}
+.ma-detail-head{padding:20px 26px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(180deg,rgba(74,122,255,.06),transparent);flex-shrink:0}
 .ma-detail-head-left{display:flex;align-items:center;gap:14px;min-width:0}
-.ma-detail-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#fff;flex-shrink:0;box-shadow:0 12px 26px -10px rgba(74,122,255,.8)}
-.ma-detail-title{font-size:1.15rem;font-weight:900;letter-spacing:-.3px}
-.ma-detail-title span{color:#6a9aff;font-family:'Courier New',monospace;font-size:1.05rem}
-.ma-detail-sub{font-size:.78rem;color:#8a92b0;font-weight:700;margin-top:5px;display:flex;align-items:center;gap:6px}
+.ma-detail-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#fff;flex-shrink:0;box-shadow:0 12px 26px -10px rgba(74,122,255,.8)}
+.ma-detail-title{font-size:1.05rem;font-weight:900}
+.ma-detail-title span{color:#6a9aff;font-family:'Courier New',monospace;font-size:.98rem}
+.ma-detail-sub{font-size:.76rem;color:#8a92b0;font-weight:700;margin-top:5px;display:flex;align-items:center;gap:6px}
 .ma-detail-head-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.ma-btn-print{padding:11px 22px;border-radius:12px;border:none;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.86rem;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 10px 24px -10px rgba(76,175,80,.85);transition:all .3s}
+.ma-btn-print{padding:10px 20px;border-radius:10px;border:none;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;display:inline-flex;align-items:center;gap:7px;box-shadow:0 10px 24px -10px rgba(76,175,80,.85);transition:all .3s}
 .ma-btn-print:hover{transform:translateY(-2px)}
-.ma-detail-body{flex:1;overflow-y:auto;padding:24px 28px;background:rgba(0,0,0,.1)}
+.ma-detail-body{flex:1;overflow-y:auto;padding:22px 26px;background:rgba(0,0,0,.1)}
 .ma-detail-body::-webkit-scrollbar{width:6px}
 .ma-detail-body::-webkit-scrollbar-thumb{background:rgba(74,122,255,.25);border-radius:6px}
-.ma-detail-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.ma-detail-section{background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));border:1px solid rgba(74,122,255,.14);border-radius:16px;padding:18px 20px;margin-bottom:16px}
+.ma-detail-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.ma-detail-section{background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));border:1px solid rgba(74,122,255,.14);border-radius:14px;padding:16px 18px;margin-bottom:14px}
 .ma-detail-section:last-child{margin-bottom:0}
-.ma-detail-h3{font-size:.82rem;font-weight:900;color:#6a9aff;margin-bottom:14px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.8px}
-.ma-detail-row{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px dashed rgba(74,122,255,.12);gap:12px;font-size:.88rem}
+.ma-detail-h3{font-size:.78rem;font-weight:900;color:#6a9aff;margin-bottom:12px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.8px}
+.ma-detail-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px dashed rgba(74,122,255,.12);gap:12px;font-size:.86rem}
 .ma-detail-row:last-child{border-bottom:none}
-.ma-detail-row .lbl{color:#8a92b0;font-weight:700;font-size:.82rem;flex-shrink:0}
-.ma-detail-row .val{font-weight:800;color:#fff;text-align:left;word-break:break-word;font-size:.9rem}
-.ma-items-table{width:100%;border-collapse:collapse;font-size:.88rem}
-.ma-items-table thead th{padding:12px;text-align:right;font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;color:#8a92b0;font-weight:800;border-bottom:2px solid rgba(74,122,255,.2)}
-.ma-items-table tbody td{padding:13px 12px;border-bottom:1px solid rgba(74,122,255,.08);color:#e0e6f4;font-weight:600}
+.ma-detail-row .lbl{color:#8a92b0;font-weight:700;font-size:.8rem;flex-shrink:0}
+.ma-detail-row .val{font-weight:800;color:#fff;text-align:left;word-break:break-word;font-size:.88rem}
+.ma-items-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.ma-items-table thead th{padding:11px;text-align:right;font-size:.7rem;text-transform:uppercase;letter-spacing:.8px;color:#8a92b0;font-weight:800;border-bottom:2px solid rgba(74,122,255,.2)}
+.ma-items-table tbody td{padding:11px;border-bottom:1px solid rgba(74,122,255,.06);color:#e0e6f4;font-weight:600}
 .ma-items-table tbody tr:last-child td{border-bottom:none}
-.ma-items-table tbody td:first-child{color:#8a92b0;font-weight:800;text-align:center;width:44px}
-.ma-items-table .price-cell,.ma-items-table .total-cell{font-family:'Courier New',monospace;direction:ltr;text-align:left;font-weight:800;color:#6a9aff}
-.ma-items-table .total-cell{color:#fff;font-size:1rem}
-.ma-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.ma-summary-box{background:linear-gradient(145deg,rgba(74,122,255,.08),rgba(2,28,164,.05));border:1px solid rgba(74,122,255,.2);border-radius:16px;padding:18px 20px}
+.ma-items-table .mono{font-family:'Courier New',monospace;direction:ltr;text-align:left;font-weight:800;color:#6a9aff}
+.ma-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ma-summary-box{background:linear-gradient(145deg,rgba(74,122,255,.08),rgba(2,28,164,.05));border:1px solid rgba(74,122,255,.2);border-radius:14px;padding:16px 18px}
 .ma-summary-box.cashback{background:linear-gradient(145deg,rgba(245,179,66,.08),rgba(201,138,30,.05));border-color:rgba(245,179,66,.25)}
-.ma-summary-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;font-size:.9rem;border-bottom:1px dashed rgba(74,122,255,.12)}
+.ma-summary-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:.88rem;border-bottom:1px dashed rgba(74,122,255,.12)}
 .ma-summary-row:last-child{border-bottom:none}
 .ma-summary-row .lbl{color:#8a92b0;font-weight:700}
 .ma-summary-row .val{font-family:'Courier New',monospace;font-weight:800;color:#fff;direction:ltr}
-.ma-summary-row.total{padding-top:16px;margin-top:6px;border-top:2px solid rgba(74,122,255,.3);border-bottom:none}
-.ma-summary-row.total .lbl{color:#fff;font-size:1rem;font-weight:900}
-.ma-summary-row.total .val{color:#4a7aff;font-size:1.35rem;font-weight:900}
+.ma-summary-row.total{padding-top:14px;margin-top:4px;border-top:2px solid rgba(74,122,255,.3);border-bottom:none}
+.ma-summary-row.total .lbl{color:#fff;font-size:.95rem;font-weight:900}
+.ma-summary-row.total .val{color:#4a7aff;font-size:1.25rem;font-weight:900}
 .ma-summary-box.cashback .ma-summary-row.total .val{color:#f5b342}
-.ma-cb-status-pill{padding:6px 14px;border-radius:20px;font-size:.78rem;font-weight:800;display:inline-flex;align-items:center;gap:6px}
-.ma-cb-status-pill.paid{background:rgba(76,175,80,.15);border:1px solid rgba(76,175,80,.4);color:#66bb6a}
-.ma-cb-status-pill.unpaid{background:rgba(245,179,66,.15);border:1px solid rgba(245,179,66,.4);color:#f5b342}
-.ma-cb-status-pill.pending{background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.4);color:#6a9aff}
-.ma-cb-status-pill.none{background:rgba(217,4,41,.1);border:1px solid rgba(217,4,41,.3);color:#ff6b6b}
 
-/* CHAT MODAL */
-.ma-chat-header{padding:20px 24px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(74,122,255,.06),transparent)}
-.ma-chat-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;flex-shrink:0}
+/* CHAT */
+.ma-chat-header{padding:18px 22px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(74,122,255,.06),transparent)}
+.ma-chat-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.95rem;flex-shrink:0}
 .ma-chat-header-info{flex:1;min-width:0}
-.ma-chat-header-name{font-size:1rem;font-weight:900;line-height:1.2}
-.ma-chat-header-status{font-size:.74rem;color:#66bb6a;font-weight:700;display:flex;align-items:center;gap:5px;margin-top:3px}
-.ma-chat-close{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#e0e6f4;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.ma-chat-header-name{font-size:.95rem;font-weight:900;line-height:1.2}
+.ma-chat-header-status{font-size:.72rem;color:#66bb6a;font-weight:700;display:flex;align-items:center;gap:5px;margin-top:3px}
+.ma-chat-close{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#e0e6f4;cursor:pointer;font-size:.92rem;display:flex;align-items:center;justify-content:center;transition:all .3s}
 .ma-chat-close:hover{background:rgba(217,4,41,.2);border-color:rgba(217,4,41,.4);color:#ff6b6b}
-.ma-chat-body{flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:12px;background:rgba(0,0,0,.15);min-height:280px;max-height:420px}
+.ma-chat-body{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:10px;background:rgba(0,0,0,.15);min-height:280px;max-height:420px}
 .ma-chat-body::-webkit-scrollbar{width:6px}
 .ma-chat-body::-webkit-scrollbar-thumb{background:rgba(74,122,255,.25);border-radius:6px}
-.ma-msg{max-width:78%;padding:11px 15px;border-radius:16px;font-size:.88rem;line-height:1.7;word-wrap:break-word;position:relative;animation:msgIn .25s ease}
-@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.ma-msg-meta{font-size:.62rem;font-weight:800;opacity:.8;margin-bottom:4px;letter-spacing:.5px;text-transform:uppercase}
-.ma-msg-time{font-size:.62rem;font-weight:700;opacity:.75;margin-top:5px;text-align:left;direction:ltr}
+.ma-msg{max-width:78%;padding:10px 14px;border-radius:14px;font-size:.86rem;line-height:1.65;word-wrap:break-word}
+.ma-msg-meta{font-size:.6rem;font-weight:800;opacity:.8;margin-bottom:4px;letter-spacing:.5px;text-transform:uppercase}
+.ma-msg-time{font-size:.6rem;font-weight:700;opacity:.75;margin-top:4px;text-align:left;direction:ltr}
 .ma-msg.admin{align-self:flex-end;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;border-bottom-left-radius:4px}
 .ma-msg.customer{align-self:flex-start;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#e0e6f4;border-bottom-right-radius:4px}
 .ma-msg.note{align-self:center;background:linear-gradient(135deg,rgba(147,51,234,.25),rgba(107,33,168,.25));border:1px dashed rgba(147,51,234,.5);color:#e9d5ff;max-width:88%}
-.ma-msg.note .ma-msg-meta{color:#c084fc}
-.ma-chat-empty{text-align:center;padding:50px 20px;color:#8a92b0;font-weight:700;font-size:.88rem}
-.ma-chat-empty i{font-size:2.2rem;color:#4a7aff;opacity:.5;display:block;margin-bottom:12px}
-.ma-chat-footer{padding:16px 20px;border-top:1px solid rgba(74,122,255,.14);background:rgba(0,0,0,.2);display:flex;gap:10px;align-items:flex-end}
-.ma-chat-footer textarea{flex:1;padding:12px 16px;border-radius:14px;background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.2);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.9rem;outline:none;transition:all .3s;resize:none;min-height:46px;max-height:120px;line-height:1.5}
+.ma-chat-empty{text-align:center;padding:40px 20px;color:#8a92b0;font-weight:700;font-size:.85rem}
+.ma-chat-empty i{font-size:2rem;color:#4a7aff;opacity:.5;display:block;margin-bottom:10px}
+.ma-chat-footer{padding:14px 18px;border-top:1px solid rgba(74,122,255,.14);background:rgba(0,0,0,.2);display:flex;gap:8px;align-items:flex-end}
+.ma-chat-footer textarea{flex:1;padding:11px 14px;border-radius:12px;background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.2);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.88rem;outline:none;resize:none;min-height:44px;max-height:120px;line-height:1.5}
 .ma-chat-footer textarea:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
-.ma-chat-send{width:46px;height:46px;border-radius:14px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;cursor:pointer;font-size:1rem;transition:all .3s;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 22px -8px rgba(74,122,255,.9)}
+.ma-chat-send{width:44px;height:44px;border-radius:12px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;cursor:pointer;font-size:.95rem;transition:all .3s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ma-chat-send:hover:not(:disabled){transform:translateY(-2px)}
-.ma-chat-send:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
 /* TOAST */
-.ma-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:14px 26px;border-radius:60px;font-weight:800;font-size:.9rem;z-index:100001;transition:transform .4s cubic-bezier(.34,1.56,.64,1);display:inline-flex;align-items:center;gap:10px;box-shadow:0 15px 40px -10px rgba(0,0,0,.6);max-width:90vw;font-family:'Cairo',sans-serif}
+.ma-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:13px 24px;border-radius:60px;font-weight:800;font-size:.88rem;z-index:100001;transition:transform .4s cubic-bezier(.34,1.56,.64,1);display:inline-flex;align-items:center;gap:10px;box-shadow:0 15px 40px -10px rgba(0,0,0,.6);max-width:90vw;font-family:'Cairo',sans-serif}
 .ma-toast.show{transform:translateX(-50%) translateY(0)}
 .ma-toast.success{background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff}
 .ma-toast.error{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff}
 .ma-toast.info{background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff}
 
-/* RESPONSIVE */
-@media (max-width:900px){
-  .ma-stats,.ma-stats-sm{grid-template-columns:repeat(2,1fr)}
-  .ma-user-stats{grid-template-columns:repeat(2,1fr)}
-  .ma-us-item:nth-child(3){border-left:none}
-  .ma-user-info{display:none}
+@media (max-width:1100px){
+  .ma-nav-menu{overflow-x:auto;gap:0}
+  .ma-nav-link{padding:9px 10px;font-size:.78rem}
+  .ma-nav-user-info{display:none}
+  .ma-stats{grid-template-columns:repeat(2,1fr)}
   .ma-detail-cols,.ma-summary-grid{grid-template-columns:1fr}
 }
-@media (max-width:600px){
-  .ma-container{padding:0 14px}
-  .ma-header-inner{padding:0 14px}
-  .ma-order{padding:18px 16px}
-  .ma-bottom{flex-direction:column;align-items:stretch;gap:10px}
-  .ma-actions{flex-direction:column}
-  .ma-actions select{min-width:100%}
-  .ma-btn-action{width:100%;justify-content:center}
-  .ma-stat{padding:18px 16px}
-  .ma-stat-val{font-size:1.4rem}
-  .ma-modal{padding:22px 20px}
-  .ma-modal.ma-modal-lg,.ma-modal.ma-modal-xl{padding:0}
-  .ma-chat-body{max-height:340px}
-  .ma-detail-head{padding:16px 18px}
-  .ma-detail-body{padding:16px 18px}
-  .ma-detail-head-right{gap:6px}
-  .ma-btn-print{padding:9px 14px;font-size:.78rem}
+@media (max-width:700px){
+  .ma-nav-inner{padding:0 12px;height:60px}
+  .ma-nav-brand .name{font-size:.85rem}
+  .ma-nav-brand .sub{display:none}
+  .ma-nav-brand img{height:32px}
+  .ma-nav-link span{display:none}
+  .ma-nav-link i:first-child{font-size:1rem}
+  .ma-content{padding:18px 14px 60px}
+  .ma-stats{grid-template-columns:1fr}
+  .ma-page-title{font-size:1.2rem}
+  .ma-table{font-size:.78rem}
+  .ma-table thead th,.ma-table tbody td{padding:10px 8px}
 }
 </style>
 </head>
 <body>
+<div class="ma-bg"></div>
 
-<div class="ma-root" id="menAdminRoot">
-  <div class="ma-bg"></div>
-
-  <!-- LOGIN -->
-  <div class="ma-gate" id="maGate">
-    <div class="ma-gate-card">
-      <div class="ma-gate-icon"><i class="fas fa-shield-halved"></i></div>
-      <h1>لوحة إدارة الطلبات</h1>
-      <p>سجّل دخولك بحساب المشرف للوصول</p>
-      <div class="ma-field">
-        <label>البريد الإلكتروني</label>
-        <input type="email" id="maGateEmail" placeholder="admin@example.com" autocomplete="email">
-      </div>
-      <div class="ma-field">
-        <label>كلمة المرور</label>
-        <input type="password" id="maGatePass" placeholder="••••••••" autocomplete="current-password">
-      </div>
-      <button class="ma-gate-btn" id="maGateBtn">
-        <i class="fas fa-right-to-bracket"></i> دخول
-      </button>
-      <div class="ma-gate-err" id="maGateErr"></div>
-    </div>
+<!-- LOGIN -->
+<div class="ma-gate" id="maGate">
+  <div class="ma-gate-card">
+    <div class="ma-gate-icon"><i class="fas fa-shield-halved"></i></div>
+    <h1>لوحة الإدارة</h1>
+    <p>سجّل دخولك بحساب المشرف للوصول</p>
+    <div class="ma-field"><label>البريد الإلكتروني</label><input type="email" id="maGateEmail" placeholder="admin@example.com" autocomplete="email"></div>
+    <div class="ma-field"><label>كلمة المرور</label><input type="password" id="maGatePass" placeholder="••••••••" autocomplete="current-password"></div>
+    <button class="ma-gate-btn" id="maGateBtn"><i class="fas fa-right-to-bracket"></i> دخول</button>
+    <div class="ma-gate-err" id="maGateErr"></div>
   </div>
+</div>
 
-  <!-- DASHBOARD -->
-  <div class="ma-dash" id="maDash">
-    <div class="ma-header">
-      <div class="ma-header-inner">
-        <div class="ma-brand">
-          <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN Store">
-          <div class="ma-brand-text">
-            <div class="t">لوحة الطلبات</div>
-            <div class="s">MEN Store Admin</div>
-          </div>
-        </div>
-        <div class="ma-user">
-          <div class="ma-user-info">
-            <div class="n" id="maUserName">—</div>
-            <div class="e" id="maUserEmail">—</div>
-          </div>
-          <button class="ma-btn-ghost ma-btn-users" id="maViewUsers">
-            <i class="fas fa-users"></i> <span id="maViewUsersText">العملاء</span>
-          </button>
-          <button class="ma-btn-ghost" id="maLogout">
-            <i class="fas fa-sign-out-alt"></i> خروج
-          </button>
-        </div>
+<!-- APP -->
+<div class="ma-app" id="maApp">
+  <nav class="ma-nav">
+    <div class="ma-nav-inner">
+      <div class="ma-nav-brand">
+        <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN">
+        <div><div class="name">لوحة الإدارة</div><div class="sub">MEN Store Admin</div></div>
+      </div>
+      <div class="ma-nav-menu" id="maNavMenu"></div>
+      <div class="ma-nav-user">
+        <div class="ma-nav-user-info"><div class="n" id="maUserName">—</div><div class="e" id="maUserEmail">—</div></div>
+        <button class="ma-btn-ghost" id="maLogout"><i class="fas fa-sign-out-alt"></i> خروج</button>
       </div>
     </div>
+  </nav>
 
-    <div class="ma-container">
-      <div class="ma-stats">
-        <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)">
-          <div class="ma-stat-icon"><i class="fas fa-box"></i></div>
-          <div class="ma-stat-val" id="maStatTotal">0</div>
-          <div class="ma-stat-lbl">إجمالي الطلبات</div>
-        </div>
-        <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)">
-          <div class="ma-stat-icon"><i class="fas fa-hourglass-half"></i></div>
-          <div class="ma-stat-val" id="maStatPending">0</div>
-          <div class="ma-stat-lbl">قيد المعالجة</div>
-        </div>
-        <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)">
-          <div class="ma-stat-icon"><i class="fas fa-circle-check"></i></div>
-          <div class="ma-stat-val" id="maStatDelivered">0</div>
-          <div class="ma-stat-lbl">تم الاستلام</div>
-        </div>
-        <div class="ma-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.15)">
-          <div class="ma-stat-icon"><i class="fas fa-coins"></i></div>
-          <div class="ma-stat-val" id="maStatRevenue">0</div>
-          <div class="ma-stat-lbl">إجمالي المبيعات (ر.س)</div>
-        </div>
-      </div>
-
-      <div class="ma-stats-sm">
-        <div class="ma-stat-sm" style="--accent:#9333ea;--icon-bg:rgba(147,51,234,.15)">
-          <div class="ma-stat-sm-icon"><i class="fas fa-users"></i></div>
-          <div>
-            <div class="ma-stat-sm-val" id="maStatCustomers">0</div>
-            <div class="ma-stat-sm-lbl">إجمالي العملاء</div>
-          </div>
-        </div>
-        <div class="ma-stat-sm" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)">
-          <div class="ma-stat-sm-icon"><i class="fas fa-chart-line"></i></div>
-          <div>
-            <div class="ma-stat-sm-val" id="maStatAvg">0</div>
-            <div class="ma-stat-sm-lbl">متوسط قيمة الطلب</div>
-          </div>
-        </div>
-        <div class="ma-stat-sm" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)">
-          <div class="ma-stat-sm-icon"><i class="fas fa-gift"></i></div>
-          <div>
-            <div class="ma-stat-sm-val" id="maStatCashback">0</div>
-            <div class="ma-stat-sm-lbl">كاش باك ممنوح (ر.س)</div>
-          </div>
-        </div>
-        <div class="ma-stat-sm" style="--accent:#d90429;--icon-bg:rgba(217,4,41,.15)">
-          <div class="ma-stat-sm-icon"><i class="fas fa-circle-xmark"></i></div>
-          <div>
-            <div class="ma-stat-sm-val" id="maStatCancelled">0</div>
-            <div class="ma-stat-sm-lbl">طلبات ملغاة</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="ma-filters">
-        <div class="ma-search">
-          <input type="text" id="maSearch" placeholder="ابحث بالاسم، البريد، الجوال، رقم الطلب...">
-          <i class="fas fa-search"></i>
-        </div>
-        <select id="maStatusFilter">
-          <option value="">كل الحالات</option>
-          <option value="pending">⏳ قيد الانتظار</option>
-          <option value="preparing">⚙️ جاري التجهيز</option>
-          <option value="review">🔍 تحت المراجعة</option>
-          <option value="delivered">✅ تم الاستلام</option>
-          <option value="cancelled">❌ ملغي</option>
-        </select>
-        <button class="ma-refresh" id="maRefresh"><i class="fas fa-rotate"></i> تحديث</button>
-      </div>
-
-      <div id="maOrders">
-        <div class="ma-loader"><div class="ma-spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل الطلبات...</p></div>
-      </div>
-
-      <div id="maUsers" style="display:none">
-        <div class="ma-loader"><div class="ma-spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل العملاء...</p></div>
-      </div>
-    </div>
+  <div class="ma-content">
+    <div class="ma-view" id="view-reports"></div>
+    <div class="ma-view" id="view-reports-sales"></div>
+    <div class="ma-view" id="view-reports-customers"></div>
+    <div class="ma-view" id="view-reports-cashback"></div>
+    <div class="ma-view" id="view-orders"></div>
+    <div class="ma-view" id="view-customers"></div>
+    <div class="ma-view" id="view-finance"></div>
+    <div class="ma-view" id="view-rewards"></div>
+    <div class="ma-view" id="view-rewards-rate"></div>
+    <div class="ma-view" id="view-rewards-log"></div>
+    <div class="ma-view" id="view-audit"></div>
+    <div class="ma-view" id="view-data"></div>
   </div>
+</div>
 
-  <!-- DETAIL MODAL -->
-  <div class="ma-modal-back" id="maDetailModal">
-    <div class="ma-modal ma-modal-xl">
-      <div class="ma-detail-head">
-        <div class="ma-detail-head-left">
-          <div class="ma-detail-icon"><i class="fas fa-receipt"></i></div>
-          <div>
-            <div class="ma-detail-title">تفاصيل الطلب <span id="maDetailOrderId">#—</span></div>
-            <div class="ma-detail-sub" id="maDetailDate">—</div>
-          </div>
-        </div>
-        <div class="ma-detail-head-right">
-          <button class="ma-btn-print" id="maDetailPrint">
-            <i class="fas fa-print"></i> طباعة
-          </button>
-          <button class="ma-chat-close" id="maDetailClose">
-            <i class="fas fa-xmark"></i>
-          </button>
-        </div>
+<!-- Detail Modal -->
+<div class="ma-modal-back" id="maDetailModal">
+  <div class="ma-modal ma-modal-xl">
+    <div class="ma-detail-head">
+      <div class="ma-detail-head-left">
+        <div class="ma-detail-icon"><i class="fas fa-receipt"></i></div>
+        <div><div class="ma-detail-title">تفاصيل الطلب <span id="maDetailOrderId">#—</span></div><div class="ma-detail-sub" id="maDetailDate">—</div></div>
       </div>
-      <div class="ma-detail-body" id="maDetailBody"></div>
+      <div class="ma-detail-head-right">
+        <button class="ma-btn-print" id="maDetailPrint"><i class="fas fa-print"></i> طباعة</button>
+        <button class="ma-chat-close" id="maDetailClose"><i class="fas fa-xmark"></i></button>
+      </div>
     </div>
+    <div class="ma-detail-body" id="maDetailBody"></div>
   </div>
+</div>
 
-  <!-- CASHBACK MODAL -->
-  <div class="ma-modal-back" id="maCbModal">
-    <div class="ma-modal">
-      <div class="ma-modal-title">
-        <i class="fas fa-gift" id="maCbIcon"></i>
-        <span id="maCbTitle">إضافة كاش باك</span>
-      </div>
-      <div class="ma-modal-sub" id="maCbSub">—</div>
-      <div class="ma-modal-field">
-        <label>المبلغ (ر.س)</label>
-        <input type="number" id="maCbAmount" placeholder="0.00" step="0.01" min="0.01">
-        <div class="ma-quick">
-          <button type="button" data-amt="5">5 ر.س</button>
-          <button type="button" data-amt="10">10 ر.س</button>
-          <button type="button" data-amt="20">20 ر.س</button>
-          <button type="button" data-amt="50">50 ر.س</button>
-          <button type="button" data-amt="100">100 ر.س</button>
-        </div>
-      </div>
-      <div class="ma-modal-field">
-        <label>السبب / ملاحظة (اختياري)</label>
-        <input type="text" id="maCbReason" placeholder="مثال: تعويض، هدية، تصحيح رصيد...">
-      </div>
-      <div class="ma-modal-actions">
-        <button class="cancel" id="maCbCancel" type="button">إلغاء</button>
-        <button class="confirm" id="maCbConfirm" type="button"><i class="fas fa-check"></i> إضافة الكاش باك</button>
-      </div>
+<!-- Cashback Modal -->
+<div class="ma-modal-back" id="maCbModal">
+  <div class="ma-modal">
+    <div class="ma-modal-title"><i class="fas fa-gift" id="maCbIcon"></i><span id="maCbTitle">إضافة كاش باك</span></div>
+    <div class="ma-modal-sub" id="maCbSub">—</div>
+    <div class="ma-modal-field"><label>المبلغ (ر.س)</label><input type="number" id="maCbAmount" placeholder="0.00" step="0.01" min="0.01">
+      <div class="ma-quick"><button data-amt="5">5</button><button data-amt="10">10</button><button data-amt="20">20</button><button data-amt="50">50</button><button data-amt="100">100</button></div>
     </div>
+    <div class="ma-modal-field"><label>السبب</label><input type="text" id="maCbReason" placeholder="اختياري..."></div>
+    <div class="ma-modal-actions"><button class="cancel" id="maCbCancel">إلغاء</button><button class="confirm" id="maCbConfirm"><i class="fas fa-check"></i> تأكيد</button></div>
   </div>
+</div>
 
-  <!-- DELETE MODAL -->
-  <div class="ma-modal-back" id="maDelModal">
-    <div class="ma-modal">
-      <div class="ma-modal-title">
-        <i class="fas fa-trash" style="background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff"></i>
-        حذف الطلب نهائياً
-      </div>
-      <div class="ma-modal-sub" id="maDelSub">—</div>
-      <div class="ma-warn-box">
-        <i class="fas fa-triangle-exclamation"></i>
-        <div>
-          <strong>تحذير:</strong> سيتم حذف الطلب نهائياً من قاعدة البيانات.
-          إذا كان الطلب مُستلَم سيُخصم الكاش باك تلقائياً.
-        </div>
-      </div>
-      <div class="ma-modal-actions">
-        <button class="cancel" id="maDelCancel" type="button">إلغاء</button>
-        <button class="confirm danger" id="maDelConfirm" type="button"><i class="fas fa-trash"></i> حذف نهائي</button>
-      </div>
-    </div>
+<!-- Delete Modal -->
+<div class="ma-modal-back" id="maDelModal">
+  <div class="ma-modal">
+    <div class="ma-modal-title"><i class="fas fa-trash" style="background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff"></i>حذف الطلب</div>
+    <div class="ma-modal-sub" id="maDelSub">—</div>
+    <div class="ma-warn-box"><i class="fas fa-triangle-exclamation"></i><div>سيتم الحذف نهائياً مع استرجاع الكاش باك.</div></div>
+    <div class="ma-modal-actions"><button class="cancel" id="maDelCancel">إلغاء</button><button class="confirm danger" id="maDelConfirm"><i class="fas fa-trash"></i> حذف</button></div>
   </div>
+</div>
 
-  <!-- NOTE MODAL -->
-  <div class="ma-modal-back" id="maNoteModal">
-    <div class="ma-modal">
-      <div class="ma-modal-title">
-        <i class="fas fa-comment-dots" style="background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff"></i>
-        إرسال ملاحظة للعميل
-      </div>
-      <div class="ma-modal-sub" id="maNoteSub">—</div>
-      <div class="ma-modal-field">
-        <label>نص الملاحظة</label>
-        <textarea id="maNoteText" placeholder="اكتب ملاحظتك هنا..."></textarea>
-      </div>
-      <div class="ma-modal-actions">
-        <button class="cancel" id="maNoteCancel" type="button">إلغاء</button>
-        <button class="confirm purple" id="maNoteConfirm" type="button"><i class="fas fa-paper-plane"></i> إرسال</button>
-      </div>
-    </div>
+<!-- Note Modal -->
+<div class="ma-modal-back" id="maNoteModal">
+  <div class="ma-modal">
+    <div class="ma-modal-title"><i class="fas fa-comment-dots" style="background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff"></i>ملاحظة للعميل</div>
+    <div class="ma-modal-sub" id="maNoteSub">—</div>
+    <div class="ma-modal-field"><label>النص</label><textarea id="maNoteText"></textarea></div>
+    <div class="ma-modal-actions"><button class="cancel" id="maNoteCancel">إلغاء</button><button class="confirm purple" id="maNoteConfirm"><i class="fas fa-paper-plane"></i> إرسال</button></div>
   </div>
+</div>
 
-  <!-- CHAT MODAL -->
-  <div class="ma-modal-back" id="maChatModal">
-    <div class="ma-modal ma-modal-lg">
-      <div class="ma-chat-header">
-        <div class="ma-chat-avatar" id="maChatAvatar">?</div>
-        <div class="ma-chat-header-info">
-          <div class="ma-chat-header-name" id="maChatName">—</div>
-          <div class="ma-chat-header-status"><i class="fas fa-circle" style="font-size:.5rem"></i> <span id="maChatEmail">—</span></div>
-        </div>
-        <button class="ma-chat-close" id="maChatClose" type="button"><i class="fas fa-xmark"></i></button>
-      </div>
-      <div class="ma-chat-body" id="maChatBody">
-        <div class="ma-chat-empty"><i class="fas fa-comments"></i> جاري تحميل المحادثة...</div>
-      </div>
-      <div class="ma-chat-footer">
-        <textarea id="maChatInput" placeholder="اكتب رسالتك..." rows="1"></textarea>
-        <button class="ma-chat-send" id="maChatSend" type="button"><i class="fas fa-paper-plane"></i></button>
-      </div>
+<!-- Chat Modal -->
+<div class="ma-modal-back" id="maChatModal">
+  <div class="ma-modal ma-modal-lg">
+    <div class="ma-chat-header">
+      <div class="ma-chat-avatar" id="maChatAvatar">?</div>
+      <div class="ma-chat-header-info"><div class="ma-chat-header-name" id="maChatName">—</div><div class="ma-chat-header-status"><i class="fas fa-circle" style="font-size:.5rem"></i> <span id="maChatEmail">—</span></div></div>
+      <button class="ma-chat-close" id="maChatClose"><i class="fas fa-xmark"></i></button>
     </div>
+    <div class="ma-chat-body" id="maChatBody"></div>
+    <div class="ma-chat-footer"><textarea id="maChatInput" placeholder="اكتب..." rows="1"></textarea><button class="ma-chat-send" id="maChatSend"><i class="fas fa-paper-plane"></i></button></div>
   </div>
 </div>
 
 <script>
-(function () {
-  'use strict';
+(function(){
+'use strict';
 
-  const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
-  const ADMIN_EMAILS = ['mkmkmkl24666606@gmail.com'];
-  const CASHBACK_RATE = 0.02;
+// ═══ Settings ═══
+const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
+const ADMIN_EMAILS = ['mkmkmkl24666606@gmail.com'];
+const LOGO_URL = 'https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png';
 
-  const ORDER_STATUS = {
-    pending:   { label: 'قيد الانتظار', color: '#f5b342', bg: 'linear-gradient(135deg,#f5b342,#c98a1e)', icon: 'fa-hourglass-half', text: '#000' },
-    preparing: { label: 'جاري التجهيز', color: '#4a7aff', bg: 'linear-gradient(135deg,#4a7aff,#021ca4)', icon: 'fa-gears', text: '#fff' },
-    review:    { label: 'تحت المراجعة', color: '#6a9aff', bg: 'linear-gradient(135deg,#6a9aff,#4a7aff)', icon: 'fa-magnifying-glass', text: '#fff' },
-    delivered: { label: 'تم الاستلام', color: '#4caf50', bg: 'linear-gradient(135deg,#4caf50,#2e7d32)', icon: 'fa-circle-check', text: '#fff' },
-    cancelled: { label: 'ملغي', color: '#d90429', bg: 'linear-gradient(135deg,#d90429,#8b0018)', icon: 'fa-circle-xmark', text: '#fff' }
-  };
+const ORDER_STATUS = {
+  pending:   { label:'قيد الانتظار', color:'#f5b342', bg:'linear-gradient(135deg,#f5b342,#c98a1e)', icon:'fa-hourglass-half', text:'#000' },
+  preparing: { label:'جاري التجهيز', color:'#4a7aff', bg:'linear-gradient(135deg,#4a7aff,#021ca4)', icon:'fa-gears', text:'#fff' },
+  review:    { label:'تحت المراجعة', color:'#6a9aff', bg:'linear-gradient(135deg,#6a9aff,#4a7aff)', icon:'fa-magnifying-glass', text:'#fff' },
+  delivered: { label:'تم الاستلام',  color:'#4caf50', bg:'linear-gradient(135deg,#4caf50,#2e7d32)', icon:'fa-circle-check', text:'#fff' },
+  cancelled: { label:'ملغي',         color:'#d90429', bg:'linear-gradient(135deg,#d90429,#8b0018)', icon:'fa-circle-xmark', text:'#fff' }
+};
 
-  let sb = null;
-  let currentUser = null;
-  let allOrders = [];
-  let allUsers = [];
-  let usersView = false;
-  let selectedOrderForCashback = null;
-  let selectedOrderForDelete = null;
-  let selectedUserForNote = null;
-  let selectedUserForChat = null;
-  let currentDetailOrder = null;
-  let cbMode = 'add';
+const NAV = [
+  { id:'reports', label:'التقارير', icon:'fa-chart-line', sub:[
+    { id:'reports', label:'نظرة عامة', icon:'fa-gauge-high' },
+    { id:'reports-sales', label:'المبيعات', icon:'fa-chart-bar' },
+    { id:'reports-customers', label:'العملاء', icon:'fa-user-chart' },
+    { id:'reports-cashback', label:'الكاش باك', icon:'fa-gift' }
+  ]},
+  { id:'orders', label:'سجل الطلبات', icon:'fa-box' },
+  { id:'customers', label:'سجل العملاء', icon:'fa-users' },
+  { id:'finance', label:'المالية', icon:'fa-coins' },
+  { id:'rewards', label:'الجوائز', icon:'fa-trophy', sub:[
+    { id:'rewards', label:'إدارة الكاش باك', icon:'fa-gift' },
+    { id:'rewards-rate', label:'نسبة الكاش باك', icon:'fa-percent' },
+    { id:'rewards-log', label:'سجل الكاش باك', icon:'fa-list' }
+  ]},
+  { id:'audit', label:'سجل التدقيق', icon:'fa-history' },
+  { id:'data', label:'البيانات', icon:'fa-database' }
+];
 
-  const $ = id => document.getElementById(id);
+let sb=null, currentUser=null;
+let allOrders=[], allUsers=[], allCashbackLog=[], allAuditLog=[];
+let currentView='reports';
+let currentDetailOrder=null, selectedOrderForCashback=null, selectedOrderForDelete=null;
+let selectedUserForNote=null, selectedUserForChat=null, cbMode='add';
+let lastRefresh=null;
+const settings = { cashback_rate: 0.02, store_name:'MEN Store', currency:'ر.س' };
 
-  function isAdminEmail(email) {
-    if (!ADMIN_EMAILS || ADMIN_EMAILS.length === 0) return true;
-    return ADMIN_EMAILS.includes((email || '').toLowerCase());
-  }
-  function escapeHtml(s) {
-    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-  }
-  function fmtDate(d) {
-    if (!d) return '—';
-    try { return new Date(d).toLocaleString('ar-SA', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }); } catch { return '—'; }
-  }
-  function fmtDateShort(d) {
-    if (!d) return '—';
-    try { return new Date(d).toLocaleDateString('ar-SA', { year:'numeric', month:'short', day:'numeric' }); } catch { return '—'; }
-  }
-  function fmtTimeAgo(d) {
-    if (!d) return '—';
-    const diff = Date.now() - new Date(d).getTime();
-    const sec = Math.floor(diff / 1000);
-    if (sec < 60) return 'الآن';
-    const min = Math.floor(sec / 60);
-    if (min < 60) return `قبل ${min} د`;
-    const hr = Math.floor(min / 60);
-    if (hr < 24) return `قبل ${hr} س`;
-    const day = Math.floor(hr / 24);
-    if (day < 30) return `قبل ${day} يوم`;
-    return fmtDate(d);
-  }
+const $ = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+const fmtDate = d => { if(!d) return '—'; try { return new Date(d).toLocaleString('ar-SA',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}); } catch { return '—'; } };
+const fmtDateShort = d => { if(!d) return '—'; try { return new Date(d).toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'}); } catch { return '—'; } };
+const fmtNum = n => Number(n||0).toFixed(2);
+const fmtInt = n => Number(n||0).toFixed(0);
 
-  function init() {
-    if (!window.supabase?.createClient) { alert('فشل تحميل Supabase SDK'); return; }
-    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: { persistSession: true, autoRefreshToken: true, storageKey: 'men-auth-token' }
-    });
-    bindEvents();
-    checkAuth();
-  }
+// ═══ Init ═══
+function init(){
+  if(!window.supabase?.createClient){ alert('فشل تحميل Supabase — تحقق من الإنترنت'); return; }
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { persistSession:true, autoRefreshToken:true, storageKey:'men-auth-token' }
+  });
+  buildNav();
+  bindEvents();
+  checkAuth();
+}
 
-  function bindEvents() {
-    $('maGateBtn').addEventListener('click', doLogin);
-    $('maGatePass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-    $('maGateEmail').addEventListener('keydown', e => { if (e.key === 'Enter') $('maGatePass').focus(); });
-    $('maLogout').addEventListener('click', async () => {
-      await sb.auth.signOut();
-      currentUser = null;
-      showGate();
-      toast('تم تسجيل الخروج', 'info');
-    });
-    $('maViewUsers').addEventListener('click', () => {
-      usersView = !usersView;
-      if (usersView) {
-        $('maOrders').style.display = 'none';
-        $('maUsers').style.display = 'block';
-        $('maViewUsersText').textContent = 'الطلبات';
-        $('maViewUsers').querySelector('i').className = 'fas fa-box';
-        $('maSearch').placeholder = 'ابحث بالاسم، البريد، الجوال...';
-        $('maStatusFilter').style.display = 'none';
-        if (!allUsers.length) loadUsers(); else renderUsers();
-      } else {
-        $('maOrders').style.display = 'block';
-        $('maUsers').style.display = 'none';
-        $('maViewUsersText').textContent = 'العملاء';
-        $('maViewUsers').querySelector('i').className = 'fas fa-users';
-        $('maSearch').placeholder = 'ابحث بالاسم، البريد، الجوال، رقم الطلب...';
-        $('maStatusFilter').style.display = '';
-      }
-    });
-    $('maSearch').addEventListener('input', () => { if (usersView) renderUsers(); else renderOrders(); });
-    $('maStatusFilter').addEventListener('change', renderOrders);
-    $('maRefresh').addEventListener('click', () => {
-      if (usersView) loadUsers(); else loadOrders();
-      toast('تم التحديث', 'info');
-    });
-    $('maCbCancel').addEventListener('click', closeCbModal);
-    $('maCbModal').addEventListener('click', e => { if (e.target.id === 'maCbModal') closeCbModal(); });
-    $('maCbConfirm').addEventListener('click', confirmCashback);
-    document.querySelectorAll('[data-amt]').forEach(b => {
-      b.addEventListener('click', () => { $('maCbAmount').value = b.dataset.amt; });
-    });
-    $('maDelCancel').addEventListener('click', closeDelModal);
-    $('maDelModal').addEventListener('click', e => { if (e.target.id === 'maDelModal') closeDelModal(); });
-    $('maDelConfirm').addEventListener('click', confirmDelete);
-    $('maNoteCancel').addEventListener('click', closeNoteModal);
-    $('maNoteModal').addEventListener('click', e => { if (e.target.id === 'maNoteModal') closeNoteModal(); });
-    $('maNoteConfirm').addEventListener('click', confirmNote);
-    $('maChatClose').addEventListener('click', closeChatModal);
-    $('maChatModal').addEventListener('click', e => { if (e.target.id === 'maChatModal') closeChatModal(); });
-    $('maChatSend').addEventListener('click', sendChatMessage);
-    $('maChatInput').addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
-    });
-    $('maDetailClose').addEventListener('click', closeDetailModal);
-    $('maDetailModal').addEventListener('click', e => { if (e.target.id === 'maDetailModal') closeDetailModal(); });
-    $('maDetailPrint').addEventListener('click', printCurrentOrder);
-  }
-
-  async function checkAuth() {
-    const { data: { session } } = await sb.auth.getSession();
-    if (session?.user && isAdminEmail(session.user.email)) {
-      currentUser = session.user;
-      showDashboard();
-    } else {
-      showGate();
+function buildNav(){
+  const menu = $('maNavMenu');
+  menu.innerHTML = NAV.map(item => {
+    const hasSub = item.sub && item.sub.length;
+    if(!hasSub){
+      return `<div class="ma-nav-item"><button class="ma-nav-link" data-view="${item.id}"><i class="fas ${item.icon}"></i><span>${item.label}</span></button></div>`;
     }
+    const subs = item.sub.map(s => `<a data-view="${s.id}"><i class="fas ${s.icon}"></i>${s.label}</a>`).join('');
+    return `<div class="ma-nav-item has-dropdown"><button class="ma-nav-link"><i class="fas ${item.icon}"></i><span>${item.label}</span><i class="fas fa-chevron-down caret"></i></button><div class="ma-nav-dropdown">${subs}</div></div>`;
+  }).join('');
+
+  menu.querySelectorAll('.ma-nav-item.has-dropdown > .ma-nav-link').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.ma-nav-item.open').forEach(i => i.classList.remove('open'));
+      if(!wasOpen) item.classList.add('open');
+    });
+  });
+  menu.querySelectorAll('[data-view]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      switchView(el.dataset.view);
+      document.querySelectorAll('.ma-nav-item.open').forEach(i => i.classList.remove('open'));
+    });
+  });
+  document.addEventListener('click', () => document.querySelectorAll('.ma-nav-item.open').forEach(i => i.classList.remove('open')));
+}
+
+// ═══ Settings ═══
+async function loadSettings(){
+  try {
+    const ls = localStorage.getItem('men_admin_settings');
+    if(ls) Object.assign(settings, JSON.parse(ls));
+  } catch {}
+  try {
+    const { data } = await sb.from('men_settings').select('*');
+    if(data) data.forEach(r => {
+      if(r.key === 'cashback_rate') settings.cashback_rate = Number(r.value);
+      if(r.key === 'store_name') settings.store_name = r.value;
+    });
+  } catch(e){}
+}
+async function saveSetting(key, value){
+  settings[key] = value;
+  try { localStorage.setItem('men_admin_settings', JSON.stringify(settings)); } catch {}
+  try { await sb.from('men_settings').upsert({ key, value: String(value) }); } catch(e){ console.warn(e); }
+}
+
+// ═══ Audit ═══
+async function logAudit(action, details={}){
+  try {
+    await sb.from('men_audit_log').insert({
+      admin_email: currentUser?.email || 'unknown',
+      admin_name: currentUser?.user_metadata?.name || currentUser?.email?.split('@')[0] || 'مشرف',
+      action, details: JSON.stringify(details), created_at: new Date().toISOString()
+    });
+  } catch(e){ console.warn('audit:', e); }
+}
+
+// ═══ Auth ═══
+async function checkAuth(){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(session?.user && ADMIN_EMAILS.includes((session.user.email||'').toLowerCase())){
+    currentUser = session.user;
+    await loadSettings();
+    await loadAllData();
+    showApp();
   }
-  function showGate() {
-    $('maGate').style.display = 'flex';
-    $('maDash').classList.remove('active');
+}
+async function doLogin(){
+  const email = $('maGateEmail').value.trim().toLowerCase();
+  const pass = $('maGatePass').value;
+  const err = $('maGateErr');
+  err.classList.remove('show');
+  if(!email || !pass){ err.textContent='أدخل البريد وكلمة المرور'; err.classList.add('show'); return; }
+  if(!ADMIN_EMAILS.includes(email)){ err.textContent='ليس حساب مشرف'; err.classList.add('show'); return; }
+  const btn = $('maGateBtn');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>...';
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+    if(error) throw error;
+    currentUser = data.user;
+    await loadSettings();
+    await loadAllData();
+    toast('مرحباً بك 👋', 'success');
+    showApp();
+  } catch(e){
+    err.textContent = e.message; err.classList.add('show');
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-right-to-bracket"></i> دخول';
   }
-  function showDashboard() {
-    $('maGate').style.display = 'none';
-    $('maDash').classList.add('active');
-    $('maUserName').textContent = currentUser.user_metadata?.name || currentUser.email.split('@')[0];
-    $('maUserEmail').textContent = currentUser.email;
-    loadOrders();
-    loadUsers(true);
-  }
-  async function doLogin() {
-    const email = $('maGateEmail').value.trim().toLowerCase();
-    const pass = $('maGatePass').value;
-    const err = $('maGateErr');
-    err.classList.remove('show');
-    if (!email || !pass) { err.textContent = 'الرجاء إدخال البريد وكلمة المرور'; err.classList.add('show'); return; }
-    if (!isAdminEmail(email)) { err.textContent = 'هذا الحساب ليس مشرفاً'; err.classList.add('show'); return; }
-    const btn = $('maGateBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الدخول...';
+}
+function showApp(){
+  $('maGate').style.display = 'none';
+  $('maApp').classList.add('active');
+  $('maUserName').textContent = currentUser.user_metadata?.name || currentUser.email.split('@')[0];
+  $('maUserEmail').textContent = currentUser.email;
+  switchView('reports');
+}
+
+// ═══ Data ═══
+async function loadAllData(){
+  try {
+    const [o,u,cl] = await Promise.all([
+      sb.from('men_orders').select('*').order('created_at',{ascending:false}).limit(2000),
+      sb.from('men_users').select('*').order('created_at',{ascending:false}).limit(2000),
+      sb.from('men_cashback_log').select('*').order('created_at',{ascending:false}).limit(2000).then(r=>r).catch(()=>({data:[]}))
+    ]);
+    allOrders = o.data || [];
+    allUsers = u.data || [];
+    allCashbackLog = cl.data || [];
     try {
-      const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
-      if (error) throw error;
-      currentUser = data.user;
-      toast('مرحباً بك 👋', 'success');
-      showDashboard();
-    } catch (e) {
-      err.textContent = e.message || 'فشل تسجيل الدخول';
-      err.classList.add('show');
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-right-to-bracket"></i> دخول';
-    }
+      const a = await sb.from('men_audit_log').select('*').order('created_at',{ascending:false}).limit(1000);
+      allAuditLog = a.data || [];
+    } catch { allAuditLog = []; }
+    lastRefresh = new Date();
+  } catch(e){ console.error(e); }
+}
+
+// ═══ Views ═══
+function switchView(viewId){
+  currentView = viewId;
+  document.querySelectorAll('.ma-view').forEach(v => v.classList.remove('active'));
+  const view = $('view-' + viewId);
+  if(view) view.classList.add('active');
+  document.querySelectorAll('.ma-nav-link, .ma-nav-dropdown a').forEach(el => el.classList.remove('active'));
+  const activeNav = document.querySelector(`[data-view="${viewId}"]`);
+  if(activeNav) activeNav.classList.add('active');
+  renderView(viewId);
+}
+
+function renderView(viewId){
+  const el = $('view-' + viewId);
+  if(!el) return;
+  switch(viewId){
+    case 'reports': return renderReportsOverview(el);
+    case 'reports-sales': return renderReportsSales(el);
+    case 'reports-customers': return renderReportsCustomers(el);
+    case 'reports-cashback': return renderReportsCashback(el);
+    case 'orders': return renderOrdersView(el);
+    case 'customers': return renderCustomersView(el);
+    case 'finance': return renderFinanceView(el);
+    case 'rewards': return renderRewardsView(el);
+    case 'rewards-rate': return renderRateView(el);
+    case 'rewards-log': return renderRewardsLogView(el);
+    case 'audit': return renderAuditView(el);
+    case 'data': return renderDataView(el);
   }
+}
 
-  async function loadOrders() {
-    const container = $('maOrders');
-    container.innerHTML = '<div class="ma-loader"><div class="ma-spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل الطلبات...</p></div>';
-    try {
-      const { data, error } = await sb.from('men_orders').select('*').order('created_at', { ascending: false }).limit(500);
-      if (error) throw error;
-      allOrders = data || [];
-      renderStats();
-      renderOrders();
-    } catch (err) {
-      console.error(err);
-      container.innerHTML = `<div class="ma-empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i><h3>فشل تحميل الطلبات</h3><p>${escapeHtml(err.message)}</p></div>`;
-    }
+// ═══ REPORTS OVERVIEW ═══
+function renderReportsOverview(el){
+  const total = allOrders.length;
+  const delivered = allOrders.filter(o => o.status === 'delivered').length;
+  const pending = allOrders.filter(o => !['delivered','cancelled'].includes(o.status)).length;
+  const cancelled = allOrders.filter(o => o.status === 'cancelled').length;
+  const revenue = allOrders.filter(o => o.status === 'delivered').reduce((s,o) => s + Number(o.total||0), 0);
+  const avgOrder = delivered > 0 ? revenue / delivered : 0;
+  const totalUsers = allUsers.length;
+  const totalCb = allUsers.reduce((s,u) => s + Number(u.cashback||0), 0);
+  const potentialCb = allOrders.filter(o => !['delivered','cancelled'].includes(o.status)).reduce((s,o) => s + Number(o.total||0) * settings.cashback_rate, 0);
+  const deliveryRate = total > 0 ? (delivered / total * 100) : 0;
+
+  el.innerHTML = `
+    <div class="ma-page-head">
+      <div><div class="ma-page-title"><i class="fas fa-gauge-high"></i> نظرة عامة</div><div class="ma-page-sub">ملخص أداء المتجر • ${lastRefresh ? fmtDate(lastRefresh) : '—'}</div></div>
+      <button class="ma-btn ma-btn-primary" onclick="window.__refresh()"><i class="fas fa-rotate"></i> تحديث</button>
+    </div>
+    <div class="ma-stats">
+      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-box"></i></div><div class="ma-stat-val">${total}</div><div class="ma-stat-lbl">إجمالي الطلبات</div></div>
+      <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-circle-check"></i></div><div class="ma-stat-val">${delivered}</div><div class="ma-stat-lbl">تم الاستلام • ${deliveryRate.toFixed(0)}%</div></div>
+      <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-hourglass-half"></i></div><div class="ma-stat-val">${pending}</div><div class="ma-stat-lbl">قيد المعالجة</div></div>
+      <div class="ma-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.15)"><div class="ma-stat-icon"><i class="fas fa-coins"></i></div><div class="ma-stat-val">${fmtInt(revenue)}</div><div class="ma-stat-lbl">إجمالي المبيعات (ر.س)</div></div>
+    </div>
+    <div class="ma-stats">
+      <div class="ma-stat" style="--accent:#9333ea;--icon-bg:rgba(147,51,234,.15)"><div class="ma-stat-icon"><i class="fas fa-users"></i></div><div class="ma-stat-val">${totalUsers}</div><div class="ma-stat-lbl">إجمالي العملاء</div></div>
+      <div class="ma-stat" style="--accent:#00c9a7;--icon-bg:rgba(0,201,167,.15)"><div class="ma-stat-icon"><i class="fas fa-chart-line"></i></div><div class="ma-stat-val">${fmtInt(avgOrder)} ر.س</div><div class="ma-stat-lbl">متوسط قيمة الطلب</div></div>
+      <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-gift"></i></div><div class="ma-stat-val">${fmtInt(totalCb)}</div><div class="ma-stat-lbl">كاش باك ممنوح (ر.س)</div></div>
+      <div class="ma-stat" style="--accent:#d90429;--icon-bg:rgba(217,4,41,.15)"><div class="ma-stat-icon"><i class="fas fa-circle-xmark"></i></div><div class="ma-stat-val">${cancelled}</div><div class="ma-stat-lbl">طلبات ملغاة</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px">
+      <div class="ma-card"><div class="ma-card-title"><i class="fas fa-chart-bar"></i> المبيعات - آخر 7 أيام</div>${renderSalesChart()}</div>
+      <div class="ma-card"><div class="ma-card-title"><i class="fas fa-chart-pie"></i> توزيع الحالات</div>${renderStatusChart()}</div>
+    </div>
+    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-clock"></i> آخر الطلبات</div>${renderRecentOrders(5)}</div>
+    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-gift"></i> كاش باك متوقع</div>
+      <div style="text-align:center;padding:20px">
+        <div style="font-size:2.4rem;font-weight:900;background:linear-gradient(135deg,#f5b342,#c98a1e);-webkit-background-clip:text;background-clip:text;color:transparent">${fmtNum(potentialCb)} ر.س</div>
+        <div style="color:#8a92b0;font-weight:700;margin-top:8px;font-size:.85rem">عند تسليم الطلبات بنسبة ${(settings.cashback_rate*100).toFixed(1)}%</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderSalesChart(){
+  const days = [];
+  for(let i=6; i>=0; i--){
+    const d = new Date(); d.setDate(d.getDate() - i); d.setHours(0,0,0,0);
+    const next = new Date(d); next.setDate(next.getDate() + 1);
+    const label = d.toLocaleDateString('ar-SA',{weekday:'short',day:'numeric'});
+    const val = allOrders.filter(o => { const t = new Date(o.created_at).getTime(); return t >= d.getTime() && t < next.getTime(); }).reduce((s,o) => s + Number(o.total||0), 0);
+    days.push({label, value: val});
   }
+  const max = Math.max(...days.map(d => d.value), 1);
+  if(days.every(d => d.value === 0)) return `<div class="ma-empty"><i class="fas fa-chart-line"></i><h3>لا توجد بيانات</h3></div>`;
+  return days.map(d => `
+    <div class="ma-chart-bar">
+      <div class="ma-chart-label">${d.label}</div>
+      <div class="ma-chart-track"><div class="ma-chart-fill" style="width:${(d.value/max*100)}%"></div></div>
+      <div class="ma-chart-value">${fmtInt(d.value)}</div>
+    </div>`).join('');
+}
 
-  function renderStats() {
-    const total = allOrders.length;
-    const pending = allOrders.filter(o => o.status !== 'delivered' && o.status !== 'cancelled').length;
-    const delivered = allOrders.filter(o => o.status === 'delivered').length;
-    const cancelled = allOrders.filter(o => o.status === 'cancelled').length;
-    const revenue = allOrders.filter(o => o.status === 'delivered').reduce((s, o) => s + Number(o.total || 0), 0);
-    const avg = delivered > 0 ? revenue / delivered : 0;
-    const totalCashback = allUsers.reduce((s, u) => s + Number(u.cashback || 0), 0);
-    $('maStatTotal').textContent = total;
-    $('maStatPending').textContent = pending;
-    $('maStatDelivered').textContent = delivered;
-    $('maStatRevenue').textContent = revenue.toFixed(0);
-    $('maStatCustomers').textContent = allUsers.length;
-    $('maStatAvg').textContent = avg.toFixed(0) + ' ر.س';
-    $('maStatCashback').textContent = totalCashback.toFixed(0);
-    $('maStatCancelled').textContent = cancelled;
-  }
+function renderStatusChart(){
+  const total = allOrders.length || 1;
+  const html = Object.entries(ORDER_STATUS).map(([k,v]) => {
+    const count = allOrders.filter(o => o.status === k).length;
+    if(!count) return '';
+    const pct = (count / total * 100);
+    return `<div class="ma-chart-bar"><div class="ma-chart-label">${v.label}</div><div class="ma-chart-track"><div class="ma-chart-fill" style="width:${pct}%;background:${v.bg}">${count}</div></div><div class="ma-chart-value">${pct.toFixed(0)}%</div></div>`;
+  }).join('');
+  return html || `<div class="ma-empty"><i class="fas fa-inbox"></i><h3>لا توجد بيانات</h3></div>`;
+}
 
-  function renderOrders() {
-    const container = $('maOrders');
-    const q = ($('maSearch').value || '').trim().toLowerCase();
-    const statusFilter = $('maStatusFilter').value;
-    let filtered = allOrders.filter(o => {
-      if (statusFilter && o.status !== statusFilter) return false;
-      if (q) {
-        const hay = `${o.id} ${o.user_name||''} ${o.user_email||''} ${o.user_phone||''}`.toLowerCase();
-        if (!hay.includes(q)) return false;
-      }
-      return true;
-    });
-    if (!filtered.length) {
-      container.innerHTML = `<div class="ma-empty"><i class="fas fa-inbox"></i><h3>لا يوجد طلبات</h3><p>${q || statusFilter ? 'جرّب تغيير الفلتر أو البحث' : 'ستظهر الطلبات هنا تلقائياً'}</p></div>`;
-      return;
-    }
-    container.innerHTML = '<div class="ma-orders">' + filtered.map(renderOrderCard).join('') + '</div>';
-
-    container.querySelectorAll('[data-apply-status]').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const oid = btn.dataset.applyStatus;
-        const sel = container.querySelector(`select[data-order-select="${oid}"]`);
-        await applyStatus(oid, sel.value, btn);
-      });
-    });
-    container.querySelectorAll('[data-detail-order]').forEach(btn => {
-      btn.addEventListener('click', () => openDetailModal(btn.dataset.detailOrder));
-    });
-    container.querySelectorAll('[data-add-cashback]').forEach(btn => {
-      btn.addEventListener('click', () => openCbModal(btn.dataset.addCashback, 'add'));
-    });
-    container.querySelectorAll('[data-delete-order]').forEach(btn => {
-      btn.addEventListener('click', () => openDelModal(btn.dataset.deleteOrder));
-    });
-    container.querySelectorAll('[data-mark-paid]').forEach(btn => {
-      btn.addEventListener('click', () => toggleCashbackPaid(btn.dataset.markPaid, true));
-    });
-    container.querySelectorAll('[data-unmark-paid]').forEach(btn => {
-      btn.addEventListener('click', () => toggleCashbackPaid(btn.dataset.unmarkPaid, false));
-    });
-  }
-
-  function renderOrderCard(o) {
+function renderRecentOrders(limit){
+  const list = allOrders.slice(0, limit);
+  if(!list.length) return `<div class="ma-empty"><i class="fas fa-inbox"></i><h3>لا توجد طلبات</h3></div>`;
+  return `<table class="ma-table"><thead><tr><th>رقم</th><th>العميل</th><th>المبلغ</th><th>الحالة</th><th>التاريخ</th></tr></thead><tbody>${list.map(o => {
     const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
-    const items = Array.isArray(o.items) ? o.items : [];
-    const itemsHtml = items.map(it => `<div>• <span class="name">${escapeHtml(it.name || 'منتج')}</span> × ${it.qty || 1} — ${(Number(it.price||0) * Number(it.qty||1)).toFixed(2)} ر.س</div>`).join('') || '<div>—</div>';
-    const date = fmtDate(o.created_at);
-    let cbHtml = '';
-    if (o.status === 'delivered' && o.cashback_applied) {
-      const amount = Number(o.cashback || 0).toFixed(2);
-      if (o.cashback_paid) {
-        const paidDate = o.cashback_paid_at ? fmtDateShort(o.cashback_paid_at) : '';
-        cbHtml = `<div class="ma-cb-info paid"><i class="fas fa-circle-check"></i> كاش باك مدفوع: ${amount} ر.س <span class="cb-date">— ${paidDate}</span></div>`;
-      } else {
-        cbHtml = `<div class="ma-cb-info unpaid"><i class="fas fa-hourglass-half"></i> كاش باك غير مدفوع: ${amount} ر.س</div>`;
-      }
-    } else if (o.status !== 'cancelled' && o.status !== 'delivered') {
-      const potential = Number(o.total || 0) * CASHBACK_RATE;
-      cbHtml = `<div class="ma-cb-info pending"><i class="fas fa-clock"></i> متوقع عند التسليم: ${potential.toFixed(2)} ر.س</div>`;
+    return `<tr><td class="mono">#${String(o.id).slice(-6).toUpperCase()}</td><td>${esc(o.user_name || o.user_email || '—')}</td><td class="price">${fmtNum(o.total)} ر.س</td><td><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></td><td style="font-size:.78rem;color:#8a92b0">${fmtDate(o.created_at)}</td></tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+// ═══ REPORTS SALES ═══
+function renderReportsSales(el){
+  const delivered = allOrders.filter(o => o.status === 'delivered');
+  const revenue = delivered.reduce((s,o) => s + Number(o.total||0), 0);
+  const avg = delivered.length > 0 ? revenue / delivered.length : 0;
+  const max = delivered.length > 0 ? Math.max(...delivered.map(o => Number(o.total||0))) : 0;
+  const byMonth = {};
+  delivered.forEach(o => {
+    const d = new Date(o.created_at);
+    const k = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2,'0');
+    byMonth[k] = (byMonth[k] || 0) + Number(o.total||0);
+  });
+  const months = Object.entries(byMonth).sort().slice(-6);
+  const maxM = Math.max(...months.map(m => m[1]), 1);
+
+  el.innerHTML = `
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-chart-bar"></i> تقارير المبيعات</div><div class="ma-page-sub">تحليل مفصل للمبيعات</div></div></div>
+    <div class="ma-stats">
+      <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-sack-dollar"></i></div><div class="ma-stat-val">${fmtInt(revenue)}</div><div class="ma-stat-lbl">إجمالي الإيرادات</div></div>
+      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-bag-shopping"></i></div><div class="ma-stat-val">${delivered.length}</div><div class="ma-stat-lbl">طلبات مكتملة</div></div>
+      <div class="ma-stat" style="--accent:#00c9a7;--icon-bg:rgba(0,201,167,.15)"><div class="ma-stat-icon"><i class="fas fa-chart-line"></i></div><div class="ma-stat-val">${fmtInt(avg)} ر.س</div><div class="ma-stat-lbl">متوسط الطلب</div></div>
+      <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-crown"></i></div><div class="ma-stat-val">${fmtInt(max)} ر.س</div><div class="ma-stat-lbl">أعلى طلب</div></div>
+    </div>
+    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-calendar"></i> المبيعات الشهرية</div>
+      ${months.length ? months.map(([k,v]) => `<div class="ma-chart-bar"><div class="ma-chart-label">${k}</div><div class="ma-chart-track"><div class="ma-chart-fill green" style="width:${v/maxM*100}%"></div></div><div class="ma-chart-value">${fmtInt(v)} ر.س</div></div>`).join('') : '<div class="ma-empty"><i class="fas fa-chart-line"></i><h3>لا توجد بيانات</h3></div>'}
+    </div>
+    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-trophy"></i> أفضل 10 طلبات</div>
+      <table class="ma-table"><thead><tr><th>#</th><th>رقم</th><th>العميل</th><th>المبلغ</th><th>التاريخ</th></tr></thead><tbody>${[...delivered].sort((a,b) => b.total - a.total).slice(0,10).map((o,i) => `<tr><td>${i+1}</td><td class="mono">#${String(o.id).slice(-6).toUpperCase()}</td><td>${esc(o.user_name || o.user_email || '—')}</td><td class="price">${fmtNum(o.total)} ر.س</td><td style="font-size:.78rem;color:#8a92b0">${fmtDate(o.created_at)}</td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center;padding:30px;color:#8a92b0">لا توجد بيانات</td></tr>'}</tbody></table>
+    </div>
+  `;
+}
+
+// ═══ REPORTS CUSTOMERS ═══
+function renderReportsCustomers(el){
+  const topCustomers = [...allUsers].map(u => {
+    const list = allOrders.filter(o => String(o.user_id) === String(u.id));
+    const paid = list.filter(o => o.status === 'delivered').reduce((s,o) => s + Number(o.total||0), 0);
+    return {...u, _count: list.length, _paid: paid};
+  }).sort((a,b) => b._paid - a._paid).slice(0, 15);
+  const newThisMonth = allUsers.filter(u => {
+    const d = new Date(u.created_at), now = new Date();
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  }).length;
+
+  el.innerHTML = `
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-user-chart"></i> تقارير العملاء</div></div></div>
+    <div class="ma-stats">
+      <div class="ma-stat" style="--accent:#9333ea;--icon-bg:rgba(147,51,234,.15)"><div class="ma-stat-icon"><i class="fas fa-users"></i></div><div class="ma-stat-val">${allUsers.length}</div><div class="ma-stat-lbl">إجمالي العملاء</div></div>
+      <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-user-plus"></i></div><div class="ma-stat-val">${newThisMonth}</div><div class="ma-stat-lbl">جديد هذا الشهر</div></div>
+      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-repeat"></i></div><div class="ma-stat-val">${allUsers.filter(u => allOrders.filter(o => String(o.user_id) === String(u.id)).length > 1).length}</div><div class="ma-stat-lbl">عملاء متكررون</div></div>
+      <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-gift"></i></div><div class="ma-stat-val">${fmtInt(allUsers.reduce((s,u) => s + Number(u.cashback||0), 0))}</div><div class="ma-stat-lbl">إجمالي الكاش باك</div></div>
+    </div>
+    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-crown"></i> أفضل 15 عميل</div>
+      <table class="ma-table"><thead><tr><th>#</th><th>الاسم</th><th>البريد</th><th>الطلبات</th><th>إجمالي المدفوع</th><th>الكاش باك</th></tr></thead><tbody>${topCustomers.map((u,i) => `<tr><td>${i+1}</td><td style="font-weight:800">${esc(u.name || '—')}</td><td style="font-size:.78rem;color:#8a92b0" dir="ltr">${esc(u.email || '—')}</td><td>${u._count}</td><td class="price">${fmtNum(u._paid)} ر.س</td><td style="color:#f5b342;font-weight:800">${fmtNum(u.cashback)} ر.س</td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center;padding:30px;color:#8a92b0">لا توجد بيانات</td></tr>'}</tbody></table>
+    </div>
+  `;
+}
+
+// ═══ REPORTS CASHBACK ═══
+function renderReportsCashback(el){
+  const totalGranted = allCashbackLog.filter(l => Number(l.amount) > 0).reduce((s,l) => s + Number(l.amount), 0);
+  const totalDeducted = Math.abs(allCashbackLog.filter(l => Number(l.amount) < 0).reduce((s,l) => s + Number(l.amount), 0));
+  const totalBalance = allUsers.reduce((s,u) => s + Number(u.cashback||0), 0);
+  const paidOrders = allOrders.filter(o => o.cashback_paid);
+  const unpaidOrders = allOrders.filter(o => o.cashback_applied && !o.cashback_paid);
+  const paidAmount = paidOrders.reduce((s,o) => s + Number(o.cashback||0), 0);
+  const unpaidAmount = unpaidOrders.reduce((s,o) => s + Number(o.cashback||0), 0);
+
+  el.innerHTML = `
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-gift"></i> تقارير الكاش باك</div><div class="ma-page-sub">النسبة: ${(settings.cashback_rate * 100).toFixed(2)}%</div></div></div>
+    <div class="ma-stats">
+      <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-circle-plus"></i></div><div class="ma-stat-val">${fmtInt(totalGranted)}</div><div class="ma-stat-lbl">إجمالي ممنوح</div></div>
+      <div class="ma-stat" style="--accent:#d90429;--icon-bg:rgba(217,4,41,.15)"><div class="ma-stat-icon"><i class="fas fa-circle-minus"></i></div><div class="ma-stat-val">${fmtInt(totalDeducted)}</div><div class="ma-stat-lbl">إجمالي مخصوم</div></div>
+      <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-wallet"></i></div><div class="ma-stat-val">${fmtInt(totalBalance)}</div><div class="ma-stat-lbl">الرصيد الحالي</div></div>
+      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-percent"></i></div><div class="ma-stat-val">${(settings.cashback_rate * 100).toFixed(1)}%</div><div class="ma-stat-lbl">النسبة</div></div>
+    </div>
+    <div class="ma-stats">
+      <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-check"></i></div><div class="ma-stat-val">${fmtInt(paidAmount)}</div><div class="ma-stat-lbl">مدفوع (${paidOrders.length})</div></div>
+      <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-hourglass-half"></i></div><div class="ma-stat-val">${fmtInt(unpaidAmount)}</div><div class="ma-stat-lbl">غير مدفوع (${unpaidOrders.length})</div></div>
+      <div class="ma-stat" style="--accent:#9333ea;--icon-bg:rgba(147,51,234,.15)"><div class="ma-stat-icon"><i class="fas fa-list"></i></div><div class="ma-stat-val">${allCashbackLog.length}</div><div class="ma-stat-lbl">عمليات</div></div>
+    </div>
+    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-history"></i> آخر 20 عملية</div>
+      <table class="ma-table"><thead><tr><th>العميل</th><th>المبلغ</th><th>النوع</th><th>السبب</th><th>التاريخ</th></tr></thead><tbody>${allCashbackLog.slice(0,20).map(l => {
+        const amt = Number(l.amount||0), pos = amt > 0;
+        return `<tr><td style="font-size:.8rem">${esc(l.user_email||'—')}</td><td style="font-weight:900;color:${pos?'#4caf50':'#d90429'}" class="mono">${pos?'+':''}${fmtNum(amt)}</td><td><span class="ma-badge" style="background:${pos?'rgba(76,175,80,.15)':'rgba(217,4,41,.15)'};color:${pos?'#4caf50':'#ff6b6b'}">${esc(l.type||'—')}</span></td><td style="font-size:.78rem;color:#a8b0cc">${esc(l.reason||'—')}</td><td style="font-size:.76rem;color:#8a92b0">${fmtDate(l.created_at)}</td></tr>`;
+      }).join('') || '<tr><td colspan="5" style="text-align:center;padding:30px;color:#8a92b0">لا سجلات</td></tr>'}</tbody></table>
+    </div>
+  `;
+}
+
+// ═══ ORDERS ═══
+function renderOrdersView(el){
+  el.innerHTML = `
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-box"></i> سجل الطلبات</div><div class="ma-page-sub">${allOrders.length} طلب</div></div></div>
+    <div class="ma-toolbar">
+      <div class="ma-search"><input type="text" id="ordSearch" placeholder="ابحث..."><i class="fas fa-search"></i></div>
+      <select id="ordStatus"><option value="">كل الحالات</option>${Object.entries(ORDER_STATUS).map(([k,v]) => `<option value="${k}">${v.label}</option>`).join('')}</select>
+      <button class="ma-btn ma-btn-primary" id="ordRefresh"><i class="fas fa-rotate"></i> تحديث</button>
+    </div>
+    <div id="ordTableContainer"></div>
+  `;
+  renderOrdersTable();
+  $('ordSearch').addEventListener('input', renderOrdersTable);
+  $('ordStatus').addEventListener('change', renderOrdersTable);
+  $('ordRefresh').addEventListener('click', async () => { await loadAllData(); renderOrdersTable(); toast('تم التحديث','info'); });
+}
+
+function renderOrdersTable(){
+  const c = $('ordTableContainer');
+  if(!c) return;
+  const q = ($('ordSearch').value || '').trim().toLowerCase();
+  const sf = $('ordStatus').value;
+  const filtered = allOrders.filter(o => {
+    if(sf && o.status !== sf) return false;
+    if(q){
+      const hay = `${o.id} ${o.user_name||''} ${o.user_email||''} ${o.user_phone||''}`.toLowerCase();
+      if(!hay.includes(q)) return false;
     }
-    const options = Object.entries(ORDER_STATUS).map(([k, v]) =>
-      `<option value="${k}" ${k === o.status ? 'selected' : ''}>${v.label}</option>`
-    ).join('');
-    const showMarkPaid = o.status === 'delivered' && o.cashback_applied && !o.cashback_paid;
-    const showUnmarkPaid = o.cashback_paid;
-
-    return `
-      <div class="ma-order" data-order="${o.id}">
-        <div class="ma-order-top">
-          <div>
-            <div class="ma-order-id" style="--st-color:${st.color}">
-              <span class="dot"></span>
-              طلب #${String(o.id || '').slice(-8).toUpperCase()}
-            </div>
-            <div class="ma-order-date"><i class="fas fa-clock"></i> ${date}</div>
-          </div>
-          <div class="ma-order-badge" style="background:${st.bg};color:${st.text}">
-            <i class="fas ${st.icon}"></i> ${st.label}
-          </div>
-        </div>
-        <div class="ma-customer">
-          <div class="ma-cust-item"><i class="fas fa-user"></i><div><div class="lbl">العميل</div><div class="val">${escapeHtml(o.user_name || '—')}</div></div></div>
-          <div class="ma-cust-item"><i class="fas fa-envelope"></i><div><div class="lbl">البريد</div><div class="val">${escapeHtml(o.user_email || '—')}</div></div></div>
-          <div class="ma-cust-item"><i class="fas fa-phone"></i><div><div class="lbl">الجوال</div><div class="val">${escapeHtml(o.user_phone || '—')}</div></div></div>
-        </div>
-        <div class="ma-items">${itemsHtml}</div>
-        <div class="ma-bottom">
-          <div class="ma-total-wrap">
-            <div class="ma-total-lbl">المبلغ المدفوع</div>
-            <div class="ma-total">${Number(o.total || 0).toFixed(2)} ر.س</div>
-          </div>
-          ${cbHtml}
-        </div>
-        <div class="ma-actions">
-          <button class="ma-btn-action ma-btn-detail" data-detail-order="${o.id}">
-            <i class="fas fa-receipt"></i> التفاصيل والطباعة
-          </button>
-          <select data-order-select="${o.id}">${options}</select>
-          <button class="ma-btn-action ma-btn-apply" data-apply-status="${o.id}">
-            <i class="fas fa-check"></i> تطبيق الحالة
-          </button>
-          <button class="ma-btn-action ma-btn-cb" data-add-cashback="${o.id}">
-            <i class="fas fa-gift"></i> كاش باك
-          </button>
-          ${showMarkPaid ? `<button class="ma-btn-action ma-btn-paid" data-mark-paid="${o.id}"><i class="fas fa-money-bill-wave"></i> تعليم كمدفوع</button>` : ''}
-          ${showUnmarkPaid ? `<button class="ma-btn-action ma-btn-unpaid" data-unmark-paid="${o.id}"><i class="fas fa-rotate-left"></i> إلغاء الدفع</button>` : ''}
-          <button class="ma-btn-action ma-btn-delete" data-delete-order="${o.id}">
-            <i class="fas fa-trash"></i> حذف
-          </button>
-        </div>
-      </div>
-    `;
+    return true;
+  });
+  if(!filtered.length){
+    c.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-inbox"></i><h3>لا توجد طلبات</h3></div></div>`;
+    return;
   }
-
-  function openDetailModal(orderId) {
-    const order = allOrders.find(o => String(o.id) === String(orderId));
-    if (!order) return;
-    currentDetailOrder = order;
-    const st = ORDER_STATUS[order.status] || ORDER_STATUS.pending;
-    const items = Array.isArray(order.items) ? order.items : [];
-
-    $('maDetailOrderId').textContent = '#' + String(order.id).slice(-8).toUpperCase();
-    $('maDetailDate').innerHTML = `<i class="fas fa-clock"></i> ${fmtDate(order.created_at)}`;
-
-    let subtotal = 0;
-    let itemsRows = items.map((it, i) => {
-      const price = Number(it.price || 0);
-      const qty = Number(it.qty || 1);
-      const lineTotal = price * qty;
-      subtotal += lineTotal;
+  c.innerHTML = `<div class="ma-table-wrap"><table class="ma-table">
+    <thead><tr><th>رقم</th><th>العميل</th><th>الجوال</th><th>المبلغ المدفوع</th><th>الكاش باك</th><th>الحالة</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+    <tbody>${filtered.map(o => {
+      const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
+      let cb = '';
+      if(o.status === 'delivered' && o.cashback_applied){
+        cb = `<span style="color:${o.cashback_paid?'#4caf50':'#f5b342'};font-weight:900">${fmtNum(o.cashback)} ${o.cashback_paid?'✓':'⏳'}</span>`;
+      } else if(['delivered','cancelled'].includes(o.status)) cb = `<span style="color:#8a92b0">—</span>`;
+      else cb = `<span style="color:#4a7aff">${fmtNum(Number(o.total||0)*settings.cashback_rate)} متوقع</span>`;
       return `<tr>
-        <td>${i+1}</td>
-        <td>${escapeHtml(it.name || 'منتج')}</td>
-        <td>${qty}</td>
-        <td class="price-cell">${price.toFixed(2)} ر.س</td>
-        <td class="total-cell">${lineTotal.toFixed(2)} ر.س</td>
+        <td class="mono">#${String(o.id).slice(-8).toUpperCase()}</td>
+        <td style="font-weight:800">${esc(o.user_name||'—')}</td>
+        <td style="font-size:.8rem;color:#8a92b0" dir="ltr">${esc(o.user_phone||'—')}</td>
+        <td class="price">${fmtNum(o.total)} ر.س</td>
+        <td style="font-size:.82rem">${cb}</td>
+        <td><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></td>
+        <td style="font-size:.76rem;color:#8a92b0">${fmtDate(o.created_at)}</td>
+        <td><div class="actions-cell">
+          <button class="ma-mini-btn ma-mini-detail" data-detail-order="${o.id}"><i class="fas fa-receipt"></i> تفاصيل</button>
+          <button class="ma-mini-btn ma-mini-cb" data-add-cashback="${o.id}"><i class="fas fa-gift"></i></button>
+          <button class="ma-mini-btn ma-mini-delete" data-delete-order="${o.id}"><i class="fas fa-trash"></i></button>
+        </div></td>
       </tr>`;
-    }).join('');
-    if (!itemsRows) itemsRows = `<tr><td colspan="5" style="text-align:center;color:#8a92b0;padding:20px">لا توجد منتجات مسجلة</td></tr>`;
+    }).join('')}</tbody></table></div>`;
+  c.querySelectorAll('[data-detail-order]').forEach(b => b.addEventListener('click', () => openDetailModal(b.dataset.detailOrder)));
+  c.querySelectorAll('[data-add-cashback]').forEach(b => b.addEventListener('click', () => openCbModal(b.dataset.addCashback, 'add')));
+  c.querySelectorAll('[data-delete-order]').forEach(b => b.addEventListener('click', () => openDelModal(b.dataset.deleteOrder)));
+}
 
-    const total = Number(order.total || 0);
-    const shipping = Math.max(0, total - subtotal);
-    const cashbackEarned = Number(order.cashback || 0);
-    const potentialCb = total * CASHBACK_RATE;
+// ═══ CUSTOMERS ═══
+function renderCustomersView(el){
+  el.innerHTML = `
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-users"></i> سجل العملاء</div><div class="ma-page-sub">${allUsers.length} عميل</div></div></div>
+    <div class="ma-toolbar"><div class="ma-search"><input type="text" id="custSearch" placeholder="ابحث..."><i class="fas fa-search"></i></div><button class="ma-btn ma-btn-primary" id="custRefresh"><i class="fas fa-rotate"></i> تحديث</button></div>
+    <div id="custTableContainer"></div>
+  `;
+  renderCustomersTable();
+  $('custSearch').addEventListener('input', renderCustomersTable);
+  $('custRefresh').addEventListener('click', async () => { await loadAllData(); renderCustomersTable(); toast('تم التحديث','info'); });
+}
 
-    let cbStatusPill = '', cbAmountDisplay = '', cbPaidDateRow = '';
-    if (order.status === 'cancelled') {
-      cbStatusPill = `<span class="ma-cb-status-pill none"><i class="fas fa-ban"></i> لا يوجد (طلب ملغي)</span>`;
-      cbAmountDisplay = '0.00 ر.س';
-    } else if (order.status === 'delivered' && order.cashback_applied) {
-      cbAmountDisplay = `${cashbackEarned.toFixed(2)} ر.س`;
-      if (order.cashback_paid) {
-        cbStatusPill = `<span class="ma-cb-status-pill paid"><i class="fas fa-circle-check"></i> مدفوع للعميل</span>`;
-        if (order.cashback_paid_at) {
-          cbPaidDateRow = `<div class="ma-summary-row total">
-            <span class="lbl">تاريخ الصرف</span>
-            <span class="val">${fmtDate(order.cashback_paid_at)}</span>
-          </div>`;
-        }
-      } else {
-        cbStatusPill = `<span class="ma-cb-status-pill unpaid"><i class="fas fa-hourglass-half"></i> غير مدفوع</span>`;
-      }
-    } else {
-      cbStatusPill = `<span class="ma-cb-status-pill pending"><i class="fas fa-clock"></i> متوقع عند التسليم</span>`;
-      cbAmountDisplay = `${potentialCb.toFixed(2)} ر.س`;
-    }
-
-    const html = `
-      <div class="ma-detail-cols">
-        <div class="ma-detail-section">
-          <div class="ma-detail-h3"><i class="fas fa-user"></i> معلومات العميل</div>
-          <div class="ma-detail-row"><span class="lbl">الاسم</span><span class="val">${escapeHtml(order.user_name || '—')}</span></div>
-          <div class="ma-detail-row"><span class="lbl">البريد</span><span class="val" dir="ltr">${escapeHtml(order.user_email || '—')}</span></div>
-          <div class="ma-detail-row"><span class="lbl">الجوال</span><span class="val" dir="ltr">${escapeHtml(order.user_phone || '—')}</span></div>
-          ${order.user_address ? `<div class="ma-detail-row"><span class="lbl">العنوان</span><span class="val">${escapeHtml(order.user_address)}</span></div>` : ''}
-        </div>
-        <div class="ma-detail-section">
-          <div class="ma-detail-h3"><i class="fas fa-info-circle"></i> معلومات الطلب</div>
-          <div class="ma-detail-row">
-            <span class="lbl">الحالة</span>
-            <span class="val"><span class="ma-order-badge" style="background:${st.bg};color:${st.text};font-size:.72rem;padding:5px 12px"><i class="fas ${st.icon}"></i> ${st.label}</span></span>
-          </div>
-          <div class="ma-detail-row"><span class="lbl">تاريخ الطلب</span><span class="val">${fmtDate(order.created_at)}</span></div>
-          ${order.updated_at ? `<div class="ma-detail-row"><span class="lbl">آخر تحديث</span><span class="val">${fmtDate(order.updated_at)}</span></div>` : ''}
-          ${order.payment_method ? `<div class="ma-detail-row"><span class="lbl">طريقة الدفع</span><span class="val">${escapeHtml(order.payment_method)}</span></div>` : ''}
-        </div>
-      </div>
-      <div class="ma-detail-section">
-        <div class="ma-detail-h3"><i class="fas fa-box"></i> تفاصيل المنتجات</div>
-        <table class="ma-items-table">
-          <thead><tr><th>#</th><th>المنتج</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th></tr></thead>
-          <tbody>${itemsRows}</tbody>
-        </table>
-      </div>
-      <div class="ma-summary-grid">
-        <div class="ma-summary-box">
-          <div class="ma-detail-h3"><i class="fas fa-credit-card"></i> ملخص الدفع</div>
-          <div class="ma-summary-row"><span class="lbl">المجموع الفرعي</span><span class="val">${subtotal.toFixed(2)} ر.س</span></div>
-          <div class="ma-summary-row"><span class="lbl">الشحن</span><span class="val">${shipping.toFixed(2)} ر.س</span></div>
-          <div class="ma-summary-row total"><span class="lbl">المبلغ المدفوع</span><span class="val">${total.toFixed(2)} ر.س</span></div>
-        </div>
-        <div class="ma-summary-box cashback">
-          <div class="ma-detail-h3"><i class="fas fa-gift"></i> كاش باك العميل</div>
-          <div class="ma-summary-row"><span class="lbl">الكاش باك المكتسب</span><span class="val">${cbAmountDisplay}</span></div>
-          <div class="ma-summary-row"><span class="lbl">الحالة</span><span class="val">${cbStatusPill}</span></div>
-          ${cbPaidDateRow}
-        </div>
-      </div>
-    `;
-    $('maDetailBody').innerHTML = html;
-    $('maDetailModal').classList.add('show');
+function renderCustomersTable(){
+  const c = $('custTableContainer');
+  if(!c) return;
+  const q = ($('custSearch').value || '').trim().toLowerCase();
+  const filtered = allUsers.filter(u => {
+    if(!q) return true;
+    const hay = `${u.id} ${u.name||''} ${u.email||''} ${u.phone||''}`.toLowerCase();
+    return hay.includes(q);
+  });
+  if(!filtered.length){
+    c.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-users"></i><h3>لا يوجد عملاء</h3></div></div>`;
+    return;
   }
-
-  function closeDetailModal() {
-    $('maDetailModal').classList.remove('show');
-    currentDetailOrder = null;
-  }
-
-  function printCurrentOrder() {
-    if (!currentDetailOrder) return;
-    const order = currentDetailOrder;
-    const items = Array.isArray(order.items) ? order.items : [];
-    let subtotal = 0;
-    const itemsRows = items.map((it, i) => {
-      const price = Number(it.price || 0);
-      const qty = Number(it.qty || 1);
-      const lineTotal = price * qty;
-      subtotal += lineTotal;
+  c.innerHTML = `<div class="ma-table-wrap"><table class="ma-table">
+    <thead><tr><th>الاسم</th><th>البريد</th><th>الجوال</th><th>الطلبات</th><th>إجمالي المدفوع</th><th>رصيد الكاش باك</th><th>إجراءات</th></tr></thead>
+    <tbody>${filtered.map(u => {
+      const list = allOrders.filter(o => String(o.user_id) === String(u.id));
+      const paid = list.filter(o => o.status === 'delivered').reduce((s,o) => s + Number(o.total||0), 0);
       return `<tr>
-        <td style="text-align:center">${i+1}</td>
-        <td>${escapeHtml(it.name || 'منتج')}</td>
-        <td style="text-align:center">${qty}</td>
-        <td class="num">${price.toFixed(2)}</td>
-        <td class="num">${lineTotal.toFixed(2)}</td>
+        <td style="font-weight:800">${esc(u.name||'—')}</td>
+        <td style="font-size:.8rem;color:#a8b0cc" dir="ltr">${esc(u.email||'—')}</td>
+        <td style="font-size:.8rem;color:#8a92b0" dir="ltr">${esc(u.phone||'—')}</td>
+        <td><strong>${list.length}</strong></td>
+        <td class="price">${fmtNum(paid)} ر.س</td>
+        <td style="color:#f5b342;font-weight:900">${fmtNum(u.cashback)} ر.س</td>
+        <td><div class="actions-cell">
+          <button class="ma-mini-btn ma-mini-chat" data-user-chat="${u.id}"><i class="fas fa-comments"></i></button>
+          <button class="ma-mini-btn ma-mini-note" data-user-note="${u.id}"><i class="fas fa-comment-dots"></i></button>
+          <button class="ma-mini-btn ma-mini-cb" data-user-cb="${u.id}" data-cb-mode="add"><i class="fas fa-gift"></i></button>
+          <button class="ma-mini-btn ma-mini-delete" data-user-cb="${u.id}" data-cb-mode="deduct"><i class="fas fa-minus"></i></button>
+        </div></td>
       </tr>`;
-    }).join('') || '<tr><td colspan="5" style="text-align:center">لا توجد منتجات</td></tr>';
+    }).join('')}</tbody></table></div>`;
+  c.querySelectorAll('[data-user-chat]').forEach(b => b.addEventListener('click', () => openChatModal(b.dataset.userChat)));
+  c.querySelectorAll('[data-user-note]').forEach(b => b.addEventListener('click', () => openNoteModal(b.dataset.userNote)));
+  c.querySelectorAll('[data-user-cb]').forEach(b => b.addEventListener('click', () => openUserCbModal(b.dataset.userCb, b.dataset.cbMode || 'add')));
+}
 
-    const total = Number(order.total || 0);
-    const shipping = Math.max(0, total - subtotal);
-    const cashbackEarned = Number(order.cashback || 0);
-    const potentialCb = total * CASHBACK_RATE;
-    const st = ORDER_STATUS[order.status] || ORDER_STATUS.pending;
+// ═══ FINANCE ═══
+function renderFinanceView(el){
+  const delivered = allOrders.filter(o => o.status === 'delivered');
+  const revenue = delivered.reduce((s,o) => s + Number(o.total||0), 0);
+  const cashbackPaid = allOrders.filter(o => o.cashback_paid).reduce((s,o) => s + Number(o.cashback||0), 0);
+  const cashbackUnpaid = allOrders.filter(o => o.cashback_applied && !o.cashback_paid).reduce((s,o) => s + Number(o.cashback||0), 0);
+  const netRevenue = revenue - cashbackPaid;
+  const potentialCb = allOrders.filter(o => !['delivered','cancelled'].includes(o.status)).reduce((s,o) => s + Number(o.total||0) * settings.cashback_rate, 0);
+  const pendingList = allOrders.filter(o => o.cashback_applied && !o.cashback_paid);
 
-    let cbAmount = '0.00', cbStatus = '—', cbDate = '—';
-    if (order.status === 'cancelled') {
-      cbStatus = 'لا يوجد (طلب ملغي)';
-    } else if (order.status === 'delivered' && order.cashback_applied) {
-      cbAmount = cashbackEarned.toFixed(2);
-      cbStatus = order.cashback_paid ? 'مدفوع للعميل ✓' : 'غير مدفوع';
-      cbDate = order.cashback_paid && order.cashback_paid_at ? fmtDate(order.cashback_paid_at) : '—';
-    } else {
-      cbAmount = potentialCb.toFixed(2) + ' (متوقع)';
-      cbStatus = 'قيد الانتظار';
-    }
+  el.innerHTML = `
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-coins"></i> المالية</div></div></div>
+    <div class="ma-stats">
+      <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-sack-dollar"></i></div><div class="ma-stat-val">${fmtInt(revenue)}</div><div class="ma-stat-lbl">إجمالي الإيرادات</div></div>
+      <div class="ma-stat" style="--accent:#d90429;--icon-bg:rgba(217,4,41,.15)"><div class="ma-stat-icon"><i class="fas fa-gift"></i></div><div class="ma-stat-val">${fmtInt(cashbackPaid)}</div><div class="ma-stat-lbl">كاش باك مدفوع</div></div>
+      <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-hourglass"></i></div><div class="ma-stat-val">${fmtInt(cashbackUnpaid)}</div><div class="ma-stat-lbl">التزام غير مدفوع</div></div>
+      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-wallet"></i></div><div class="ma-stat-val">${fmtInt(netRevenue)}</div><div class="ma-stat-lbl">صافي الإيراد</div></div>
+    </div>
+    <div class="ma-stats">
+      <div class="ma-stat" style="--accent:#00c9a7;--icon-bg:rgba(0,201,167,.15)"><div class="ma-stat-icon"><i class="fas fa-percent"></i></div><div class="ma-stat-val">${(settings.cashback_rate*100).toFixed(1)}%</div><div class="ma-stat-lbl">النسبة الحالية</div></div>
+      <div class="ma-stat" style="--accent:#9333ea;--icon-bg:rgba(147,51,234,.15)"><div class="ma-stat-icon"><i class="fas fa-chart-pie"></i></div><div class="ma-stat-val">${fmtInt(potentialCb)}</div><div class="ma-stat-lbl">كاش باك متوقع</div></div>
+      <div class="ma-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.15)"><div class="ma-stat-icon"><i class="fas fa-users"></i></div><div class="ma-stat-val">${fmtInt(allUsers.reduce((s,u) => s + Number(u.cashback||0), 0))}</div><div class="ma-stat-lbl">أرصدة الكاش باك</div></div>
+    </div>
+    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-list-check"></i> الكاش باك المعلق</div>
+      ${pendingList.length ? `<table class="ma-table"><thead><tr><th>رقم</th><th>العميل</th><th>المبلغ</th><th>التاريخ</th><th>إجراء</th></tr></thead><tbody>${pendingList.map(o => `<tr><td class="mono">#${String(o.id).slice(-6).toUpperCase()}</td><td>${esc(o.user_name||o.user_email||'—')}</td><td class="price">${fmtNum(o.cashback)} ر.س</td><td style="font-size:.78rem;color:#8a92b0">${fmtDate(o.created_at)}</td><td><button class="ma-mini-btn ma-mini-detail" data-mark-paid="${o.id}"><i class="fas fa-money-bill-wave"></i> تعليم كمدفوع</button></td></tr>`).join('')}</tbody></table>` : '<div class="ma-empty"><i class="fas fa-check-circle" style="color:#4caf50"></i><h3>لا يوجد كاش باك معلق</h3></div>'}
+    </div>
+  `;
+  el.querySelectorAll('[data-mark-paid]').forEach(b => b.addEventListener('click', () => toggleCashbackPaid(b.dataset.markPaid, true)));
+}
 
-    const bodyHtml = `
-      <div class="head">
-        <div class="brand">
-          <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN">
-          <div>
-            <div class="brand-name">MEN Store</div>
-            <div class="brand-tag">فاتورة طلب رسمية</div>
-          </div>
-        </div>
-        <div class="order-box">
-          <div class="num">#${String(order.id).slice(-8).toUpperCase()}</div>
-          <div>التاريخ: ${fmtDate(order.created_at)}</div>
-          <div>الحالة: ${st.label}</div>
-        </div>
-      </div>
-      <div class="section">
-        <h2>معلومات العميل</h2>
-        <table class="info-table">
-          <tr>
-            <td class="lbl">الاسم</td><td>${escapeHtml(order.user_name || '—')}</td>
-            <td class="lbl">البريد</td><td dir="ltr" style="text-align:right">${escapeHtml(order.user_email || '—')}</td>
-          </tr>
-          <tr>
-            <td class="lbl">الجوال</td><td dir="ltr" style="text-align:right">${escapeHtml(order.user_phone || '—')}</td>
-            <td class="lbl">العنوان</td><td>${escapeHtml(order.user_address || '—')}</td>
-          </tr>
-        </table>
-      </div>
-      <div class="section">
-        <h2>تفاصيل المنتجات</h2>
-        <table class="items-table">
-          <thead><tr>
-            <th style="width:40px;text-align:center">#</th>
-            <th>المنتج</th>
-            <th style="width:70px;text-align:center">الكمية</th>
-            <th style="width:100px">السعر</th>
-            <th style="width:110px">الإجمالي</th>
-          </tr></thead>
-          <tbody>${itemsRows}</tbody>
-        </table>
-      </div>
-      <div class="bottom">
-        <div class="section">
-          <h2>ملخص الدفع</h2>
-          <table class="summary-table">
-            <tr><td class="lbl">المجموع الفرعي</td><td class="val">${subtotal.toFixed(2)} ر.س</td></tr>
-            <tr><td class="lbl">الشحن</td><td class="val">${shipping.toFixed(2)} ر.س</td></tr>
-            <tr class="total"><td class="lbl">المبلغ المدفوع</td><td class="val">${total.toFixed(2)} ر.س</td></tr>
-          </table>
-        </div>
-        <div class="section">
-          <h2>كاش باك العميل</h2>
-          <table class="summary-table">
-            <tr><td class="lbl">الكاش باك المكتسب</td><td class="val">${cbAmount} ر.س</td></tr>
-            <tr><td class="lbl">الحالة</td><td class="val">${cbStatus}</td></tr>
-            <tr><td class="lbl">تاريخ الصرف</td><td class="val">${cbDate}</td></tr>
-          </table>
-        </div>
-      </div>
-      <div class="foot">
-        <div class="thanks">شكراً لتسوقك معنا 🌟</div>
-        <div>MEN Store — فاتورة رسمية</div>
-      </div>
-    `;
+// ═══ REWARDS MANAGE ═══
+function renderRewardsView(el){
+  el.innerHTML = `
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-gift"></i> إدارة الكاش باك</div><div class="ma-page-sub">أضف أو اخصم كاش باك</div></div></div>
+    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-search"></i> البحث عن عميل</div>
+      <div class="ma-search" style="max-width:600px"><input type="text" id="rewSearch" placeholder="اسم أو بريد العميل..."><i class="fas fa-search"></i></div>
+    </div>
+    <div id="rewResults"></div>
+  `;
+  const search = () => {
+    const q = ($('rewSearch').value || '').trim().toLowerCase();
+    const results = $('rewResults');
+    if(!q){ results.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-user-search"></i><h3>ابدأ البحث</h3></div></div>`; return; }
+    const matches = allUsers.filter(u => `${u.name||''} ${u.email||''}`.toLowerCase().includes(q)).slice(0,10);
+    if(!matches.length){ results.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-user-slash"></i><h3>لا نتائج</h3></div></div>`; return; }
+    results.innerHTML = `<div class="ma-table-wrap"><table class="ma-table"><thead><tr><th>الاسم</th><th>البريد</th><th>الرصيد</th><th>إجراء</th></tr></thead><tbody>${matches.map(u => `<tr><td style="font-weight:800">${esc(u.name||'—')}</td><td style="font-size:.8rem" dir="ltr">${esc(u.email||'—')}</td><td style="color:#f5b342;font-weight:900">${fmtNum(u.cashback)} ر.س</td><td><div class="actions-cell"><button class="ma-mini-btn ma-mini-cb" data-user-cb="${u.id}" data-cb-mode="add"><i class="fas fa-plus"></i> إضافة</button><button class="ma-mini-btn ma-mini-delete" data-user-cb="${u.id}" data-cb-mode="deduct"><i class="fas fa-minus"></i> خصم</button></div></td></tr>`).join('')}</tbody></table></div>`;
+    results.querySelectorAll('[data-user-cb]').forEach(b => b.addEventListener('click', () => openUserCbModal(b.dataset.userCb, b.dataset.cbMode)));
+  };
+  $('rewSearch').addEventListener('input', search);
+  search();
+}
 
-    const w = window.open('', '_blank', 'width=900,height=700');
-    if (!w) { toast('الرجاء السماح بالنوافذ المنبثقة', 'error'); return; }
-    w.document.write(`<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<title>فاتورة #${String(order.id).slice(-8).toUpperCase()}</title>
+// ═══ RATE ═══
+function renderRateView(el){
+  el.innerHTML = `
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-percent"></i> نسبة الكاش باك</div><div class="ma-page-sub">تحكم بنسبة الكاش باك</div></div></div>
+    <div class="ma-rate-card">
+      <div class="ma-rate-title"><i class="fas fa-gift"></i><div><div class="t">النسبة الحالية</div><div class="s">تُطبَّق على الطلبات الجديدة</div></div></div>
+      <div class="ma-rate-display">${(settings.cashback_rate*100).toFixed(2)}%</div>
+      <div class="ma-rate-hint">مثال: 1000 ر.س → ${fmtNum(1000 * settings.cashback_rate)} ر.س كاش باك</div>
+      <div class="ma-rate-form">
+        <input type="number" id="rateInput" value="${(settings.cashback_rate*100).toFixed(2)}" step="0.1" min="0" max="100">
+        <span style="font-size:1.4rem;font-weight:900;color:#f5b342">%</span>
+        <button class="ma-btn ma-btn-gold" id="rateSave"><i class="fas fa-save"></i> حفظ النسبة</button>
+      </div>
+    </div>
+    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-bolt"></i> نِسب سريعة</div>
+      <div class="ma-quick" style="gap:10px;margin-top:8px">
+        <button data-rate="1">1%</button><button data-rate="2">2%</button><button data-rate="3">3%</button><button data-rate="5">5%</button><button data-rate="10">10%</button>
+      </div>
+    </div>
+    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-exclamation-triangle" style="color:#f5b342"></i> تنبيه</div>
+      <div style="color:#a8b0cc;font-size:.88rem;line-height:1.9;padding:4px 0">
+        • تغيير النسبة <strong style="color:#fff">لا يؤثر</strong> على الطلبات المسلّمة سابقاً<br>
+        • النسبة الجديدة تُستخدم في حساب الكاش باك المتوقع للطلبات الجارية<br>
+        • لتغيير كاش باك طلب محدد، استخدم زر الكاش باك في سجل الطلبات
+      </div>
+    </div>
+  `;
+  $('rateSave').addEventListener('click', async () => {
+    const v = Number($('rateInput').value);
+    if(isNaN(v) || v < 0 || v > 100){ toast('نسبة غير صحيحة','error'); return; }
+    const rate = v / 100;
+    const oldRate = settings.cashback_rate;
+    await saveSetting('cashback_rate', rate);
+    await logAudit('rate_changed', {old: oldRate, new: rate});
+    toast(`✅ تم الحفظ: ${v.toFixed(2)}%`, 'success');
+    renderRateView(el);
+  });
+  el.querySelectorAll('[data-rate]').forEach(b => b.addEventListener('click', () => { $('rateInput').value = b.dataset.rate; }));
+}
+
+// ═══ REWARDS LOG ═══
+function renderRewardsLogView(el){
+  const pos = allCashbackLog.filter(l => Number(l.amount) > 0).reduce((s,l) => s + Number(l.amount), 0);
+  const neg = Math.abs(allCashbackLog.filter(l => Number(l.amount) < 0).reduce((s,l) => s + Number(l.amount), 0));
+  el.innerHTML = `
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-list"></i> سجل الكاش باك</div><div class="ma-page-sub">${allCashbackLog.length} عملية</div></div></div>
+    <div class="ma-stats">
+      <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-plus-circle"></i></div><div class="ma-stat-val">${fmtInt(pos)}</div><div class="ma-stat-lbl">مضاف</div></div>
+      <div class="ma-stat" style="--accent:#d90429;--icon-bg:rgba(217,4,41,.15)"><div class="ma-stat-icon"><i class="fas fa-minus-circle"></i></div><div class="ma-stat-val">${fmtInt(neg)}</div><div class="ma-stat-lbl">مخصوم</div></div>
+      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-list"></i></div><div class="ma-stat-val">${allCashbackLog.length}</div><div class="ma-stat-lbl">العمليات</div></div>
+    </div>
+    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-history"></i> العمليات</div>
+      ${allCashbackLog.length ? `<div style="max-height:600px;overflow-y:auto"><table class="ma-table"><thead><tr><th>العميل</th><th>المبلغ</th><th>النوع</th><th>السبب</th><th>بواسطة</th><th>التاريخ</th></tr></thead><tbody>${allCashbackLog.map(l => {const amt = Number(l.amount||0), pos = amt > 0; return `<tr><td style="font-size:.8rem">${esc(l.user_email||'—')}</td><td style="font-weight:900;color:${pos?'#4caf50':'#d90429'}" class="mono">${pos?'+':''}${fmtNum(amt)}</td><td><span class="ma-badge" style="background:rgba(74,122,255,.15);color:#6a9aff">${esc(l.type||'—')}</span></td><td style="font-size:.78rem;color:#a8b0cc">${esc(l.reason||'—')}</td><td style="font-size:.76rem;color:#8a92b0">${esc(l.created_by||'—')}</td><td style="font-size:.76rem;color:#8a92b0">${fmtDate(l.created_at)}</td></tr>`;}).join('')}</tbody></table></div>` : '<div class="ma-empty"><i class="fas fa-list"></i><h3>لا عمليات</h3></div>'}
+    </div>
+  `;
+}
+
+// ═══ AUDIT ═══
+function renderAuditView(el){
+  el.innerHTML = `
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-history"></i> سجل التدقيق</div><div class="ma-page-sub">${allAuditLog.length} عملية</div></div></div>
+    ${!allAuditLog.length ? `<div class="ma-card"><div class="ma-empty"><i class="fas fa-history"></i><h3>لا سجلات تدقيق</h3><p>ملاحظة: يحتاج جدول men_audit_log في Supabase</p></div></div>` : ''}
+    <div class="ma-toolbar"><div class="ma-search"><input type="text" id="auditSearch" placeholder="ابحث..."><i class="fas fa-search"></i></div></div>
+    <div id="auditTableContainer"></div>
+  `;
+  const render = () => {
+    const q = ($('auditSearch').value || '').trim().toLowerCase();
+    const filtered = allAuditLog.filter(l => !q || `${l.action} ${l.admin_email} ${l.details||''}`.toLowerCase().includes(q));
+    const c = $('auditTableContainer');
+    if(!filtered.length){ c.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-search"></i><h3>لا نتائج</h3></div></div>`; return; }
+    const labels = {
+      rate_changed:{l:'تغيير نسبة',i:'fa-percent',c:'#f5b342'},
+      cashback_add:{l:'إضافة كاش باك',i:'fa-gift',c:'#4caf50'},
+      cashback_deduct:{l:'خصم كاش باك',i:'fa-minus',c:'#d90429'},
+      order_deleted:{l:'حذف طلب',i:'fa-trash',c:'#d90429'},
+      note_sent:{l:'إرسال ملاحظة',i:'fa-comment-dots',c:'#9333ea'},
+      cashback_paid:{l:'دفع كاش باك',i:'fa-money-bill-wave',c:'#4caf50'},
+      export_orders:{l:'تصدير طلبات',i:'fa-download',c:'#4a7aff'},
+      export_customers:{l:'تصدير عملاء',i:'fa-download',c:'#4a7aff'},
+      export_cashback:{l:'تصدير كاش باك',i:'fa-download',c:'#4a7aff'},
+      export_backup:{l:'نسخة احتياطية',i:'fa-download',c:'#4a7aff'}
+    };
+    c.innerHTML = `<div class="ma-table-wrap"><table class="ma-table"><thead><tr><th>الإجراء</th><th>المشرف</th><th>التفاصيل</th><th>التاريخ</th></tr></thead><tbody>${filtered.map(l => {
+      const m = labels[l.action] || {l:l.action,i:'fa-circle-info',c:'#6a9aff'};
+      return `<tr><td><span class="ma-badge" style="background:${m.c}22;color:${m.c};border:1px solid ${m.c}55"><i class="fas ${m.i}"></i> ${esc(m.l)}</span></td><td style="font-size:.8rem" dir="ltr">${esc(l.admin_email||'—')}</td><td style="font-size:.76rem;color:#a8b0cc;max-width:400px;word-break:break-all">${esc((l.details||'').substring(0,200))}</td><td style="font-size:.76rem;color:#8a92b0">${fmtDate(l.created_at)}</td></tr>`;
+    }).join('')}</tbody></table></div>`;
+  };
+  $('auditSearch').addEventListener('input', render);
+  render();
+}
+
+// ═══ DATA ═══
+function renderDataView(el){
+  el.innerHTML = `
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-database"></i> البيانات</div><div class="ma-page-sub">تصدير ونسخ احتياطي</div></div></div>
+    <div class="ma-stats">
+      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-box"></i></div><div class="ma-stat-val">${allOrders.length}</div><div class="ma-stat-lbl">طلبات</div></div>
+      <div class="ma-stat" style="--accent:#9333ea;--icon-bg:rgba(147,51,234,.15)"><div class="ma-stat-icon"><i class="fas fa-users"></i></div><div class="ma-stat-val">${allUsers.length}</div><div class="ma-stat-lbl">عملاء</div></div>
+      <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-gift"></i></div><div class="ma-stat-val">${allCashbackLog.length}</div><div class="ma-stat-lbl">كاش باك</div></div>
+      <div class="ma-stat" style="--accent:#00c9a7;--icon-bg:rgba(0,201,167,.15)"><div class="ma-stat-icon"><i class="fas fa-history"></i></div><div class="ma-stat-val">${allAuditLog.length}</div><div class="ma-stat-lbl">تدقيق</div></div>
+    </div>
+    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-file-export"></i> تصدير</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px">
+        <button class="ma-btn ma-btn-primary" style="height:60px;justify-content:flex-start;padding:0 20px" data-export="orders"><i class="fas fa-file-csv" style="font-size:1.2rem"></i><span><div style="font-weight:900">تصدير الطلبات</div><div style="font-size:.72rem;opacity:.8">CSV</div></span></button>
+        <button class="ma-btn ma-btn-primary" style="height:60px;justify-content:flex-start;padding:0 20px" data-export="customers"><i class="fas fa-file-csv" style="font-size:1.2rem"></i><span><div style="font-weight:900">تصدير العملاء</div><div style="font-size:.72rem;opacity:.8">CSV</div></span></button>
+        <button class="ma-btn ma-btn-gold" style="height:60px;justify-content:flex-start;padding:0 20px" data-export="cashback"><i class="fas fa-file-csv" style="font-size:1.2rem"></i><span><div style="font-weight:900">تصدير الكاش باك</div><div style="font-size:.72rem;opacity:.8">CSV</div></span></button>
+        <button class="ma-btn ma-btn-success" style="height:60px;justify-content:flex-start;padding:0 20px" data-export="all"><i class="fas fa-file-zipper" style="font-size:1.2rem"></i><span><div style="font-weight:900">نسخة احتياطية</div><div style="font-size:.72rem;opacity:.8">JSON</div></span></button>
+      </div>
+    </div>
+    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-info-circle"></i> معلومات النظام</div>
+      <div class="ma-detail-row"><span class="lbl">اسم المتجر</span><span class="val">${esc(settings.store_name)}</span></div>
+      <div class="ma-detail-row"><span class="lbl">نسبة الكاش باك</span><span class="val">${(settings.cashback_rate*100).toFixed(2)}%</span></div>
+      <div class="ma-detail-row"><span class="lbl">العملة</span><span class="val">${esc(settings.currency)}</span></div>
+      <div class="ma-detail-row"><span class="lbl">البريد</span><span class="val" dir="ltr">${esc(currentUser?.email||'—')}</span></div>
+      <div class="ma-detail-row"><span class="lbl">آخر تحديث</span><span class="val">${lastRefresh ? fmtDate(lastRefresh) : '—'}</span></div>
+    </div>
+  `;
+  el.querySelectorAll('[data-export]').forEach(b => {
+    b.addEventListener('click', () => {
+      const t = b.dataset.export;
+      if(t === 'orders') exportOrders();
+      else if(t === 'customers') exportCustomers();
+      else if(t === 'cashback') exportCashback();
+      else if(t === 'all') exportBackup();
+    });
+  });
+}
+
+// ═══ Export ═══
+function downloadFile(content, filename, mime){
+  const blob = new Blob([content], {type: mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+function toCSV(rows, headers){
+  const q = v => `"${String(v == null ? '' : v).replace(/"/g,'""')}"`;
+  const lines = [headers.map(h => q(h.label)).join(',')];
+  rows.forEach(r => lines.push(headers.map(h => q(typeof h.get === 'function' ? h.get(r) : r[h.key])).join(',')));
+  return '\ufeff' + lines.join('\n');
+}
+function exportOrders(){
+  downloadFile(toCSV(allOrders, [
+    {label:'رقم', get:o => o.id},{label:'العميل',key:'user_name'},{label:'البريد',key:'user_email'},
+    {label:'الجوال',key:'user_phone'},{label:'المبلغ', get:o => Number(o.total||0).toFixed(2)},
+    {label:'الحالة', get:o => ORDER_STATUS[o.status]?.label || o.status},
+    {label:'كاش باك', get:o => Number(o.cashback||0).toFixed(2)},
+    {label:'حالة الكاش باك', get:o => o.cashback_paid ? 'مدفوع' : (o.cashback_applied ? 'غير مدفوع' : '—')},
+    {label:'التاريخ', get:o => fmtDate(o.created_at)}
+  ]), `orders_${Date.now()}.csv`, 'text/csv;charset=utf-8');
+  toast('✅ تم التصدير','success');
+  logAudit('export_orders',{count:allOrders.length});
+}
+function exportCustomers(){
+  downloadFile(toCSV(allUsers, [
+    {label:'الاسم',key:'name'},{label:'البريد',key:'email'},{label:'الجوال',key:'phone'},
+    {label:'الكاش باك', get:u => Number(u.cashback||0).toFixed(2)},
+    {label:'التسجيل', get:u => fmtDate(u.created_at)}
+  ]), `customers_${Date.now()}.csv`, 'text/csv;charset=utf-8');
+  toast('✅ تم التصدير','success');
+  logAudit('export_customers',{count:allUsers.length});
+}
+function exportCashback(){
+  downloadFile(toCSV(allCashbackLog, [
+    {label:'البريد',key:'user_email'},{label:'المبلغ', get:l => Number(l.amount||0).toFixed(2)},
+    {label:'النوع',key:'type'},{label:'السبب',key:'reason'},{label:'بواسطة',key:'created_by'},
+    {label:'التاريخ', get:l => fmtDate(l.created_at)}
+  ]), `cashback_${Date.now()}.csv`, 'text/csv;charset=utf-8');
+  toast('✅ تم التصدير','success');
+  logAudit('export_cashback',{count:allCashbackLog.length});
+}
+function exportBackup(){
+  const backup = {exported_at:new Date().toISOString(), settings, orders:allOrders, customers:allUsers, cashback_log:allCashbackLog, audit_log:allAuditLog};
+  downloadFile(JSON.stringify(backup,null,2), `men_backup_${Date.now()}.json`, 'application/json');
+  toast('✅ تم التصدير','success');
+  logAudit('export_backup');
+}
+
+// ═══ Detail ═══
+function openDetailModal(orderId){
+  const order = allOrders.find(o => String(o.id) === String(orderId));
+  if(!order) return;
+  currentDetailOrder = order;
+  const st = ORDER_STATUS[order.status] || ORDER_STATUS.pending;
+  const items = Array.isArray(order.items) ? order.items : [];
+  $('maDetailOrderId').textContent = '#' + String(order.id).slice(-8).toUpperCase();
+  $('maDetailDate').innerHTML = `<i class="fas fa-clock"></i> ${fmtDate(order.created_at)}`;
+  let subtotal = 0;
+  const itemsRows = items.map((it,i) => {
+    const p = Number(it.price||0), q = Number(it.qty||1), t = p*q;
+    subtotal += t;
+    return `<tr><td>${i+1}</td><td>${esc(it.name||'منتج')}</td><td>${q}</td><td class="mono">${p.toFixed(2)} ر.س</td><td class="mono">${t.toFixed(2)} ر.س</td></tr>`;
+  }).join('') || `<tr><td colspan="5" style="text-align:center;color:#8a92b0;padding:20px">لا منتجات</td></tr>`;
+  const total = Number(order.total||0);
+  const shipping = Math.max(0, total - subtotal);
+  const cbEarned = Number(order.cashback||0);
+  const potentialCb = total * settings.cashback_rate;
+  let cbPill = '', cbAmount = '', cbPaidRow = '';
+  if(order.status === 'cancelled'){
+    cbPill = `<span class="ma-badge" style="background:rgba(217,4,41,.15);color:#ff6b6b"><i class="fas fa-ban"></i> ملغي</span>`;
+    cbAmount = '0.00 ر.س';
+  } else if(order.status === 'delivered' && order.cashback_applied){
+    cbAmount = `${cbEarned.toFixed(2)} ر.س`;
+    if(order.cashback_paid){
+      cbPill = `<span class="ma-badge" style="background:rgba(76,175,80,.15);color:#4caf50"><i class="fas fa-circle-check"></i> مدفوع</span>`;
+      if(order.cashback_paid_at) cbPaidRow = `<div class="ma-summary-row total"><span class="lbl">تاريخ الصرف</span><span class="val">${fmtDate(order.cashback_paid_at)}</span></div>`;
+    } else cbPill = `<span class="ma-badge" style="background:rgba(245,179,66,.15);color:#f5b342"><i class="fas fa-hourglass-half"></i> غير مدفوع</span>`;
+  } else {
+    cbPill = `<span class="ma-badge" style="background:rgba(74,122,255,.15);color:#6a9aff"><i class="fas fa-clock"></i> متوقع</span>`;
+    cbAmount = `${potentialCb.toFixed(2)} ر.س`;
+  }
+  $('maDetailBody').innerHTML = `
+    <div class="ma-detail-cols">
+      <div class="ma-detail-section"><div class="ma-detail-h3"><i class="fas fa-user"></i> العميل</div>
+        <div class="ma-detail-row"><span class="lbl">الاسم</span><span class="val">${esc(order.user_name||'—')}</span></div>
+        <div class="ma-detail-row"><span class="lbl">البريد</span><span class="val" dir="ltr">${esc(order.user_email||'—')}</span></div>
+        <div class="ma-detail-row"><span class="lbl">الجوال</span><span class="val" dir="ltr">${esc(order.user_phone||'—')}</span></div>
+        ${order.user_address ? `<div class="ma-detail-row"><span class="lbl">العنوان</span><span class="val">${esc(order.user_address)}</span></div>` : ''}
+      </div>
+      <div class="ma-detail-section"><div class="ma-detail-h3"><i class="fas fa-info-circle"></i> الطلب</div>
+        <div class="ma-detail-row"><span class="lbl">الحالة</span><span class="val"><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></span></div>
+        <div class="ma-detail-row"><span class="lbl">التاريخ</span><span class="val">${fmtDate(order.created_at)}</span></div>
+        ${order.updated_at ? `<div class="ma-detail-row"><span class="lbl">التحديث</span><span class="val">${fmtDate(order.updated_at)}</span></div>` : ''}
+      </div>
+    </div>
+    <div class="ma-detail-section"><div class="ma-detail-h3"><i class="fas fa-box"></i> المنتجات</div>
+      <table class="ma-items-table"><thead><tr><th>#</th><th>المنتج</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th></tr></thead><tbody>${itemsRows}</tbody></table>
+    </div>
+    <div class="ma-summary-grid">
+      <div class="ma-summary-box"><div class="ma-detail-h3"><i class="fas fa-credit-card"></i> الدفع</div>
+        <div class="ma-summary-row"><span class="lbl">المجموع الفرعي</span><span class="val">${subtotal.toFixed(2)} ر.س</span></div>
+        <div class="ma-summary-row"><span class="lbl">الشحن</span><span class="val">${shipping.toFixed(2)} ر.س</span></div>
+        <div class="ma-summary-row total"><span class="lbl">المبلغ المدفوع</span><span class="val">${total.toFixed(2)} ر.س</span></div>
+      </div>
+      <div class="ma-summary-box cashback"><div class="ma-detail-h3"><i class="fas fa-gift"></i> الكاش باك</div>
+        <div class="ma-summary-row"><span class="lbl">المكتسب</span><span class="val">${cbAmount}</span></div>
+        <div class="ma-summary-row"><span class="lbl">الحالة</span><span class="val">${cbPill}</span></div>
+        ${cbPaidRow}
+      </div>
+    </div>
+  `;
+  $('maDetailModal').classList.add('show');
+}
+function closeDetailModal(){ $('maDetailModal').classList.remove('show'); currentDetailOrder = null; }
+
+// ═══ Print ═══
+function printCurrentOrder(){
+  if(!currentDetailOrder) return;
+  const o = currentDetailOrder;
+  const items = Array.isArray(o.items) ? o.items : [];
+  let subtotal = 0;
+  const itemsRows = items.map((it,i) => {
+    const p = Number(it.price||0), q = Number(it.qty||1), t = p*q;
+    subtotal += t;
+    return `<tr><td style="text-align:center">${i+1}</td><td>${esc(it.name||'منتج')}</td><td style="text-align:center">${q}</td><td class="num">${p.toFixed(2)}</td><td class="num">${t.toFixed(2)}</td></tr>`;
+  }).join('') || '<tr><td colspan="5" style="text-align:center">لا منتجات</td></tr>';
+  const total = Number(o.total||0);
+  const ship = Math.max(0, total - subtotal);
+  const cbE = Number(o.cashback||0);
+  const cbP = total * settings.cashback_rate;
+  const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
+  let cbAmt = '0.00', cbSt = '—', cbD = '—';
+  if(o.status === 'cancelled') cbSt = 'ملغي';
+  else if(o.status === 'delivered' && o.cashback_applied){
+    cbAmt = cbE.toFixed(2);
+    cbSt = o.cashback_paid ? 'مدفوع ✓' : 'غير مدفوع';
+    cbD = o.cashback_paid && o.cashback_paid_at ? fmtDate(o.cashback_paid_at) : '—';
+  } else { cbAmt = cbP.toFixed(2) + ' (متوقع)'; cbSt = 'قيد الانتظار'; }
+
+  const html = `<div class="head"><div class="brand"><img src="${LOGO_URL}"><div><div class="brand-name">MEN Store</div><div class="brand-tag">فاتورة رسمية</div></div></div>
+    <div class="order-box"><div class="num">#${String(o.id).slice(-8).toUpperCase()}</div><div>${fmtDate(o.created_at)}</div><div>${st.label}</div></div></div>
+    <div class="section"><h2>العميل</h2><table class="info-table">
+      <tr><td class="lbl">الاسم</td><td>${esc(o.user_name||'—')}</td><td class="lbl">البريد</td><td dir="ltr" style="text-align:right">${esc(o.user_email||'—')}</td></tr>
+      <tr><td class="lbl">الجوال</td><td dir="ltr" style="text-align:right">${esc(o.user_phone||'—')}</td><td class="lbl">العنوان</td><td>${esc(o.user_address||'—')}</td></tr>
+    </table></div>
+    <div class="section"><h2>المنتجات</h2><table class="items-table"><thead><tr><th style="width:40px;text-align:center">#</th><th>المنتج</th><th style="width:70px;text-align:center">الكمية</th><th style="width:100px">السعر</th><th style="width:110px">الإجمالي</th></tr></thead><tbody>${itemsRows}</tbody></table></div>
+    <div class="bottom">
+      <div class="section"><h2>الدفع</h2><table class="summary-table">
+        <tr><td class="lbl">المجموع الفرعي</td><td class="val">${subtotal.toFixed(2)} ر.س</td></tr>
+        <tr><td class="lbl">الشحن</td><td class="val">${ship.toFixed(2)} ر.س</td></tr>
+        <tr class="total"><td class="lbl">المدفوع</td><td class="val">${total.toFixed(2)} ر.س</td></tr>
+      </table></div>
+      <div class="section"><h2>الكاش باك</h2><table class="summary-table">
+        <tr><td class="lbl">المكتسب</td><td class="val">${cbAmt} ر.س</td></tr>
+        <tr><td class="lbl">الحالة</td><td class="val">${cbSt}</td></tr>
+        <tr><td class="lbl">تاريخ الصرف</td><td class="val">${cbD}</td></tr>
+      </table></div>
+    </div>
+    <div class="foot"><div class="thanks">شكراً 🌟</div><div>MEN Store</div></div>`;
+
+  const w = window.open('', '_blank', 'width=900,height=700');
+  if(!w){ toast('الرجاء السماح بالنوافذ المنبثقة','error'); return; }
+  w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>فاتورة</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Cairo',sans-serif;background:#fff;color:#000;padding:14mm;font-size:11pt;line-height:1.6}
-@page{size:A4;margin:12mm}
-@media print{body{padding:0}}
-.head{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:14px;border-bottom:2px solid #000;margin-bottom:18px;gap:16px}
-.brand{display:flex;align-items:center;gap:12px}
-.brand img{height:50px}
-.brand-name{font-size:16pt;font-weight:900;letter-spacing:-.5px}
-.brand-tag{font-size:9pt;color:#333;font-weight:600}
-.order-box{text-align:left;font-size:10pt;line-height:1.7}
-.order-box .num{font-size:14pt;font-weight:900;font-family:'Courier New',monospace}
-.section{margin-bottom:16px;page-break-inside:avoid}
-.section h2{font-size:11pt;font-weight:900;background:#f0f0f0;padding:6px 10px;margin-bottom:10px;border-right:4px solid #000;text-transform:uppercase;letter-spacing:.5px}
-.info-table{width:100%;border-collapse:collapse;font-size:10pt}
-.info-table td{padding:6px 10px;border:1px solid #ccc}
-.info-table td.lbl{background:#f7f7f7;font-weight:800;width:22%}
-.items-table{width:100%;border-collapse:collapse;font-size:10pt}
-.items-table thead th{background:#000;color:#fff;padding:8px 10px;text-align:right;font-weight:800;font-size:9.5pt;border:1px solid #000}
-.items-table tbody td{padding:8px 10px;border:1px solid #ccc}
-.items-table tbody tr:nth-child(even) td{background:#fafafa}
-.items-table .num{font-family:'Courier New',monospace;direction:ltr;text-align:left;font-weight:800}
-.bottom{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;page-break-inside:avoid}
-.summary-table{width:100%;border-collapse:collapse;font-size:10pt}
-.summary-table td{padding:7px 10px;border:1px solid #ccc}
-.summary-table td.lbl{background:#f7f7f7;font-weight:700}
-.summary-table td.val{font-family:'Courier New',monospace;direction:ltr;text-align:left;font-weight:800}
-.summary-table tr.total td{background:#000;color:#fff;font-weight:900;font-size:11pt;padding:10px}
-.summary-table tr.total td.val{color:#fff;font-size:12pt}
-.foot{margin-top:24px;padding-top:14px;border-top:2px solid #000;display:flex;justify-content:space-between;align-items:center;font-size:9pt;page-break-inside:avoid}
-.foot .thanks{font-weight:900;font-size:11pt}
-</style>
-</head>
-<body>${bodyHtml}</body>
-</html>`);
-    w.document.close();
-    w.onload = () => { w.focus(); w.print(); };
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Cairo',sans-serif;background:#fff;color:#000;padding:14mm;font-size:11pt;line-height:1.6}@page{size:A4;margin:12mm}@media print{body{padding:0}}
+.head{display:flex;justify-content:space-between;padding-bottom:14px;border-bottom:2px solid #000;margin-bottom:18px}.brand{display:flex;align-items:center;gap:12px}.brand img{height:50px}.brand-name{font-size:16pt;font-weight:900}.brand-tag{font-size:9pt;color:#333}.order-box{text-align:left;font-size:10pt}.order-box .num{font-size:14pt;font-weight:900;font-family:'Courier New',monospace}
+.section{margin-bottom:16px;page-break-inside:avoid}.section h2{font-size:11pt;font-weight:900;background:#f0f0f0;padding:6px 10px;margin-bottom:10px;border-right:4px solid #000}
+.info-table{width:100%;border-collapse:collapse;font-size:10pt}.info-table td{padding:6px 10px;border:1px solid #ccc}.info-table td.lbl{background:#f7f7f7;font-weight:800;width:22%}
+.items-table{width:100%;border-collapse:collapse;font-size:10pt}.items-table thead th{background:#000;color:#fff;padding:8px 10px;text-align:right;font-weight:800;border:1px solid #000}.items-table tbody td{padding:8px 10px;border:1px solid #ccc}.items-table tbody tr:nth-child(even) td{background:#fafafa}.items-table .num{font-family:'Courier New',monospace;direction:ltr;text-align:left;font-weight:800}
+.bottom{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.summary-table{width:100%;border-collapse:collapse;font-size:10pt}.summary-table td{padding:7px 10px;border:1px solid #ccc}.summary-table td.lbl{background:#f7f7f7;font-weight:700}.summary-table td.val{font-family:'Courier New',monospace;direction:ltr;text-align:left;font-weight:800}.summary-table tr.total td{background:#000;color:#fff;font-weight:900;padding:10px}
+.foot{margin-top:24px;padding-top:14px;border-top:2px solid #000;display:flex;justify-content:space-between;font-size:9pt}.foot .thanks{font-weight:900;font-size:11pt}
+</style></head><body>${html}</body></html>`);
+  w.document.close();
+  w.onload = () => { w.focus(); w.print(); };
+}
+
+// ═══ Toggle Paid ═══
+async function toggleCashbackPaid(orderId, paid){
+  const order = allOrders.find(o => String(o.id) === String(orderId));
+  if(!order) return;
+  const updates = {cashback_paid: paid, cashback_paid_at: paid ? new Date().toISOString() : null, updated_at: new Date().toISOString()};
+  try {
+    const { error } = await sb.from('men_orders').update(updates).eq('id', orderId);
+    if(error) throw error;
+    Object.assign(order, updates);
+    await logAudit(paid ? 'cashback_paid' : 'cashback_unpaid', {order_id: orderId, amount: order.cashback});
+    renderView(currentView);
+    toast(paid ? '✅ تم التعليم كمدفوع' : '↩️ تم إلغاء الدفع', 'success');
+  } catch(e){ toast('فشل: ' + e.message, 'error'); }
+}
+
+// ═══ Cashback ═══
+function openUserCbModal(userId, mode='add'){
+  const user = allUsers.find(u => String(u.id) === String(userId));
+  if(!user) return;
+  cbMode = mode;
+  selectedOrderForCashback = {user_id:user.id, user_email:user.email, user_name:user.name, id:'—'};
+  updateCbModalUI();
+  const hint = mode === 'deduct' ? '<em style="color:#ff8a8a">خصم</em>' : '<em style="color:#6a9aff">إضافة</em>';
+  $('maCbSub').innerHTML = `العميل: <strong>${esc(user.name||'—')}</strong><br>البريد: <strong dir="ltr">${esc(user.email||'—')}</strong><br>الرصيد: <strong style="color:#f5b342">${fmtNum(user.cashback)} ر.س</strong><br>${hint}`;
+  $('maCbAmount').value = ''; $('maCbReason').value = '';
+  $('maCbModal').classList.add('show');
+  setTimeout(() => $('maCbAmount').focus(), 200);
+}
+function openCbModal(orderId, mode='add'){
+  const order = allOrders.find(o => String(o.id) === String(orderId));
+  if(!order) return;
+  cbMode = mode;
+  selectedOrderForCashback = order;
+  updateCbModalUI();
+  $('maCbSub').innerHTML = `العميل: <strong>${esc(order.user_name||'—')}</strong><br>الطلب: <strong>#${String(order.id).slice(-8).toUpperCase()}</strong>`;
+  $('maCbAmount').value = ''; $('maCbReason').value = '';
+  $('maCbModal').classList.add('show');
+  setTimeout(() => $('maCbAmount').focus(), 200);
+}
+function updateCbModalUI(){
+  const isD = cbMode === 'deduct';
+  const icon = $('maCbIcon'), btn = $('maCbConfirm');
+  $('maCbTitle').textContent = isD ? 'خصم كاش باك' : 'إضافة كاش باك';
+  if(isD){
+    icon.className = 'fas fa-minus'; icon.style.background = 'linear-gradient(135deg,#d90429,#8b0018)'; icon.style.color = '#fff';
+    btn.className = 'confirm deduct'; btn.innerHTML = '<i class="fas fa-minus"></i> خصم';
+  } else {
+    icon.className = 'fas fa-gift'; icon.style.background = 'linear-gradient(135deg,#f5b342,#c98a1e)'; icon.style.color = '#000';
+    btn.className = 'confirm'; btn.innerHTML = '<i class="fas fa-check"></i> إضافة';
   }
+}
+function closeCbModal(){ $('maCbModal').classList.remove('show'); selectedOrderForCashback = null; cbMode = 'add'; }
 
-  async function toggleCashbackPaid(orderId, paid) {
-    const order = allOrders.find(o => String(o.id) === String(orderId));
-    if (!order) return;
-    const updates = {
-      cashback_paid: paid,
-      cashback_paid_at: paid ? new Date().toISOString() : null,
-      updated_at: new Date().toISOString()
-    };
-    try {
-      const { error } = await sb.from('men_orders').update(updates).eq('id', orderId);
-      if (error) throw error;
-      Object.assign(order, updates);
-      renderOrders();
-      toast(paid ? `✅ تم تعليم الكاش باك كمدفوع` : `↩️ تم إلغاء تعليم الدفع`, 'success');
-      if (paid) {
-        try {
-          await sb.from('men_messages').insert({
-            user_id: order.user_id, user_email: order.user_email,
-            sender: 'admin', sender_name: 'الإدارة', sender_email: currentUser.email,
-            message: `تم دفع كاش باك بقيمة ${Number(order.cashback || 0).toFixed(2)} ر.س لطلبك #${String(orderId).slice(-8).toUpperCase()} ✅`,
-            type: 'note', is_read: false
-          });
-        } catch (e) { console.warn('notify paid:', e); }
-      }
-    } catch (err) {
-      console.error(err);
-      toast('فشل التحديث: ' + err.message, 'error');
-    }
-  }
+async function confirmCashback(){
+  const amount = Number($('maCbAmount').value);
+  const reasonInput = $('maCbReason').value.trim();
+  if(!amount || amount <= 0){ toast('مبلغ غير صحيح', 'error'); return; }
+  if(!selectedOrderForCashback) return;
+  const order = selectedOrderForCashback;
+  const isD = cbMode === 'deduct';
+  const signed = isD ? -amount : amount;
+  const btn = $('maCbConfirm');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>...';
+  try {
+    const { data: u, error: uE } = await sb.from('men_users').select('cashback, name').eq('id', order.user_id).maybeSingle();
+    if(uE) throw uE;
+    const cur = Number(u?.cashback||0);
+    if(isD && amount > cur){ toast(`الرصيد ${fmtNum(cur)} فقط`, 'error'); btn.disabled = false; updateCbModalUI(); return; }
+    const reason = reasonInput || (isD ? 'خصم' : 'إضافة');
+    await sb.from('men_cashback_log').insert({user_id:order.user_id, user_email:order.user_email, amount:signed, reason, order_id: order.id !== '—' ? order.id : null, type: isD ? 'deduct' : 'manual', created_by: currentUser.email});
+    const newCb = Math.round((cur + signed) * 100) / 100;
+    await sb.from('men_users').update({cashback: newCb, updated_at: new Date().toISOString()}).eq('id', order.user_id);
+    const lu = allUsers.find(x => String(x.id) === String(order.user_id));
+    if(lu) lu.cashback = newCb;
+    const lbl = u?.name || order.user_name || order.user_email;
+    await logAudit(isD ? 'cashback_deduct' : 'cashback_add', {user:lbl, amount, reason});
+    toast(isD ? `✅ خصم ${fmtNum(amount)}` : `✅ إضافة ${fmtNum(amount)}`, 'success');
+    closeCbModal();
+    renderView(currentView);
+  } catch(e){ toast('فشل: ' + e.message, 'error'); btn.disabled = false; updateCbModalUI(); }
+}
 
-  async function loadUsers(silent = false) {
-    const container = $('maUsers');
-    if (!silent) container.innerHTML = '<div class="ma-loader"><div class="ma-spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل العملاء...</p></div>';
-    try {
-      const { data, error } = await sb.from('men_users').select('*').order('created_at', { ascending: false }).limit(500);
-      if (error) throw error;
-      allUsers = data || [];
-      $('maStatCustomers').textContent = allUsers.length;
-      const totalCashback = allUsers.reduce((s, u) => s + Number(u.cashback || 0), 0);
-      $('maStatCashback').textContent = totalCashback.toFixed(0);
-      if (!silent) renderUsers();
-    } catch (err) {
-      console.error(err);
-      if (!silent) container.innerHTML = `<div class="ma-empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i><h3>فشل تحميل العملاء</h3><p>${escapeHtml(err.message)}</p></div>`;
-    }
-  }
+// ═══ Delete ═══
+function openDelModal(orderId){
+  const order = allOrders.find(o => String(o.id) === String(orderId));
+  if(!order) return;
+  selectedOrderForDelete = order;
+  const items = Array.isArray(order.items) ? order.items : [];
+  const list = items.length ? items.map(i => `• ${esc(i.name||'منتج')} × ${i.qty||1}`).join('<br>') : '—';
+  $('maDelSub').innerHTML = `الطلب: <strong>#${String(order.id).slice(-8).toUpperCase()}</strong><br>العميل: <strong>${esc(order.user_name||'—')}</strong><br>المبلغ: <strong style="color:#6a9aff">${fmtNum(order.total)} ر.س</strong><br><div style="margin-top:10px;padding:10px 12px;background:rgba(0,0,0,.25);border-radius:12px;font-size:.82rem;line-height:1.9">${list}</div>`;
+  $('maDelModal').classList.add('show');
+}
+function closeDelModal(){ $('maDelModal').classList.remove('show'); selectedOrderForDelete = null; }
 
-  function renderUsers() {
-    const container = $('maUsers');
-    const q = ($('maSearch').value || '').trim().toLowerCase();
-    let filtered = allUsers.filter(u => {
-      if (!q) return true;
-      const hay = `${u.id} ${u.name||''} ${u.email||''} ${u.phone||''}`.toLowerCase();
-      return hay.includes(q);
-    });
-    if (!filtered.length) {
-      container.innerHTML = `<div class="ma-empty"><i class="fas fa-users"></i><h3>لا يوجد عملاء</h3><p>${q ? 'لا يوجد نتائج مطابقة للبحث' : 'سيظهر العملاء هنا عند تسجيلهم'}</p></div>`;
-      return;
-    }
-    container.innerHTML = '<div class="ma-orders">' + filtered.map(renderUserCard).join('') + '</div>';
-    container.querySelectorAll('[data-user-cb]').forEach(btn => {
-      btn.addEventListener('click', () => openUserCbModal(btn.dataset.userCb, btn.dataset.cbMode || 'add'));
-    });
-    container.querySelectorAll('[data-user-note]').forEach(btn => {
-      btn.addEventListener('click', () => openNoteModal(btn.dataset.userNote));
-    });
-    container.querySelectorAll('[data-user-chat]').forEach(btn => {
-      btn.addEventListener('click', () => openChatModal(btn.dataset.userChat));
-    });
-  }
-
-  function getUserStats(userId) {
-    const list = allOrders.filter(o => String(o.user_id) === String(userId));
-    const total = list.length;
-    const delivered = list.filter(o => o.status === 'delivered');
-    const paid = delivered.reduce((s, o) => s + Number(o.total || 0), 0);
-    const pending = list.filter(o => o.status !== 'delivered' && o.status !== 'cancelled').length;
-    const cancelled = list.filter(o => o.status === 'cancelled').length;
-    return { total, paid, pending, cancelled, lastOrder: list[0] };
-  }
-
-  function renderUserCard(u) {
-    const stats = getUserStats(u.id);
-    const nameParts = (u.name || 'M').split(/\s+/);
-    let initials = '?';
-    if (nameParts.length === 1) initials = nameParts[0].substring(0, 2);
-    else initials = (nameParts[0][0] || '') + (nameParts[nameParts.length - 1][0] || '');
-    initials = initials.toUpperCase();
-    const lastTxt = stats.lastOrder ? fmtTimeAgo(stats.lastOrder.created_at) : 'لا يوجد';
-
-    return `
-      <div class="ma-order">
-        <div class="ma-order-top">
-          <div style="display:flex;align-items:center;gap:14px">
-            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;color:#fff">${escapeHtml(initials)}</div>
-            <div>
-              <div class="ma-order-id"><span class="dot" style="background:#4caf50"></span> ${escapeHtml(u.name || 'بدون اسم')}</div>
-              <div class="ma-order-date" style="margin-top:6px"><i class="fas fa-envelope"></i> ${escapeHtml(u.email || '—')}</div>
-            </div>
-          </div>
-          <div class="ma-order-badge" style="background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff"><i class="fas fa-user"></i> عميل</div>
-        </div>
-        <div class="ma-user-stats">
-          <div class="ma-us-item"><div class="ma-us-val">${stats.total}</div><div class="ma-us-lbl">إجمالي الطلبات</div></div>
-          <div class="ma-us-item"><div class="ma-us-val">${stats.paid.toFixed(0)} ر.س</div><div class="ma-us-lbl">إجمالي المدفوع</div></div>
-          <div class="ma-us-item"><div class="ma-us-val" style="background:linear-gradient(135deg,#66bb6a,#2e7d32);-webkit-background-clip:text;background-clip:text;color:transparent">${Number(u.cashback || 0).toFixed(0)} ر.س</div><div class="ma-us-lbl">رصيد الكاش باك</div></div>
-          <div class="ma-us-item"><div class="ma-us-val" style="font-size:.86rem">${lastTxt}</div><div class="ma-us-lbl">آخر طلب</div></div>
-        </div>
-        <div class="ma-customer">
-          <div class="ma-cust-item"><i class="fas fa-phone"></i><div><div class="lbl">الجوال</div><div class="val">${escapeHtml(u.phone || '—')}</div></div></div>
-          <div class="ma-cust-item"><i class="fas fa-calendar"></i><div><div class="lbl">سجل في</div><div class="val">${fmtDate(u.created_at)}</div></div></div>
-          <div class="ma-cust-item"><i class="fas fa-hourglass-half"></i><div><div class="lbl">طلبات جارية</div><div class="val">${stats.pending}</div></div></div>
-          <div class="ma-cust-item"><i class="fas fa-circle-xmark"></i><div><div class="lbl">ملغاة</div><div class="val">${stats.cancelled}</div></div></div>
-        </div>
-        <div class="ma-actions">
-          <button class="ma-btn-action ma-btn-chat" data-user-chat="${u.id}"><i class="fas fa-comments"></i> المحادثة</button>
-          <button class="ma-btn-action ma-btn-note" data-user-note="${u.id}"><i class="fas fa-comment-dots"></i> ملاحظة</button>
-          <button class="ma-btn-action ma-btn-cb" data-user-cb="${u.id}" data-cb-mode="add"><i class="fas fa-gift"></i> إضافة كاش باك</button>
-          <button class="ma-btn-action ma-btn-deduct" data-user-cb="${u.id}" data-cb-mode="deduct"><i class="fas fa-minus"></i> خصم كاش باك</button>
-        </div>
-      </div>
-    `;
-  }
-
-  async function applyStatus(orderId, newStatus, btnEl) {
-    if (!ORDER_STATUS[newStatus]) return;
-    const order = allOrders.find(o => String(o.id) === String(orderId));
-    if (!order) return;
-    if (order.status === newStatus) { toast('الحالة نفسها', 'info'); return; }
-    if (btnEl) { btnEl.disabled = true; btnEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري...'; }
-    const oldStatus = order.status;
-    const updates = { status: newStatus, updated_at: new Date().toISOString() };
-    let cbMsg = '';
-
-    if (newStatus === 'delivered' && !order.cashback_applied) {
-      const earned = Math.round(Number(order.total || 0) * CASHBACK_RATE * 100) / 100;
-      updates.cashback = earned;
-      updates.cashback_applied = true;
-      updates.cashback_applied_at = new Date().toISOString();
-      updates.cashback_paid = false;
-      cbMsg = ` + ${earned.toFixed(2)} ر.س كاش باك`;
+async function confirmDelete(){
+  if(!selectedOrderForDelete) return;
+  const order = selectedOrderForDelete;
+  const btn = $('maDelConfirm');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>...';
+  try {
+    if(order.cashback_applied && Number(order.cashback||0) > 0){
+      const refund = Number(order.cashback||0);
       try {
-        await sb.from('men_cashback_log').insert({
-          user_id: order.user_id, user_email: order.user_email, amount: earned,
-          reason: `كاش باك تلقائي من الطلب #${orderId}`, order_id: orderId,
-          type: 'order', created_by: currentUser.email
-        });
-        const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
-        const newCb = Math.round((Number(u?.cashback || 0) + earned) * 100) / 100;
-        await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', order.user_id);
-      } catch (e) { console.warn(e); }
+        await sb.from('men_cashback_log').insert({user_id:order.user_id, user_email:order.user_email, amount:-refund, reason:`حذف الطلب`, order_id:order.id, type:'refund', created_by:currentUser.email});
+        const { data:u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
+        const newCb = Math.max(0, Math.round((Number(u?.cashback||0) - refund) * 100) / 100);
+        await sb.from('men_users').update({cashback: newCb}).eq('id', order.user_id);
+        const lu = allUsers.find(x => String(x.id) === String(order.user_id));
+        if(lu) lu.cashback = newCb;
+      } catch(e){ console.warn(e); }
     }
+    await sb.from('men_orders').delete().eq('id', order.id);
+    allOrders = allOrders.filter(o => String(o.id) !== String(order.id));
+    await logAudit('order_deleted', {order_id:order.id, total:order.total});
+    toast('🗑️ تم الحذف', 'success');
+    closeDelModal();
+    renderView(currentView);
+  } catch(e){ toast('فشل: ' + e.message, 'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-trash"></i> حذف'; }
+}
 
-    if ((oldStatus === 'delivered' && newStatus !== 'delivered') || newStatus === 'cancelled') {
-      if (order.cashback_applied && order.cashback > 0) {
-        const refund = Number(order.cashback || 0);
-        updates.cashback = 0;
-        updates.cashback_applied = false;
-        updates.cashback_paid = false;
-        cbMsg = ` − خصم ${refund.toFixed(2)} ر.س`;
-        try {
-          await sb.from('men_cashback_log').insert({
-            user_id: order.user_id, user_email: order.user_email, amount: -refund,
-            reason: `إلغاء كاش باك الطلب #${orderId}`, order_id: orderId,
-            type: 'refund', created_by: currentUser.email
-          });
-          const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
-          const newCb = Math.max(0, Math.round((Number(u?.cashback || 0) - refund) * 100) / 100);
-          await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', order.user_id);
-        } catch (e) { console.warn(e); }
-      }
-    }
+// ═══ Note ═══
+function openNoteModal(userId){
+  const user = allUsers.find(u => String(u.id) === String(userId));
+  if(!user) return;
+  selectedUserForNote = user;
+  $('maNoteSub').innerHTML = `العميل: <strong>${esc(user.name||'—')}</strong><br>البريد: <strong dir="ltr">${esc(user.email||'—')}</strong>`;
+  $('maNoteText').value = '';
+  $('maNoteModal').classList.add('show');
+  setTimeout(() => $('maNoteText').focus(), 200);
+}
+function closeNoteModal(){ $('maNoteModal').classList.remove('show'); selectedUserForNote = null; }
+async function confirmNote(){
+  if(!selectedUserForNote) return;
+  const text = $('maNoteText').value.trim();
+  if(!text){ toast('اكتب النص','error'); return; }
+  const btn = $('maNoteConfirm');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>...';
+  try {
+    await sb.from('men_messages').insert({user_id:selectedUserForNote.id, user_email:selectedUserForNote.email, sender:'admin', sender_name:currentUser.user_metadata?.name || currentUser.email.split('@')[0], sender_email:currentUser.email, message:text, type:'note', is_read:false});
+    await logAudit('note_sent', {user:selectedUserForNote.email});
+    toast('📝 تم الإرسال','success');
+    closeNoteModal();
+  } catch(e){ toast('فشل: ' + e.message,'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال'; }
+}
 
-    try {
-      const { error } = await sb.from('men_orders').update(updates).eq('id', orderId);
-      if (error) throw error;
-      Object.assign(order, updates);
-      renderStats();
-      renderOrders();
-      toast(`✅ تم التحديث إلى "${ORDER_STATUS[newStatus].label}"${cbMsg}`, 'success');
-    } catch (err) {
-      console.error(err);
-      toast('فشل التحديث: ' + err.message, 'error');
-      if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = '<i class="fas fa-check"></i> تطبيق الحالة'; }
-    }
-  }
+// ═══ Chat ═══
+async function openChatModal(userId){
+  const user = allUsers.find(u => String(u.id) === String(userId));
+  if(!user) return;
+  selectedUserForChat = user;
+  const parts = (user.name||'M').split(/\s+/);
+  let ini = parts.length === 1 ? parts[0].substring(0,2) : (parts[0][0]||'') + (parts[parts.length-1][0]||'');
+  $('maChatAvatar').textContent = ini.toUpperCase();
+  $('maChatName').textContent = user.name || 'بدون اسم';
+  $('maChatEmail').textContent = user.email || '—';
+  $('maChatBody').innerHTML = '<div class="ma-chat-empty"><i class="fas fa-spinner fa-spin"></i> تحميل...</div>';
+  $('maChatInput').value = '';
+  $('maChatModal').classList.add('show');
+  await loadChatMessages(user.id);
+  setTimeout(() => $('maChatInput').focus(), 200);
+}
+function closeChatModal(){ $('maChatModal').classList.remove('show'); selectedUserForChat = null; }
+async function loadChatMessages(userId){
+  try {
+    const { data, error } = await sb.from('men_messages').select('*').eq('user_id', userId).order('created_at', {ascending:true}).limit(300);
+    if(error) throw error;
+    renderChat(data || []);
+  } catch(e){ $('maChatBody').innerHTML = `<div class="ma-chat-empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i> فشل: ${esc(e.message)}</div>`; }
+}
+function renderChat(msgs){
+  const b = $('maChatBody');
+  if(!msgs.length){ b.innerHTML = '<div class="ma-chat-empty"><i class="fas fa-comment-slash"></i> لا رسائل</div>'; return; }
+  b.innerHTML = msgs.map(m => {
+    const t = fmtDate(m.created_at);
+    if(m.type === 'note') return `<div class="ma-msg note"><div class="ma-msg-meta">📝 ملاحظة</div><div>${esc(m.message)}</div><div class="ma-msg-time">${t}</div></div>`;
+    const cls = m.sender === 'admin' ? 'admin' : 'customer';
+    const lbl = m.sender === 'admin' ? 'المشرف' : 'العميل';
+    return `<div class="ma-msg ${cls}"><div class="ma-msg-meta">${lbl}</div><div>${esc(m.message)}</div><div class="ma-msg-time">${t}</div></div>`;
+  }).join('');
+  b.scrollTop = b.scrollHeight;
+}
+async function sendChatMessage(){
+  if(!selectedUserForChat) return;
+  const inp = $('maChatInput'), text = inp.value.trim();
+  if(!text) return;
+  const btn = $('maChatSend');
+  btn.disabled = true;
+  try {
+    await sb.from('men_messages').insert({user_id:selectedUserForChat.id, user_email:selectedUserForChat.email, sender:'admin', sender_name:currentUser.user_metadata?.name || currentUser.email.split('@')[0], sender_email:currentUser.email, message:text, type:'chat', is_read:false});
+    inp.value = '';
+    await loadChatMessages(selectedUserForChat.id);
+  } catch(e){ toast('فشل: ' + e.message, 'error'); }
+  finally { btn.disabled = false; inp.focus(); }
+}
 
-  function openUserCbModal(userId, mode = 'add') {
-    const user = allUsers.find(u => String(u.id) === String(userId));
-    if (!user) return;
-    cbMode = mode;
-    selectedOrderForCashback = {
-      user_id: user.id, user_email: user.email, user_name: user.name,
-      user_cashback: Number(user.cashback || 0), id: '—'
-    };
-    updateCbModalUI();
-    const modeHint = mode === 'deduct'
-      ? `<em style="color:#ff8a8a">وضع الخصم — سيتم إنقاص المبلغ من رصيد العميل</em>`
-      : `<em style="color:#6a9aff">إضافة مباشرة للرصيد (بدون طلب)</em>`;
-    $('maCbSub').innerHTML = `
-      العميل: <strong>${escapeHtml(user.name || '—')}</strong><br>
-      البريد: <strong dir="ltr">${escapeHtml(user.email || '—')}</strong><br>
-      الرصيد الحالي: <strong style="color:#66bb6a">${Number(user.cashback || 0).toFixed(2)} ر.س</strong><br>
-      ${modeHint}
-    `;
-    $('maCbAmount').value = '';
-    $('maCbReason').value = '';
-    $('maCbModal').classList.add('show');
-    setTimeout(() => $('maCbAmount').focus(), 200);
-  }
+// ═══ Bind Events ═══
+function bindEvents(){
+  $('maGateBtn').addEventListener('click', doLogin);
+  $('maGatePass').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+  $('maGateEmail').addEventListener('keydown', e => { if(e.key === 'Enter') $('maGatePass').focus(); });
+  $('maLogout').addEventListener('click', async () => {
+    await sb.auth.signOut();
+    currentUser = null;
+    $('maApp').classList.remove('active');
+    $('maGate').style.display = 'flex';
+    $('maGateEmail').value = ''; $('maGatePass').value = '';
+    toast('تم الخروج','info');
+  });
+  $('maCbCancel').addEventListener('click', closeCbModal);
+  $('maCbModal').addEventListener('click', e => { if(e.target.id === 'maCbModal') closeCbModal(); });
+  $('maCbConfirm').addEventListener('click', confirmCashback);
+  document.querySelectorAll('[data-amt]').forEach(b => b.addEventListener('click', () => { $('maCbAmount').value = b.dataset.amt; }));
+  $('maDelCancel').addEventListener('click', closeDelModal);
+  $('maDelModal').addEventListener('click', e => { if(e.target.id === 'maDelModal') closeDelModal(); });
+  $('maDelConfirm').addEventListener('click', confirmDelete);
+  $('maNoteCancel').addEventListener('click', closeNoteModal);
+  $('maNoteModal').addEventListener('click', e => { if(e.target.id === 'maNoteModal') closeNoteModal(); });
+  $('maNoteConfirm').addEventListener('click', confirmNote);
+  $('maChatClose').addEventListener('click', closeChatModal);
+  $('maChatModal').addEventListener('click', e => { if(e.target.id === 'maChatModal') closeChatModal(); });
+  $('maChatSend').addEventListener('click', sendChatMessage);
+  $('maChatInput').addEventListener('keydown', e => { if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendChatMessage(); } });
+  $('maDetailClose').addEventListener('click', closeDetailModal);
+  $('maDetailModal').addEventListener('click', e => { if(e.target.id === 'maDetailModal') closeDetailModal(); });
+  $('maDetailPrint').addEventListener('click', printCurrentOrder);
+}
 
-  function openCbModal(orderId, mode = 'add') {
-    const order = allOrders.find(o => String(o.id) === String(orderId));
-    if (!order) return;
-    cbMode = mode;
-    selectedOrderForCashback = order;
-    updateCbModalUI();
-    $('maCbSub').innerHTML = `
-      العميل: <strong>${escapeHtml(order.user_name || '—')}</strong><br>
-      البريد: <strong dir="ltr">${escapeHtml(order.user_email || '—')}</strong><br>
-      رقم الطلب: <strong>#${String(order.id).slice(-8).toUpperCase()}</strong>
-    `;
-    $('maCbAmount').value = '';
-    $('maCbReason').value = '';
-    $('maCbModal').classList.add('show');
-    setTimeout(() => $('maCbAmount').focus(), 200);
-  }
+// ═══ Toast ═══
+function toast(msg, type='info'){
+  const t = document.createElement('div');
+  t.className = 'ma-toast ' + type;
+  const icons = {success:'fa-circle-check', error:'fa-circle-exclamation', info:'fa-circle-info'};
+  t.innerHTML = `<i class="fas ${icons[type] || 'fa-circle-info'}"></i><span>${esc(msg)}</span>`;
+  document.body.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3000);
+}
 
-  function updateCbModalUI() {
-    const isDeduct = cbMode === 'deduct';
-    const icon = $('maCbIcon');
-    const confirmBtn = $('maCbConfirm');
-    $('maCbTitle').textContent = isDeduct ? 'خصم كاش باك' : 'إضافة كاش باك';
-    if (isDeduct) {
-      icon.className = 'fas fa-minus';
-      icon.style.background = 'linear-gradient(135deg,#d90429,#8b0018)';
-      icon.style.color = '#fff';
-      confirmBtn.className = 'confirm deduct';
-      confirmBtn.innerHTML = '<i class="fas fa-minus"></i> خصم الكاش باك';
-    } else {
-      icon.className = 'fas fa-gift';
-      icon.style.background = 'linear-gradient(135deg,#f5b342,#c98a1e)';
-      icon.style.color = '#000';
-      confirmBtn.className = 'confirm';
-      confirmBtn.innerHTML = '<i class="fas fa-check"></i> إضافة الكاش باك';
-    }
-  }
+// ═══ Public refresh ═══
+window.__refresh = async () => { await loadAllData(); renderView(currentView); toast('تم التحديث','info'); };
 
-  function closeCbModal() {
-    $('maCbModal').classList.remove('show');
-    selectedOrderForCashback = null;
-    cbMode = 'add';
-  }
-
-  async function confirmCashback() {
-    const amountRaw = Number($('maCbAmount').value);
-    const reasonInput = $('maCbReason').value.trim();
-    if (!amountRaw || amountRaw <= 0) { toast('أدخل مبلغاً صحيحاً', 'error'); return; }
-    if (!selectedOrderForCashback) return;
-    const order = selectedOrderForCashback;
-    const isDeduct = cbMode === 'deduct';
-    const signedAmount = isDeduct ? -amountRaw : amountRaw;
-    const btn = $('maCbConfirm');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التنفيذ...';
-    try {
-      const { data: u, error: uErr } = await sb.from('men_users').select('cashback, name, email').eq('id', order.user_id).maybeSingle();
-      if (uErr) throw uErr;
-      const currentCb = Number(u?.cashback || 0);
-      if (isDeduct && amountRaw > currentCb) {
-        toast(`الرصيد الحالي ${currentCb.toFixed(2)} ر.س فقط`, 'error');
-        btn.disabled = false;
-        updateCbModalUI();
-        return;
-      }
-      const reason = reasonInput || (isDeduct ? 'خصم كاش باك من الإدارة' : 'كاش باك إضافي من الإدارة');
-      const { error } = await sb.from('men_cashback_log').insert({
-        user_id: order.user_id, user_email: order.user_email, amount: signedAmount,
-        reason: reason, order_id: order.id !== '—' ? order.id : null,
-        type: isDeduct ? 'deduct' : 'manual', created_by: currentUser.email
-      });
-      if (error) throw error;
-      const newCb = Math.round((currentCb + signedAmount) * 100) / 100;
-      const { error: updErr } = await sb.from('men_users').update({
-        cashback: newCb, updated_at: new Date().toISOString()
-      }).eq('id', order.user_id);
-      if (updErr) throw updErr;
-      const localUser = allUsers.find(x => String(x.id) === String(order.user_id));
-      if (localUser) localUser.cashback = newCb;
-      const nameLabel = u?.name || order.user_name || order.user_email;
-      toast(isDeduct ? `✅ تم خصم ${amountRaw.toFixed(2)} ر.س من ${nameLabel}` : `✅ تم إضافة ${amountRaw.toFixed(2)} ر.س لـ ${nameLabel}`, 'success');
-      closeCbModal();
-      if (usersView) renderUsers();
-      renderStats();
-    } catch (err) {
-      console.error(err);
-      toast('فشل: ' + err.message, 'error');
-      btn.disabled = false;
-      updateCbModalUI();
-    }
-  }
-
-  function openDelModal(orderId) {
-    const order = allOrders.find(o => String(o.id) === String(orderId));
-    if (!order) return;
-    selectedOrderForDelete = order;
-    const items = Array.isArray(order.items) ? order.items : [];
-    const itemsList = items.length ? items.map(it => `• ${escapeHtml(it.name || 'منتج')} × ${it.qty || 1}`).join('<br>') : '—';
-    const cbNote = (order.cashback_applied && Number(order.cashback || 0) > 0)
-      ? `<br><span style="color:#ff9a9a">⚠️ سيتم خصم ${Number(order.cashback).toFixed(2)} ر.س من رصيد العميل</span>` : '';
-    $('maDelSub').innerHTML = `
-      رقم الطلب: <strong>#${String(order.id).slice(-8).toUpperCase()}</strong><br>
-      العميل: <strong>${escapeHtml(order.user_name || '—')}</strong><br>
-      الإجمالي: <strong style="color:#6a9aff">${Number(order.total || 0).toFixed(2)} ر.س</strong><br>
-      <div style="margin-top:10px;padding:10px 12px;background:rgba(0,0,0,.25);border-radius:12px;font-size:.82rem;line-height:1.9">${itemsList}</div>
-      ${cbNote}
-    `;
-    $('maDelModal').classList.add('show');
-  }
-
-  function closeDelModal() {
-    $('maDelModal').classList.remove('show');
-    selectedOrderForDelete = null;
-  }
-
-  async function confirmDelete() {
-    if (!selectedOrderForDelete) return;
-    const order = selectedOrderForDelete;
-    const btn = $('maDelConfirm');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحذف...';
-    try {
-      if (order.cashback_applied && Number(order.cashback || 0) > 0) {
-        const refund = Number(order.cashback || 0);
-        try {
-          await sb.from('men_cashback_log').insert({
-            user_id: order.user_id, user_email: order.user_email, amount: -refund,
-            reason: `حذف الطلب #${order.id} — استرجاع الكاش باك`, order_id: order.id,
-            type: 'refund', created_by: currentUser.email
-          });
-          const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
-          const newCb = Math.max(0, Math.round((Number(u?.cashback || 0) - refund) * 100) / 100);
-          await sb.from('men_users').update({ cashback: newCb, updated_at: new Date().toISOString() }).eq('id', order.user_id);
-        } catch (e) { console.warn('refund:', e); }
-      }
-      const { error } = await sb.from('men_orders').delete().eq('id', order.id);
-      if (error) throw error;
-      allOrders = allOrders.filter(o => String(o.id) !== String(order.id));
-      renderStats();
-      renderOrders();
-      toast(`🗑️ تم حذف الطلب نهائياً`, 'success');
-      closeDelModal();
-    } catch (err) {
-      console.error(err);
-      toast('فشل الحذف: ' + err.message, 'error');
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-trash"></i> حذف نهائي';
-    }
-  }
-
-  function openNoteModal(userId) {
-    const user = allUsers.find(u => String(u.id) === String(userId));
-    if (!user) return;
-    selectedUserForNote = user;
-    $('maNoteSub').innerHTML = `
-      العميل: <strong>${escapeHtml(user.name || '—')}</strong><br>
-      البريد: <strong dir="ltr">${escapeHtml(user.email || '—')}</strong>
-    `;
-    $('maNoteText').value = '';
-    $('maNoteModal').classList.add('show');
-    setTimeout(() => $('maNoteText').focus(), 200);
-  }
-
-  function closeNoteModal() {
-    $('maNoteModal').classList.remove('show');
-    selectedUserForNote = null;
-  }
-
-  async function confirmNote() {
-    if (!selectedUserForNote) return;
-    const text = $('maNoteText').value.trim();
-    if (!text) { toast('اكتب نص الملاحظة', 'error'); return; }
-    const btn = $('maNoteConfirm');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-    try {
-      const { error } = await sb.from('men_messages').insert({
-        user_id: selectedUserForNote.id,
-        user_email: selectedUserForNote.email,
-        sender: 'admin',
-        sender_name: currentUser.user_metadata?.name || currentUser.email.split('@')[0],
-        sender_email: currentUser.email,
-        message: text, type: 'note', is_read: false
-      });
-      if (error) throw error;
-      toast(`📝 تم إرسال الملاحظة`, 'success');
-      closeNoteModal();
-    } catch (err) {
-      console.error(err);
-      toast('فشل الإرسال: ' + err.message, 'error');
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال';
-    }
-  }
-
-  async function openChatModal(userId) {
-    const user = allUsers.find(u => String(u.id) === String(userId));
-    if (!user) return;
-    selectedUserForChat = user;
-    const nameParts = (user.name || 'M').split(/\s+/);
-    let initials = nameParts.length === 1 ? nameParts[0].substring(0, 2)
-      : (nameParts[0][0] || '') + (nameParts[nameParts.length - 1][0] || '');
-    initials = initials.toUpperCase();
-    $('maChatAvatar').textContent = initials;
-    $('maChatName').textContent = user.name || 'بدون اسم';
-    $('maChatEmail').textContent = user.email || '—';
-    $('maChatBody').innerHTML = '<div class="ma-chat-empty"><i class="fas fa-spinner fa-spin"></i> جاري التحميل...</div>';
-    $('maChatInput').value = '';
-    $('maChatModal').classList.add('show');
-    await loadChatMessages(user.id);
-    setTimeout(() => $('maChatInput').focus(), 200);
-  }
-
-  function closeChatModal() {
-    $('maChatModal').classList.remove('show');
-    selectedUserForChat = null;
-  }
-
-  async function loadChatMessages(userId) {
-    try {
-      const { data, error } = await sb.from('men_messages').select('*').eq('user_id', userId).order('created_at', { ascending: true }).limit(300);
-      if (error) throw error;
-      renderChatMessages(data || []);
-    } catch (err) {
-      console.error(err);
-      $('maChatBody').innerHTML = `<div class="ma-chat-empty"><i class="fas fa-triangle-exclamation" style="color:#d90429"></i> فشل التحميل: ${escapeHtml(err.message)}</div>`;
-    }
-  }
-
-  function renderChatMessages(msgs) {
-    const body = $('maChatBody');
-    if (!msgs.length) {
-      body.innerHTML = '<div class="ma-chat-empty"><i class="fas fa-comment-slash"></i> لا يوجد رسائل بعد</div>';
-      return;
-    }
-    body.innerHTML = msgs.map(m => {
-      const time = fmtDate(m.created_at);
-      if (m.type === 'note') {
-        return `<div class="ma-msg note">
-          <div class="ma-msg-meta"><i class="fas fa-comment-dots"></i> ملاحظة — ${escapeHtml(m.sender_name || 'المشرف')}</div>
-          <div>${escapeHtml(m.message)}</div>
-          <div class="ma-msg-time">${time}</div>
-        </div>`;
-      }
-      const cls = m.sender === 'admin' ? 'admin' : 'customer';
-      const senderLabel = m.sender === 'admin' ? 'المشرف' : 'العميل';
-      return `<div class="ma-msg ${cls}">
-        <div class="ma-msg-meta">${senderLabel}</div>
-        <div>${escapeHtml(m.message)}</div>
-        <div class="ma-msg-time">${time}</div>
-      </div>`;
-    }).join('');
-    body.scrollTop = body.scrollHeight;
-  }
-
-  async function sendChatMessage() {
-    if (!selectedUserForChat) return;
-    const input = $('maChatInput');
-    const text = input.value.trim();
-    if (!text) return;
-    const btn = $('maChatSend');
-    btn.disabled = true;
-    try {
-      const { error } = await sb.from('men_messages').insert({
-        user_id: selectedUserForChat.id,
-        user_email: selectedUserForChat.email,
-        sender: 'admin',
-        sender_name: currentUser.user_metadata?.name || currentUser.email.split('@')[0],
-        sender_email: currentUser.email,
-        message: text, type: 'chat', is_read: false
-      });
-      if (error) throw error;
-      input.value = '';
-      await loadChatMessages(selectedUserForChat.id);
-    } catch (err) {
-      console.error(err);
-      toast('فشل الإرسال: ' + err.message, 'error');
-    } finally {
-      btn.disabled = false;
-      input.focus();
-    }
-  }
-
-  function toast(msg, type = 'info') {
-    const t = document.createElement('div');
-    t.className = 'ma-toast ' + type;
-    const icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', info: 'fa-circle-info' };
-    t.innerHTML = `<i class="fas ${icons[type] || 'fa-circle-info'}"></i><span>${escapeHtml(msg)}</span>`;
-    document.body.appendChild(t);
-    requestAnimationFrame(() => t.classList.add('show'));
-    setTimeout(() => {
-      t.classList.remove('show');
-      setTimeout(() => t.remove(), 400);
-    }, 3000);
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+// ═══ Boot ═══
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
 })();
 </script>
-
 </body>
 </html>
