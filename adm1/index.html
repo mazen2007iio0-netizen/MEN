@@ -36,8 +36,6 @@ body{position:relative}
 /* APP */
 .ma-app{position:relative;z-index:10;display:none;min-height:100vh}
 .ma-app.active{display:block}
-
-/* NAV */
 .ma-nav{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,rgba(6,8,18,.99),rgba(6,8,18,.92));backdrop-filter:blur(20px);border-bottom:1px solid rgba(74,122,255,.14)}
 .ma-nav-inner{max-width:1600px;margin:0 auto;padding:0 28px;height:68px;display:flex;align-items:center;gap:16px}
 .ma-nav-brand{display:flex;align-items:center;gap:12px;flex-shrink:0;margin-left:20px}
@@ -127,6 +125,31 @@ body{position:relative}
 .ma-mini-chat{background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.35);color:#6a9aff}
 .ma-mini-note{background:rgba(147,51,234,.15);border:1px solid rgba(147,51,234,.35);color:#c084fc}
 
+/* STATUS SELECT IN TABLE */
+.ma-status-select{
+  height:32px;
+  padding:0 8px;
+  border-radius:8px;
+  background:rgba(74,122,255,.12);
+  border:1px solid rgba(74,122,255,.3);
+  color:#6a9aff;
+  font-family:'Cairo',sans-serif;
+  font-weight:800;
+  font-size:.72rem;
+  cursor:pointer;
+  outline:none;
+  transition:all .2s;
+}
+.ma-status-select:hover{background:rgba(74,122,255,.22);border-color:#4a7aff}
+.ma-status-select:focus{border-color:#4a7aff;box-shadow:0 0 0 2px rgba(74,122,255,.15)}
+.ma-status-select option{background:#0a0e1a;color:#fff}
+
+/* STATUS BUTTONS IN DETAIL */
+.ma-status-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.ma-status-buttons .ma-btn{flex:1;min-width:130px;justify-content:center}
+.ma-status-buttons .ma-btn.active-status{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;border:none;box-shadow:0 8px 22px -8px rgba(74,122,255,.8);cursor:not-allowed;opacity:.9}
+.ma-status-buttons .ma-btn:disabled{opacity:.5;cursor:not-allowed}
+
 /* BADGE */
 .ma-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:.7rem;font-weight:800;white-space:nowrap}
 
@@ -151,7 +174,7 @@ body{position:relative}
 .ma-rate-form input:focus{border-color:#f5b342;box-shadow:0 0 0 4px rgba(245,179,66,.15)}
 .ma-rate-hint{font-size:.8rem;color:#8a92b0;font-weight:700;line-height:1.7;margin-top:12px}
 
-/* EMPTY/LOADER */
+/* EMPTY */
 .ma-empty{text-align:center;padding:60px 24px}
 .ma-empty i{font-size:2.8rem;color:#4a7aff;margin-bottom:14px;opacity:.6;display:block}
 .ma-empty h3{font-size:1.05rem;font-weight:900;margin-bottom:6px}
@@ -188,7 +211,7 @@ body{position:relative}
 .ma-warn-box{margin-top:14px;padding:13px 15px;border-radius:12px;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.28);color:#ff9a9a;font-size:.8rem;font-weight:700;line-height:1.8;display:flex;gap:10px;align-items:flex-start}
 .ma-warn-box i{color:#d90429;font-size:1rem;flex-shrink:0;margin-top:2px}
 
-/* DETAIL MODAL */
+/* DETAIL */
 .ma-detail-head{padding:20px 26px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(180deg,rgba(74,122,255,.06),transparent);flex-shrink:0}
 .ma-detail-head-left{display:flex;align-items:center;gap:14px;min-width:0}
 .ma-detail-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#fff;flex-shrink:0;box-shadow:0 12px 26px -10px rgba(74,122,255,.8)}
@@ -225,6 +248,13 @@ body{position:relative}
 .ma-summary-row.total .lbl{color:#fff;font-size:.95rem;font-weight:900}
 .ma-summary-row.total .val{color:#4a7aff;font-size:1.25rem;font-weight:900}
 .ma-summary-box.cashback .ma-summary-row.total .val{color:#f5b342}
+
+/* STATUS BUTTONS GRID IN DETAIL */
+.ma-status-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px}
+.ma-status-btn{padding:12px 14px;border-radius:11px;border:1.5px solid rgba(74,122,255,.25);background:rgba(74,122,255,.06);color:#a8b0cc;font-family:'Cairo',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px}
+.ma-status-btn:hover:not(:disabled){background:rgba(74,122,255,.18);border-color:#4a7aff;color:#fff;transform:translateY(-1px)}
+.ma-status-btn.current{background:linear-gradient(135deg,#021ca4,#4a7aff);border-color:transparent;color:#fff;cursor:not-allowed;opacity:.9;box-shadow:0 8px 22px -8px rgba(74,122,255,.8)}
+.ma-status-btn:disabled{cursor:not-allowed;opacity:.5}
 
 /* CHAT */
 .ma-chat-header{padding:18px 22px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(74,122,255,.06),transparent)}
@@ -283,7 +313,6 @@ body{position:relative}
 <body>
 <div class="ma-bg"></div>
 
-<!-- LOGIN -->
 <div class="ma-gate" id="maGate">
   <div class="ma-gate-card">
     <div class="ma-gate-icon"><i class="fas fa-shield-halved"></i></div>
@@ -296,7 +325,6 @@ body{position:relative}
   </div>
 </div>
 
-<!-- APP -->
 <div class="ma-app" id="maApp">
   <nav class="ma-nav">
     <div class="ma-nav-inner">
@@ -328,7 +356,6 @@ body{position:relative}
   </div>
 </div>
 
-<!-- Detail Modal -->
 <div class="ma-modal-back" id="maDetailModal">
   <div class="ma-modal ma-modal-xl">
     <div class="ma-detail-head">
@@ -345,7 +372,6 @@ body{position:relative}
   </div>
 </div>
 
-<!-- Cashback Modal -->
 <div class="ma-modal-back" id="maCbModal">
   <div class="ma-modal">
     <div class="ma-modal-title"><i class="fas fa-gift" id="maCbIcon"></i><span id="maCbTitle">إضافة كاش باك</span></div>
@@ -358,7 +384,6 @@ body{position:relative}
   </div>
 </div>
 
-<!-- Delete Modal -->
 <div class="ma-modal-back" id="maDelModal">
   <div class="ma-modal">
     <div class="ma-modal-title"><i class="fas fa-trash" style="background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff"></i>حذف الطلب</div>
@@ -368,7 +393,6 @@ body{position:relative}
   </div>
 </div>
 
-<!-- Note Modal -->
 <div class="ma-modal-back" id="maNoteModal">
   <div class="ma-modal">
     <div class="ma-modal-title"><i class="fas fa-comment-dots" style="background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff"></i>ملاحظة للعميل</div>
@@ -378,7 +402,6 @@ body{position:relative}
   </div>
 </div>
 
-<!-- Chat Modal -->
 <div class="ma-modal-back" id="maChatModal">
   <div class="ma-modal ma-modal-lg">
     <div class="ma-chat-header">
@@ -395,7 +418,6 @@ body{position:relative}
 (function(){
 'use strict';
 
-// ═══ Settings ═══
 const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
 const ADMIN_EMAILS = ['mkmkmkl24666606@gmail.com'];
@@ -443,7 +465,6 @@ const fmtDateShort = d => { if(!d) return '—'; try { return new Date(d).toLoca
 const fmtNum = n => Number(n||0).toFixed(2);
 const fmtInt = n => Number(n||0).toFixed(0);
 
-// ═══ Init ═══
 function init(){
   if(!window.supabase?.createClient){ alert('فشل تحميل Supabase — تحقق من الإنترنت'); return; }
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
@@ -484,7 +505,6 @@ function buildNav(){
   document.addEventListener('click', () => document.querySelectorAll('.ma-nav-item.open').forEach(i => i.classList.remove('open')));
 }
 
-// ═══ Settings ═══
 async function loadSettings(){
   try {
     const ls = localStorage.getItem('men_admin_settings');
@@ -501,10 +521,9 @@ async function loadSettings(){
 async function saveSetting(key, value){
   settings[key] = value;
   try { localStorage.setItem('men_admin_settings', JSON.stringify(settings)); } catch {}
-  try { await sb.from('men_settings').upsert({ key, value: String(value) }); } catch(e){ console.warn(e); }
+  try { await sb.from('men_settings').upsert({ key, value: String(value) }); } catch(e){}
 }
 
-// ═══ Audit ═══
 async function logAudit(action, details={}){
   try {
     await sb.from('men_audit_log').insert({
@@ -512,10 +531,9 @@ async function logAudit(action, details={}){
       admin_name: currentUser?.user_metadata?.name || currentUser?.email?.split('@')[0] || 'مشرف',
       action, details: JSON.stringify(details), created_at: new Date().toISOString()
     });
-  } catch(e){ console.warn('audit:', e); }
+  } catch(e){}
 }
 
-// ═══ Auth ═══
 async function checkAuth(){
   const { data:{ session } } = await sb.auth.getSession();
   if(session?.user && ADMIN_EMAILS.includes((session.user.email||'').toLowerCase())){
@@ -556,7 +574,6 @@ function showApp(){
   switchView('reports');
 }
 
-// ═══ Data ═══
 async function loadAllData(){
   try {
     const [o,u,cl] = await Promise.all([
@@ -575,7 +592,6 @@ async function loadAllData(){
   } catch(e){ console.error(e); }
 }
 
-// ═══ Views ═══
 function switchView(viewId){
   currentView = viewId;
   document.querySelectorAll('.ma-view').forEach(v => v.classList.remove('active'));
@@ -606,7 +622,6 @@ function renderView(viewId){
   }
 }
 
-// ═══ REPORTS OVERVIEW ═══
 function renderReportsOverview(el){
   const total = allOrders.length;
   const delivered = allOrders.filter(o => o.status === 'delivered').length;
@@ -689,7 +704,6 @@ function renderRecentOrders(limit){
   }).join('')}</tbody></table>`;
 }
 
-// ═══ REPORTS SALES ═══
 function renderReportsSales(el){
   const delivered = allOrders.filter(o => o.status === 'delivered');
   const revenue = delivered.reduce((s,o) => s + Number(o.total||0), 0);
@@ -705,7 +719,7 @@ function renderReportsSales(el){
   const maxM = Math.max(...months.map(m => m[1]), 1);
 
   el.innerHTML = `
-    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-chart-bar"></i> تقارير المبيعات</div><div class="ma-page-sub">تحليل مفصل للمبيعات</div></div></div>
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-chart-bar"></i> تقارير المبيعات</div></div></div>
     <div class="ma-stats">
       <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-sack-dollar"></i></div><div class="ma-stat-val">${fmtInt(revenue)}</div><div class="ma-stat-lbl">إجمالي الإيرادات</div></div>
       <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-bag-shopping"></i></div><div class="ma-stat-val">${delivered.length}</div><div class="ma-stat-lbl">طلبات مكتملة</div></div>
@@ -721,7 +735,6 @@ function renderReportsSales(el){
   `;
 }
 
-// ═══ REPORTS CUSTOMERS ═══
 function renderReportsCustomers(el){
   const topCustomers = [...allUsers].map(u => {
     const list = allOrders.filter(o => String(o.user_id) === String(u.id));
@@ -747,7 +760,6 @@ function renderReportsCustomers(el){
   `;
 }
 
-// ═══ REPORTS CASHBACK ═══
 function renderReportsCashback(el){
   const totalGranted = allCashbackLog.filter(l => Number(l.amount) > 0).reduce((s,l) => s + Number(l.amount), 0);
   const totalDeducted = Math.abs(allCashbackLog.filter(l => Number(l.amount) < 0).reduce((s,l) => s + Number(l.amount), 0));
@@ -779,7 +791,7 @@ function renderReportsCashback(el){
   `;
 }
 
-// ═══ ORDERS ═══
+/* ═══ ORDERS VIEW WITH STATUS CHANGE ═══ */
 function renderOrdersView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-box"></i> سجل الطلبات</div><div class="ma-page-sub">${allOrders.length} طلب</div></div></div>
@@ -814,7 +826,7 @@ function renderOrdersTable(){
     return;
   }
   c.innerHTML = `<div class="ma-table-wrap"><table class="ma-table">
-    <thead><tr><th>رقم</th><th>العميل</th><th>الجوال</th><th>المبلغ المدفوع</th><th>الكاش باك</th><th>الحالة</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+    <thead><tr><th>رقم</th><th>العميل</th><th>الجوال</th><th>المبلغ</th><th>الكاش باك</th><th>الحالة</th><th>تغيير الحالة</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
     <tbody>${filtered.map(o => {
       const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
       let cb = '';
@@ -822,6 +834,11 @@ function renderOrdersTable(){
         cb = `<span style="color:${o.cashback_paid?'#4caf50':'#f5b342'};font-weight:900">${fmtNum(o.cashback)} ${o.cashback_paid?'✓':'⏳'}</span>`;
       } else if(['delivered','cancelled'].includes(o.status)) cb = `<span style="color:#8a92b0">—</span>`;
       else cb = `<span style="color:#4a7aff">${fmtNum(Number(o.total||0)*settings.cashback_rate)} متوقع</span>`;
+
+      const statusOptions = Object.entries(ORDER_STATUS).map(([k,v]) =>
+        `<option value="${k}" ${o.status===k?'disabled selected':''}>${o.status===k?'✓ ':''}${v.label}</option>`
+      ).join('');
+
       return `<tr>
         <td class="mono">#${String(o.id).slice(-8).toUpperCase()}</td>
         <td style="font-weight:800">${esc(o.user_name||'—')}</td>
@@ -829,6 +846,12 @@ function renderOrdersTable(){
         <td class="price">${fmtNum(o.total)} ر.س</td>
         <td style="font-size:.82rem">${cb}</td>
         <td><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></td>
+        <td>
+          <select class="ma-status-select" data-status-order="${o.id}">
+            <option value="">تغيير ▾</option>
+            ${statusOptions}
+          </select>
+        </td>
         <td style="font-size:.76rem;color:#8a92b0">${fmtDate(o.created_at)}</td>
         <td><div class="actions-cell">
           <button class="ma-mini-btn ma-mini-detail" data-detail-order="${o.id}"><i class="fas fa-receipt"></i> تفاصيل</button>
@@ -837,12 +860,107 @@ function renderOrdersTable(){
         </div></td>
       </tr>`;
     }).join('')}</tbody></table></div>`;
+
   c.querySelectorAll('[data-detail-order]').forEach(b => b.addEventListener('click', () => openDetailModal(b.dataset.detailOrder)));
   c.querySelectorAll('[data-add-cashback]').forEach(b => b.addEventListener('click', () => openCbModal(b.dataset.addCashback, 'add')));
   c.querySelectorAll('[data-delete-order]').forEach(b => b.addEventListener('click', () => openDelModal(b.dataset.deleteOrder)));
+
+  c.querySelectorAll('[data-status-order]').forEach(sel => {
+    sel.addEventListener('change', async () => {
+      const newStatus = sel.value;
+      if(!newStatus) return;
+      sel.value = '';
+      await applyStatus(sel.dataset.statusOrder, newStatus);
+    });
+  });
 }
 
-// ═══ CUSTOMERS ═══
+/* ═══ APPLY STATUS ═══ */
+async function applyStatus(orderId, newStatus){
+  if(!ORDER_STATUS[newStatus]) return;
+  const order = allOrders.find(o => String(o.id) === String(orderId));
+  if(!order) return;
+  if(order.status === newStatus){ toast('الحالة نفسها','info'); return; }
+
+  const oldStatus = order.status;
+  const oldLabel = ORDER_STATUS[oldStatus]?.label || oldStatus;
+  const newLabel = ORDER_STATUS[newStatus].label;
+  let confirmMsg = `تغيير الحالة من "${oldLabel}" إلى "${newLabel}"؟`;
+
+  if(newStatus === 'delivered' && !order.cashback_applied){
+    const earned = Math.round(Number(order.total||0) * settings.cashback_rate * 100) / 100;
+    confirmMsg += `\n\nسيتم إضافة ${earned.toFixed(2)} ر.س كاش باك لرصيد العميل.`;
+  } else if((oldStatus === 'delivered' && newStatus !== 'delivered') && order.cashback_applied && order.cashback > 0){
+    const refund = Number(order.cashback||0);
+    confirmMsg += `\n\nسيتم خصم ${refund.toFixed(2)} ر.س كاش باك من رصيد العميل.`;
+  } else if(newStatus === 'cancelled' && order.cashback_applied && order.cashback > 0){
+    const refund = Number(order.cashback||0);
+    confirmMsg += `\n\nسيتم خصم ${refund.toFixed(2)} ر.س كاش باك من رصيد العميل.`;
+  }
+
+  if(!confirm(confirmMsg)) return;
+
+  const updates = {status: newStatus, updated_at: new Date().toISOString()};
+  let cbMsg = '';
+
+  if(newStatus === 'delivered' && !order.cashback_applied){
+    const earned = Math.round(Number(order.total||0) * settings.cashback_rate * 100) / 100;
+    updates.cashback = earned;
+    updates.cashback_applied = true;
+    updates.cashback_applied_at = new Date().toISOString();
+    updates.cashback_paid = false;
+    cbMsg = ` + ${earned.toFixed(2)} ر.س كاش باك`;
+    try {
+      await sb.from('men_cashback_log').insert({
+        user_id: order.user_id, user_email: order.user_email, amount: earned,
+        reason: `كاش باك تلقائي من الطلب #${orderId}`, order_id: orderId,
+        type: 'order', created_by: currentUser.email
+      });
+      const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
+      const newCb = Math.round((Number(u?.cashback||0) + earned) * 100) / 100;
+      await sb.from('men_users').update({cashback: newCb, updated_at: new Date().toISOString()}).eq('id', order.user_id);
+      const lu = allUsers.find(x => String(x.id) === String(order.user_id));
+      if(lu) lu.cashback = newCb;
+    } catch(e){ console.warn(e); }
+  }
+
+  if((oldStatus === 'delivered' && newStatus !== 'delivered') || newStatus === 'cancelled'){
+    if(order.cashback_applied && order.cashback > 0){
+      const refund = Number(order.cashback||0);
+      updates.cashback = 0;
+      updates.cashback_applied = false;
+      updates.cashback_paid = false;
+      cbMsg = ` − خصم ${refund.toFixed(2)} ر.س`;
+      try {
+        await sb.from('men_cashback_log').insert({
+          user_id: order.user_id, user_email: order.user_email, amount: -refund,
+          reason: `إلغاء كاش باك الطلب #${orderId}`, order_id: orderId,
+          type: 'refund', created_by: currentUser.email
+        });
+        const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
+        const newCb = Math.max(0, Math.round((Number(u?.cashback||0) - refund) * 100) / 100);
+        await sb.from('men_users').update({cashback: newCb, updated_at: new Date().toISOString()}).eq('id', order.user_id);
+        const lu = allUsers.find(x => String(x.id) === String(order.user_id));
+        if(lu) lu.cashback = newCb;
+      } catch(e){ console.warn(e); }
+    }
+  }
+
+  try {
+    const { error } = await sb.from('men_orders').update(updates).eq('id', orderId);
+    if(error) throw error;
+    Object.assign(order, updates);
+    await logAudit('status_change', {order_id: orderId, from: oldStatus, to: newStatus});
+    renderView(currentView);
+    toast(`✅ ${newLabel}${cbMsg}`, 'success');
+    if(currentDetailOrder && String(currentDetailOrder.id) === String(orderId)){
+      openDetailModal(orderId);
+    }
+  } catch(e){
+    toast('فشل: ' + e.message, 'error');
+  }
+}
+
 function renderCustomersView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-users"></i> سجل العملاء</div><div class="ma-page-sub">${allUsers.length} عميل</div></div></div>
@@ -892,7 +1010,6 @@ function renderCustomersTable(){
   c.querySelectorAll('[data-user-cb]').forEach(b => b.addEventListener('click', () => openUserCbModal(b.dataset.userCb, b.dataset.cbMode || 'add')));
 }
 
-// ═══ FINANCE ═══
 function renderFinanceView(el){
   const delivered = allOrders.filter(o => o.status === 'delivered');
   const revenue = delivered.reduce((s,o) => s + Number(o.total||0), 0);
@@ -922,7 +1039,6 @@ function renderFinanceView(el){
   el.querySelectorAll('[data-mark-paid]').forEach(b => b.addEventListener('click', () => toggleCashbackPaid(b.dataset.markPaid, true)));
 }
 
-// ═══ REWARDS MANAGE ═══
 function renderRewardsView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-gift"></i> إدارة الكاش باك</div><div class="ma-page-sub">أضف أو اخصم كاش باك</div></div></div>
@@ -944,7 +1060,6 @@ function renderRewardsView(el){
   search();
 }
 
-// ═══ RATE ═══
 function renderRateView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-percent"></i> نسبة الكاش باك</div><div class="ma-page-sub">تحكم بنسبة الكاش باك</div></div></div>
@@ -984,7 +1099,6 @@ function renderRateView(el){
   el.querySelectorAll('[data-rate]').forEach(b => b.addEventListener('click', () => { $('rateInput').value = b.dataset.rate; }));
 }
 
-// ═══ REWARDS LOG ═══
 function renderRewardsLogView(el){
   const pos = allCashbackLog.filter(l => Number(l.amount) > 0).reduce((s,l) => s + Number(l.amount), 0);
   const neg = Math.abs(allCashbackLog.filter(l => Number(l.amount) < 0).reduce((s,l) => s + Number(l.amount), 0));
@@ -1001,7 +1115,6 @@ function renderRewardsLogView(el){
   `;
 }
 
-// ═══ AUDIT ═══
 function renderAuditView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-history"></i> سجل التدقيق</div><div class="ma-page-sub">${allAuditLog.length} عملية</div></div></div>
@@ -1016,6 +1129,7 @@ function renderAuditView(el){
     if(!filtered.length){ c.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-search"></i><h3>لا نتائج</h3></div></div>`; return; }
     const labels = {
       rate_changed:{l:'تغيير نسبة',i:'fa-percent',c:'#f5b342'},
+      status_change:{l:'تغيير حالة',i:'fa-arrows-rotate',c:'#4a7aff'},
       cashback_add:{l:'إضافة كاش باك',i:'fa-gift',c:'#4caf50'},
       cashback_deduct:{l:'خصم كاش باك',i:'fa-minus',c:'#d90429'},
       order_deleted:{l:'حذف طلب',i:'fa-trash',c:'#d90429'},
@@ -1035,7 +1149,6 @@ function renderAuditView(el){
   render();
 }
 
-// ═══ DATA ═══
 function renderDataView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-database"></i> البيانات</div><div class="ma-page-sub">تصدير ونسخ احتياطي</div></div></div>
@@ -1072,7 +1185,6 @@ function renderDataView(el){
   });
 }
 
-// ═══ Export ═══
 function downloadFile(content, filename, mime){
   const blob = new Blob([content], {type: mime});
   const url = URL.createObjectURL(blob);
@@ -1123,7 +1235,7 @@ function exportBackup(){
   logAudit('export_backup');
 }
 
-// ═══ Detail ═══
+/* ═══ DETAIL MODAL WITH STATUS BUTTONS ═══ */
 function openDetailModal(orderId){
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
@@ -1156,6 +1268,14 @@ function openDetailModal(orderId){
     cbPill = `<span class="ma-badge" style="background:rgba(74,122,255,.15);color:#6a9aff"><i class="fas fa-clock"></i> متوقع</span>`;
     cbAmount = `${potentialCb.toFixed(2)} ر.س`;
   }
+
+  const statusButtons = Object.entries(ORDER_STATUS).map(([k,v]) => {
+    const isCurrent = order.status === k;
+    return `<button class="ma-status-btn ${isCurrent?'current':''}" data-status-btn="${k}" ${isCurrent?'disabled':''}>
+      <i class="fas ${v.icon}"></i> ${v.label}${isCurrent?' ✓':''}
+    </button>`;
+  }).join('');
+
   $('maDetailBody').innerHTML = `
     <div class="ma-detail-cols">
       <div class="ma-detail-section"><div class="ma-detail-h3"><i class="fas fa-user"></i> العميل</div>
@@ -1165,11 +1285,20 @@ function openDetailModal(orderId){
         ${order.user_address ? `<div class="ma-detail-row"><span class="lbl">العنوان</span><span class="val">${esc(order.user_address)}</span></div>` : ''}
       </div>
       <div class="ma-detail-section"><div class="ma-detail-h3"><i class="fas fa-info-circle"></i> الطلب</div>
-        <div class="ma-detail-row"><span class="lbl">الحالة</span><span class="val"><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></span></div>
+        <div class="ma-detail-row"><span class="lbl">الحالة الحالية</span><span class="val"><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></span></div>
         <div class="ma-detail-row"><span class="lbl">التاريخ</span><span class="val">${fmtDate(order.created_at)}</span></div>
         ${order.updated_at ? `<div class="ma-detail-row"><span class="lbl">التحديث</span><span class="val">${fmtDate(order.updated_at)}</span></div>` : ''}
       </div>
     </div>
+
+    <div class="ma-detail-section" style="background:linear-gradient(145deg,rgba(74,122,255,.1),rgba(2,28,164,.06));border-color:rgba(74,122,255,.35)">
+      <div class="ma-detail-h3"><i class="fas fa-arrows-rotate"></i> تغيير حالة الطلب</div>
+      <div class="ma-status-btns">${statusButtons}</div>
+      <div style="margin-top:12px;font-size:.76rem;color:#8a92b0;line-height:1.7">
+        ⓘ تغيير الحالة إلى "تم الاستلام" يضيف الكاش باك تلقائياً للعميل — والخروج منها يخصمه.
+      </div>
+    </div>
+
     <div class="ma-detail-section"><div class="ma-detail-h3"><i class="fas fa-box"></i> المنتجات</div>
       <table class="ma-items-table"><thead><tr><th>#</th><th>المنتج</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th></tr></thead><tbody>${itemsRows}</tbody></table>
     </div>
@@ -1187,10 +1316,15 @@ function openDetailModal(orderId){
     </div>
   `;
   $('maDetailModal').classList.add('show');
+
+  $('maDetailBody').querySelectorAll('[data-status-btn]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      await applyStatus(order.id, btn.dataset.statusBtn);
+    });
+  });
 }
 function closeDetailModal(){ $('maDetailModal').classList.remove('show'); currentDetailOrder = null; }
 
-// ═══ Print ═══
 function printCurrentOrder(){
   if(!currentDetailOrder) return;
   const o = currentDetailOrder;
@@ -1252,7 +1386,6 @@ function printCurrentOrder(){
   w.onload = () => { w.focus(); w.print(); };
 }
 
-// ═══ Toggle Paid ═══
 async function toggleCashbackPaid(orderId, paid){
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
@@ -1267,7 +1400,6 @@ async function toggleCashbackPaid(orderId, paid){
   } catch(e){ toast('فشل: ' + e.message, 'error'); }
 }
 
-// ═══ Cashback ═══
 function openUserCbModal(userId, mode='add'){
   const user = allUsers.find(u => String(u.id) === String(userId));
   if(!user) return;
@@ -1334,7 +1466,6 @@ async function confirmCashback(){
   } catch(e){ toast('فشل: ' + e.message, 'error'); btn.disabled = false; updateCbModalUI(); }
 }
 
-// ═══ Delete ═══
 function openDelModal(orderId){
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
@@ -1372,7 +1503,6 @@ async function confirmDelete(){
   } catch(e){ toast('فشل: ' + e.message, 'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-trash"></i> حذف'; }
 }
 
-// ═══ Note ═══
 function openNoteModal(userId){
   const user = allUsers.find(u => String(u.id) === String(userId));
   if(!user) return;
@@ -1397,7 +1527,6 @@ async function confirmNote(){
   } catch(e){ toast('فشل: ' + e.message,'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال'; }
 }
 
-// ═══ Chat ═══
 async function openChatModal(userId){
   const user = allUsers.find(u => String(u.id) === String(userId));
   if(!user) return;
@@ -1447,7 +1576,6 @@ async function sendChatMessage(){
   finally { btn.disabled = false; inp.focus(); }
 }
 
-// ═══ Bind Events ═══
 function bindEvents(){
   $('maGateBtn').addEventListener('click', doLogin);
   $('maGatePass').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
@@ -1479,7 +1607,6 @@ function bindEvents(){
   $('maDetailPrint').addEventListener('click', printCurrentOrder);
 }
 
-// ═══ Toast ═══
 function toast(msg, type='info'){
   const t = document.createElement('div');
   t.className = 'ma-toast ' + type;
@@ -1490,10 +1617,8 @@ function toast(msg, type='info'){
   setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3000);
 }
 
-// ═══ Public refresh ═══
 window.__refresh = async () => { await loadAllData(); renderView(currentView); toast('تم التحديث','info'); };
 
-// ═══ Boot ═══
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
 else init();
 })();
