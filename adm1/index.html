@@ -2,7 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#060812">
 <title>لوحة إدارة — MEN Store Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,22 +13,23 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-height:100vh;overflow-x:hidden}
+html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
 body{position:relative}
+body.nav-open{overflow:hidden}
 .ma-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 15% 20%,rgba(2,28,164,.35) 0%,transparent 55%),radial-gradient(ellipse at 85% 80%,rgba(74,122,255,.25) 0%,transparent 50%),radial-gradient(ellipse at 50% 50%,#060812 0%,#030510 100%)}
-.ma-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(74,122,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,122,255,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%)}
+.ma-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(74,122,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,122,255,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%)}
 
 /* LOGIN */
-.ma-gate{position:relative;z-index:10;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
-.ma-gate-card{background:linear-gradient(145deg,rgba(14,20,38,.85),rgba(8,12,24,.95));border:1px solid rgba(74,122,255,.14);border-radius:28px;padding:44px 40px;max-width:440px;width:100%;text-align:center;box-shadow:0 40px 100px -30px rgba(2,28,164,.8)}
-.ma-gate-icon{width:80px;height:80px;margin:0 auto 20px;border-radius:24px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:2rem;box-shadow:0 20px 50px -12px rgba(74,122,255,.8)}
-.ma-gate-card h1{font-size:1.7rem;font-weight:900;margin-bottom:10px;letter-spacing:-.5px}
-.ma-gate-card p{color:#8a92b0;font-weight:600;margin-bottom:26px;line-height:1.7}
-.ma-field{margin-bottom:14px;text-align:right}
+.ma-gate{position:relative;z-index:10;display:flex;align-items:center;justify-content:center;min-height:100vh;min-height:100dvh;padding:20px}
+.ma-gate-card{background:linear-gradient(145deg,rgba(14,20,38,.85),rgba(8,12,24,.95));border:1px solid rgba(74,122,255,.14);border-radius:26px;padding:40px 32px;max-width:440px;width:100%;text-align:center;box-shadow:0 40px 100px -30px rgba(2,28,164,.8)}
+.ma-gate-icon{width:76px;height:76px;margin:0 auto 18px;border-radius:22px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.9rem;box-shadow:0 20px 50px -12px rgba(74,122,255,.8)}
+.ma-gate-card h1{font-size:1.6rem;font-weight:900;margin-bottom:8px;letter-spacing:-.5px}
+.ma-gate-card p{color:#8a92b0;font-weight:600;margin-bottom:24px;line-height:1.7;font-size:.92rem}
+.ma-field{margin-bottom:13px;text-align:right}
 .ma-field label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
-.ma-field input{width:100%;height:52px;padding:0 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-size:.94rem;font-weight:600;outline:none;transition:all .3s;direction:ltr;text-align:right;box-sizing:border-box}
+.ma-field input{width:100%;height:52px;padding:0 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-size:16px;font-weight:600;outline:none;transition:border-color .25s,box-shadow .25s;direction:ltr;text-align:right;box-sizing:border-box}
 .ma-field input:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.15)}
-.ma-gate-btn{width:100%;height:54px;border:none;border-radius:14px;margin-top:8px;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;transition:all .3s;box-shadow:0 14px 34px -12px rgba(74,122,255,.8);display:flex;align-items:center;justify-content:center;gap:10px}
+.ma-gate-btn{width:100%;height:54px;border:none;border-radius:14px;margin-top:8px;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;transition:transform .25s,box-shadow .25s;box-shadow:0 14px 34px -12px rgba(74,122,255,.8);display:flex;align-items:center;justify-content:center;gap:10px}
 .ma-gate-btn:hover:not(:disabled){transform:translateY(-2px)}
 .ma-gate-btn:disabled{opacity:.7;cursor:not-allowed}
 .ma-gate-err{display:none;margin-top:14px;padding:12px;border-radius:12px;background:rgba(217,4,41,.1);border:1px solid rgba(217,4,41,.3);color:#ff8a8a;font-size:.85rem;font-weight:700}
@@ -36,7 +38,7 @@ body{position:relative}
 /* APP */
 .ma-app{position:relative;z-index:10;display:none;min-height:100vh}
 .ma-app.active{display:block}
-.ma-nav{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,rgba(6,8,18,.99),rgba(6,8,18,.92));backdrop-filter:blur(20px);border-bottom:1px solid rgba(74,122,255,.14)}
+.ma-nav{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,rgba(6,8,18,.99),rgba(6,8,18,.92));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(74,122,255,.14)}
 .ma-nav-inner{max-width:1600px;margin:0 auto;padding:0 28px;height:68px;display:flex;align-items:center;gap:16px}
 .ma-nav-brand{display:flex;align-items:center;gap:12px;flex-shrink:0;margin-left:20px}
 .ma-nav-brand img{height:40px;filter:brightness(0) invert(1) drop-shadow(0 4px 12px rgba(74,122,255,.4))}
@@ -44,23 +46,29 @@ body{position:relative}
 .ma-nav-brand .sub{font-size:.64rem;color:#8a92b0;font-weight:700;letter-spacing:1px;text-transform:uppercase}
 .ma-nav-menu{display:flex;align-items:center;gap:2px;flex:1}
 .ma-nav-item{position:relative}
-.ma-nav-link{display:inline-flex;align-items:center;gap:7px;padding:10px 15px;border-radius:10px;background:transparent;border:none;color:#a8b0cc;font-family:'Cairo',sans-serif;font-weight:800;font-size:.84rem;cursor:pointer;transition:all .2s;white-space:nowrap}
+.ma-nav-link{display:inline-flex;align-items:center;gap:7px;padding:10px 15px;border-radius:10px;background:transparent;border:none;color:#a8b0cc;font-family:'Cairo',sans-serif;font-weight:800;font-size:.84rem;cursor:pointer;transition:background .2s,color .2s;white-space:nowrap}
 .ma-nav-link .caret{font-size:.6rem;margin-right:3px;transition:transform .2s;opacity:.6}
 .ma-nav-item.open .ma-nav-link .caret{transform:rotate(180deg)}
 .ma-nav-link:hover{background:rgba(74,122,255,.1);color:#fff}
 .ma-nav-item.open>.ma-nav-link,.ma-nav-link.active{background:linear-gradient(135deg,rgba(2,28,164,.5),rgba(74,122,255,.35));color:#fff;box-shadow:0 4px 14px -4px rgba(74,122,255,.6)}
-.ma-nav-dropdown{position:absolute;top:calc(100% + 8px);right:0;min-width:230px;background:linear-gradient(145deg,rgba(14,20,38,.99),rgba(8,12,24,1));border:1px solid rgba(74,122,255,.25);border-radius:14px;padding:8px;box-shadow:0 20px 50px -12px rgba(2,28,164,.9);opacity:0;visibility:hidden;transform:translateY(-8px);transition:all .2s;z-index:101}
+.ma-nav-dropdown{position:absolute;top:calc(100% + 8px);right:0;min-width:230px;background:linear-gradient(145deg,rgba(14,20,38,.99),rgba(8,12,24,1));border:1px solid rgba(74,122,255,.25);border-radius:14px;padding:8px;box-shadow:0 20px 50px -12px rgba(2,28,164,.9);opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .2s,transform .2s,visibility .2s;z-index:101}
 .ma-nav-item.open .ma-nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
-.ma-nav-dropdown a{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;color:#a8b0cc;text-decoration:none;font-weight:800;font-size:.85rem;transition:all .2s;cursor:pointer}
+.ma-nav-dropdown a{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;color:#a8b0cc;text-decoration:none;font-weight:800;font-size:.85rem;transition:background .2s,color .2s;cursor:pointer}
 .ma-nav-dropdown a:hover{background:rgba(74,122,255,.15);color:#fff}
 .ma-nav-dropdown a.active{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff}
-.ma-nav-dropdown a i{width:18px;font-size:.8rem;opacity:.85}
+.ma-nav-dropdown a i{width:18px;font-size:.8rem;opacity:.85;text-align:center}
 .ma-nav-user{display:flex;align-items:center;gap:10px;flex-shrink:0}
 .ma-nav-user-info{text-align:left}
 .ma-nav-user-info .n{font-size:.82rem;font-weight:900}
 .ma-nav-user-info .e{font-size:.68rem;color:#8a92b0;font-weight:600}
-.ma-btn-ghost{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;background:rgba(217,4,41,.12);border:1px solid rgba(217,4,41,.3);color:#ff6b6b;font-family:'Cairo',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;transition:all .2s}
+.ma-btn-ghost{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;background:rgba(217,4,41,.12);border:1px solid rgba(217,4,41,.3);color:#ff6b6b;font-family:'Cairo',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;transition:background .2s,transform .2s}
 .ma-btn-ghost:hover{background:rgba(217,4,41,.22);transform:translateY(-1px)}
+
+/* Mobile nav toggle */
+.ma-nav-toggle{display:none;width:42px;height:42px;border-radius:11px;background:rgba(74,122,255,.12);border:1px solid rgba(74,122,255,.25);color:#fff;cursor:pointer;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;transition:background .2s}
+.ma-nav-toggle:hover{background:rgba(74,122,255,.22)}
+.ma-nav-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:98}
+.ma-nav-backdrop.show{display:block;animation:maFade .2s}
 
 /* CONTENT */
 .ma-content{max-width:1600px;margin:0 auto;padding:32px 28px 80px;position:relative;z-index:5}
@@ -69,7 +77,7 @@ body{position:relative}
 @keyframes maFade{from{opacity:0}to{opacity:1}}
 .ma-page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:24px;flex-wrap:wrap}
 .ma-page-title{font-size:1.55rem;font-weight:900;letter-spacing:-.5px;display:flex;align-items:center;gap:12px}
-.ma-page-title i{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 12px 26px -10px rgba(74,122,255,.8)}
+.ma-page-title i{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 12px 26px -10px rgba(74,122,255,.8);flex-shrink:0}
 .ma-page-sub{color:#8a92b0;font-size:.82rem;font-weight:600;margin-top:6px}
 
 /* STATS */
@@ -84,11 +92,12 @@ body{position:relative}
 /* CARDS */
 .ma-card{background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));border:1px solid rgba(74,122,255,.14);border-radius:18px;padding:22px;margin-bottom:16px}
 .ma-card-title{font-size:.95rem;font-weight:900;color:#6a9aff;margin-bottom:16px;display:flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.5px}
+.ma-charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
 
 /* TOOLBAR */
 .ma-toolbar{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:16px;padding:16px 20px;margin-bottom:18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .ma-search{flex:1;min-width:220px;position:relative}
-.ma-search input{width:100%;height:44px;padding:0 42px 0 14px;border-radius:11px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.88rem;outline:none;transition:border-color .3s,box-shadow .3s;box-sizing:border-box}
+.ma-search input{width:100%;height:44px;padding:0 42px 0 14px;border-radius:11px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:16px;outline:none;transition:border-color .25s,box-shadow .25s;box-sizing:border-box}
 .ma-search input:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
 .ma-search i{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#4a7aff;pointer-events:none;font-size:.85rem}
 .ma-toolbar select{height:44px;padding:0 16px;border-radius:11px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.85rem;outline:none;cursor:pointer;min-width:150px}
@@ -100,8 +109,6 @@ body{position:relative}
 .ma-btn-success:hover{transform:translateY(-2px)}
 .ma-btn-gold{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 8px 22px -8px rgba(245,179,66,.8)}
 .ma-btn-gold:hover{transform:translateY(-2px)}
-.ma-btn-danger{background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff;box-shadow:0 8px 22px -8px rgba(139,0,24,.9)}
-.ma-btn-danger:hover{transform:translateY(-2px)}
 .ma-btn-soft{background:rgba(74,122,255,.1);border:1px solid rgba(74,122,255,.25);color:#6a9aff}
 .ma-btn-soft:hover{background:rgba(74,122,255,.2)}
 
@@ -111,7 +118,7 @@ body{position:relative}
 .ma-table thead{background:rgba(74,122,255,.06)}
 .ma-table thead th{padding:14px 14px;text-align:right;font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;color:#8a92b0;font-weight:800;border-bottom:1px solid rgba(74,122,255,.15);white-space:nowrap}
 .ma-table tbody td{padding:13px 14px;border-bottom:1px solid rgba(74,122,255,.06);color:#e0e6f4;font-weight:600;vertical-align:middle}
-.ma-table tbody tr{transition:background .2s;will-change:background}
+.ma-table tbody tr{transition:background .2s}
 .ma-table tbody tr:hover{background:rgba(74,122,255,.05)}
 .ma-table tbody tr:last-child td{border-bottom:none}
 .ma-table .mono{font-family:'Courier New',monospace;direction:ltr;text-align:left;font-weight:800}
@@ -124,14 +131,13 @@ body{position:relative}
 .ma-mini-delete{background:rgba(217,4,41,.15);border:1px solid rgba(217,4,41,.35);color:#ff6b6b}
 .ma-mini-chat{background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.35);color:#6a9aff}
 .ma-mini-note{background:rgba(147,51,234,.15);border:1px solid rgba(147,51,234,.35);color:#c084fc}
+.ma-mini-ship{background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.35);color:#6a9aff}
 
-/* STATUS SELECT IN TABLE */
 .ma-status-select{height:32px;padding:0 8px;border-radius:8px;background:rgba(74,122,255,.12);border:1px solid rgba(74,122,255,.3);color:#6a9aff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.72rem;cursor:pointer;outline:none;transition:background .2s,border-color .2s}
 .ma-status-select:hover{background:rgba(74,122,255,.22);border-color:#4a7aff}
 .ma-status-select:focus{border-color:#4a7aff;box-shadow:0 0 0 2px rgba(74,122,255,.15)}
 .ma-status-select option{background:#0a0e1a;color:#fff}
 
-/* BADGE */
 .ma-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:.7rem;font-weight:800;white-space:nowrap}
 
 /* CHART */
@@ -146,7 +152,7 @@ body{position:relative}
 /* RATE */
 .ma-rate-card{background:linear-gradient(145deg,rgba(245,179,66,.08),rgba(201,138,30,.03));border:2px solid rgba(245,179,66,.3);border-radius:20px;padding:26px;margin-bottom:20px}
 .ma-rate-title{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-.ma-rate-title i{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.ma-rate-title i{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
 .ma-rate-title .t{font-size:1.1rem;font-weight:900}
 .ma-rate-title .s{font-size:.78rem;color:#8a92b0;font-weight:700;margin-top:3px}
 .ma-rate-display{font-size:3rem;font-weight:900;background:linear-gradient(135deg,#f5b342,#c98a1e);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-2px;line-height:1;margin:18px 0 8px}
@@ -155,7 +161,7 @@ body{position:relative}
 .ma-rate-form input:focus{border-color:#f5b342;box-shadow:0 0 0 4px rgba(245,179,66,.15)}
 .ma-rate-hint{font-size:.8rem;color:#8a92b0;font-weight:700;line-height:1.7;margin-top:12px}
 
-/* TAX/SHIPPING CARDS */
+/* SETTING CARDS */
 .ma-setting-card{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.2);border-radius:20px;padding:26px;margin-bottom:20px}
 .ma-setting-card.tax{background:linear-gradient(145deg,rgba(0,201,167,.08),rgba(0,143,119,.03));border-color:rgba(0,201,167,.35)}
 .ma-setting-card.shipping{background:linear-gradient(145deg,rgba(74,122,255,.08),rgba(2,28,164,.03));border-color:rgba(74,122,255,.35)}
@@ -169,7 +175,7 @@ body{position:relative}
 .ma-setting-card.tax .ma-setting-display{background:linear-gradient(135deg,#00c9a7,#008f77);-webkit-background-clip:text;background-clip:text;color:transparent}
 .ma-setting-card.shipping .ma-setting-display{background:linear-gradient(135deg,#6a9aff,#4a7aff);-webkit-background-clip:text;background-clip:text;color:transparent}
 .ma-setting-form{display:flex;gap:10px;align-items:center;margin-top:16px;flex-wrap:wrap}
-.ma-setting-form input{height:52px;width:180px;padding:0 18px;border-radius:12px;background:rgba(0,0,0,.4);color:#fff;font-family:'Cairo',sans-serif;font-weight:900;font-size:1.2rem;text-align:center;outline:none;direction:ltr;border:2px solid rgba(74,122,255,.3);transition:border-color .3s,box-shadow .3s}
+.ma-setting-form input{height:52px;width:180px;padding:0 18px;border-radius:12px;background:rgba(0,0,0,.4);color:#fff;font-family:'Cairo',sans-serif;font-weight:900;font-size:1.2rem;text-align:center;outline:none;direction:ltr;border:2px solid rgba(74,122,255,.3);transition:border-color .25s,box-shadow .25s}
 .ma-setting-card.tax .ma-setting-form input{border-color:rgba(0,201,167,.35);color:#00c9a7}
 .ma-setting-card.tax .ma-setting-form input:focus{border-color:#00c9a7;box-shadow:0 0 0 4px rgba(0,201,167,.15)}
 .ma-setting-card.shipping .ma-setting-form input{border-color:rgba(74,122,255,.35);color:#6a9aff}
@@ -183,8 +189,8 @@ body{position:relative}
 .ma-empty p{color:#8a92b0;font-weight:600;font-size:.88rem}
 
 /* MODALS */
-.ma-modal-back{display:none;position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
-.ma-modal-back.show{display:flex}
+.ma-modal-back{display:none;position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+.ma-modal-back.show{display:flex;animation:maFade .2s}
 .ma-modal{background:linear-gradient(145deg,rgba(14,20,38,.98),rgba(8,12,24,1));border:1px solid rgba(74,122,255,.18);border-radius:20px;max-width:460px;width:100%;padding:28px;box-shadow:0 40px 100px -30px rgba(2,28,164,.9)}
 .ma-modal.ma-modal-lg{max-width:600px;display:flex;flex-direction:column;max-height:90vh;padding:0;overflow:hidden}
 .ma-modal.ma-modal-xl{max-width:980px;width:100%;max-height:92vh;padding:0;display:flex;flex-direction:column;overflow:hidden}
@@ -193,15 +199,15 @@ body{position:relative}
 .ma-modal-sub{color:#8a92b0;font-size:.85rem;font-weight:600;margin-bottom:20px;line-height:1.8}
 .ma-modal-field{margin-bottom:14px}
 .ma-modal-field label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
-.ma-modal-field input,.ma-modal-field textarea{width:100%;padding:13px 16px;border-radius:12px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.92rem;outline:none;transition:border-color .3s,box-shadow .3s;box-sizing:border-box}
+.ma-modal-field input,.ma-modal-field textarea{width:100%;padding:13px 16px;border-radius:12px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:16px;outline:none;transition:border-color .25s,box-shadow .25s;box-sizing:border-box}
 .ma-modal-field textarea{min-height:110px;line-height:1.7;resize:none}
 .ma-modal-field input:focus,.ma-modal-field textarea:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
 .ma-modal-field input[type=number]{direction:ltr;text-align:right;font-size:1.05rem;font-weight:800}
 .ma-quick{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.ma-quick button{padding:7px 14px;border-radius:18px;border:1.5px solid rgba(74,122,255,.14);background:rgba(74,122,255,.08);color:#6a9aff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.78rem;cursor:pointer;transition:background .3s,border-color .3s}
+.ma-quick button{padding:7px 14px;border-radius:18px;border:1.5px solid rgba(74,122,255,.14);background:rgba(74,122,255,.08);color:#6a9aff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.78rem;cursor:pointer;transition:background .2s,border-color .2s}
 .ma-quick button:hover{background:rgba(74,122,255,.2);border-color:#4a7aff}
 .ma-modal-actions{display:flex;gap:10px;margin-top:20px}
-.ma-modal-actions button{flex:1;height:48px;border-radius:12px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:transform .3s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.ma-modal-actions button{flex:1;height:48px;border-radius:12px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:transform .25s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .ma-modal-actions .cancel{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:#e0e6f4}
 .ma-modal-actions .cancel:hover{background:rgba(255,255,255,.12)}
 .ma-modal-actions .confirm{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 12px 30px -10px rgba(245,179,66,.9)}
@@ -223,9 +229,9 @@ body{position:relative}
 .ma-detail-title span{color:#6a9aff;font-family:'Courier New',monospace;font-size:.98rem}
 .ma-detail-sub{font-size:.76rem;color:#8a92b0;font-weight:700;margin-top:5px;display:flex;align-items:center;gap:6px}
 .ma-detail-head-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.ma-btn-print{padding:10px 20px;border-radius:10px;border:none;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;display:inline-flex;align-items:center;gap:7px;box-shadow:0 10px 24px -10px rgba(76,175,80,.85);transition:transform .3s}
+.ma-btn-print{padding:10px 20px;border-radius:10px;border:none;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;display:inline-flex;align-items:center;gap:7px;box-shadow:0 10px 24px -10px rgba(76,175,80,.85);transition:transform .25s}
 .ma-btn-print:hover{transform:translateY(-2px)}
-.ma-detail-body{flex:1;overflow-y:auto;padding:22px 26px;background:rgba(0,0,0,.1);overscroll-behavior:contain}
+.ma-detail-body{flex:1;overflow-y:auto;padding:22px 26px;background:rgba(0,0,0,.1);overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .ma-detail-body::-webkit-scrollbar{width:6px}
 .ma-detail-body::-webkit-scrollbar-thumb{background:rgba(74,122,255,.25);border-radius:6px}
 .ma-detail-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
@@ -257,28 +263,26 @@ body{position:relative}
 .ma-summary-row.total .val{color:#4a7aff;font-size:1.25rem;font-weight:900}
 .ma-summary-box.cashback .ma-summary-row.total .val{color:#f5b342}
 
-/* STATUS BUTTONS GRID IN DETAIL */
 .ma-status-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px}
 .ma-status-btn{padding:12px 14px;border-radius:11px;border:1.5px solid rgba(74,122,255,.25);background:rgba(74,122,255,.06);color:#a8b0cc;font-family:'Cairo',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;transition:background .2s,border-color .2s,transform .2s;display:flex;align-items:center;justify-content:center;gap:7px}
 .ma-status-btn:hover:not(:disabled){background:rgba(74,122,255,.18);border-color:#4a7aff;color:#fff;transform:translateY(-1px)}
 .ma-status-btn.current{background:linear-gradient(135deg,#021ca4,#4a7aff);border-color:transparent;color:#fff;cursor:not-allowed;opacity:.9;box-shadow:0 8px 22px -8px rgba(74,122,255,.8)}
 .ma-status-btn:disabled{cursor:not-allowed;opacity:.5}
 
-/* SHIPPING EDIT ROW */
 .ma-shipping-edit{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px dashed rgba(74,122,255,.15)}
 .ma-shipping-edit .ma-btn-soft{height:40px;padding:0 16px}
 .ma-shipping-edit-info{flex:1;min-width:200px;font-size:.82rem;color:#8a92b0;font-weight:700}
 .ma-shipping-edit-info strong{color:#6a9aff;font-family:'Courier New',monospace;font-size:.95rem}
 
 /* CHAT */
-.ma-chat-header{padding:18px 22px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(74,122,255,.06),transparent)}
+.ma-chat-header{padding:18px 22px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(74,122,255,.06),transparent);flex-shrink:0}
 .ma-chat-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.95rem;flex-shrink:0}
 .ma-chat-header-info{flex:1;min-width:0}
-.ma-chat-header-name{font-size:.95rem;font-weight:900;line-height:1.2}
-.ma-chat-header-status{font-size:.72rem;color:#66bb6a;font-weight:700;display:flex;align-items:center;gap:5px;margin-top:3px}
-.ma-chat-close{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#e0e6f4;cursor:pointer;font-size:.92rem;display:flex;align-items:center;justify-content:center;transition:background .3s,border-color .3s,color .3s}
+.ma-chat-header-name{font-size:.95rem;font-weight:900;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ma-chat-header-status{font-size:.72rem;color:#66bb6a;font-weight:700;display:flex;align-items:center;gap:5px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ma-chat-close{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#e0e6f4;cursor:pointer;font-size:.92rem;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s,color .2s;flex-shrink:0}
 .ma-chat-close:hover{background:rgba(217,4,41,.2);border-color:rgba(217,4,41,.4);color:#ff6b6b}
-.ma-chat-body{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:10px;background:rgba(0,0,0,.15);min-height:280px;max-height:420px;overscroll-behavior:contain}
+.ma-chat-body{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:10px;background:rgba(0,0,0,.15);min-height:280px;max-height:420px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .ma-chat-body::-webkit-scrollbar{width:6px}
 .ma-chat-body::-webkit-scrollbar-thumb{background:rgba(74,122,255,.25);border-radius:6px}
 .ma-msg{max-width:78%;padding:10px 14px;border-radius:14px;font-size:.86rem;line-height:1.65;word-wrap:break-word}
@@ -289,10 +293,10 @@ body{position:relative}
 .ma-msg.note{align-self:center;background:linear-gradient(135deg,rgba(147,51,234,.25),rgba(107,33,168,.25));border:1px dashed rgba(147,51,234,.5);color:#e9d5ff;max-width:88%}
 .ma-chat-empty{text-align:center;padding:40px 20px;color:#8a92b0;font-weight:700;font-size:.85rem}
 .ma-chat-empty i{font-size:2rem;color:#4a7aff;opacity:.5;display:block;margin-bottom:10px}
-.ma-chat-footer{padding:14px 18px;border-top:1px solid rgba(74,122,255,.14);background:rgba(0,0,0,.2);display:flex;gap:8px;align-items:flex-end}
-.ma-chat-footer textarea{flex:1;padding:11px 14px;border-radius:12px;background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.2);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.88rem;outline:none;resize:none;min-height:44px;max-height:120px;line-height:1.5}
+.ma-chat-footer{padding:14px 18px;border-top:1px solid rgba(74,122,255,.14);background:rgba(0,0,0,.2);display:flex;gap:8px;align-items:flex-end;flex-shrink:0}
+.ma-chat-footer textarea{flex:1;padding:11px 14px;border-radius:12px;background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.2);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:16px;outline:none;resize:none;min-height:44px;max-height:120px;line-height:1.5}
 .ma-chat-footer textarea:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
-.ma-chat-send{width:44px;height:44px;border-radius:12px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;cursor:pointer;font-size:.95rem;transition:transform .3s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ma-chat-send{width:44px;height:44px;border-radius:12px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;cursor:pointer;font-size:.95rem;transition:transform .25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ma-chat-send:hover:not(:disabled){transform:translateY(-2px)}
 
 /* TOAST */
@@ -302,30 +306,228 @@ body{position:relative}
 .ma-toast.error{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff}
 .ma-toast.info{background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff}
 
-.ma-loading-overlay{position:fixed;inset:0;z-index:99999;background:rgba(6,8,18,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;pointer-events:none}
+.ma-loading-overlay{position:fixed;inset:0;z-index:99999;background:rgba(6,8,18,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;pointer-events:none}
 .ma-loading-overlay.show{display:flex;pointer-events:auto}
 .ma-loading-spinner{width:50px;height:50px;border:4px solid rgba(74,122,255,.2);border-top-color:#4a7aff;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
 @media (max-width:1100px){
-  .ma-nav-menu{overflow-x:auto;gap:0}
+  .ma-nav-menu{gap:0}
   .ma-nav-link{padding:9px 10px;font-size:.78rem}
-  .ma-nav-user-info{display:none}
   .ma-stats{grid-template-columns:repeat(2,1fr)}
   .ma-detail-cols,.ma-summary-grid{grid-template-columns:1fr}
+  .ma-charts-grid{grid-template-columns:1fr}
 }
-@media (max-width:700px){
-  .ma-nav-inner{padding:0 12px;height:60px}
-  .ma-nav-brand .name{font-size:.85rem}
+
+/* ─── Mobile Drawer Nav ─── */
+@media (max-width:820px){
+  .ma-nav-toggle{display:flex}
+  .ma-nav-inner{padding:0 14px;height:62px;gap:10px}
+  .ma-nav-brand{margin-left:0;flex:1;gap:10px}
+  .ma-nav-brand .name{font-size:.88rem}
   .ma-nav-brand .sub{display:none}
-  .ma-nav-brand img{height:32px}
-  .ma-nav-link span{display:none}
-  .ma-nav-link i:first-child{font-size:1rem}
-  .ma-content{padding:18px 14px 60px}
+  .ma-nav-brand img{height:34px}
+  .ma-nav-user-info{display:none}
+
+  .ma-nav-menu{
+    position:fixed;top:0;right:-100%;bottom:0;
+    width:min(320px,85vw);
+    background:linear-gradient(180deg,#0a0e1a,#060812);
+    border-left:1px solid rgba(74,122,255,.2);
+    flex-direction:column;
+    align-items:stretch;
+    padding:78px 14px 24px;
+    transition:right .35s cubic-bezier(.34,1.56,.64,1);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    z-index:99;
+    gap:4px;
+    box-shadow:-20px 0 60px -20px rgba(0,0,0,.8);
+    flex:0 0 auto;
+  }
+  .ma-nav-menu.open{right:0}
+  .ma-nav-menu .ma-nav-item{width:100%}
+  .ma-nav-menu .ma-nav-link{
+    width:100%;justify-content:flex-start;
+    padding:14px 16px;font-size:.92rem;gap:12px;
+  }
+  .ma-nav-menu .ma-nav-link span{display:inline}
+  .ma-nav-menu .ma-nav-link i:first-child{width:20px;font-size:.95rem;text-align:center}
+  .ma-nav-menu .ma-nav-link .caret{margin-right:auto;margin-left:0}
+  .ma-nav-menu .ma-nav-dropdown{
+    position:static;display:none;
+    opacity:1;visibility:visible;transform:none;
+    box-shadow:none;border:none;
+    background:rgba(74,122,255,.05);
+    margin-top:6px;border-radius:10px;min-width:0;
+    padding:6px;
+  }
+  .ma-nav-menu .ma-nav-item.open .ma-nav-dropdown{display:block}
+  .ma-nav-menu .ma-nav-dropdown a{padding:12px 14px;font-size:.88rem}
+
+  /* Tables -> Card view */
+  .ma-table-wrap{background:transparent;border:none;padding:0;overflow:visible;border-radius:0}
+  .ma-table{font-size:.85rem;display:block;width:100%}
+  .ma-table thead{display:none}
+  .ma-table tbody{display:block}
+  .ma-table tbody tr{
+    display:block;
+    background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));
+    border:1px solid rgba(74,122,255,.18);
+    border-radius:14px;
+    padding:14px;
+    margin-bottom:10px;
+  }
+  .ma-table tbody tr:hover{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9))}
+  .ma-table tbody td{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 0;
+    border-bottom:1px dashed rgba(74,122,255,.1);
+    text-align:left;
+    font-size:.82rem;
+    gap:12px;
+  }
+  .ma-table tbody td:last-child{border-bottom:none}
+  .ma-table tbody td::before{
+    content:attr(data-label);
+    color:#8a92b0;
+    font-size:.68rem;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    flex-shrink:0;
+    text-align:right;
+    min-width:70px;
+  }
+  .ma-table tbody td.mono{font-size:.8rem}
+  .ma-table tbody td[data-label="إجراءات"]{
+    flex-direction:column;
+    align-items:stretch;
+    gap:8px;
+    padding-top:12px;
+    margin-top:4px;
+    border-top:1px solid rgba(74,122,255,.18);
+    border-bottom:none;
+  }
+  .ma-table tbody td[data-label="إجراءات"]::before{
+    margin-bottom:4px;
+    text-align:right;
+    width:100%;
+  }
+  .ma-table tbody td[data-label="إجراءات"] .actions-cell{
+    justify-content:flex-end;
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .ma-status-select{height:36px;font-size:.78rem}
+
+  /* Modals */
+  .ma-modal-back{padding:10px}
+  .ma-modal{max-width:100%;padding:22px;border-radius:16px}
+  .ma-modal.ma-modal-xl,.ma-modal.ma-modal-lg{
+    max-width:100%;width:100%;
+    max-height:96vh;max-height:96dvh;height:96vh;height:96dvh;
+    border-radius:14px;
+  }
+  .ma-detail-head{padding:14px;flex-wrap:wrap;gap:10px}
+  .ma-detail-head-right{margin-right:auto}
+  .ma-detail-body{padding:14px}
+  .ma-status-btns{grid-template-columns:1fr 1fr}
+  .ma-chat-body{min-height:auto;max-height:none}
+
+  /* Toolbar */
+  .ma-toolbar{padding:12px}
+  .ma-search{flex-basis:100%;min-width:0}
+  .ma-toolbar select{flex:1;min-width:130px}
+
+  /* Rate/Setting */
+  .ma-rate-display,.ma-setting-display{font-size:2.4rem}
+  .ma-rate-card,.ma-setting-card{padding:20px}
+  .ma-rate-form input,.ma-setting-form input{width:140px;font-size:1.15rem;height:48px}
+  .ma-setting-form .ma-btn{height:48px}
+
+  /* Login */
+  .ma-gate-card{padding:32px 24px;border-radius:22px}
+  .ma-gate-card h1{font-size:1.4rem}
+  .ma-gate-icon{width:68px;height:68px;font-size:1.7rem;margin-bottom:14px}
+}
+
+@media (max-width:520px){
+  .ma-stats{grid-template-columns:1fr 1fr;gap:12px}
+  .ma-stat{padding:14px;min-height:100px;border-radius:16px}
+  .ma-stat-icon{width:36px;height:36px;font-size:.95rem;margin-bottom:8px;border-radius:10px}
+  .ma-stat-val{font-size:1.5rem}
+  .ma-stat-lbl{font-size:.7rem}
+  .ma-page-title{font-size:1.15rem;gap:10px}
+  .ma-page-title i{width:36px;height:36px;font-size:.95rem;border-radius:10px}
+  .ma-page-sub{font-size:.76rem}
+  .ma-content{padding:16px 12px 60px}
+  .ma-page-head{margin-bottom:18px;gap:12px}
+  .ma-status-btns{grid-template-columns:1fr}
+  .ma-rate-display,.ma-setting-display{font-size:2rem}
+  .ma-btn-ghost{width:42px;padding:0;justify-content:center;font-size:0;gap:0}
+  .ma-btn-ghost i{font-size:.95rem}
+  .ma-btn-print{padding:8px 14px;font-size:.76rem}
+  .ma-detail-title{font-size:.92rem}
+  .ma-detail-icon{width:40px;height:40px;font-size:1rem}
+  .ma-summary-grid,.ma-detail-cols{gap:10px}
+  .ma-summary-box{padding:14px}
+  .ma-detail-section{padding:14px}
+  .ma-card{padding:16px;border-radius:16px}
+  .ma-card-title{font-size:.86rem}
+  .ma-chart-label{min-width:80px;font-size:.72rem}
+  .ma-chart-value{min-width:70px;font-size:.78rem}
+  .ma-chart-track{height:22px}
+  .ma-chart-fill{font-size:.66rem;padding:0 6px}
+  .ma-empty{padding:40px 16px}
+  .ma-empty i{font-size:2.2rem}
+  .ma-empty h3{font-size:.95rem}
+  .ma-empty p{font-size:.8rem}
+  .ma-toast{padding:11px 18px;font-size:.82rem;bottom:16px}
+  .ma-btn{height:42px;padding:0 14px;font-size:.8rem}
+  .ma-toolbar select{height:42px;font-size:.82rem}
+  .ma-search input{height:42px;font-size:16px}
+  .ma-modal-title{font-size:.98rem;gap:10px}
+  .ma-modal-title i{width:38px;height:38px;font-size:.92rem}
+  .ma-modal-sub{font-size:.8rem}
+  .ma-modal-actions button{height:46px;font-size:.84rem}
+  .ma-quick button{padding:6px 12px;font-size:.74rem}
+  .ma-detail-row{font-size:.82rem}
+  .ma-detail-row .lbl{font-size:.76rem}
+  .ma-detail-row .val{font-size:.82rem}
+  .ma-summary-row{font-size:.82rem}
+  .ma-summary-row.total .val{font-size:1.15rem}
+  .ma-items-table{font-size:.78rem}
+  .ma-items-table thead th{padding:8px 6px;font-size:.66rem}
+  .ma-items-table tbody td{padding:8px 6px}
+}
+
+@media (max-width:400px){
   .ma-stats{grid-template-columns:1fr}
-  .ma-page-title{font-size:1.2rem}
-  .ma-table{font-size:.78rem}
-  .ma-table thead th,.ma-table tbody td{padding:10px 8px}
+  .ma-table tbody td::before{min-width:60px;font-size:.65rem}
+  .ma-chart-label{min-width:66px;font-size:.68rem}
+  .ma-chart-value{min-width:55px;font-size:.72rem}
+  .ma-gate-card{padding:28px 20px}
+  .ma-gate-card h1{font-size:1.25rem}
+  .ma-nav-brand img{height:30px}
+  .ma-nav-brand .name{font-size:.82rem}
+  .ma-nav-inner{padding:0 10px;height:58px}
+  .ma-content{padding:14px 10px 60px}
+  .ma-page-head .ma-btn{height:40px;font-size:.76rem;padding:0 12px}
+}
+
+@media (max-width:820px) and (orientation:landscape){
+  .ma-nav-menu{padding-top:70px}
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
 }
 </style>
 </head>
@@ -337,7 +539,7 @@ body{position:relative}
     <div class="ma-gate-icon"><i class="fas fa-shield-halved"></i></div>
     <h1>لوحة الإدارة</h1>
     <p>سجّل دخولك بحساب المشرف للوصول</p>
-    <div class="ma-field"><label>البريد الإلكتروني</label><input type="email" id="maGateEmail" placeholder="admin@example.com" autocomplete="email"></div>
+    <div class="ma-field"><label>البريد الإلكتروني</label><input type="email" id="maGateEmail" placeholder="admin@example.com" autocomplete="email" inputmode="email"></div>
     <div class="ma-field"><label>كلمة المرور</label><input type="password" id="maGatePass" placeholder="••••••••" autocomplete="current-password"></div>
     <button class="ma-gate-btn" id="maGateBtn"><i class="fas fa-right-to-bracket"></i> دخول</button>
     <div class="ma-gate-err" id="maGateErr"></div>
@@ -347,6 +549,7 @@ body{position:relative}
 <div class="ma-app" id="maApp">
   <nav class="ma-nav">
     <div class="ma-nav-inner">
+      <button class="ma-nav-toggle" id="maNavToggle" aria-label="القائمة"><i class="fas fa-bars"></i></button>
       <div class="ma-nav-brand">
         <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN">
         <div><div class="name">لوحة الإدارة</div><div class="sub">MEN Store Admin</div></div>
@@ -354,10 +557,11 @@ body{position:relative}
       <div class="ma-nav-menu" id="maNavMenu"></div>
       <div class="ma-nav-user">
         <div class="ma-nav-user-info"><div class="n" id="maUserName">—</div><div class="e" id="maUserEmail">—</div></div>
-        <button class="ma-btn-ghost" id="maLogout"><i class="fas fa-sign-out-alt"></i> خروج</button>
+        <button class="ma-btn-ghost" id="maLogout" aria-label="خروج"><i class="fas fa-sign-out-alt"></i> خروج</button>
       </div>
     </div>
   </nav>
+  <div class="ma-nav-backdrop" id="maNavBackdrop"></div>
 
   <div class="ma-content">
     <div class="ma-view" id="view-reports"></div>
@@ -392,7 +596,7 @@ body{position:relative}
       </div>
       <div class="ma-detail-head-right">
         <button class="ma-btn-print" id="maDetailPrint"><i class="fas fa-print"></i> طباعة</button>
-        <button class="ma-chat-close" id="maDetailClose"><i class="fas fa-xmark"></i></button>
+        <button class="ma-chat-close" id="maDetailClose" aria-label="إغلاق"><i class="fas fa-xmark"></i></button>
       </div>
     </div>
     <div class="ma-detail-body" id="maDetailBody"></div>
@@ -403,7 +607,7 @@ body{position:relative}
   <div class="ma-modal">
     <div class="ma-modal-title"><i class="fas fa-gift" id="maCbIcon"></i><span id="maCbTitle">إضافة كاش باك</span></div>
     <div class="ma-modal-sub" id="maCbSub">—</div>
-    <div class="ma-modal-field"><label>المبلغ (ر.س)</label><input type="number" id="maCbAmount" placeholder="0.00" step="0.01" min="0.01">
+    <div class="ma-modal-field"><label>المبلغ (ر.س)</label><input type="number" id="maCbAmount" placeholder="0.00" step="0.01" min="0.01" inputmode="decimal">
       <div class="ma-quick"><button data-amt="5">5</button><button data-amt="10">10</button><button data-amt="20">20</button><button data-amt="50">50</button><button data-amt="100">100</button></div>
     </div>
     <div class="ma-modal-field"><label>السبب</label><input type="text" id="maCbReason" placeholder="اختياري..."></div>
@@ -435,7 +639,7 @@ body{position:relative}
     <div class="ma-modal-sub" id="maShipSub">—</div>
     <div class="ma-modal-field">
       <label>سعر الشحن (ر.س)</label>
-      <input type="number" id="maShipAmount" placeholder="0.00" step="0.01" min="0">
+      <input type="number" id="maShipAmount" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
       <div class="ma-quick">
         <button data-ship="0">مجاني</button>
         <button data-ship="10">10</button>
@@ -461,10 +665,10 @@ body{position:relative}
     <div class="ma-chat-header">
       <div class="ma-chat-avatar" id="maChatAvatar">?</div>
       <div class="ma-chat-header-info"><div class="ma-chat-header-name" id="maChatName">—</div><div class="ma-chat-header-status"><i class="fas fa-circle" style="font-size:.5rem"></i> <span id="maChatEmail">—</span></div></div>
-      <button class="ma-chat-close" id="maChatClose"><i class="fas fa-xmark"></i></button>
+      <button class="ma-chat-close" id="maChatClose" aria-label="إغلاق"><i class="fas fa-xmark"></i></button>
     </div>
     <div class="ma-chat-body" id="maChatBody"></div>
-    <div class="ma-chat-footer"><textarea id="maChatInput" placeholder="اكتب..." rows="1"></textarea><button class="ma-chat-send" id="maChatSend"><i class="fas fa-paper-plane"></i></button></div>
+    <div class="ma-chat-footer"><textarea id="maChatInput" placeholder="اكتب..." rows="1"></textarea><button class="ma-chat-send" id="maChatSend" aria-label="إرسال"><i class="fas fa-paper-plane"></i></button></div>
   </div>
 </div>
 
@@ -519,9 +723,9 @@ let dataLoaded = false;
 let loadingPromise = null;
 let auditLogLoaded = false;
 
-const settings = { 
-  cashback_rate: 0.02, 
-  store_name:'MEN Store', 
+const settings = {
+  cashback_rate: 0.02,
+  store_name:'MEN Store',
   currency:'ر.س',
   vat_rate: 0.15,
   vat_enabled: true,
@@ -547,17 +751,28 @@ function showLoading(v){
   if(v) el.classList.add('show'); else el.classList.remove('show');
 }
 
-/* ═══════════════════════════════════════════════
-   حساب تفاصيل الطلب (المجموع الفرعي + الشحن + الضريبة)
-═══════════════════════════════════════════════ */
+/* Mobile nav */
+function openMobileNav(){
+  $('maNavMenu').classList.add('open');
+  $('maNavBackdrop').classList.add('show');
+  document.body.classList.add('nav-open');
+}
+function closeMobileNav(){
+  $('maNavMenu').classList.remove('open');
+  $('maNavBackdrop').classList.remove('show');
+  document.body.classList.remove('nav-open');
+}
+function toggleMobileNav(){
+  if($('maNavMenu').classList.contains('open')) closeMobileNav();
+  else openMobileNav();
+}
+
+/* ═══ حساب التفاصيل ═══ */
 function calcOrderBreakdown(order){
   const items = Array.isArray(order.items) ? order.items : [];
   const itemsSubtotal = items.reduce((s,it) => s + Number(it.price||0) * Number(it.qty||1), 0);
   const total = Number(order.total||0);
-  
-  // إذا كانت التفاصيل محفوظة مسبقاً، استخدمها
   const hasSavedBreakdown = order.subtotal != null && order.vat_amount != null && order.shipping_fee != null;
-  
   if(hasSavedBreakdown){
     return {
       itemsSubtotal: round2(itemsSubtotal),
@@ -567,13 +782,9 @@ function calcOrderBreakdown(order){
       total: round2(total)
     };
   }
-  
-  // حساب تلقائي: نفترض أن الطلب يحتوي المجموع الفرعي + شحن + ضريبة
   let subtotal = itemsSubtotal > 0 ? itemsSubtotal : total;
   let vat = settings.vat_enabled ? round2(subtotal * settings.vat_rate) : 0;
   let shipping = round2(total - subtotal - vat);
-  
-  // إذا الناتج غير منطقي، استخدم الشحن الافتراضي
   if(shipping < 0 || shipping > total){
     shipping = Number(settings.shipping_fee || 0);
     subtotal = round2(total / (1 + (settings.vat_enabled ? settings.vat_rate : 0)));
@@ -583,25 +794,15 @@ function calcOrderBreakdown(order){
     }
     vat = settings.vat_enabled ? round2(subtotal * settings.vat_rate) : 0;
   }
-  
-  return {
-    itemsSubtotal: round2(itemsSubtotal),
-    subtotal: round2(subtotal),
-    shipping: round2(shipping),
-    vat: round2(vat),
-    total: round2(total)
-  };
+  return { itemsSubtotal: round2(itemsSubtotal), subtotal: round2(subtotal), shipping: round2(shipping), vat: round2(vat), total: round2(total) };
 }
-
 function computeNewTotal(itemsSubtotal, shippingFee){
   const vat = settings.vat_enabled ? round2(itemsSubtotal * settings.vat_rate) : 0;
   const total = round2(itemsSubtotal + Number(shippingFee||0) + vat);
   return { vat, total };
 }
 
-/* ═══════════════════════════════════════════════
-   INIT
-═══════════════════════════════════════════════ */
+/* ═══ INIT ═══ */
 function init(){
   if(!window.supabase?.createClient){ alert('فشل تحميل Supabase — تحقق من الإنترنت'); return; }
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
@@ -637,9 +838,14 @@ function buildNav(){
       e.preventDefault(); e.stopPropagation();
       switchView(el.dataset.view);
       document.querySelectorAll('.ma-nav-item.open').forEach(i => i.classList.remove('open'));
+      closeMobileNav();
     });
   });
-  document.addEventListener('click', () => document.querySelectorAll('.ma-nav-item.open').forEach(i => i.classList.remove('open')));
+  document.addEventListener('click', e => {
+    if(!e.target.closest('.ma-nav-item')) {
+      document.querySelectorAll('.ma-nav-item.open').forEach(i => i.classList.remove('open'));
+    }
+  });
 }
 
 async function loadSettings(){
@@ -793,9 +999,7 @@ function renderView(viewId){
   }
 }
 
-/* ═══════════════════════════════════════════════
-   REPORTS
-═══════════════════════════════════════════════ */
+/* ═══ REPORTS ═══ */
 function renderReportsOverview(el){
   const total = allOrders.length;
   const delivered = allOrders.filter(o => o.status === 'delivered').length;
@@ -828,14 +1032,14 @@ function renderReportsOverview(el){
       <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-gift"></i></div><div class="ma-stat-val">${fmtInt(totalCb)}</div><div class="ma-stat-lbl">كاش باك ممنوح (ر.س)</div></div>
       <div class="ma-stat" style="--accent:#d90429;--icon-bg:rgba(217,4,41,.15)"><div class="ma-stat-icon"><i class="fas fa-circle-xmark"></i></div><div class="ma-stat-val">${cancelled}</div><div class="ma-stat-lbl">طلبات ملغاة</div></div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px">
+    <div class="ma-charts-grid">
       <div class="ma-card"><div class="ma-card-title"><i class="fas fa-chart-bar"></i> المبيعات - آخر 7 أيام</div>${renderSalesChart()}</div>
       <div class="ma-card"><div class="ma-card-title"><i class="fas fa-chart-pie"></i> توزيع الحالات</div>${renderStatusChart()}</div>
     </div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-clock"></i> آخر الطلبات</div>${renderRecentOrders(5)}</div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-gift"></i> كاش باك متوقع</div>
-      <div style="text-align:center;padding:20px">
-        <div style="font-size:2.4rem;font-weight:900;background:linear-gradient(135deg,#f5b342,#c98a1e);-webkit-background-clip:text;background-clip:text;color:transparent">${fmtNum(potentialCb)} ر.س</div>
+      <div style="text-align:center;padding:20px 10px">
+        <div style="font-size:clamp(1.8rem,6vw,2.4rem);font-weight:900;background:linear-gradient(135deg,#f5b342,#c98a1e);-webkit-background-clip:text;background-clip:text;color:transparent">${fmtNum(potentialCb)} ر.س</div>
         <div style="color:#8a92b0;font-weight:700;margin-top:8px;font-size:.85rem">عند تسليم الطلبات بنسبة ${(settings.cashback_rate*100).toFixed(1)}% (على المجموع الفرعي)</div>
       </div>
     </div>
@@ -879,7 +1083,13 @@ function renderRecentOrders(limit){
   if(!list.length) return `<div class="ma-empty"><i class="fas fa-inbox"></i><h3>لا توجد طلبات</h3></div>`;
   return `<table class="ma-table"><thead><tr><th>رقم</th><th>العميل</th><th>المبلغ</th><th>الحالة</th><th>التاريخ</th></tr></thead><tbody>${list.map(o => {
     const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
-    return `<tr><td class="mono">#${String(o.id).slice(-6).toUpperCase()}</td><td>${esc(o.user_name || o.user_email || '—')}</td><td class="price">${fmtNum(o.total)} ر.س</td><td><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></td><td style="font-size:.78rem;color:#8a92b0">${fmtDate(o.created_at)}</td></tr>`;
+    return `<tr>
+      <td class="mono" data-label="رقم">#${String(o.id).slice(-6).toUpperCase()}</td>
+      <td data-label="العميل">${esc(o.user_name || o.user_email || '—')}</td>
+      <td class="price" data-label="المبلغ">${fmtNum(o.total)} ر.س</td>
+      <td data-label="الحالة"><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></td>
+      <td data-label="التاريخ" style="font-size:.78rem;color:#8a92b0">${fmtDate(o.created_at)}</td>
+    </tr>`;
   }).join('')}</tbody></table>`;
 }
 
@@ -909,7 +1119,13 @@ function renderReportsSales(el){
       ${months.length ? months.map(([k,v]) => `<div class="ma-chart-bar"><div class="ma-chart-label">${k}</div><div class="ma-chart-track"><div class="ma-chart-fill green" style="width:${v/maxM*100}%"></div></div><div class="ma-chart-value">${fmtInt(v)} ر.س</div></div>`).join('') : '<div class="ma-empty"><i class="fas fa-chart-line"></i><h3>لا توجد بيانات</h3></div>'}
     </div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-trophy"></i> أفضل 10 طلبات</div>
-      <table class="ma-table"><thead><tr><th>#</th><th>رقم</th><th>العميل</th><th>المبلغ</th><th>التاريخ</th></tr></thead><tbody>${[...delivered].sort((a,b) => b.total - a.total).slice(0,10).map((o,i) => `<tr><td>${i+1}</td><td class="mono">#${String(o.id).slice(-6).toUpperCase()}</td><td>${esc(o.user_name || o.user_email || '—')}</td><td class="price">${fmtNum(o.total)} ر.س</td><td style="font-size:.78rem;color:#8a92b0">${fmtDate(o.created_at)}</td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center;padding:30px;color:#8a92b0">لا توجد بيانات</td></tr>'}</tbody></table>
+      <table class="ma-table"><thead><tr><th>#</th><th>رقم</th><th>العميل</th><th>المبلغ</th><th>التاريخ</th></tr></thead><tbody>${[...delivered].sort((a,b) => b.total - a.total).slice(0,10).map((o,i) => `<tr>
+        <td data-label="#">${i+1}</td>
+        <td class="mono" data-label="رقم">#${String(o.id).slice(-6).toUpperCase()}</td>
+        <td data-label="العميل">${esc(o.user_name || o.user_email || '—')}</td>
+        <td class="price" data-label="المبلغ">${fmtNum(o.total)} ر.س</td>
+        <td data-label="التاريخ" style="font-size:.78rem;color:#8a92b0">${fmtDate(o.created_at)}</td>
+      </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;padding:30px;color:#8a92b0">لا توجد بيانات</td></tr>'}</tbody></table>
     </div>
   `;
 }
@@ -941,7 +1157,14 @@ function renderReportsCustomers(el){
       <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-gift"></i></div><div class="ma-stat-val">${fmtInt(allUsers.reduce((s,u) => s + Number(u.cashback||0), 0))}</div><div class="ma-stat-lbl">إجمالي الكاش باك</div></div>
     </div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-crown"></i> أفضل 15 عميل</div>
-      <table class="ma-table"><thead><tr><th>#</th><th>الاسم</th><th>البريد</th><th>الطلبات</th><th>إجمالي المدفوع</th><th>الكاش باك</th></tr></thead><tbody>${topCustomers.map((u,i) => `<tr><td>${i+1}</td><td style="font-weight:800">${esc(u.name || '—')}</td><td style="font-size:.78rem;color:#8a92b0" dir="ltr">${esc(u.email || '—')}</td><td>${u._count}</td><td class="price">${fmtNum(u._paid)} ر.س</td><td style="color:#f5b342;font-weight:800">${fmtNum(u.cashback)} ر.س</td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center;padding:30px;color:#8a92b0">لا توجد بيانات</td></tr>'}</tbody></table>
+      <table class="ma-table"><thead><tr><th>#</th><th>الاسم</th><th>البريد</th><th>الطلبات</th><th>إجمالي المدفوع</th><th>الكاش باك</th></tr></thead><tbody>${topCustomers.map((u,i) => `<tr>
+        <td data-label="#">${i+1}</td>
+        <td data-label="الاسم" style="font-weight:800">${esc(u.name || '—')}</td>
+        <td data-label="البريد" style="font-size:.78rem;color:#8a92b0" dir="ltr">${esc(u.email || '—')}</td>
+        <td data-label="الطلبات">${u._count}</td>
+        <td class="price" data-label="المدفوع">${fmtNum(u._paid)} ر.س</td>
+        <td data-label="الكاش باك" style="color:#f5b342;font-weight:800">${fmtNum(u.cashback)} ر.س</td>
+      </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;padding:30px;color:#8a92b0">لا توجد بيانات</td></tr>'}</tbody></table>
     </div>
   `;
 }
@@ -971,15 +1194,19 @@ function renderReportsCashback(el){
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-history"></i> آخر 20 عملية</div>
       <table class="ma-table"><thead><tr><th>العميل</th><th>المبلغ</th><th>النوع</th><th>السبب</th><th>التاريخ</th></tr></thead><tbody>${allCashbackLog.slice(0,20).map(l => {
         const amt = Number(l.amount||0), pos = amt > 0;
-        return `<tr><td style="font-size:.8rem">${esc(l.user_email||'—')}</td><td style="font-weight:900;color:${pos?'#4caf50':'#d90429'}" class="mono">${pos?'+':''}${fmtNum(amt)}</td><td><span class="ma-badge" style="background:${pos?'rgba(76,175,80,.15)':'rgba(217,4,41,.15)'};color:${pos?'#4caf50':'#ff6b6b'}">${esc(l.type||'—')}</span></td><td style="font-size:.78rem;color:#a8b0cc">${esc(l.reason||'—')}</td><td style="font-size:.76rem;color:#8a92b0">${fmtDate(l.created_at)}</td></tr>`;
+        return `<tr>
+          <td data-label="العميل" style="font-size:.8rem">${esc(l.user_email||'—')}</td>
+          <td data-label="المبلغ" style="font-weight:900;color:${pos?'#4caf50':'#d90429'}" class="mono">${pos?'+':''}${fmtNum(amt)}</td>
+          <td data-label="النوع"><span class="ma-badge" style="background:${pos?'rgba(76,175,80,.15)':'rgba(217,4,41,.15)'};color:${pos?'#4caf50':'#ff6b6b'}">${esc(l.type||'—')}</span></td>
+          <td data-label="السبب" style="font-size:.78rem;color:#a8b0cc">${esc(l.reason||'—')}</td>
+          <td data-label="التاريخ" style="font-size:.76rem;color:#8a92b0">${fmtDate(l.created_at)}</td>
+        </tr>`;
       }).join('') || '<tr><td colspan="5" style="text-align:center;padding:30px;color:#8a92b0">لا سجلات</td></tr>'}</tbody></table>
     </div>
   `;
 }
 
-/* ═══════════════════════════════════════════════
-   ORDERS
-═══════════════════════════════════════════════ */
+/* ═══ ORDERS ═══ */
 function renderOrdersView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-box"></i> سجل الطلبات</div><div class="ma-page-sub">${allOrders.length} طلب</div></div></div>
@@ -1055,25 +1282,25 @@ function renderOrdersTable(){
       ).join('');
 
       return `<tr>
-        <td class="mono">#${String(o.id).slice(-8).toUpperCase()}</td>
-        <td style="font-weight:800">${esc(o.user_name||'—')}</td>
-        <td style="font-size:.8rem;color:#8a92b0" dir="ltr">${esc(o.user_phone||'—')}</td>
-        <td class="price">${fmtNum(o.total)} ر.س</td>
-        <td style="font-size:.8rem;color:#6a9aff;font-weight:800">${fmtNum(bd.shipping)}</td>
-        <td style="font-size:.82rem">${cb}</td>
-        <td><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></td>
-        <td>
+        <td class="mono" data-label="رقم">#${String(o.id).slice(-8).toUpperCase()}</td>
+        <td data-label="العميل" style="font-weight:800">${esc(o.user_name||'—')}</td>
+        <td data-label="الجوال" style="font-size:.8rem;color:#8a92b0" dir="ltr">${esc(o.user_phone||'—')}</td>
+        <td class="price" data-label="المبلغ">${fmtNum(o.total)} ر.س</td>
+        <td data-label="الشحن" style="font-size:.8rem;color:#6a9aff;font-weight:800">${fmtNum(bd.shipping)}</td>
+        <td data-label="الكاش باك" style="font-size:.82rem">${cb}</td>
+        <td data-label="الحالة"><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></td>
+        <td data-label="تغيير الحالة">
           <select class="ma-status-select" data-status-order="${o.id}">
             <option value="">تغيير ▾</option>
             ${statusOptions}
           </select>
         </td>
-        <td style="font-size:.76rem;color:#8a92b0">${fmtDate(o.created_at)}</td>
-        <td><div class="actions-cell">
+        <td data-label="التاريخ" style="font-size:.76rem;color:#8a92b0">${fmtDate(o.created_at)}</td>
+        <td data-label="إجراءات"><div class="actions-cell">
           <button class="ma-mini-btn ma-mini-detail" data-detail-order="${o.id}"><i class="fas fa-receipt"></i> تفاصيل</button>
           <button class="ma-mini-btn ma-mini-cb" data-add-cashback="${o.id}" title="كاش باك"><i class="fas fa-gift"></i></button>
-          <button class="ma-mini-btn ma-mini-detail" data-edit-shipping="${o.id}" title="تعديل الشحن" style="background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.35);color:#6a9aff"><i class="fas fa-truck"></i></button>
-          <button class="ma-mini-btn ma-mini-delete" data-delete-order="${o.id}"><i class="fas fa-trash"></i></button>
+          <button class="ma-mini-btn ma-mini-ship" data-edit-shipping="${o.id}" title="تعديل الشحن"><i class="fas fa-truck"></i></button>
+          <button class="ma-mini-btn ma-mini-delete" data-delete-order="${o.id}" title="حذف"><i class="fas fa-trash"></i></button>
         </div></td>
       </tr>`;
     }).join('')}</tbody></table></div>`;
@@ -1171,9 +1398,7 @@ async function applyStatus(orderId, newStatus){
   }
 }
 
-/* ═══════════════════════════════════════════════
-   CUSTOMERS
-═══════════════════════════════════════════════ */
+/* ═══ CUSTOMERS ═══ */
 function renderCustomersView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-users"></i> سجل العملاء</div><div class="ma-page-sub">${allUsers.length} عميل</div></div></div>
@@ -1227,25 +1452,23 @@ function renderCustomersTable(){
       const list = allOrders.filter(o => String(o.user_id) === String(u.id));
       const paid = list.filter(o => o.status === 'delivered').reduce((s,o) => s + Number(o.total||0), 0);
       return `<tr>
-        <td style="font-weight:800">${esc(u.name||'—')}</td>
-        <td style="font-size:.8rem;color:#a8b0cc" dir="ltr">${esc(u.email||'—')}</td>
-        <td style="font-size:.8rem;color:#8a92b0" dir="ltr">${esc(u.phone||'—')}</td>
-        <td><strong>${ordersByUser.get(String(u.id)) || 0}</strong></td>
-        <td class="price">${fmtNum(paid)} ر.س</td>
-        <td style="color:#f5b342;font-weight:900">${fmtNum(u.cashback)} ر.س</td>
-        <td><div class="actions-cell">
-          <button class="ma-mini-btn ma-mini-chat" data-user-chat="${u.id}"><i class="fas fa-comments"></i></button>
-          <button class="ma-mini-btn ma-mini-note" data-user-note="${u.id}"><i class="fas fa-comment-dots"></i></button>
-          <button class="ma-mini-btn ma-mini-cb" data-user-cb="${u.id}" data-cb-mode="add"><i class="fas fa-gift"></i></button>
-          <button class="ma-mini-btn ma-mini-delete" data-user-cb="${u.id}" data-cb-mode="deduct"><i class="fas fa-minus"></i></button>
+        <td data-label="الاسم" style="font-weight:800">${esc(u.name||'—')}</td>
+        <td data-label="البريد" style="font-size:.8rem;color:#a8b0cc" dir="ltr">${esc(u.email||'—')}</td>
+        <td data-label="الجوال" style="font-size:.8rem;color:#8a92b0" dir="ltr">${esc(u.phone||'—')}</td>
+        <td data-label="الطلبات"><strong>${ordersByUser.get(String(u.id)) || 0}</strong></td>
+        <td class="price" data-label="المدفوع">${fmtNum(paid)} ر.س</td>
+        <td data-label="الكاش باك" style="color:#f5b342;font-weight:900">${fmtNum(u.cashback)} ر.س</td>
+        <td data-label="إجراءات"><div class="actions-cell">
+          <button class="ma-mini-btn ma-mini-chat" data-user-chat="${u.id}" title="محادثة"><i class="fas fa-comments"></i></button>
+          <button class="ma-mini-btn ma-mini-note" data-user-note="${u.id}" title="ملاحظة"><i class="fas fa-comment-dots"></i></button>
+          <button class="ma-mini-btn ma-mini-cb" data-user-cb="${u.id}" data-cb-mode="add" title="إضافة كاش باك"><i class="fas fa-gift"></i></button>
+          <button class="ma-mini-btn ma-mini-delete" data-user-cb="${u.id}" data-cb-mode="deduct" title="خصم"><i class="fas fa-minus"></i></button>
         </div></td>
       </tr>`;
     }).join('')}</tbody></table></div>`;
 }
 
-/* ═══════════════════════════════════════════════
-   FINANCE
-═══════════════════════════════════════════════ */
+/* ═══ FINANCE ═══ */
 function renderFinanceView(el){
   const delivered = allOrders.filter(o => o.status === 'delivered');
   const revenue = delivered.reduce((s,o) => s + Number(o.total||0), 0);
@@ -1258,7 +1481,6 @@ function renderFinanceView(el){
   }, 0);
   const pendingList = allOrders.filter(o => o.cashback_applied && !o.cashback_paid);
 
-  // إجمالي الضرائب المحصلة
   const totalVAT = allOrders.filter(o => o.status === 'delivered').reduce((s,o) => {
     const bd = calcOrderBreakdown(o);
     return s + bd.vat;
@@ -1283,15 +1505,19 @@ function renderFinanceView(el){
       <div class="ma-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.15)"><div class="ma-stat-icon"><i class="fas fa-users"></i></div><div class="ma-stat-val">${fmtInt(allUsers.reduce((s,u) => s + Number(u.cashback||0), 0))}</div><div class="ma-stat-lbl">أرصدة الكاش باك</div></div>
     </div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-list-check"></i> الكاش باك المعلق</div>
-      ${pendingList.length ? `<table class="ma-table"><thead><tr><th>رقم</th><th>العميل</th><th>المبلغ</th><th>التاريخ</th><th>إجراء</th></tr></thead><tbody>${pendingList.map(o => `<tr><td class="mono">#${String(o.id).slice(-6).toUpperCase()}</td><td>${esc(o.user_name||o.user_email||'—')}</td><td class="price">${fmtNum(o.cashback)} ر.س</td><td style="font-size:.78rem;color:#8a92b0">${fmtDate(o.created_at)}</td><td><button class="ma-mini-btn ma-mini-detail" data-mark-paid="${o.id}"><i class="fas fa-money-bill-wave"></i> تعليم كمدفوع</button></td></tr>`).join('')}</tbody></table>` : '<div class="ma-empty"><i class="fas fa-check-circle" style="color:#4caf50"></i><h3>لا يوجد كاش باك معلق</h3></div>'}
+      ${pendingList.length ? `<table class="ma-table"><thead><tr><th>رقم</th><th>العميل</th><th>المبلغ</th><th>التاريخ</th><th>إجراء</th></tr></thead><tbody>${pendingList.map(o => `<tr>
+        <td class="mono" data-label="رقم">#${String(o.id).slice(-6).toUpperCase()}</td>
+        <td data-label="العميل">${esc(o.user_name||o.user_email||'—')}</td>
+        <td class="price" data-label="المبلغ">${fmtNum(o.cashback)} ر.س</td>
+        <td data-label="التاريخ" style="font-size:.78rem;color:#8a92b0">${fmtDate(o.created_at)}</td>
+        <td data-label="إجراء"><button class="ma-mini-btn ma-mini-detail" data-mark-paid="${o.id}"><i class="fas fa-money-bill-wave"></i> تعليم كمدفوع</button></td>
+      </tr>`).join('')}</tbody></table>` : '<div class="ma-empty"><i class="fas fa-check-circle" style="color:#4caf50"></i><h3>لا يوجد كاش باك معلق</h3></div>'}
     </div>
   `;
   el.querySelectorAll('[data-mark-paid]').forEach(b => b.addEventListener('click', () => toggleCashbackPaid(b.dataset.markPaid, true)));
 }
 
-/* ═══════════════════════════════════════════════
-   REWARDS
-═══════════════════════════════════════════════ */
+/* ═══ REWARDS ═══ */
 function renderRewardsView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-gift"></i> إدارة الكاش باك</div><div class="ma-page-sub">أضف أو اخصم كاش باك</div></div></div>
@@ -1306,7 +1532,12 @@ function renderRewardsView(el){
     if(!q){ results.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-user-search"></i><h3>ابدأ البحث</h3></div></div>`; return; }
     const matches = allUsers.filter(u => `${u.name||''} ${u.email||''}`.toLowerCase().includes(q)).slice(0,10);
     if(!matches.length){ results.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-user-slash"></i><h3>لا نتائج</h3></div></div>`; return; }
-    results.innerHTML = `<div class="ma-table-wrap"><table class="ma-table"><thead><tr><th>الاسم</th><th>البريد</th><th>الرصيد</th><th>إجراء</th></tr></thead><tbody>${matches.map(u => `<tr><td style="font-weight:800">${esc(u.name||'—')}</td><td style="font-size:.8rem" dir="ltr">${esc(u.email||'—')}</td><td style="color:#f5b342;font-weight:900">${fmtNum(u.cashback)} ر.س</td><td><div class="actions-cell"><button class="ma-mini-btn ma-mini-cb" data-user-cb="${u.id}" data-cb-mode="add"><i class="fas fa-plus"></i> إضافة</button><button class="ma-mini-btn ma-mini-delete" data-user-cb="${u.id}" data-cb-mode="deduct"><i class="fas fa-minus"></i> خصم</button></div></td></tr>`).join('')}</tbody></table></div>`;
+    results.innerHTML = `<div class="ma-table-wrap"><table class="ma-table"><thead><tr><th>الاسم</th><th>البريد</th><th>الرصيد</th><th>إجراء</th></tr></thead><tbody>${matches.map(u => `<tr>
+      <td data-label="الاسم" style="font-weight:800">${esc(u.name||'—')}</td>
+      <td data-label="البريد" style="font-size:.8rem" dir="ltr">${esc(u.email||'—')}</td>
+      <td data-label="الرصيد" style="color:#f5b342;font-weight:900">${fmtNum(u.cashback)} ر.س</td>
+      <td data-label="إجراء"><div class="actions-cell"><button class="ma-mini-btn ma-mini-cb" data-user-cb="${u.id}" data-cb-mode="add"><i class="fas fa-plus"></i> إضافة</button><button class="ma-mini-btn ma-mini-delete" data-user-cb="${u.id}" data-cb-mode="deduct"><i class="fas fa-minus"></i> خصم</button></div></td>
+    </tr>`).join('')}</tbody></table></div>`;
     results.querySelectorAll('[data-user-cb]').forEach(b => b.addEventListener('click', () => openUserCbModal(b.dataset.userCb, b.dataset.cbMode)));
   };
   $('rewSearch').addEventListener('input', debounce(search, 180));
@@ -1316,14 +1547,13 @@ function renderRewardsView(el){
 function renderRateView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-sliders"></i> النسب والضرائب</div><div class="ma-page-sub">تحكم بنسبة الكاش باك، ضريبة القيمة المضافة، والشحن الافتراضي</div></div></div>
-    
-    <!-- نسبة الكاش باك -->
+
     <div class="ma-rate-card">
       <div class="ma-rate-title"><i class="fas fa-gift"></i><div><div class="t">نسبة الكاش باك</div><div class="s">تُطبَّق على المجموع الفرعي (بدون ضريبة/شحن)</div></div></div>
       <div class="ma-rate-display">${(settings.cashback_rate*100).toFixed(2)}%</div>
       <div class="ma-rate-hint">مثال: طلب بمجموع فرعي 1000 ر.س → ${fmtNum(1000 * settings.cashback_rate)} ر.س كاش باك</div>
       <div class="ma-rate-form">
-        <input type="number" id="rateInput" value="${(settings.cashback_rate*100).toFixed(2)}" step="0.1" min="0" max="100">
+        <input type="number" id="rateInput" value="${(settings.cashback_rate*100).toFixed(2)}" step="0.1" min="0" max="100" inputmode="decimal">
         <span style="font-size:1.4rem;font-weight:900;color:#f5b342">%</span>
         <button class="ma-btn ma-btn-gold" id="rateSave"><i class="fas fa-save"></i> حفظ النسبة</button>
       </div>
@@ -1332,14 +1562,10 @@ function renderRateView(el){
       </div>
     </div>
 
-    <!-- الضريبة -->
     <div class="ma-setting-card tax">
       <div class="ma-setting-title">
         <i class="fas fa-file-invoice"></i>
-        <div>
-          <div class="t">ضريبة القيمة المضافة</div>
-          <div class="s">السعودية — 15% افتراضياً (يمكن تغييرها)</div>
-        </div>
+        <div><div class="t">ضريبة القيمة المضافة</div><div class="s">السعودية — 15% افتراضياً (يمكن تغييرها)</div></div>
       </div>
       <div class="ma-setting-display">${(settings.vat_rate*100).toFixed(2)}%</div>
       <div class="ma-setting-hint">
@@ -1347,10 +1573,10 @@ function renderRateView(el){
         ${settings.vat_enabled ? '✅ الضريبة <strong style="color:#00c9a7">مُفعّلة</strong>' : '⚠️ الضريبة <strong style="color:#d90429">معطّلة</strong>'}
       </div>
       <div class="ma-setting-form">
-        <input type="number" id="vatRateInput" value="${(settings.vat_rate*100).toFixed(2)}" step="0.1" min="0" max="100">
+        <input type="number" id="vatRateInput" value="${(settings.vat_rate*100).toFixed(2)}" step="0.1" min="0" max="100" inputmode="decimal">
         <span style="font-size:1.4rem;font-weight:900;color:#00c9a7">%</span>
-        <button class="ma-btn" id="vatSave" style="background:linear-gradient(135deg,#00c9a7,#008f77);color:#fff"><i class="fas fa-save"></i> حفظ الضريبة</button>
-        <button class="ma-btn ma-btn-soft" id="vatToggle" style="height:52px;padding:0 20px">
+        <button class="ma-btn" id="vatSave" style="background:linear-gradient(135deg,#00c9a7,#008f77);color:#fff"><i class="fas fa-save"></i> حفظ</button>
+        <button class="ma-btn ma-btn-soft" id="vatToggle" style="padding:0 20px">
           <i class="fas fa-${settings.vat_enabled ? 'toggle-on' : 'toggle-off'}"></i>
           ${settings.vat_enabled ? 'تعطيل' : 'تفعيل'}
         </button>
@@ -1362,23 +1588,19 @@ function renderRateView(el){
       </div>
     </div>
 
-    <!-- الشحن الافتراضي -->
     <div class="ma-setting-card shipping">
       <div class="ma-setting-title">
         <i class="fas fa-truck"></i>
-        <div>
-          <div class="t">سعر الشحن الافتراضي</div>
-          <div class="s">يُستخدم في حساب التفاصيل عند عدم وجود شحن محفوظ</div>
-        </div>
+        <div><div class="t">سعر الشحن الافتراضي</div><div class="s">يُستخدم في حساب التفاصيل عند عدم وجود شحن محفوظ</div></div>
       </div>
       <div class="ma-setting-display">${fmtNum(settings.shipping_fee)} ر.س</div>
       <div class="ma-setting-hint">
         💡 يمكنك تعديل شحن كل طلب على حدة من صفحة <strong style="color:#fff">سجل الطلبات</strong> أو من <strong style="color:#fff">تفاصيل الطلب</strong>.
       </div>
       <div class="ma-setting-form">
-        <input type="number" id="shipFeeInput" value="${Number(settings.shipping_fee).toFixed(2)}" step="0.01" min="0">
+        <input type="number" id="shipFeeInput" value="${Number(settings.shipping_fee).toFixed(2)}" step="0.01" min="0" inputmode="decimal">
         <span style="font-size:1.4rem;font-weight:900;color:#6a9aff">ر.س</span>
-        <button class="ma-btn" id="shipFeeSave" style="background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff"><i class="fas fa-save"></i> حفظ الشحن</button>
+        <button class="ma-btn" id="shipFeeSave" style="background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff"><i class="fas fa-save"></i> حفظ</button>
       </div>
       <div class="ma-quick" style="gap:10px;margin-top:14px">
         <button data-shipfee="0">مجاني</button>
@@ -1389,8 +1611,7 @@ function renderRateView(el){
       </div>
     </div>
   `;
-  
-  // ربط الأحداث
+
   $('rateSave').addEventListener('click', async () => {
     const v = Number($('rateInput').value);
     if(isNaN(v) || v < 0 || v > 100){ toast('نسبة غير صحيحة','error'); return; }
@@ -1404,7 +1625,7 @@ function renderRateView(el){
     renderRateView(el);
   });
   el.querySelectorAll('[data-rate]').forEach(b => b.addEventListener('click', () => { $('rateInput').value = b.dataset.rate; }));
-  
+
   $('vatSave').addEventListener('click', async () => {
     const v = Number($('vatRateInput').value);
     if(isNaN(v) || v < 0 || v > 100){ toast('نسبة ضريبة غير صحيحة','error'); return; }
@@ -1418,7 +1639,7 @@ function renderRateView(el){
     renderRateView(el);
   });
   el.querySelectorAll('[data-vat]').forEach(b => b.addEventListener('click', () => { $('vatRateInput').value = b.dataset.vat; }));
-  
+
   $('vatToggle').addEventListener('click', async () => {
     showLoading(true);
     await saveSetting('vat_enabled', !settings.vat_enabled);
@@ -1427,7 +1648,7 @@ function renderRateView(el){
     toast(settings.vat_enabled ? '✅ تم تفعيل الضريبة' : '⚠️ تم تعطيل الضريبة', settings.vat_enabled ? 'success' : 'info');
     renderRateView(el);
   });
-  
+
   $('shipFeeSave').addEventListener('click', async () => {
     const v = Number($('shipFeeInput').value);
     if(isNaN(v) || v < 0){ toast('سعر غير صحيح','error'); return; }
@@ -1452,14 +1673,19 @@ function renderRewardsLogView(el){
       <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-list"></i></div><div class="ma-stat-val">${allCashbackLog.length}</div><div class="ma-stat-lbl">العمليات</div></div>
     </div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-history"></i> العمليات</div>
-      ${allCashbackLog.length ? `<div style="max-height:600px;overflow-y:auto"><table class="ma-table"><thead><tr><th>العميل</th><th>المبلغ</th><th>النوع</th><th>السبب</th><th>بواسطة</th><th>التاريخ</th></tr></thead><tbody>${allCashbackLog.map(l => {const amt = Number(l.amount||0), pos = amt > 0; return `<tr><td style="font-size:.8rem">${esc(l.user_email||'—')}</td><td style="font-weight:900;color:${pos?'#4caf50':'#d90429'}" class="mono">${pos?'+':''}${fmtNum(amt)}</td><td><span class="ma-badge" style="background:rgba(74,122,255,.15);color:#6a9aff">${esc(l.type||'—')}</span></td><td style="font-size:.78rem;color:#a8b0cc">${esc(l.reason||'—')}</td><td style="font-size:.76rem;color:#8a92b0">${esc(l.created_by||'—')}</td><td style="font-size:.76rem;color:#8a92b0">${fmtDate(l.created_at)}</td></tr>`;}).join('')}</tbody></table></div>` : '<div class="ma-empty"><i class="fas fa-list"></i><h3>لا عمليات</h3></div>'}
+      ${allCashbackLog.length ? `<div style="max-height:600px;overflow-y:auto"><table class="ma-table"><thead><tr><th>العميل</th><th>المبلغ</th><th>النوع</th><th>السبب</th><th>بواسطة</th><th>التاريخ</th></tr></thead><tbody>${allCashbackLog.map(l => {const amt = Number(l.amount||0), pos = amt > 0; return `<tr>
+        <td data-label="العميل" style="font-size:.8rem">${esc(l.user_email||'—')}</td>
+        <td data-label="المبلغ" style="font-weight:900;color:${pos?'#4caf50':'#d90429'}" class="mono">${pos?'+':''}${fmtNum(amt)}</td>
+        <td data-label="النوع"><span class="ma-badge" style="background:rgba(74,122,255,.15);color:#6a9aff">${esc(l.type||'—')}</span></td>
+        <td data-label="السبب" style="font-size:.78rem;color:#a8b0cc">${esc(l.reason||'—')}</td>
+        <td data-label="بواسطة" style="font-size:.76rem;color:#8a92b0">${esc(l.created_by||'—')}</td>
+        <td data-label="التاريخ" style="font-size:.76rem;color:#8a92b0">${fmtDate(l.created_at)}</td>
+      </tr>`;}).join('')}</tbody></table></div>` : '<div class="ma-empty"><i class="fas fa-list"></i><h3>لا عمليات</h3></div>'}
     </div>
   `;
 }
 
-/* ═══════════════════════════════════════════════
-   AUDIT
-═══════════════════════════════════════════════ */
+/* ═══ AUDIT ═══ */
 function renderAuditView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-history"></i> سجل التدقيق</div><div class="ma-page-sub">${allAuditLog.length} عملية</div></div></div>
@@ -1491,7 +1717,12 @@ function renderAuditView(el){
     };
     c.innerHTML = `<div class="ma-table-wrap"><table class="ma-table"><thead><tr><th>الإجراء</th><th>المشرف</th><th>التفاصيل</th><th>التاريخ</th></tr></thead><tbody>${filtered.map(l => {
       const m = labels[l.action] || {l:l.action,i:'fa-circle-info',c:'#6a9aff'};
-      return `<tr><td><span class="ma-badge" style="background:${m.c}22;color:${m.c};border:1px solid ${m.c}55"><i class="fas ${m.i}"></i> ${esc(m.l)}</span></td><td style="font-size:.8rem" dir="ltr">${esc(l.admin_email||'—')}</td><td style="font-size:.76rem;color:#a8b0cc;max-width:400px;word-break:break-all">${esc((l.details||'').substring(0,200))}</td><td style="font-size:.76rem;color:#8a92b0">${fmtDate(l.created_at)}</td></tr>`;
+      return `<tr>
+        <td data-label="الإجراء"><span class="ma-badge" style="background:${m.c}22;color:${m.c};border:1px solid ${m.c}55"><i class="fas ${m.i}"></i> ${esc(m.l)}</span></td>
+        <td data-label="المشرف" style="font-size:.8rem" dir="ltr">${esc(l.admin_email||'—')}</td>
+        <td data-label="التفاصيل" style="font-size:.76rem;color:#a8b0cc;max-width:400px;word-break:break-all">${esc((l.details||'').substring(0,200))}</td>
+        <td data-label="التاريخ" style="font-size:.76rem;color:#8a92b0">${fmtDate(l.created_at)}</td>
+      </tr>`;
     }).join('')}</tbody></table></div>`;
   };
   $('auditSearch').addEventListener('input', debounce(render, 180));
@@ -1505,9 +1736,7 @@ function renderAuditView(el){
   render();
 }
 
-/* ═══════════════════════════════════════════════
-   DATA
-═══════════════════════════════════════════════ */
+/* ═══ DATA ═══ */
 function renderDataView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-database"></i> البيانات</div><div class="ma-page-sub">تصدير ونسخ احتياطي</div></div></div>
@@ -1518,7 +1747,7 @@ function renderDataView(el){
       <div class="ma-stat" style="--accent:#00c9a7;--icon-bg:rgba(0,201,167,.15)"><div class="ma-stat-icon"><i class="fas fa-history"></i></div><div class="ma-stat-val">${allAuditLog.length}</div><div class="ma-stat-lbl">تدقيق</div></div>
     </div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-file-export"></i> تصدير</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px">
         <button class="ma-btn ma-btn-primary" style="height:60px;justify-content:flex-start;padding:0 20px" data-export="orders"><i class="fas fa-file-csv" style="font-size:1.2rem"></i><span><div style="font-weight:900">تصدير الطلبات</div><div style="font-size:.72rem;opacity:.8">CSV</div></span></button>
         <button class="ma-btn ma-btn-primary" style="height:60px;justify-content:flex-start;padding:0 20px" data-export="customers"><i class="fas fa-file-csv" style="font-size:1.2rem"></i><span><div style="font-weight:900">تصدير العملاء</div><div style="font-size:.72rem;opacity:.8">CSV</div></span></button>
         <button class="ma-btn ma-btn-gold" style="height:60px;justify-content:flex-start;padding:0 20px" data-export="cashback"><i class="fas fa-file-csv" style="font-size:1.2rem"></i><span><div style="font-weight:900">تصدير الكاش باك</div><div style="font-size:.72rem;opacity:.8">CSV</div></span></button>
@@ -1551,7 +1780,7 @@ function downloadFile(content, filename, mime){
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = filename; a.click();
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 function toCSV(rows, headers){
   const q = v => `"${String(v == null ? '' : v).replace(/"/g,'""')}"`;
@@ -1600,9 +1829,7 @@ function exportBackup(){
   logAudit('export_backup');
 }
 
-/* ═══════════════════════════════════════════════
-   DETAIL MODAL
-═══════════════════════════════════════════════ */
+/* ═══ DETAIL ═══ */
 function openDetailModal(orderId){
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
@@ -1611,18 +1838,18 @@ function openDetailModal(orderId){
   const items = Array.isArray(order.items) ? order.items : [];
   $('maDetailOrderId').textContent = '#' + String(order.id).slice(-8).toUpperCase();
   $('maDetailDate').innerHTML = `<i class="fas fa-clock"></i> ${fmtDate(order.created_at)}`;
-  
+
   const bd = calcOrderBreakdown(order);
   const total = bd.total;
   const subtotal = bd.subtotal;
   const shipping = bd.shipping;
   const vatAmount = bd.vat;
-  
+
   const itemsRows = items.map((it,i) => {
     const p = Number(it.price||0), q = Number(it.qty||1), t = p*q;
     return `<tr><td>${i+1}</td><td>${esc(it.name||'منتج')}</td><td>${q}</td><td class="mono">${p.toFixed(2)} ر.س</td><td class="mono">${t.toFixed(2)} ر.س</td></tr>`;
   }).join('') || `<tr><td colspan="5" style="text-align:center;color:#8a92b0;padding:20px">لا منتجات</td></tr>`;
-  
+
   const cbEarned = Number(order.cashback||0);
   const potentialCb = round2(subtotal * settings.cashback_rate);
   let cbPill = '', cbAmount = '', cbPaidRow = '';
@@ -1667,7 +1894,7 @@ function openDetailModal(orderId){
       <div class="ma-status-btns">${statusButtons}</div>
       <div class="ma-shipping-edit">
         <div class="ma-shipping-edit-info">
-          <i class="fas fa-truck" style="color:#6a9aff"></i> 
+          <i class="fas fa-truck" style="color:#6a9aff"></i>
           الشحن الحالي: <strong>${shipping.toFixed(2)} ر.س</strong>
         </div>
         <button class="ma-btn ma-btn-soft" id="maEditShippingBtn"><i class="fas fa-pen"></i> تعديل الشحن</button>
@@ -1705,9 +1932,7 @@ function openDetailModal(orderId){
 }
 function closeDetailModal(){ $('maDetailModal').classList.remove('show'); currentDetailOrder = null; }
 
-/* ═══════════════════════════════════════════════
-   PRINT
-═══════════════════════════════════════════════ */
+/* ═══ PRINT ═══ */
 function printCurrentOrder(){
   if(!currentDetailOrder) return;
   const o = currentDetailOrder;
@@ -1768,9 +1993,7 @@ function printCurrentOrder(){
   w.onload = () => { w.focus(); w.print(); };
 }
 
-/* ═══════════════════════════════════════════════
-   SHIPPING MODAL
-═══════════════════════════════════════════════ */
+/* ═══ SHIPPING ═══ */
 function openShippingModal(orderId){
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
@@ -1789,13 +2012,12 @@ async function confirmShipping(){
   if(!selectedOrderForShipping) return;
   const newShip = Number($('maShipAmount').value);
   if(isNaN(newShip) || newShip < 0){ toast('سعر غير صحيح','error'); return; }
-  
+
   const order = selectedOrderForShipping;
   const bd = calcOrderBreakdown(order);
-  // المجموع الفرعي = bd.subtotal (المنتجات قبل الشحن والضريبة)
   const itemsSubtotal = bd.subtotal;
   const { vat, total } = computeNewTotal(itemsSubtotal, newShip);
-  
+
   const btn = $('maShipConfirm');
   btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>...';
   showLoading(true);
@@ -1822,9 +2044,7 @@ async function confirmShipping(){
   finally { showLoading(false); }
 }
 
-/* ═══════════════════════════════════════════════
-   CASHBACK PAID TOGGLE
-═══════════════════════════════════════════════ */
+/* ═══ CASHBACK PAID ═══ */
 async function toggleCashbackPaid(orderId, paid){
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
@@ -1842,9 +2062,7 @@ async function toggleCashbackPaid(orderId, paid){
   finally { showLoading(false); }
 }
 
-/* ═══════════════════════════════════════════════
-   CASHBACK MODALS
-═══════════════════════════════════════════════ */
+/* ═══ CB MODALS ═══ */
 function openUserCbModal(userId, mode='add'){
   const user = allUsers.find(u => String(u.id) === String(userId));
   if(!user) return;
@@ -1897,7 +2115,7 @@ async function confirmCashback(){
     const { data: u, error: uE } = await sb.from('men_users').select('cashback, name').eq('id', order.user_id).maybeSingle();
     if(uE) throw uE;
     const cur = Number(u?.cashback||0);
-    if(isD && amount > cur){ toast(`الرصيد ${fmtNum(cur)} فقط`, 'error'); btn.disabled = false; updateCbModalUI(); return; }
+    if(isD && amount > cur){ toast(`الرصيد ${fmtNum(cur)} فقط`, 'error'); btn.disabled = false; updateCbModalUI(); showLoading(false); return; }
     const reason = reasonInput || (isD ? 'خصم' : 'إضافة');
     await sb.from('men_cashback_log').insert({user_id:order.user_id, user_email:order.user_email, amount:signed, reason, order_id: order.id !== '—' ? order.id : null, type: isD ? 'deduct' : 'manual', created_by: currentUser.email});
     const newCb = round2(cur + signed);
@@ -1913,9 +2131,7 @@ async function confirmCashback(){
   finally { showLoading(false); }
 }
 
-/* ═══════════════════════════════════════════════
-   DELETE MODAL
-═══════════════════════════════════════════════ */
+/* ═══ DELETE ═══ */
 function openDelModal(orderId){
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
@@ -1956,9 +2172,7 @@ async function confirmDelete(){
   finally { showLoading(false); }
 }
 
-/* ═══════════════════════════════════════════════
-   NOTE MODAL
-═══════════════════════════════════════════════ */
+/* ═══ NOTE ═══ */
 function openNoteModal(userId){
   const user = allUsers.find(u => String(u.id) === String(userId));
   if(!user) return;
@@ -1981,13 +2195,11 @@ async function confirmNote(){
     logAudit('note_sent', {user:selectedUserForNote.email});
     toast('📝 تم الإرسال','success');
     closeNoteModal();
-  } catch(e){ toast('فشل: ' + e.message,'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال'; }
-  finally { showLoading(false); }
+  } catch(e){ toast('فشل: ' + e.message,'error'); }
+  finally { showLoading(false); btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال'; }
 }
 
-/* ═══════════════════════════════════════════════
-   CHAT
-═══════════════════════════════════════════════ */
+/* ═══ CHAT ═══ */
 async function openChatModal(userId){
   const user = allUsers.find(u => String(u.id) === String(userId));
   if(!user) return;
@@ -2001,7 +2213,6 @@ async function openChatModal(userId){
   $('maChatInput').value = '';
   $('maChatModal').classList.add('show');
   await loadChatMessages(user.id);
-  setTimeout(() => $('maChatInput').focus(), 200);
 }
 function closeChatModal(){ $('maChatModal').classList.remove('show'); selectedUserForChat = null; }
 async function loadChatMessages(userId){
@@ -2037,9 +2248,7 @@ async function sendChatMessage(){
   finally { btn.disabled = false; inp.focus(); }
 }
 
-/* ═══════════════════════════════════════════════
-   CONFIRM DIALOG
-═══════════════════════════════════════════════ */
+/* ═══ CONFIRM ═══ */
 function askConfirm(message, opts = {}){
   return new Promise(resolve => {
     const modal = $('maConfirmModal');
@@ -2071,10 +2280,15 @@ async function refreshAll(){
   toast('تم التحديث','info');
 }
 
-/* ═══════════════════════════════════════════════
-   EVENTS
-═══════════════════════════════════════════════ */
+/* ═══ EVENTS ═══ */
 function bindEvents(){
+  // Mobile nav
+  $('maNavToggle').addEventListener('click', toggleMobileNav);
+  $('maNavBackdrop').addEventListener('click', closeMobileNav);
+  window.addEventListener('resize', debounce(() => {
+    if(window.innerWidth > 820) closeMobileNav();
+  }, 150));
+
   $('maGateBtn').addEventListener('click', doLogin);
   $('maGatePass').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
   $('maGateEmail').addEventListener('keydown', e => { if(e.key === 'Enter') $('maGatePass').focus(); });
@@ -2086,6 +2300,7 @@ function bindEvents(){
     $('maApp').classList.remove('active');
     $('maGate').style.display = 'flex';
     $('maGateEmail').value = ''; $('maGatePass').value = '';
+    closeMobileNav();
     toast('تم الخروج','info');
   });
   $('maCbCancel').addEventListener('click', closeCbModal);
