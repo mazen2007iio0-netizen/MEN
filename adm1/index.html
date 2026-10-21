@@ -45,7 +45,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-dash{position:relative;z-index:10;display:none;padding:24px 0 80px}
 .ma-dash.active{display:block}
 .ma-header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,rgba(6,8,18,.98),rgba(6,8,18,.9));backdrop-filter:blur(20px);border-bottom:1px solid rgba(74,122,255,.14);padding:16px 0;margin-bottom:28px}
-.ma-header-inner{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.ma-header-inner{max-width:1560px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .ma-brand{display:flex;align-items:center;gap:14px}
 .ma-brand img{height:44px;width:auto;filter:brightness(0) invert(1) drop-shadow(0 6px 18px rgba(74,122,255,.5))}
 .ma-brand-text .t{font-size:1.05rem;font-weight:900;letter-spacing:-.3px;line-height:1.2}
@@ -59,68 +59,74 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-btn-users{background:rgba(74,122,255,.12)!important;border-color:rgba(74,122,255,.3)!important;color:#6a9aff!important}
 .ma-btn-users:hover{background:rgba(74,122,255,.22)!important}
 
-.ma-container{max-width:1400px;margin:0 auto;padding:0 24px}
+.ma-container{max-width:1560px;margin:0 auto;padding:0 32px}
 
-/* ===== Stats section ===== */
+/* ===== Stats ===== */
 .ma-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
-.ma-stat{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:22px;padding:22px;position:relative;overflow:hidden;transition:all .35s}
+.ma-stat{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:22px;padding:24px;position:relative;overflow:hidden;transition:all .35s}
 .ma-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,#4a7aff);opacity:.9}
 .ma-stat:hover{transform:translateY(-5px);border-color:rgba(74,122,255,.35);box-shadow:0 22px 50px -15px rgba(2,28,164,.6)}
-.ma-stat-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:14px;background:var(--icon-bg);color:var(--accent)}
-.ma-stat-val{font-size:1.8rem;font-weight:900;line-height:1.1;margin-bottom:4px;letter-spacing:-1px}
-.ma-stat-lbl{font-size:.78rem;color:#8a92b0;font-weight:700}
+.ma-stat-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:14px;background:var(--icon-bg);color:var(--accent)}
+.ma-stat-val{font-size:2rem;font-weight:900;line-height:1.1;margin-bottom:4px;letter-spacing:-1px}
+.ma-stat-lbl{font-size:.8rem;color:#8a92b0;font-weight:700}
 
 .ma-stats-sm{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
-.ma-stat-sm{background:linear-gradient(145deg,rgba(14,20,38,.6),rgba(8,12,24,.8));border:1px solid rgba(74,122,255,.1);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;transition:all .3s}
+.ma-stat-sm{background:linear-gradient(145deg,rgba(14,20,38,.6),rgba(8,12,24,.8));border:1px solid rgba(74,122,255,.1);border-radius:18px;padding:18px 20px;display:flex;align-items:center;gap:14px;transition:all .3s}
 .ma-stat-sm:hover{border-color:rgba(74,122,255,.28);transform:translateY(-3px)}
-.ma-stat-sm-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;background:var(--icon-bg);color:var(--accent)}
-.ma-stat-sm-val{font-size:1.1rem;font-weight:900;line-height:1.2}
-.ma-stat-sm-lbl{font-size:.7rem;color:#8a92b0;font-weight:700;margin-top:2px}
+.ma-stat-sm-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;background:var(--icon-bg);color:var(--accent)}
+.ma-stat-sm-val{font-size:1.15rem;font-weight:900;line-height:1.2}
+.ma-stat-sm-lbl{font-size:.72rem;color:#8a92b0;font-weight:700;margin-top:2px}
 
-.ma-filters{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:22px;padding:20px 22px;margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.ma-search{flex:1;min-width:220px;position:relative}
+.ma-filters{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.14);border-radius:22px;padding:20px 24px;margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.ma-search{flex:1;min-width:260px;position:relative}
 .ma-search input{width:100%;height:48px;padding:0 44px 0 16px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.9rem;outline:none;transition:all .3s}
 .ma-search input:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.15)}
 .ma-search i{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#4a7aff;pointer-events:none}
-.ma-filters select{height:48px;padding:0 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.88rem;outline:none;cursor:pointer;min-width:170px}
+.ma-filters select{height:48px;padding:0 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.88rem;outline:none;cursor:pointer;min-width:180px}
 .ma-filters select:focus{border-color:#4a7aff}
 .ma-refresh{height:48px;padding:0 22px;border-radius:14px;border:none;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .3s;box-shadow:0 10px 26px -10px rgba(74,122,255,.8)}
 .ma-refresh:hover{transform:translateY(-2px)}
 
-.ma-orders{display:flex;flex-direction:column;gap:14px}
-.ma-order{background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));border:1px solid rgba(74,122,255,.14);border-radius:22px;padding:22px 24px;transition:all .35s;position:relative;overflow:hidden}
+.ma-orders{display:flex;flex-direction:column;gap:16px}
+.ma-order{background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));border:1px solid rgba(74,122,255,.14);border-radius:22px;padding:26px 30px;transition:all .35s;position:relative;overflow:hidden}
 .ma-order:hover{transform:translateY(-3px);border-color:rgba(74,122,255,.35);box-shadow:0 20px 50px -15px rgba(2,28,164,.6)}
 .ma-order-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px}
-.ma-order-id{font-weight:900;font-size:1rem;display:flex;align-items:center;gap:10px}
+.ma-order-id{font-weight:900;font-size:1.05rem;display:flex;align-items:center;gap:10px}
 .ma-order-id .dot{width:10px;height:10px;border-radius:50%;background:var(--st-color,#4caf50);box-shadow:0 0 14px var(--st-color,#4caf50)}
-.ma-order-date{color:#8a92b0;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:6px;margin-top:6px}
-.ma-order-badge{color:#fff;font-size:.72rem;font-weight:800;padding:6px 14px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 6px 18px -6px rgba(0,0,0,.6)}
-.ma-customer{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:14px 16px;background:rgba(74,122,255,.05);border:1px solid rgba(74,122,255,.14);border-radius:16px;margin-bottom:14px}
+.ma-order-date{color:#8a92b0;font-size:.8rem;font-weight:600;display:flex;align-items:center;gap:6px;margin-top:6px}
+.ma-order-badge{color:#fff;font-size:.74rem;font-weight:800;padding:7px 16px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 6px 18px -6px rgba(0,0,0,.6)}
+.ma-customer{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;padding:16px 18px;background:rgba(74,122,255,.05);border:1px solid rgba(74,122,255,.14);border-radius:16px;margin-bottom:14px}
 .ma-cust-item{display:flex;align-items:center;gap:10px}
-.ma-cust-item i{width:32px;height:32px;border-radius:10px;background:rgba(74,122,255,.15);color:#6a9aff;display:flex;align-items:center;justify-content:center;font-size:.82rem;flex-shrink:0}
+.ma-cust-item i{width:34px;height:34px;border-radius:10px;background:rgba(74,122,255,.15);color:#6a9aff;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
 .ma-cust-item .lbl{font-size:.68rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1px}
-.ma-cust-item .val{font-size:.86rem;font-weight:700;color:#fff;word-break:break-all}
-.ma-items{padding:14px 16px;background:rgba(0,0,0,.2);border-radius:14px;margin-bottom:14px;font-size:.85rem;color:#a8b0cc;line-height:1.9}
+.ma-cust-item .val{font-size:.88rem;font-weight:700;color:#fff;word-break:break-all}
+.ma-items{padding:14px 18px;background:rgba(0,0,0,.2);border-radius:14px;margin-bottom:14px;font-size:.87rem;color:#a8b0cc;line-height:1.9}
 .ma-items .name{color:#fff;font-weight:700}
-.ma-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-.ma-total{font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,#fff,#6a9aff);-webkit-background-clip:text;background-clip:text;color:transparent}
-.ma-cb-info{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:20px;font-size:.78rem;font-weight:800}
+.ma-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 0;border-top:1px solid rgba(74,122,255,.1);border-bottom:1px solid rgba(74,122,255,.1);margin-bottom:16px}
+.ma-total-wrap{display:flex;flex-direction:column;gap:2px}
+.ma-total-lbl{font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.ma-total{font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,#fff,#6a9aff);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.ma-cb-info{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:20px;font-size:.82rem;font-weight:800}
 .ma-cb-info.earned{background:rgba(76,175,80,.12);border:1px solid rgba(76,175,80,.3);color:#66bb6a}
 .ma-cb-info.pending{background:rgba(245,179,66,.1);border:1px solid rgba(245,179,66,.3);color:#f5b342}
 .ma-cb-info.paid{background:rgba(76,175,80,.18);border:1px solid rgba(76,175,80,.5);color:#66bb6a}
 .ma-cb-info.unpaid{background:rgba(245,179,66,.15);border:1px solid rgba(245,179,66,.5);color:#f5b342}
-.ma-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px dashed rgba(74,122,255,.2)}
-.ma-actions select{flex:1;min-width:160px;height:44px;padding:0 14px;border-radius:12px;background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.25);color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.85rem;outline:none;cursor:pointer}
+.ma-cb-info .cb-date{font-size:.7rem;opacity:.85;font-weight:700;margin-right:4px}
+
+.ma-actions{display:flex;gap:8px;flex-wrap:wrap}
+.ma-actions select{flex:1;min-width:170px;height:44px;padding:0 14px;border-radius:12px;background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.25);color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:.85rem;outline:none;cursor:pointer}
 .ma-actions select:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
-.ma-btn-action{padding:11px 20px;border-radius:12px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .3s}
+.ma-btn-action{padding:11px 20px;border-radius:12px;border:none;font-family:'Cairo',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .3s;white-space:nowrap}
 .ma-btn-apply{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;box-shadow:0 8px 22px -8px rgba(74,122,255,.8)}
 .ma-btn-apply:hover:not(:disabled){transform:translateY(-2px)}
+.ma-btn-detail{background:linear-gradient(135deg,#00c9a7,#008f77);color:#fff;box-shadow:0 8px 22px -8px rgba(0,201,167,.8)}
+.ma-btn-detail:hover{transform:translateY(-2px)}
 .ma-btn-cb{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 8px 22px -8px rgba(245,179,66,.8)}
 .ma-btn-cb:hover{transform:translateY(-2px)}
 .ma-btn-deduct{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff;box-shadow:0 8px 22px -8px rgba(217,4,41,.8)}
 .ma-btn-deduct:hover{transform:translateY(-2px)}
 .ma-btn-delete{background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff;box-shadow:0 8px 22px -8px rgba(139,0,24,.9)}
-.ma-btn-delete:hover{transform:translateY(-2px);background:linear-gradient(135deg,#a30020,#6b0014)}
+.ma-btn-delete:hover{transform:translateY(-2px)}
 .ma-btn-chat{background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff;box-shadow:0 8px 22px -8px rgba(74,122,255,.9)}
 .ma-btn-chat:hover{transform:translateY(-2px)}
 .ma-btn-note{background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff;box-shadow:0 8px 22px -8px rgba(147,51,234,.8)}
@@ -131,12 +137,11 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-btn-unpaid:hover{background:rgba(255,255,255,.12)}
 .ma-btn-action:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
 
-/* ===== User stats block ===== */
 .ma-user-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px;background:linear-gradient(135deg,rgba(74,122,255,.08),rgba(2,28,164,.05));border:1px solid rgba(74,122,255,.18);border-radius:16px;margin-bottom:14px}
 .ma-us-item{text-align:center;padding:6px 4px;border-left:1px dashed rgba(74,122,255,.2)}
 .ma-us-item:first-child{border-left:none}
-.ma-us-val{font-size:1.05rem;font-weight:900;background:linear-gradient(135deg,#fff,#6a9aff);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.2}
-.ma-us-lbl{font-size:.66rem;color:#8a92b0;font-weight:800;margin-top:4px;text-transform:uppercase;letter-spacing:.6px}
+.ma-us-val{font-size:1.1rem;font-weight:900;background:linear-gradient(135deg,#fff,#6a9aff);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.2}
+.ma-us-lbl{font-size:.68rem;color:#8a92b0;font-weight:800;margin-top:4px;text-transform:uppercase;letter-spacing:.6px}
 
 .ma-empty{text-align:center;padding:80px 24px;background:rgba(74,122,255,.04);border:1.5px dashed rgba(74,122,255,.25);border-radius:24px}
 .ma-empty i{font-size:3rem;color:#4a7aff;margin-bottom:16px;opacity:.7}
@@ -149,10 +154,11 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-modal-back{display:none;position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
 .ma-modal-back.show{display:flex}
 .ma-modal{background:linear-gradient(145deg,rgba(14,20,38,.98),rgba(8,12,24,1));border:1px solid rgba(74,122,255,.14);border-radius:24px;max-width:440px;width:100%;padding:30px 28px;box-shadow:0 40px 100px -30px rgba(2,28,164,.9)}
-.ma-modal.ma-modal-lg{max-width:560px;display:flex;flex-direction:column;max-height:90vh;padding:0;overflow:hidden}
+.ma-modal.ma-modal-lg{max-width:580px;display:flex;flex-direction:column;max-height:90vh;padding:0;overflow:hidden}
+.ma-modal.ma-modal-xl{max-width:960px;width:100%;max-height:92vh;padding:0;display:flex;flex-direction:column;overflow:hidden}
 .ma-modal-title{display:flex;align-items:center;gap:12px;font-size:1.15rem;font-weight:900;margin-bottom:8px}
 .ma-modal-title i{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .3s;flex-shrink:0}
-.ma-modal-sub{color:#8a92b0;font-size:.85rem;font-weight:600;margin-bottom:22px;line-height:1.7}
+.ma-modal-sub{color:#8a92b0;font-size:.85rem;font-weight:600;margin-bottom:22px;line-height:1.8}
 .ma-modal-field{margin-bottom:14px}
 .ma-modal-field label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
 .ma-modal-field input,.ma-modal-field textarea{width:100%;padding:14px 18px;border-radius:14px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.94rem;outline:none;transition:all .3s;resize:none}
@@ -176,7 +182,55 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-warn-box{margin-top:16px;padding:14px 16px;border-radius:14px;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.28);color:#ff9a9a;font-size:.82rem;font-weight:700;line-height:1.8;display:flex;gap:10px;align-items:flex-start}
 .ma-warn-box i{color:#d90429;font-size:1.1rem;flex-shrink:0;margin-top:2px}
 
-/* ===== Chat modal ===== */
+/* ===== Order Detail Modal ===== */
+.ma-detail-head{padding:22px 28px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;justify-content:space-between;gap:16px;background:linear-gradient(180deg,rgba(74,122,255,.06),transparent);flex-shrink:0}
+.ma-detail-head-left{display:flex;align-items:center;gap:14px;min-width:0}
+.ma-detail-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#fff;flex-shrink:0;box-shadow:0 12px 26px -10px rgba(74,122,255,.8)}
+.ma-detail-title{font-size:1.15rem;font-weight:900;letter-spacing:-.3px}
+.ma-detail-title span{color:#6a9aff;font-family:'Courier New',monospace;font-size:1.05rem}
+.ma-detail-sub{font-size:.78rem;color:#8a92b0;font-weight:700;margin-top:5px;display:flex;align-items:center;gap:6px}
+.ma-detail-head-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.ma-btn-print{padding:11px 22px;border-radius:12px;border:none;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.86rem;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 10px 24px -10px rgba(76,175,80,.85);transition:all .3s}
+.ma-btn-print:hover{transform:translateY(-2px)}
+.ma-detail-body{flex:1;overflow-y:auto;padding:24px 28px;background:rgba(0,0,0,.1)}
+.ma-detail-body::-webkit-scrollbar{width:6px}
+.ma-detail-body::-webkit-scrollbar-thumb{background:rgba(74,122,255,.25);border-radius:6px}
+
+.ma-detail-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.ma-detail-section{background:linear-gradient(145deg,rgba(14,20,38,.7),rgba(8,12,24,.85));border:1px solid rgba(74,122,255,.14);border-radius:16px;padding:18px 20px;margin-bottom:16px}
+.ma-detail-section:last-child{margin-bottom:0}
+.ma-detail-h3{font-size:.82rem;font-weight:900;color:#6a9aff;margin-bottom:14px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.8px}
+.ma-detail-row{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px dashed rgba(74,122,255,.12);gap:12px;font-size:.88rem}
+.ma-detail-row:last-child{border-bottom:none}
+.ma-detail-row .lbl{color:#8a92b0;font-weight:700;font-size:.82rem;flex-shrink:0}
+.ma-detail-row .val{font-weight:800;color:#fff;text-align:left;word-break:break-word;font-size:.9rem}
+
+.ma-items-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.ma-items-table thead th{padding:12px;text-align:right;font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;color:#8a92b0;font-weight:800;border-bottom:2px solid rgba(74,122,255,.2)}
+.ma-items-table tbody td{padding:13px 12px;border-bottom:1px solid rgba(74,122,255,.08);color:#e0e6f4;font-weight:600}
+.ma-items-table tbody tr:last-child td{border-bottom:none}
+.ma-items-table tbody td:first-child{color:#8a92b0;font-weight:800;text-align:center;width:44px}
+.ma-items-table .price-cell,.ma-items-table .total-cell{font-family:'Courier New',monospace;direction:ltr;text-align:left;font-weight:800;color:#6a9aff}
+.ma-items-table .total-cell{color:#fff;font-size:1rem}
+
+.ma-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ma-summary-box{background:linear-gradient(145deg,rgba(74,122,255,.08),rgba(2,28,164,.05));border:1px solid rgba(74,122,255,.2);border-radius:16px;padding:18px 20px}
+.ma-summary-box.cashback{background:linear-gradient(145deg,rgba(245,179,66,.08),rgba(201,138,30,.05));border-color:rgba(245,179,66,.25)}
+.ma-summary-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;font-size:.9rem;border-bottom:1px dashed rgba(74,122,255,.12)}
+.ma-summary-row:last-child{border-bottom:none}
+.ma-summary-row .lbl{color:#8a92b0;font-weight:700}
+.ma-summary-row .val{font-family:'Courier New',monospace;font-weight:800;color:#fff;direction:ltr}
+.ma-summary-row.total{padding-top:16px;margin-top:6px;border-top:2px solid rgba(74,122,255,.3);border-bottom:none}
+.ma-summary-row.total .lbl{color:#fff;font-size:1rem;font-weight:900}
+.ma-summary-row.total .val{color:#4a7aff;font-size:1.35rem;font-weight:900}
+.ma-summary-box.cashback .ma-summary-row.total .val{color:#f5b342}
+.ma-cb-status-pill{padding:6px 14px;border-radius:20px;font-size:.78rem;font-weight:800;display:inline-flex;align-items:center;gap:6px}
+.ma-cb-status-pill.paid{background:rgba(76,175,80,.15);border:1px solid rgba(76,175,80,.4);color:#66bb6a}
+.ma-cb-status-pill.unpaid{background:rgba(245,179,66,.15);border:1px solid rgba(245,179,66,.4);color:#f5b342}
+.ma-cb-status-pill.pending{background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.4);color:#6a9aff}
+.ma-cb-status-pill.none{background:rgba(217,4,41,.1);border:1px solid rgba(217,4,41,.3);color:#ff6b6b}
+
+/* ===== Chat Modal ===== */
 .ma-chat-header{padding:20px 24px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(74,122,255,.06),transparent)}
 .ma-chat-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;flex-shrink:0}
 .ma-chat-header-info{flex:1;min-width:0}
@@ -184,12 +238,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-chat-header-status{font-size:.74rem;color:#66bb6a;font-weight:700;display:flex;align-items:center;gap:5px;margin-top:3px}
 .ma-chat-close{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#e0e6f4;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:all .3s}
 .ma-chat-close:hover{background:rgba(217,4,41,.2);border-color:rgba(217,4,41,.4);color:#ff6b6b}
-
 .ma-chat-body{flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:12px;background:rgba(0,0,0,.15);min-height:280px;max-height:420px}
 .ma-chat-body::-webkit-scrollbar{width:6px}
-.ma-chat-body::-webkit-scrollbar-track{background:transparent}
 .ma-chat-body::-webkit-scrollbar-thumb{background:rgba(74,122,255,.25);border-radius:6px}
-
 .ma-msg{max-width:78%;padding:11px 15px;border-radius:16px;font-size:.88rem;line-height:1.7;word-wrap:break-word;position:relative;animation:msgIn .25s ease}
 @keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .ma-msg-meta{font-size:.62rem;font-weight:800;opacity:.8;margin-bottom:4px;letter-spacing:.5px;text-transform:uppercase}
@@ -198,10 +249,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-msg.customer{align-self:flex-start;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#e0e6f4;border-bottom-right-radius:4px}
 .ma-msg.note{align-self:center;background:linear-gradient(135deg,rgba(147,51,234,.25),rgba(107,33,168,.25));border:1px dashed rgba(147,51,234,.5);color:#e9d5ff;max-width:88%}
 .ma-msg.note .ma-msg-meta{color:#c084fc}
-
 .ma-chat-empty{text-align:center;padding:50px 20px;color:#8a92b0;font-weight:700;font-size:.88rem}
 .ma-chat-empty i{font-size:2.2rem;color:#4a7aff;opacity:.5;display:block;margin-bottom:12px}
-
 .ma-chat-footer{padding:16px 20px;border-top:1px solid rgba(74,122,255,.14);background:rgba(0,0,0,.2);display:flex;gap:10px;align-items:flex-end}
 .ma-chat-footer textarea{flex:1;padding:12px 16px;border-radius:14px;background:rgba(0,0,0,.4);border:1.5px solid rgba(74,122,255,.2);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.9rem;outline:none;transition:all .3s;resize:none;min-height:46px;max-height:120px;line-height:1.5}
 .ma-chat-footer textarea:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
@@ -215,11 +264,16 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 .ma-toast.error{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff}
 .ma-toast.info{background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff}
 
+/* ===== PRINT AREA ===== */
+.ma-print-area{display:none}
+
+/* ===== Responsive ===== */
 @media (max-width:900px){
   .ma-stats,.ma-stats-sm{grid-template-columns:repeat(2,1fr)}
   .ma-user-stats{grid-template-columns:repeat(2,1fr)}
   .ma-us-item:nth-child(3){border-left:none}
   .ma-user-info{display:none}
+  .ma-detail-cols,.ma-summary-grid{grid-template-columns:1fr}
 }
 @media (max-width:600px){
   .ma-container{padding:0 14px}
@@ -232,8 +286,84 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   .ma-stat{padding:18px 16px}
   .ma-stat-val{font-size:1.4rem}
   .ma-modal{padding:22px 20px}
-  .ma-modal.ma-modal-lg{padding:0}
+  .ma-modal.ma-modal-lg,.ma-modal.ma-modal-xl{padding:0}
   .ma-chat-body{max-height:340px}
+  .ma-detail-head{padding:16px 18px}
+  .ma-detail-body{padding:16px 18px}
+  .ma-detail-head-right{gap:6px}
+  .ma-btn-print{padding:9px 14px;font-size:.78rem}
+}
+
+/* ═══════════ PRINT ═══════════ */
+@media print {
+  @page { size: A4; margin: 12mm; }
+  html, body {
+    background: #fff !important;
+    color: #000 !important;
+    margin: 0 !important; padding: 0 !important;
+    font-family: 'Cairo', sans-serif !important;
+  }
+  body > *:not(.ma-print-area) { display: none !important; }
+  .ma-print-area { display: block !important; width: 100% !important; }
+  .ma-print-area * {
+    color: #000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  .ma-print-inner { width: 100%; font-size: 11pt; line-height: 1.6; }
+
+  .ma-print-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: 14px; border-bottom: 2px solid #000; margin-bottom: 18px; gap: 16px;
+  }
+  .ma-print-brand { display: flex; align-items: center; gap: 12px; }
+  .ma-print-brand img { height: 50px; filter: none !important; }
+  .ma-print-brand-name { font-size: 16pt; font-weight: 900; letter-spacing: -.5px; }
+  .ma-print-brand-tag { font-size: 9pt; color: #333 !important; font-weight: 600; }
+
+  .ma-print-order-box { text-align: left; font-size: 10pt; line-height: 1.7; }
+  .ma-print-order-box .num { font-size: 14pt; font-weight: 900; font-family: 'Courier New', monospace; }
+
+  .ma-print-section { margin-bottom: 16px; page-break-inside: avoid; }
+  .ma-print-h2 {
+    font-size: 11pt; font-weight: 900;
+    background: #f0f0f0 !important;
+    padding: 6px 10px; margin-bottom: 10px;
+    border-right: 4px solid #000;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+
+  .ma-print-info-table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+  .ma-print-info-table td { padding: 6px 10px; border: 1px solid #ccc; }
+  .ma-print-info-table td.lbl { background: #f7f7f7 !important; font-weight: 800; width: 22%; color: #000 !important; }
+
+  .ma-print-items-table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+  .ma-print-items-table thead th {
+    background: #000 !important; color: #fff !important;
+    padding: 8px 10px; text-align: right; font-weight: 800;
+    font-size: 9.5pt; border: 1px solid #000;
+  }
+  .ma-print-items-table tbody td { padding: 8px 10px; border: 1px solid #ccc; color: #000 !important; }
+  .ma-print-items-table tbody tr:nth-child(even) td { background: #fafafa !important; }
+  .ma-print-items-table .num { font-family: 'Courier New', monospace; direction: ltr; text-align: left; font-weight: 800; }
+
+  .ma-print-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; page-break-inside: avoid; }
+
+  .ma-print-summary-table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+  .ma-print-summary-table td { padding: 7px 10px; border: 1px solid #ccc; }
+  .ma-print-summary-table td.lbl { background: #f7f7f7 !important; font-weight: 700; }
+  .ma-print-summary-table td.val { font-family: 'Courier New', monospace; direction: ltr; text-align: left; font-weight: 800; }
+  .ma-print-summary-table tr.total td { background: #000 !important; color: #fff !important; font-weight: 900; font-size: 11pt; padding: 10px; }
+  .ma-print-summary-table tr.total td.val { color: #fff !important; font-size: 12pt; }
+
+  .ma-print-foot {
+    margin-top: 24px; padding-top: 14px; border-top: 2px solid #000;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 9pt; color: #333 !important; page-break-inside: avoid;
+  }
+  .ma-print-foot .thanks { font-weight: 900; font-size: 11pt; color: #000 !important; }
 }
 </style>
 </head>
@@ -288,7 +418,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     </div>
 
     <div class="ma-container">
-      <!-- Stats Row 1 -->
       <div class="ma-stats">
         <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)">
           <div class="ma-stat-icon"><i class="fas fa-box"></i></div>
@@ -312,7 +441,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         </div>
       </div>
 
-      <!-- Stats Row 2 (small insights) -->
       <div class="ma-stats-sm">
         <div class="ma-stat-sm" style="--accent:#9333ea;--icon-bg:rgba(147,51,234,.15)">
           <div class="ma-stat-sm-icon"><i class="fas fa-users"></i></div>
@@ -370,6 +498,30 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     </div>
   </div>
 
+  <!-- 📋 Order Detail Modal -->
+  <div class="ma-modal-back" id="maDetailModal">
+    <div class="ma-modal ma-modal-xl">
+      <div class="ma-detail-head">
+        <div class="ma-detail-head-left">
+          <div class="ma-detail-icon"><i class="fas fa-receipt"></i></div>
+          <div>
+            <div class="ma-detail-title">تفاصيل الطلب <span id="maDetailOrderId">#—</span></div>
+            <div class="ma-detail-sub" id="maDetailDate">—</div>
+          </div>
+        </div>
+        <div class="ma-detail-head-right">
+          <button class="ma-btn-print" id="maDetailPrint">
+            <i class="fas fa-print"></i> طباعة
+          </button>
+          <button class="ma-chat-close" id="maDetailClose">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="ma-detail-body" id="maDetailBody"></div>
+    </div>
+  </div>
+
   <!-- 💰 Cashback Modal -->
   <div class="ma-modal-back" id="maCbModal">
     <div class="ma-modal">
@@ -378,7 +530,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         <span id="maCbTitle">إضافة كاش باك</span>
       </div>
       <div class="ma-modal-sub" id="maCbSub">—</div>
-
       <div class="ma-modal-field">
         <label>المبلغ (ر.س)</label>
         <input type="number" id="maCbAmount" placeholder="0.00" step="0.01" min="0.01">
@@ -390,12 +541,10 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
           <button type="button" data-amt="100">100 ر.س</button>
         </div>
       </div>
-
       <div class="ma-modal-field">
         <label>السبب / ملاحظة (اختياري)</label>
         <input type="text" id="maCbReason" placeholder="مثال: تعويض، هدية، تصحيح رصيد...">
       </div>
-
       <div class="ma-modal-actions">
         <button class="cancel" id="maCbCancel" type="button">إلغاء</button>
         <button class="confirm" id="maCbConfirm" type="button"><i class="fas fa-check"></i> إضافة الكاش باك</button>
@@ -407,11 +556,10 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   <div class="ma-modal-back" id="maDelModal">
     <div class="ma-modal">
       <div class="ma-modal-title">
-        <i class="fas fa-trash" id="maDelIcon" style="background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff"></i>
+        <i class="fas fa-trash" style="background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff"></i>
         حذف الطلب نهائياً
       </div>
       <div class="ma-modal-sub" id="maDelSub">—</div>
-
       <div class="ma-warn-box">
         <i class="fas fa-triangle-exclamation"></i>
         <div>
@@ -419,7 +567,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
           إذا كان الطلب مُستلَم سيُخصم الكاش باك تلقائياً.
         </div>
       </div>
-
       <div class="ma-modal-actions">
         <button class="cancel" id="maDelCancel" type="button">إلغاء</button>
         <button class="confirm danger" id="maDelConfirm" type="button"><i class="fas fa-trash"></i> حذف نهائي</button>
@@ -431,21 +578,18 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   <div class="ma-modal-back" id="maNoteModal">
     <div class="ma-modal">
       <div class="ma-modal-title">
-        <i class="fas fa-comment-dots" id="maNoteIcon" style="background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff"></i>
+        <i class="fas fa-comment-dots" style="background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff"></i>
         إرسال ملاحظة للعميل
       </div>
       <div class="ma-modal-sub" id="maNoteSub">—</div>
-
       <div class="ma-modal-field">
         <label>نص الملاحظة</label>
         <textarea id="maNoteText" placeholder="اكتب ملاحظتك هنا... ستظهر للعميل كرسالة"></textarea>
       </div>
-
       <div class="ma-warn-box" style="background:rgba(147,51,234,.08);border-color:rgba(147,51,234,.3);color:#d8b4fe">
         <i class="fas fa-info-circle" style="color:#9333ea"></i>
         <div>ستظهر الملاحظة للعميل كرسالة مباشرة بمجرد دخوله للموقع.</div>
       </div>
-
       <div class="ma-modal-actions">
         <button class="cancel" id="maNoteCancel" type="button">إلغاء</button>
         <button class="confirm purple" id="maNoteConfirm" type="button"><i class="fas fa-paper-plane"></i> إرسال الملاحظة</button>
@@ -464,11 +608,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         </div>
         <button class="ma-chat-close" id="maChatClose" type="button"><i class="fas fa-xmark"></i></button>
       </div>
-
       <div class="ma-chat-body" id="maChatBody">
         <div class="ma-chat-empty"><i class="fas fa-comments"></i> جاري تحميل المحادثة...</div>
       </div>
-
       <div class="ma-chat-footer">
         <textarea id="maChatInput" placeholder="اكتب رسالتك..." rows="1"></textarea>
         <button class="ma-chat-send" id="maChatSend" type="button"><i class="fas fa-paper-plane"></i></button>
@@ -477,21 +619,24 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   </div>
 </div>
 
+<!-- 🖨️ Print Area (خارج الـ root ليعمل مع window.print) -->
+<div class="ma-print-area" id="maPrintArea"></div>
+
 <script>
 (function () {
   'use strict';
 
-  const SUPABASE_URL  = 'https://xoqwzluyxynqpdpmidts.supabase.co';
+  const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
   const ADMIN_EMAILS = ['mkmkmkl24666606@gmail.com'];
   const CASHBACK_RATE = 0.02;
 
   const ORDER_STATUS = {
     pending:   { label: 'قيد الانتظار', color: '#f5b342', bg: 'linear-gradient(135deg,#f5b342,#c98a1e)', icon: 'fa-hourglass-half', text: '#000' },
-    preparing: { label: 'جاري التجهيز', color: '#4a7aff', bg: 'linear-gradient(135deg,#4a7aff,#021ca4)', icon: 'fa-gears',           text: '#fff' },
-    review:    { label: 'تحت المراجعة', color: '#6a9aff', bg: 'linear-gradient(135deg,#6a9aff,#4a7aff)', icon: 'fa-magnifying-glass',text: '#fff' },
-    delivered: { label: 'تم الاستلام',  color: '#4caf50', bg: 'linear-gradient(135deg,#4caf50,#2e7d32)', icon: 'fa-circle-check',    text: '#fff' },
-    cancelled: { label: 'ملغي',         color: '#d90429', bg: 'linear-gradient(135deg,#d90429,#8b0018)', icon: 'fa-circle-xmark',    text: '#fff' }
+    preparing: { label: 'جاري التجهيز', color: '#4a7aff', bg: 'linear-gradient(135deg,#4a7aff,#021ca4)', icon: 'fa-gears', text: '#fff' },
+    review:    { label: 'تحت المراجعة', color: '#6a9aff', bg: 'linear-gradient(135deg,#6a9aff,#4a7aff)', icon: 'fa-magnifying-glass', text: '#fff' },
+    delivered: { label: 'تم الاستلام', color: '#4caf50', bg: 'linear-gradient(135deg,#4caf50,#2e7d32)', icon: 'fa-circle-check', text: '#fff' },
+    cancelled: { label: 'ملغي', color: '#d90429', bg: 'linear-gradient(135deg,#d90429,#8b0018)', icon: 'fa-circle-xmark', text: '#fff' }
   };
 
   let sb = null;
@@ -503,7 +648,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   let selectedOrderForDelete = null;
   let selectedUserForNote = null;
   let selectedUserForChat = null;
+  let currentDetailOrder = null;
   let cbMode = 'add';
+
   const $ = id => document.getElementById(id);
 
   function isAdminEmail(email) {
@@ -521,6 +668,13 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     if (!d) return '—';
     try {
       return new Date(d).toLocaleString('ar-SA', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+    } catch { return '—'; }
+  }
+
+  function fmtDateShort(d) {
+    if (!d) return '—';
+    try {
+      return new Date(d).toLocaleDateString('ar-SA', { year:'numeric', month:'short', day:'numeric' });
     } catch { return '—'; }
   }
 
@@ -587,8 +741,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     });
 
     $('maSearch').addEventListener('input', () => {
-      if (usersView) renderUsers();
-      else renderOrders();
+      if (usersView) renderUsers(); else renderOrders();
     });
     $('maStatusFilter').addEventListener('change', renderOrders);
 
@@ -622,6 +775,11 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     $('maChatInput').addEventListener('keydown', e => {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
     });
+
+    // Detail modal
+    $('maDetailClose').addEventListener('click', closeDetailModal);
+    $('maDetailModal').addEventListener('click', e => { if (e.target.id === 'maDetailModal') closeDetailModal(); });
+    $('maDetailPrint').addEventListener('click', printCurrentOrder);
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -758,6 +916,10 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       });
     });
 
+    container.querySelectorAll('[data-detail-order]').forEach(btn => {
+      btn.addEventListener('click', () => openDetailModal(btn.dataset.detailOrder));
+    });
+
     container.querySelectorAll('[data-add-cashback]').forEach(btn => {
       btn.addEventListener('click', () => openCbModal(btn.dataset.addCashback, 'add'));
     });
@@ -766,7 +928,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       btn.addEventListener('click', () => openDelModal(btn.dataset.deleteOrder));
     });
 
-    // ✅ أزرار تعليم الكاش باك كمدفوع / غير مدفوع
     container.querySelectorAll('[data-mark-paid]').forEach(btn => {
       btn.addEventListener('click', () => toggleCashbackPaid(btn.dataset.markPaid, true));
     });
@@ -782,12 +943,13 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     const itemsHtml = items.map(it => `<div>• <span class="name">${escapeHtml(it.name || 'منتج')}</span> × ${it.qty || 1} — ${(Number(it.price||0) * Number(it.qty||1)).toFixed(2)} ر.س</div>`).join('') || '<div>—</div>';
     const date = fmtDate(o.created_at);
 
-    // ═══ كاش باك: 3 حالات واضحة ═══
+    // Cashback badge
     let cbHtml = '';
     if (o.status === 'delivered' && o.cashback_applied) {
       const amount = Number(o.cashback || 0).toFixed(2);
       if (o.cashback_paid) {
-        cbHtml = `<div class="ma-cb-info paid"><i class="fas fa-circle-check"></i> كاش باك مدفوع: ${amount} ر.س</div>`;
+        const paidDate = o.cashback_paid_at ? fmtDateShort(o.cashback_paid_at) : '';
+        cbHtml = `<div class="ma-cb-info paid"><i class="fas fa-circle-check"></i> كاش باك مدفوع: ${amount} ر.س <span class="cb-date">— ${paidDate}</span></div>`;
       } else {
         cbHtml = `<div class="ma-cb-info unpaid"><i class="fas fa-hourglass-half"></i> كاش باك غير مدفوع: ${amount} ر.س</div>`;
       }
@@ -800,7 +962,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       `<option value="${k}" ${k === o.status ? 'selected' : ''}>${v.label}</option>`
     ).join('');
 
-    // ✅ زر تعليم الدفع يظهر فقط للطلبات المُستلمة التي عليها كاش باك
     const showMarkPaid = o.status === 'delivered' && o.cashback_applied && !o.cashback_paid;
     const showUnmarkPaid = o.cashback_paid;
 
@@ -828,11 +989,17 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         <div class="ma-items">${itemsHtml}</div>
 
         <div class="ma-bottom">
-          <div class="ma-total">${Number(o.total || 0).toFixed(2)} ر.س</div>
+          <div class="ma-total-wrap">
+            <div class="ma-total-lbl">المبلغ المدفوع</div>
+            <div class="ma-total">${Number(o.total || 0).toFixed(2)} ر.س</div>
+          </div>
           ${cbHtml}
         </div>
 
         <div class="ma-actions">
+          <button class="ma-btn-action ma-btn-detail" data-detail-order="${o.id}">
+            <i class="fas fa-receipt"></i> التفاصيل والطباعة
+          </button>
           <select data-order-select="${o.id}">${options}</select>
           <button class="ma-btn-action ma-btn-apply" data-apply-status="${o.id}">
             <i class="fas fa-check"></i> تطبيق الحالة
@@ -840,22 +1007,281 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
           <button class="ma-btn-action ma-btn-cb" data-add-cashback="${o.id}">
             <i class="fas fa-gift"></i> كاش باك
           </button>
-          ${showMarkPaid ? `
-            <button class="ma-btn-action ma-btn-paid" data-mark-paid="${o.id}">
-              <i class="fas fa-money-bill-wave"></i> تعليم كمدفوع
-            </button>
-          ` : ''}
-          ${showUnmarkPaid ? `
-            <button class="ma-btn-action ma-btn-unpaid" data-unmark-paid="${o.id}">
-              <i class="fas fa-rotate-left"></i> إلغاء الدفع
-            </button>
-          ` : ''}
+          ${showMarkPaid ? `<button class="ma-btn-action ma-btn-paid" data-mark-paid="${o.id}"><i class="fas fa-money-bill-wave"></i> تعليم كمدفوع</button>` : ''}
+          ${showUnmarkPaid ? `<button class="ma-btn-action ma-btn-unpaid" data-unmark-paid="${o.id}"><i class="fas fa-rotate-left"></i> إلغاء الدفع</button>` : ''}
           <button class="ma-btn-action ma-btn-delete" data-delete-order="${o.id}">
             <i class="fas fa-trash"></i> حذف
           </button>
         </div>
       </div>
     `;
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // 📋 DETAIL MODAL
+  // ═══════════════════════════════════════════════════════════
+  function openDetailModal(orderId) {
+    const order = allOrders.find(o => String(o.id) === String(orderId));
+    if (!order) return;
+    currentDetailOrder = order;
+
+    const st = ORDER_STATUS[order.status] || ORDER_STATUS.pending;
+    const items = Array.isArray(order.items) ? order.items : [];
+
+    $('maDetailOrderId').textContent = '#' + String(order.id).slice(-8).toUpperCase();
+    $('maDetailDate').innerHTML = `<i class="fas fa-clock"></i> ${fmtDate(order.created_at)}`;
+
+    let subtotal = 0;
+    let itemsRows = items.map((it, i) => {
+      const price = Number(it.price || 0);
+      const qty = Number(it.qty || 1);
+      const lineTotal = price * qty;
+      subtotal += lineTotal;
+      return `<tr>
+        <td>${i+1}</td>
+        <td>${escapeHtml(it.name || 'منتج')}</td>
+        <td>${qty}</td>
+        <td class="price-cell">${price.toFixed(2)} ر.س</td>
+        <td class="total-cell">${lineTotal.toFixed(2)} ر.س</td>
+      </tr>`;
+    }).join('');
+    if (!itemsRows) {
+      itemsRows = `<tr><td colspan="5" style="text-align:center;color:#8a92b0;padding:20px">لا توجد منتجات مسجلة</td></tr>`;
+    }
+
+    const total = Number(order.total || 0);
+    const shipping = Math.max(0, total - subtotal);
+    const cashbackEarned = Number(order.cashback || 0);
+    const potentialCb = total * CASHBACK_RATE;
+
+    // Cashback status pill
+    let cbStatusPill = '';
+    let cbAmountDisplay = '';
+    let cbPaidDateRow = '';
+
+    if (order.status === 'cancelled') {
+      cbStatusPill = `<span class="ma-cb-status-pill none"><i class="fas fa-ban"></i> لا يوجد (طلب ملغي)</span>`;
+      cbAmountDisplay = '0.00 ر.س';
+    } else if (order.status === 'delivered' && order.cashback_applied) {
+      cbAmountDisplay = `${cashbackEarned.toFixed(2)} ر.س`;
+      if (order.cashback_paid) {
+        cbStatusPill = `<span class="ma-cb-status-pill paid"><i class="fas fa-circle-check"></i> مدفوع للعميل</span>`;
+        if (order.cashback_paid_at) {
+          cbPaidDateRow = `<div class="ma-summary-row total">
+            <span class="lbl">تاريخ الصرف</span>
+            <span class="val">${fmtDate(order.cashback_paid_at)}</span>
+          </div>`;
+        }
+      } else {
+        cbStatusPill = `<span class="ma-cb-status-pill unpaid"><i class="fas fa-hourglass-half"></i> غير مدفوع</span>`;
+      }
+    } else {
+      cbStatusPill = `<span class="ma-cb-status-pill pending"><i class="fas fa-clock"></i> متوقع عند التسليم</span>`;
+      cbAmountDisplay = `${potentialCb.toFixed(2)} ر.س`;
+    }
+
+    const html = `
+      <div class="ma-detail-cols">
+        <div class="ma-detail-section">
+          <div class="ma-detail-h3"><i class="fas fa-user"></i> معلومات العميل</div>
+          <div class="ma-detail-row"><span class="lbl">الاسم</span><span class="val">${escapeHtml(order.user_name || '—')}</span></div>
+          <div class="ma-detail-row"><span class="lbl">البريد</span><span class="val" dir="ltr">${escapeHtml(order.user_email || '—')}</span></div>
+          <div class="ma-detail-row"><span class="lbl">الجوال</span><span class="val" dir="ltr">${escapeHtml(order.user_phone || '—')}</span></div>
+          ${order.user_address ? `<div class="ma-detail-row"><span class="lbl">العنوان</span><span class="val">${escapeHtml(order.user_address)}</span></div>` : ''}
+        </div>
+
+        <div class="ma-detail-section">
+          <div class="ma-detail-h3"><i class="fas fa-info-circle"></i> معلومات الطلب</div>
+          <div class="ma-detail-row">
+            <span class="lbl">الحالة</span>
+            <span class="val"><span class="ma-order-badge" style="background:${st.bg};color:${st.text};font-size:.72rem;padding:5px 12px"><i class="fas ${st.icon}"></i> ${st.label}</span></span>
+          </div>
+          <div class="ma-detail-row"><span class="lbl">تاريخ الطلب</span><span class="val">${fmtDate(order.created_at)}</span></div>
+          ${order.updated_at ? `<div class="ma-detail-row"><span class="lbl">آخر تحديث</span><span class="val">${fmtDate(order.updated_at)}</span></div>` : ''}
+          ${order.payment_method ? `<div class="ma-detail-row"><span class="lbl">طريقة الدفع</span><span class="val">${escapeHtml(order.payment_method)}</span></div>` : ''}
+        </div>
+      </div>
+
+      <div class="ma-detail-section">
+        <div class="ma-detail-h3"><i class="fas fa-box"></i> تفاصيل المنتجات</div>
+        <table class="ma-items-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>المنتج</th>
+              <th>الكمية</th>
+              <th>السعر</th>
+              <th>الإجمالي</th>
+            </tr>
+          </thead>
+          <tbody>${itemsRows}</tbody>
+        </table>
+      </div>
+
+      <div class="ma-summary-grid">
+        <div class="ma-summary-box">
+          <div class="ma-detail-h3"><i class="fas fa-credit-card"></i> ملخص الدفع</div>
+          <div class="ma-summary-row">
+            <span class="lbl">المجموع الفرعي</span>
+            <span class="val">${subtotal.toFixed(2)} ر.س</span>
+          </div>
+          <div class="ma-summary-row">
+            <span class="lbl">الشحن</span>
+            <span class="val">${shipping.toFixed(2)} ر.س</span>
+          </div>
+          <div class="ma-summary-row total">
+            <span class="lbl">المبلغ المدفوع</span>
+            <span class="val">${total.toFixed(2)} ر.س</span>
+          </div>
+        </div>
+
+        <div class="ma-summary-box cashback">
+          <div class="ma-detail-h3"><i class="fas fa-gift"></i> كاش باك العميل</div>
+          <div class="ma-summary-row">
+            <span class="lbl">الكاش باك المكتسب</span>
+            <span class="val">${cbAmountDisplay}</span>
+          </div>
+          <div class="ma-summary-row">
+            <span class="lbl">الحالة</span>
+            <span class="val">${cbStatusPill}</span>
+          </div>
+          ${cbPaidDateRow}
+        </div>
+      </div>
+    `;
+
+    $('maDetailBody').innerHTML = html;
+    $('maDetailModal').classList.add('show');
+  }
+
+  function closeDetailModal() {
+    $('maDetailModal').classList.remove('show');
+    currentDetailOrder = null;
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // 🖨️ PRINT
+  // ═══════════════════════════════════════════════════════════
+  function printCurrentOrder() {
+    if (!currentDetailOrder) return;
+    const order = currentDetailOrder;
+
+    const items = Array.isArray(order.items) ? order.items : [];
+    let subtotal = 0;
+    const itemsRows = items.map((it, i) => {
+      const price = Number(it.price || 0);
+      const qty = Number(it.qty || 1);
+      const lineTotal = price * qty;
+      subtotal += lineTotal;
+      return `<tr>
+        <td style="text-align:center">${i+1}</td>
+        <td>${escapeHtml(it.name || 'منتج')}</td>
+        <td style="text-align:center">${qty}</td>
+        <td class="num">${price.toFixed(2)}</td>
+        <td class="num">${lineTotal.toFixed(2)}</td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="5" style="text-align:center">لا توجد منتجات</td></tr>';
+
+    const total = Number(order.total || 0);
+    const shipping = Math.max(0, total - subtotal);
+    const cashbackEarned = Number(order.cashback || 0);
+    const potentialCb = total * CASHBACK_RATE;
+    const st = ORDER_STATUS[order.status] || ORDER_STATUS.pending;
+
+    let cbAmount = '0.00';
+    let cbStatus = '—';
+    let cbDate = '—';
+    if (order.status === 'cancelled') {
+      cbStatus = 'لا يوجد (طلب ملغي)';
+    } else if (order.status === 'delivered' && order.cashback_applied) {
+      cbAmount = cashbackEarned.toFixed(2);
+      cbStatus = order.cashback_paid ? 'مدفوع للعميل ✓' : 'غير مدفوع';
+      cbDate = order.cashback_paid && order.cashback_paid_at ? fmtDate(order.cashback_paid_at) : '—';
+    } else {
+      cbAmount = potentialCb.toFixed(2) + ' (متوقع)';
+      cbStatus = 'قيد الانتظار';
+    }
+
+    const html = `
+      <div class="ma-print-inner">
+        <div class="ma-print-head">
+          <div class="ma-print-brand">
+            <img src="https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png" alt="MEN Store">
+            <div>
+              <div class="ma-print-brand-name">MEN Store</div>
+              <div class="ma-print-brand-tag">فاتورة طلب رسمية</div>
+            </div>
+          </div>
+          <div class="ma-print-order-box">
+            <div class="num">#${String(order.id).slice(-8).toUpperCase()}</div>
+            <div>التاريخ: ${fmtDate(order.created_at)}</div>
+            <div>الحالة: ${st.label}</div>
+          </div>
+        </div>
+
+        <div class="ma-print-section">
+          <h2 class="ma-print-h2">معلومات العميل</h2>
+          <table class="ma-print-info-table">
+            <tr>
+              <td class="lbl">الاسم</td>
+              <td>${escapeHtml(order.user_name || '—')}</td>
+              <td class="lbl">البريد الإلكتروني</td>
+              <td dir="ltr" style="text-align:right">${escapeHtml(order.user_email || '—')}</td>
+            </tr>
+            <tr>
+              <td class="lbl">رقم الجوال</td>
+              <td dir="ltr" style="text-align:right">${escapeHtml(order.user_phone || '—')}</td>
+              <td class="lbl">العنوان</td>
+              <td>${escapeHtml(order.user_address || '—')}</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="ma-print-section">
+          <h2 class="ma-print-h2">تفاصيل المنتجات</h2>
+          <table class="ma-print-items-table">
+            <thead>
+              <tr>
+                <th style="width:40px;text-align:center">#</th>
+                <th>المنتج</th>
+                <th style="width:70px;text-align:center">الكمية</th>
+                <th style="width:100px">السعر (ر.س)</th>
+                <th style="width:110px">الإجمالي (ر.س)</th>
+              </tr>
+            </thead>
+            <tbody>${itemsRows}</tbody>
+          </table>
+        </div>
+
+        <div class="ma-print-bottom">
+          <div class="ma-print-section">
+            <h2 class="ma-print-h2">ملخص الدفع</h2>
+            <table class="ma-print-summary-table">
+              <tr><td class="lbl">المجموع الفرعي</td><td class="val">${subtotal.toFixed(2)} ر.س</td></tr>
+              <tr><td class="lbl">الشحن</td><td class="val">${shipping.toFixed(2)} ر.س</td></tr>
+              <tr class="total"><td class="lbl">المبلغ المدفوع</td><td class="val">${total.toFixed(2)} ر.س</td></tr>
+            </table>
+          </div>
+
+          <div class="ma-print-section">
+            <h2 class="ma-print-h2">كاش باك العميل</h2>
+            <table class="ma-print-summary-table">
+              <tr><td class="lbl">الكاش باك المكتسب</td><td class="val">${cbAmount} ر.س</td></tr>
+              <tr><td class="lbl">الحالة</td><td class="val">${cbStatus}</td></tr>
+              <tr><td class="lbl">تاريخ الصرف</td><td class="val">${cbDate}</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="ma-print-foot">
+          <div class="thanks">شكراً لتسوقك معنا 🌟</div>
+          <div>MEN Store — فاتورة رسمية</div>
+        </div>
+      </div>
+    `;
+
+    $('maPrintArea').innerHTML = html;
+    setTimeout(() => window.print(), 150);
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -885,7 +1311,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         'success'
       );
 
-      // إشعار العميل بأن الكاش باك تم دفعه
       if (paid) {
         try {
           await sb.from('men_messages').insert({
@@ -914,17 +1339,12 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     if (!silent) container.innerHTML = '<div class="ma-loader"><div class="ma-spin"></div><p style="color:#8a92b0;font-weight:700">جاري تحميل العملاء...</p></div>';
 
     try {
-      const { data, error } = await sb.from('men_users')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(500);
-
+      const { data, error } = await sb.from('men_users').select('*').order('created_at', { ascending: false }).limit(500);
       if (error) throw error;
       allUsers = data || [];
       $('maStatCustomers').textContent = allUsers.length;
       const totalCashback = allUsers.reduce((s, u) => s + Number(u.cashback || 0), 0);
       $('maStatCashback').textContent = totalCashback.toFixed(0);
-
       if (!silent) renderUsers();
     } catch (err) {
       console.error(err);
@@ -978,7 +1398,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     if (nameParts.length === 1) initials = nameParts[0].substring(0, 2);
     else initials = (nameParts[0][0] || '') + (nameParts[nameParts.length - 1][0] || '');
     initials = initials.toUpperCase();
-
     const lastTxt = stats.lastOrder ? fmtTimeAgo(stats.lastOrder.created_at) : 'لا يوجد';
 
     return `
@@ -991,28 +1410,14 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
               <div class="ma-order-date" style="margin-top:6px"><i class="fas fa-envelope"></i> ${escapeHtml(u.email || '—')}</div>
             </div>
           </div>
-          <div class="ma-order-badge" style="background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff">
-            <i class="fas fa-user"></i> عميل
-          </div>
+          <div class="ma-order-badge" style="background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff"><i class="fas fa-user"></i> عميل</div>
         </div>
 
         <div class="ma-user-stats">
-          <div class="ma-us-item">
-            <div class="ma-us-val">${stats.total}</div>
-            <div class="ma-us-lbl">إجمالي الطلبات</div>
-          </div>
-          <div class="ma-us-item">
-            <div class="ma-us-val">${stats.paid.toFixed(0)} ر.س</div>
-            <div class="ma-us-lbl">إجمالي المدفوع</div>
-          </div>
-          <div class="ma-us-item">
-            <div class="ma-us-val" style="background:linear-gradient(135deg,#66bb6a,#2e7d32);-webkit-background-clip:text;background-clip:text;color:transparent">${Number(u.cashback || 0).toFixed(0)} ر.س</div>
-            <div class="ma-us-lbl">رصيد الكاش باك</div>
-          </div>
-          <div class="ma-us-item">
-            <div class="ma-us-val" style="font-size:.86rem">${lastTxt}</div>
-            <div class="ma-us-lbl">آخر طلب</div>
-          </div>
+          <div class="ma-us-item"><div class="ma-us-val">${stats.total}</div><div class="ma-us-lbl">إجمالي الطلبات</div></div>
+          <div class="ma-us-item"><div class="ma-us-val">${stats.paid.toFixed(0)} ر.س</div><div class="ma-us-lbl">إجمالي المدفوع</div></div>
+          <div class="ma-us-item"><div class="ma-us-val" style="background:linear-gradient(135deg,#66bb6a,#2e7d32);-webkit-background-clip:text;background-clip:text;color:transparent">${Number(u.cashback || 0).toFixed(0)} ر.س</div><div class="ma-us-lbl">رصيد الكاش باك</div></div>
+          <div class="ma-us-item"><div class="ma-us-val" style="font-size:.86rem">${lastTxt}</div><div class="ma-us-lbl">آخر طلب</div></div>
         </div>
 
         <div class="ma-customer">
@@ -1023,18 +1428,10 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         </div>
 
         <div class="ma-actions">
-          <button class="ma-btn-action ma-btn-chat" data-user-chat="${u.id}">
-            <i class="fas fa-comments"></i> المحادثة
-          </button>
-          <button class="ma-btn-action ma-btn-note" data-user-note="${u.id}">
-            <i class="fas fa-comment-dots"></i> ملاحظة
-          </button>
-          <button class="ma-btn-action ma-btn-cb" data-user-cb="${u.id}" data-cb-mode="add">
-            <i class="fas fa-gift"></i> إضافة كاش باك
-          </button>
-          <button class="ma-btn-action ma-btn-deduct" data-user-cb="${u.id}" data-cb-mode="deduct">
-            <i class="fas fa-minus"></i> خصم كاش باك
-          </button>
+          <button class="ma-btn-action ma-btn-chat" data-user-chat="${u.id}"><i class="fas fa-comments"></i> المحادثة</button>
+          <button class="ma-btn-action ma-btn-note" data-user-note="${u.id}"><i class="fas fa-comment-dots"></i> ملاحظة</button>
+          <button class="ma-btn-action ma-btn-cb" data-user-cb="${u.id}" data-cb-mode="add"><i class="fas fa-gift"></i> إضافة كاش باك</button>
+          <button class="ma-btn-action ma-btn-deduct" data-user-cb="${u.id}" data-cb-mode="deduct"><i class="fas fa-minus"></i> خصم كاش باك</button>
         </div>
       </div>
     `;
@@ -1048,7 +1445,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     const order = allOrders.find(o => String(o.id) === String(orderId));
     if (!order) return;
     if (order.status === newStatus) { toast('الحالة نفسها', 'info'); return; }
-
     if (btnEl) { btnEl.disabled = true; btnEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري...'; }
 
     const oldStatus = order.status;
@@ -1060,7 +1456,7 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       updates.cashback = earned;
       updates.cashback_applied = true;
       updates.cashback_applied_at = new Date().toISOString();
-      updates.cashback_paid = false; // لسه ما اتدفعش
+      updates.cashback_paid = false;
       cbMsg = ` + ${earned.toFixed(2)} ر.س كاش باك`;
       try {
         await sb.from('men_cashback_log').insert({
@@ -1120,11 +1516,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       user_cashback: Number(user.cashback || 0), id: '—'
     };
     updateCbModalUI();
-
     const modeHint = mode === 'deduct'
       ? `<em style="color:#ff8a8a">وضع الخصم — سيتم إنقاص المبلغ من رصيد العميل</em>`
       : `<em style="color:#6a9aff">إضافة مباشرة للرصيد (بدون طلب)</em>`;
-
     $('maCbSub').innerHTML = `
       العميل: <strong>${escapeHtml(user.name || '—')}</strong><br>
       البريد: <strong dir="ltr">${escapeHtml(user.email || '—')}</strong><br>
@@ -1143,7 +1537,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     cbMode = mode;
     selectedOrderForCashback = order;
     updateCbModalUI();
-
     $('maCbSub').innerHTML = `
       العميل: <strong>${escapeHtml(order.user_name || '—')}</strong><br>
       البريد: <strong dir="ltr">${escapeHtml(order.user_email || '—')}</strong><br>
@@ -1160,7 +1553,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     const icon = $('maCbIcon');
     const confirmBtn = $('maCbConfirm');
     $('maCbTitle').textContent = isDeduct ? 'خصم كاش باك' : 'إضافة كاش باك';
-
     if (isDeduct) {
       icon.className = 'fas fa-minus';
       icon.style.background = 'linear-gradient(135deg,#d90429,#8b0018)';
@@ -1185,7 +1577,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   async function confirmCashback() {
     const amountRaw = Number($('maCbAmount').value);
     const reasonInput = $('maCbReason').value.trim();
-
     if (!amountRaw || amountRaw <= 0) { toast('أدخل مبلغاً صحيحاً', 'error'); return; }
     if (!selectedOrderForCashback) return;
 
@@ -1201,7 +1592,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       const { data: u, error: uErr } = await sb.from('men_users')
         .select('cashback, name, email').eq('id', order.user_id).maybeSingle();
       if (uErr) throw uErr;
-
       const currentCb = Number(u?.cashback || 0);
 
       if (isDeduct && amountRaw > currentCb) {
@@ -1231,16 +1621,14 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
       const nameLabel = u?.name || order.user_name || order.user_email;
       toast(
-        isDeduct
-          ? `✅ تم خصم ${amountRaw.toFixed(2)} ر.س من رصيد ${nameLabel}`
-          : `✅ تم إضافة ${amountRaw.toFixed(2)} ر.س كاش باك لـ ${nameLabel}`,
+        isDeduct ? `✅ تم خصم ${amountRaw.toFixed(2)} ر.س من رصيد ${nameLabel}`
+                 : `✅ تم إضافة ${amountRaw.toFixed(2)} ر.س كاش باك لـ ${nameLabel}`,
         'success'
       );
 
       closeCbModal();
       if (usersView) renderUsers();
       renderStats();
-
     } catch (err) {
       console.error(err);
       toast('فشل: ' + err.message, 'error');
@@ -1281,7 +1669,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   async function confirmDelete() {
     if (!selectedOrderForDelete) return;
     const order = selectedOrderForDelete;
-
     const btn = $('maDelConfirm');
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحذف...';
@@ -1317,10 +1704,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
       allOrders = allOrders.filter(o => String(o.id) !== String(order.id));
       renderStats();
       renderOrders();
-
       toast(`🗑️ تم حذف الطلب #${String(order.id).slice(-8).toUpperCase()} نهائياً`, 'success');
       closeDelModal();
-
     } catch (err) {
       console.error(err);
       toast('فشل الحذف: ' + err.message, 'error');
@@ -1336,7 +1721,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     const user = allUsers.find(u => String(u.id) === String(userId));
     if (!user) return;
     selectedUserForNote = user;
-
     $('maNoteSub').innerHTML = `
       العميل: <strong>${escapeHtml(user.name || '—')}</strong><br>
       البريد: <strong dir="ltr">${escapeHtml(user.email || '—')}</strong>
@@ -1355,7 +1739,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     if (!selectedUserForNote) return;
     const text = $('maNoteText').value.trim();
     if (!text) { toast('اكتب نص الملاحظة', 'error'); return; }
-
     const btn = $('maNoteConfirm');
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
@@ -1372,7 +1755,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         is_read: false
       });
       if (error) throw error;
-
       toast(`📝 تم إرسال الملاحظة إلى ${selectedUserForNote.name || selectedUserForNote.email}`, 'success');
       closeNoteModal();
     } catch (err) {
@@ -1402,7 +1784,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     $('maChatBody').innerHTML = '<div class="ma-chat-empty"><i class="fas fa-spinner fa-spin"></i> جاري تحميل المحادثة...</div>';
     $('maChatInput').value = '';
     $('maChatModal').classList.add('show');
-
     await loadChatMessages(user.id);
     setTimeout(() => $('maChatInput').focus(), 200);
   }
@@ -1415,11 +1796,8 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
   async function loadChatMessages(userId) {
     try {
       const { data, error } = await sb.from('men_messages')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: true })
-        .limit(300);
-
+        .select('*').eq('user_id', userId)
+        .order('created_at', { ascending: true }).limit(300);
       if (error) throw error;
       renderChatMessages(data || []);
     } catch (err) {
@@ -1430,12 +1808,10 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
 
   function renderChatMessages(msgs) {
     const body = $('maChatBody');
-
     if (!msgs.length) {
       body.innerHTML = '<div class="ma-chat-empty"><i class="fas fa-comment-slash"></i> لا يوجد رسائل بعد<br><span style="font-size:.78rem;opacity:.7;margin-top:6px;display:block">ابدأ المحادثة من الأسفل</span></div>';
       return;
     }
-
     body.innerHTML = msgs.map(m => {
       const time = fmtDate(m.created_at);
       if (m.type === 'note') {
@@ -1453,7 +1829,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         <div class="ma-msg-time">${time}</div>
       </div>`;
     }).join('');
-
     body.scrollTop = body.scrollHeight;
   }
 
@@ -1462,7 +1837,6 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
     const input = $('maChatInput');
     const text = input.value.trim();
     if (!text) return;
-
     const btn = $('maChatSend');
     btn.disabled = true;
 
@@ -1478,11 +1852,9 @@ html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-heigh
         is_read: false
       });
       if (error) throw error;
-
       input.value = '';
       input.style.height = 'auto';
       await loadChatMessages(selectedUserForChat.id);
-
     } catch (err) {
       console.error(err);
       toast('فشل الإرسال: ' + err.message, 'error');
