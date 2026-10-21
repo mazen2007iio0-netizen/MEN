@@ -155,6 +155,27 @@ body{position:relative}
 .ma-rate-form input:focus{border-color:#f5b342;box-shadow:0 0 0 4px rgba(245,179,66,.15)}
 .ma-rate-hint{font-size:.8rem;color:#8a92b0;font-weight:700;line-height:1.7;margin-top:12px}
 
+/* TAX/SHIPPING CARDS */
+.ma-setting-card{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.2);border-radius:20px;padding:26px;margin-bottom:20px}
+.ma-setting-card.tax{background:linear-gradient(145deg,rgba(0,201,167,.08),rgba(0,143,119,.03));border-color:rgba(0,201,167,.35)}
+.ma-setting-card.shipping{background:linear-gradient(145deg,rgba(74,122,255,.08),rgba(2,28,164,.03));border-color:rgba(74,122,255,.35)}
+.ma-setting-title{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.ma-setting-title i{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.ma-setting-card.tax .ma-setting-title i{background:linear-gradient(135deg,#00c9a7,#008f77);color:#fff}
+.ma-setting-card.shipping .ma-setting-title i{background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff}
+.ma-setting-title .t{font-size:1.15rem;font-weight:900}
+.ma-setting-title .s{font-size:.78rem;color:#8a92b0;font-weight:700;margin-top:3px}
+.ma-setting-display{font-size:2.6rem;font-weight:900;letter-spacing:-1.5px;line-height:1;margin:16px 0 8px}
+.ma-setting-card.tax .ma-setting-display{background:linear-gradient(135deg,#00c9a7,#008f77);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ma-setting-card.shipping .ma-setting-display{background:linear-gradient(135deg,#6a9aff,#4a7aff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ma-setting-form{display:flex;gap:10px;align-items:center;margin-top:16px;flex-wrap:wrap}
+.ma-setting-form input{height:52px;width:180px;padding:0 18px;border-radius:12px;background:rgba(0,0,0,.4);color:#fff;font-family:'Cairo',sans-serif;font-weight:900;font-size:1.2rem;text-align:center;outline:none;direction:ltr;border:2px solid rgba(74,122,255,.3);transition:border-color .3s,box-shadow .3s}
+.ma-setting-card.tax .ma-setting-form input{border-color:rgba(0,201,167,.35);color:#00c9a7}
+.ma-setting-card.tax .ma-setting-form input:focus{border-color:#00c9a7;box-shadow:0 0 0 4px rgba(0,201,167,.15)}
+.ma-setting-card.shipping .ma-setting-form input{border-color:rgba(74,122,255,.35);color:#6a9aff}
+.ma-setting-card.shipping .ma-setting-form input:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.15)}
+.ma-setting-hint{font-size:.8rem;color:#8a92b0;font-weight:700;line-height:1.7;margin-top:12px}
+
 /* EMPTY */
 .ma-empty{text-align:center;padding:60px 24px}
 .ma-empty i{font-size:2.8rem;color:#4a7aff;margin-bottom:14px;opacity:.6;display:block}
@@ -188,6 +209,8 @@ body{position:relative}
 .ma-modal-actions .confirm.deduct{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff}
 .ma-modal-actions .confirm.danger{background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff}
 .ma-modal-actions .confirm.purple{background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff}
+.ma-modal-actions .confirm.teal{background:linear-gradient(135deg,#00c9a7,#008f77);color:#fff}
+.ma-modal-actions .confirm.blue{background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff}
 .ma-modal-actions .confirm:disabled{opacity:.6;cursor:not-allowed}
 .ma-warn-box{margin-top:14px;padding:13px 15px;border-radius:12px;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.28);color:#ff9a9a;font-size:.8rem;font-weight:700;line-height:1.8;display:flex;gap:10px;align-items:flex-start}
 .ma-warn-box i{color:#d90429;font-size:1rem;flex-shrink:0;margin-top:2px}
@@ -221,10 +244,14 @@ body{position:relative}
 .ma-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .ma-summary-box{background:linear-gradient(145deg,rgba(74,122,255,.08),rgba(2,28,164,.05));border:1px solid rgba(74,122,255,.2);border-radius:14px;padding:16px 18px}
 .ma-summary-box.cashback{background:linear-gradient(145deg,rgba(245,179,66,.08),rgba(201,138,30,.05));border-color:rgba(245,179,66,.25)}
-.ma-summary-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:.88rem;border-bottom:1px dashed rgba(74,122,255,.12)}
+.ma-summary-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:.88rem;border-bottom:1px dashed rgba(74,122,255,.12);gap:10px}
 .ma-summary-row:last-child{border-bottom:none}
 .ma-summary-row .lbl{color:#8a92b0;font-weight:700}
 .ma-summary-row .val{font-family:'Courier New',monospace;font-weight:800;color:#fff;direction:ltr}
+.ma-summary-row.vat .lbl{color:#00c9a7}
+.ma-summary-row.vat .val{color:#00c9a7}
+.ma-summary-row.shipping .lbl{color:#6a9aff}
+.ma-summary-row.shipping .val{color:#6a9aff}
 .ma-summary-row.total{padding-top:14px;margin-top:4px;border-top:2px solid rgba(74,122,255,.3);border-bottom:none}
 .ma-summary-row.total .lbl{color:#fff;font-size:.95rem;font-weight:900}
 .ma-summary-row.total .val{color:#4a7aff;font-size:1.25rem;font-weight:900}
@@ -236,6 +263,12 @@ body{position:relative}
 .ma-status-btn:hover:not(:disabled){background:rgba(74,122,255,.18);border-color:#4a7aff;color:#fff;transform:translateY(-1px)}
 .ma-status-btn.current{background:linear-gradient(135deg,#021ca4,#4a7aff);border-color:transparent;color:#fff;cursor:not-allowed;opacity:.9;box-shadow:0 8px 22px -8px rgba(74,122,255,.8)}
 .ma-status-btn:disabled{cursor:not-allowed;opacity:.5}
+
+/* SHIPPING EDIT ROW */
+.ma-shipping-edit{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px dashed rgba(74,122,255,.15)}
+.ma-shipping-edit .ma-btn-soft{height:40px;padding:0 16px}
+.ma-shipping-edit-info{flex:1;min-width:200px;font-size:.82rem;color:#8a92b0;font-weight:700}
+.ma-shipping-edit-info strong{color:#6a9aff;font-family:'Courier New',monospace;font-size:.95rem}
 
 /* CHAT */
 .ma-chat-header{padding:18px 22px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(74,122,255,.06),transparent)}
@@ -396,6 +429,33 @@ body{position:relative}
   </div>
 </div>
 
+<div class="ma-modal-back" id="maShippingModal">
+  <div class="ma-modal">
+    <div class="ma-modal-title"><i class="fas fa-truck" style="background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff"></i><span id="maShipTitle">تعديل الشحن</span></div>
+    <div class="ma-modal-sub" id="maShipSub">—</div>
+    <div class="ma-modal-field">
+      <label>سعر الشحن (ر.س)</label>
+      <input type="number" id="maShipAmount" placeholder="0.00" step="0.01" min="0">
+      <div class="ma-quick">
+        <button data-ship="0">مجاني</button>
+        <button data-ship="10">10</button>
+        <button data-ship="15">15</button>
+        <button data-ship="20">20</button>
+        <button data-ship="25">25</button>
+        <button data-ship="30">30</button>
+      </div>
+    </div>
+    <div class="ma-warn-box" style="background:rgba(74,122,255,.08);border-color:rgba(74,122,255,.28);color:#a8b0cc">
+      <i class="fas fa-info-circle" style="color:#4a7aff"></i>
+      <div>سيُعاد حساب الإجمالي والضريبة تلقائياً بعد الحفظ.</div>
+    </div>
+    <div class="ma-modal-actions">
+      <button class="cancel" id="maShipCancel">إلغاء</button>
+      <button class="confirm blue" id="maShipConfirm"><i class="fas fa-save"></i> حفظ</button>
+    </div>
+  </div>
+</div>
+
 <div class="ma-modal-back" id="maChatModal">
   <div class="ma-modal ma-modal-lg">
     <div class="ma-chat-header">
@@ -440,7 +500,7 @@ const NAV = [
   { id:'finance', label:'المالية', icon:'fa-coins' },
   { id:'rewards', label:'الجوائز', icon:'fa-trophy', sub:[
     { id:'rewards', label:'إدارة الكاش باك', icon:'fa-gift' },
-    { id:'rewards-rate', label:'نسبة الكاش باك', icon:'fa-percent' },
+    { id:'rewards-rate', label:'النسب والضرائب', icon:'fa-percent' },
     { id:'rewards-log', label:'سجل الكاش باك', icon:'fa-list' }
   ]},
   { id:'audit', label:'سجل التدقيق', icon:'fa-history' },
@@ -451,20 +511,29 @@ let sb = null, currentUser = null;
 let allOrders = [], allUsers = [], allCashbackLog = [], allAuditLog = [];
 let currentView = 'reports';
 let currentDetailOrder = null, selectedOrderForCashback = null, selectedOrderForDelete = null;
+let selectedOrderForShipping = null;
 let selectedUserForNote = null, selectedUserForChat = null, cbMode = 'add';
 let lastRefresh = null;
 let dataVersion = 0;
 let dataLoaded = false;
 let loadingPromise = null;
 let auditLogLoaded = false;
-const settings = { cashback_rate: 0.02, store_name:'MEN Store', currency:'ر.س' };
+
+const settings = { 
+  cashback_rate: 0.02, 
+  store_name:'MEN Store', 
+  currency:'ر.س',
+  vat_rate: 0.15,
+  vat_enabled: true,
+  shipping_fee: 0
+};
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 const fmtDate = d => { if(!d) return '—'; try { return new Date(d).toLocaleString('ar-SA',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}); } catch { return '—'; } };
-const fmtDateShort = d => { if(!d) return '—'; try { return new Date(d).toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'}); } catch { return '—'; } };
 const fmtNum = n => Number(n||0).toFixed(2);
 const fmtInt = n => Number(n||0).toFixed(0);
+const round2 = n => Math.round(Number(n||0) * 100) / 100;
 
 function debounce(fn, ms = 180){
   let t;
@@ -478,6 +547,61 @@ function showLoading(v){
   if(v) el.classList.add('show'); else el.classList.remove('show');
 }
 
+/* ═══════════════════════════════════════════════
+   حساب تفاصيل الطلب (المجموع الفرعي + الشحن + الضريبة)
+═══════════════════════════════════════════════ */
+function calcOrderBreakdown(order){
+  const items = Array.isArray(order.items) ? order.items : [];
+  const itemsSubtotal = items.reduce((s,it) => s + Number(it.price||0) * Number(it.qty||1), 0);
+  const total = Number(order.total||0);
+  
+  // إذا كانت التفاصيل محفوظة مسبقاً، استخدمها
+  const hasSavedBreakdown = order.subtotal != null && order.vat_amount != null && order.shipping_fee != null;
+  
+  if(hasSavedBreakdown){
+    return {
+      itemsSubtotal: round2(itemsSubtotal),
+      subtotal: round2(order.subtotal),
+      shipping: round2(order.shipping_fee),
+      vat: round2(order.vat_amount),
+      total: round2(total)
+    };
+  }
+  
+  // حساب تلقائي: نفترض أن الطلب يحتوي المجموع الفرعي + شحن + ضريبة
+  let subtotal = itemsSubtotal > 0 ? itemsSubtotal : total;
+  let vat = settings.vat_enabled ? round2(subtotal * settings.vat_rate) : 0;
+  let shipping = round2(total - subtotal - vat);
+  
+  // إذا الناتج غير منطقي، استخدم الشحن الافتراضي
+  if(shipping < 0 || shipping > total){
+    shipping = Number(settings.shipping_fee || 0);
+    subtotal = round2(total / (1 + (settings.vat_enabled ? settings.vat_rate : 0)));
+    if(shipping > 0 && subtotal + shipping > total){
+      subtotal = round2(total - shipping);
+      if(subtotal < 0){ subtotal = total; shipping = 0; }
+    }
+    vat = settings.vat_enabled ? round2(subtotal * settings.vat_rate) : 0;
+  }
+  
+  return {
+    itemsSubtotal: round2(itemsSubtotal),
+    subtotal: round2(subtotal),
+    shipping: round2(shipping),
+    vat: round2(vat),
+    total: round2(total)
+  };
+}
+
+function computeNewTotal(itemsSubtotal, shippingFee){
+  const vat = settings.vat_enabled ? round2(itemsSubtotal * settings.vat_rate) : 0;
+  const total = round2(itemsSubtotal + Number(shippingFee||0) + vat);
+  return { vat, total };
+}
+
+/* ═══════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════ */
 function init(){
   if(!window.supabase?.createClient){ alert('فشل تحميل Supabase — تحقق من الإنترنت'); return; }
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
@@ -528,6 +652,9 @@ async function loadSettings(){
     if(data) data.forEach(r => {
       if(r.key === 'cashback_rate') settings.cashback_rate = Number(r.value);
       if(r.key === 'store_name') settings.store_name = r.value;
+      if(r.key === 'vat_rate') settings.vat_rate = Number(r.value);
+      if(r.key === 'vat_enabled') settings.vat_enabled = (r.value === 'true' || r.value === '1');
+      if(r.key === 'shipping_fee') settings.shipping_fee = Number(r.value);
     });
   } catch(e){}
 }
@@ -631,7 +758,6 @@ async function loadAuditLog(force = false){
 }
 
 function switchView(viewId){
-  const sameView = currentView === viewId;
   currentView = viewId;
   document.querySelectorAll('.ma-view').forEach(v => v.classList.remove('active'));
   const view = $('view-' + viewId);
@@ -667,7 +793,9 @@ function renderView(viewId){
   }
 }
 
-/* Reports */
+/* ═══════════════════════════════════════════════
+   REPORTS
+═══════════════════════════════════════════════ */
 function renderReportsOverview(el){
   const total = allOrders.length;
   const delivered = allOrders.filter(o => o.status === 'delivered').length;
@@ -677,7 +805,10 @@ function renderReportsOverview(el){
   const avgOrder = delivered > 0 ? revenue / delivered : 0;
   const totalUsers = allUsers.length;
   const totalCb = allUsers.reduce((s,u) => s + Number(u.cashback||0), 0);
-  const potentialCb = allOrders.filter(o => !['delivered','cancelled'].includes(o.status)).reduce((s,o) => s + Number(o.total||0) * settings.cashback_rate, 0);
+  const potentialCb = allOrders.filter(o => !['delivered','cancelled'].includes(o.status)).reduce((s,o) => {
+    const bd = calcOrderBreakdown(o);
+    return s + bd.subtotal * settings.cashback_rate;
+  }, 0);
   const deliveryRate = total > 0 ? (delivered / total * 100) : 0;
 
   el.innerHTML = `
@@ -705,7 +836,7 @@ function renderReportsOverview(el){
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-gift"></i> كاش باك متوقع</div>
       <div style="text-align:center;padding:20px">
         <div style="font-size:2.4rem;font-weight:900;background:linear-gradient(135deg,#f5b342,#c98a1e);-webkit-background-clip:text;background-clip:text;color:transparent">${fmtNum(potentialCb)} ر.س</div>
-        <div style="color:#8a92b0;font-weight:700;margin-top:8px;font-size:.85rem">عند تسليم الطلبات بنسبة ${(settings.cashback_rate*100).toFixed(1)}%</div>
+        <div style="color:#8a92b0;font-weight:700;margin-top:8px;font-size:.85rem">عند تسليم الطلبات بنسبة ${(settings.cashback_rate*100).toFixed(1)}% (على المجموع الفرعي)</div>
       </div>
     </div>
   `;
@@ -825,7 +956,7 @@ function renderReportsCashback(el){
   const unpaidAmount = unpaidOrders.reduce((s,o) => s + Number(o.cashback||0), 0);
 
   el.innerHTML = `
-    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-gift"></i> تقارير الكاش باك</div><div class="ma-page-sub">النسبة: ${(settings.cashback_rate * 100).toFixed(2)}%</div></div></div>
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-gift"></i> تقارير الكاش باك</div><div class="ma-page-sub">النسبة: ${(settings.cashback_rate * 100).toFixed(2)}% • على المجموع الفرعي</div></div></div>
     <div class="ma-stats">
       <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-circle-plus"></i></div><div class="ma-stat-val">${fmtInt(totalGranted)}</div><div class="ma-stat-lbl">إجمالي ممنوح</div></div>
       <div class="ma-stat" style="--accent:#d90429;--icon-bg:rgba(217,4,41,.15)"><div class="ma-stat-icon"><i class="fas fa-circle-minus"></i></div><div class="ma-stat-val">${fmtInt(totalDeducted)}</div><div class="ma-stat-lbl">إجمالي مخصوم</div></div>
@@ -846,7 +977,9 @@ function renderReportsCashback(el){
   `;
 }
 
-/* Orders */
+/* ═══════════════════════════════════════════════
+   ORDERS
+═══════════════════════════════════════════════ */
 function renderOrdersView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-box"></i> سجل الطلبات</div><div class="ma-page-sub">${allOrders.length} طلب</div></div></div>
@@ -861,11 +994,12 @@ function renderOrdersView(el){
   if(!container.dataset.bound){
     container.dataset.bound = '1';
     container.addEventListener('click', e => {
-      const btn = e.target.closest('[data-detail-order], [data-add-cashback], [data-delete-order]');
+      const btn = e.target.closest('[data-detail-order], [data-add-cashback], [data-delete-order], [data-edit-shipping]');
       if(!btn) return;
       if(btn.dataset.detailOrder) openDetailModal(btn.dataset.detailOrder);
       else if(btn.dataset.addCashback) openCbModal(btn.dataset.addCashback, 'add');
       else if(btn.dataset.deleteOrder) openDelModal(btn.dataset.deleteOrder);
+      else if(btn.dataset.editShipping) openShippingModal(btn.dataset.editShipping);
     });
     container.addEventListener('change', async e => {
       const sel = e.target.closest('[data-status-order]');
@@ -906,14 +1040,15 @@ function renderOrdersTable(){
     return;
   }
   c.innerHTML = `<div class="ma-table-wrap"><table class="ma-table">
-    <thead><tr><th>رقم</th><th>العميل</th><th>الجوال</th><th>المبلغ</th><th>الكاش باك</th><th>الحالة</th><th>تغيير الحالة</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+    <thead><tr><th>رقم</th><th>العميل</th><th>الجوال</th><th>المبلغ</th><th>الشحن</th><th>الكاش باك</th><th>الحالة</th><th>تغيير الحالة</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
     <tbody>${filtered.map(o => {
       const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
+      const bd = calcOrderBreakdown(o);
       let cb = '';
       if(o.status === 'delivered' && o.cashback_applied){
         cb = `<span style="color:${o.cashback_paid?'#4caf50':'#f5b342'};font-weight:900">${fmtNum(o.cashback)} ${o.cashback_paid?'✓':'⏳'}</span>`;
       } else if(['delivered','cancelled'].includes(o.status)) cb = `<span style="color:#8a92b0">—</span>`;
-      else cb = `<span style="color:#4a7aff">${fmtNum(Number(o.total||0)*settings.cashback_rate)} متوقع</span>`;
+      else cb = `<span style="color:#4a7aff">${fmtNum(bd.subtotal*settings.cashback_rate)} متوقع</span>`;
 
       const statusOptions = Object.entries(ORDER_STATUS).map(([k,v]) =>
         `<option value="${k}" ${o.status===k?'disabled selected':''}>${o.status===k?'✓ ':''}${v.label}</option>`
@@ -924,6 +1059,7 @@ function renderOrdersTable(){
         <td style="font-weight:800">${esc(o.user_name||'—')}</td>
         <td style="font-size:.8rem;color:#8a92b0" dir="ltr">${esc(o.user_phone||'—')}</td>
         <td class="price">${fmtNum(o.total)} ر.س</td>
+        <td style="font-size:.8rem;color:#6a9aff;font-weight:800">${fmtNum(bd.shipping)}</td>
         <td style="font-size:.82rem">${cb}</td>
         <td><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></td>
         <td>
@@ -935,7 +1071,8 @@ function renderOrdersTable(){
         <td style="font-size:.76rem;color:#8a92b0">${fmtDate(o.created_at)}</td>
         <td><div class="actions-cell">
           <button class="ma-mini-btn ma-mini-detail" data-detail-order="${o.id}"><i class="fas fa-receipt"></i> تفاصيل</button>
-          <button class="ma-mini-btn ma-mini-cb" data-add-cashback="${o.id}"><i class="fas fa-gift"></i></button>
+          <button class="ma-mini-btn ma-mini-cb" data-add-cashback="${o.id}" title="كاش باك"><i class="fas fa-gift"></i></button>
+          <button class="ma-mini-btn ma-mini-detail" data-edit-shipping="${o.id}" title="تعديل الشحن" style="background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.35);color:#6a9aff"><i class="fas fa-truck"></i></button>
           <button class="ma-mini-btn ma-mini-delete" data-delete-order="${o.id}"><i class="fas fa-trash"></i></button>
         </div></td>
       </tr>`;
@@ -953,9 +1090,11 @@ async function applyStatus(orderId, newStatus){
   const newLabel = ORDER_STATUS[newStatus].label;
   let confirmMsg = `تغيير الحالة من "${oldLabel}" إلى "${newLabel}"؟`;
 
+  const bd = calcOrderBreakdown(order);
+
   if(newStatus === 'delivered' && !order.cashback_applied){
-    const earned = Math.round(Number(order.total||0) * settings.cashback_rate * 100) / 100;
-    confirmMsg += `\n\nسيتم إضافة ${earned.toFixed(2)} ر.س كاش باك لرصيد العميل.`;
+    const earned = round2(bd.subtotal * settings.cashback_rate);
+    confirmMsg += `\n\nسيتم إضافة ${earned.toFixed(2)} ر.س كاش باك (على المجموع الفرعي ${bd.subtotal.toFixed(2)} ر.س).`;
   } else if((oldStatus === 'delivered' && newStatus !== 'delivered') && order.cashback_applied && order.cashback > 0){
     const refund = Number(order.cashback||0);
     confirmMsg += `\n\nسيتم خصم ${refund.toFixed(2)} ر.س كاش باك من رصيد العميل.`;
@@ -972,7 +1111,7 @@ async function applyStatus(orderId, newStatus){
   let cbMsg = '';
 
   if(newStatus === 'delivered' && !order.cashback_applied){
-    const earned = Math.round(Number(order.total||0) * settings.cashback_rate * 100) / 100;
+    const earned = round2(bd.subtotal * settings.cashback_rate);
     updates.cashback = earned;
     updates.cashback_applied = true;
     updates.cashback_applied_at = new Date().toISOString();
@@ -985,7 +1124,7 @@ async function applyStatus(orderId, newStatus){
         type: 'order', created_by: currentUser.email
       });
       const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
-      const newCb = Math.round((Number(u?.cashback||0) + earned) * 100) / 100;
+      const newCb = round2(Number(u?.cashback||0) + earned);
       await sb.from('men_users').update({cashback: newCb, updated_at: new Date().toISOString()}).eq('id', order.user_id);
       const lu = allUsers.find(x => String(x.id) === String(order.user_id));
       if(lu) lu.cashback = newCb;
@@ -1006,7 +1145,7 @@ async function applyStatus(orderId, newStatus){
           type: 'refund', created_by: currentUser.email
         });
         const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
-        const newCb = Math.max(0, Math.round((Number(u?.cashback||0) - refund) * 100) / 100);
+        const newCb = Math.max(0, round2(Number(u?.cashback||0) - refund));
         await sb.from('men_users').update({cashback: newCb, updated_at: new Date().toISOString()}).eq('id', order.user_id);
         const lu = allUsers.find(x => String(x.id) === String(order.user_id));
         if(lu) lu.cashback = newCb;
@@ -1032,7 +1171,9 @@ async function applyStatus(orderId, newStatus){
   }
 }
 
-/* Customers */
+/* ═══════════════════════════════════════════════
+   CUSTOMERS
+═══════════════════════════════════════════════ */
 function renderCustomersView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-users"></i> سجل العملاء</div><div class="ma-page-sub">${allUsers.length} عميل</div></div></div>
@@ -1074,7 +1215,6 @@ function renderCustomersTable(){
     c.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-users"></i><h3>لا يوجد عملاء</h3></div></div>`;
     return;
   }
-  // ordersByUser Map once
   const ordersByUser = new Map();
   for(const o of allOrders){
     const k = String(o.user_id);
@@ -1103,25 +1243,42 @@ function renderCustomersTable(){
     }).join('')}</tbody></table></div>`;
 }
 
+/* ═══════════════════════════════════════════════
+   FINANCE
+═══════════════════════════════════════════════ */
 function renderFinanceView(el){
   const delivered = allOrders.filter(o => o.status === 'delivered');
   const revenue = delivered.reduce((s,o) => s + Number(o.total||0), 0);
   const cashbackPaid = allOrders.filter(o => o.cashback_paid).reduce((s,o) => s + Number(o.cashback||0), 0);
   const cashbackUnpaid = allOrders.filter(o => o.cashback_applied && !o.cashback_paid).reduce((s,o) => s + Number(o.cashback||0), 0);
   const netRevenue = revenue - cashbackPaid;
-  const potentialCb = allOrders.filter(o => !['delivered','cancelled'].includes(o.status)).reduce((s,o) => s + Number(o.total||0) * settings.cashback_rate, 0);
+  const potentialCb = allOrders.filter(o => !['delivered','cancelled'].includes(o.status)).reduce((s,o) => {
+    const bd = calcOrderBreakdown(o);
+    return s + bd.subtotal * settings.cashback_rate;
+  }, 0);
   const pendingList = allOrders.filter(o => o.cashback_applied && !o.cashback_paid);
+
+  // إجمالي الضرائب المحصلة
+  const totalVAT = allOrders.filter(o => o.status === 'delivered').reduce((s,o) => {
+    const bd = calcOrderBreakdown(o);
+    return s + bd.vat;
+  }, 0);
+  const totalShipping = allOrders.filter(o => o.status === 'delivered').reduce((s,o) => {
+    const bd = calcOrderBreakdown(o);
+    return s + bd.shipping;
+  }, 0);
 
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-coins"></i> المالية</div></div></div>
     <div class="ma-stats">
       <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-sack-dollar"></i></div><div class="ma-stat-val">${fmtInt(revenue)}</div><div class="ma-stat-lbl">إجمالي الإيرادات</div></div>
+      <div class="ma-stat" style="--accent:#00c9a7;--icon-bg:rgba(0,201,167,.15)"><div class="ma-stat-icon"><i class="fas fa-file-invoice"></i></div><div class="ma-stat-val">${fmtInt(totalVAT)}</div><div class="ma-stat-lbl">ضرائب محصلة (${(settings.vat_rate*100).toFixed(0)}%)</div></div>
+      <div class="ma-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.15)"><div class="ma-stat-icon"><i class="fas fa-truck"></i></div><div class="ma-stat-val">${fmtInt(totalShipping)}</div><div class="ma-stat-lbl">إيرادات الشحن</div></div>
       <div class="ma-stat" style="--accent:#d90429;--icon-bg:rgba(217,4,41,.15)"><div class="ma-stat-icon"><i class="fas fa-gift"></i></div><div class="ma-stat-val">${fmtInt(cashbackPaid)}</div><div class="ma-stat-lbl">كاش باك مدفوع</div></div>
-      <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-hourglass"></i></div><div class="ma-stat-val">${fmtInt(cashbackUnpaid)}</div><div class="ma-stat-lbl">التزام غير مدفوع</div></div>
-      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-wallet"></i></div><div class="ma-stat-val">${fmtInt(netRevenue)}</div><div class="ma-stat-lbl">صافي الإيراد</div></div>
     </div>
     <div class="ma-stats">
-      <div class="ma-stat" style="--accent:#00c9a7;--icon-bg:rgba(0,201,167,.15)"><div class="ma-stat-icon"><i class="fas fa-percent"></i></div><div class="ma-stat-val">${(settings.cashback_rate*100).toFixed(1)}%</div><div class="ma-stat-lbl">النسبة الحالية</div></div>
+      <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-hourglass"></i></div><div class="ma-stat-val">${fmtInt(cashbackUnpaid)}</div><div class="ma-stat-lbl">التزام غير مدفوع</div></div>
+      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-wallet"></i></div><div class="ma-stat-val">${fmtInt(netRevenue)}</div><div class="ma-stat-lbl">صافي الإيراد</div></div>
       <div class="ma-stat" style="--accent:#9333ea;--icon-bg:rgba(147,51,234,.15)"><div class="ma-stat-icon"><i class="fas fa-chart-pie"></i></div><div class="ma-stat-val">${fmtInt(potentialCb)}</div><div class="ma-stat-lbl">كاش باك متوقع</div></div>
       <div class="ma-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.15)"><div class="ma-stat-icon"><i class="fas fa-users"></i></div><div class="ma-stat-val">${fmtInt(allUsers.reduce((s,u) => s + Number(u.cashback||0), 0))}</div><div class="ma-stat-lbl">أرصدة الكاش باك</div></div>
     </div>
@@ -1132,6 +1289,9 @@ function renderFinanceView(el){
   el.querySelectorAll('[data-mark-paid]').forEach(b => b.addEventListener('click', () => toggleCashbackPaid(b.dataset.markPaid, true)));
 }
 
+/* ═══════════════════════════════════════════════
+   REWARDS
+═══════════════════════════════════════════════ */
 function renderRewardsView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-gift"></i> إدارة الكاش باك</div><div class="ma-page-sub">أضف أو اخصم كاش باك</div></div></div>
@@ -1155,30 +1315,82 @@ function renderRewardsView(el){
 
 function renderRateView(el){
   el.innerHTML = `
-    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-percent"></i> نسبة الكاش باك</div><div class="ma-page-sub">تحكم بنسبة الكاش باك</div></div></div>
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-sliders"></i> النسب والضرائب</div><div class="ma-page-sub">تحكم بنسبة الكاش باك، ضريبة القيمة المضافة، والشحن الافتراضي</div></div></div>
+    
+    <!-- نسبة الكاش باك -->
     <div class="ma-rate-card">
-      <div class="ma-rate-title"><i class="fas fa-gift"></i><div><div class="t">النسبة الحالية</div><div class="s">تُطبَّق على الطلبات الجديدة</div></div></div>
+      <div class="ma-rate-title"><i class="fas fa-gift"></i><div><div class="t">نسبة الكاش باك</div><div class="s">تُطبَّق على المجموع الفرعي (بدون ضريبة/شحن)</div></div></div>
       <div class="ma-rate-display">${(settings.cashback_rate*100).toFixed(2)}%</div>
-      <div class="ma-rate-hint">مثال: 1000 ر.س → ${fmtNum(1000 * settings.cashback_rate)} ر.س كاش باك</div>
+      <div class="ma-rate-hint">مثال: طلب بمجموع فرعي 1000 ر.س → ${fmtNum(1000 * settings.cashback_rate)} ر.س كاش باك</div>
       <div class="ma-rate-form">
         <input type="number" id="rateInput" value="${(settings.cashback_rate*100).toFixed(2)}" step="0.1" min="0" max="100">
         <span style="font-size:1.4rem;font-weight:900;color:#f5b342">%</span>
         <button class="ma-btn ma-btn-gold" id="rateSave"><i class="fas fa-save"></i> حفظ النسبة</button>
       </div>
-    </div>
-    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-bolt"></i> نِسب سريعة</div>
-      <div class="ma-quick" style="gap:10px;margin-top:8px">
+      <div class="ma-quick" style="gap:10px;margin-top:14px">
         <button data-rate="1">1%</button><button data-rate="2">2%</button><button data-rate="3">3%</button><button data-rate="5">5%</button><button data-rate="10">10%</button>
       </div>
     </div>
-    <div class="ma-card"><div class="ma-card-title"><i class="fas fa-exclamation-triangle" style="color:#f5b342"></i> تنبيه</div>
-      <div style="color:#a8b0cc;font-size:.88rem;line-height:1.9;padding:4px 0">
-        • تغيير النسبة <strong style="color:#fff">لا يؤثر</strong> على الطلبات المسلّمة سابقاً<br>
-        • النسبة الجديدة تُستخدم في حساب الكاش باك المتوقع للطلبات الجارية<br>
-        • لتغيير كاش باك طلب محدد، استخدم زر الكاش باك في سجل الطلبات
+
+    <!-- الضريبة -->
+    <div class="ma-setting-card tax">
+      <div class="ma-setting-title">
+        <i class="fas fa-file-invoice"></i>
+        <div>
+          <div class="t">ضريبة القيمة المضافة</div>
+          <div class="s">السعودية — 15% افتراضياً (يمكن تغييرها)</div>
+        </div>
+      </div>
+      <div class="ma-setting-display">${(settings.vat_rate*100).toFixed(2)}%</div>
+      <div class="ma-setting-hint">
+        الضريبة تُحسب على <strong style="color:#fff">المجموع الفرعي للطلب</strong> (بدون شحن).
+        ${settings.vat_enabled ? '✅ الضريبة <strong style="color:#00c9a7">مُفعّلة</strong>' : '⚠️ الضريبة <strong style="color:#d90429">معطّلة</strong>'}
+      </div>
+      <div class="ma-setting-form">
+        <input type="number" id="vatRateInput" value="${(settings.vat_rate*100).toFixed(2)}" step="0.1" min="0" max="100">
+        <span style="font-size:1.4rem;font-weight:900;color:#00c9a7">%</span>
+        <button class="ma-btn" id="vatSave" style="background:linear-gradient(135deg,#00c9a7,#008f77);color:#fff"><i class="fas fa-save"></i> حفظ الضريبة</button>
+        <button class="ma-btn ma-btn-soft" id="vatToggle" style="height:52px;padding:0 20px">
+          <i class="fas fa-${settings.vat_enabled ? 'toggle-on' : 'toggle-off'}"></i>
+          ${settings.vat_enabled ? 'تعطيل' : 'تفعيل'}
+        </button>
+      </div>
+      <div class="ma-quick" style="gap:10px;margin-top:14px">
+        <button data-vat="0">0%</button>
+        <button data-vat="5">5%</button>
+        <button data-vat="15">15% (السعودية)</button>
+      </div>
+    </div>
+
+    <!-- الشحن الافتراضي -->
+    <div class="ma-setting-card shipping">
+      <div class="ma-setting-title">
+        <i class="fas fa-truck"></i>
+        <div>
+          <div class="t">سعر الشحن الافتراضي</div>
+          <div class="s">يُستخدم في حساب التفاصيل عند عدم وجود شحن محفوظ</div>
+        </div>
+      </div>
+      <div class="ma-setting-display">${fmtNum(settings.shipping_fee)} ر.س</div>
+      <div class="ma-setting-hint">
+        💡 يمكنك تعديل شحن كل طلب على حدة من صفحة <strong style="color:#fff">سجل الطلبات</strong> أو من <strong style="color:#fff">تفاصيل الطلب</strong>.
+      </div>
+      <div class="ma-setting-form">
+        <input type="number" id="shipFeeInput" value="${Number(settings.shipping_fee).toFixed(2)}" step="0.01" min="0">
+        <span style="font-size:1.4rem;font-weight:900;color:#6a9aff">ر.س</span>
+        <button class="ma-btn" id="shipFeeSave" style="background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff"><i class="fas fa-save"></i> حفظ الشحن</button>
+      </div>
+      <div class="ma-quick" style="gap:10px;margin-top:14px">
+        <button data-shipfee="0">مجاني</button>
+        <button data-shipfee="10">10</button>
+        <button data-shipfee="15">15</button>
+        <button data-shipfee="20">20</button>
+        <button data-shipfee="25">25</button>
       </div>
     </div>
   `;
+  
+  // ربط الأحداث
   $('rateSave').addEventListener('click', async () => {
     const v = Number($('rateInput').value);
     if(isNaN(v) || v < 0 || v > 100){ toast('نسبة غير صحيحة','error'); return; }
@@ -1192,6 +1404,41 @@ function renderRateView(el){
     renderRateView(el);
   });
   el.querySelectorAll('[data-rate]').forEach(b => b.addEventListener('click', () => { $('rateInput').value = b.dataset.rate; }));
+  
+  $('vatSave').addEventListener('click', async () => {
+    const v = Number($('vatRateInput').value);
+    if(isNaN(v) || v < 0 || v > 100){ toast('نسبة ضريبة غير صحيحة','error'); return; }
+    const rate = v / 100;
+    const oldRate = settings.vat_rate;
+    showLoading(true);
+    await saveSetting('vat_rate', rate);
+    showLoading(false);
+    logAudit('vat_rate_changed', {old: oldRate, new: rate});
+    toast(`✅ الضريبة: ${v.toFixed(2)}%`, 'success');
+    renderRateView(el);
+  });
+  el.querySelectorAll('[data-vat]').forEach(b => b.addEventListener('click', () => { $('vatRateInput').value = b.dataset.vat; }));
+  
+  $('vatToggle').addEventListener('click', async () => {
+    showLoading(true);
+    await saveSetting('vat_enabled', !settings.vat_enabled);
+    showLoading(false);
+    logAudit('vat_toggled', {enabled: settings.vat_enabled});
+    toast(settings.vat_enabled ? '✅ تم تفعيل الضريبة' : '⚠️ تم تعطيل الضريبة', settings.vat_enabled ? 'success' : 'info');
+    renderRateView(el);
+  });
+  
+  $('shipFeeSave').addEventListener('click', async () => {
+    const v = Number($('shipFeeInput').value);
+    if(isNaN(v) || v < 0){ toast('سعر غير صحيح','error'); return; }
+    showLoading(true);
+    await saveSetting('shipping_fee', v);
+    showLoading(false);
+    logAudit('shipping_fee_changed', {new: v});
+    toast(`✅ الشحن الافتراضي: ${v.toFixed(2)} ر.س`, 'success');
+    renderRateView(el);
+  });
+  el.querySelectorAll('[data-shipfee]').forEach(b => b.addEventListener('click', () => { $('shipFeeInput').value = b.dataset.shipfee; }));
 }
 
 function renderRewardsLogView(el){
@@ -1210,6 +1457,9 @@ function renderRewardsLogView(el){
   `;
 }
 
+/* ═══════════════════════════════════════════════
+   AUDIT
+═══════════════════════════════════════════════ */
 function renderAuditView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-history"></i> سجل التدقيق</div><div class="ma-page-sub">${allAuditLog.length} عملية</div></div></div>
@@ -1223,7 +1473,10 @@ function renderAuditView(el){
     const c = $('auditTableContainer');
     if(!filtered.length){ c.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-search"></i><h3>لا نتائج</h3></div></div>`; return; }
     const labels = {
-      rate_changed:{l:'تغيير نسبة',i:'fa-percent',c:'#f5b342'},
+      rate_changed:{l:'تغيير نسبة كاش باك',i:'fa-percent',c:'#f5b342'},
+      vat_rate_changed:{l:'تغيير نسبة الضريبة',i:'fa-file-invoice',c:'#00c9a7'},
+      vat_toggled:{l:'تفعيل/تعطيل الضريبة',i:'fa-toggle-on',c:'#00c9a7'},
+      shipping_fee_changed:{l:'تغيير الشحن الافتراضي',i:'fa-truck',c:'#4a7aff'},
       status_change:{l:'تغيير حالة',i:'fa-arrows-rotate',c:'#4a7aff'},
       cashback_add:{l:'إضافة كاش باك',i:'fa-gift',c:'#4caf50'},
       cashback_deduct:{l:'خصم كاش باك',i:'fa-minus',c:'#d90429'},
@@ -1233,7 +1486,8 @@ function renderAuditView(el){
       export_orders:{l:'تصدير طلبات',i:'fa-download',c:'#4a7aff'},
       export_customers:{l:'تصدير عملاء',i:'fa-download',c:'#4a7aff'},
       export_cashback:{l:'تصدير كاش باك',i:'fa-download',c:'#4a7aff'},
-      export_backup:{l:'نسخة احتياطية',i:'fa-download',c:'#4a7aff'}
+      export_backup:{l:'نسخة احتياطية',i:'fa-download',c:'#4a7aff'},
+      shipping_changed:{l:'تعديل شحن طلب',i:'fa-truck',c:'#4a7aff'}
     };
     c.innerHTML = `<div class="ma-table-wrap"><table class="ma-table"><thead><tr><th>الإجراء</th><th>المشرف</th><th>التفاصيل</th><th>التاريخ</th></tr></thead><tbody>${filtered.map(l => {
       const m = labels[l.action] || {l:l.action,i:'fa-circle-info',c:'#6a9aff'};
@@ -1251,6 +1505,9 @@ function renderAuditView(el){
   render();
 }
 
+/* ═══════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════ */
 function renderDataView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-database"></i> البيانات</div><div class="ma-page-sub">تصدير ونسخ احتياطي</div></div></div>
@@ -1271,6 +1528,8 @@ function renderDataView(el){
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-info-circle"></i> معلومات النظام</div>
       <div class="ma-detail-row"><span class="lbl">اسم المتجر</span><span class="val">${esc(settings.store_name)}</span></div>
       <div class="ma-detail-row"><span class="lbl">نسبة الكاش باك</span><span class="val">${(settings.cashback_rate*100).toFixed(2)}%</span></div>
+      <div class="ma-detail-row"><span class="lbl">ضريبة القيمة المضافة</span><span class="val" style="color:#00c9a7">${settings.vat_enabled ? (settings.vat_rate*100).toFixed(2)+'%' : 'معطّلة'}</span></div>
+      <div class="ma-detail-row"><span class="lbl">الشحن الافتراضي</span><span class="val" style="color:#6a9aff">${fmtNum(settings.shipping_fee)} ر.س</span></div>
       <div class="ma-detail-row"><span class="lbl">العملة</span><span class="val">${esc(settings.currency)}</span></div>
       <div class="ma-detail-row"><span class="lbl">البريد</span><span class="val" dir="ltr">${esc(currentUser?.email||'—')}</span></div>
       <div class="ma-detail-row"><span class="lbl">آخر تحديث</span><span class="val">${lastRefresh ? fmtDate(lastRefresh) : '—'}</span></div>
@@ -1303,7 +1562,11 @@ function toCSV(rows, headers){
 function exportOrders(){
   downloadFile(toCSV(allOrders, [
     {label:'رقم', get:o => o.id},{label:'العميل',key:'user_name'},{label:'البريد',key:'user_email'},
-    {label:'الجوال',key:'user_phone'},{label:'المبلغ', get:o => Number(o.total||0).toFixed(2)},
+    {label:'الجوال',key:'user_phone'},
+    {label:'المجموع الفرعي', get:o => calcOrderBreakdown(o).subtotal.toFixed(2)},
+    {label:'الشحن', get:o => calcOrderBreakdown(o).shipping.toFixed(2)},
+    {label:'الضريبة', get:o => calcOrderBreakdown(o).vat.toFixed(2)},
+    {label:'الإجمالي', get:o => Number(o.total||0).toFixed(2)},
     {label:'الحالة', get:o => ORDER_STATUS[o.status]?.label || o.status},
     {label:'كاش باك', get:o => Number(o.cashback||0).toFixed(2)},
     {label:'حالة الكاش باك', get:o => o.cashback_paid ? 'مدفوع' : (o.cashback_applied ? 'غير مدفوع' : '—')},
@@ -1337,7 +1600,9 @@ function exportBackup(){
   logAudit('export_backup');
 }
 
-/* Detail modal */
+/* ═══════════════════════════════════════════════
+   DETAIL MODAL
+═══════════════════════════════════════════════ */
 function openDetailModal(orderId){
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
@@ -1346,16 +1611,20 @@ function openDetailModal(orderId){
   const items = Array.isArray(order.items) ? order.items : [];
   $('maDetailOrderId').textContent = '#' + String(order.id).slice(-8).toUpperCase();
   $('maDetailDate').innerHTML = `<i class="fas fa-clock"></i> ${fmtDate(order.created_at)}`;
-  let subtotal = 0;
+  
+  const bd = calcOrderBreakdown(order);
+  const total = bd.total;
+  const subtotal = bd.subtotal;
+  const shipping = bd.shipping;
+  const vatAmount = bd.vat;
+  
   const itemsRows = items.map((it,i) => {
     const p = Number(it.price||0), q = Number(it.qty||1), t = p*q;
-    subtotal += t;
     return `<tr><td>${i+1}</td><td>${esc(it.name||'منتج')}</td><td>${q}</td><td class="mono">${p.toFixed(2)} ر.س</td><td class="mono">${t.toFixed(2)} ر.س</td></tr>`;
   }).join('') || `<tr><td colspan="5" style="text-align:center;color:#8a92b0;padding:20px">لا منتجات</td></tr>`;
-  const total = Number(order.total||0);
-  const shipping = Math.max(0, total - subtotal);
+  
   const cbEarned = Number(order.cashback||0);
-  const potentialCb = total * settings.cashback_rate;
+  const potentialCb = round2(subtotal * settings.cashback_rate);
   let cbPill = '', cbAmount = '', cbPaidRow = '';
   if(order.status === 'cancelled'){
     cbPill = `<span class="ma-badge" style="background:rgba(217,4,41,.15);color:#ff6b6b"><i class="fas fa-ban"></i> ملغي</span>`;
@@ -1396,8 +1665,15 @@ function openDetailModal(orderId){
     <div class="ma-detail-section" style="background:linear-gradient(145deg,rgba(74,122,255,.1),rgba(2,28,164,.06));border-color:rgba(74,122,255,.35)">
       <div class="ma-detail-h3"><i class="fas fa-arrows-rotate"></i> تغيير حالة الطلب</div>
       <div class="ma-status-btns">${statusButtons}</div>
+      <div class="ma-shipping-edit">
+        <div class="ma-shipping-edit-info">
+          <i class="fas fa-truck" style="color:#6a9aff"></i> 
+          الشحن الحالي: <strong>${shipping.toFixed(2)} ر.س</strong>
+        </div>
+        <button class="ma-btn ma-btn-soft" id="maEditShippingBtn"><i class="fas fa-pen"></i> تعديل الشحن</button>
+      </div>
       <div style="margin-top:12px;font-size:.76rem;color:#8a92b0;line-height:1.7">
-        ⓘ تغيير الحالة إلى "تم الاستلام" يضيف الكاش باك تلقائياً للعميل — والخروج منها يخصمه.
+        ⓘ تغيير الحالة إلى "تم الاستلام" يضيف الكاش باك تلقائياً (على المجموع الفرعي) — والخروج منها يخصمه.
       </div>
     </div>
 
@@ -1407,8 +1683,9 @@ function openDetailModal(orderId){
     <div class="ma-summary-grid">
       <div class="ma-summary-box"><div class="ma-detail-h3"><i class="fas fa-credit-card"></i> الدفع</div>
         <div class="ma-summary-row"><span class="lbl">المجموع الفرعي</span><span class="val">${subtotal.toFixed(2)} ر.س</span></div>
-        <div class="ma-summary-row"><span class="lbl">الشحن</span><span class="val">${shipping.toFixed(2)} ر.س</span></div>
-        <div class="ma-summary-row total"><span class="lbl">المبلغ المدفوع</span><span class="val">${total.toFixed(2)} ر.س</span></div>
+        <div class="ma-summary-row shipping"><span class="lbl">الشحن</span><span class="val">${shipping.toFixed(2)} ر.س</span></div>
+        ${settings.vat_enabled ? `<div class="ma-summary-row vat"><span class="lbl">ضريبة القيمة المضافة (${(settings.vat_rate*100).toFixed(0)}%)</span><span class="val">${vatAmount.toFixed(2)} ر.س</span></div>` : ''}
+        <div class="ma-summary-row total"><span class="lbl">الإجمالي</span><span class="val">${total.toFixed(2)} ر.س</span></div>
       </div>
       <div class="ma-summary-box cashback"><div class="ma-detail-h3"><i class="fas fa-gift"></i> الكاش باك</div>
         <div class="ma-summary-row"><span class="lbl">المكتسب</span><span class="val">${cbAmount}</span></div>
@@ -1424,23 +1701,25 @@ function openDetailModal(orderId){
       await applyStatus(order.id, btn.dataset.statusBtn);
     });
   });
+  $('maEditShippingBtn')?.addEventListener('click', () => openShippingModal(order.id));
 }
 function closeDetailModal(){ $('maDetailModal').classList.remove('show'); currentDetailOrder = null; }
 
+/* ═══════════════════════════════════════════════
+   PRINT
+═══════════════════════════════════════════════ */
 function printCurrentOrder(){
   if(!currentDetailOrder) return;
   const o = currentDetailOrder;
   const items = Array.isArray(o.items) ? o.items : [];
-  let subtotal = 0;
+  const bd = calcOrderBreakdown(o);
   const itemsRows = items.map((it,i) => {
     const p = Number(it.price||0), q = Number(it.qty||1), t = p*q;
-    subtotal += t;
     return `<tr><td style="text-align:center">${i+1}</td><td>${esc(it.name||'منتج')}</td><td style="text-align:center">${q}</td><td class="num">${p.toFixed(2)}</td><td class="num">${t.toFixed(2)}</td></tr>`;
   }).join('') || '<tr><td colspan="5" style="text-align:center">لا منتجات</td></tr>';
-  const total = Number(o.total||0);
-  const ship = Math.max(0, total - subtotal);
+  const total = bd.total;
   const cbE = Number(o.cashback||0);
-  const cbP = total * settings.cashback_rate;
+  const cbP = round2(bd.subtotal * settings.cashback_rate);
   const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
   let cbAmt = '0.00', cbSt = '—', cbD = '—';
   if(o.status === 'cancelled') cbSt = 'ملغي';
@@ -1450,7 +1729,7 @@ function printCurrentOrder(){
     cbD = o.cashback_paid && o.cashback_paid_at ? fmtDate(o.cashback_paid_at) : '—';
   } else { cbAmt = cbP.toFixed(2) + ' (متوقع)'; cbSt = 'قيد الانتظار'; }
 
-  const html = `<div class="head"><div class="brand"><img src="${LOGO_URL}"><div><div class="brand-name">MEN Store</div><div class="brand-tag">فاتورة رسمية</div></div></div>
+  const html = `<div class="head"><div class="brand"><img src="${LOGO_URL}"><div><div class="brand-name">MEN Store</div><div class="brand-tag">فاتورة ضريبية</div></div></div>
     <div class="order-box"><div class="num">#${String(o.id).slice(-8).toUpperCase()}</div><div>${fmtDate(o.created_at)}</div><div>${st.label}</div></div></div>
     <div class="section"><h2>العميل</h2><table class="info-table">
       <tr><td class="lbl">الاسم</td><td>${esc(o.user_name||'—')}</td><td class="lbl">البريد</td><td dir="ltr" style="text-align:right">${esc(o.user_email||'—')}</td></tr>
@@ -1459,9 +1738,10 @@ function printCurrentOrder(){
     <div class="section"><h2>المنتجات</h2><table class="items-table"><thead><tr><th style="width:40px;text-align:center">#</th><th>المنتج</th><th style="width:70px;text-align:center">الكمية</th><th style="width:100px">السعر</th><th style="width:110px">الإجمالي</th></tr></thead><tbody>${itemsRows}</tbody></table></div>
     <div class="bottom">
       <div class="section"><h2>الدفع</h2><table class="summary-table">
-        <tr><td class="lbl">المجموع الفرعي</td><td class="val">${subtotal.toFixed(2)} ر.س</td></tr>
-        <tr><td class="lbl">الشحن</td><td class="val">${ship.toFixed(2)} ر.س</td></tr>
-        <tr class="total"><td class="lbl">المدفوع</td><td class="val">${total.toFixed(2)} ر.س</td></tr>
+        <tr><td class="lbl">المجموع الفرعي</td><td class="val">${bd.subtotal.toFixed(2)} ر.س</td></tr>
+        <tr><td class="lbl">الشحن</td><td class="val">${bd.shipping.toFixed(2)} ر.س</td></tr>
+        ${settings.vat_enabled ? `<tr><td class="lbl">ضريبة القيمة المضافة (${(settings.vat_rate*100).toFixed(0)}%)</td><td class="val">${bd.vat.toFixed(2)} ر.س</td></tr>` : ''}
+        <tr class="total"><td class="lbl">الإجمالي</td><td class="val">${total.toFixed(2)} ر.س</td></tr>
       </table></div>
       <div class="section"><h2>الكاش باك</h2><table class="summary-table">
         <tr><td class="lbl">المكتسب</td><td class="val">${cbAmt} ر.س</td></tr>
@@ -1469,7 +1749,7 @@ function printCurrentOrder(){
         <tr><td class="lbl">تاريخ الصرف</td><td class="val">${cbD}</td></tr>
       </table></div>
     </div>
-    <div class="foot"><div class="thanks">رضاك غايتنا </div><div>MEN Store</div></div>`;
+    <div class="foot"><div class="thanks">شكراً 🌟</div><div>MEN Store — الرقم الضريبي: 300000000000003</div></div>`;
 
   const w = window.open('', '_blank', 'width=900,height=700');
   if(!w){ toast('الرجاء السماح بالنوافذ المنبثقة','error'); return; }
@@ -1488,6 +1768,63 @@ function printCurrentOrder(){
   w.onload = () => { w.focus(); w.print(); };
 }
 
+/* ═══════════════════════════════════════════════
+   SHIPPING MODAL
+═══════════════════════════════════════════════ */
+function openShippingModal(orderId){
+  const order = allOrders.find(o => String(o.id) === String(orderId));
+  if(!order) return;
+  selectedOrderForShipping = order;
+  const bd = calcOrderBreakdown(order);
+  $('maShipSub').innerHTML = `الطلب: <strong>#${String(order.id).slice(-8).toUpperCase()}</strong><br>العميل: <strong>${esc(order.user_name||'—')}</strong><br>الشحن الحالي: <strong style="color:#6a9aff">${bd.shipping.toFixed(2)} ر.س</strong><br>المجموع الفرعي: <strong style="color:#00c9a7">${bd.subtotal.toFixed(2)} ر.س</strong>`;
+  $('maShipAmount').value = bd.shipping.toFixed(2);
+  $('maShippingModal').classList.add('show');
+  setTimeout(() => $('maShipAmount').focus(), 200);
+}
+function closeShippingModal(){
+  $('maShippingModal').classList.remove('show');
+  selectedOrderForShipping = null;
+}
+async function confirmShipping(){
+  if(!selectedOrderForShipping) return;
+  const newShip = Number($('maShipAmount').value);
+  if(isNaN(newShip) || newShip < 0){ toast('سعر غير صحيح','error'); return; }
+  
+  const order = selectedOrderForShipping;
+  const bd = calcOrderBreakdown(order);
+  // المجموع الفرعي = bd.subtotal (المنتجات قبل الشحن والضريبة)
+  const itemsSubtotal = bd.subtotal;
+  const { vat, total } = computeNewTotal(itemsSubtotal, newShip);
+  
+  const btn = $('maShipConfirm');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>...';
+  showLoading(true);
+  try {
+    const updates = {
+      shipping_fee: newShip,
+      subtotal: itemsSubtotal,
+      vat_amount: vat,
+      total: total,
+      updated_at: new Date().toISOString()
+    };
+    const { error } = await sb.from('men_orders').update(updates).eq('id', order.id);
+    if(error) throw error;
+    Object.assign(order, updates);
+    dataVersion++;
+    logAudit('shipping_changed', {order_id: order.id, old: bd.shipping, new: newShip, total});
+    toast(`✅ الشحن: ${newShip.toFixed(2)} ر.س — الإجمالي: ${total.toFixed(2)} ر.س`, 'success');
+    closeShippingModal();
+    if(currentDetailOrder && String(currentDetailOrder.id) === String(order.id)){
+      openDetailModal(order.id);
+    }
+    renderView(currentView);
+  } catch(e){ toast('فشل: ' + e.message, 'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> حفظ'; }
+  finally { showLoading(false); }
+}
+
+/* ═══════════════════════════════════════════════
+   CASHBACK PAID TOGGLE
+═══════════════════════════════════════════════ */
 async function toggleCashbackPaid(orderId, paid){
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
@@ -1505,7 +1842,9 @@ async function toggleCashbackPaid(orderId, paid){
   finally { showLoading(false); }
 }
 
-/* Cashback modals */
+/* ═══════════════════════════════════════════════
+   CASHBACK MODALS
+═══════════════════════════════════════════════ */
 function openUserCbModal(userId, mode='add'){
   const user = allUsers.find(u => String(u.id) === String(userId));
   if(!user) return;
@@ -1561,7 +1900,7 @@ async function confirmCashback(){
     if(isD && amount > cur){ toast(`الرصيد ${fmtNum(cur)} فقط`, 'error'); btn.disabled = false; updateCbModalUI(); return; }
     const reason = reasonInput || (isD ? 'خصم' : 'إضافة');
     await sb.from('men_cashback_log').insert({user_id:order.user_id, user_email:order.user_email, amount:signed, reason, order_id: order.id !== '—' ? order.id : null, type: isD ? 'deduct' : 'manual', created_by: currentUser.email});
-    const newCb = Math.round((cur + signed) * 100) / 100;
+    const newCb = round2(cur + signed);
     await sb.from('men_users').update({cashback: newCb, updated_at: new Date().toISOString()}).eq('id', order.user_id);
     const lu = allUsers.find(x => String(x.id) === String(order.user_id));
     if(lu) lu.cashback = newCb;
@@ -1574,7 +1913,9 @@ async function confirmCashback(){
   finally { showLoading(false); }
 }
 
-/* Delete modal */
+/* ═══════════════════════════════════════════════
+   DELETE MODAL
+═══════════════════════════════════════════════ */
 function openDelModal(orderId){
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
@@ -1598,7 +1939,7 @@ async function confirmDelete(){
       try {
         await sb.from('men_cashback_log').insert({user_id:order.user_id, user_email:order.user_email, amount:-refund, reason:`حذف الطلب`, order_id:order.id, type:'refund', created_by:currentUser.email});
         const { data:u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
-        const newCb = Math.max(0, Math.round((Number(u?.cashback||0) - refund) * 100) / 100);
+        const newCb = Math.max(0, round2(Number(u?.cashback||0) - refund));
         await sb.from('men_users').update({cashback: newCb}).eq('id', order.user_id);
         const lu = allUsers.find(x => String(x.id) === String(order.user_id));
         if(lu) lu.cashback = newCb;
@@ -1615,7 +1956,9 @@ async function confirmDelete(){
   finally { showLoading(false); }
 }
 
-/* Note modal */
+/* ═══════════════════════════════════════════════
+   NOTE MODAL
+═══════════════════════════════════════════════ */
 function openNoteModal(userId){
   const user = allUsers.find(u => String(u.id) === String(userId));
   if(!user) return;
@@ -1642,7 +1985,9 @@ async function confirmNote(){
   finally { showLoading(false); }
 }
 
-/* Chat */
+/* ═══════════════════════════════════════════════
+   CHAT
+═══════════════════════════════════════════════ */
 async function openChatModal(userId){
   const user = allUsers.find(u => String(u.id) === String(userId));
   if(!user) return;
@@ -1692,7 +2037,9 @@ async function sendChatMessage(){
   finally { btn.disabled = false; inp.focus(); }
 }
 
-/* Confirm dialog promise-based */
+/* ═══════════════════════════════════════════════
+   CONFIRM DIALOG
+═══════════════════════════════════════════════ */
 function askConfirm(message, opts = {}){
   return new Promise(resolve => {
     const modal = $('maConfirmModal');
@@ -1724,6 +2071,9 @@ async function refreshAll(){
   toast('تم التحديث','info');
 }
 
+/* ═══════════════════════════════════════════════
+   EVENTS
+═══════════════════════════════════════════════ */
 function bindEvents(){
   $('maGateBtn').addEventListener('click', doLogin);
   $('maGatePass').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
@@ -1748,6 +2098,10 @@ function bindEvents(){
   $('maNoteCancel').addEventListener('click', closeNoteModal);
   $('maNoteModal').addEventListener('click', e => { if(e.target.id === 'maNoteModal') closeNoteModal(); });
   $('maNoteConfirm').addEventListener('click', confirmNote);
+  $('maShipCancel').addEventListener('click', closeShippingModal);
+  $('maShippingModal').addEventListener('click', e => { if(e.target.id === 'maShippingModal') closeShippingModal(); });
+  $('maShipConfirm').addEventListener('click', confirmShipping);
+  document.querySelectorAll('[data-ship]').forEach(b => b.addEventListener('click', () => { $('maShipAmount').value = b.dataset.ship; }));
   $('maChatClose').addEventListener('click', closeChatModal);
   $('maChatModal').addEventListener('click', e => { if(e.target.id === 'maChatModal') closeChatModal(); });
   $('maChatSend').addEventListener('click', sendChatMessage);
@@ -1764,7 +2118,7 @@ function toast(msg, type='info'){
   t.innerHTML = `<i class="fas ${icons[type] || 'fa-circle-info'}"></i><span>${esc(msg)}</span>`;
   document.body.appendChild(t);
   requestAnimationFrame(() => t.classList.add('show'));
-  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3000);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3200);
 }
 
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
