@@ -20,7 +20,7 @@ body.nav-open{overflow:hidden}
 .ma-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(74,122,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,122,255,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%)}
 
 /* LOGIN */
-.ma-gate{position:relative;z-index:10;display:flex;align-items:center;justify-content:center;min-height:100vh;min-height:100dvh;padding:20px}
+.ma-gate{position:relative;z-index:10;display:flex;align-items:center;justify-content:center;min-height:100vh;min-height:100dvh;padding:20px;padding-top:calc(20px + env(safe-area-inset-top));padding-bottom:calc(20px + env(safe-area-inset-bottom))}
 .ma-gate-card{background:linear-gradient(145deg,rgba(14,20,38,.85),rgba(8,12,24,.95));border:1px solid rgba(74,122,255,.14);border-radius:26px;padding:40px 32px;max-width:440px;width:100%;text-align:center;box-shadow:0 40px 100px -30px rgba(2,28,164,.8)}
 .ma-gate-icon{width:76px;height:76px;margin:0 auto 18px;border-radius:22px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-size:1.9rem;box-shadow:0 20px 50px -12px rgba(74,122,255,.8)}
 .ma-gate-card h1{font-size:1.6rem;font-weight:900;margin-bottom:8px;letter-spacing:-.5px}
@@ -32,8 +32,11 @@ body.nav-open{overflow:hidden}
 .ma-gate-btn{width:100%;height:54px;border:none;border-radius:14px;margin-top:8px;background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;transition:transform .25s,box-shadow .25s;box-shadow:0 14px 34px -12px rgba(74,122,255,.8);display:flex;align-items:center;justify-content:center;gap:10px}
 .ma-gate-btn:hover:not(:disabled){transform:translateY(-2px)}
 .ma-gate-btn:disabled{opacity:.7;cursor:not-allowed}
-.ma-gate-err{display:none;margin-top:14px;padding:12px;border-radius:12px;background:rgba(217,4,41,.1);border:1px solid rgba(217,4,41,.3);color:#ff8a8a;font-size:.85rem;font-weight:700}
+.ma-gate-switch{width:100%;height:46px;margin-top:10px;background:transparent;border:1.5px solid rgba(74,122,255,.25);border-radius:12px;color:#6a9aff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;transition:background .2s,border-color .2s}
+.ma-gate-switch:hover{background:rgba(74,122,255,.08);border-color:#4a7aff}
+.ma-gate-err{display:none;margin-top:14px;padding:12px;border-radius:12px;background:rgba(217,4,41,.1);border:1px solid rgba(217,4,41,.3);color:#ff8a8a;font-size:.85rem;font-weight:700;line-height:1.6}
 .ma-gate-err.show{display:block}
+.ma-gate-err.success{background:rgba(76,175,80,.1);border-color:rgba(76,175,80,.35);color:#7ce084}
 
 /* APP */
 .ma-app{position:relative;z-index:10;display:none;min-height:100vh}
@@ -58,20 +61,20 @@ body.nav-open{overflow:hidden}
 .ma-nav-dropdown a.active{background:linear-gradient(135deg,#021ca4,#4a7aff);color:#fff}
 .ma-nav-dropdown a i{width:18px;font-size:.8rem;opacity:.85;text-align:center}
 .ma-nav-user{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.ma-nav-user-info{text-align:left}
-.ma-nav-user-info .n{font-size:.82rem;font-weight:900}
+.ma-nav-user-info{text-align:left;display:flex;flex-direction:column;gap:3px}
+.ma-nav-user-info .n{font-size:.82rem;font-weight:900;display:flex;align-items:center;gap:6px}
 .ma-nav-user-info .e{font-size:.68rem;color:#8a92b0;font-weight:600}
+.ma-nav-user-info .role-badge{display:inline-flex;align-items:center;gap:4px;font-size:.6rem;font-weight:900;padding:2px 8px;border-radius:20px;margin-top:2px;width:fit-content}
 .ma-btn-ghost{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;background:rgba(217,4,41,.12);border:1px solid rgba(217,4,41,.3);color:#ff6b6b;font-family:'Cairo',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;transition:background .2s,transform .2s}
 .ma-btn-ghost:hover{background:rgba(217,4,41,.22);transform:translateY(-1px)}
 
-/* Mobile nav toggle */
 .ma-nav-toggle{display:none;width:42px;height:42px;border-radius:11px;background:rgba(74,122,255,.12);border:1px solid rgba(74,122,255,.25);color:#fff;cursor:pointer;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;transition:background .2s}
 .ma-nav-toggle:hover{background:rgba(74,122,255,.22)}
 .ma-nav-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:98}
 .ma-nav-backdrop.show{display:block;animation:maFade .2s}
 
 /* CONTENT */
-.ma-content{max-width:1600px;margin:0 auto;padding:32px 28px 80px;position:relative;z-index:5}
+.ma-content{max-width:1600px;margin:0 auto;padding:32px 28px 80px;padding-bottom:calc(80px + env(safe-area-inset-bottom));position:relative;z-index:5}
 .ma-view{display:none;contain:layout style paint}
 .ma-view.active{display:block;animation:maFade .25s}
 @keyframes maFade{from{opacity:0}to{opacity:1}}
@@ -109,6 +112,8 @@ body.nav-open{overflow:hidden}
 .ma-btn-success:hover{transform:translateY(-2px)}
 .ma-btn-gold{background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;box-shadow:0 8px 22px -8px rgba(245,179,66,.8)}
 .ma-btn-gold:hover{transform:translateY(-2px)}
+.ma-btn-danger{background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff;box-shadow:0 8px 22px -8px rgba(139,0,24,.9)}
+.ma-btn-danger:hover{transform:translateY(-2px)}
 .ma-btn-soft{background:rgba(74,122,255,.1);border:1px solid rgba(74,122,255,.25);color:#6a9aff}
 .ma-btn-soft:hover{background:rgba(74,122,255,.2)}
 
@@ -132,6 +137,8 @@ body.nav-open{overflow:hidden}
 .ma-mini-chat{background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.35);color:#6a9aff}
 .ma-mini-note{background:rgba(147,51,234,.15);border:1px solid rgba(147,51,234,.35);color:#c084fc}
 .ma-mini-ship{background:rgba(74,122,255,.15);border:1px solid rgba(74,122,255,.35);color:#6a9aff}
+.ma-mini-edit{background:rgba(245,179,66,.15);border:1px solid rgba(245,179,66,.35);color:#f5b342}
+.ma-mini-toggle{background:rgba(76,175,80,.15);border:1px solid rgba(76,175,80,.35);color:#4caf50}
 
 .ma-status-select{height:32px;padding:0 8px;border-radius:8px;background:rgba(74,122,255,.12);border:1px solid rgba(74,122,255,.3);color:#6a9aff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.72rem;cursor:pointer;outline:none;transition:background .2s,border-color .2s}
 .ma-status-select:hover{background:rgba(74,122,255,.22);border-color:#4a7aff}
@@ -182,6 +189,35 @@ body.nav-open{overflow:hidden}
 .ma-setting-card.shipping .ma-setting-form input:focus{border-color:#4a7aff;box-shadow:0 0 0 4px rgba(74,122,255,.15)}
 .ma-setting-hint{font-size:.8rem;color:#8a92b0;font-weight:700;line-height:1.7;margin-top:12px}
 
+/* ADMIN CARDS */
+.ma-admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.ma-admin-card{background:linear-gradient(145deg,rgba(14,20,38,.85),rgba(8,12,24,.95));border:1px solid rgba(74,122,255,.18);border-radius:16px;padding:18px;transition:border-color .2s,transform .2s}
+.ma-admin-card.inactive{opacity:.55}
+.ma-admin-card:hover{border-color:rgba(74,122,255,.4)}
+.ma-admin-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.ma-admin-avatar{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#021ca4,#4a7aff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.95rem;flex-shrink:0}
+.ma-admin-name{font-weight:900;font-size:.92rem;line-height:1.2}
+.ma-admin-email{font-size:.72rem;color:#8a92b0;font-weight:600;margin-top:3px;direction:ltr;text-align:right;word-break:break-all}
+.ma-admin-info{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;font-size:.78rem}
+.ma-admin-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ma-admin-row .lbl{color:#8a92b0;font-weight:700}
+.ma-admin-row .val{font-weight:800}
+.ma-admin-actions{display:flex;gap:6px;flex-wrap:wrap;padding-top:12px;border-top:1px dashed rgba(74,122,255,.14)}
+.ma-admin-actions .ma-mini-btn{flex:1;justify-content:center;min-width:0}
+
+.role-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:.68rem;font-weight:900}
+
+/* ROLE PICKER */
+.ma-role-picker{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.ma-role-option{display:block;cursor:pointer;position:relative}
+.ma-role-option input{position:absolute;opacity:0;pointer-events:none}
+.ma-role-option-card{background:rgba(0,0,0,.3);border:1.5px solid rgba(74,122,255,.18);border-radius:12px;padding:12px;transition:border-color .2s,background .2s;display:flex;flex-direction:column;gap:5px}
+.ma-role-option input:checked + .ma-role-option-card{border-color:var(--role-color);background:color-mix(in srgb,var(--role-color) 12%,rgba(0,0,0,.3))}
+.ma-role-option-card i{font-size:1.1rem;color:var(--role-color)}
+.ma-role-option-card .rn{font-weight:900;font-size:.82rem}
+.ma-role-option-card .rd{font-size:.66rem;color:#8a92b0;font-weight:700;line-height:1.5}
+.ma-role-option input:disabled + .ma-role-option-card{opacity:.5;cursor:not-allowed}
+
 /* EMPTY */
 .ma-empty{text-align:center;padding:60px 24px}
 .ma-empty i{font-size:2.8rem;color:#4a7aff;margin-bottom:14px;opacity:.6;display:block}
@@ -189,19 +225,20 @@ body.nav-open{overflow:hidden}
 .ma-empty p{color:#8a92b0;font-weight:600;font-size:.88rem}
 
 /* MODALS */
-.ma-modal-back{display:none;position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+.ma-modal-back{display:none;position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
 .ma-modal-back.show{display:flex;animation:maFade .2s}
-.ma-modal{background:linear-gradient(145deg,rgba(14,20,38,.98),rgba(8,12,24,1));border:1px solid rgba(74,122,255,.18);border-radius:20px;max-width:460px;width:100%;padding:28px;box-shadow:0 40px 100px -30px rgba(2,28,164,.9)}
-.ma-modal.ma-modal-lg{max-width:600px;display:flex;flex-direction:column;max-height:90vh;padding:0;overflow:hidden}
+.ma-modal{background:linear-gradient(145deg,rgba(14,20,38,.98),rgba(8,12,24,1));border:1px solid rgba(74,122,255,.18);border-radius:20px;max-width:460px;width:100%;padding:28px;box-shadow:0 40px 100px -30px rgba(2,28,164,.9);max-height:95vh;overflow-y:auto}
+.ma-modal.ma-modal-lg{max-width:600px;display:flex;flex-direction:column;max-height:92vh;padding:0;overflow:hidden}
 .ma-modal.ma-modal-xl{max-width:980px;width:100%;max-height:92vh;padding:0;display:flex;flex-direction:column;overflow:hidden}
 .ma-modal-title{display:flex;align-items:center;gap:12px;font-size:1.05rem;font-weight:900;margin-bottom:8px}
 .ma-modal-title i{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
 .ma-modal-sub{color:#8a92b0;font-size:.85rem;font-weight:600;margin-bottom:20px;line-height:1.8}
 .ma-modal-field{margin-bottom:14px}
 .ma-modal-field label{display:block;font-size:.72rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
-.ma-modal-field input,.ma-modal-field textarea{width:100%;padding:13px 16px;border-radius:12px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:16px;outline:none;transition:border-color .25s,box-shadow .25s;box-sizing:border-box}
+.ma-modal-field input,.ma-modal-field textarea,.ma-modal-field select{width:100%;padding:13px 16px;border-radius:12px;background:rgba(0,0,0,.35);border:1.5px solid rgba(74,122,255,.14);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:16px;outline:none;transition:border-color .25s,box-shadow .25s;box-sizing:border-box}
 .ma-modal-field textarea{min-height:110px;line-height:1.7;resize:none}
-.ma-modal-field input:focus,.ma-modal-field textarea:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
+.ma-modal-field select{cursor:pointer}
+.ma-modal-field input:focus,.ma-modal-field textarea:focus,.ma-modal-field select:focus{border-color:#4a7aff;box-shadow:0 0 0 3px rgba(74,122,255,.15)}
 .ma-modal-field input[type=number]{direction:ltr;text-align:right;font-size:1.05rem;font-weight:800}
 .ma-quick{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .ma-quick button{padding:7px 14px;border-radius:18px;border:1.5px solid rgba(74,122,255,.14);background:rgba(74,122,255,.08);color:#6a9aff;font-family:'Cairo',sans-serif;font-weight:800;font-size:.78rem;cursor:pointer;transition:background .2s,border-color .2s}
@@ -220,6 +257,8 @@ body.nav-open{overflow:hidden}
 .ma-modal-actions .confirm:disabled{opacity:.6;cursor:not-allowed}
 .ma-warn-box{margin-top:14px;padding:13px 15px;border-radius:12px;background:rgba(217,4,41,.08);border:1px solid rgba(217,4,41,.28);color:#ff9a9a;font-size:.8rem;font-weight:700;line-height:1.8;display:flex;gap:10px;align-items:flex-start}
 .ma-warn-box i{color:#d90429;font-size:1rem;flex-shrink:0;margin-top:2px}
+.ma-info-box{margin-top:14px;padding:13px 15px;border-radius:12px;background:rgba(74,122,255,.08);border:1px solid rgba(74,122,255,.28);color:#a8b0cc;font-size:.8rem;font-weight:700;line-height:1.8;display:flex;gap:10px;align-items:flex-start}
+.ma-info-box i{color:#4a7aff;font-size:1rem;flex-shrink:0;margin-top:2px}
 
 /* DETAIL */
 .ma-detail-head{padding:20px 26px;border-bottom:1px solid rgba(74,122,255,.14);display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(180deg,rgba(74,122,255,.06),transparent);flex-shrink:0}
@@ -300,7 +339,7 @@ body.nav-open{overflow:hidden}
 .ma-chat-send:hover:not(:disabled){transform:translateY(-2px)}
 
 /* TOAST */
-.ma-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:13px 24px;border-radius:60px;font-weight:800;font-size:.88rem;z-index:100001;transition:transform .35s cubic-bezier(.34,1.56,.64,1);display:inline-flex;align-items:center;gap:10px;box-shadow:0 15px 40px -10px rgba(0,0,0,.6);max-width:90vw;font-family:'Cairo',sans-serif}
+.ma-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:13px 24px;border-radius:60px;font-weight:800;font-size:.88rem;z-index:100001;transition:transform .35s cubic-bezier(.34,1.56,.64,1);display:inline-flex;align-items:center;gap:10px;box-shadow:0 15px 40px -10px rgba(0,0,0,.6);max-width:90vw;font-family:'Cairo',sans-serif;bottom:calc(24px + env(safe-area-inset-bottom))}
 .ma-toast.show{transform:translateX(-50%) translateY(0)}
 .ma-toast.success{background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff}
 .ma-toast.error{background:linear-gradient(135deg,#d90429,#8b0018);color:#fff}
@@ -311,9 +350,7 @@ body.nav-open{overflow:hidden}
 .ma-loading-spinner{width:50px;height:50px;border:4px solid rgba(74,122,255,.2);border-top-color:#4a7aff;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ═══════════════════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════════════════ */
+/* ═════ RESPONSIVE ═════ */
 @media (max-width:1100px){
   .ma-nav-menu{gap:0}
   .ma-nav-link{padding:9px 10px;font-size:.78rem}
@@ -322,139 +359,64 @@ body.nav-open{overflow:hidden}
   .ma-charts-grid{grid-template-columns:1fr}
 }
 
-/* ─── Mobile Drawer Nav ─── */
 @media (max-width:820px){
   .ma-nav-toggle{display:flex}
-  .ma-nav-inner{padding:0 14px;height:62px;gap:10px}
+  .ma-nav-inner{padding:0 14px;padding-top:env(safe-area-inset-top);height:calc(62px + env(safe-area-inset-top));gap:10px}
   .ma-nav-brand{margin-left:0;flex:1;gap:10px}
   .ma-nav-brand .name{font-size:.88rem}
   .ma-nav-brand .sub{display:none}
   .ma-nav-brand img{height:34px}
   .ma-nav-user-info{display:none}
-
-  .ma-nav-menu{
-    position:fixed;top:0;right:-100%;bottom:0;
-    width:min(320px,85vw);
-    background:linear-gradient(180deg,#0a0e1a,#060812);
-    border-left:1px solid rgba(74,122,255,.2);
-    flex-direction:column;
-    align-items:stretch;
-    padding:78px 14px 24px;
-    transition:right .35s cubic-bezier(.34,1.56,.64,1);
-    overflow-y:auto;
-    overscroll-behavior:contain;
-    z-index:99;
-    gap:4px;
-    box-shadow:-20px 0 60px -20px rgba(0,0,0,.8);
-    flex:0 0 auto;
-  }
+  .ma-nav-menu{position:fixed;top:0;right:-100%;bottom:0;width:min(320px,85vw);background:linear-gradient(180deg,#0a0e1a,#060812);border-left:1px solid rgba(74,122,255,.2);flex-direction:column;align-items:stretch;padding:calc(78px + env(safe-area-inset-top)) 14px 24px;transition:right .35s cubic-bezier(.34,1.56,.64,1);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;z-index:99;gap:4px;box-shadow:-20px 0 60px -20px rgba(0,0,0,.8);flex:0 0 auto}
   .ma-nav-menu.open{right:0}
   .ma-nav-menu .ma-nav-item{width:100%}
-  .ma-nav-menu .ma-nav-link{
-    width:100%;justify-content:flex-start;
-    padding:14px 16px;font-size:.92rem;gap:12px;
-  }
+  .ma-nav-menu .ma-nav-link{width:100%;justify-content:flex-start;padding:14px 16px;font-size:.92rem;gap:12px}
   .ma-nav-menu .ma-nav-link span{display:inline}
   .ma-nav-menu .ma-nav-link i:first-child{width:20px;font-size:.95rem;text-align:center}
   .ma-nav-menu .ma-nav-link .caret{margin-right:auto;margin-left:0}
-  .ma-nav-menu .ma-nav-dropdown{
-    position:static;display:none;
-    opacity:1;visibility:visible;transform:none;
-    box-shadow:none;border:none;
-    background:rgba(74,122,255,.05);
-    margin-top:6px;border-radius:10px;min-width:0;
-    padding:6px;
-  }
+  .ma-nav-menu .ma-nav-dropdown{position:static;display:none;opacity:1;visibility:visible;transform:none;box-shadow:none;border:none;background:rgba(74,122,255,.05);margin-top:6px;border-radius:10px;min-width:0;padding:6px}
   .ma-nav-menu .ma-nav-item.open .ma-nav-dropdown{display:block}
   .ma-nav-menu .ma-nav-dropdown a{padding:12px 14px;font-size:.88rem}
 
-  /* Tables -> Card view */
   .ma-table-wrap{background:transparent;border:none;padding:0;overflow:visible;border-radius:0}
   .ma-table{font-size:.85rem;display:block;width:100%}
   .ma-table thead{display:none}
   .ma-table tbody{display:block}
-  .ma-table tbody tr{
-    display:block;
-    background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));
-    border:1px solid rgba(74,122,255,.18);
-    border-radius:14px;
-    padding:14px;
-    margin-bottom:10px;
-  }
+  .ma-table tbody tr{display:block;background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9));border:1px solid rgba(74,122,255,.18);border-radius:14px;padding:14px;margin-bottom:10px}
   .ma-table tbody tr:hover{background:linear-gradient(145deg,rgba(14,20,38,.75),rgba(8,12,24,.9))}
-  .ma-table tbody td{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:8px 0;
-    border-bottom:1px dashed rgba(74,122,255,.1);
-    text-align:left;
-    font-size:.82rem;
-    gap:12px;
-  }
+  .ma-table tbody td{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed rgba(74,122,255,.1);text-align:left;font-size:.82rem;gap:12px}
   .ma-table tbody td:last-child{border-bottom:none}
-  .ma-table tbody td::before{
-    content:attr(data-label);
-    color:#8a92b0;
-    font-size:.68rem;
-    font-weight:800;
-    text-transform:uppercase;
-    letter-spacing:.5px;
-    flex-shrink:0;
-    text-align:right;
-    min-width:70px;
-  }
+  .ma-table tbody td::before{content:attr(data-label);color:#8a92b0;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;text-align:right;min-width:70px}
   .ma-table tbody td.mono{font-size:.8rem}
-  .ma-table tbody td[data-label="إجراءات"]{
-    flex-direction:column;
-    align-items:stretch;
-    gap:8px;
-    padding-top:12px;
-    margin-top:4px;
-    border-top:1px solid rgba(74,122,255,.18);
-    border-bottom:none;
-  }
-  .ma-table tbody td[data-label="إجراءات"]::before{
-    margin-bottom:4px;
-    text-align:right;
-    width:100%;
-  }
-  .ma-table tbody td[data-label="إجراءات"] .actions-cell{
-    justify-content:flex-end;
-    width:100%;
-    flex-wrap:wrap;
-  }
+  .ma-table tbody td[data-label="إجراءات"]{flex-direction:column;align-items:stretch;gap:8px;padding-top:12px;margin-top:4px;border-top:1px solid rgba(74,122,255,.18);border-bottom:none}
+  .ma-table tbody td[data-label="إجراءات"]::before{margin-bottom:4px;text-align:right;width:100%}
+  .ma-table tbody td[data-label="إجراءات"] .actions-cell{justify-content:flex-end;width:100%;flex-wrap:wrap}
   .ma-status-select{height:36px;font-size:.78rem}
 
-  /* Modals */
-  .ma-modal-back{padding:10px}
-  .ma-modal{max-width:100%;padding:22px;border-radius:16px}
-  .ma-modal.ma-modal-xl,.ma-modal.ma-modal-lg{
-    max-width:100%;width:100%;
-    max-height:96vh;max-height:96dvh;height:96vh;height:96dvh;
-    border-radius:14px;
-  }
+  .ma-modal-back{padding:10px;align-items:flex-end}
+  .ma-modal{max-width:100%;padding:22px;border-radius:20px 20px 0 0;max-height:92vh}
+  .ma-modal.ma-modal-xl,.ma-modal.ma-modal-lg{max-width:100%;width:100%;max-height:96vh;height:96vh;border-radius:20px 20px 0 0}
   .ma-detail-head{padding:14px;flex-wrap:wrap;gap:10px}
   .ma-detail-head-right{margin-right:auto}
   .ma-detail-body{padding:14px}
   .ma-status-btns{grid-template-columns:1fr 1fr}
   .ma-chat-body{min-height:auto;max-height:none}
 
-  /* Toolbar */
   .ma-toolbar{padding:12px}
   .ma-search{flex-basis:100%;min-width:0}
   .ma-toolbar select{flex:1;min-width:130px}
 
-  /* Rate/Setting */
   .ma-rate-display,.ma-setting-display{font-size:2.4rem}
   .ma-rate-card,.ma-setting-card{padding:20px}
   .ma-rate-form input,.ma-setting-form input{width:140px;font-size:1.15rem;height:48px}
   .ma-setting-form .ma-btn{height:48px}
 
-  /* Login */
   .ma-gate-card{padding:32px 24px;border-radius:22px}
   .ma-gate-card h1{font-size:1.4rem}
   .ma-gate-icon{width:68px;height:68px;font-size:1.7rem;margin-bottom:14px}
+
+  .ma-admin-grid{grid-template-columns:1fr}
+  .ma-modal-actions{position:sticky;bottom:0;background:linear-gradient(180deg,transparent 0%,rgba(8,12,24,1) 40%);padding-top:14px;margin-top:10px}
 }
 
 @media (max-width:520px){
@@ -466,7 +428,7 @@ body.nav-open{overflow:hidden}
   .ma-page-title{font-size:1.15rem;gap:10px}
   .ma-page-title i{width:36px;height:36px;font-size:.95rem;border-radius:10px}
   .ma-page-sub{font-size:.76rem}
-  .ma-content{padding:16px 12px 60px}
+  .ma-content{padding:16px 12px 60px;padding-bottom:calc(60px + env(safe-area-inset-bottom))}
   .ma-page-head{margin-bottom:18px;gap:12px}
   .ma-status-btns{grid-template-columns:1fr}
   .ma-rate-display,.ma-setting-display{font-size:2rem}
@@ -488,7 +450,7 @@ body.nav-open{overflow:hidden}
   .ma-empty i{font-size:2.2rem}
   .ma-empty h3{font-size:.95rem}
   .ma-empty p{font-size:.8rem}
-  .ma-toast{padding:11px 18px;font-size:.82rem;bottom:16px}
+  .ma-toast{padding:11px 18px;font-size:.82rem;bottom:calc(16px + env(safe-area-inset-bottom))}
   .ma-btn{height:42px;padding:0 14px;font-size:.8rem}
   .ma-toolbar select{height:42px;font-size:.82rem}
   .ma-search input{height:42px;font-size:16px}
@@ -505,6 +467,7 @@ body.nav-open{overflow:hidden}
   .ma-items-table{font-size:.78rem}
   .ma-items-table thead th{padding:8px 6px;font-size:.66rem}
   .ma-items-table tbody td{padding:8px 6px}
+  .ma-role-picker{grid-template-columns:1fr}
 }
 
 @media (max-width:400px){
@@ -516,16 +479,11 @@ body.nav-open{overflow:hidden}
   .ma-gate-card h1{font-size:1.25rem}
   .ma-nav-brand img{height:30px}
   .ma-nav-brand .name{font-size:.82rem}
-  .ma-nav-inner{padding:0 10px;height:58px}
+  .ma-nav-inner{padding:0 10px;height:calc(58px + env(safe-area-inset-top))}
   .ma-content{padding:14px 10px 60px}
   .ma-page-head .ma-btn{height:40px;font-size:.76rem;padding:0 12px}
 }
 
-@media (max-width:820px) and (orientation:landscape){
-  .ma-nav-menu{padding-top:70px}
-}
-
-/* Reduce motion */
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.01ms !important;transition-duration:.01ms !important}
 }
@@ -534,18 +492,21 @@ body.nav-open{overflow:hidden}
 <body>
 <div class="ma-bg"></div>
 
+<!-- LOGIN GATE -->
 <div class="ma-gate" id="maGate">
   <div class="ma-gate-card">
     <div class="ma-gate-icon"><i class="fas fa-shield-halved"></i></div>
-    <h1>لوحة الإدارة</h1>
-    <p>سجّل دخولك بحساب المشرف للوصول</p>
+    <h1 id="maGateTitle">لوحة الإدارة</h1>
+    <p id="maGateDesc">سجّل دخولك بحساب المشرف للوصول</p>
     <div class="ma-field"><label>البريد الإلكتروني</label><input type="email" id="maGateEmail" placeholder="admin@example.com" autocomplete="email" inputmode="email"></div>
     <div class="ma-field"><label>كلمة المرور</label><input type="password" id="maGatePass" placeholder="••••••••" autocomplete="current-password"></div>
-    <button class="ma-gate-btn" id="maGateBtn"><i class="fas fa-right-to-bracket"></i> دخول</button>
+    <button class="ma-gate-btn" id="maGateBtn"><i class="fas fa-right-to-bracket"></i> <span>دخول</span></button>
+    <button class="ma-gate-switch" id="maGateSwitch">ليس لديك حساب؟ إنشاء حساب جديد</button>
     <div class="ma-gate-err" id="maGateErr"></div>
   </div>
 </div>
 
+<!-- APP -->
 <div class="ma-app" id="maApp">
   <nav class="ma-nav">
     <div class="ma-nav-inner">
@@ -556,7 +517,11 @@ body.nav-open{overflow:hidden}
       </div>
       <div class="ma-nav-menu" id="maNavMenu"></div>
       <div class="ma-nav-user">
-        <div class="ma-nav-user-info"><div class="n" id="maUserName">—</div><div class="e" id="maUserEmail">—</div></div>
+        <div class="ma-nav-user-info">
+          <div class="n" id="maUserName">—</div>
+          <div class="e" id="maUserEmail">—</div>
+          <div class="role-badge" id="maUserRole" style="display:none"></div>
+        </div>
         <button class="ma-btn-ghost" id="maLogout" aria-label="خروج"><i class="fas fa-sign-out-alt"></i> خروج</button>
       </div>
     </div>
@@ -576,9 +541,11 @@ body.nav-open{overflow:hidden}
     <div class="ma-view" id="view-rewards-log"></div>
     <div class="ma-view" id="view-audit"></div>
     <div class="ma-view" id="view-data"></div>
+    <div class="ma-view" id="view-admins"></div>
   </div>
 </div>
 
+<!-- CONFIRM MODAL -->
 <div class="ma-modal-back" id="maConfirmModal">
   <div class="ma-modal">
     <div class="ma-modal-title"><i class="fas fa-question" id="maConfirmIcon" style="background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000"></i><span id="maConfirmTitle">تأكيد</span></div>
@@ -587,6 +554,7 @@ body.nav-open{overflow:hidden}
   </div>
 </div>
 
+<!-- DETAIL MODAL -->
 <div class="ma-modal-back" id="maDetailModal">
   <div class="ma-modal ma-modal-xl">
     <div class="ma-detail-head">
@@ -603,6 +571,7 @@ body.nav-open{overflow:hidden}
   </div>
 </div>
 
+<!-- CB MODAL -->
 <div class="ma-modal-back" id="maCbModal">
   <div class="ma-modal">
     <div class="ma-modal-title"><i class="fas fa-gift" id="maCbIcon"></i><span id="maCbTitle">إضافة كاش باك</span></div>
@@ -615,6 +584,7 @@ body.nav-open{overflow:hidden}
   </div>
 </div>
 
+<!-- DELETE MODAL -->
 <div class="ma-modal-back" id="maDelModal">
   <div class="ma-modal">
     <div class="ma-modal-title"><i class="fas fa-trash" style="background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff"></i>حذف الطلب</div>
@@ -624,6 +594,7 @@ body.nav-open{overflow:hidden}
   </div>
 </div>
 
+<!-- NOTE MODAL -->
 <div class="ma-modal-back" id="maNoteModal">
   <div class="ma-modal">
     <div class="ma-modal-title"><i class="fas fa-comment-dots" style="background:linear-gradient(135deg,#9333ea,#6b21a8);color:#fff"></i>ملاحظة للعميل</div>
@@ -633,6 +604,7 @@ body.nav-open{overflow:hidden}
   </div>
 </div>
 
+<!-- SHIPPING MODAL -->
 <div class="ma-modal-back" id="maShippingModal">
   <div class="ma-modal">
     <div class="ma-modal-title"><i class="fas fa-truck" style="background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff"></i><span id="maShipTitle">تعديل الشحن</span></div>
@@ -649,10 +621,7 @@ body.nav-open{overflow:hidden}
         <button data-ship="30">30</button>
       </div>
     </div>
-    <div class="ma-warn-box" style="background:rgba(74,122,255,.08);border-color:rgba(74,122,255,.28);color:#a8b0cc">
-      <i class="fas fa-info-circle" style="color:#4a7aff"></i>
-      <div>سيُعاد حساب الإجمالي والضريبة تلقائياً بعد الحفظ.</div>
-    </div>
+    <div class="ma-info-box"><i class="fas fa-info-circle"></i><div>سيُعاد حساب الإجمالي والضريبة تلقائياً بعد الحفظ.</div></div>
     <div class="ma-modal-actions">
       <button class="cancel" id="maShipCancel">إلغاء</button>
       <button class="confirm blue" id="maShipConfirm"><i class="fas fa-save"></i> حفظ</button>
@@ -660,6 +629,7 @@ body.nav-open{overflow:hidden}
   </div>
 </div>
 
+<!-- CHAT MODAL -->
 <div class="ma-modal-back" id="maChatModal">
   <div class="ma-modal ma-modal-lg">
     <div class="ma-chat-header">
@@ -672,6 +642,39 @@ body.nav-open{overflow:hidden}
   </div>
 </div>
 
+<!-- ADMIN MODAL -->
+<div class="ma-modal-back" id="maAdminModal">
+  <div class="ma-modal">
+    <div class="ma-modal-title"><i class="fas fa-user-shield" id="maAdminIcon" style="background:linear-gradient(135deg,#f5b342,#c98a1e);color:#000"></i><span id="maAdminTitle">إضافة مشرف</span></div>
+    <div class="ma-modal-sub" id="maAdminSub">—</div>
+    <div class="ma-modal-field"><label>الاسم الكامل</label><input type="text" id="maAdminName" placeholder="مثال: أحمد محمد" autocomplete="name"></div>
+    <div class="ma-modal-field"><label>البريد الإلكتروني</label><input type="email" id="maAdminEmail" placeholder="user@example.com" inputmode="email" autocomplete="email" dir="ltr" style="text-align:right"></div>
+    <div class="ma-modal-field">
+      <label>الدور والصلاحيات</label>
+      <div class="ma-role-picker" id="maAdminRolePicker"></div>
+    </div>
+    <div class="ma-modal-field" style="display:flex;align-items:center;gap:10px">
+      <input type="checkbox" id="maAdminActive" checked style="width:20px;height:20px;cursor:pointer;padding:0;flex-shrink:0">
+      <label for="maAdminActive" style="margin:0;cursor:pointer;text-transform:none;letter-spacing:0;font-size:.88rem;color:#e0e6f4;font-weight:700">مشرف نشط (يستطيع تسجيل الدخول)</label>
+    </div>
+    <div class="ma-info-box" id="maAdminInfoBox"><i class="fas fa-info-circle"></i><div>المشرف الجديد سيستطيع تسجيل الدخول بنفس البريد بعد إنشاء حساب له عبر زر "إنشاء حساب" في شاشة الدخول.</div></div>
+    <div class="ma-modal-actions">
+      <button class="cancel" id="maAdminCancel">إلغاء</button>
+      <button class="confirm" id="maAdminConfirm"><i class="fas fa-check"></i> حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE ADMIN MODAL -->
+<div class="ma-modal-back" id="maAdminDelModal">
+  <div class="ma-modal">
+    <div class="ma-modal-title"><i class="fas fa-user-slash" style="background:linear-gradient(135deg,#8b0018,#5a0010);color:#fff"></i>حذف مشرف</div>
+    <div class="ma-modal-sub" id="maAdminDelSub">—</div>
+    <div class="ma-warn-box"><i class="fas fa-triangle-exclamation"></i><div>سيتم حذف صلاحيات المشرف نهائياً. سيتمكن من إعادة تسجيل الدخول إذا أعيدت إضافته لاحقاً.</div></div>
+    <div class="ma-modal-actions"><button class="cancel" id="maAdminDelCancel">إلغاء</button><button class="confirm danger" id="maAdminDelConfirm"><i class="fas fa-trash"></i> حذف</button></div>
+  </div>
+</div>
+
 <div class="ma-loading-overlay" id="maLoadingOverlay"><div class="ma-loading-spinner"></div></div>
 
 <script>
@@ -680,9 +683,61 @@ body.nav-open{overflow:hidden}
 
 const SUPABASE_URL = 'https://xoqwzluyxynqpdpmidts.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvcXd6bHV5eHlucXBkcG1pZHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMTI2NDAsImV4cCI6MjEwNTY4ODY0MH0.xIpvxJyAMAoLqkSR9RJk2ZcgN7rsfOg2OfbelraMWvs';
-const ADMIN_EMAILS = ['mkmkmkl24666606@gmail.com'];
+const BASE_ADMIN_EMAIL = 'mkmkmkl24666606@gmail.com';
 const LOGO_URL = 'https://www.socialcreator.com/srv/imgs/ti_imgs/200176_309202.png';
 const CACHE_MS = 30000;
+
+/* ═══════ ROLES & PERMISSIONS ═══════ */
+const ROLES = {
+  super_admin: {
+    label: 'مدير عام',
+    desc: 'صلاحيات كاملة على النظام',
+    color: '#f5b342',
+    bg: 'linear-gradient(135deg,#f5b342,#c98a1e)',
+    text: '#000',
+    icon: 'fa-crown'
+  },
+  finance_manager: {
+    label: 'مدير مالي',
+    desc: 'مراقبة المالية والتقارير والكاش باك',
+    color: '#00c9a7',
+    bg: 'linear-gradient(135deg,#00c9a7,#008f77)',
+    text: '#fff',
+    icon: 'fa-coins'
+  },
+  orders_manager: {
+    label: 'مدير طلبات',
+    desc: 'تأكيد الطلبات والتواصل مع العملاء',
+    color: '#4a7aff',
+    bg: 'linear-gradient(135deg,#4a7aff,#021ca4)',
+    text: '#fff',
+    icon: 'fa-box'
+  },
+  viewer: {
+    label: 'مشاهد',
+    desc: 'قراءة فقط — لا تعديلات',
+    color: '#8a92b0',
+    bg: 'linear-gradient(135deg,#8a92b0,#4b5173)',
+    text: '#fff',
+    icon: 'fa-eye'
+  }
+};
+
+const PERMS = {
+  manage_admins:    ['super_admin'],
+  edit_settings:    ['super_admin','finance_manager'],
+  confirm_orders:   ['super_admin','orders_manager'],
+  delete_orders:    ['super_admin'],
+  add_cashback:     ['super_admin','finance_manager'],
+  edit_shipping:    ['super_admin','finance_manager','orders_manager'],
+  send_notes:       ['super_admin','finance_manager','orders_manager'],
+  view_finance:     ['super_admin','finance_manager'],
+  view_orders:      ['super_admin','finance_manager','orders_manager','viewer'],
+  view_customers:   ['super_admin','finance_manager','orders_manager','viewer'],
+  view_reports:     ['super_admin','finance_manager','orders_manager','viewer'],
+  view_audit:       ['super_admin'],
+  export_data:      ['super_admin','finance_manager','orders_manager']
+};
 
 const ORDER_STATUS = {
   pending:   { label:'قيد الانتظار', color:'#f5b342', bg:'linear-gradient(135deg,#f5b342,#c98a1e)', icon:'fa-hourglass-half', text:'#000' },
@@ -693,43 +748,39 @@ const ORDER_STATUS = {
 };
 
 const NAV = [
-  { id:'reports', label:'التقارير', icon:'fa-chart-line', sub:[
-    { id:'reports', label:'نظرة عامة', icon:'fa-gauge-high' },
-    { id:'reports-sales', label:'المبيعات', icon:'fa-chart-bar' },
-    { id:'reports-customers', label:'العملاء', icon:'fa-user-chart' },
-    { id:'reports-cashback', label:'الكاش باك', icon:'fa-gift' }
+  { id:'reports', label:'التقارير', icon:'fa-chart-line', perm:'view_reports', sub:[
+    { id:'reports', label:'نظرة عامة', icon:'fa-gauge-high', perm:'view_reports' },
+    { id:'reports-sales', label:'المبيعات', icon:'fa-chart-bar', perm:'view_reports' },
+    { id:'reports-customers', label:'العملاء', icon:'fa-user-chart', perm:'view_customers' },
+    { id:'reports-cashback', label:'الكاش باك', icon:'fa-gift', perm:'view_finance' }
   ]},
-  { id:'orders', label:'سجل الطلبات', icon:'fa-box' },
-  { id:'customers', label:'سجل العملاء', icon:'fa-users' },
-  { id:'finance', label:'المالية', icon:'fa-coins' },
-  { id:'rewards', label:'الجوائز', icon:'fa-trophy', sub:[
-    { id:'rewards', label:'إدارة الكاش باك', icon:'fa-gift' },
-    { id:'rewards-rate', label:'النسب والضرائب', icon:'fa-percent' },
-    { id:'rewards-log', label:'سجل الكاش باك', icon:'fa-list' }
+  { id:'orders', label:'سجل الطلبات', icon:'fa-box', perm:'view_orders' },
+  { id:'customers', label:'سجل العملاء', icon:'fa-users', perm:'view_customers' },
+  { id:'finance', label:'المالية', icon:'fa-coins', perm:'view_finance' },
+  { id:'rewards', label:'الجوائز', icon:'fa-trophy', perm:'add_cashback', sub:[
+    { id:'rewards', label:'إدارة الكاش باك', icon:'fa-gift', perm:'add_cashback' },
+    { id:'rewards-rate', label:'النسب والضرائب', icon:'fa-percent', perm:'edit_settings' },
+    { id:'rewards-log', label:'سجل الكاش باك', icon:'fa-list', perm:'view_finance' }
   ]},
-  { id:'audit', label:'سجل التدقيق', icon:'fa-history' },
-  { id:'data', label:'البيانات', icon:'fa-database' }
+  { id:'admins', label:'المشرفون', icon:'fa-user-shield', perm:'manage_admins' },
+  { id:'audit', label:'سجل التدقيق', icon:'fa-history', perm:'view_audit' },
+  { id:'data', label:'البيانات', icon:'fa-database', perm:'export_data' }
 ];
 
-let sb = null, currentUser = null;
+let sb = null, currentUser = null, currentAdmin = null;
+let allAdmins = [];
 let allOrders = [], allUsers = [], allCashbackLog = [], allAuditLog = [];
 let currentView = 'reports';
 let currentDetailOrder = null, selectedOrderForCashback = null, selectedOrderForDelete = null;
 let selectedOrderForShipping = null;
 let selectedUserForNote = null, selectedUserForChat = null, cbMode = 'add';
-let lastRefresh = null;
-let dataVersion = 0;
-let dataLoaded = false;
-let loadingPromise = null;
-let auditLogLoaded = false;
+let editingAdminEmail = null, deletingAdminEmail = null;
+let lastRefresh = null, dataVersion = 0, dataLoaded = false, loadingPromise = null, auditLogLoaded = false;
+let gateMode = 'login';
 
 const settings = {
-  cashback_rate: 0.02,
-  store_name:'MEN Store',
-  currency:'ر.س',
-  vat_rate: 0.15,
-  vat_enabled: true,
-  shipping_fee: 0
+  cashback_rate: 0.02, store_name:'MEN Store', currency:'ر.س',
+  vat_rate: 0.15, vat_enabled: true, shipping_fee: 0
 };
 
 const $ = id => document.getElementById(id);
@@ -738,49 +789,25 @@ const fmtDate = d => { if(!d) return '—'; try { return new Date(d).toLocaleStr
 const fmtNum = n => Number(n||0).toFixed(2);
 const fmtInt = n => Number(n||0).toFixed(0);
 const round2 = n => Math.round(Number(n||0) * 100) / 100;
+const can = perm => !!(currentAdmin && (PERMS[perm]||[]).includes(currentAdmin.role));
 
 function debounce(fn, ms = 180){
   let t;
-  return function(...args){
-    clearTimeout(t);
-    t = setTimeout(() => fn.apply(this, args), ms);
-  };
+  return function(...args){ clearTimeout(t); t = setTimeout(() => fn.apply(this, args), ms); };
 }
-function showLoading(v){
-  const el = $('maLoadingOverlay');
-  if(v) el.classList.add('show'); else el.classList.remove('show');
-}
+function showLoading(v){ $('maLoadingOverlay').classList.toggle('show', v); }
 
-/* Mobile nav */
-function openMobileNav(){
-  $('maNavMenu').classList.add('open');
-  $('maNavBackdrop').classList.add('show');
-  document.body.classList.add('nav-open');
-}
-function closeMobileNav(){
-  $('maNavMenu').classList.remove('open');
-  $('maNavBackdrop').classList.remove('show');
-  document.body.classList.remove('nav-open');
-}
-function toggleMobileNav(){
-  if($('maNavMenu').classList.contains('open')) closeMobileNav();
-  else openMobileNav();
-}
+function openMobileNav(){ $('maNavMenu').classList.add('open'); $('maNavBackdrop').classList.add('show'); document.body.classList.add('nav-open'); }
+function closeMobileNav(){ $('maNavMenu').classList.remove('open'); $('maNavBackdrop').classList.remove('show'); document.body.classList.remove('nav-open'); }
+function toggleMobileNav(){ if($('maNavMenu').classList.contains('open')) closeMobileNav(); else openMobileNav(); }
 
-/* ═══ حساب التفاصيل ═══ */
+/* ═══════ CALC ═══════ */
 function calcOrderBreakdown(order){
   const items = Array.isArray(order.items) ? order.items : [];
   const itemsSubtotal = items.reduce((s,it) => s + Number(it.price||0) * Number(it.qty||1), 0);
   const total = Number(order.total||0);
-  const hasSavedBreakdown = order.subtotal != null && order.vat_amount != null && order.shipping_fee != null;
-  if(hasSavedBreakdown){
-    return {
-      itemsSubtotal: round2(itemsSubtotal),
-      subtotal: round2(order.subtotal),
-      shipping: round2(order.shipping_fee),
-      vat: round2(order.vat_amount),
-      total: round2(total)
-    };
+  if(order.subtotal != null && order.vat_amount != null && order.shipping_fee != null){
+    return { itemsSubtotal: round2(itemsSubtotal), subtotal: round2(order.subtotal), shipping: round2(order.shipping_fee), vat: round2(order.vat_amount), total: round2(total) };
   }
   let subtotal = itemsSubtotal > 0 ? itemsSubtotal : total;
   let vat = settings.vat_enabled ? round2(subtotal * settings.vat_rate) : 0;
@@ -802,22 +829,78 @@ function computeNewTotal(itemsSubtotal, shippingFee){
   return { vat, total };
 }
 
-/* ═══ INIT ═══ */
+/* ═══════ ADMINS ═══════ */
+function normalizeEmail(e){ return String(e||'').trim().toLowerCase(); }
+function findAdmin(email){
+  const e = normalizeEmail(email);
+  if(!e) return null;
+  return allAdmins.find(a => normalizeEmail(a.email) === e) || null;
+}
+function getAdminForLogin(email){
+  const a = findAdmin(email);
+  if(a && a.active !== false) return a;
+  // Base admin always works
+  if(normalizeEmail(email) === BASE_ADMIN_EMAIL){
+    return { email: BASE_ADMIN_EMAIL, name: 'المدير العام', role: 'super_admin', active: true, isBase: true };
+  }
+  return null;
+}
+function isBaseAdmin(email){ return normalizeEmail(email) === BASE_ADMIN_EMAIL; }
+
+async function loadAdmins(){
+  let loaded = false;
+  try {
+    const { data } = await sb.from('men_settings').select('value').eq('key','admins_list').maybeSingle();
+    if(data?.value){
+      const p = JSON.parse(data.value);
+      if(Array.isArray(p)){ allAdmins = p; loaded = true; }
+    }
+  } catch(e){}
+  if(!loaded){
+    try { const ls = localStorage.getItem('men_admins'); if(ls){ const p = JSON.parse(ls); if(Array.isArray(p)) allAdmins = p; } } catch {}
+  }
+  // ensure base admin exists
+  if(!findAdmin(BASE_ADMIN_EMAIL)){
+    allAdmins.unshift({ email: BASE_ADMIN_EMAIL, name: 'المدير العام', role: 'super_admin', active: true, isBase: true });
+  } else {
+    // mark base admin
+    const base = findAdmin(BASE_ADMIN_EMAIL);
+    if(base) base.isBase = true;
+  }
+}
+async function saveAdmins(){
+  try { await sb.from('men_settings').upsert({ key:'admins_list', value: JSON.stringify(allAdmins) }); } catch(e){ console.warn('saveAdmins sb', e); }
+  try { localStorage.setItem('men_admins', JSON.stringify(allAdmins)); } catch {}
+}
+
+/* ═══════ INIT ═══════ */
 function init(){
   if(!window.supabase?.createClient){ alert('فشل تحميل Supabase — تحقق من الإنترنت'); return; }
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: { persistSession:true, autoRefreshToken:true, storageKey:'men-auth-token' }
   });
-  buildNav();
   bindEvents();
-  checkAuth();
+  (async () => {
+    await loadAdmins();
+    await checkAuth();
+  })();
 }
 
+/* ═══════ NAV BUILD ═══════ */
 function buildNav(){
   const menu = $('maNavMenu');
-  menu.innerHTML = NAV.map(item => {
-    const hasSub = item.sub && item.sub.length;
-    if(!hasSub){
+  const visibleNav = NAV.map(item => {
+    if(item.sub){
+      const visibleSubs = item.sub.filter(s => can(s.perm));
+      if(!visibleSubs.length) return null;
+      return { ...item, sub: visibleSubs, isGroup: true };
+    }
+    if(!can(item.perm)) return null;
+    return { ...item, isGroup: false };
+  }).filter(Boolean);
+
+  menu.innerHTML = visibleNav.map(item => {
+    if(!item.isGroup){
       return `<div class="ma-nav-item"><button class="ma-nav-link" data-view="${item.id}"><i class="fas ${item.icon}"></i><span>${item.label}</span></button></div>`;
     }
     const subs = item.sub.map(s => `<a data-view="${s.id}"><i class="fas ${s.icon}"></i>${s.label}</a>`).join('');
@@ -841,18 +924,11 @@ function buildNav(){
       closeMobileNav();
     });
   });
-  document.addEventListener('click', e => {
-    if(!e.target.closest('.ma-nav-item')) {
-      document.querySelectorAll('.ma-nav-item.open').forEach(i => i.classList.remove('open'));
-    }
-  });
 }
 
+/* ═══════ SETTINGS ═══════ */
 async function loadSettings(){
-  try {
-    const ls = localStorage.getItem('men_admin_settings');
-    if(ls) Object.assign(settings, JSON.parse(ls));
-  } catch {}
+  try { const ls = localStorage.getItem('men_admin_settings'); if(ls) Object.assign(settings, JSON.parse(ls)); } catch {}
   try {
     const { data } = await sb.from('men_settings').select('*');
     if(data) data.forEach(r => {
@@ -870,12 +946,13 @@ async function saveSetting(key, value){
   try { await sb.from('men_settings').upsert({ key, value: String(value) }); } catch(e){}
 }
 
+/* ═══════ AUDIT ═══════ */
 const auditQueue = [];
 let auditTimer = null;
 function logAudit(action, details = {}){
   auditQueue.push({
     admin_email: currentUser?.email || 'unknown',
-    admin_name: currentUser?.user_metadata?.name || currentUser?.email?.split('@')[0] || 'مشرف',
+    admin_name: currentAdmin?.name || currentUser?.email?.split('@')[0] || 'مشرف',
     action, details: JSON.stringify(details), created_at: new Date().toISOString()
   });
   clearTimeout(auditTimer);
@@ -888,48 +965,126 @@ async function flushAudit(){
   catch(e){ console.warn('audit failed', e); }
 }
 
+/* ═══════ AUTH ═══════ */
 async function checkAuth(){
   const { data:{ session } } = await sb.auth.getSession();
-  if(session?.user && ADMIN_EMAILS.includes((session.user.email||'').toLowerCase())){
-    currentUser = session.user;
-    showLoading(true);
-    await Promise.all([loadSettings(), loadAllData()]);
-    showLoading(false);
-    showApp();
-  } else {
-    $('maGate').style.display = 'flex';
+  if(session?.user){
+    const admin = getAdminForLogin(session.user.email);
+    if(admin){
+      currentUser = session.user;
+      currentAdmin = admin;
+      showLoading(true);
+      await Promise.all([loadSettings(), loadAllData()]);
+      showLoading(false);
+      showApp();
+      return;
+    }
+    await sb.auth.signOut();
   }
+  $('maGate').style.display = 'flex';
 }
 async function doLogin(){
-  const email = $('maGateEmail').value.trim().toLowerCase();
+  const email = normalizeEmail($('maGateEmail').value);
   const pass = $('maGatePass').value;
   const err = $('maGateErr');
-  err.classList.remove('show');
+  err.classList.remove('show','success');
   if(!email || !pass){ err.textContent='أدخل البريد وكلمة المرور'; err.classList.add('show'); return; }
-  if(!ADMIN_EMAILS.includes(email)){ err.textContent='ليس حساب مشرف'; err.classList.add('show'); return; }
+  const allowed = getAdminForLogin(email);
+  if(!allowed){ err.textContent='هذا البريد غير مصرح له بالدخول'; err.classList.add('show'); return; }
+
   const btn = $('maGateBtn');
   btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>...';
   try {
     const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
     if(error) throw error;
     currentUser = data.user;
+    currentAdmin = allowed;
     showLoading(true);
     await Promise.all([loadSettings(), loadAllData()]);
     showLoading(false);
-    toast('مرحباً بك 👋', 'success');
+    toast(`مرحباً ${currentAdmin.name||''} 👋`, 'success');
     showApp();
   } catch(e){
     err.textContent = e.message; err.classList.add('show');
   } finally {
-    btn.disabled = false; btn.innerHTML = '<i class="fas fa-right-to-bracket"></i> دخول';
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-right-to-bracket"></i> <span>دخول</span>';
   }
 }
+async function doSignup(){
+  const email = normalizeEmail($('maGateEmail').value);
+  const pass = $('maGatePass').value;
+  const err = $('maGateErr');
+  err.classList.remove('show','success');
+  if(!email || !pass){ err.textContent='أدخل البريد وكلمة المرور'; err.classList.add('show'); return; }
+  if(pass.length < 6){ err.textContent='كلمة المرور يجب أن تكون 6 أحرف على الأقل'; err.classList.add('show'); return; }
+
+  await loadAdmins();
+  const preApproved = findAdmin(email);
+  if(!preApproved){
+    err.innerHTML = `⚠️ هذا البريد غير مصرح له بعد.<br><span style="font-size:.78rem;opacity:.85">اطلب من المدير العام إضافتها أولاً من قسم "المشرفون".</span>`;
+    err.classList.add('show');
+    return;
+  }
+
+  const btn = $('maGateBtn');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>...';
+  try {
+    const { data, error } = await sb.auth.signUp({ email, password: pass });
+    if(error) throw error;
+    if(data.session){
+      currentUser = data.user;
+      currentAdmin = getAdminForLogin(email);
+      showLoading(true);
+      await Promise.all([loadSettings(), loadAllData()]);
+      showLoading(false);
+      toast(`تم إنشاء الحساب وتسجيل الدخول 🎉`, 'success');
+      showApp();
+    } else {
+      err.innerHTML = `✅ تم إنشاء الحساب!<br><span style="font-size:.78rem;opacity:.85">إذا طُلب تأكيد البريد، افتح رسالة التأكيد ثم سجل الدخول.</span>`;
+      err.classList.add('show','success');
+      switchGateMode('login');
+    }
+  } catch(e){
+    err.textContent = e.message; err.classList.add('show');
+  } finally {
+    btn.disabled = false; updateGateBtnUI();
+  }
+}
+
+function switchGateMode(mode){
+  gateMode = mode;
+  $('maGateTitle').textContent = mode === 'login' ? 'لوحة الإدارة' : 'إنشاء حساب جديد';
+  $('maGateDesc').textContent = mode === 'login' ? 'سجّل دخولك بحساب المشرف للوصول' : 'أنشئ حسابك — يجب أن يكون بريدك مصرحاً مسبقاً';
+  $('maGateSwitch').textContent = mode === 'login' ? 'ليس لديك حساب؟ إنشاء حساب جديد' : 'لديك حساب؟ سجّل الدخول';
+  updateGateBtnUI();
+  $('maGateErr').classList.remove('show');
+}
+function updateGateBtnUI(){
+  $('maGateBtn').innerHTML = gateMode === 'login'
+    ? '<i class="fas fa-right-to-bracket"></i> <span>دخول</span>'
+    : '<i class="fas fa-user-plus"></i> <span>إنشاء الحساب</span>';
+}
+
 function showApp(){
   $('maGate').style.display = 'none';
   $('maApp').classList.add('active');
-  $('maUserName').textContent = currentUser.user_metadata?.name || currentUser.email.split('@')[0];
+  $('maUserName').textContent = currentAdmin.name || currentUser.user_metadata?.name || currentUser.email.split('@')[0];
   $('maUserEmail').textContent = currentUser.email;
-  switchView('reports');
+  const role = ROLES[currentAdmin.role] || ROLES.viewer;
+  const rb = $('maUserRole');
+  rb.style.display = 'inline-flex';
+  rb.style.background = role.bg;
+  rb.style.color = role.text;
+  rb.innerHTML = `<i class="fas ${role.icon}"></i> ${role.label}`;
+  buildNav();
+  switchView(defaultViewForRole());
+}
+function defaultViewForRole(){
+  switch(currentAdmin?.role){
+    case 'finance_manager': return 'finance';
+    case 'orders_manager': return 'orders';
+    default: return 'reports';
+  }
 }
 
 async function loadAllData(force = false){
@@ -953,7 +1108,6 @@ async function loadAllData(force = false){
   })();
   return loadingPromise;
 }
-
 async function loadAuditLog(force = false){
   if(auditLogLoaded && !force) return;
   try {
@@ -963,11 +1117,24 @@ async function loadAuditLog(force = false){
   } catch { allAuditLog = []; }
 }
 
+/* ═══════ VIEW ROUTING ═══════ */
 function switchView(viewId){
+  const view = $('view-' + viewId);
+  if(!view) return;
+  // permission check
+  const navItem = NAV.find(n => n.id === viewId || (n.sub && n.sub.find(s => s.id === viewId)));
+  let perm = null;
+  if(navItem){
+    if(navItem.sub){ const s = navItem.sub.find(s => s.id === viewId); perm = s?.perm; }
+    else perm = navItem.perm;
+  }
+  if(perm && !can(perm)){
+    toast('ليس لديك صلاحية للوصول لهذا القسم','error');
+    return;
+  }
   currentView = viewId;
   document.querySelectorAll('.ma-view').forEach(v => v.classList.remove('active'));
-  const view = $('view-' + viewId);
-  if(view) view.classList.add('active');
+  view.classList.add('active');
   document.querySelectorAll('.ma-nav-link, .ma-nav-dropdown a').forEach(el => el.classList.remove('active'));
   const activeNav = document.querySelector(`[data-view="${viewId}"]`);
   if(activeNav) activeNav.classList.add('active');
@@ -979,7 +1146,6 @@ function switchView(viewId){
   }
   renderView(viewId);
 }
-
 function renderView(viewId){
   const el = $('view-' + viewId);
   if(!el) return;
@@ -996,10 +1162,11 @@ function renderView(viewId){
     case 'rewards-log': return renderRewardsLogView(el);
     case 'audit': return renderAuditView(el);
     case 'data': return renderDataView(el);
+    case 'admins': return renderAdminsView(el);
   }
 }
 
-/* ═══ REPORTS ═══ */
+/* ═══════ REPORTS ═══════ */
 function renderReportsOverview(el){
   const total = allOrders.length;
   const delivered = allOrders.filter(o => o.status === 'delivered').length;
@@ -1007,12 +1174,8 @@ function renderReportsOverview(el){
   const cancelled = allOrders.filter(o => o.status === 'cancelled').length;
   const revenue = allOrders.filter(o => o.status === 'delivered').reduce((s,o) => s + Number(o.total||0), 0);
   const avgOrder = delivered > 0 ? revenue / delivered : 0;
-  const totalUsers = allUsers.length;
   const totalCb = allUsers.reduce((s,u) => s + Number(u.cashback||0), 0);
-  const potentialCb = allOrders.filter(o => !['delivered','cancelled'].includes(o.status)).reduce((s,o) => {
-    const bd = calcOrderBreakdown(o);
-    return s + bd.subtotal * settings.cashback_rate;
-  }, 0);
+  const potentialCb = allOrders.filter(o => !['delivered','cancelled'].includes(o.status)).reduce((s,o) => { const bd = calcOrderBreakdown(o); return s + bd.subtotal * settings.cashback_rate; }, 0);
   const deliveryRate = total > 0 ? (delivered / total * 100) : 0;
 
   el.innerHTML = `
@@ -1027,23 +1190,22 @@ function renderReportsOverview(el){
       <div class="ma-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.15)"><div class="ma-stat-icon"><i class="fas fa-coins"></i></div><div class="ma-stat-val">${fmtInt(revenue)}</div><div class="ma-stat-lbl">إجمالي المبيعات (ر.س)</div></div>
     </div>
     <div class="ma-stats">
-      <div class="ma-stat" style="--accent:#9333ea;--icon-bg:rgba(147,51,234,.15)"><div class="ma-stat-icon"><i class="fas fa-users"></i></div><div class="ma-stat-val">${totalUsers}</div><div class="ma-stat-lbl">إجمالي العملاء</div></div>
+      <div class="ma-stat" style="--accent:#9333ea;--icon-bg:rgba(147,51,234,.15)"><div class="ma-stat-icon"><i class="fas fa-users"></i></div><div class="ma-stat-val">${allUsers.length}</div><div class="ma-stat-lbl">إجمالي العملاء</div></div>
       <div class="ma-stat" style="--accent:#00c9a7;--icon-bg:rgba(0,201,167,.15)"><div class="ma-stat-icon"><i class="fas fa-chart-line"></i></div><div class="ma-stat-val">${fmtInt(avgOrder)} ر.س</div><div class="ma-stat-lbl">متوسط قيمة الطلب</div></div>
-      <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-gift"></i></div><div class="ma-stat-val">${fmtInt(totalCb)}</div><div class="ma-stat-lbl">كاش باك ممنوح (ر.س)</div></div>
+      <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-gift"></i></div><div class="ma-stat-val">${fmtInt(totalCb)}</div><div class="ma-stat-lbl">كاش باك ممنوح</div></div>
       <div class="ma-stat" style="--accent:#d90429;--icon-bg:rgba(217,4,41,.15)"><div class="ma-stat-icon"><i class="fas fa-circle-xmark"></i></div><div class="ma-stat-val">${cancelled}</div><div class="ma-stat-lbl">طلبات ملغاة</div></div>
     </div>
     <div class="ma-charts-grid">
-      <div class="ma-card"><div class="ma-card-title"><i class="fas fa-chart-bar"></i> المبيعات - آخر 7 أيام</div>${renderSalesChart()}</div>
+      <div class="ma-card"><div class="ma-card-title"><i class="fas fa-chart-bar"></i> آخر 7 أيام</div>${renderSalesChart()}</div>
       <div class="ma-card"><div class="ma-card-title"><i class="fas fa-chart-pie"></i> توزيع الحالات</div>${renderStatusChart()}</div>
     </div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-clock"></i> آخر الطلبات</div>${renderRecentOrders(5)}</div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-gift"></i> كاش باك متوقع</div>
       <div style="text-align:center;padding:20px 10px">
         <div style="font-size:clamp(1.8rem,6vw,2.4rem);font-weight:900;background:linear-gradient(135deg,#f5b342,#c98a1e);-webkit-background-clip:text;background-clip:text;color:transparent">${fmtNum(potentialCb)} ر.س</div>
-        <div style="color:#8a92b0;font-weight:700;margin-top:8px;font-size:.85rem">عند تسليم الطلبات بنسبة ${(settings.cashback_rate*100).toFixed(1)}% (على المجموع الفرعي)</div>
+        <div style="color:#8a92b0;font-weight:700;margin-top:8px;font-size:.85rem">بنسبة ${(settings.cashback_rate*100).toFixed(1)}% على المجموع الفرعي</div>
       </div>
-    </div>
-  `;
+    </div>`;
   el.querySelector('[data-action="refresh"]').addEventListener('click', refreshAll);
 }
 
@@ -1059,14 +1221,8 @@ function renderSalesChart(){
   }
   const max = Math.max(...days.map(d => d.value), 1);
   if(days.every(d => d.value === 0)) return `<div class="ma-empty"><i class="fas fa-chart-line"></i><h3>لا توجد بيانات</h3></div>`;
-  return days.map(d => `
-    <div class="ma-chart-bar">
-      <div class="ma-chart-label">${d.label}</div>
-      <div class="ma-chart-track"><div class="ma-chart-fill" style="width:${(d.value/max*100)}%"></div></div>
-      <div class="ma-chart-value">${fmtInt(d.value)}</div>
-    </div>`).join('');
+  return days.map(d => `<div class="ma-chart-bar"><div class="ma-chart-label">${d.label}</div><div class="ma-chart-track"><div class="ma-chart-fill" style="width:${(d.value/max*100)}%"></div></div><div class="ma-chart-value">${fmtInt(d.value)}</div></div>`).join('');
 }
-
 function renderStatusChart(){
   const total = allOrders.length || 1;
   const html = Object.entries(ORDER_STATUS).map(([k,v]) => {
@@ -1077,7 +1233,6 @@ function renderStatusChart(){
   }).join('');
   return html || `<div class="ma-empty"><i class="fas fa-inbox"></i><h3>لا توجد بيانات</h3></div>`;
 }
-
 function renderRecentOrders(limit){
   const list = allOrders.slice(0, limit);
   if(!list.length) return `<div class="ma-empty"><i class="fas fa-inbox"></i><h3>لا توجد طلبات</h3></div>`;
@@ -1088,8 +1243,7 @@ function renderRecentOrders(limit){
       <td data-label="العميل">${esc(o.user_name || o.user_email || '—')}</td>
       <td class="price" data-label="المبلغ">${fmtNum(o.total)} ر.س</td>
       <td data-label="الحالة"><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></td>
-      <td data-label="التاريخ" style="font-size:.78rem;color:#8a92b0">${fmtDate(o.created_at)}</td>
-    </tr>`;
+      <td data-label="التاريخ" style="font-size:.78rem;color:#8a92b0">${fmtDate(o.created_at)}</td></tr>`;
   }).join('')}</tbody></table>`;
 }
 
@@ -1099,74 +1253,57 @@ function renderReportsSales(el){
   const avg = delivered.length > 0 ? revenue / delivered.length : 0;
   const max = delivered.length > 0 ? Math.max(...delivered.map(o => Number(o.total||0))) : 0;
   const byMonth = {};
-  delivered.forEach(o => {
-    const d = new Date(o.created_at);
-    const k = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2,'0');
-    byMonth[k] = (byMonth[k] || 0) + Number(o.total||0);
-  });
+  delivered.forEach(o => { const d = new Date(o.created_at); const k = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); byMonth[k] = (byMonth[k]||0) + Number(o.total||0); });
   const months = Object.entries(byMonth).sort().slice(-6);
   const maxM = Math.max(...months.map(m => m[1]), 1);
 
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-chart-bar"></i> تقارير المبيعات</div></div></div>
     <div class="ma-stats">
-      <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-sack-dollar"></i></div><div class="ma-stat-val">${fmtInt(revenue)}</div><div class="ma-stat-lbl">إجمالي الإيرادات</div></div>
-      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-bag-shopping"></i></div><div class="ma-stat-val">${delivered.length}</div><div class="ma-stat-lbl">طلبات مكتملة</div></div>
+      <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-sack-dollar"></i></div><div class="ma-stat-val">${fmtInt(revenue)}</div><div class="ma-stat-lbl">الإيرادات</div></div>
+      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-bag-shopping"></i></div><div class="ma-stat-val">${delivered.length}</div><div class="ma-stat-lbl">مكتملة</div></div>
       <div class="ma-stat" style="--accent:#00c9a7;--icon-bg:rgba(0,201,167,.15)"><div class="ma-stat-icon"><i class="fas fa-chart-line"></i></div><div class="ma-stat-val">${fmtInt(avg)} ر.س</div><div class="ma-stat-lbl">متوسط الطلب</div></div>
       <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-crown"></i></div><div class="ma-stat-val">${fmtInt(max)} ر.س</div><div class="ma-stat-lbl">أعلى طلب</div></div>
     </div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-calendar"></i> المبيعات الشهرية</div>
-      ${months.length ? months.map(([k,v]) => `<div class="ma-chart-bar"><div class="ma-chart-label">${k}</div><div class="ma-chart-track"><div class="ma-chart-fill green" style="width:${v/maxM*100}%"></div></div><div class="ma-chart-value">${fmtInt(v)} ر.س</div></div>`).join('') : '<div class="ma-empty"><i class="fas fa-chart-line"></i><h3>لا توجد بيانات</h3></div>'}
+      ${months.length ? months.map(([k,v]) => `<div class="ma-chart-bar"><div class="ma-chart-label">${k}</div><div class="ma-chart-track"><div class="ma-chart-fill green" style="width:${v/maxM*100}%"></div></div><div class="ma-chart-value">${fmtInt(v)}</div></div>`).join('') : '<div class="ma-empty"><i class="fas fa-chart-line"></i><h3>لا توجد بيانات</h3></div>'}
     </div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-trophy"></i> أفضل 10 طلبات</div>
       <table class="ma-table"><thead><tr><th>#</th><th>رقم</th><th>العميل</th><th>المبلغ</th><th>التاريخ</th></tr></thead><tbody>${[...delivered].sort((a,b) => b.total - a.total).slice(0,10).map((o,i) => `<tr>
-        <td data-label="#">${i+1}</td>
-        <td class="mono" data-label="رقم">#${String(o.id).slice(-6).toUpperCase()}</td>
-        <td data-label="العميل">${esc(o.user_name || o.user_email || '—')}</td>
-        <td class="price" data-label="المبلغ">${fmtNum(o.total)} ر.س</td>
+        <td data-label="#">${i+1}</td><td class="mono" data-label="رقم">#${String(o.id).slice(-6).toUpperCase()}</td>
+        <td data-label="العميل">${esc(o.user_name||o.user_email||'—')}</td><td class="price" data-label="المبلغ">${fmtNum(o.total)} ر.س</td>
         <td data-label="التاريخ" style="font-size:.78rem;color:#8a92b0">${fmtDate(o.created_at)}</td>
       </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;padding:30px;color:#8a92b0">لا توجد بيانات</td></tr>'}</tbody></table>
-    </div>
-  `;
+    </div>`;
 }
 
 function renderReportsCustomers(el){
   const ordersByUser = new Map();
-  for(const o of allOrders){
-    const k = String(o.user_id);
-    if(!ordersByUser.has(k)) ordersByUser.set(k, []);
-    ordersByUser.get(k).push(o);
-  }
+  for(const o of allOrders){ const k = String(o.user_id); if(!ordersByUser.has(k)) ordersByUser.set(k, []); ordersByUser.get(k).push(o); }
   const topCustomers = allUsers.map(u => {
     const list = ordersByUser.get(String(u.id)) || [];
     const paid = list.filter(o => o.status === 'delivered').reduce((s,o) => s + Number(o.total||0), 0);
     return {...u, _count: list.length, _paid: paid};
   }).sort((a,b) => b._paid - a._paid).slice(0, 15);
-  const newThisMonth = allUsers.filter(u => {
-    const d = new Date(u.created_at), now = new Date();
-    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-  }).length;
-  const returning = allUsers.filter(u => (ordersByUser.get(String(u.id)) || []).length > 1).length;
+  const newThisMonth = allUsers.filter(u => { const d = new Date(u.created_at), now = new Date(); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); }).length;
+  const returning = allUsers.filter(u => (ordersByUser.get(String(u.id))||[]).length > 1).length;
 
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-user-chart"></i> تقارير العملاء</div></div></div>
     <div class="ma-stats">
-      <div class="ma-stat" style="--accent:#9333ea;--icon-bg:rgba(147,51,234,.15)"><div class="ma-stat-icon"><i class="fas fa-users"></i></div><div class="ma-stat-val">${allUsers.length}</div><div class="ma-stat-lbl">إجمالي العملاء</div></div>
+      <div class="ma-stat" style="--accent:#9333ea;--icon-bg:rgba(147,51,234,.15)"><div class="ma-stat-icon"><i class="fas fa-users"></i></div><div class="ma-stat-val">${allUsers.length}</div><div class="ma-stat-lbl">العملاء</div></div>
       <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-user-plus"></i></div><div class="ma-stat-val">${newThisMonth}</div><div class="ma-stat-lbl">جديد هذا الشهر</div></div>
-      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-repeat"></i></div><div class="ma-stat-val">${returning}</div><div class="ma-stat-lbl">عملاء متكررون</div></div>
+      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-repeat"></i></div><div class="ma-stat-val">${returning}</div><div class="ma-stat-lbl">متكررون</div></div>
       <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-gift"></i></div><div class="ma-stat-val">${fmtInt(allUsers.reduce((s,u) => s + Number(u.cashback||0), 0))}</div><div class="ma-stat-lbl">إجمالي الكاش باك</div></div>
     </div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-crown"></i> أفضل 15 عميل</div>
-      <table class="ma-table"><thead><tr><th>#</th><th>الاسم</th><th>البريد</th><th>الطلبات</th><th>إجمالي المدفوع</th><th>الكاش باك</th></tr></thead><tbody>${topCustomers.map((u,i) => `<tr>
-        <td data-label="#">${i+1}</td>
-        <td data-label="الاسم" style="font-weight:800">${esc(u.name || '—')}</td>
-        <td data-label="البريد" style="font-size:.78rem;color:#8a92b0" dir="ltr">${esc(u.email || '—')}</td>
-        <td data-label="الطلبات">${u._count}</td>
-        <td class="price" data-label="المدفوع">${fmtNum(u._paid)} ر.س</td>
+      <table class="ma-table"><thead><tr><th>#</th><th>الاسم</th><th>البريد</th><th>الطلبات</th><th>المدفوع</th><th>الكاش باك</th></tr></thead><tbody>${topCustomers.map((u,i) => `<tr>
+        <td data-label="#">${i+1}</td><td data-label="الاسم" style="font-weight:800">${esc(u.name||'—')}</td>
+        <td data-label="البريد" style="font-size:.78rem;color:#8a92b0" dir="ltr">${esc(u.email||'—')}</td>
+        <td data-label="الطلبات">${u._count}</td><td class="price" data-label="المدفوع">${fmtNum(u._paid)} ر.س</td>
         <td data-label="الكاش باك" style="color:#f5b342;font-weight:800">${fmtNum(u.cashback)} ر.س</td>
       </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;padding:30px;color:#8a92b0">لا توجد بيانات</td></tr>'}</tbody></table>
-    </div>
-  `;
+    </div>`;
 }
 
 function renderReportsCashback(el){
@@ -1179,12 +1316,12 @@ function renderReportsCashback(el){
   const unpaidAmount = unpaidOrders.reduce((s,o) => s + Number(o.cashback||0), 0);
 
   el.innerHTML = `
-    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-gift"></i> تقارير الكاش باك</div><div class="ma-page-sub">النسبة: ${(settings.cashback_rate * 100).toFixed(2)}% • على المجموع الفرعي</div></div></div>
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-gift"></i> تقارير الكاش باك</div><div class="ma-page-sub">النسبة: ${(settings.cashback_rate*100).toFixed(2)}%</div></div></div>
     <div class="ma-stats">
-      <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-circle-plus"></i></div><div class="ma-stat-val">${fmtInt(totalGranted)}</div><div class="ma-stat-lbl">إجمالي ممنوح</div></div>
-      <div class="ma-stat" style="--accent:#d90429;--icon-bg:rgba(217,4,41,.15)"><div class="ma-stat-icon"><i class="fas fa-circle-minus"></i></div><div class="ma-stat-val">${fmtInt(totalDeducted)}</div><div class="ma-stat-lbl">إجمالي مخصوم</div></div>
+      <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-circle-plus"></i></div><div class="ma-stat-val">${fmtInt(totalGranted)}</div><div class="ma-stat-lbl">ممنوح</div></div>
+      <div class="ma-stat" style="--accent:#d90429;--icon-bg:rgba(217,4,41,.15)"><div class="ma-stat-icon"><i class="fas fa-circle-minus"></i></div><div class="ma-stat-val">${fmtInt(totalDeducted)}</div><div class="ma-stat-lbl">مخصوم</div></div>
       <div class="ma-stat" style="--accent:#f5b342;--icon-bg:rgba(245,179,66,.15)"><div class="ma-stat-icon"><i class="fas fa-wallet"></i></div><div class="ma-stat-val">${fmtInt(totalBalance)}</div><div class="ma-stat-lbl">الرصيد الحالي</div></div>
-      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-percent"></i></div><div class="ma-stat-val">${(settings.cashback_rate * 100).toFixed(1)}%</div><div class="ma-stat-lbl">النسبة</div></div>
+      <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-percent"></i></div><div class="ma-stat-val">${(settings.cashback_rate*100).toFixed(1)}%</div><div class="ma-stat-lbl">النسبة</div></div>
     </div>
     <div class="ma-stats">
       <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-check"></i></div><div class="ma-stat-val">${fmtInt(paidAmount)}</div><div class="ma-stat-lbl">مدفوع (${paidOrders.length})</div></div>
@@ -1202,11 +1339,10 @@ function renderReportsCashback(el){
           <td data-label="التاريخ" style="font-size:.76rem;color:#8a92b0">${fmtDate(l.created_at)}</td>
         </tr>`;
       }).join('') || '<tr><td colspan="5" style="text-align:center;padding:30px;color:#8a92b0">لا سجلات</td></tr>'}</tbody></table>
-    </div>
-  `;
+    </div>`;
 }
 
-/* ═══ ORDERS ═══ */
+/* ═══════ ORDERS ═══════ */
 function renderOrdersView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-box"></i> سجل الطلبات</div><div class="ma-page-sub">${allOrders.length} طلب</div></div></div>
@@ -1215,8 +1351,7 @@ function renderOrdersView(el){
       <select id="ordStatus"><option value="">كل الحالات</option>${Object.entries(ORDER_STATUS).map(([k,v]) => `<option value="${k}">${v.label}</option>`).join('')}</select>
       <button class="ma-btn ma-btn-primary" id="ordRefresh"><i class="fas fa-rotate"></i> تحديث</button>
     </div>
-    <div id="ordTableContainer"></div>
-  `;
+    <div id="ordTableContainer"></div>`;
   const container = $('ordTableContainer');
   if(!container.dataset.bound){
     container.dataset.bound = '1';
@@ -1241,14 +1376,10 @@ function renderOrdersView(el){
   $('ordSearch').addEventListener('input', debounce(renderOrdersTable, 150));
   $('ordStatus').addEventListener('change', renderOrdersTable);
   $('ordRefresh').addEventListener('click', async () => {
-    showLoading(true);
-    await loadAllData(true);
-    showLoading(false);
-    renderOrdersTable();
-    toast('تم التحديث','info');
+    showLoading(true); await loadAllData(true); showLoading(false);
+    renderOrdersTable(); toast('تم التحديث','info');
   });
 }
-
 function renderOrdersTable(){
   const c = $('ordTableContainer');
   if(!c) return;
@@ -1256,18 +1387,18 @@ function renderOrdersTable(){
   const sf = $('ordStatus').value;
   const filtered = allOrders.filter(o => {
     if(sf && o.status !== sf) return false;
-    if(q){
-      const hay = `${o.id} ${o.user_name||''} ${o.user_email||''} ${o.user_phone||''}`.toLowerCase();
-      if(!hay.includes(q)) return false;
-    }
+    if(q){ const hay = `${o.id} ${o.user_name||''} ${o.user_email||''} ${o.user_phone||''}`.toLowerCase(); if(!hay.includes(q)) return false; }
     return true;
   });
-  if(!filtered.length){
-    c.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-inbox"></i><h3>لا توجد طلبات</h3></div></div>`;
-    return;
-  }
+  if(!filtered.length){ c.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-inbox"></i><h3>لا توجد طلبات</h3></div></div>`; return; }
+
+  const canConfirm = can('confirm_orders');
+  const canCb = can('add_cashback');
+  const canDel = can('delete_orders');
+  const canShip = can('edit_shipping');
+
   c.innerHTML = `<div class="ma-table-wrap"><table class="ma-table">
-    <thead><tr><th>رقم</th><th>العميل</th><th>الجوال</th><th>المبلغ</th><th>الشحن</th><th>الكاش باك</th><th>الحالة</th><th>تغيير الحالة</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+    <thead><tr><th>رقم</th><th>العميل</th><th>الجوال</th><th>المبلغ</th><th>الشحن</th><th>الكاش باك</th><th>الحالة</th>${canConfirm?'<th>تغيير الحالة</th>':''}<th>التاريخ</th><th>إجراءات</th></tr></thead>
     <tbody>${filtered.map(o => {
       const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
       const bd = calcOrderBreakdown(o);
@@ -1289,24 +1420,20 @@ function renderOrdersTable(){
         <td data-label="الشحن" style="font-size:.8rem;color:#6a9aff;font-weight:800">${fmtNum(bd.shipping)}</td>
         <td data-label="الكاش باك" style="font-size:.82rem">${cb}</td>
         <td data-label="الحالة"><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></td>
-        <td data-label="تغيير الحالة">
-          <select class="ma-status-select" data-status-order="${o.id}">
-            <option value="">تغيير ▾</option>
-            ${statusOptions}
-          </select>
-        </td>
+        ${canConfirm?`<td data-label="تغيير الحالة"><select class="ma-status-select" data-status-order="${o.id}"><option value="">تغيير ▾</option>${statusOptions}</select></td>`:''}
         <td data-label="التاريخ" style="font-size:.76rem;color:#8a92b0">${fmtDate(o.created_at)}</td>
         <td data-label="إجراءات"><div class="actions-cell">
           <button class="ma-mini-btn ma-mini-detail" data-detail-order="${o.id}"><i class="fas fa-receipt"></i> تفاصيل</button>
-          <button class="ma-mini-btn ma-mini-cb" data-add-cashback="${o.id}" title="كاش باك"><i class="fas fa-gift"></i></button>
-          <button class="ma-mini-btn ma-mini-ship" data-edit-shipping="${o.id}" title="تعديل الشحن"><i class="fas fa-truck"></i></button>
-          <button class="ma-mini-btn ma-mini-delete" data-delete-order="${o.id}" title="حذف"><i class="fas fa-trash"></i></button>
+          ${canCb?`<button class="ma-mini-btn ma-mini-cb" data-add-cashback="${o.id}" title="كاش باك"><i class="fas fa-gift"></i></button>`:''}
+          ${canShip?`<button class="ma-mini-btn ma-mini-ship" data-edit-shipping="${o.id}" title="تعديل الشحن"><i class="fas fa-truck"></i></button>`:''}
+          ${canDel?`<button class="ma-mini-btn ma-mini-delete" data-delete-order="${o.id}" title="حذف"><i class="fas fa-trash"></i></button>`:''}
         </div></td>
       </tr>`;
     }).join('')}</tbody></table></div>`;
 }
 
 async function applyStatus(orderId, newStatus){
+  if(!can('confirm_orders')){ toast('ليس لديك صلاحية تأكيد الطلبات','error'); return; }
   if(!ORDER_STATUS[newStatus]) return;
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
@@ -1316,18 +1443,15 @@ async function applyStatus(orderId, newStatus){
   const oldLabel = ORDER_STATUS[oldStatus]?.label || oldStatus;
   const newLabel = ORDER_STATUS[newStatus].label;
   let confirmMsg = `تغيير الحالة من "${oldLabel}" إلى "${newLabel}"؟`;
-
   const bd = calcOrderBreakdown(order);
 
   if(newStatus === 'delivered' && !order.cashback_applied){
     const earned = round2(bd.subtotal * settings.cashback_rate);
-    confirmMsg += `\n\nسيتم إضافة ${earned.toFixed(2)} ر.س كاش باك (على المجموع الفرعي ${bd.subtotal.toFixed(2)} ر.س).`;
+    confirmMsg += `\n\nسيتم إضافة ${earned.toFixed(2)} ر.س كاش باك.`;
   } else if((oldStatus === 'delivered' && newStatus !== 'delivered') && order.cashback_applied && order.cashback > 0){
-    const refund = Number(order.cashback||0);
-    confirmMsg += `\n\nسيتم خصم ${refund.toFixed(2)} ر.س كاش باك من رصيد العميل.`;
+    confirmMsg += `\n\nسيتم خصم ${Number(order.cashback||0).toFixed(2)} ر.س كاش باك.`;
   } else if(newStatus === 'cancelled' && order.cashback_applied && order.cashback > 0){
-    const refund = Number(order.cashback||0);
-    confirmMsg += `\n\nسيتم خصم ${refund.toFixed(2)} ر.س كاش باك من رصيد العميل.`;
+    confirmMsg += `\n\nسيتم خصم ${Number(order.cashback||0).toFixed(2)} ر.س كاش باك.`;
   }
 
   const ok = await askConfirm(confirmMsg, { title: 'تغيير حالة الطلب', danger: newStatus === 'cancelled' });
@@ -1345,11 +1469,7 @@ async function applyStatus(orderId, newStatus){
     updates.cashback_paid = false;
     cbMsg = ` + ${earned.toFixed(2)} ر.س كاش باك`;
     try {
-      await sb.from('men_cashback_log').insert({
-        user_id: order.user_id, user_email: order.user_email, amount: earned,
-        reason: `كاش باك تلقائي من الطلب #${orderId}`, order_id: orderId,
-        type: 'order', created_by: currentUser.email
-      });
+      await sb.from('men_cashback_log').insert({ user_id: order.user_id, user_email: order.user_email, amount: earned, reason: `كاش باك تلقائي من الطلب #${orderId}`, order_id: orderId, type: 'order', created_by: currentUser.email });
       const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
       const newCb = round2(Number(u?.cashback||0) + earned);
       await sb.from('men_users').update({cashback: newCb, updated_at: new Date().toISOString()}).eq('id', order.user_id);
@@ -1357,20 +1477,13 @@ async function applyStatus(orderId, newStatus){
       if(lu) lu.cashback = newCb;
     } catch(e){ console.warn(e); }
   }
-
   if((oldStatus === 'delivered' && newStatus !== 'delivered') || newStatus === 'cancelled'){
     if(order.cashback_applied && order.cashback > 0){
       const refund = Number(order.cashback||0);
-      updates.cashback = 0;
-      updates.cashback_applied = false;
-      updates.cashback_paid = false;
+      updates.cashback = 0; updates.cashback_applied = false; updates.cashback_paid = false;
       cbMsg = ` − خصم ${refund.toFixed(2)} ر.س`;
       try {
-        await sb.from('men_cashback_log').insert({
-          user_id: order.user_id, user_email: order.user_email, amount: -refund,
-          reason: `إلغاء كاش باك الطلب #${orderId}`, order_id: orderId,
-          type: 'refund', created_by: currentUser.email
-        });
+        await sb.from('men_cashback_log').insert({ user_id: order.user_id, user_email: order.user_email, amount: -refund, reason: `إلغاء كاش باك الطلب #${orderId}`, order_id: orderId, type: 'refund', created_by: currentUser.email });
         const { data: u } = await sb.from('men_users').select('cashback').eq('id', order.user_id).maybeSingle();
         const newCb = Math.max(0, round2(Number(u?.cashback||0) - refund));
         await sb.from('men_users').update({cashback: newCb, updated_at: new Date().toISOString()}).eq('id', order.user_id);
@@ -1388,23 +1501,17 @@ async function applyStatus(orderId, newStatus){
     logAudit('status_change', {order_id: orderId, from: oldStatus, to: newStatus});
     renderView(currentView);
     toast(`✅ ${newLabel}${cbMsg}`, 'success');
-    if(currentDetailOrder && String(currentDetailOrder.id) === String(orderId)){
-      openDetailModal(orderId);
-    }
-  } catch(e){
-    toast('فشل: ' + e.message, 'error');
-  } finally {
-    showLoading(false);
-  }
+    if(currentDetailOrder && String(currentDetailOrder.id) === String(orderId)) openDetailModal(orderId);
+  } catch(e){ toast('فشل: ' + e.message, 'error'); }
+  finally { showLoading(false); }
 }
 
-/* ═══ CUSTOMERS ═══ */
+/* ═══════ CUSTOMERS ═══════ */
 function renderCustomersView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-users"></i> سجل العملاء</div><div class="ma-page-sub">${allUsers.length} عميل</div></div></div>
     <div class="ma-toolbar"><div class="ma-search"><input type="text" id="custSearch" placeholder="ابحث..."><i class="fas fa-search"></i></div><button class="ma-btn ma-btn-primary" id="custRefresh"><i class="fas fa-rotate"></i> تحديث</button></div>
-    <div id="custTableContainer"></div>
-  `;
+    <div id="custTableContainer"></div>`;
   const container = $('custTableContainer');
   if(!container.dataset.bound){
     container.dataset.bound = '1';
@@ -1419,14 +1526,10 @@ function renderCustomersView(el){
   renderCustomersTable();
   $('custSearch').addEventListener('input', debounce(renderCustomersTable, 150));
   $('custRefresh').addEventListener('click', async () => {
-    showLoading(true);
-    await loadAllData(true);
-    showLoading(false);
-    renderCustomersTable();
-    toast('تم التحديث','info');
+    showLoading(true); await loadAllData(true); showLoading(false);
+    renderCustomersTable(); toast('تم التحديث','info');
   });
 }
-
 function renderCustomersTable(){
   const c = $('custTableContainer');
   if(!c) return;
@@ -1436,16 +1539,11 @@ function renderCustomersTable(){
     const hay = `${u.id} ${u.name||''} ${u.email||''} ${u.phone||''}`.toLowerCase();
     return hay.includes(q);
   });
-  if(!filtered.length){
-    c.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-users"></i><h3>لا يوجد عملاء</h3></div></div>`;
-    return;
-  }
+  if(!filtered.length){ c.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-users"></i><h3>لا يوجد عملاء</h3></div></div>`; return; }
   const ordersByUser = new Map();
-  for(const o of allOrders){
-    const k = String(o.user_id);
-    if(!ordersByUser.has(k)) ordersByUser.set(k, 0);
-    ordersByUser.set(k, ordersByUser.get(k) + 1);
-  }
+  for(const o of allOrders){ const k = String(o.user_id); ordersByUser.set(k, (ordersByUser.get(k)||0) + 1); }
+  const canNote = can('send_notes');
+  const canCb = can('add_cashback');
   c.innerHTML = `<div class="ma-table-wrap"><table class="ma-table">
     <thead><tr><th>الاسم</th><th>البريد</th><th>الجوال</th><th>الطلبات</th><th>إجمالي المدفوع</th><th>رصيد الكاش باك</th><th>إجراءات</th></tr></thead>
     <tbody>${filtered.map(u => {
@@ -1459,43 +1557,34 @@ function renderCustomersTable(){
         <td class="price" data-label="المدفوع">${fmtNum(paid)} ر.س</td>
         <td data-label="الكاش باك" style="color:#f5b342;font-weight:900">${fmtNum(u.cashback)} ر.س</td>
         <td data-label="إجراءات"><div class="actions-cell">
-          <button class="ma-mini-btn ma-mini-chat" data-user-chat="${u.id}" title="محادثة"><i class="fas fa-comments"></i></button>
-          <button class="ma-mini-btn ma-mini-note" data-user-note="${u.id}" title="ملاحظة"><i class="fas fa-comment-dots"></i></button>
-          <button class="ma-mini-btn ma-mini-cb" data-user-cb="${u.id}" data-cb-mode="add" title="إضافة كاش باك"><i class="fas fa-gift"></i></button>
-          <button class="ma-mini-btn ma-mini-delete" data-user-cb="${u.id}" data-cb-mode="deduct" title="خصم"><i class="fas fa-minus"></i></button>
+          ${canNote?`<button class="ma-mini-btn ma-mini-chat" data-user-chat="${u.id}" title="محادثة"><i class="fas fa-comments"></i></button>
+          <button class="ma-mini-btn ma-mini-note" data-user-note="${u.id}" title="ملاحظة"><i class="fas fa-comment-dots"></i></button>`:''}
+          ${canCb?`<button class="ma-mini-btn ma-mini-cb" data-user-cb="${u.id}" data-cb-mode="add" title="إضافة كاش باك"><i class="fas fa-gift"></i></button>
+          <button class="ma-mini-btn ma-mini-delete" data-user-cb="${u.id}" data-cb-mode="deduct" title="خصم"><i class="fas fa-minus"></i></button>`:''}
         </div></td>
       </tr>`;
     }).join('')}</tbody></table></div>`;
 }
 
-/* ═══ FINANCE ═══ */
+/* ═══════ FINANCE ═══════ */
 function renderFinanceView(el){
   const delivered = allOrders.filter(o => o.status === 'delivered');
   const revenue = delivered.reduce((s,o) => s + Number(o.total||0), 0);
   const cashbackPaid = allOrders.filter(o => o.cashback_paid).reduce((s,o) => s + Number(o.cashback||0), 0);
   const cashbackUnpaid = allOrders.filter(o => o.cashback_applied && !o.cashback_paid).reduce((s,o) => s + Number(o.cashback||0), 0);
   const netRevenue = revenue - cashbackPaid;
-  const potentialCb = allOrders.filter(o => !['delivered','cancelled'].includes(o.status)).reduce((s,o) => {
-    const bd = calcOrderBreakdown(o);
-    return s + bd.subtotal * settings.cashback_rate;
-  }, 0);
+  const potentialCb = allOrders.filter(o => !['delivered','cancelled'].includes(o.status)).reduce((s,o) => { const bd = calcOrderBreakdown(o); return s + bd.subtotal * settings.cashback_rate; }, 0);
   const pendingList = allOrders.filter(o => o.cashback_applied && !o.cashback_paid);
-
-  const totalVAT = allOrders.filter(o => o.status === 'delivered').reduce((s,o) => {
-    const bd = calcOrderBreakdown(o);
-    return s + bd.vat;
-  }, 0);
-  const totalShipping = allOrders.filter(o => o.status === 'delivered').reduce((s,o) => {
-    const bd = calcOrderBreakdown(o);
-    return s + bd.shipping;
-  }, 0);
+  const totalVAT = allOrders.filter(o => o.status === 'delivered').reduce((s,o) => { const bd = calcOrderBreakdown(o); return s + bd.vat; }, 0);
+  const totalShipping = allOrders.filter(o => o.status === 'delivered').reduce((s,o) => { const bd = calcOrderBreakdown(o); return s + bd.shipping; }, 0);
+  const canMarkPaid = can('add_cashback');
 
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-coins"></i> المالية</div></div></div>
     <div class="ma-stats">
-      <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-sack-dollar"></i></div><div class="ma-stat-val">${fmtInt(revenue)}</div><div class="ma-stat-lbl">إجمالي الإيرادات</div></div>
-      <div class="ma-stat" style="--accent:#00c9a7;--icon-bg:rgba(0,201,167,.15)"><div class="ma-stat-icon"><i class="fas fa-file-invoice"></i></div><div class="ma-stat-val">${fmtInt(totalVAT)}</div><div class="ma-stat-lbl">ضرائب محصلة (${(settings.vat_rate*100).toFixed(0)}%)</div></div>
-      <div class="ma-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.15)"><div class="ma-stat-icon"><i class="fas fa-truck"></i></div><div class="ma-stat-val">${fmtInt(totalShipping)}</div><div class="ma-stat-lbl">إيرادات الشحن</div></div>
+      <div class="ma-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.15)"><div class="ma-stat-icon"><i class="fas fa-sack-dollar"></i></div><div class="ma-stat-val">${fmtInt(revenue)}</div><div class="ma-stat-lbl">الإيرادات</div></div>
+      <div class="ma-stat" style="--accent:#00c9a7;--icon-bg:rgba(0,201,167,.15)"><div class="ma-stat-icon"><i class="fas fa-file-invoice"></i></div><div class="ma-stat-val">${fmtInt(totalVAT)}</div><div class="ma-stat-lbl">ضرائب (${(settings.vat_rate*100).toFixed(0)}%)</div></div>
+      <div class="ma-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.15)"><div class="ma-stat-icon"><i class="fas fa-truck"></i></div><div class="ma-stat-val">${fmtInt(totalShipping)}</div><div class="ma-stat-lbl">الشحن</div></div>
       <div class="ma-stat" style="--accent:#d90429;--icon-bg:rgba(217,4,41,.15)"><div class="ma-stat-icon"><i class="fas fa-gift"></i></div><div class="ma-stat-val">${fmtInt(cashbackPaid)}</div><div class="ma-stat-lbl">كاش باك مدفوع</div></div>
     </div>
     <div class="ma-stats">
@@ -1505,27 +1594,25 @@ function renderFinanceView(el){
       <div class="ma-stat" style="--accent:#6a9aff;--icon-bg:rgba(106,154,255,.15)"><div class="ma-stat-icon"><i class="fas fa-users"></i></div><div class="ma-stat-val">${fmtInt(allUsers.reduce((s,u) => s + Number(u.cashback||0), 0))}</div><div class="ma-stat-lbl">أرصدة الكاش باك</div></div>
     </div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-list-check"></i> الكاش باك المعلق</div>
-      ${pendingList.length ? `<table class="ma-table"><thead><tr><th>رقم</th><th>العميل</th><th>المبلغ</th><th>التاريخ</th><th>إجراء</th></tr></thead><tbody>${pendingList.map(o => `<tr>
+      ${pendingList.length ? `<table class="ma-table"><thead><tr><th>رقم</th><th>العميل</th><th>المبلغ</th><th>التاريخ</th>${canMarkPaid?'<th>إجراء</th>':''}</tr></thead><tbody>${pendingList.map(o => `<tr>
         <td class="mono" data-label="رقم">#${String(o.id).slice(-6).toUpperCase()}</td>
         <td data-label="العميل">${esc(o.user_name||o.user_email||'—')}</td>
         <td class="price" data-label="المبلغ">${fmtNum(o.cashback)} ر.س</td>
         <td data-label="التاريخ" style="font-size:.78rem;color:#8a92b0">${fmtDate(o.created_at)}</td>
-        <td data-label="إجراء"><button class="ma-mini-btn ma-mini-detail" data-mark-paid="${o.id}"><i class="fas fa-money-bill-wave"></i> تعليم كمدفوع</button></td>
+        ${canMarkPaid?`<td data-label="إجراء"><button class="ma-mini-btn ma-mini-detail" data-mark-paid="${o.id}"><i class="fas fa-money-bill-wave"></i> تعليم كمدفوع</button></td>`:''}
       </tr>`).join('')}</tbody></table>` : '<div class="ma-empty"><i class="fas fa-check-circle" style="color:#4caf50"></i><h3>لا يوجد كاش باك معلق</h3></div>'}
-    </div>
-  `;
+    </div>`;
   el.querySelectorAll('[data-mark-paid]').forEach(b => b.addEventListener('click', () => toggleCashbackPaid(b.dataset.markPaid, true)));
 }
 
-/* ═══ REWARDS ═══ */
+/* ═══════ REWARDS ═══════ */
 function renderRewardsView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-gift"></i> إدارة الكاش باك</div><div class="ma-page-sub">أضف أو اخصم كاش باك</div></div></div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-search"></i> البحث عن عميل</div>
       <div class="ma-search" style="max-width:600px"><input type="text" id="rewSearch" placeholder="اسم أو بريد العميل..."><i class="fas fa-search"></i></div>
     </div>
-    <div id="rewResults"></div>
-  `;
+    <div id="rewResults"></div>`;
   const results = $('rewResults');
   const search = () => {
     const q = ($('rewSearch').value || '').trim().toLowerCase();
@@ -1546,118 +1633,74 @@ function renderRewardsView(el){
 
 function renderRateView(el){
   el.innerHTML = `
-    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-sliders"></i> النسب والضرائب</div><div class="ma-page-sub">تحكم بنسبة الكاش باك، ضريبة القيمة المضافة، والشحن الافتراضي</div></div></div>
-
+    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-sliders"></i> النسب والضرائب</div></div></div>
     <div class="ma-rate-card">
-      <div class="ma-rate-title"><i class="fas fa-gift"></i><div><div class="t">نسبة الكاش باك</div><div class="s">تُطبَّق على المجموع الفرعي (بدون ضريبة/شحن)</div></div></div>
+      <div class="ma-rate-title"><i class="fas fa-gift"></i><div><div class="t">نسبة الكاش باك</div><div class="s">تُطبَّق على المجموع الفرعي</div></div></div>
       <div class="ma-rate-display">${(settings.cashback_rate*100).toFixed(2)}%</div>
       <div class="ma-rate-hint">مثال: طلب بمجموع فرعي 1000 ر.س → ${fmtNum(1000 * settings.cashback_rate)} ر.س كاش باك</div>
       <div class="ma-rate-form">
         <input type="number" id="rateInput" value="${(settings.cashback_rate*100).toFixed(2)}" step="0.1" min="0" max="100" inputmode="decimal">
         <span style="font-size:1.4rem;font-weight:900;color:#f5b342">%</span>
-        <button class="ma-btn ma-btn-gold" id="rateSave"><i class="fas fa-save"></i> حفظ النسبة</button>
+        <button class="ma-btn ma-btn-gold" id="rateSave"><i class="fas fa-save"></i> حفظ</button>
       </div>
       <div class="ma-quick" style="gap:10px;margin-top:14px">
         <button data-rate="1">1%</button><button data-rate="2">2%</button><button data-rate="3">3%</button><button data-rate="5">5%</button><button data-rate="10">10%</button>
       </div>
     </div>
-
     <div class="ma-setting-card tax">
-      <div class="ma-setting-title">
-        <i class="fas fa-file-invoice"></i>
-        <div><div class="t">ضريبة القيمة المضافة</div><div class="s">السعودية — 15% افتراضياً (يمكن تغييرها)</div></div>
-      </div>
+      <div class="ma-setting-title"><i class="fas fa-file-invoice"></i><div><div class="t">ضريبة القيمة المضافة</div><div class="s">السعودية — 15% افتراضياً</div></div></div>
       <div class="ma-setting-display">${(settings.vat_rate*100).toFixed(2)}%</div>
-      <div class="ma-setting-hint">
-        الضريبة تُحسب على <strong style="color:#fff">المجموع الفرعي للطلب</strong> (بدون شحن).
-        ${settings.vat_enabled ? '✅ الضريبة <strong style="color:#00c9a7">مُفعّلة</strong>' : '⚠️ الضريبة <strong style="color:#d90429">معطّلة</strong>'}
-      </div>
+      <div class="ma-setting-hint">الضريبة تُحسب على المجموع الفرعي. ${settings.vat_enabled ? '✅ مُفعّلة' : '⚠️ معطّلة'}</div>
       <div class="ma-setting-form">
         <input type="number" id="vatRateInput" value="${(settings.vat_rate*100).toFixed(2)}" step="0.1" min="0" max="100" inputmode="decimal">
         <span style="font-size:1.4rem;font-weight:900;color:#00c9a7">%</span>
         <button class="ma-btn" id="vatSave" style="background:linear-gradient(135deg,#00c9a7,#008f77);color:#fff"><i class="fas fa-save"></i> حفظ</button>
-        <button class="ma-btn ma-btn-soft" id="vatToggle" style="padding:0 20px">
-          <i class="fas fa-${settings.vat_enabled ? 'toggle-on' : 'toggle-off'}"></i>
-          ${settings.vat_enabled ? 'تعطيل' : 'تفعيل'}
-        </button>
+        <button class="ma-btn ma-btn-soft" id="vatToggle" style="padding:0 20px"><i class="fas fa-${settings.vat_enabled ? 'toggle-on' : 'toggle-off'}"></i> ${settings.vat_enabled ? 'تعطيل' : 'تفعيل'}</button>
       </div>
-      <div class="ma-quick" style="gap:10px;margin-top:14px">
-        <button data-vat="0">0%</button>
-        <button data-vat="5">5%</button>
-        <button data-vat="15">15% (السعودية)</button>
-      </div>
+      <div class="ma-quick" style="gap:10px;margin-top:14px"><button data-vat="0">0%</button><button data-vat="5">5%</button><button data-vat="15">15%</button></div>
     </div>
-
     <div class="ma-setting-card shipping">
-      <div class="ma-setting-title">
-        <i class="fas fa-truck"></i>
-        <div><div class="t">سعر الشحن الافتراضي</div><div class="s">يُستخدم في حساب التفاصيل عند عدم وجود شحن محفوظ</div></div>
-      </div>
+      <div class="ma-setting-title"><i class="fas fa-truck"></i><div><div class="t">سعر الشحن الافتراضي</div><div class="s">يُستخدم عند عدم وجود شحن محفوظ</div></div></div>
       <div class="ma-setting-display">${fmtNum(settings.shipping_fee)} ر.س</div>
-      <div class="ma-setting-hint">
-        💡 يمكنك تعديل شحن كل طلب على حدة من صفحة <strong style="color:#fff">سجل الطلبات</strong> أو من <strong style="color:#fff">تفاصيل الطلب</strong>.
-      </div>
+      <div class="ma-setting-hint">💡 يمكنك تعديل شحن كل طلب من صفحة سجل الطلبات.</div>
       <div class="ma-setting-form">
         <input type="number" id="shipFeeInput" value="${Number(settings.shipping_fee).toFixed(2)}" step="0.01" min="0" inputmode="decimal">
         <span style="font-size:1.4rem;font-weight:900;color:#6a9aff">ر.س</span>
         <button class="ma-btn" id="shipFeeSave" style="background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff"><i class="fas fa-save"></i> حفظ</button>
       </div>
       <div class="ma-quick" style="gap:10px;margin-top:14px">
-        <button data-shipfee="0">مجاني</button>
-        <button data-shipfee="10">10</button>
-        <button data-shipfee="15">15</button>
-        <button data-shipfee="20">20</button>
-        <button data-shipfee="25">25</button>
+        <button data-shipfee="0">مجاني</button><button data-shipfee="10">10</button><button data-shipfee="15">15</button><button data-shipfee="20">20</button><button data-shipfee="25">25</button>
       </div>
-    </div>
-  `;
+    </div>`;
 
   $('rateSave').addEventListener('click', async () => {
     const v = Number($('rateInput').value);
     if(isNaN(v) || v < 0 || v > 100){ toast('نسبة غير صحيحة','error'); return; }
-    const rate = v / 100;
-    const oldRate = settings.cashback_rate;
-    showLoading(true);
-    await saveSetting('cashback_rate', rate);
-    showLoading(false);
-    logAudit('rate_changed', {old: oldRate, new: rate});
-    toast(`✅ تم الحفظ: ${v.toFixed(2)}%`, 'success');
-    renderRateView(el);
+    showLoading(true); await saveSetting('cashback_rate', v/100); showLoading(false);
+    logAudit('rate_changed', {new: v/100});
+    toast(`✅ ${v.toFixed(2)}%`, 'success'); renderRateView(el);
   });
   el.querySelectorAll('[data-rate]').forEach(b => b.addEventListener('click', () => { $('rateInput').value = b.dataset.rate; }));
-
   $('vatSave').addEventListener('click', async () => {
     const v = Number($('vatRateInput').value);
-    if(isNaN(v) || v < 0 || v > 100){ toast('نسبة ضريبة غير صحيحة','error'); return; }
-    const rate = v / 100;
-    const oldRate = settings.vat_rate;
-    showLoading(true);
-    await saveSetting('vat_rate', rate);
-    showLoading(false);
-    logAudit('vat_rate_changed', {old: oldRate, new: rate});
-    toast(`✅ الضريبة: ${v.toFixed(2)}%`, 'success');
-    renderRateView(el);
+    if(isNaN(v) || v < 0 || v > 100){ toast('نسبة غير صحيحة','error'); return; }
+    showLoading(true); await saveSetting('vat_rate', v/100); showLoading(false);
+    logAudit('vat_rate_changed', {new: v/100});
+    toast(`✅ الضريبة: ${v.toFixed(2)}%`, 'success'); renderRateView(el);
   });
   el.querySelectorAll('[data-vat]').forEach(b => b.addEventListener('click', () => { $('vatRateInput').value = b.dataset.vat; }));
-
   $('vatToggle').addEventListener('click', async () => {
-    showLoading(true);
-    await saveSetting('vat_enabled', !settings.vat_enabled);
-    showLoading(false);
+    showLoading(true); await saveSetting('vat_enabled', !settings.vat_enabled); showLoading(false);
     logAudit('vat_toggled', {enabled: settings.vat_enabled});
-    toast(settings.vat_enabled ? '✅ تم تفعيل الضريبة' : '⚠️ تم تعطيل الضريبة', settings.vat_enabled ? 'success' : 'info');
+    toast(settings.vat_enabled ? '✅ مُفعّلة' : '⚠️ معطّلة', settings.vat_enabled ? 'success' : 'info');
     renderRateView(el);
   });
-
   $('shipFeeSave').addEventListener('click', async () => {
     const v = Number($('shipFeeInput').value);
     if(isNaN(v) || v < 0){ toast('سعر غير صحيح','error'); return; }
-    showLoading(true);
-    await saveSetting('shipping_fee', v);
-    showLoading(false);
+    showLoading(true); await saveSetting('shipping_fee', v); showLoading(false);
     logAudit('shipping_fee_changed', {new: v});
-    toast(`✅ الشحن الافتراضي: ${v.toFixed(2)} ر.س`, 'success');
-    renderRateView(el);
+    toast(`✅ الشحن: ${v.toFixed(2)} ر.س`, 'success'); renderRateView(el);
   });
   el.querySelectorAll('[data-shipfee]').forEach(b => b.addEventListener('click', () => { $('shipFeeInput').value = b.dataset.shipfee; }));
 }
@@ -1673,26 +1716,205 @@ function renderRewardsLogView(el){
       <div class="ma-stat" style="--accent:#4a7aff;--icon-bg:rgba(74,122,255,.15)"><div class="ma-stat-icon"><i class="fas fa-list"></i></div><div class="ma-stat-val">${allCashbackLog.length}</div><div class="ma-stat-lbl">العمليات</div></div>
     </div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-history"></i> العمليات</div>
-      ${allCashbackLog.length ? `<div style="max-height:600px;overflow-y:auto"><table class="ma-table"><thead><tr><th>العميل</th><th>المبلغ</th><th>النوع</th><th>السبب</th><th>بواسطة</th><th>التاريخ</th></tr></thead><tbody>${allCashbackLog.map(l => {const amt = Number(l.amount||0), pos = amt > 0; return `<tr>
+      ${allCashbackLog.length ? `<div style="max-height:600px;overflow-y:auto"><table class="ma-table"><thead><tr><th>العميل</th><th>المبلغ</th><th>النوع</th><th>السبب</th><th>بواسطة</th><th>التاريخ</th></tr></thead><tbody>${allCashbackLog.map(l => { const amt = Number(l.amount||0), pos = amt > 0; return `<tr>
         <td data-label="العميل" style="font-size:.8rem">${esc(l.user_email||'—')}</td>
         <td data-label="المبلغ" style="font-weight:900;color:${pos?'#4caf50':'#d90429'}" class="mono">${pos?'+':''}${fmtNum(amt)}</td>
         <td data-label="النوع"><span class="ma-badge" style="background:rgba(74,122,255,.15);color:#6a9aff">${esc(l.type||'—')}</span></td>
         <td data-label="السبب" style="font-size:.78rem;color:#a8b0cc">${esc(l.reason||'—')}</td>
         <td data-label="بواسطة" style="font-size:.76rem;color:#8a92b0">${esc(l.created_by||'—')}</td>
         <td data-label="التاريخ" style="font-size:.76rem;color:#8a92b0">${fmtDate(l.created_at)}</td>
-      </tr>`;}).join('')}</tbody></table></div>` : '<div class="ma-empty"><i class="fas fa-list"></i><h3>لا عمليات</h3></div>'}
-    </div>
-  `;
+      </tr>`; }).join('')}</tbody></table></div>` : '<div class="ma-empty"><i class="fas fa-list"></i><h3>لا عمليات</h3></div>'}
+    </div>`;
 }
 
-/* ═══ AUDIT ═══ */
+/* ═══════ ADMINS MANAGEMENT ═══════ */
+function renderAdminsView(el){
+  if(!can('manage_admins')){ el.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-lock"></i><h3>لا صلاحية</h3></div></div>`; return; }
+  const roleOptions = Object.entries(ROLES).map(([k,v]) => `<option value="${k}">${v.label}</option>`).join('');
+
+  el.innerHTML = `
+    <div class="ma-page-head">
+      <div><div class="ma-page-title"><i class="fas fa-user-shield"></i> المشرفون</div><div class="ma-page-sub">${allAdmins.length} مشرف • إدارة الصلاحيات</div></div>
+      <button class="ma-btn ma-btn-primary" id="addAdminBtn"><i class="fas fa-user-plus"></i> إضافة مشرف</button>
+    </div>
+    <div class="ma-card" style="background:linear-gradient(145deg,rgba(74,122,255,.08),rgba(2,28,164,.03));border-color:rgba(74,122,255,.3)">
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <i class="fas fa-info-circle" style="color:#4a7aff;font-size:1.2rem;margin-top:2px"></i>
+        <div style="font-size:.85rem;color:#a8b0cc;font-weight:600;line-height:1.8">
+          <strong style="color:#fff">كيفية عمل الأدوار:</strong>
+          <div style="margin-top:6px">
+            <span style="color:#f5b342;font-weight:800">👑 المدير العام</span> — كل الصلاحيات (بما فيها إدارة المشرفين والحذف)
+          </div>
+          <div><span style="color:#00c9a7;font-weight:800">💰 المدير المالي</span> — مراقبة المالية، التقارير، الكاش باك، النسب، والضرائب</div>
+          <div><span style="color:#4a7aff;font-weight:800">📦 مدير الطلبات</span> — تأكيد الطلبات، تغيير الحالات، التواصل مع العملاء، تعديل الشحن</div>
+          <div><span style="color:#8a92b0;font-weight:800">👁️ مشاهد</span> — قراءة فقط للتقارير والعملاء والطلبات (بدون أي تعديل)</div>
+        </div>
+      </div>
+    </div>
+    <div class="ma-admin-grid" id="adminsGrid">
+      ${allAdmins.map(a => {
+        const role = ROLES[a.role] || ROLES.viewer;
+        const isSelf = normalizeEmail(a.email) === normalizeEmail(currentUser.email);
+        const isBase = isBaseAdmin(a.email);
+        const initial = (a.name||'?').split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+        return `<div class="ma-admin-card ${a.active===false?'inactive':''}">
+          <div class="ma-admin-head">
+            <div class="ma-admin-avatar" style="background:${role.bg};color:${role.text}">${esc(initial)}</div>
+            <div style="flex:1;min-width:0">
+              <div class="ma-admin-name">${esc(a.name||'—')} ${isSelf?'<span style="color:#4a7aff;font-size:.6rem;background:rgba(74,122,255,.15);padding:1px 6px;border-radius:8px;margin-right:4px">أنت</span>':''}</div>
+              <div class="ma-admin-email">${esc(a.email||'—')}</div>
+            </div>
+          </div>
+          <div class="ma-admin-info">
+            <div class="ma-admin-row">
+              <span class="lbl">الدور</span>
+              <span class="val role-badge" style="background:${role.bg};color:${role.text}"><i class="fas ${role.icon}"></i> ${role.label}</span>
+            </div>
+            <div class="ma-admin-row">
+              <span class="lbl">الحالة</span>
+              <span class="val">${a.active===false?'<span style="color:#d90429"><i class="fas fa-circle-xmark"></i> معطّل</span>':'<span style="color:#4caf50"><i class="fas fa-circle-check"></i> نشط</span>'}</span>
+            </div>
+          </div>
+          <div class="ma-admin-actions">
+            <button class="ma-mini-btn ma-mini-edit" data-edit-admin="${esc(a.email)}" ${(isBase && !isSelf)?'disabled style="opacity:.4;cursor:not-allowed"':''}><i class="fas fa-pen"></i> تعديل</button>
+            ${!isBase && !isSelf ? `<button class="ma-mini-btn ma-mini-toggle" data-toggle-admin="${esc(a.email)}"><i class="fas fa-${a.active===false?'check':'ban'}"></i> ${a.active===false?'تفعيل':'تعطيل'}</button>
+            <button class="ma-mini-btn ma-mini-delete" data-delete-admin="${esc(a.email)}"><i class="fas fa-trash"></i> حذف</button>` : (isBase?`<span style="font-size:.7rem;color:#8a92b0;font-weight:700;padding:6px 0"><i class="fas fa-lock"></i> أساسي</span>`:'')}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  $('addAdminBtn').addEventListener('click', () => openAdminModal(null));
+  el.querySelectorAll('[data-edit-admin]').forEach(b => b.addEventListener('click', () => openAdminModal(b.dataset.editAdmin)));
+  el.querySelectorAll('[data-delete-admin]').forEach(b => b.addEventListener('click', () => openAdminDeleteModal(b.dataset.deleteAdmin)));
+  el.querySelectorAll('[data-toggle-admin]').forEach(b => b.addEventListener('click', () => toggleAdminActive(b.dataset.toggleAdmin)));
+}
+
+function buildRolePicker(selectedRole, allowSuperAdmin){
+  return Object.entries(ROLES).map(([k,v]) => {
+    const disabled = (k === 'super_admin' && !allowSuperAdmin) ? 'disabled' : '';
+    const checked = k === selectedRole ? 'checked' : '';
+    return `<label class="ma-role-option">
+      <input type="radio" name="maAdminRole" value="${k}" ${checked} ${disabled}>
+      <div class="ma-role-option-card" style="--role-color:${v.color}">
+        <i class="fas ${v.icon}"></i>
+        <div class="rn">${v.label}</div>
+        <div class="rd">${v.desc}</div>
+      </div>
+    </label>`;
+  }).join('');
+}
+
+function openAdminModal(email){
+  const isEdit = !!email;
+  editingAdminEmail = email;
+  const admin = isEdit ? findAdmin(email) : null;
+  $('maAdminTitle').textContent = isEdit ? 'تعديل مشرف' : 'إضافة مشرف';
+  $('maAdminSub').textContent = isEdit ? `تحديث بيانات ومسار ${admin?.name||admin?.email||''}` : 'أضف مشرفاً جديداً وحدد دوره';
+  $('maAdminIcon').className = isEdit ? 'fas fa-user-pen' : 'fas fa-user-plus';
+  $('maAdminName').value = admin?.name || '';
+  $('maAdminEmail').value = admin?.email || '';
+  $('maAdminEmail').disabled = isEdit && isBaseAdmin(admin?.email);
+  $('maAdminActive').checked = admin?.active !== false;
+  $('maAdminActive').disabled = isEdit && isBaseAdmin(admin?.email);
+  const canAssignSuper = currentAdmin.role === 'super_admin';
+  $('maAdminRolePicker').innerHTML = buildRolePicker(admin?.role || 'orders_manager', canAssignSuper);
+  $('maAdminModal').classList.add('show');
+  setTimeout(() => { if(!isEdit) $('maAdminName').focus(); }, 200);
+}
+function closeAdminModal(){ $('maAdminModal').classList.remove('show'); editingAdminEmail = null; }
+
+async function saveAdmin(){
+  if(!can('manage_admins')){ toast('ليس لديك صلاحية','error'); return; }
+  const emailInput = $('maAdminEmail');
+  const email = normalizeEmail(emailInput.value);
+  const name = $('maAdminName').value.trim();
+  const active = $('maAdminActive').checked;
+  const roleEl = document.querySelector('input[name="maAdminRole"]:checked');
+  const role = roleEl?.value || 'orders_manager';
+
+  if(!name){ toast('أدخل الاسم','error'); return; }
+  if(!email || !/^\S+@\S+\.\S+$/.test(email)){ toast('بريد غير صحيح','error'); return; }
+  if(!ROLES[role]){ toast('دور غير صحيح','error'); return; }
+  if(role === 'super_admin' && currentAdmin.role !== 'super_admin'){ toast('لا يمكنك تعيين مدير عام','error'); return; }
+
+  const isEdit = !!editingAdminEmail;
+  const existing = findAdmin(email);
+  if(!isEdit && existing){ toast('هذا البريد موجود مسبقاً','error'); return; }
+  if(isEdit && !existing){ toast('المشرف غير موجود','error'); return; }
+  if(isBaseAdmin(email) && role !== 'super_admin'){ toast('لا يمكن تغيير دور المشرف الأساسي','error'); return; }
+
+  showLoading(true);
+  if(isEdit){
+    Object.assign(existing, { name, role, active });
+    if(isBaseAdmin(existing.email)){ existing.active = true; existing.role = 'super_admin'; }
+  } else {
+    allAdmins.push({ email, name, role, active, created_at: new Date().toISOString(), created_by: currentUser.email });
+  }
+  await saveAdmins();
+  showLoading(false);
+  logAudit(isEdit?'admin_updated':'admin_added', {email, role, active});
+  toast(isEdit ? '✅ تم تحديث المشرف' : '✅ تمت إضافة المشرف', 'success');
+  closeAdminModal();
+  renderView('admins');
+}
+
+async function toggleAdminActive(email){
+  if(!can('manage_admins')) return;
+  const admin = findAdmin(email);
+  if(!admin) return;
+  if(isBaseAdmin(email)){ toast('لا يمكن تعطيل المشرف الأساسي','error'); return; }
+  if(normalizeEmail(email) === normalizeEmail(currentUser.email)){ toast('لا يمكنك تعطيل نفسك','error'); return; }
+  const newActive = admin.active === false;
+  const ok = await askConfirm(
+    newActive ? `تفعيل ${admin.name||email}؟` : `تعطيل ${admin.name||email}؟\n\nلن يستطيع تسجيل الدخول حتى يُعاد تفعيله.`,
+    { title: newActive?'تفعيل':'تعطيل', danger: !newActive }
+  );
+  if(!ok) return;
+  showLoading(true);
+  admin.active = newActive;
+  await saveAdmins();
+  showLoading(false);
+  logAudit(newActive?'admin_activated':'admin_deactivated', {email});
+  toast(newActive?'✅ تم التفعيل':'✅ تم التعطيل', 'success');
+  renderView('admins');
+}
+
+function openAdminDeleteModal(email){
+  if(!can('manage_admins')) return;
+  const admin = findAdmin(email);
+  if(!admin) return;
+  if(isBaseAdmin(email)){ toast('لا يمكن حذف المشرف الأساسي','error'); return; }
+  if(normalizeEmail(email) === normalizeEmail(currentUser.email)){ toast('لا يمكنك حذف نفسك','error'); return; }
+  deletingAdminEmail = email;
+  $('maAdminDelSub').innerHTML = `المشرف: <strong>${esc(admin.name||'—')}</strong><br>البريد: <strong dir="ltr">${esc(email)}</strong><br>الدور: <strong>${ROLES[admin.role]?.label||'—'}</strong>`;
+  $('maAdminDelModal').classList.add('show');
+}
+function closeAdminDeleteModal(){ $('maAdminDelModal').classList.remove('show'); deletingAdminEmail = null; }
+
+async function confirmDeleteAdmin(){
+  if(!deletingAdminEmail) return;
+  const email = deletingAdminEmail;
+  const admin = findAdmin(email);
+  if(!admin){ closeAdminDeleteModal(); return; }
+  if(isBaseAdmin(email) || normalizeEmail(email) === normalizeEmail(currentUser.email)){ toast('لا يمكن الحذف','error'); closeAdminDeleteModal(); return; }
+  showLoading(true);
+  allAdmins = allAdmins.filter(a => normalizeEmail(a.email) !== normalizeEmail(email));
+  await saveAdmins();
+  showLoading(false);
+  logAudit('admin_deleted', {email});
+  toast('🗑️ تم الحذف', 'success');
+  closeAdminDeleteModal();
+  renderView('admins');
+}
+
+/* ═══════ AUDIT ═══════ */
 function renderAuditView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-history"></i> سجل التدقيق</div><div class="ma-page-sub">${allAuditLog.length} عملية</div></div></div>
-    ${!allAuditLog.length ? `<div class="ma-card"><div class="ma-empty"><i class="fas fa-history"></i><h3>لا سجلات تدقيق</h3><p>ملاحظة: يحتاج جدول men_audit_log في Supabase</p></div></div>` : ''}
+    ${!allAuditLog.length ? `<div class="ma-card"><div class="ma-empty"><i class="fas fa-history"></i><h3>لا سجلات</h3><p>يحتاج جدول men_audit_log</p></div></div>` : ''}
     <div class="ma-toolbar"><div class="ma-search"><input type="text" id="auditSearch" placeholder="ابحث..."><i class="fas fa-search"></i></div><button class="ma-btn ma-btn-primary" id="auditRefresh"><i class="fas fa-rotate"></i> تحديث</button></div>
-    <div id="auditTableContainer"></div>
-  `;
+    <div id="auditTableContainer"></div>`;
   const render = () => {
     const q = ($('auditSearch').value || '').trim().toLowerCase();
     const filtered = allAuditLog.filter(l => !q || `${l.action} ${l.admin_email} ${l.details||''}`.toLowerCase().includes(q));
@@ -1713,7 +1935,12 @@ function renderAuditView(el){
       export_customers:{l:'تصدير عملاء',i:'fa-download',c:'#4a7aff'},
       export_cashback:{l:'تصدير كاش باك',i:'fa-download',c:'#4a7aff'},
       export_backup:{l:'نسخة احتياطية',i:'fa-download',c:'#4a7aff'},
-      shipping_changed:{l:'تعديل شحن طلب',i:'fa-truck',c:'#4a7aff'}
+      shipping_changed:{l:'تعديل شحن',i:'fa-truck',c:'#4a7aff'},
+      admin_added:{l:'إضافة مشرف',i:'fa-user-plus',c:'#4caf50'},
+      admin_updated:{l:'تعديل مشرف',i:'fa-user-pen',c:'#f5b342'},
+      admin_deleted:{l:'حذف مشرف',i:'fa-user-slash',c:'#d90429'},
+      admin_activated:{l:'تفعيل مشرف',i:'fa-user-check',c:'#4caf50'},
+      admin_deactivated:{l:'تعطيل مشرف',i:'fa-user-xmark',c:'#d90429'}
     };
     c.innerHTML = `<div class="ma-table-wrap"><table class="ma-table"><thead><tr><th>الإجراء</th><th>المشرف</th><th>التفاصيل</th><th>التاريخ</th></tr></thead><tbody>${filtered.map(l => {
       const m = labels[l.action] || {l:l.action,i:'fa-circle-info',c:'#6a9aff'};
@@ -1726,17 +1953,11 @@ function renderAuditView(el){
     }).join('')}</tbody></table></div>`;
   };
   $('auditSearch').addEventListener('input', debounce(render, 180));
-  $('auditRefresh').addEventListener('click', async () => {
-    showLoading(true);
-    await loadAuditLog(true);
-    showLoading(false);
-    render();
-    toast('تم التحديث','info');
-  });
+  $('auditRefresh').addEventListener('click', async () => { showLoading(true); await loadAuditLog(true); showLoading(false); render(); toast('تم التحديث','info'); });
   render();
 }
 
-/* ═══ DATA ═══ */
+/* ═══════ DATA ═══════ */
 function renderDataView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-database"></i> البيانات</div><div class="ma-page-sub">تصدير ونسخ احتياطي</div></div></div>
@@ -1747,7 +1968,7 @@ function renderDataView(el){
       <div class="ma-stat" style="--accent:#00c9a7;--icon-bg:rgba(0,201,167,.15)"><div class="ma-stat-icon"><i class="fas fa-history"></i></div><div class="ma-stat-val">${allAuditLog.length}</div><div class="ma-stat-lbl">تدقيق</div></div>
     </div>
     <div class="ma-card"><div class="ma-card-title"><i class="fas fa-file-export"></i> تصدير</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px">
         <button class="ma-btn ma-btn-primary" style="height:60px;justify-content:flex-start;padding:0 20px" data-export="orders"><i class="fas fa-file-csv" style="font-size:1.2rem"></i><span><div style="font-weight:900">تصدير الطلبات</div><div style="font-size:.72rem;opacity:.8">CSV</div></span></button>
         <button class="ma-btn ma-btn-primary" style="height:60px;justify-content:flex-start;padding:0 20px" data-export="customers"><i class="fas fa-file-csv" style="font-size:1.2rem"></i><span><div style="font-weight:900">تصدير العملاء</div><div style="font-size:.72rem;opacity:.8">CSV</div></span></button>
         <button class="ma-btn ma-btn-gold" style="height:60px;justify-content:flex-start;padding:0 20px" data-export="cashback"><i class="fas fa-file-csv" style="font-size:1.2rem"></i><span><div style="font-weight:900">تصدير الكاش باك</div><div style="font-size:.72rem;opacity:.8">CSV</div></span></button>
@@ -1759,22 +1980,18 @@ function renderDataView(el){
       <div class="ma-detail-row"><span class="lbl">نسبة الكاش باك</span><span class="val">${(settings.cashback_rate*100).toFixed(2)}%</span></div>
       <div class="ma-detail-row"><span class="lbl">ضريبة القيمة المضافة</span><span class="val" style="color:#00c9a7">${settings.vat_enabled ? (settings.vat_rate*100).toFixed(2)+'%' : 'معطّلة'}</span></div>
       <div class="ma-detail-row"><span class="lbl">الشحن الافتراضي</span><span class="val" style="color:#6a9aff">${fmtNum(settings.shipping_fee)} ر.س</span></div>
-      <div class="ma-detail-row"><span class="lbl">العملة</span><span class="val">${esc(settings.currency)}</span></div>
+      <div class="ma-detail-row"><span class="lbl">دورك</span><span class="val" style="color:${ROLES[currentAdmin.role]?.color||'#fff'}">${ROLES[currentAdmin.role]?.label||'—'}</span></div>
       <div class="ma-detail-row"><span class="lbl">البريد</span><span class="val" dir="ltr">${esc(currentUser?.email||'—')}</span></div>
       <div class="ma-detail-row"><span class="lbl">آخر تحديث</span><span class="val">${lastRefresh ? fmtDate(lastRefresh) : '—'}</span></div>
-    </div>
-  `;
-  el.querySelectorAll('[data-export]').forEach(b => {
-    b.addEventListener('click', () => {
-      const t = b.dataset.export;
-      if(t === 'orders') exportOrders();
-      else if(t === 'customers') exportCustomers();
-      else if(t === 'cashback') exportCashback();
-      else if(t === 'all') exportBackup();
-    });
-  });
+    </div>`;
+  el.querySelectorAll('[data-export]').forEach(b => b.addEventListener('click', () => {
+    const t = b.dataset.export;
+    if(t === 'orders') exportOrders();
+    else if(t === 'customers') exportCustomers();
+    else if(t === 'cashback') exportCashback();
+    else if(t === 'all') exportBackup();
+  }));
 }
-
 function downloadFile(content, filename, mime){
   const blob = new Blob([content], {type: mime});
   const url = URL.createObjectURL(blob);
@@ -1790,8 +2007,7 @@ function toCSV(rows, headers){
 }
 function exportOrders(){
   downloadFile(toCSV(allOrders, [
-    {label:'رقم', get:o => o.id},{label:'العميل',key:'user_name'},{label:'البريد',key:'user_email'},
-    {label:'الجوال',key:'user_phone'},
+    {label:'رقم', get:o => o.id},{label:'العميل',key:'user_name'},{label:'البريد',key:'user_email'},{label:'الجوال',key:'user_phone'},
     {label:'المجموع الفرعي', get:o => calcOrderBreakdown(o).subtotal.toFixed(2)},
     {label:'الشحن', get:o => calcOrderBreakdown(o).shipping.toFixed(2)},
     {label:'الضريبة', get:o => calcOrderBreakdown(o).vat.toFixed(2)},
@@ -1807,8 +2023,7 @@ function exportOrders(){
 function exportCustomers(){
   downloadFile(toCSV(allUsers, [
     {label:'الاسم',key:'name'},{label:'البريد',key:'email'},{label:'الجوال',key:'phone'},
-    {label:'الكاش باك', get:u => Number(u.cashback||0).toFixed(2)},
-    {label:'التسجيل', get:u => fmtDate(u.created_at)}
+    {label:'الكاش باك', get:u => Number(u.cashback||0).toFixed(2)},{label:'التسجيل', get:u => fmtDate(u.created_at)}
   ]), `customers_${Date.now()}.csv`, 'text/csv;charset=utf-8');
   toast('✅ تم التصدير','success');
   logAudit('export_customers',{count:allUsers.length});
@@ -1823,13 +2038,13 @@ function exportCashback(){
   logAudit('export_cashback',{count:allCashbackLog.length});
 }
 function exportBackup(){
-  const backup = {exported_at:new Date().toISOString(), settings, orders:allOrders, customers:allUsers, cashback_log:allCashbackLog, audit_log:allAuditLog};
+  const backup = {exported_at:new Date().toISOString(), settings, admins:allAdmins, orders:allOrders, customers:allUsers, cashback_log:allCashbackLog, audit_log:allAuditLog};
   downloadFile(JSON.stringify(backup,null,2), `men_backup_${Date.now()}.json`, 'application/json');
   toast('✅ تم التصدير','success');
   logAudit('export_backup');
 }
 
-/* ═══ DETAIL ═══ */
+/* ═══════ DETAIL ═══════ */
 function openDetailModal(orderId){
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
@@ -1838,12 +2053,8 @@ function openDetailModal(orderId){
   const items = Array.isArray(order.items) ? order.items : [];
   $('maDetailOrderId').textContent = '#' + String(order.id).slice(-8).toUpperCase();
   $('maDetailDate').innerHTML = `<i class="fas fa-clock"></i> ${fmtDate(order.created_at)}`;
-
   const bd = calcOrderBreakdown(order);
-  const total = bd.total;
-  const subtotal = bd.subtotal;
-  const shipping = bd.shipping;
-  const vatAmount = bd.vat;
+  const { subtotal, shipping, vat: vatAmount, total } = bd;
 
   const itemsRows = items.map((it,i) => {
     const p = Number(it.price||0), q = Number(it.qty||1), t = p*q;
@@ -1867,12 +2078,12 @@ function openDetailModal(orderId){
     cbAmount = `${potentialCb.toFixed(2)} ر.س`;
   }
 
-  const statusButtons = Object.entries(ORDER_STATUS).map(([k,v]) => {
+  const canConfirm = can('confirm_orders');
+  const canShip = can('edit_shipping');
+  const statusButtons = canConfirm ? Object.entries(ORDER_STATUS).map(([k,v]) => {
     const isCurrent = order.status === k;
-    return `<button class="ma-status-btn ${isCurrent?'current':''}" data-status-btn="${k}" ${isCurrent?'disabled':''}>
-      <i class="fas ${v.icon}"></i> ${v.label}${isCurrent?' ✓':''}
-    </button>`;
-  }).join('');
+    return `<button class="ma-status-btn ${isCurrent?'current':''}" data-status-btn="${k}" ${isCurrent?'disabled':''}><i class="fas ${v.icon}"></i> ${v.label}${isCurrent?' ✓':''}</button>`;
+  }).join('') : `<div style="padding:12px;background:rgba(138,146,176,.1);border-radius:10px;color:#8a92b0;font-size:.82rem;text-align:center"><i class="fas fa-lock"></i> ليس لديك صلاحية تغيير الحالة</div>`;
 
   $('maDetailBody').innerHTML = `
     <div class="ma-detail-cols">
@@ -1883,27 +2094,20 @@ function openDetailModal(orderId){
         ${order.user_address ? `<div class="ma-detail-row"><span class="lbl">العنوان</span><span class="val">${esc(order.user_address)}</span></div>` : ''}
       </div>
       <div class="ma-detail-section"><div class="ma-detail-h3"><i class="fas fa-info-circle"></i> الطلب</div>
-        <div class="ma-detail-row"><span class="lbl">الحالة الحالية</span><span class="val"><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></span></div>
+        <div class="ma-detail-row"><span class="lbl">الحالة</span><span class="val"><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></span></div>
         <div class="ma-detail-row"><span class="lbl">التاريخ</span><span class="val">${fmtDate(order.created_at)}</span></div>
         ${order.updated_at ? `<div class="ma-detail-row"><span class="lbl">التحديث</span><span class="val">${fmtDate(order.updated_at)}</span></div>` : ''}
       </div>
     </div>
-
     <div class="ma-detail-section" style="background:linear-gradient(145deg,rgba(74,122,255,.1),rgba(2,28,164,.06));border-color:rgba(74,122,255,.35)">
       <div class="ma-detail-h3"><i class="fas fa-arrows-rotate"></i> تغيير حالة الطلب</div>
       <div class="ma-status-btns">${statusButtons}</div>
       <div class="ma-shipping-edit">
-        <div class="ma-shipping-edit-info">
-          <i class="fas fa-truck" style="color:#6a9aff"></i>
-          الشحن الحالي: <strong>${shipping.toFixed(2)} ر.س</strong>
-        </div>
-        <button class="ma-btn ma-btn-soft" id="maEditShippingBtn"><i class="fas fa-pen"></i> تعديل الشحن</button>
+        <div class="ma-shipping-edit-info"><i class="fas fa-truck" style="color:#6a9aff"></i> الشحن الحالي: <strong>${shipping.toFixed(2)} ر.س</strong></div>
+        ${canShip?`<button class="ma-btn ma-btn-soft" id="maEditShippingBtn"><i class="fas fa-pen"></i> تعديل الشحن</button>`:''}
       </div>
-      <div style="margin-top:12px;font-size:.76rem;color:#8a92b0;line-height:1.7">
-        ⓘ تغيير الحالة إلى "تم الاستلام" يضيف الكاش باك تلقائياً (على المجموع الفرعي) — والخروج منها يخصمه.
-      </div>
+      ${canConfirm?`<div style="margin-top:12px;font-size:.76rem;color:#8a92b0;line-height:1.7">ⓘ تغيير الحالة إلى "تم الاستلام" يضيف الكاش باك — والخروج منها يخصمه.</div>`:''}
     </div>
-
     <div class="ma-detail-section"><div class="ma-detail-h3"><i class="fas fa-box"></i> المنتجات</div>
       <table class="ma-items-table"><thead><tr><th>#</th><th>المنتج</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th></tr></thead><tbody>${itemsRows}</tbody></table>
     </div>
@@ -1911,7 +2115,7 @@ function openDetailModal(orderId){
       <div class="ma-summary-box"><div class="ma-detail-h3"><i class="fas fa-credit-card"></i> الدفع</div>
         <div class="ma-summary-row"><span class="lbl">المجموع الفرعي</span><span class="val">${subtotal.toFixed(2)} ر.س</span></div>
         <div class="ma-summary-row shipping"><span class="lbl">الشحن</span><span class="val">${shipping.toFixed(2)} ر.س</span></div>
-        ${settings.vat_enabled ? `<div class="ma-summary-row vat"><span class="lbl">ضريبة القيمة المضافة (${(settings.vat_rate*100).toFixed(0)}%)</span><span class="val">${vatAmount.toFixed(2)} ر.س</span></div>` : ''}
+        ${settings.vat_enabled ? `<div class="ma-summary-row vat"><span class="lbl">ضريبة (${(settings.vat_rate*100).toFixed(0)}%)</span><span class="val">${vatAmount.toFixed(2)} ر.س</span></div>` : ''}
         <div class="ma-summary-row total"><span class="lbl">الإجمالي</span><span class="val">${total.toFixed(2)} ر.س</span></div>
       </div>
       <div class="ma-summary-box cashback"><div class="ma-detail-h3"><i class="fas fa-gift"></i> الكاش باك</div>
@@ -1919,68 +2123,47 @@ function openDetailModal(orderId){
         <div class="ma-summary-row"><span class="lbl">الحالة</span><span class="val">${cbPill}</span></div>
         ${cbPaidRow}
       </div>
-    </div>
-  `;
+    </div>`;
   $('maDetailModal').classList.add('show');
-
-  $('maDetailBody').querySelectorAll('[data-status-btn]').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      await applyStatus(order.id, btn.dataset.statusBtn);
-    });
-  });
+  $('maDetailBody').querySelectorAll('[data-status-btn]').forEach(btn => btn.addEventListener('click', async () => { await applyStatus(order.id, btn.dataset.statusBtn); }));
   $('maEditShippingBtn')?.addEventListener('click', () => openShippingModal(order.id));
 }
 function closeDetailModal(){ $('maDetailModal').classList.remove('show'); currentDetailOrder = null; }
 
-/* ═══ PRINT ═══ */
+/* ═══════ PRINT ═══════ */
 function printCurrentOrder(){
   if(!currentDetailOrder) return;
   const o = currentDetailOrder;
   const items = Array.isArray(o.items) ? o.items : [];
   const bd = calcOrderBreakdown(o);
-  const itemsRows = items.map((it,i) => {
-    const p = Number(it.price||0), q = Number(it.qty||1), t = p*q;
-    return `<tr><td style="text-align:center">${i+1}</td><td>${esc(it.name||'منتج')}</td><td style="text-align:center">${q}</td><td class="num">${p.toFixed(2)}</td><td class="num">${t.toFixed(2)}</td></tr>`;
-  }).join('') || '<tr><td colspan="5" style="text-align:center">لا منتجات</td></tr>';
-  const total = bd.total;
-  const cbE = Number(o.cashback||0);
-  const cbP = round2(bd.subtotal * settings.cashback_rate);
+  const itemsRows = items.map((it,i) => { const p = Number(it.price||0), q = Number(it.qty||1), t = p*q; return `<tr><td style="text-align:center">${i+1}</td><td>${esc(it.name||'منتج')}</td><td style="text-align:center">${q}</td><td class="num">${p.toFixed(2)}</td><td class="num">${t.toFixed(2)}</td></tr>`; }).join('') || '<tr><td colspan="5" style="text-align:center">لا منتجات</td></tr>';
+  const total = bd.total, cbE = Number(o.cashback||0), cbP = round2(bd.subtotal * settings.cashback_rate);
   const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
   let cbAmt = '0.00', cbSt = '—', cbD = '—';
   if(o.status === 'cancelled') cbSt = 'ملغي';
-  else if(o.status === 'delivered' && o.cashback_applied){
-    cbAmt = cbE.toFixed(2);
-    cbSt = o.cashback_paid ? 'مدفوع ✓' : 'غير مدفوع';
-    cbD = o.cashback_paid && o.cashback_paid_at ? fmtDate(o.cashback_paid_at) : '—';
-  } else { cbAmt = cbP.toFixed(2) + ' (متوقع)'; cbSt = 'قيد الانتظار'; }
+  else if(o.status === 'delivered' && o.cashback_applied){ cbAmt = cbE.toFixed(2); cbSt = o.cashback_paid ? 'مدفوع ✓' : 'غير مدفوع'; cbD = o.cashback_paid && o.cashback_paid_at ? fmtDate(o.cashback_paid_at) : '—'; }
+  else { cbAmt = cbP.toFixed(2) + ' (متوقع)'; cbSt = 'قيد الانتظار'; }
 
   const html = `<div class="head"><div class="brand"><img src="${LOGO_URL}"><div><div class="brand-name">MEN Store</div><div class="brand-tag">فاتورة ضريبية</div></div></div>
     <div class="order-box"><div class="num">#${String(o.id).slice(-8).toUpperCase()}</div><div>${fmtDate(o.created_at)}</div><div>${st.label}</div></div></div>
-    <div class="section"><h2>العميل</h2><table class="info-table">
-      <tr><td class="lbl">الاسم</td><td>${esc(o.user_name||'—')}</td><td class="lbl">البريد</td><td dir="ltr" style="text-align:right">${esc(o.user_email||'—')}</td></tr>
-      <tr><td class="lbl">الجوال</td><td dir="ltr" style="text-align:right">${esc(o.user_phone||'—')}</td><td class="lbl">العنوان</td><td>${esc(o.user_address||'—')}</td></tr>
-    </table></div>
+    <div class="section"><h2>العميل</h2><table class="info-table"><tr><td class="lbl">الاسم</td><td>${esc(o.user_name||'—')}</td><td class="lbl">البريد</td><td dir="ltr" style="text-align:right">${esc(o.user_email||'—')}</td></tr><tr><td class="lbl">الجوال</td><td dir="ltr" style="text-align:right">${esc(o.user_phone||'—')}</td><td class="lbl">العنوان</td><td>${esc(o.user_address||'—')}</td></tr></table></div>
     <div class="section"><h2>المنتجات</h2><table class="items-table"><thead><tr><th style="width:40px;text-align:center">#</th><th>المنتج</th><th style="width:70px;text-align:center">الكمية</th><th style="width:100px">السعر</th><th style="width:110px">الإجمالي</th></tr></thead><tbody>${itemsRows}</tbody></table></div>
     <div class="bottom">
       <div class="section"><h2>الدفع</h2><table class="summary-table">
         <tr><td class="lbl">المجموع الفرعي</td><td class="val">${bd.subtotal.toFixed(2)} ر.س</td></tr>
         <tr><td class="lbl">الشحن</td><td class="val">${bd.shipping.toFixed(2)} ر.س</td></tr>
-        ${settings.vat_enabled ? `<tr><td class="lbl">ضريبة القيمة المضافة (${(settings.vat_rate*100).toFixed(0)}%)</td><td class="val">${bd.vat.toFixed(2)} ر.س</td></tr>` : ''}
-        <tr class="total"><td class="lbl">الإجمالي</td><td class="val">${total.toFixed(2)} ر.س</td></tr>
-      </table></div>
+        ${settings.vat_enabled ? `<tr><td class="lbl">ضريبة (${(settings.vat_rate*100).toFixed(0)}%)</td><td class="val">${bd.vat.toFixed(2)} ر.س</td></tr>` : ''}
+        <tr class="total"><td class="lbl">الإجمالي</td><td class="val">${total.toFixed(2)} ر.س</td></tr></table></div>
       <div class="section"><h2>الكاش باك</h2><table class="summary-table">
         <tr><td class="lbl">المكتسب</td><td class="val">${cbAmt} ر.س</td></tr>
         <tr><td class="lbl">الحالة</td><td class="val">${cbSt}</td></tr>
-        <tr><td class="lbl">تاريخ الصرف</td><td class="val">${cbD}</td></tr>
-      </table></div>
+        <tr><td class="lbl">تاريخ الصرف</td><td class="val">${cbD}</td></tr></table></div>
     </div>
     <div class="foot"><div class="thanks">شكراً 🌟</div><div>MEN Store — الرقم الضريبي: 300000000000003</div></div>`;
 
   const w = window.open('', '_blank', 'width=900,height=700');
   if(!w){ toast('الرجاء السماح بالنوافذ المنبثقة','error'); return; }
-  w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>فاتورة</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<style>
+  w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>فاتورة</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Cairo',sans-serif;background:#fff;color:#000;padding:14mm;font-size:11pt;line-height:1.6}@page{size:A4;margin:12mm}@media print{body{padding:0}}
 .head{display:flex;justify-content:space-between;padding-bottom:14px;border-bottom:2px solid #000;margin-bottom:18px}.brand{display:flex;align-items:center;gap:12px}.brand img{height:50px}.brand-name{font-size:16pt;font-weight:900}.brand-tag{font-size:9pt;color:#333}.order-box{text-align:left;font-size:10pt}.order-box .num{font-size:14pt;font-weight:900;font-family:'Courier New',monospace}
 .section{margin-bottom:16px;page-break-inside:avoid}.section h2{font-size:11pt;font-weight:900;background:#f0f0f0;padding:6px 10px;margin-bottom:10px;border-right:4px solid #000}
@@ -1993,8 +2176,9 @@ function printCurrentOrder(){
   w.onload = () => { w.focus(); w.print(); };
 }
 
-/* ═══ SHIPPING ═══ */
+/* ═══════ SHIPPING ═══════ */
 function openShippingModal(orderId){
+  if(!can('edit_shipping')){ toast('ليس لديك صلاحية','error'); return; }
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
   selectedOrderForShipping = order;
@@ -2004,48 +2188,35 @@ function openShippingModal(orderId){
   $('maShippingModal').classList.add('show');
   setTimeout(() => $('maShipAmount').focus(), 200);
 }
-function closeShippingModal(){
-  $('maShippingModal').classList.remove('show');
-  selectedOrderForShipping = null;
-}
+function closeShippingModal(){ $('maShippingModal').classList.remove('show'); selectedOrderForShipping = null; }
 async function confirmShipping(){
-  if(!selectedOrderForShipping) return;
+  if(!selectedOrderForShipping || !can('edit_shipping')) return;
   const newShip = Number($('maShipAmount').value);
   if(isNaN(newShip) || newShip < 0){ toast('سعر غير صحيح','error'); return; }
-
   const order = selectedOrderForShipping;
   const bd = calcOrderBreakdown(order);
-  const itemsSubtotal = bd.subtotal;
-  const { vat, total } = computeNewTotal(itemsSubtotal, newShip);
-
+  const { vat, total } = computeNewTotal(bd.subtotal, newShip);
   const btn = $('maShipConfirm');
   btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>...';
   showLoading(true);
   try {
-    const updates = {
-      shipping_fee: newShip,
-      subtotal: itemsSubtotal,
-      vat_amount: vat,
-      total: total,
-      updated_at: new Date().toISOString()
-    };
+    const updates = { shipping_fee: newShip, subtotal: bd.subtotal, vat_amount: vat, total, updated_at: new Date().toISOString() };
     const { error } = await sb.from('men_orders').update(updates).eq('id', order.id);
     if(error) throw error;
     Object.assign(order, updates);
     dataVersion++;
     logAudit('shipping_changed', {order_id: order.id, old: bd.shipping, new: newShip, total});
-    toast(`✅ الشحن: ${newShip.toFixed(2)} ر.س — الإجمالي: ${total.toFixed(2)} ر.س`, 'success');
+    toast(`✅ الشحن: ${newShip.toFixed(2)} — الإجمالي: ${total.toFixed(2)}`, 'success');
     closeShippingModal();
-    if(currentDetailOrder && String(currentDetailOrder.id) === String(order.id)){
-      openDetailModal(order.id);
-    }
+    if(currentDetailOrder && String(currentDetailOrder.id) === String(order.id)) openDetailModal(order.id);
     renderView(currentView);
   } catch(e){ toast('فشل: ' + e.message, 'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> حفظ'; }
   finally { showLoading(false); }
 }
 
-/* ═══ CASHBACK PAID ═══ */
+/* ═══════ CASHBACK PAID ═══════ */
 async function toggleCashbackPaid(orderId, paid){
+  if(!can('add_cashback')){ toast('ليس لديك صلاحية','error'); return; }
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
   const updates = {cashback_paid: paid, cashback_paid_at: paid ? new Date().toISOString() : null, updated_at: new Date().toISOString()};
@@ -2057,13 +2228,14 @@ async function toggleCashbackPaid(orderId, paid){
     dataVersion++;
     logAudit(paid ? 'cashback_paid' : 'cashback_unpaid', {order_id: orderId, amount: order.cashback});
     renderView(currentView);
-    toast(paid ? '✅ تم التعليم كمدفوع' : '↩️ تم إلغاء الدفع', 'success');
+    toast(paid ? '✅ تم' : '↩️ أُلغي', 'success');
   } catch(e){ toast('فشل: ' + e.message, 'error'); }
   finally { showLoading(false); }
 }
 
-/* ═══ CB MODALS ═══ */
+/* ═══════ CB MODALS ═══════ */
 function openUserCbModal(userId, mode='add'){
+  if(!can('add_cashback')){ toast('ليس لديك صلاحية','error'); return; }
   const user = allUsers.find(u => String(u.id) === String(userId));
   if(!user) return;
   cbMode = mode;
@@ -2076,6 +2248,7 @@ function openUserCbModal(userId, mode='add'){
   setTimeout(() => $('maCbAmount').focus(), 200);
 }
 function openCbModal(orderId, mode='add'){
+  if(!can('add_cashback')){ toast('ليس لديك صلاحية','error'); return; }
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
   cbMode = mode;
@@ -2101,9 +2274,10 @@ function updateCbModalUI(){
 function closeCbModal(){ $('maCbModal').classList.remove('show'); selectedOrderForCashback = null; cbMode = 'add'; }
 
 async function confirmCashback(){
+  if(!can('add_cashback')){ toast('ليس لديك صلاحية','error'); return; }
   const amount = Number($('maCbAmount').value);
   const reasonInput = $('maCbReason').value.trim();
-  if(!amount || amount <= 0){ toast('مبلغ غير صحيح', 'error'); return; }
+  if(!amount || amount <= 0){ toast('مبلغ غير صحيح','error'); return; }
   if(!selectedOrderForCashback) return;
   const order = selectedOrderForCashback;
   const isD = cbMode === 'deduct';
@@ -2122,8 +2296,7 @@ async function confirmCashback(){
     await sb.from('men_users').update({cashback: newCb, updated_at: new Date().toISOString()}).eq('id', order.user_id);
     const lu = allUsers.find(x => String(x.id) === String(order.user_id));
     if(lu) lu.cashback = newCb;
-    const lbl = u?.name || order.user_name || order.user_email;
-    logAudit(isD ? 'cashback_deduct' : 'cashback_add', {user:lbl, amount, reason});
+    logAudit(isD ? 'cashback_deduct' : 'cashback_add', {user: u?.name||order.user_name, amount, reason});
     toast(isD ? `✅ خصم ${fmtNum(amount)}` : `✅ إضافة ${fmtNum(amount)}`, 'success');
     closeCbModal();
     renderView(currentView);
@@ -2131,8 +2304,9 @@ async function confirmCashback(){
   finally { showLoading(false); }
 }
 
-/* ═══ DELETE ═══ */
+/* ═══════ DELETE ═══════ */
 function openDelModal(orderId){
+  if(!can('delete_orders')){ toast('ليس لديك صلاحية','error'); return; }
   const order = allOrders.find(o => String(o.id) === String(orderId));
   if(!order) return;
   selectedOrderForDelete = order;
@@ -2142,8 +2316,8 @@ function openDelModal(orderId){
   $('maDelModal').classList.add('show');
 }
 function closeDelModal(){ $('maDelModal').classList.remove('show'); selectedOrderForDelete = null; }
-
 async function confirmDelete(){
+  if(!can('delete_orders')) return;
   if(!selectedOrderForDelete) return;
   const order = selectedOrderForDelete;
   const btn = $('maDelConfirm');
@@ -2172,8 +2346,9 @@ async function confirmDelete(){
   finally { showLoading(false); }
 }
 
-/* ═══ NOTE ═══ */
+/* ═══════ NOTE ═══════ */
 function openNoteModal(userId){
+  if(!can('send_notes')){ toast('ليس لديك صلاحية','error'); return; }
   const user = allUsers.find(u => String(u.id) === String(userId));
   if(!user) return;
   selectedUserForNote = user;
@@ -2184,6 +2359,7 @@ function openNoteModal(userId){
 }
 function closeNoteModal(){ $('maNoteModal').classList.remove('show'); selectedUserForNote = null; }
 async function confirmNote(){
+  if(!can('send_notes')) return;
   if(!selectedUserForNote) return;
   const text = $('maNoteText').value.trim();
   if(!text){ toast('اكتب النص','error'); return; }
@@ -2191,7 +2367,7 @@ async function confirmNote(){
   btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>...';
   showLoading(true);
   try {
-    await sb.from('men_messages').insert({user_id:selectedUserForNote.id, user_email:selectedUserForNote.email, sender:'admin', sender_name:currentUser.user_metadata?.name || currentUser.email.split('@')[0], sender_email:currentUser.email, message:text, type:'note', is_read:false});
+    await sb.from('men_messages').insert({user_id:selectedUserForNote.id, user_email:selectedUserForNote.email, sender:'admin', sender_name:currentAdmin.name||currentUser.email.split('@')[0], sender_email:currentUser.email, message:text, type:'note', is_read:false});
     logAudit('note_sent', {user:selectedUserForNote.email});
     toast('📝 تم الإرسال','success');
     closeNoteModal();
@@ -2199,8 +2375,9 @@ async function confirmNote(){
   finally { showLoading(false); btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال'; }
 }
 
-/* ═══ CHAT ═══ */
+/* ═══════ CHAT ═══════ */
 async function openChatModal(userId){
+  if(!can('send_notes')){ toast('ليس لديك صلاحية','error'); return; }
   const user = allUsers.find(u => String(u.id) === String(userId));
   if(!user) return;
   selectedUserForChat = user;
@@ -2235,20 +2412,20 @@ function renderChat(msgs){
   b.scrollTop = b.scrollHeight;
 }
 async function sendChatMessage(){
-  if(!selectedUserForChat) return;
+  if(!selectedUserForChat || !can('send_notes')) return;
   const inp = $('maChatInput'), text = inp.value.trim();
   if(!text) return;
   const btn = $('maChatSend');
   btn.disabled = true;
   try {
-    await sb.from('men_messages').insert({user_id:selectedUserForChat.id, user_email:selectedUserForChat.email, sender:'admin', sender_name:currentUser.user_metadata?.name || currentUser.email.split('@')[0], sender_email:currentUser.email, message:text, type:'chat', is_read:false});
+    await sb.from('men_messages').insert({user_id:selectedUserForChat.id, user_email:selectedUserForChat.email, sender:'admin', sender_name:currentAdmin.name||currentUser.email.split('@')[0], sender_email:currentUser.email, message:text, type:'chat', is_read:false});
     inp.value = '';
     await loadChatMessages(selectedUserForChat.id);
   } catch(e){ toast('فشل: ' + e.message, 'error'); }
   finally { btn.disabled = false; inp.focus(); }
 }
 
-/* ═══ CONFIRM ═══ */
+/* ═══════ CONFIRM ═══════ */
 function askConfirm(message, opts = {}){
   return new Promise(resolve => {
     const modal = $('maConfirmModal');
@@ -2275,55 +2452,80 @@ async function refreshAll(){
   showLoading(true);
   await loadAllData(true);
   if(currentView === 'audit') await loadAuditLog(true);
+  await loadAdmins();
   showLoading(false);
   renderView(currentView);
   toast('تم التحديث','info');
 }
 
-/* ═══ EVENTS ═══ */
+/* ═══════ EVENTS ═══════ */
 function bindEvents(){
-  // Mobile nav
   $('maNavToggle').addEventListener('click', toggleMobileNav);
   $('maNavBackdrop').addEventListener('click', closeMobileNav);
-  window.addEventListener('resize', debounce(() => {
-    if(window.innerWidth > 820) closeMobileNav();
-  }, 150));
+  window.addEventListener('resize', debounce(() => { if(window.innerWidth > 820) closeMobileNav(); }, 150));
 
-  $('maGateBtn').addEventListener('click', doLogin);
-  $('maGatePass').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+  $('maGateBtn').addEventListener('click', () => { if(gateMode === 'login') doLogin(); else doSignup(); });
+  $('maGateSwitch').addEventListener('click', () => switchGateMode(gateMode === 'login' ? 'signup' : 'login'));
+  $('maGatePass').addEventListener('keydown', e => { if(e.key === 'Enter') { if(gateMode === 'login') doLogin(); else doSignup(); } });
   $('maGateEmail').addEventListener('keydown', e => { if(e.key === 'Enter') $('maGatePass').focus(); });
+
   $('maLogout').addEventListener('click', async () => {
     await flushAudit();
     await sb.auth.signOut();
-    currentUser = null;
+    currentUser = null; currentAdmin = null;
     dataLoaded = false; dataVersion = 0; lastRefresh = null; auditLogLoaded = false;
     $('maApp').classList.remove('active');
     $('maGate').style.display = 'flex';
     $('maGateEmail').value = ''; $('maGatePass').value = '';
+    $('maGateErr').classList.remove('show');
+    switchGateMode('login');
     closeMobileNav();
     toast('تم الخروج','info');
   });
+
+  // Modal actions
   $('maCbCancel').addEventListener('click', closeCbModal);
   $('maCbModal').addEventListener('click', e => { if(e.target.id === 'maCbModal') closeCbModal(); });
   $('maCbConfirm').addEventListener('click', confirmCashback);
   document.querySelectorAll('[data-amt]').forEach(b => b.addEventListener('click', () => { $('maCbAmount').value = b.dataset.amt; }));
+
   $('maDelCancel').addEventListener('click', closeDelModal);
   $('maDelModal').addEventListener('click', e => { if(e.target.id === 'maDelModal') closeDelModal(); });
   $('maDelConfirm').addEventListener('click', confirmDelete);
+
   $('maNoteCancel').addEventListener('click', closeNoteModal);
   $('maNoteModal').addEventListener('click', e => { if(e.target.id === 'maNoteModal') closeNoteModal(); });
   $('maNoteConfirm').addEventListener('click', confirmNote);
+
   $('maShipCancel').addEventListener('click', closeShippingModal);
   $('maShippingModal').addEventListener('click', e => { if(e.target.id === 'maShippingModal') closeShippingModal(); });
   $('maShipConfirm').addEventListener('click', confirmShipping);
   document.querySelectorAll('[data-ship]').forEach(b => b.addEventListener('click', () => { $('maShipAmount').value = b.dataset.ship; }));
+
   $('maChatClose').addEventListener('click', closeChatModal);
   $('maChatModal').addEventListener('click', e => { if(e.target.id === 'maChatModal') closeChatModal(); });
   $('maChatSend').addEventListener('click', sendChatMessage);
   $('maChatInput').addEventListener('keydown', e => { if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendChatMessage(); } });
+
   $('maDetailClose').addEventListener('click', closeDetailModal);
   $('maDetailModal').addEventListener('click', e => { if(e.target.id === 'maDetailModal') closeDetailModal(); });
   $('maDetailPrint').addEventListener('click', printCurrentOrder);
+
+  // Admin modals
+  $('maAdminCancel').addEventListener('click', closeAdminModal);
+  $('maAdminModal').addEventListener('click', e => { if(e.target.id === 'maAdminModal') closeAdminModal(); });
+  $('maAdminConfirm').addEventListener('click', saveAdmin);
+
+  $('maAdminDelCancel').addEventListener('click', closeAdminDeleteModal);
+  $('maAdminDelModal').addEventListener('click', e => { if(e.target.id === 'maAdminDelModal') closeAdminDeleteModal(); });
+  $('maAdminDelConfirm').addEventListener('click', confirmDeleteAdmin);
+
+  // Prevent form submits
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.closest('.ma-modal-back')){
+      e.preventDefault();
+    }
+  });
 }
 
 function toast(msg, type='info'){
