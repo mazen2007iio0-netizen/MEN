@@ -22,6 +22,7 @@
   --safe-r:env(safe-area-inset-right,0px);
   --nav-h:68px;
   --nav-h-mobile:62px;
+  --sidebar-w:260px;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{font-family:'Cairo',sans-serif;background:#060812;color:#fff;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-text-size-adjust:100%;text-size-adjust:100%}
@@ -489,6 +490,185 @@ img{max-width:100%;height:auto;display:block}
   .ma-stat-val{font-size:2.2rem}
 }
 
+/* ═══════════════════════════════════════════════
+   ★ DESKTOP SIDEBAR LAYOUT (≥ 821px) ★
+   الشريط الجانبي الثابت على اليمين
+═══════════════════════════════════════════════ */
+@media (min-width: 821px){
+  /* دفع المحتوى لليسار لترك مساحة للشريط الجانبي */
+  .ma-app { padding-right: var(--sidebar-w); }
+
+  .ma-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    width: var(--sidebar-w);
+    height: 100vh;
+    height: 100dvh;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    border-bottom: none;
+    border-left: 1px solid rgba(74,122,255,.14);
+    box-shadow: -25px 0 50px -35px rgba(0,0,0,.85);
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(6,8,18,.99) 0%, rgba(6,8,18,.94) 100%);
+  }
+
+  .ma-nav-inner {
+    max-width: none;
+    margin: 0;
+    padding: 20px 14px 14px;
+    height: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    overflow: hidden;
+  }
+
+  .ma-nav-toggle { display: none !important; }
+
+  /* شعار أعلى الشريط */
+  .ma-nav-brand {
+    margin-left: 0;
+    padding: 0 4px 14px;
+    border-bottom: 1px solid rgba(74,122,255,.12);
+    flex-shrink: 0;
+    gap: 10px;
+  }
+  .ma-nav-brand img { height: 34px; }
+  .ma-nav-brand .name { font-size: .9rem; }
+  .ma-nav-brand .sub { font-size: .6rem; letter-spacing: .8px; display: block; }
+
+  /* قائمة الروابط رأسياً */
+  .ma-nav-menu {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 3px;
+    flex: 1 1 auto;
+    min-height: 0;
+    min-width: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 6px 2px;
+    margin: 0;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(74,122,255,.3) transparent;
+  }
+  .ma-nav-menu::-webkit-scrollbar { width: 5px; }
+  .ma-nav-menu::-webkit-scrollbar-track { background: transparent; }
+  .ma-nav-menu::-webkit-scrollbar-thumb { background: rgba(74,122,255,.3); border-radius: 5px; }
+  .ma-nav-menu::-webkit-scrollbar-thumb:hover { background: rgba(74,122,255,.5); }
+
+  .ma-nav-item { width: 100%; flex-shrink: 0; }
+
+  .ma-nav-link {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 11px 13px;
+    gap: 11px;
+    font-size: .86rem;
+    border-radius: 10px;
+    text-align: right;
+  }
+  .ma-nav-link i:first-child {
+    width: 20px;
+    font-size: .92rem;
+    text-align: center;
+    flex-shrink: 0;
+    opacity: .85;
+  }
+  .ma-nav-link span {
+    display: inline !important;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ma-nav-link .caret {
+    display: inline !important;
+    margin-right: 0;
+    margin-left: 0;
+    opacity: .55;
+    transition: transform .2s;
+  }
+  .ma-nav-item.open .ma-nav-link .caret { transform: rotate(180deg); }
+
+  /* القوائم الفرعية داخل الشريط */
+  .ma-nav-dropdown {
+    position: static;
+    display: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    background: rgba(74,122,255,.06);
+    margin-top: 3px;
+    border-radius: 10px;
+    min-width: 0;
+    padding: 5px;
+  }
+  .ma-nav-item.open .ma-nav-dropdown { display: block; }
+  .ma-nav-dropdown a {
+    padding: 9px 12px;
+    font-size: .8rem;
+    gap: 9px;
+    border-radius: 8px;
+  }
+  .ma-nav-dropdown a i { width: 16px; font-size: .75rem; }
+
+  /* منطقة المستخدم أسفل الشريط */
+  .ma-nav-user {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 9px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(74,122,255,.12);
+    flex-shrink: 0;
+  }
+  .ma-nav-user-info {
+    text-align: right;
+    gap: 3px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .ma-nav-user-info .n {
+    font-size: .84rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ma-nav-user-info .e {
+    font-size: .67rem;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ma-btn-ghost {
+    width: 100%;
+    justify-content: center;
+    font-size: .8rem !important;
+    min-height: 40px;
+    padding: 8px 14px;
+  }
+
+  /* الخلفية المعتمة غير مطلوبة على الديسكتوب */
+  .ma-nav-backdrop { display: none !important; }
+  body.nav-open { overflow: auto; }
+
+  /* توسيط المحتوى داخل المساحة المتبقية */
+  .ma-content { max-width: 1600px; margin: 0 auto; }
+}
+
 /* Landscape phones */
 @media (max-height:500px) and (orientation:landscape){
   .ma-nav-inner{height:calc(54px + var(--safe-t))}
@@ -508,7 +688,7 @@ img{max-width:100%;height:auto;display:block}
 @media print{
   .ma-nav,.ma-nav-backdrop,.ma-loading-overlay,.ma-toast,.ma-bg{display:none !important}
   body,html{background:#fff !important;color:#000 !important}
-  .ma-app,.ma-content{display:block !important;padding:0 !important}
+  .ma-app,.ma-content{display:block !important;padding:0 !important;margin:0 !important;max-width:none !important}
   .ma-view{display:block !important;page-break-after:always}
 }
 </style>
@@ -784,29 +964,23 @@ let gateMode = 'login';
    COMPLETE SETTINGS (all user-configurable)
 ═══════════════════════════════════════════════ */
 const DEFAULT_SETTINGS = {
-  // Cashback
   cashback_rate: 0.02,
   cashback_min_order: 0,
   cashback_max: 0,
-  // VAT
   vat_rate: 0.15,
   vat_enabled: true,
   vat_number: '300000000000003',
-  // Shipping
   shipping_fee: 0,
   free_shipping_min: 0,
-  // Store info
   store_name: 'MEN Store',
   store_phone: '',
   store_email: '',
   store_address: '',
   currency: 'ر.س',
   currency_code: 'SAR',
-  // Order settings
   order_prefix: 'MEN',
   allow_cancel: true,
   auto_cashback_on_delivery: true,
-  // Contact/notifications
   support_whatsapp: '',
   invoice_footer: 'شكراً لتسوقكم معنا 🌟'
 };
@@ -924,7 +1098,6 @@ async function loadAdmins(){
     const ls = safeJSON(localStorage.getItem(LS_ADMINS), null);
     if(Array.isArray(ls)) allAdmins = ls;
   }
-  // Guarantee base admin exists
   const base = findAdmin(BASE_ADMIN_EMAIL);
   if(!base){
     allAdmins.unshift({ email: BASE_ADMIN_EMAIL, name: 'المدير العام', role: 'super_admin', active: true, isBase: true });
@@ -954,7 +1127,6 @@ async function init(){
   bindEvents();
   await loadAdmins();
   await checkAuth();
-  // Refresh session on focus (mobile browsers suspend timers)
   document.addEventListener('visibilitychange', () => {
     if(document.visibilityState === 'visible' && currentUser){
       sb.auth.getSession().then(({data}) => {
@@ -1008,14 +1180,11 @@ function buildNav(){
    SETTINGS
 ═══════════════════════════════════════════════ */
 async function loadSettings(){
-  // 1) Defaults
   Object.assign(settings, DEFAULT_SETTINGS);
-  // 2) From local storage
   const ls = safeJSON(localStorage.getItem(LS_SETTINGS), null);
   if(ls && typeof ls === 'object'){
     for(const k in ls) if(k in DEFAULT_SETTINGS) settings[k] = ls[k];
   }
-  // 3) From server
   try {
     const { data, error } = await sb.from('men_settings').select('*');
     if(!error && data) data.forEach(r => {
@@ -1784,13 +1953,12 @@ function renderRewardsLogView(el){
 }
 
 /* ═══════════════════════════════════════════════
-   SETTINGS PAGE (COMPLETE)
+   SETTINGS PAGE
 ═══════════════════════════════════════════════ */
 function renderSettingsView(el){
   el.innerHTML = `
     <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-sliders"></i> الإعدادات</div><div class="ma-page-sub">تحكم كامل بكل جوانب المتجر</div></div></div>
 
-    <!-- STORE INFO -->
     <div class="ma-setting-card store">
       <div class="ma-setting-title"><i class="fas fa-store"></i><div><div class="t">معلومات المتجر</div><div class="s">تظهر على الفواتير والتقارير</div></div></div>
       <div class="ma-modal-field"><label for="setStoreName">اسم المتجر</label><input type="text" id="setStoreName" value="${esc(settings.store_name)}" placeholder="MEN Store"></div>
@@ -1802,7 +1970,6 @@ function renderSettingsView(el){
       <div class="ma-modal-actions"><button class="confirm teal" id="setStoreSave" type="button"><i class="fas fa-save"></i> حفظ المعلومات</button></div>
     </div>
 
-    <!-- CASHBACK -->
     <div class="ma-rate-card">
       <div class="ma-rate-title"><i class="fas fa-gift"></i><div><div class="t">نسبة الكاش باك</div><div class="s">تُطبَّق على المجموع الفرعي (بدون ضريبة/شحن)</div></div></div>
       <div class="ma-rate-display">${(settings.cashback_rate*100).toFixed(2)}%</div>
@@ -1822,7 +1989,6 @@ function renderSettingsView(el){
       </div>
     </div>
 
-    <!-- VAT -->
     <div class="ma-setting-card tax">
       <div class="ma-setting-title"><i class="fas fa-file-invoice"></i><div><div class="t">ضريبة القيمة المضافة</div><div class="s">تُحسب على المجموع الفرعي</div></div></div>
       <div class="ma-setting-display">${(settings.vat_rate*100).toFixed(2)}%</div>
@@ -1841,7 +2007,6 @@ function renderSettingsView(el){
       </div>
     </div>
 
-    <!-- SHIPPING -->
     <div class="ma-setting-card shipping">
       <div class="ma-setting-title"><i class="fas fa-truck"></i><div><div class="t">إعدادات الشحن</div><div class="s">السعر الافتراضي والشحن المجاني</div></div></div>
       <div class="ma-setting-display">${fmtNum(settings.shipping_fee)} ر.س</div>
@@ -1856,7 +2021,6 @@ function renderSettingsView(el){
       <button class="ma-btn" id="setFreeShipSave" style="background:linear-gradient(135deg,#4a7aff,#021ca4);color:#fff;width:100%;margin-top:8px" type="button"><i class="fas fa-save"></i> حفظ حد الشحن المجاني</button>
     </div>
 
-    <!-- ORDERS -->
     <div class="ma-card">
       <div class="ma-card-title"><i class="fas fa-box"></i> إعدادات الطلبات</div>
       <div class="ma-modal-field"><label for="setOrderPrefix">بادئة رقم الطلب</label><input type="text" id="setOrderPrefix" value="${esc(settings.order_prefix)}" placeholder="MEN" dir="ltr" style="text-align:right"></div>
@@ -1871,7 +2035,6 @@ function renderSettingsView(el){
       </div>
     </div>
 
-    <!-- CURRENCY -->
     <div class="ma-card">
       <div class="ma-card-title"><i class="fas fa-money-bill"></i> العملة</div>
       <div class="ma-modal-field"><label for="setCurrency">رمز العملة (بالعربي)</label><input type="text" id="setCurrency" value="${esc(settings.currency)}" placeholder="ر.س"></div>
@@ -1879,14 +2042,12 @@ function renderSettingsView(el){
       <button class="ma-btn ma-btn-primary" id="setCurrencySave" type="button" style="width:100%;margin-top:8px"><i class="fas fa-save"></i> حفظ العملة</button>
     </div>
 
-    <!-- BACKUP -->
     <div class="ma-card" style="border-color:rgba(245,179,66,.3);background:linear-gradient(145deg,rgba(245,179,66,.05),rgba(201,138,30,.02))">
       <div class="ma-card-title" style="color:#f5b342"><i class="fas fa-triangle-exclamation"></i> منطقة الخطر</div>
       <button class="ma-btn ma-btn-danger" id="resetSettings" type="button" style="width:100%"><i class="fas fa-rotate-left"></i> إعادة تعيين الإعدادات</button>
       <div style="font-size:.78rem;color:#8a92b0;font-weight:700;margin-top:8px;text-align:center">سيتم استرجاع كل الإعدادات للقيم الافتراضية</div>
     </div>`;
 
-  // ── Store info save
   $('setStoreSave').addEventListener('click', async () => {
     const fields = {
       store_name: $('setStoreName').value.trim() || 'MEN Store',
@@ -1903,7 +2064,6 @@ function renderSettingsView(el){
     toast('✅ تم حفظ معلومات المتجر','success');
   });
 
-  // ── Cashback rate
   $('rateSave').addEventListener('click', async () => {
     const v = Number($('rateInput').value);
     if(isNaN(v) || v < 0 || v > 100){ toast('نسبة غير صحيحة','error'); return; }
@@ -1913,7 +2073,6 @@ function renderSettingsView(el){
   });
   el.querySelectorAll('[data-rate]').forEach(b => b.addEventListener('click', () => { $('rateInput').value = b.dataset.rate; }));
 
-  // ── Cashback limits
   $('setCbLimitsSave').addEventListener('click', async () => {
     const minV = Number($('setCbMin').value) || 0;
     const maxV = Number($('setCbMax').value) || 0;
@@ -1926,7 +2085,6 @@ function renderSettingsView(el){
     toast('✅ تم حفظ الحدود','success');
   });
 
-  // ── VAT rate
   $('vatSave').addEventListener('click', async () => {
     const v = Number($('vatRateInput').value);
     if(isNaN(v) || v < 0 || v > 100){ toast('نسبة غير صحيحة','error'); return; }
@@ -1936,7 +2094,6 @@ function renderSettingsView(el){
   });
   el.querySelectorAll('[data-vat]').forEach(b => b.addEventListener('click', () => { $('vatRateInput').value = b.dataset.vat; }));
 
-  // ── VAT number
   $('setVatNumSave').addEventListener('click', async () => {
     const v = $('setVatNumber').value.trim();
     if(!v){ toast('أدخل الرقم الضريبي','error'); return; }
@@ -1945,7 +2102,6 @@ function renderSettingsView(el){
     toast('✅ تم حفظ الرقم الضريبي','success');
   });
 
-  // ── VAT toggle
   $('vatToggleCheck').addEventListener('change', async (e) => {
     showLoading(true); await saveSetting('vat_enabled', e.target.checked); showLoading(false);
     logAudit('vat_toggled', {enabled: e.target.checked});
@@ -1953,7 +2109,6 @@ function renderSettingsView(el){
     renderSettingsView(el);
   });
 
-  // ── Shipping
   $('shipFeeSave').addEventListener('click', async () => {
     const v = Number($('shipFeeInput').value);
     if(isNaN(v) || v < 0){ toast('سعر غير صحيح','error'); return; }
@@ -1963,7 +2118,6 @@ function renderSettingsView(el){
   });
   el.querySelectorAll('[data-shipfee]').forEach(b => b.addEventListener('click', () => { $('shipFeeInput').value = b.dataset.shipfee; }));
 
-  // ── Free shipping
   $('setFreeShipSave').addEventListener('click', async () => {
     const v = Number($('setFreeShip').value) || 0;
     if(v < 0){ toast('قيمة غير صحيحة','error'); return; }
@@ -1972,7 +2126,6 @@ function renderSettingsView(el){
     toast('✅ تم حفظ حد الشحن المجاني','success');
   });
 
-  // ── Order prefix
   $('setOrderPrefixSave').addEventListener('click', async () => {
     const v = $('setOrderPrefix').value.trim() || 'MEN';
     showLoading(true); await saveSetting('order_prefix', v); showLoading(false);
@@ -1980,21 +2133,18 @@ function renderSettingsView(el){
     toast('✅ تم حفظ البادئة','success');
   });
 
-  // ── Auto cashback
   $('setAutoCb').addEventListener('change', async (e) => {
     showLoading(true); await saveSetting('auto_cashback_on_delivery', e.target.checked); showLoading(false);
     logAudit('auto_cashback_changed', {enabled: e.target.checked});
     toast(e.target.checked ? '✅ مُفعّل' : '⚠️ معطّل', e.target.checked ? 'success' : 'info');
   });
 
-  // ── Allow cancel
   $('setAllowCancel').addEventListener('change', async (e) => {
     showLoading(true); await saveSetting('allow_cancel', e.target.checked); showLoading(false);
     logAudit('allow_cancel_changed', {enabled: e.target.checked});
     toast(e.target.checked ? '✅ مسموح' : '⚠️ ممنوع', e.target.checked ? 'success' : 'info');
   });
 
-  // ── Currency
   $('setCurrencySave').addEventListener('click', async () => {
     const cur = $('setCurrency').value.trim() || 'ر.س';
     const code = $('setCurrencyCode').value.trim().toUpperCase() || 'SAR';
@@ -2006,7 +2156,6 @@ function renderSettingsView(el){
     toast('✅ تم حفظ العملة','success');
   });
 
-  // ── Reset
   $('resetSettings').addEventListener('click', async () => {
     const ok = await askConfirm('سيتم إعادة تعيين جميع الإعدادات للقيم الافتراضية.\n\nهل أنت متأكد؟', { title: 'إعادة تعيين الإعدادات', danger: true });
     if(!ok) return;
@@ -2785,56 +2934,46 @@ async function refreshAll(){
    EVENT BINDINGS
 ═══════════════════════════════════════════════ */
 function bindEvents(){
-  // Nav
   $('maNavToggle').addEventListener('click', toggleMobileNav);
   $('maNavBackdrop').addEventListener('click', closeMobileNav);
   window.addEventListener('resize', debounce(() => { if(window.innerWidth > 820) closeMobileNav(); }, 150));
   document.addEventListener('keydown', e => { if(e.key === 'Escape') closeMobileNav(); });
 
-  // Gate
   $('maGateBtn').addEventListener('click', () => { if(gateMode === 'login') doLogin(); else doSignup(); });
   $('maGateSwitch').addEventListener('click', () => switchGateMode(gateMode === 'login' ? 'signup' : 'login'));
   $('maGatePass').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); if(gateMode === 'login') doLogin(); else doSignup(); } });
   $('maGateEmail').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); $('maGatePass').focus(); } });
 
-  // Logout
   $('maLogout').addEventListener('click', () => handleLogout(false));
 
-  // CB Modal
   $('maCbCancel').addEventListener('click', closeCbModal);
   $('maCbModal').addEventListener('click', e => { if(e.target.id === 'maCbModal') closeCbModal(); });
   $('maCbConfirm').addEventListener('click', confirmCashback);
   $('maCbAmount').addEventListener('keydown', e => { if(e.key === 'Enter') confirmCashback(); });
   document.querySelectorAll('[data-amt]').forEach(b => b.addEventListener('click', () => { $('maCbAmount').value = b.dataset.amt; }));
 
-  // Delete
   $('maDelCancel').addEventListener('click', closeDelModal);
   $('maDelModal').addEventListener('click', e => { if(e.target.id === 'maDelModal') closeDelModal(); });
   $('maDelConfirm').addEventListener('click', confirmDelete);
 
-  // Note
   $('maNoteCancel').addEventListener('click', closeNoteModal);
   $('maNoteModal').addEventListener('click', e => { if(e.target.id === 'maNoteModal') closeNoteModal(); });
   $('maNoteConfirm').addEventListener('click', confirmNote);
 
-  // Shipping
   $('maShipCancel').addEventListener('click', closeShippingModal);
   $('maShippingModal').addEventListener('click', e => { if(e.target.id === 'maShippingModal') closeShippingModal(); });
   $('maShipConfirm').addEventListener('click', confirmShipping);
   document.querySelectorAll('[data-ship]').forEach(b => b.addEventListener('click', () => { $('maShipAmount').value = b.dataset.ship; }));
 
-  // Chat
   $('maChatClose').addEventListener('click', closeChatModal);
   $('maChatModal').addEventListener('click', e => { if(e.target.id === 'maChatModal') closeChatModal(); });
   $('maChatSend').addEventListener('click', sendChatMessage);
   $('maChatInput').addEventListener('keydown', e => { if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendChatMessage(); } });
 
-  // Detail
   $('maDetailClose').addEventListener('click', closeDetailModal);
   $('maDetailModal').addEventListener('click', e => { if(e.target.id === 'maDetailModal') closeDetailModal(); });
   $('maDetailPrint').addEventListener('click', printCurrentOrder);
 
-  // Admin modals
   $('maAdminCancel').addEventListener('click', closeAdminModal);
   $('maAdminModal').addEventListener('click', e => { if(e.target.id === 'maAdminModal') closeAdminModal(); });
   $('maAdminConfirm').addEventListener('click', saveAdmin);
@@ -2843,7 +2982,6 @@ function bindEvents(){
   $('maAdminDelModal').addEventListener('click', e => { if(e.target.id === 'maAdminDelModal') closeAdminDeleteModal(); });
   $('maAdminDelConfirm').addEventListener('click', confirmDeleteAdmin);
 
-  // Prevent accidental form submit
   document.addEventListener('keydown', e => {
     if(e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.closest('.ma-modal-back') && e.target.type !== 'submit'){
       e.preventDefault();
