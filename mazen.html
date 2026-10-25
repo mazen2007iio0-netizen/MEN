@@ -2,792 +2,975 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>قياس القدرات | اختبار تجريبي</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>🏔️ سباق التلال</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  :root{
-    --primary:#0d9488;
-    --primary-d:#0f766e;
-    --primary-l:#ccfbf1;
-    --accent:#f59e0b;
-    --bg:#eef2f6;
-    --card:#ffffff;
-    --text:#1e293b;
-    --muted:#64748b;
-    --border:#e2e8f0;
-    --green:#16a34a;
-    --red:#dc2626;
-    --shadow:0 4px 20px rgba(15,23,42,.07);
-  }
-  body{
-    font-family:'Tajawal',system-ui,sans-serif;
-    background:var(--bg);
-    background-image:radial-gradient(circle at 10% 0%, #ccfbf1 0%, transparent 45%),
-                     radial-gradient(circle at 90% 10%, #dbeafe 0%, transparent 40%);
-    background-attachment:fixed;
-    color:var(--text);
-    min-height:100vh;
-    line-height:1.7;
-  }
-  .wrap{max-width:880px;margin:0 auto;padding:20px 16px 60px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;background:#0b0f14;
+  font-family:"Segoe UI",Tahoma,"Noto Kufi Arabic",sans-serif;user-select:none;touch-action:none}
+canvas{position:absolute;inset:0;display:block}
 
-  /* ===== Header ===== */
-  header{
-    display:flex;align-items:center;gap:12px;
-    padding:14px 18px;margin-bottom:22px;
-    background:rgba(255,255,255,.8);
-    backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.9);
-    border-radius:18px;box-shadow:var(--shadow);
-  }
-  .logo{
-    width:44px;height:44px;flex:none;border-radius:13px;
-    background:linear-gradient(135deg,var(--primary),#0ea5e9);
-    display:grid;place-items:center;color:#fff;font-size:22px;
-    box-shadow:0 4px 12px rgba(13,148,136,.35);
-  }
-  header h1{font-size:20px;font-weight:800;letter-spacing:-.3px}
-  header p{font-size:12.5px;color:var(--muted);font-weight:500}
+/* ====== HUD ====== */
+#hud{position:absolute;inset:0;pointer-events:none;z-index:10}
+#hud.hide{display:none}
+.hud-top{position:absolute;top:0;left:0;right:0;display:flex;gap:10px;padding:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.hud-item{display:flex;align-items:center;gap:6px;background:rgba(8,14,22,.55);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:7px 14px;color:#fff;font-size:15px;font-weight:700;
+  box-shadow:0 4px 18px rgba(0,0,0,.3)}
+.hud-item .ico{font-size:16px}
+.hud-item small{opacity:.7;font-weight:500;font-size:11px}
+.bar{width:110px;height:10px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:100%;border-radius:99px;
+  background:linear-gradient(90deg,#22e07a,#a8e063);transition:width .12s linear}
+.bar i.low{background:linear-gradient(90deg,#ff3b3b,#ff8a3b)}
 
-  /* ===== Cards ===== */
-  .card{
-    background:var(--card);border-radius:20px;padding:26px;
-    box-shadow:var(--shadow);border:1px solid rgba(226,232,240,.8);
-  }
+.pedal{position:absolute;bottom:22px;width:96px;height:96px;border-radius:50%;border:2px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.12);backdrop-filter:blur(10px);color:#fff;font-size:34px;pointer-events:auto;
+  display:flex;align-items:center;justify-content:center;transition:transform .07s,background .12s;
+  box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.pedal:active,.pedal.active{transform:scale(.93);background:rgba(255,255,255,.3)}
+.pedal.brake{left:22px;background:rgba(255,70,70,.22);border-color:rgba(255,120,120,.4)}
+.pedal.gas{right:22px;background:rgba(60,220,130,.22);border-color:rgba(120,255,180,.4)}
+.pause-btn{position:absolute;top:12px;left:12px;width:42px;height:42px;border-radius:12px;
+  border:1px solid rgba(255,255,255,.2);background:rgba(8,14,22,.55);color:#fff;font-size:17px;
+  pointer-events:auto;backdrop-filter:blur(8px);cursor:pointer}
 
-  /* ===== Start screen ===== */
-  .hero{text-align:center;padding:8px 0 22px}
-  .hero .icon{
-    font-size:52px;margin-bottom:6px;
-  }
-  .hero h2{font-size:26px;font-weight:800;margin-bottom:8px}
-  .hero p{color:var(--muted);font-size:15px;max-width:520px;margin:0 auto}
+/* ====== Screens ====== */
+.screen{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 50% 0%,rgba(20,40,70,.55),rgba(4,8,14,.88));backdrop-filter:blur(6px);padding:16px;overflow-y:auto}
+.screen.hide{display:none}
+.panel{width:100%;max-width:420px;background:rgba(14,22,34,.9);border:1px solid rgba(120,180,255,.18);
+  border-radius:24px;padding:26px 22px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.6)}
+.panel h1{font-size:28px;color:#fff;margin-bottom:6px;letter-spacing:.5px}
+.panel h2{font-size:22px;color:#fff;margin-bottom:14px}
+.sub{color:#8fa6c0;font-size:13px;margin-bottom:16px;line-height:1.6}
+.coins-big{background:linear-gradient(135deg,#ffd54a,#ff9f1c);-webkit-background-clip:text;background-clip:text;
+  color:transparent;font-size:26px;font-weight:900;margin:8px 0 18px}
+.big-btn{display:block;width:100%;padding:15px;margin:9px 0;border:none;border-radius:16px;font-size:17px;font-weight:800;
+  color:#04121f;cursor:pointer;background:linear-gradient(135deg,#3ddc84,#12b76a);
+  box-shadow:0 8px 24px rgba(18,183,106,.35);transition:transform .1s;font-family:inherit}
+.big-btn:active{transform:scale(.97)}
+.big-btn.alt{background:linear-gradient(135deg,#4a6fa5,#2d4568);color:#eaf2ff;
+  box-shadow:0 8px 24px rgba(45,69,104,.4)}
+.big-btn:disabled{opacity:.45;filter:grayscale(.6);cursor:not-allowed}
+.back-btn{margin-top:10px;background:transparent;border:1px solid rgba(255,255,255,.2);color:#b9cbe0;
+  padding:11px;width:100%;border-radius:14px;font-size:14px;cursor:pointer;font-family:inherit;font-weight:600}
 
-  .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}
-  .stat{
-    background:linear-gradient(160deg,#f8fafc,#f1f5f9);
-    border:1px solid var(--border);border-radius:16px;
-    padding:16px 10px;text-align:center;
-  }
-  .stat b{display:block;font-size:26px;font-weight:800;color:var(--primary-d);line-height:1.3}
-  .stat span{font-size:12.5px;color:var(--muted);font-weight:500}
+/* upgrade list */
+.upg{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:12px;margin-bottom:10px;text-align:right}
+.upg-icon{font-size:24px;width:38px;text-align:center;flex-shrink:0}
+.upg-info{flex:1;min-width:0}
+.upg-name{color:#fff;font-size:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.upg-name .lvl{font-size:11px;color:#7fd1a8;background:rgba(60,220,130,.13);padding:2px 8px;border-radius:99px;font-weight:600;flex-shrink:0}
+.bars{display:flex;gap:3px;margin-top:7px}
+.bars span{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.13)}
+.bars span.on{background:linear-gradient(90deg,#3ddc84,#8ce99a)}
+.buy{background:linear-gradient(135deg,#ffd54a,#ff9f1c);border:none;color:#3a2400;font-weight:900;font-size:12px;
+  padding:9px 12px;border-radius:12px;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0}
+.buy:disabled{background:rgba(255,255,255,.1);color:#7c8ea3;cursor:not-allowed}
+.buy:active:not(:disabled){transform:scale(.95)}
 
-  .mode-list{display:grid;gap:12px;margin-top:6px}
-  .mode-btn{
-    display:flex;align-items:center;gap:14px;width:100%;text-align:right;
-    padding:16px 18px;border-radius:16px;cursor:pointer;
-    background:#fff;border:2px solid var(--border);
-    font-family:inherit;transition:.18s;color:var(--text);
-  }
-  .mode-btn:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 22px rgba(13,148,136,.14)}
-  .mode-btn .mi{
-    width:42px;height:42px;flex:none;border-radius:12px;display:grid;place-items:center;
-    background:var(--primary-l);color:var(--primary-d);font-size:20px;font-weight:700;
-  }
-  .mode-btn .mt{flex:1}
-  .mode-btn .mt strong{display:block;font-size:16px;font-weight:700}
-  .mode-btn .mt small{color:var(--muted);font-size:12.5px}
-  .mode-btn .arrow{color:var(--muted);font-size:18px}
+/* stage cards */
+.stage-card{display:flex;align-items:center;gap:12px;border-radius:18px;padding:14px;margin-bottom:11px;
+  border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;transition:.15s;text-align:right}
+.stage-card.sel{border-color:#3ddc84;background:rgba(61,220,132,.12)}
+.stage-card.locked{opacity:.6}
+.stage-emoji{font-size:30px}
+.stage-info{flex:1;min-width:0}
+.stage-name{color:#fff;font-weight:800;font-size:15px}
+.stage-best{color:#8fa6c0;font-size:11px;margin-top:3px}
+.tag{font-size:11px;padding:4px 9px;border-radius:99px;font-weight:700}
+.tag.free{background:rgba(61,220,132,.18);color:#6ee7a5}
+.tag.cost{background:rgba(255,213,74,.15);color:#ffd54a}
+.tag.lock{background:rgba(255,255,255,.1);color:#93a7bd}
 
-  .note{
-    margin-top:18px;padding:14px 16px;border-radius:14px;
-    background:#fffbeb;border:1px solid #fde68a;
-    font-size:13.5px;color:#92400e;
-  }
-
-  /* ===== Quiz ===== */
-  .topbar{
-    display:flex;align-items:center;justify-content:space-between;
-    gap:10px;margin-bottom:14px;flex-wrap:wrap;
-  }
-  .pill{
-    display:inline-flex;align-items:center;gap:6px;
-    padding:6px 13px;border-radius:999px;font-size:13px;font-weight:700;
-    background:#fff;border:1px solid var(--border);color:var(--muted);
-  }
-  .pill.badge-q{background:var(--primary-l);color:var(--primary-d);border-color:#99f6e4}
-  .pill.badge-v{background:#ede9fe;color:#6d28d9;border-color:#ddd6fe}
-  .pill.timer{font-variant-numeric:tabular-nums;color:var(--text)}
-
-  .progress-track{
-    height:8px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-bottom:20px;
-  }
-  .progress-fill{
-    height:100%;width:0;border-radius:99px;
-    background:linear-gradient(90deg,var(--primary),#0ea5e9);
-    transition:width .35s ease;
-  }
-
-  .q-num{font-size:13px;font-weight:700;color:var(--primary-d);margin-bottom:8px}
-  .q-text{font-size:19px;font-weight:700;line-height:1.85;margin-bottom:20px}
-
-  .options{display:grid;gap:10px}
-  .opt{
-    display:flex;align-items:center;gap:12px;width:100%;text-align:right;
-    padding:14px 16px;border-radius:14px;cursor:pointer;
-    background:#f8fafc;border:2px solid var(--border);
-    font-family:inherit;font-size:15.5px;font-weight:500;color:var(--text);
-    transition:.15s;
-  }
-  .opt:hover{border-color:#94a3b8;background:#fff}
-  .opt .key{
-    width:30px;height:30px;flex:none;border-radius:9px;
-    display:grid;place-items:center;font-size:13.5px;font-weight:800;
-    background:#fff;border:1.5px solid var(--border);color:var(--muted);
-    transition:.15s;
-  }
-  .opt.selected{
-    border-color:var(--primary);background:var(--primary-l);
-  }
-  .opt.selected .key{background:var(--primary);border-color:var(--primary);color:#fff}
-
-  .nav{display:flex;gap:10px;margin-top:22px}
-  .btn{
-    flex:1;padding:13px 18px;border-radius:14px;border:none;cursor:pointer;
-    font-family:inherit;font-size:15px;font-weight:700;transition:.18s;
-    display:inline-flex;align-items:center;justify-content:center;gap:7px;
-  }
-  .btn-primary{background:var(--primary);color:#fff;box-shadow:0 4px 14px rgba(13,148,136,.3)}
-  .btn-primary:hover{background:var(--primary-d);transform:translateY(-1px)}
-  .btn-ghost{background:#fff;color:var(--text);border:1.5px solid var(--border)}
-  .btn-ghost:hover{background:#f1f5f9}
-  .btn-warn{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(245,158,11,.3)}
-  .btn-warn:hover{background:#d97706}
-  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important}
-  .btn-sm{flex:none;padding:9px 16px;font-size:13.5px}
-
-  .grid-toggle{
-    margin-top:18px;display:flex;justify-content:center;
-  }
-  .qgrid{
-    display:none;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));
-    gap:7px;margin-top:14px;padding:16px;border-radius:16px;
-    background:#f8fafc;border:1px solid var(--border);
-    max-height:260px;overflow-y:auto;
-  }
-  .qgrid.open{display:grid}
-  .qgrid button{
-    aspect-ratio:1;border-radius:9px;border:1.5px solid var(--border);
-    background:#fff;font-family:inherit;font-size:13px;font-weight:700;
-    color:var(--muted);cursor:pointer;transition:.13s;
-  }
-  .qgrid button:hover{border-color:var(--primary)}
-  .qgrid button.done{background:var(--primary-l);border-color:#5eead4;color:var(--primary-d)}
-  .qgrid button.now{background:var(--primary);border-color:var(--primary);color:#fff}
-
-  /* ===== Results ===== */
-  .res-hero{text-align:center;padding:10px 0 4px}
-  .ring{
-    width:170px;height:170px;margin:0 auto 18px;border-radius:50%;
-    display:grid;place-items:center;position:relative;
-    background:conic-gradient(var(--primary) 0deg, var(--primary) 0deg, #e2e8f0 0deg);
-    transition:background .8s ease;
-  }
-  .ring::after{
-    content:'';position:absolute;inset:11px;border-radius:50%;background:#fff;
-  }
-  .ring .val{position:relative;z-index:2;text-align:center}
-  .ring .val b{display:block;font-size:40px;font-weight:800;line-height:1.1;color:var(--primary-d)}
-  .ring .val span{font-size:12.5px;color:var(--muted);font-weight:600}
-
-  .res-title{font-size:23px;font-weight:800;margin-bottom:6px}
-  .res-sub{color:var(--muted);font-size:14.5px;margin-bottom:22px}
-
-  .res-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
-  .res-box{
-    padding:16px;border-radius:16px;text-align:center;
-    background:#f8fafc;border:1px solid var(--border);
-  }
-  .res-box b{display:block;font-size:24px;font-weight:800;line-height:1.3}
-  .res-box span{font-size:12.5px;color:var(--muted);font-weight:600}
-  .c-green b{color:var(--green)}
-  .c-red b{color:var(--red)}
-  .c-teal b{color:var(--primary-d)}
-  .c-violet b{color:#6d28d9}
-
-  .filters{display:flex;gap:8px;margin:26px 0 14px;flex-wrap:wrap}
-  .fbtn{
-    padding:8px 16px;border-radius:999px;border:1.5px solid var(--border);
-    background:#fff;font-family:inherit;font-size:13.5px;font-weight:700;
-    color:var(--muted);cursor:pointer;transition:.15s;
-  }
-  .fbtn.active{background:var(--primary);border-color:var(--primary);color:#fff}
-
-  .rev-item{
-    border:1px solid var(--border);border-radius:16px;padding:18px;
-    margin-bottom:12px;background:#fff;
-  }
-  .rev-item.wrong{border-color:#fecaca;background:#fff7f7}
-  .rev-item.skipped{border-color:#fde68a;background:#fffdf5}
-  .rev-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-  .rev-num{
-    font-size:12.5px;font-weight:800;color:var(--muted);
-    background:#f1f5f9;padding:3px 10px;border-radius:8px;
-  }
-  .tag{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:8px}
-  .tag.q{background:var(--primary-l);color:var(--primary-d)}
-  .tag.v{background:#ede9fe;color:#6d28d9}
-  .tag.ok{background:#dcfce7;color:#15803d}
-  .tag.no{background:#fee2e2;color:#b91c1c}
-  .tag.sk{background:#fef3c7;color:#b45309}
-  .rev-q{font-size:15.5px;font-weight:700;margin-bottom:12px;line-height:1.8}
-  .rev-opts{display:grid;gap:7px}
-  .rev-opt{
-    padding:10px 14px;border-radius:11px;font-size:14px;
-    background:#f8fafc;border:1.5px solid var(--border);color:var(--muted);
-  }
-  .rev-opt.correct{background:#f0fdf4;border-color:#86efac;color:#15803d;font-weight:700}
-  .rev-opt.chosen-wrong{background:#fef2f2;border-color:#fca5a5;color:#b91c1c;font-weight:700}
-  .rev-opt .mark{font-weight:800;margin-inline-start:6px}
-
-  .hidden{display:none!important}
-
-  .empty{
-    text-align:center;padding:40px 20px;color:var(--muted);font-size:15px;
-  }
-
-  @media(max-width:560px){
-    .wrap{padding:12px 12px 50px}
-    .card{padding:20px 16px;border-radius:17px}
-    .hero h2{font-size:22px}
-    .q-text{font-size:17px}
-    .opt{font-size:14.5px;padding:12px 14px}
-    .res-grid{grid-template-columns:repeat(2,1fr)}
-    .stats-row{gap:8px}
-    .stat b{font-size:21px}
-    .ring{width:145px;height:145px}
-    .ring .val b{font-size:34px}
-    .btn{font-size:14px;padding:12px 14px}
-  }
+/* game over */
+.res-row{display:flex;justify-content:space-between;padding:11px 14px;background:rgba(255,255,255,.05);
+  border-radius:13px;margin-bottom:9px;color:#c8d8ea;font-size:14px}
+.res-row b{color:#fff;font-weight:800}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <header>
-    <div class="logo">📊</div>
-    <div>
-      <h1>قياس القدرات</h1>
-      <p>اختبار تجريبي شامل — كمي ولفظي</p>
+<canvas id="game"></canvas>
+
+<!-- ======= HUD ======= -->
+<div id="hud" class="hide">
+  <div class="hud-top">
+    <div class="hud-item fuel">
+      <span class="ico">⛽</span>
+      <div class="bar"><i id="fuelFill"></i></div>
     </div>
-  </header>
+    <div class="hud-item"><span class="ico">🪙</span><b id="coinNum">0</b></div>
+    <div class="hud-item"><span class="ico">📏</span><b id="distNum">0</b><small>م</small></div>
+  </div>
+  <button class="pause-btn" id="btnPause">⏸</button>
+  <button class="pedal brake" id="pedalBrake">◀</button>
+  <button class="pedal gas" id="pedalGas">▶</button>
+</div>
 
-  <!-- ============ شاشة البداية ============ -->
-  <section id="startScreen">
-    <div class="card">
-      <div class="hero">
-        <div class="icon">🎯</div>
-        <h2>استعد لاختبار القدرات</h2>
-        <p>بنك أسئلة تجريبي يحتوي على 100 سؤال موزعة بين القسم الكمي واللفظي، مع تصحيح فوري وتحليل للنتائج.</p>
-      </div>
+<!-- ======= MENU ======= -->
+<div id="scr-menu" class="screen">
+  <div class="panel">
+    <h1>🏔️ سباق التلال</h1>
+    <p class="sub">قُد سيارتك فوق التلال، اجمع العملات والوقود،<br>وطوّر مركبتك لتصل إلى أبعد مدى!</p>
+    <div class="coins-big">🪙 <b id="menuCoins">0</b></div>
+    <button class="big-btn" id="btnPlay">▶ ابدأ اللعب</button>
+    <button class="big-btn alt" id="btnGarage">🔧 الجراج</button>
+    <button class="big-btn alt" id="btnStages">🗺️ المراحل</button>
+  </div>
+</div>
 
-      <div class="stats-row">
-        <div class="stat"><b>100</b><span>سؤال</span></div>
-        <div class="stat"><b>58</b><span>كمي</span></div>
-        <div class="stat"><b>42</b><span>لفظي</span></div>
-      </div>
+<!-- ======= GARAGE ======= -->
+<div id="scr-garage" class="screen hide">
+  <div class="panel">
+    <h2>🔧 الجراج</h2>
+    <div class="coins-big" style="margin:4px 0 16px">🪙 <b id="garageCoins">0</b></div>
+    <div id="upgList"></div>
+    <button class="back-btn" data-back="menu">رجوع</button>
+  </div>
+</div>
 
-      <div class="mode-list">
-        <button class="mode-btn" onclick="startQuiz('all')">
-          <span class="mi">★</span>
-          <span class="mt"><strong>الاختبار الكامل</strong><small>100 سؤال — كمي ولفظي</small></span>
-          <span class="arrow">‹</span>
-        </button>
-        <button class="mode-btn" onclick="startQuiz('quant')">
-          <span class="mi">➗</span>
-          <span class="mt"><strong>القسم الكمي فقط</strong><small>58 سؤال — حساب وجبر وهندسة</small></span>
-          <span class="arrow">‹</span>
-        </button>
-        <button class="mode-btn" onclick="startQuiz('verbal')">
-          <span class="mi">📖</span>
-          <span class="mt"><strong>القسم اللفظي فقط</strong><small>42 سؤال — مفردات وتناظر وإكمال</small></span>
-          <span class="arrow">‹</span>
-        </button>
-      </div>
+<!-- ======= STAGES ======= -->
+<div id="scr-stages" class="screen hide">
+  <div class="panel">
+    <h2>🗺️ المراحل</h2>
+    <div class="coins-big" style="margin:4px 0 16px">🪙 <b id="stageCoins">0</b></div>
+    <div id="stageList"></div>
+    <button class="back-btn" data-back="menu">رجوع</button>
+  </div>
+</div>
 
-      <div class="note">
-        💡 <strong>ملاحظة:</strong> يمكنك التنقل بين الأسئلة بحرية، واستخدام أرقام لوحة المفاتيح 1–4 لاختيار الإجابة. النتيجة تُعرض في نهاية الاختبار مع مراجعة كاملة للأخطاء.
-      </div>
-    </div>
-  </section>
+<!-- ======= PAUSE ======= -->
+<div id="scr-pause" class="screen hide">
+  <div class="panel">
+    <h2>⏸ إيقاف مؤقت</h2>
+    <button class="big-btn" id="btnResume">▶ متابعة</button>
+    <button class="big-btn alt" id="btnQuit">↩ إنهاء الجولة</button>
+  </div>
+</div>
 
-  <!-- ============ شاشة الاختبار ============ -->
-  <section id="quizScreen" class="hidden">
-    <div class="card">
-      <div class="topbar">
-        <span class="pill" id="counterPill">السؤال 1 من 100</span>
-        <span class="pill badge-q" id="sectionPill">كمي</span>
-        <span class="pill timer" id="timerPill">⏱ 00:00</span>
-      </div>
-
-      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-
-      <div class="q-num" id="qNum"></div>
-      <div class="q-text" id="qText"></div>
-      <div class="options" id="optionsBox"></div>
-
-      <div class="nav">
-        <button class="btn btn-ghost" id="prevBtn" onclick="go(-1)">السابق</button>
-        <button class="btn btn-primary" id="nextBtn" onclick="go(1)">التالي</button>
-      </div>
-      <div class="nav" style="margin-top:10px">
-        <button class="btn btn-warn" onclick="finishQuiz()">إنهاء الاختبار وعرض النتيجة</button>
-      </div>
-
-      <div class="grid-toggle">
-        <button class="btn btn-ghost btn-sm" onclick="toggleGrid()">🗂️ لوحة الأسئلة</button>
-      </div>
-      <div class="qgrid" id="qGrid"></div>
-    </div>
-  </section>
-
-  <!-- ============ شاشة النتائج ============ -->
-  <section id="resultScreen" class="hidden">
-    <div class="card">
-      <div class="res-hero">
-        <div class="ring" id="ring">
-          <div class="val"><b id="ringPct">0%</b><span id="ringLabel">النسبة</span></div>
-        </div>
-        <div class="res-title" id="resTitle"></div>
-        <div class="res-sub" id="resSub"></div>
-      </div>
-
-      <div class="res-grid">
-        <div class="res-box c-green"><b id="rCorrect">0</b><span>إجابة صحيحة</span></div>
-        <div class="res-box c-red"><b id="rWrong">0</b><span>إجابة خاطئة</span></div>
-        <div class="res-box c-teal"><b id="rQuant">0</b><span>الكمي</span></div>
-        <div class="res-box c-violet"><b id="rVerbal">0</b><span>اللفظي</span></div>
-      </div>
-
-      <div class="res-box" style="margin-bottom:6px">
-        <b id="rTime" style="font-size:20px">00:00</b><span>الزمن المستغرق</span>
-      </div>
-
-      <div class="nav" style="margin-top:20px">
-        <button class="btn btn-primary" onclick="location.reload()">🔄 اختبار جديد</button>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:18px">
-      <h3 style="font-size:18px;font-weight:800;margin-bottom:4px">مراجعة الأسئلة</h3>
-      <p style="font-size:13.5px;color:var(--muted)">راجع إجاباتك وتعرّف على الإجابة الصحيحة لكل سؤال.</p>
-
-      <div class="filters">
-        <button class="fbtn active" data-f="all" onclick="filterReview('all',this)">الكل</button>
-        <button class="fbtn" data-f="wrong" onclick="filterReview('wrong',this)">الأخطاء فقط</button>
-        <button class="fbtn" data-f="skipped" onclick="filterReview('skipped',this)">المتروكة</button>
-      </div>
-
-      <div id="reviewBox"></div>
-    </div>
-  </section>
-
+<!-- ======= GAME OVER ======= -->
+<div id="scr-over" class="screen hide">
+  <div class="panel">
+    <h2 id="overTitle">انتهت الجولة</h2>
+    <div class="res-row"><span>المسافة</span><b id="overDist">0 م</b></div>
+    <div class="res-row"><span>العملات</span><b id="overCoins">0 🪙</b></div>
+    <div class="res-row"><span>أفضل مسافة</span><b id="overBest">0 م</b></div>
+    <button class="big-btn" id="btnRetry">🔄 حاول مجدداً</button>
+    <button class="big-btn alt" id="btnHome">🏠 القائمة</button>
+  </div>
 </div>
 
 <script>
-/* =========================================================
-   بنك الأسئلة — الخيار الأول في كل سؤال هو الإجابة الصحيحة
-   (يتم خلط الخيارات عشوائيًا عند بدء الاختبار)
-   ========================================================= */
-const QUESTIONS = [
+"use strict";
+/* ============================================================
+   أدوات مساعدة
+============================================================ */
+const clamp = (v,a,b)=> v<a?a:(v>b?b:v);
+const lerp  = (a,b,t)=> a+(b-a)*t;
+const rnd   = (a,b)=> a+Math.random()*(b-a);
 
-/* ============ القسم الكمي (58 سؤال) ============ */
-{s:'كمي', q:'إذا كان 3س + 5 = 20، فما قيمة س؟', o:['5','3','15','4']},
-{s:'كمي', q:'ما هو 25% من العدد 480؟', o:['120','96','140','110']},
-{s:'كمي', q:'ما هو المتوسط الحسابي للأعداد: 5، 9، 13، 17؟', o:['11','10','12','13']},
-{s:'كمي', q:'مستطيل طوله 12 سم وعرضه 7 سم، فما مساحته؟', o:['84 سم²','38 سم²','19 سم²','42 سم²']},
-{s:'كمي', q:'إذا كانت النسبة بين عددين 3 : 5 وكان العدد الأول 15، فما العدد الثاني؟', o:['25','20','30','18']},
-{s:'كمي', q:'مكعب حجمه 125 سم³، فما طول حرفه؟', o:['5 سم','25 سم','15 سم','12 سم']},
-{s:'كمي', q:'ما ناتج 0.4 × 0.5؟', o:['0.2','2','0.02','0.25']},
-{s:'كمي', q:'ما هو الجذر التربيعي للعدد 144؟', o:['12','14','16','11']},
-{s:'كمي', q:'أكمل المتتالية: 2، 6، 12، 20، 30، ...', o:['42','40','44','36']},
-{s:'كمي', q:'إذا كان س ÷ 4 = 9، فما قيمة س؟', o:['36','13','45','32']},
-{s:'كمي', q:'سلعة ثمنها 80 ريالًا وعليها خصم 20%، فما ثمنها بعد الخصم؟', o:['64 ريالًا','60 ريالًا','68 ريالًا','70 ريالًا']},
-{s:'كمي', q:'مجموع قياسات زوايا المثلث يساوي:', o:['180 درجة','360 درجة','90 درجة','270 درجة']},
-{s:'كمي', q:'ما ناتج 3³؟', o:['27','9','18','81']},
-{s:'كمي', q:'أي من الأعداد التالية عدد أولي؟', o:['23','21','27','25']},
-{s:'كمي', q:'ما النسبة المئوية للعدد 40 من العدد 200؟', o:['20%','25%','40%','15%']},
-{s:'كمي', q:'دائرة نصف قطرها 7 سم، فما مساحتها؟ (ط = 22/7)', o:['154 سم²','44 سم²','49 سم²','144 سم²']},
-{s:'كمي', q:'مربع مساحته 64 سم²، فما محيطه؟', o:['32 سم','16 سم','64 سم','24 سم']},
-{s:'كمي', q:'إذا كان 2س − 7 = 11، فما قيمة س؟', o:['9','8','2','18']},
-{s:'كمي', q:'ما هو 15% من العدد 200؟', o:['30','15','20','35']},
-{s:'كمي', q:'سيارة تقطع 180 كم في 3 ساعات، فما سرعتها المتوسطة؟', o:['60 كم/س','90 كم/س','45 كم/س','55 كم/س']},
-{s:'كمي', q:'إذا كان ثلث عدد يساوي 12، فما هو العدد؟', o:['36','4','24','48']},
-{s:'كمي', q:'ما ناتج 5/8 + 1/8؟', o:['3/4','6/16','1/2','5/16']},
-{s:'كمي', q:'مثلث قاعدته 10 سم وارتفاعه 6 سم، فما مساحته؟', o:['30 سم²','60 سم²','16 سم²','32 سم²']},
-{s:'كمي', q:'ما هو 20% من 20% من العدد 500؟', o:['20','100','40','25']},
-{s:'كمي', q:'إذا كان س + ص = 10 و س − ص = 4، فما قيمة س؟', o:['7','3','6','5']},
-{s:'كمي', q:'ما ناتج 1/2 ÷ 1/4؟', o:['2','1/8','4','1/2']},
-{s:'كمي', q:'ما ناتج 7 × 8 − 6 × 9؟', o:['2','10','14','−2']},
-{s:'كمي', q:'مربع محيطه 48 سم، فما طول ضلعه؟', o:['12 سم','24 سم','16 سم','8 سم']},
-{s:'كمي', q:'ما قيمة 3/5 من العدد 60؟', o:['36','30','40','45']},
-{s:'كمي', q:'إذا كان 4س = 20، فما قيمة 3س؟', o:['15','12','20','5']},
-{s:'كمي', q:'ما النسبة المئوية للعدد 15 من العدد 60؟', o:['25%','15%','30%','20%']},
-{s:'كمي', q:'ثمن 5 أقلام 15 ريالًا، فما ثمن 8 أقلام؟', o:['24 ريالًا','20 ريالًا','30 ريالًا','18 ريالًا']},
-{s:'كمي', q:'ما مجموع الأعداد من 1 إلى 10؟', o:['55','50','45','60']},
-{s:'كمي', q:'كم دقيقة في ثلاثة أرباع الساعة؟', o:['45 دقيقة','30 دقيقة','40 دقيقة','50 دقيقة']},
-{s:'كمي', q:'ثمن 3 كتب 45 ريالًا، فما ثمن 7 كتب؟', o:['105 ريالًا','90 ريالًا','115 ريالًا','100 ريالًا']},
-{s:'كمي', q:'ما هو العدد التالي في المتتالية: 1، 4، 9، 16، ...؟', o:['25','20','24','36']},
-{s:'كمي', q:'عمر أحمد ضعف عمر أخيه، ومجموع أعمارهما 27 سنة، فما عمر أحمد؟', o:['18 سنة','9 سنوات','15 سنة','12 سنة']},
-{s:'كمي', q:'60% من عدد يساوي 42، فما هو العدد؟', o:['70','60','80','65']},
-{s:'كمي', q:'حل المعادلة: 5(س − 2) = 15', o:['5','3','1','7']},
-{s:'كمي', q:'محيط دائرة نصف قطرها 7 سم (ط = 22/7) يساوي:', o:['44 سم','22 سم','154 سم','49 سم']},
-{s:'كمي', q:'إذا كانت زاوية قياسها 60 درجة، فما قياس الزاوية المكملة لها؟', o:['120 درجة','30 درجة','90 درجة','60 درجة']},
-{s:'كمي', q:'ما ناتج 2 + 2 × 2؟', o:['6','8','4','10']},
-{s:'كمي', q:'كم عدد الأعداد الأولية بين 1 و 10؟', o:['4','3','5','6']},
-{s:'كمي', q:'إذا كان 3س + 2ص = 16 وكانت س = 2، فما قيمة ص؟', o:['5','4','6','3']},
-{s:'كمي', q:'ما متوسط الأعداد: 3، 7، 11؟', o:['7','6','8','9']},
-{s:'كمي', q:'كم يساوي نصف الربع؟', o:['1/8','1/4','1/2','1/6']},
-{s:'كمي', q:'ساعة و20 دقيقة تساوي كم دقيقة؟', o:['80 دقيقة','70 دقيقة','90 دقيقة','100 دقيقة']},
-{s:'كمي', q:'كم عدد أوجه المكعب؟', o:['6','8','12','4']},
-{s:'كمي', q:'ما ناتج 200 × 0.05؟', o:['10','100','1','20']},
-{s:'كمي', q:'إذا كان 12 ÷ س = 3، فما قيمة س؟', o:['4','6','3','9']},
-{s:'كمي', q:'مكعب مساحته الكلية 54 سم²، فما طول حرفه؟', o:['3 سم','9 سم','6 سم','4 سم']},
-{s:'كمي', q:'ما هو العدد الذي إذا أضفنا إليه 8 كان الناتج 15؟', o:['7','8','23','6']},
-{s:'كمي', q:'إذا كان ثمن 4 تفاحات 12 ريالًا، فما ثمن 10 تفاحات؟', o:['30 ريالًا','25 ريالًا','40 ريالًا','28 ريالًا']},
-{s:'كمي', q:'ما هو 40% من العدد 250؟', o:['100','80','120','90']},
-{s:'كمي', q:'ما ناتج (12 + 8) ÷ 4؟', o:['5','8','20','4']},
-{s:'كمي', q:'إذا كان متوسط 5 أعداد هو 12، فما مجموعها؟', o:['60','24','50','17']},
-{s:'كمي', q:'الزاوية القائمة قياسها:', o:['90 درجة','180 درجة','45 درجة','60 درجة']},
-{s:'كمي', q:'إذا كان نصف عدد يساوي 25، فما هو العدد؟', o:['50','25','75','100']},
+/* ============================================================
+   الحفظ
+============================================================ */
+const SAVE_KEY = 'hillclimb_save_v2';
+const save = {
+  coins: 0,
+  upg: { engine:1, tires:1, susp:1, tank:1 },
+  stage: 0,
+  unlocked: [true,false,false],
+  best: [0,0,0]
+};
+function loadSave(){
+  try{
+    const raw = localStorage.getItem(SAVE_KEY);
+    if(raw){
+      const s = JSON.parse(raw);
+      if(typeof s.coins === 'number') save.coins = s.coins;
+      if(s.upg) Object.assign(save.upg, s.upg);
+      if(typeof s.stage === 'number') save.stage = s.stage;
+      if(Array.isArray(s.unlocked)) save.unlocked = s.unlocked;
+      if(Array.isArray(s.best)) save.best = s.best;
+    }
+  }catch(e){}
+}
+function persist(){
+  try{ localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }catch(e){}
+}
+loadSave();
 
-/* ============ القسم اللفظي (42 سؤال) ============ */
-{s:'لفظي', q:'ما مرادف كلمة «الوَجَل»؟', o:['الخوف','الفرح','الغضب','الأمل']},
-{s:'لفظي', q:'ما مضاد كلمة «البُخل»؟', o:['الكرم','الشح','الحرص','الاقتصاد']},
-{s:'لفظي', q:'العلاقة: قلم : كتابة :: سكين : ......', o:['قطع','طعام','مطبخ','حديد']},
-{s:'لفظي', q:'ما مرادف كلمة «الدهاء»؟', o:['المكر','الصدق','الكرم','الجهل']},
-{s:'لفظي', q:'ما مضاد كلمة «الوفرة»؟', o:['القلة','الكثرة','الزيادة','النمو']},
-{s:'لفظي', q:'أكمل الجملة: كان الطالب ...... في دراسته حتى نال الجائزة.', o:['مجتهدًا','مهملًا','متكاسلًا','غافلًا']},
-{s:'لفظي', q:'ما مرادف كلمة «الفُتور»؟', o:['الضعف','القوة','النشاط','الحرارة']},
-{s:'لفظي', q:'العلاقة: طبيب : مستشفى :: معلم : ......', o:['مدرسة','كتاب','طالب','درس']},
-{s:'لفظي', q:'ما مضاد كلمة «الشُّح»؟', o:['الجود','البخل','الحرص','التقتير']},
-{s:'لفظي', q:'ما مرادف كلمة «الحصافة»؟', o:['العقل','الحماقة','الجهل','التسرع']},
-{s:'لفظي', q:'أكمل الجملة: لا يتحقق النجاح إلا بـ......', o:['المثابرة','التكاسل','التردد','اليأس']},
-{s:'لفظي', q:'ما مضاد كلمة «الطغيان»؟', o:['العدل','الظلم','الجور','القهر']},
-{s:'لفظي', q:'العلاقة: عين : رؤية :: أذن : ......', o:['سمع','صوت','لمس','شم']},
-{s:'لفظي', q:'ما مرادف كلمة «البراعة»؟', o:['المهارة','العجز','الضعف','البطء']},
-{s:'لفظي', q:'ما مضاد كلمة «الخمول»؟', o:['النشاط','الكسل','الفتور','التراخي']},
-{s:'لفظي', q:'ما مرادف كلمة «الأنَفة»؟', o:['العزة','الذل','الخوف','الحزن']},
-{s:'لفظي', q:'العلاقة: ماء : عطش :: طعام : ......', o:['جوع','شبع','أكل','طبخ']},
-{s:'لفظي', q:'ما مضاد كلمة «الندرة»؟', o:['الكثرة','القلة','الشح','النقص']},
-{s:'لفظي', q:'ما مرادف كلمة «الرزانة»؟', o:['الوقار','الطيش','الخفة','العجلة']},
-{s:'لفظي', q:'أكمل الجملة: يجب على الإنسان أن ...... بوقته.', o:['يستفيد','يضيع','يفرط','يهمل']},
-{s:'لفظي', q:'ما مضاد كلمة «التشتت»؟', o:['التركيز','الفوضى','الاضطراب','الإهمال']},
-{s:'لفظي', q:'ما مرادف كلمة «الجَلِيّ»؟', o:['الواضح','الغامض','الخفي','المبهم']},
-{s:'لفظي', q:'العلاقة: شمس : نهار :: قمر : ......', o:['ليل','نجوم','ضوء','سماء']},
-{s:'لفظي', q:'ما مضاد كلمة «الوفاء»؟', o:['الغدر','الصدق','الإخلاص','الأمانة']},
-{s:'لفظي', q:'ما مرادف كلمة «الشَّذا»؟', o:['الرائحة الطيبة','الصوت العالي','اللون الزاهي','الطعم الحلو']},
-{s:'لفظي', q:'ما مضاد كلمة «الصعود»؟', o:['الهبوط','الارتفاع','الطلوع','العلو']},
-{s:'لفظي', q:'العلاقة: مطرقة : مسمار :: منشار : ......', o:['خشب','حديد','حجر','زجاج']},
-{s:'لفظي', q:'ما مرادف كلمة «العَناء»؟', o:['التعب','الراحة','الفرح','السهولة']},
-{s:'لفظي', q:'ما مضاد كلمة «الإسراف»؟', o:['الاقتصاد','التبذير','البذخ','الكرم']},
-{s:'لفظي', q:'أكمل المثل: من ...... الناس ساد.', o:['خدَم','ظلم','ترك','هجر']},
-{s:'لفظي', q:'ما مرادف كلمة «الطلاقة»؟', o:['الفصاحة','العُجمة','البطء','الصمت']},
-{s:'لفظي', q:'العلاقة: جوهر : خاتم :: قماش : ......', o:['ثوب','قطن','لون','خيط']},
-{s:'لفظي', q:'ما مضاد كلمة «الغموض»؟', o:['الوضوح','الإبهام','الخفاء','التعقيد']},
-{s:'لفظي', q:'ما مرادف كلمة «الحَدَب»؟', o:['العطف','القسوة','البغض','الجفاء']},
-{s:'لفظي', q:'أكمل الجملة: الصدق ...... إلى الخير.', o:['يهدي','يُضل','يُبعد','يصرف']},
-{s:'لفظي', q:'ما مضاد كلمة «التراخي»؟', o:['الحزم','اللين','التساهل','التهاون']},
-{s:'لفظي', q:'ما مرادف كلمة «الوَسَن»؟', o:['النعاس','اليقظة','النشاط','الانتباه']},
-{s:'لفظي', q:'العلاقة: قوس : سهم :: بندقية : ......', o:['رصاصة','هدف','صياد','صوت']},
-{s:'لفظي', q:'ما مضاد كلمة «البؤس»؟', o:['السعادة','الشقاء','الحزن','التعاسة']},
-{s:'لفظي', q:'أكمل الجملة: ...... الطالب في الامتحان ليحصل على درجة عالية.', o:['يجتهد','يتكاسل','يهمل','يتردد']},
-{s:'لفظي', q:'ما مرادف كلمة «الزهد»؟', o:['الإعراض عن الدنيا','الحرص','الطمع','الجمع']},
-{s:'لفظي', q:'العلاقة: مدرس : تلميذ :: طبيب : ......', o:['مريض','دواء','مستشفى','مرض']}
+/* ============================================================
+   المراحل
+============================================================ */
+const STAGES = [
+  { name:'الصحراء', emoji:'🏜️', seed:7, baseY:420, hill:1.00, rough:1.00, mu:1.05, unlockCost:0,
+    sky1:'#ffe9a8', sky2:'#ff9147', far1:'#f2bb72', far2:'#dd9a4e',
+    ground1:'#efcc94', ground2:'#b8894f', edge:'#a5763f', cloud:'#fff3d0' },
+  { name:'الجبال', emoji:'🏔️', seed:23, baseY:420, hill:1.35, rough:1.45, mu:1.00, unlockCost:400,
+    sky1:'#cbe9ff', sky2:'#4f92cf', far1:'#84ab6d', far2:'#4d7743',
+    ground1:'#7ea85d', ground2:'#3d5a30', edge:'#2f4a25', cloud:'#ffffff' },
+  { name:'الثلوج', emoji:'❄️', seed:51, baseY:420, hill:1.20, rough:1.15, mu:0.40, unlockCost:1200,
+    sky1:'#eef8ff', sky2:'#89bce4', far1:'#c6dcee', far2:'#9dbdd8',
+    ground1:'#ffffff', ground2:'#bdd4e6', edge:'#a3c0d6', cloud:'#ffffff' }
 ];
 
-/* =========================================================
-   الحالة العامة
-   ========================================================= */
-let state = {
-  items: [],        // الأسئلة بعد الخلط
-  answers: [],      // فهرس الخيار المختار أو null
-  current: 0,
-  startTime: 0,
-  timerId: null,
-  reviewFilter: 'all'
+/* ============================================================
+   التضاريس
+============================================================ */
+let T = { seed:7, baseY:420, hill:1, rough:1 };
+
+function hash1(n){
+  const s = Math.sin(n*12.9898 + T.seed*78.233) * 43758.5453123;
+  return s - Math.floor(s);
+}
+function noise1(x){
+  const i = Math.floor(x), f = x - i;
+  const u = f*f*(3-2*f);
+  return hash1(i)*(1-u) + hash1(i+1)*u;
+}
+function terrainY(x){
+  const ramp = clamp((x-60)/430, 0, 1);
+  const diff = 1 + clamp(x/12000, 0, 0.5);
+  let h = 0;
+  h += (noise1(x*0.0009) - 0.5) * 390 * T.hill * diff;
+  h += (noise1(x*0.0036) - 0.5) * 132 * T.rough;
+  h += (noise1(x*0.0145) - 0.5) * 30  * T.rough;
+  h += (noise1(x*0.0620) - 0.5) * 8;
+  return T.baseY - h*ramp;
+}
+function terrainSlope(x){
+  return (terrainY(x+3) - terrainY(x-3)) / 6;
+}
+
+/* ============================================================
+   المحرك الفيزيائي
+============================================================ */
+const GRAVITY = 900;
+const FIXED_DT = 1/240;
+
+let car = null;
+let camX = 0, camY = 260;
+let items = [], genX = 0, nextFuelX = 0;
+let gameState = 'menu';
+let acc = 0, frameCount = 0;
+let playStats = { coins:0, maxX:0 };
+let flipTimer = 0, fuelOutTimer = 0;
+const input = { gas:false, brake:false };
+
+function carParams(){
+  const u = save.upg;
+  const st = STAGES[save.stage];
+  return {
+    enginePower : 5200 + (u.engine-1)*1250,
+    maxSpeed    : 560  + (u.engine-1)*22,
+    mu          : st.mu * (1 + (u.tires-1)*0.075),
+    suspK       : 2600 + (u.susp-1)*230,
+    suspC       : 112  + (u.susp-1)*20,
+    fuelMax     : 100  + (u.tank-1)*24
+  };
+}
+
+function makeCar(){
+  const P = carParams();
+  return {
+    x:220, y: terrainY(220) - 70,
+    vx:0, vy:0, angle:0, angVel:0,
+    mass:12, inertia:9500,
+    fuel:P.fuelMax, params:P,
+    wheels:[
+      { lx:-30, ly:16, r:15, drive:0.62, wx:0, wy:0, spin:0, grounded:false },
+      { lx: 32, ly:16, r:15, drive:0.38, wx:0, wy:0, spin:0, grounded:false }
+    ]
+  };
+}
+
+function physicsStep(c, dt, inp){
+  const P = c.params;
+  const cosA = Math.cos(c.angle), sinA = Math.sin(c.angle);
+
+  let fx = 0, fy = c.mass * GRAVITY, torque = 0;
+
+  // مقاومة الهواء
+  fx -= c.vx * 0.35;
+  fy -= c.vy * 0.35;
+
+  let anyGround = false;
+  const hasFuel = c.fuel > 0;
+
+  for(const w of c.wheels){
+    const wx = c.x + cosA*w.lx - sinA*w.ly;
+    const wy = c.y + sinA*w.lx + cosA*w.ly;
+    w.wx = wx; w.wy = wy;
+
+    const gy = terrainY(wx);
+    const s  = terrainSlope(wx);
+    const nl = Math.sqrt(1 + s*s);
+    const nx = -s/nl, ny = 1/nl;        // العمودي (للأعلى)
+    const tx =  1/nl, ty = s/nl;        // المماسي (للأمام)
+
+    const perpDist = (gy - wy) / nl;
+    const pen = w.r - perpDist;
+    w.grounded = pen > 0;
+
+    if(pen > 0){
+      anyGround = true;
+
+      const rx = wx - c.x, ry = wy - c.y;
+      const cvx = c.vx - c.angVel*ry;
+      const cvy = c.vy + c.angVel*rx;
+      const vn = cvx*nx + cvy*ny;
+      const vt = cvx*tx + cvy*ty;
+
+      let Fn = P.suspK*pen - P.suspC*vn;
+      if(Fn < 0) Fn = 0;
+      if(Fn > 70000) Fn = 70000;
+
+      const gripMax = P.mu * Fn;
+      let Ft = 0;
+
+      if(inp.gas && hasFuel){
+        Ft = P.enginePower * w.drive * clamp(1 - vt/P.maxSpeed, 0, 1);
+      } else if(inp.brake && hasFuel){
+        Ft = -vt * 26;
+        if(Math.abs(vt) < 55) Ft = -P.enginePower * 0.42 * w.drive;
+      } else {
+        Ft = -vt * 1.4;
+      }
+      Ft = clamp(Ft, -gripMax, gripMax);
+
+      const Fx = nx*Fn + tx*Ft;
+      const Fy = ny*Fn + ty*Ft;
+
+      fx += Fx; fy += Fy;
+      torque += rx*Fy - ry*Fx;
+
+      // دوران العجلة (بصري فقط)
+      w.spin += (vt / w.r) * dt;
+    }
+  }
+
+  // تحكم هوائي أثناء القفز
+  if(!anyGround && hasFuel){
+    if(inp.gas)   torque -= 44000;
+    if(inp.brake) torque += 44000;
+  }
+
+  c.vx += (fx / c.mass) * dt;
+  c.vy += (fy / c.mass) * dt;
+  c.angVel += (torque / c.inertia) * dt;
+  c.angVel *= 0.9985;
+
+  c.vx = clamp(c.vx, -2600, 2600);
+  c.vy = clamp(c.vy, -2600, 2600);
+  c.angVel = clamp(c.angVel, -15, 15);
+
+  c.x += c.vx * dt;
+  c.y += c.vy * dt;
+  c.angle += c.angVel * dt;
+
+  // جدار وهمي خلف نقطة البداية
+  if(c.x < 40){ c.x = 40; if(c.vx < 0) c.vx *= -0.3; }
+}
+
+/* ============================================================
+   توليد العناصر
+============================================================ */
+function generateItems(untilX){
+  let guard = 0;
+  while(genX < untilX && guard++ < 60){
+    genX += rnd(130, 290);
+    const y = terrainY(genX) - rnd(48, 95);
+    items.push({ type:'coin', x:genX, y, taken:false });
+
+    if(genX > nextFuelX){
+      nextFuelX = genX + rnd(1500, 2300);
+      const fx = genX + 55;
+      items.push({ type:'fuel', x:fx, y: terrainY(fx) - 48, taken:false });
+    }
+  }
+}
+
+/* ============================================================
+   منطق اللعب
+============================================================ */
+function updateGame(dt){
+  if(!car) return;
+  const P = car.params;
+
+  // استهلاك الوقود
+  if(car.fuel > 0){
+    const drain = 2.2 + (input.gas ? 1.9 : 0);
+    car.fuel = Math.max(0, car.fuel - drain*dt);
+  }
+
+  if(car.x > playStats.maxX) playStats.maxX = car.x;
+
+  // جمع العناصر
+  generateItems(car.x + 2600);
+  for(const it of items){
+    if(it.taken) continue;
+    const dx = it.x - car.x, dy = it.y - car.y;
+    if(dx*dx + dy*dy < 44*44){
+      it.taken = true;
+      if(it.type === 'coin') playStats.coins++;
+      else car.fuel = Math.min(P.fuelMax, car.fuel + P.fuelMax*0.42);
+    }
+  }
+
+  // تنظيف العناصر القديمة
+  if(frameCount % 90 === 0){
+    items = items.filter(it => !it.taken && it.x > car.x - 1600);
+  }
+
+  // كشف الانقلاب
+  const norm = Math.atan2(Math.sin(car.angle), Math.cos(car.angle));
+  if(Math.abs(norm) > 2.0){
+    flipTimer += dt;
+    if(flipTimer > 0.85){ endGame('💥 تحطمت السيارة!'); return; }
+  } else flipTimer = 0;
+
+  // نفاد الوقود
+  if(car.fuel <= 0){
+    fuelOutTimer += dt;
+    if(fuelOutTimer > 3 && Math.abs(car.vx) < 45){ endGame('⛽ نفد الوقود!'); return; }
+    if(fuelOutTimer > 14){ endGame('⛽ نفد الوقود!'); return; }
+  } else fuelOutTimer = 0;
+}
+
+function updateCamera(dt){
+  if(!car) return;
+  const k = 1 - Math.pow(0.0015, dt);
+  camX = lerp(camX, car.x - W*0.32, k*0.85);
+  camY = lerp(camY, car.y - H*0.56, k*0.85);
+}
+
+/* ============================================================
+   بدء / إنهاء اللعبة
+============================================================ */
+function startGame(idx){
+  const st = STAGES[idx];
+  T = { seed:st.seed, baseY:st.baseY, hill:st.hill, rough:st.rough };
+  save.stage = idx;
+
+  car = makeCar();
+  items = []; genX = 0; nextFuelX = 900;
+  playStats = { coins:0, maxX:0 };
+  flipTimer = 0; fuelOutTimer = 0;
+  acc = 0;
+  input.gas = false; input.brake = false;
+
+  camX = car.x - W*0.32;
+  camY = car.y - H*0.56;
+
+  gameState = 'play';
+  showScreen('hud');
+  persist();
+}
+
+function endGame(reason){
+  if(gameState !== 'play') return;
+  gameState = 'over';
+  input.gas = false; input.brake = false;
+
+  const dist = Math.floor(playStats.maxX / 30);
+  save.coins += playStats.coins;
+  if(dist > save.best[save.stage]) save.best[save.stage] = dist;
+  persist();
+
+  document.getElementById('overTitle').textContent = reason;
+  document.getElementById('overDist').textContent  = dist + ' م';
+  document.getElementById('overCoins').textContent = playStats.coins + ' 🪙';
+  document.getElementById('overBest').textContent  = save.best[save.stage] + ' م';
+
+  refreshCoins();
+  showScreen('over');
+}
+
+/* ============================================================
+   الرسم
+============================================================ */
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+let W = 0, H = 0, DPR = 1;
+
+function resize(){
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width  = Math.floor(W*DPR);
+  canvas.height = Math.floor(H*DPR);
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+}
+window.addEventListener('resize', resize);
+window.addEventListener('orientationchange', ()=> setTimeout(resize, 120));
+resize();
+
+function roundRect(x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+
+function drawParallax(st){
+  const baseCam = st.baseY - H*0.56;
+  for(let layer=0; layer<2; layer++){
+    const sp = 0.22 + layer*0.22;
+    const offX = camX * sp;
+    const offY = (camY - baseCam) * sp * 0.6;
+    ctx.beginPath();
+    ctx.moveTo(-10, H+10);
+    for(let sx=-10; sx<=W+10; sx+=18){
+      const wx = sx + offX;
+      let y = H*0.62 - offY;
+      y += Math.sin(wx*0.0016 + layer*2.1) * 55;
+      y += Math.sin(wx*0.00065 + layer*1.3) * 95;
+      ctx.lineTo(sx, y);
+    }
+    ctx.lineTo(W+10, H+10);
+    ctx.closePath();
+    ctx.fillStyle = layer===0 ? st.far1 : st.far2;
+    ctx.fill();
+  }
+  // غيوم
+  ctx.fillStyle = st.cloud;
+  ctx.globalAlpha = 0.55;
+  for(let i=0;i<5;i++){
+    const cx = ((i*340 - camX*0.12) % (W+420)) - 210;
+    const cy = 60 + (i%3)*54 - (camY - baseCam)*0.15;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, 62, 22, 0, 0, Math.PI*2);
+    ctx.ellipse(cx+40, cy-10, 46, 20, 0, 0, Math.PI*2);
+    ctx.ellipse(cx-38, cy+4, 40, 16, 0, 0, Math.PI*2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+let terrainCache = [];
+function drawTerrain(st){
+  terrainCache.length = 0;
+  const x0 = camX - 80, x1 = camX + W + 80;
+  for(let x=x0; x<=x1; x+=8){
+    terrainCache.push(x, terrainY(x));
+  }
+
+  // الجسم
+  ctx.beginPath();
+  ctx.moveTo(x0, camY + H + 400);
+  for(let i=0;i<terrainCache.length;i+=2){
+    ctx.lineTo(terrainCache[i], terrainCache[i+1]);
+  }
+  ctx.lineTo(x1, camY + H + 400);
+  ctx.closePath();
+  const g = ctx.createLinearGradient(0, camY, 0, camY + H*1.1);
+  g.addColorStop(0, st.ground1);
+  g.addColorStop(1, st.ground2);
+  ctx.fillStyle = g;
+  ctx.fill();
+
+  // الحافة
+  ctx.beginPath();
+  for(let i=0;i<terrainCache.length;i+=2){
+    const x = terrainCache[i], y = terrainCache[i+1];
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.strokeStyle = st.edge;
+  ctx.lineWidth = 5;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+}
+
+function drawItems(){
+  const t = performance.now()*0.004;
+  for(const it of items){
+    if(it.taken) continue;
+    if(it.x < camX - 120 || it.x > camX + W + 120) continue;
+
+    if(it.type === 'coin'){
+      const sx = Math.abs(Math.cos(t + it.x*0.012))*0.62 + 0.38;
+      ctx.save();
+      ctx.translate(it.x, it.y + Math.sin(t*2 + it.x*0.01)*4);
+      ctx.scale(sx, 1);
+      ctx.beginPath(); ctx.arc(0,0,13,0,Math.PI*2);
+      ctx.fillStyle = '#ffd54a'; ctx.fill();
+      ctx.lineWidth = 3; ctx.strokeStyle = '#d99a00'; ctx.stroke();
+      ctx.beginPath(); ctx.arc(0,0,6,0,Math.PI*2);
+      ctx.fillStyle = '#ffe999'; ctx.fill();
+      ctx.restore();
+    } else {
+      ctx.save();
+      ctx.translate(it.x, it.y + Math.sin(t*2.4)*4);
+      // علبة وقود
+      roundRect(-12,-15,24,30,5);
+      ctx.fillStyle = '#e63946'; ctx.fill();
+      ctx.lineWidth = 2.5; ctx.strokeStyle = '#7d1622'; ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 15px sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('⛽', 0, 1);
+      ctx.restore();
+    }
+  }
+}
+
+function drawCar(){
+  const c = car;
+  ctx.save();
+  ctx.translate(c.x, c.y);
+  ctx.rotate(c.angle);
+
+  // ظل
+  ctx.globalAlpha = 0.18;
+  ctx.beginPath();
+  ctx.ellipse(0, 26, 50, 9, 0, 0, Math.PI*2);
+  ctx.fillStyle = '#000'; ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // العجلات
+  for(const w of c.wheels){
+    ctx.save();
+    ctx.translate(w.lx, w.ly);
+    // الإطار
+    ctx.beginPath(); ctx.arc(0,0,w.r,0,Math.PI*2);
+    ctx.fillStyle = '#1c1f24'; ctx.fill();
+    ctx.lineWidth = 3; ctx.strokeStyle = '#0c0e11'; ctx.stroke();
+    // الجنط
+    ctx.save();
+    ctx.rotate(w.spin);
+    ctx.beginPath(); ctx.arc(0,0,w.r*0.56,0,Math.PI*2);
+    ctx.fillStyle = '#b9c2cc'; ctx.fill();
+    ctx.strokeStyle = '#7d8794'; ctx.lineWidth = 2;
+    for(let i=0;i<4;i++){
+      const a = i*Math.PI/2;
+      ctx.beginPath();
+      ctx.moveTo(0,0);
+      ctx.lineTo(Math.cos(a)*w.r*0.5, Math.sin(a)*w.r*0.5);
+      ctx.stroke();
+    }
+    ctx.beginPath(); ctx.arc(0,0,w.r*0.17,0,Math.PI*2);
+    ctx.fillStyle = '#59636f'; ctx.fill();
+    ctx.restore();
+    ctx.restore();
+  }
+
+  // الهيكل
+  const bodyG = ctx.createLinearGradient(0,-20,0,16);
+  bodyG.addColorStop(0,'#ff5a6a');
+  bodyG.addColorStop(1,'#c22333');
+  roundRect(-44,-16,88,31,9);
+  ctx.fillStyle = bodyG; ctx.fill();
+  ctx.lineWidth = 2; ctx.strokeStyle = '#7d1622'; ctx.stroke();
+
+  // الكابينة
+  ctx.beginPath();
+  ctx.moveTo(-24,-15);
+  ctx.lineTo(-14,-40);
+  ctx.lineTo(15,-40);
+  ctx.lineTo(26,-15);
+  ctx.closePath();
+  ctx.fillStyle = '#d63242'; ctx.fill();
+  ctx.strokeStyle = '#7d1622'; ctx.lineWidth = 2; ctx.stroke();
+
+  // الزجاج
+  ctx.beginPath();
+  ctx.moveTo(-19,-19);
+  ctx.lineTo(-11,-35);
+  ctx.lineTo(12,-35);
+  ctx.lineTo(21,-19);
+  ctx.closePath();
+  ctx.fillStyle = '#8fd3ff'; ctx.fill();
+  ctx.strokeStyle = '#4a90b8'; ctx.lineWidth = 1.6; ctx.stroke();
+
+  // السائق
+  ctx.beginPath(); ctx.arc(0,-27,6.5,0,Math.PI*2);
+  ctx.fillStyle = '#ffd7a8'; ctx.fill();
+  ctx.beginPath(); ctx.arc(0,-30,6.5,Math.PI,Math.PI*2);
+  ctx.fillStyle = '#2b6fd6'; ctx.fill();
+
+  // مصباح أمامي
+  ctx.beginPath(); ctx.arc(41,-2,5,0,Math.PI*2);
+  ctx.fillStyle = '#fff3a8'; ctx.fill();
+
+  // عادم
+  roundRect(-50,-6,7,10,3);
+  ctx.fillStyle = '#5b6470'; ctx.fill();
+
+  ctx.restore();
+}
+
+function draw(){
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  const st = STAGES[save.stage];
+
+  // السماء
+  const sky = ctx.createLinearGradient(0,0,0,H);
+  sky.addColorStop(0, st.sky1);
+  sky.addColorStop(1, st.sky2);
+  ctx.fillStyle = sky;
+  ctx.fillRect(0,0,W,H);
+
+  drawParallax(st);
+
+  ctx.save();
+  ctx.translate(-camX, -camY);
+  drawTerrain(st);
+  drawItems();
+  if(car) drawCar();
+  ctx.restore();
+}
+
+/* ============================================================
+   HUD
+============================================================ */
+let hudFuel = -1, hudCoins = -1, hudDist = -1;
+function updateHUD(){
+  if(gameState !== 'play' || !car) return;
+  const pct = clamp(car.fuel / car.params.fuelMax, 0, 1);
+  const pi = Math.round(pct*100);
+  if(pi !== hudFuel){
+    hudFuel = pi;
+    const fill = document.getElementById('fuelFill');
+    fill.style.width = pi + '%';
+    fill.classList.toggle('low', pct < 0.25);
+  }
+  if(playStats.coins !== hudCoins){
+    hudCoins = playStats.coins;
+    document.getElementById('coinNum').textContent = hudCoins;
+  }
+  const d = Math.floor(playStats.maxX/30);
+  if(d !== hudDist){
+    hudDist = d;
+    document.getElementById('distNum').textContent = d;
+  }
+}
+
+/* ============================================================
+   الحلقة الرئيسية
+============================================================ */
+let lastT = performance.now();
+function loop(now){
+  requestAnimationFrame(loop);
+  let dt = (now - lastT)/1000;
+  lastT = now;
+  if(dt > 0.1) dt = 0.1;
+  frameCount++;
+
+  if(gameState === 'play' && car){
+    acc += dt;
+    let guard = 0;
+    while(acc >= FIXED_DT && guard < 40){
+      physicsStep(car, FIXED_DT, input);
+      acc -= FIXED_DT;
+      guard++;
+    }
+    updateGame(dt);
+    updateCamera(dt);
+    updateHUD();
+  }
+
+  draw();
+}
+requestAnimationFrame(loop);
+
+/* ============================================================
+   واجهة المستخدم
+============================================================ */
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(el=>el.classList.add('hide'));
+  const hud = document.getElementById('hud');
+  if(name === 'hud'){ hud.classList.remove('hide'); }
+  else {
+    hud.classList.add('hide');
+    if(name){
+      const el = document.getElementById('scr-' + name);
+      if(el) el.classList.remove('hide');
+    }
+  }
+}
+
+function refreshCoins(){
+  const v = save.coins;
+  ['menuCoins','garageCoins','stageCoins'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = v;
+  });
+}
+
+/* ---------- التطويرات ---------- */
+const UPG_DEFS = [
+  { key:'engine', name:'المحرك',      icon:'⚙️' },
+  { key:'tires',  name:'الإطارات',    icon:'🛞' },
+  { key:'susp',   name:'نظام التعليق', icon:'🪛' },
+  { key:'tank',   name:'خزان الوقود', icon:'⛽' }
+];
+const MAX_LVL = 10;
+function upgCost(level){ return Math.floor(120 * Math.pow(1.55, level-1)); }
+
+function renderGarage(){
+  const list = document.getElementById('upgList');
+  list.innerHTML = '';
+  for(const d of UPG_DEFS){
+    const lvl = save.upg[d.key];
+    const maxed = lvl >= MAX_LVL;
+    const cost = upgCost(lvl);
+
+    const row = document.createElement('div');
+    row.className = 'upg';
+
+    let bars = '';
+    for(let i=1;i<=MAX_LVL;i++) bars += `<span class="${i<=lvl?'on':''}"></span>`;
+
+    row.innerHTML = `
+      <div class="upg-icon">${d.icon}</div>
+      <div class="upg-info">
+        <div class="upg-name"><span>${d.name}</span><span class="lvl">مستوى ${lvl}</span></div>
+        <div class="bars">${bars}</div>
+      </div>
+      <button class="buy">${maxed ? 'مكتمل' : cost + ' 🪙'}</button>
+    `;
+    const btn = row.querySelector('.buy');
+    if(maxed || save.coins < cost) btn.disabled = true;
+    if(!maxed){
+      btn.onclick = ()=>{
+        if(save.coins >= cost && save.upg[d.key] < MAX_LVL){
+          save.coins -= cost;
+          save.upg[d.key]++;
+          persist();
+          refreshCoins();
+          renderGarage();
+        }
+      };
+    }
+    list.appendChild(row);
+  }
+  refreshCoins();
+}
+
+/* ---------- المراحل ---------- */
+function renderStages(){
+  const list = document.getElementById('stageList');
+  list.innerHTML = '';
+  STAGES.forEach((st, i)=>{
+    const unlocked = save.unlocked[i];
+    const card = document.createElement('div');
+    card.className = 'stage-card' + (unlocked ? (save.stage===i?' sel':'') : ' locked');
+    const best = save.best[i] || 0;
+
+    let tag;
+    if(!unlocked) tag = `<span class="tag cost">${st.unlockCost} 🪙</span>`;
+    else if(save.stage === i) tag = `<span class="tag free">مختارة</span>`;
+    else tag = `<span class="tag lock">متاحة</span>`;
+
+    card.innerHTML = `
+      <div class="stage-emoji">${st.emoji}</div>
+      <div class="stage-info">
+        <div class="stage-name">${st.name}</div>
+        <div class="stage-best">أفضل مسافة: ${best} م</div>
+      </div>
+      ${tag}
+    `;
+
+    card.onclick = ()=>{
+      if(unlocked){
+        save.stage = i;
+        persist();
+        renderStages();
+      } else if(save.coins >= st.unlockCost){
+        save.coins -= st.unlockCost;
+        save.unlocked[i] = true;
+        save.stage = i;
+        persist();
+        refreshCoins();
+        renderStages();
+      }
+    };
+    list.appendChild(card);
+  });
+  refreshCoins();
+}
+
+/* ---------- أزرار ---------- */
+document.getElementById('btnPlay').onclick = ()=>{
+  if(!save.unlocked[save.stage]) save.stage = 0;
+  startGame(save.stage);
+};
+document.getElementById('btnGarage').onclick = ()=>{ renderGarage(); showScreen('garage'); };
+document.getElementById('btnStages').onclick = ()=>{ renderStages(); showScreen('stages'); };
+document.querySelectorAll('[data-back]').forEach(b=>{
+  b.onclick = ()=> showScreen(b.dataset.back);
+});
+
+document.getElementById('btnPause').onclick = ()=>{
+  if(gameState === 'play'){ gameState = 'paused'; showScreen('pause'); }
+};
+document.getElementById('btnResume').onclick = ()=>{
+  if(gameState === 'paused'){ gameState = 'play'; lastT = performance.now(); showScreen('hud'); }
+};
+document.getElementById('btnQuit').onclick = ()=>{
+  gameState = 'menu';
+  car = null;
+  showScreen('menu');
+  refreshCoins();
+};
+document.getElementById('btnRetry').onclick = ()=> startGame(save.stage);
+document.getElementById('btnHome').onclick = ()=>{
+  gameState = 'menu';
+  car = null;
+  showScreen('menu');
+  refreshCoins();
 };
 
-/* ---------- أدوات مساعدة ---------- */
-function shuffle(arr){
-  const a = arr.slice();
-  for(let i = a.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+/* ---------- التحكم ---------- */
+function bindPedal(id, key){
+  const el = document.getElementById(id);
+  const on = e=>{ e.preventDefault(); input[key] = true; el.classList.add('active'); };
+  const off = e=>{ e.preventDefault(); input[key] = false; el.classList.remove('active'); };
+  el.addEventListener('pointerdown', on);
+  el.addEventListener('pointerup', off);
+  el.addEventListener('pointercancel', off);
+  el.addEventListener('pointerleave', off);
+  el.addEventListener('contextmenu', e=>e.preventDefault());
+}
+bindPedal('pedalGas','gas');
+bindPedal('pedalBrake','brake');
+
+window.addEventListener('keydown', e=>{
+  if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D' || e.key === ' '){
+    input.gas = true; e.preventDefault();
   }
-  return a;
-}
-
-function fmtTime(ms){
-  const total = Math.floor(ms / 1000);
-  const m = String(Math.floor(total / 60)).padStart(2,'0');
-  const s = String(total % 60).padStart(2,'0');
-  return m + ':' + s;
-}
-
-const $ = id => document.getElementById(id);
-
-/* =========================================================
-   بدء الاختبار
-   ========================================================= */
-function startQuiz(mode){
-  let pool = QUESTIONS;
-  if(mode === 'quant')  pool = QUESTIONS.filter(q => q.s === 'كمي');
-  if(mode === 'verbal') pool = QUESTIONS.filter(q => q.s === 'لفظي');
-
-  state.items = shuffle(pool).map(q => {
-    const opts = shuffle(q.o.map((text, i) => ({ text, correct: i === 0 })));
-    return {
-      section: q.s,
-      question: q.q,
-      options: opts,
-      correctIndex: opts.findIndex(o => o.correct)
-    };
-  });
-
-  state.answers = new Array(state.items.length).fill(null);
-  state.current = 0;
-  state.startTime = Date.now();
-
-  $('startScreen').classList.add('hidden');
-  $('resultScreen').classList.add('hidden');
-  $('quizScreen').classList.remove('hidden');
-
-  buildGrid();
-  renderQuestion();
-
-  clearInterval(state.timerId);
-  state.timerId = setInterval(() => {
-    $('timerPill').textContent = '⏱ ' + fmtTime(Date.now() - state.startTime);
-  }, 1000);
-
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-/* =========================================================
-   عرض السؤال
-   ========================================================= */
-function renderQuestion(){
-  const total = state.items.length;
-  const item  = state.items[state.current];
-  const chosen = state.answers[state.current];
-
-  $('counterPill').textContent = `السؤال ${state.current + 1} من ${total}`;
-
-  const secPill = $('sectionPill');
-  secPill.textContent = item.section;
-  secPill.className = 'pill ' + (item.section === 'كمي' ? 'badge-q' : 'badge-v');
-
-  $('qNum').textContent = `سؤال رقم ${state.current + 1}`;
-  $('qText').textContent = item.question;
-
-  const answered = state.answers.filter(a => a !== null).length;
-  $('progressFill').style.width = (answered / total * 100) + '%';
-
-  // الخيارات
-  const box = $('optionsBox');
-  box.innerHTML = '';
-  item.options.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'opt' + (chosen === i ? ' selected' : '');
-    btn.innerHTML = `<span class="key">${i + 1}</span><span>${opt.text}</span>`;
-    btn.onclick = () => selectOption(i);
-    box.appendChild(btn);
-  });
-
-  // أزرار التنقل
-  $('prevBtn').disabled = state.current === 0;
-  const nextBtn = $('nextBtn');
-  if(state.current === total - 1){
-    nextBtn.textContent = 'آخر سؤال';
-    nextBtn.disabled = true;
-  } else {
-    nextBtn.textContent = 'التالي';
-    nextBtn.disabled = false;
+  if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A'){
+    input.brake = true; e.preventDefault();
   }
-
-  updateGrid();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function selectOption(i){
-  state.answers[state.current] = i;
-  renderQuestion();
-}
-
-function go(step){
-  const next = state.current + step;
-  if(next < 0 || next >= state.items.length) return;
-  state.current = next;
-  renderQuestion();
-}
-
-/* =========================================================
-   لوحة الأسئلة
-   ========================================================= */
-function buildGrid(){
-  const grid = $('qGrid');
-  grid.innerHTML = '';
-  state.items.forEach((_, i) => {
-    const b = document.createElement('button');
-    b.textContent = i + 1;
-    b.onclick = () => { state.current = i; renderQuestion(); };
-    grid.appendChild(b);
-  });
-}
-
-function updateGrid(){
-  const btns = $('qGrid').children;
-  for(let i = 0; i < btns.length; i++){
-    btns[i].className = '';
-    if(state.answers[i] !== null) btns[i].classList.add('done');
-    if(i === state.current) btns[i].classList.add('now');
-  }
-}
-
-function toggleGrid(){
-  $('qGrid').classList.toggle('open');
-}
-
-/* =========================================================
-   إنهاء الاختبار والنتائج
-   ========================================================= */
-function finishQuiz(){
-  const unanswered = state.answers.filter(a => a === null).length;
-  if(unanswered > 0){
-    const ok = confirm(`لديك ${unanswered} سؤال لم تُجب عليه. هل تريد إنهاء الاختبار الآن؟`);
-    if(!ok) return;
-  }
-
-  clearInterval(state.timerId);
-  const elapsed = Date.now() - state.startTime;
-
-  let correct = 0, wrong = 0, skipped = 0;
-  let qTotal = 0, qCorrect = 0, vTotal = 0, vCorrect = 0;
-
-  state.items.forEach((item, i) => {
-    const a = state.answers[i];
-    const isQ = item.section === 'كمي';
-    if(isQ) qTotal++; else vTotal++;
-
-    if(a === null){ skipped++; return; }
-    if(a === item.correctIndex){
-      correct++;
-      if(isQ) qCorrect++; else vCorrect++;
-    } else {
-      wrong++;
-    }
-  });
-
-  const total = state.items.length;
-  const pct = Math.round(correct / total * 100);
-
-  // الدائرة
-  const ring = $('ring');
-  const color = pct >= 80 ? '#16a34a' : pct >= 50 ? '#0d9488' : '#dc2626';
-  ring.style.background = `conic-gradient(${color} 0deg, ${color} ${pct * 3.6}deg, #e2e8f0 ${pct * 3.6}deg)`;
-  $('ringPct').textContent = pct + '%';
-  $('ringPct').style.color = color;
-
-  // العنوان
-  let title = '', sub = '';
-  if(pct >= 90){ title = '🎉 ممتاز جدًا!'; sub = 'أداء استثنائي، أنت جاهز تمامًا لاختبار القدرات.'; }
-  else if(pct >= 80){ title = '🌟 ممتاز!'; sub = 'مستوى عالٍ جدًا، واصل التدريب للحفاظ عليه.'; }
-  else if(pct >= 70){ title = '👍 جيد جدًا'; sub = 'أداء قوي، مع قليل من التدريب ستصل للقمة.'; }
-  else if(pct >= 50){ title = '📚 جيد'; sub = 'أساس جيد، ركّز على مراجعة الأخطاء وتقوية نقاط الضعف.'; }
-  else { title = '💪 تحتاج مزيدًا من التدريب'; sub = 'لا تقلق، راجع الأسئلة أدناه وأعد المحاولة.'; }
-
-  $('resTitle').textContent = title;
-  $('resSub').textContent = sub;
-
-  $('rCorrect').textContent = correct;
-  $('rWrong').textContent = wrong;
-  $('rQuant').textContent = qCorrect + ' / ' + qTotal;
-  $('rVerbal').textContent = vCorrect + ' / ' + vTotal;
-  $('rTime').textContent = fmtTime(elapsed);
-
-  buildReview();
-
-  $('quizScreen').classList.add('hidden');
-  $('resultScreen').classList.remove('hidden');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-/* =========================================================
-   مراجعة الأسئلة
-   ========================================================= */
-function buildReview(){
-  const box = $('reviewBox');
-  box.innerHTML = '';
-
-  state.items.forEach((item, i) => {
-    const a = state.answers[i];
-    let status;
-    if(a === null) status = 'skipped';
-    else if(a === item.correctIndex) status = 'correct';
-    else status = 'wrong';
-
-    if(state.reviewFilter === 'wrong' && status !== 'wrong') return;
-    if(state.reviewFilter === 'skipped' && status !== 'skipped') return;
-
-    const div = document.createElement('div');
-    div.className = 'rev-item ' + (status === 'correct' ? '' : status);
-
-    const statusTag =
-      status === 'correct' ? '<span class="tag ok">✓ صحيحة</span>' :
-      status === 'wrong'   ? '<span class="tag no">✗ خاطئة</span>' :
-                             '<span class="tag sk">— متروكة</span>';
-
-    let optsHtml = '';
-    item.options.forEach((opt, oi) => {
-      let cls = 'rev-opt';
-      let mark = '';
-      if(oi === item.correctIndex){ cls += ' correct'; mark = '<span class="mark">✓</span>'; }
-      else if(oi === a){ cls += ' chosen-wrong'; mark = '<span class="mark">✗</span>'; }
-      optsHtml += `<div class="${cls}">${opt.text}${mark}</div>`;
-    });
-
-    div.innerHTML = `
-      <div class="rev-head">
-        <span class="rev-num">سؤال ${i + 1}</span>
-        <span class="tag ${item.section === 'كمي' ? 'q' : 'v'}">${item.section}</span>
-        ${statusTag}
-      </div>
-      <div class="rev-q">${item.question}</div>
-      <div class="rev-opts">${optsHtml}</div>
-    `;
-    box.appendChild(div);
-  });
-
-  if(!box.children.length){
-    box.innerHTML = '<div class="empty">لا توجد أسئلة في هذا التصنيف 🎉</div>';
-  }
-}
-
-function filterReview(f, btn){
-  state.reviewFilter = f;
-  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  buildReview();
-}
-
-/* =========================================================
-   اختصارات لوحة المفاتيح
-   ========================================================= */
-document.addEventListener('keydown', e => {
-  if($('quizScreen').classList.contains('hidden')) return;
-
-  if(e.key >= '1' && e.key <= '4'){
-    const idx = parseInt(e.key) - 1;
-    if(idx < state.items[state.current].options.length) selectOption(idx);
-  }
-  if(e.key === 'ArrowLeft') go(1);   // RTL: يسار = التالي
-  if(e.key === 'ArrowRight') go(-1);
 });
+window.addEventListener('keyup', e=>{
+  if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D' || e.key === ' '){
+    input.gas = false; e.preventDefault();
+  }
+  if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A'){
+    input.brake = false; e.preventDefault();
+  }
+});
+
+/* ---------- تهيئة أولية ---------- */
+(function init(){
+  const st = STAGES[save.stage] || STAGES[0];
+  T = { seed:st.seed, baseY:st.baseY, hill:st.hill, rough:st.rough };
+  camX = 120;
+  camY = st.baseY - H*0.56;
+  genX = 0; nextFuelX = 900;
+  refreshCoins();
+  showScreen('menu');
+})();
+
+// منع التكبير باللمس المزدوج
+document.addEventListener('gesturestart', e=>e.preventDefault());
 </script>
 </body>
 </html>
