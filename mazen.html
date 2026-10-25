@@ -9,10 +9,7 @@
 html,body{width:100%;height:100%;overflow:hidden;background:#0b0f14;
   font-family:"Segoe UI",Tahoma,"Noto Kufi Arabic",sans-serif;user-select:none;touch-action:none}
 canvas{position:absolute;inset:0;display:block}
-
 svg{display:block}
-
-/* ====== HUD ====== */
 #hud{position:absolute;inset:0;pointer-events:none;z-index:10}
 #hud.hide{display:none}
 .hud-top{position:absolute;top:0;left:0;right:0;display:flex;gap:10px;padding:12px;align-items:center;justify-content:center;flex-wrap:wrap}
@@ -26,7 +23,6 @@ svg{display:block}
 .bar i{display:block;height:100%;width:100%;border-radius:99px;
   background:linear-gradient(90deg,#22e07a,#a8e063);transition:width .12s linear}
 .bar i.low{background:linear-gradient(90deg,#ff3b3b,#ff8a3b)}
-
 .pedal{position:absolute;bottom:22px;width:96px;height:96px;border-radius:50%;border:2px solid rgba(255,255,255,.25);
   background:rgba(255,255,255,.12);backdrop-filter:blur(10px);color:#fff;font-size:12px;font-weight:800;
   pointer-events:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
@@ -40,8 +36,6 @@ svg{display:block}
   pointer-events:auto;backdrop-filter:blur(8px);cursor:pointer;
   display:flex;align-items:center;justify-content:center}
 .pause-btn svg{width:18px;height:18px}
-
-/* ====== Screens ====== */
 .screen{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;
   background:radial-gradient(circle at 50% 0%,rgba(20,40,70,.55),rgba(4,8,14,.88));backdrop-filter:blur(6px);padding:16px;overflow-y:auto}
 .screen.hide{display:none}
@@ -64,8 +58,6 @@ svg{display:block}
 .big-btn:disabled{opacity:.45;filter:grayscale(.6);cursor:not-allowed}
 .back-btn{margin-top:10px;background:transparent;border:1px solid rgba(255,255,255,.2);color:#b9cbe0;
   padding:11px;width:100%;border-radius:14px;font-size:14px;cursor:pointer;font-family:inherit;font-weight:600}
-
-/* upgrade list */
 .upg{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
   border-radius:16px;padding:12px;margin-bottom:10px;text-align:right}
 .upg-icon{width:38px;height:38px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
@@ -83,8 +75,6 @@ svg{display:block}
 .buy svg{width:14px;height:14px}
 .buy:disabled{background:rgba(255,255,255,.1);color:#7c8ea3;cursor:not-allowed}
 .buy:active:not(:disabled){transform:scale(.95)}
-
-/* stage cards */
 .stage-card{display:flex;align-items:center;gap:12px;border-radius:18px;padding:14px;margin-bottom:11px;
   border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;transition:.15s;text-align:right}
 .stage-card.sel{border-color:#3ddc84;background:rgba(61,220,132,.12)}
@@ -100,8 +90,6 @@ svg{display:block}
 .tag.free{background:rgba(61,220,132,.18);color:#6ee7a5}
 .tag.cost{background:rgba(255,213,74,.15);color:#ffd54a}
 .tag.lock{background:rgba(255,255,255,.1);color:#93a7bd}
-
-/* game over */
 .res-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:rgba(255,255,255,.05);
   border-radius:13px;margin-bottom:9px;color:#c8d8ea;font-size:14px}
 .res-row b{color:#fff;font-weight:800;display:flex;align-items:center;gap:5px}
@@ -112,7 +100,6 @@ svg{display:block}
 
 <canvas id="game"></canvas>
 
-<!-- ======= HUD ======= -->
 <div id="hud" class="hide">
   <div class="hud-top">
     <div class="hud-item fuel">
@@ -127,7 +114,6 @@ svg{display:block}
   <button class="pedal gas" id="pedalGas"></button>
 </div>
 
-<!-- ======= MENU ======= -->
 <div id="scr-menu" class="screen">
   <div class="panel">
     <h1>سباق التلال</h1>
@@ -139,7 +125,6 @@ svg{display:block}
   </div>
 </div>
 
-<!-- ======= GARAGE ======= -->
 <div id="scr-garage" class="screen hide">
   <div class="panel">
     <h2><span id="garageTitleIcon"></span>الجراج</h2>
@@ -149,7 +134,6 @@ svg{display:block}
   </div>
 </div>
 
-<!-- ======= STAGES ======= -->
 <div id="scr-stages" class="screen hide">
   <div class="panel">
     <h2><span id="stageTitleIcon"></span>المراحل</h2>
@@ -159,7 +143,6 @@ svg{display:block}
   </div>
 </div>
 
-<!-- ======= PAUSE ======= -->
 <div id="scr-pause" class="screen hide">
   <div class="panel">
     <h2><span id="pauseTitleIcon"></span>إيقاف مؤقت</h2>
@@ -168,7 +151,6 @@ svg{display:block}
   </div>
 </div>
 
-<!-- ======= GAME OVER ======= -->
 <div id="scr-over" class="screen hide">
   <div class="panel">
     <h2><span id="overIcon"></span><span id="overTitle">انتهت الجولة</span></h2>
@@ -183,9 +165,6 @@ svg{display:block}
 <script>
 "use strict";
 
-/* ============================================================
-   SVG Icons (بديل عن الإيموجيات)
-============================================================ */
 const ICON = {
   fuel: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v16"/><path d="M3 21h12"/><path d="M12 9h3a2 2 0 0 1 2 2v6a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-3l-2-2"/><path d="M6 8h4"/></svg>`,
   coin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 10h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4" stroke-linecap="round"/></svg>`,
@@ -206,20 +185,13 @@ const ICON = {
   retry: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>`,
   left: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>`,
   right: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>`,
-  lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`,
-  star: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.2 4.6 1.4 6.8L12 17l-6 3.5 1.4-6.8L2.2 9.1l6.9-.8z"/></svg>`
+  lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`
 };
 
-/* ============================================================
-   أدوات مساعدة
-============================================================ */
 const clamp = (v,a,b)=> v<a?a:(v>b?b:v);
 const lerp  = (a,b,t)=> a+(b-a)*t;
 const rnd   = (a,b)=> a+Math.random()*(b-a);
 
-/* ============================================================
-   الحفظ
-============================================================ */
 const SAVE_KEY = 'hillclimb_save_v3';
 const save = {
   coins: 0,
@@ -246,9 +218,6 @@ function persist(){
 }
 loadSave();
 
-/* ============================================================
-   المراحل
-============================================================ */
 const STAGES = [
   { name:'الصحراء', icon:'desert', seed:7, baseY:420, hill:1.00, rough:1.00, mu:1.05, unlockCost:0,
     sky1:'#ffe9a8', sky2:'#ff9147', far1:'#f2bb72', far2:'#dd9a4e',
@@ -261,9 +230,6 @@ const STAGES = [
     ground1:'#ffffff', ground2:'#bdd4e6', edge:'#a3c0d6', cloud:'#ffffff' }
 ];
 
-/* ============================================================
-   التضاريس
-============================================================ */
 let T = { seed:7, baseY:420, hill:1, rough:1 };
 
 function hash1(n){
@@ -289,9 +255,6 @@ function terrainSlope(x){
   return (terrainY(x+3) - terrainY(x-3)) / 6;
 }
 
-/* ============================================================
-   المحرك الفيزيائي
-============================================================ */
 const GRAVITY = 900;
 const FIXED_DT = 1/240;
 
@@ -311,26 +274,57 @@ function carParams(){
     enginePower : 4800 + (u.engine-1)*1150,
     maxSpeed    : 560  + (u.engine-1)*22,
     mu          : st.mu * (1 + (u.tires-1)*0.075),
-    suspK       : 2600 + (u.susp-1)*230,
-    suspC       : 112  + (u.susp-1)*20,
+    suspK       : 4200 + (u.susp-1)*550,
+    suspC       : 85   + (u.susp-1)*9,
     fuelMax     : 100  + (u.tank-1)*24
   };
 }
 
+/* ============ إنشاء السيارة بموضع بداية آمن ============ */
 function makeCar(){
   const P = carParams();
+  const spawnX = 220;
+
+  // محاذاة زاوية السيارة مع ميل الأرض
+  let spawnAngle = Math.atan(terrainSlope(spawnX));
+  spawnAngle = clamp(spawnAngle, -0.45, 0.45);
+
+  const wheelsDef = [
+    { lx:-30, ly:16, r:15, drive:0.62, wx:0, wy:0, spin:0, grounded:false },
+    { lx: 32, ly:16, r:15, drive:0.38, wx:0, wy:0, spin:0, grounded:false }
+  ];
+
+  // حساب y بحيث تكون كلتا العجلتين فوق الأرض بمسافة أمان
+  let y = terrainY(spawnX) - 55;
+  const cosA = Math.cos(spawnAngle), sinA = Math.sin(spawnAngle);
+  const CLEAR = 15;
+
+  for(let iter=0; iter<6; iter++){
+    let raise = 0;
+    for(const w of wheelsDef){
+      const wx = spawnX + cosA*w.lx - sinA*w.ly;
+      const wy = y + sinA*w.lx + cosA*w.ly;
+      const gwy = terrainY(wx);
+      const s = terrainSlope(wx);
+      const nl = Math.sqrt(1 + s*s);
+      const perp = (gwy - wy) / nl;
+      const clearance = perp - w.r;
+      if(clearance < CLEAR) raise = Math.max(raise, CLEAR - clearance);
+    }
+    if(raise <= 0.01) break;
+    y -= raise;
+  }
+
   return {
-    x:220, y: terrainY(220) - 70,
-    vx:0, vy:0, angle:0, angVel:0,
+    x:spawnX, y,
+    vx:0, vy:0, angle:spawnAngle, angVel:0,
     mass:12, inertia:9500,
     fuel:P.fuelMax, params:P,
-    wheels:[
-      { lx:-30, ly:16, r:15, drive:0.55, wx:0, wy:0, spin:0, grounded:false },
-      { lx: 32, ly:16, r:15, drive:0.45, wx:0, wy:0, spin:0, grounded:false }
-    ]
+    wheels:wheelsDef
   };
 }
 
+/* ============ خطوة الفيزياء المُصححة ============ */
 function physicsStep(c, dt, inp){
   const P = c.params;
   const cosA = Math.cos(c.angle), sinA = Math.sin(c.angle);
@@ -360,17 +354,25 @@ function physicsStep(c, dt, inp){
 
     if(pen > 0){
       anyGround = true;
-      pen = Math.min(pen, w.r*0.85);
+      pen = Math.min(pen, w.r * 1.05);
 
       const rx = wx - c.x, ry = wy - c.y;
       const cvx = c.vx - c.angVel*ry;
       const cvy = c.vy + c.angVel*rx;
-      const vn = cvx*nx + cvy*ny;
+      let vn = cvx*nx + cvy*ny;
       const vt = cvx*tx + cvy*ty;
 
-      let Fn = P.suspK*pen - P.suspC*vn;
-      if(Fn < 0) Fn = 0;
-      if(Fn > 70000) Fn = 70000;
+      // حماية من الاختراق: تحديد سقف لسرعة الارتطام
+      const MAX_VN = 150;
+      if(vn > MAX_VN){
+        const dv = vn - MAX_VN;
+        c.vx -= dv * nx;
+        c.vy -= dv * ny;
+        vn = MAX_VN;
+      }
+
+      let Fn = P.suspK * pen - P.suspC * vn;
+      Fn = clamp(Fn, 0, 90000);
 
       const gripMax = P.mu * Fn;
       let Ft = 0;
@@ -416,9 +418,6 @@ function physicsStep(c, dt, inp){
   if(c.x < 40){ c.x = 40; if(c.vx < 0) c.vx *= -0.3; }
 }
 
-/* ============================================================
-   توليد العناصر
-============================================================ */
 function generateItems(untilX){
   let guard = 0;
   while(genX < untilX && guard++ < 60){
@@ -434,9 +433,6 @@ function generateItems(untilX){
   }
 }
 
-/* ============================================================
-   منطق اللعب
-============================================================ */
 function updateGame(dt){
   if(!car) return;
   const P = car.params;
@@ -463,17 +459,22 @@ function updateGame(dt){
     items = items.filter(it => !it.taken && it.x > car.x - 1600);
   }
 
-  // سقوط في الهاوية
+  // شبكة أمان: إن تجاوزت السيارة الأرض بعمق كبير، أعِدها للأعلى
+  const bodyGY = terrainY(car.x);
+  if(car.y > bodyGY + 120){
+    car.y = bodyGY - 55;
+    car.vy = 0;
+    car.angVel = 0;
+  }
+
   if(car.y > 4000){ endGame('سقطت في الهاوية!', 'crash'); return; }
 
-  // انقلاب
   const norm = Math.atan2(Math.sin(car.angle), Math.cos(car.angle));
   if(Math.abs(norm) > 2.2){
     flipTimer += dt;
     if(flipTimer > 0.85){ endGame('تحطمت السيارة!', 'crash'); return; }
   } else flipTimer = 0;
 
-  // نفاد الوقود
   if(car.fuel <= 0){
     fuelOutTimer += dt;
     if(fuelOutTimer > 3 && Math.abs(car.vx) < 45){ endGame('نفد الوقود!', 'fuel'); return; }
@@ -489,9 +490,6 @@ function updateCamera(dt){
   camY = lerp(camY, car.y - H*0.56, ky);
 }
 
-/* ============================================================
-   بدء / إنهاء اللعبة
-============================================================ */
 function startGame(idx){
   if(idx < 0 || idx >= STAGES.length) idx = 0;
   const st = STAGES[idx];
@@ -509,6 +507,7 @@ function startGame(idx){
   camY = car.y - H*0.56;
 
   gameState = 'play';
+  lastT = performance.now();
   showScreen('hud');
   persist();
 }
@@ -535,9 +534,6 @@ function endGame(reasonText, iconName){
   showScreen('over');
 }
 
-/* ============================================================
-   الرسم
-============================================================ */
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 let W = 0, H = 0, DPR = 1;
@@ -654,7 +650,6 @@ function drawItems(){
       roundRect(-12,-15,24,30,5);
       ctx.fillStyle = '#e63946'; ctx.fill();
       ctx.lineWidth = 2.5; ctx.strokeStyle = '#7d1622'; ctx.stroke();
-      // رسم خطوط الوقود داخل العلبة
       ctx.beginPath();
       ctx.moveTo(-6,-6); ctx.lineTo(-6,6);
       ctx.moveTo(0,-6);  ctx.lineTo(0,6);
@@ -761,9 +756,6 @@ function draw(){
   ctx.restore();
 }
 
-/* ============================================================
-   HUD
-============================================================ */
 let hudFuel = -1, hudCoins = -1, hudDist = -1;
 function updateHUD(){
   if(gameState !== 'play' || !car) return;
@@ -786,9 +778,6 @@ function updateHUD(){
   }
 }
 
-/* ============================================================
-   الحلقة الرئيسية
-============================================================ */
 let lastT = performance.now();
 function loop(now){
   requestAnimationFrame(loop);
@@ -799,6 +788,7 @@ function loop(now){
 
   if(gameState === 'play' && car){
     acc += dt;
+    if(acc > 0.5) acc = 0.5;
     let guard = 0;
     while(acc >= FIXED_DT && guard < 40 && gameState === 'play'){
       physicsStep(car, FIXED_DT, input);
@@ -814,9 +804,6 @@ function loop(now){
 }
 requestAnimationFrame(loop);
 
-/* ============================================================
-   واجهة المستخدم
-============================================================ */
 function showScreen(name){
   document.querySelectorAll('.screen').forEach(el=>el.classList.add('hide'));
   const hud = document.getElementById('hud');
@@ -838,7 +825,6 @@ function refreshCoins(){
   });
 }
 
-/* ---------- التطويرات ---------- */
 const UPG_DEFS = [
   { key:'engine', name:'المحرك',       icon:'engine' },
   { key:'tires',  name:'الإطارات',     icon:'tire' },
@@ -888,7 +874,6 @@ function renderGarage(){
   refreshCoins();
 }
 
-/* ---------- المراحل ---------- */
 function renderStages(){
   const list = document.getElementById('stageList');
   list.innerHTML = '';
@@ -931,7 +916,6 @@ function renderStages(){
   refreshCoins();
 }
 
-/* ---------- أزرار ---------- */
 document.getElementById('btnPlay').onclick = ()=>{
   if(!save.unlocked[save.stage]) save.stage = 0;
   startGame(save.stage);
@@ -962,7 +946,6 @@ document.getElementById('btnHome').onclick = ()=>{
   refreshCoins();
 };
 
-/* ---------- التحكم ---------- */
 function bindPedal(id, key){
   const el = document.getElementById(id);
   const on = e=>{ e.preventDefault(); input[key] = true; el.classList.add('active'); };
@@ -993,11 +976,7 @@ window.addEventListener('keyup', e=>{
   }
 });
 
-/* ============================================================
-   إعداد الأيقونات
-============================================================ */
 function setIcons(){
-  // HUD
   const icoFuel = document.getElementById('icoFuel');
   if(icoFuel) icoFuel.innerHTML = ICON.fuel;
   const icoCoin = document.getElementById('icoCoin');
@@ -1005,19 +984,14 @@ function setIcons(){
   const icoDist = document.getElementById('icoDist');
   if(icoDist) icoDist.innerHTML = ICON.ruler;
 
-  // Pause btn
   document.getElementById('btnPause').innerHTML = ICON.pause;
-
-  // Pedals
   document.getElementById('pedalBrake').innerHTML = ICON.left + '<span>فرامل</span>';
   document.getElementById('pedalGas').innerHTML   = ICON.right + '<span>بنزين</span>';
 
-  // Coins badges
   document.getElementById('menuCoinIcon').innerHTML   = ICON.coin;
   document.getElementById('garageCoinIcon').innerHTML = ICON.coin;
   document.getElementById('stageCoinIcon').innerHTML  = ICON.coin;
 
-  // Menu buttons
   document.getElementById('btnPlay').innerHTML =
     ICON.play + '<span>ابدأ اللعب</span>';
   document.getElementById('btnGarage').innerHTML =
@@ -1025,36 +999,26 @@ function setIcons(){
   document.getElementById('btnStages').innerHTML =
     ICON.map + '<span>المراحل</span>';
 
-  // Pause screen
   document.getElementById('pauseTitleIcon').innerHTML = ICON.pause;
   document.getElementById('btnResume').innerHTML =
     ICON.play + '<span>متابعة</span>';
   document.getElementById('btnQuit').innerHTML =
     ICON.home + '<span>إنهاء الجولة</span>';
 
-  // Garage title
   document.getElementById('garageTitleIcon').innerHTML = ICON.wrench;
-
-  // Stages title
   document.getElementById('stageTitleIcon').innerHTML = ICON.map;
 
-  // Over screen buttons
   document.getElementById('btnRetry').innerHTML =
     ICON.retry + '<span>حاول مجدداً</span>';
   document.getElementById('btnHome').innerHTML =
     ICON.home + '<span>القائمة</span>';
 
-  // Over screen coin icon placeholder (will be filled in endGame)
   document.getElementById('overCoinIco').innerHTML = '';
 }
 
-/* ============================================================
-   تهيئة أولية
-============================================================ */
 (function init(){
   setIcons();
 
-  // ضبط سلامة بيانات الحفظ
   if(save.stage >= STAGES.length || save.stage < 0) save.stage = 0;
   while(save.unlocked.length < STAGES.length) save.unlocked.push(false);
   while(save.best.length < STAGES.length) save.best.push(0);
@@ -1069,7 +1033,6 @@ function setIcons(){
   showScreen('menu');
 })();
 
-// منع التكبير باللمس المزدوج
 document.addEventListener('gesturestart', e=>e.preventDefault());
 </script>
 </body>
