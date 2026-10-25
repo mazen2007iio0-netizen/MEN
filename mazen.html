@@ -3,12 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>🏔️ سباق التلال</title>
+<title>سباق التلال</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:#0b0f14;
   font-family:"Segoe UI",Tahoma,"Noto Kufi Arabic",sans-serif;user-select:none;touch-action:none}
 canvas{position:absolute;inset:0;display:block}
+
+svg{display:block}
 
 /* ====== HUD ====== */
 #hud{position:absolute;inset:0;pointer-events:none;z-index:10}
@@ -17,7 +19,8 @@ canvas{position:absolute;inset:0;display:block}
 .hud-item{display:flex;align-items:center;gap:6px;background:rgba(8,14,22,.55);backdrop-filter:blur(8px);
   border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:7px 14px;color:#fff;font-size:15px;font-weight:700;
   box-shadow:0 4px 18px rgba(0,0,0,.3)}
-.hud-item .ico{font-size:16px}
+.hud-item .ico{width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:#8fd3ff}
+.hud-item .ico svg{width:18px;height:18px}
 .hud-item small{opacity:.7;font-weight:500;font-size:11px}
 .bar{width:110px;height:10px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden}
 .bar i{display:block;height:100%;width:100%;border-radius:99px;
@@ -25,15 +28,18 @@ canvas{position:absolute;inset:0;display:block}
 .bar i.low{background:linear-gradient(90deg,#ff3b3b,#ff8a3b)}
 
 .pedal{position:absolute;bottom:22px;width:96px;height:96px;border-radius:50%;border:2px solid rgba(255,255,255,.25);
-  background:rgba(255,255,255,.12);backdrop-filter:blur(10px);color:#fff;font-size:34px;pointer-events:auto;
-  display:flex;align-items:center;justify-content:center;transition:transform .07s,background .12s;
-  box-shadow:0 6px 24px rgba(0,0,0,.35)}
+  background:rgba(255,255,255,.12);backdrop-filter:blur(10px);color:#fff;font-size:12px;font-weight:800;
+  pointer-events:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  transition:transform .07s,background .12s;box-shadow:0 6px 24px rgba(0,0,0,.35);cursor:pointer}
 .pedal:active,.pedal.active{transform:scale(.93);background:rgba(255,255,255,.3)}
 .pedal.brake{left:22px;background:rgba(255,70,70,.22);border-color:rgba(255,120,120,.4)}
 .pedal.gas{right:22px;background:rgba(60,220,130,.22);border-color:rgba(120,255,180,.4)}
+.pedal svg{width:32px;height:32px}
 .pause-btn{position:absolute;top:12px;left:12px;width:42px;height:42px;border-radius:12px;
-  border:1px solid rgba(255,255,255,.2);background:rgba(8,14,22,.55);color:#fff;font-size:17px;
-  pointer-events:auto;backdrop-filter:blur(8px);cursor:pointer}
+  border:1px solid rgba(255,255,255,.2);background:rgba(8,14,22,.55);color:#fff;
+  pointer-events:auto;backdrop-filter:blur(8px);cursor:pointer;
+  display:flex;align-items:center;justify-content:center}
+.pause-btn svg{width:18px;height:18px}
 
 /* ====== Screens ====== */
 .screen{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;
@@ -42,13 +48,16 @@ canvas{position:absolute;inset:0;display:block}
 .panel{width:100%;max-width:420px;background:rgba(14,22,34,.9);border:1px solid rgba(120,180,255,.18);
   border-radius:24px;padding:26px 22px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.6)}
 .panel h1{font-size:28px;color:#fff;margin-bottom:6px;letter-spacing:.5px}
-.panel h2{font-size:22px;color:#fff;margin-bottom:14px}
+.panel h2{font-size:22px;color:#fff;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:10px}
+.panel h2 svg{width:26px;height:26px;color:#8fd3ff}
 .sub{color:#8fa6c0;font-size:13px;margin-bottom:16px;line-height:1.6}
-.coins-big{background:linear-gradient(135deg,#ffd54a,#ff9f1c);-webkit-background-clip:text;background-clip:text;
-  color:transparent;font-size:26px;font-weight:900;margin:8px 0 18px}
-.big-btn{display:block;width:100%;padding:15px;margin:9px 0;border:none;border-radius:16px;font-size:17px;font-weight:800;
+.coins-big{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0 18px;font-size:26px;font-weight:900}
+.coins-big svg{width:28px;height:28px;color:#ffd54a;flex-shrink:0}
+.coins-big b{background:linear-gradient(135deg,#ffd54a,#ff9f1c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.big-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;margin:9px 0;border:none;border-radius:16px;font-size:17px;font-weight:800;
   color:#04121f;cursor:pointer;background:linear-gradient(135deg,#3ddc84,#12b76a);
   box-shadow:0 8px 24px rgba(18,183,106,.35);transition:transform .1s;font-family:inherit}
+.big-btn svg{width:22px;height:22px;flex-shrink:0}
 .big-btn:active{transform:scale(.97)}
 .big-btn.alt{background:linear-gradient(135deg,#4a6fa5,#2d4568);color:#eaf2ff;
   box-shadow:0 8px 24px rgba(45,69,104,.4)}
@@ -59,7 +68,9 @@ canvas{position:absolute;inset:0;display:block}
 /* upgrade list */
 .upg{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
   border-radius:16px;padding:12px;margin-bottom:10px;text-align:right}
-.upg-icon{font-size:24px;width:38px;text-align:center;flex-shrink:0}
+.upg-icon{width:38px;height:38px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(143,211,255,.12);border-radius:11px;color:#8fd3ff}
+.upg-icon svg{width:22px;height:22px}
 .upg-info{flex:1;min-width:0}
 .upg-name{color:#fff;font-size:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .upg-name .lvl{font-size:11px;color:#7fd1a8;background:rgba(60,220,130,.13);padding:2px 8px;border-radius:99px;font-weight:600;flex-shrink:0}
@@ -67,7 +78,9 @@ canvas{position:absolute;inset:0;display:block}
 .bars span{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.13)}
 .bars span.on{background:linear-gradient(90deg,#3ddc84,#8ce99a)}
 .buy{background:linear-gradient(135deg,#ffd54a,#ff9f1c);border:none;color:#3a2400;font-weight:900;font-size:12px;
-  padding:9px 12px;border-radius:12px;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0}
+  padding:9px 12px;border-radius:12px;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;
+  display:flex;align-items:center;gap:5px}
+.buy svg{width:14px;height:14px}
 .buy:disabled{background:rgba(255,255,255,.1);color:#7c8ea3;cursor:not-allowed}
 .buy:active:not(:disabled){transform:scale(.95)}
 
@@ -76,19 +89,23 @@ canvas{position:absolute;inset:0;display:block}
   border:2px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;transition:.15s;text-align:right}
 .stage-card.sel{border-color:#3ddc84;background:rgba(61,220,132,.12)}
 .stage-card.locked{opacity:.6}
-.stage-emoji{font-size:30px}
+.stage-icon{width:42px;height:42px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(143,211,255,.12);border-radius:12px;color:#8fd3ff}
+.stage-icon svg{width:26px;height:26px}
 .stage-info{flex:1;min-width:0}
 .stage-name{color:#fff;font-weight:800;font-size:15px}
 .stage-best{color:#8fa6c0;font-size:11px;margin-top:3px}
-.tag{font-size:11px;padding:4px 9px;border-radius:99px;font-weight:700}
+.tag{font-size:11px;padding:4px 9px;border-radius:99px;font-weight:700;display:flex;align-items:center;gap:4px}
+.tag svg{width:12px;height:12px}
 .tag.free{background:rgba(61,220,132,.18);color:#6ee7a5}
 .tag.cost{background:rgba(255,213,74,.15);color:#ffd54a}
 .tag.lock{background:rgba(255,255,255,.1);color:#93a7bd}
 
 /* game over */
-.res-row{display:flex;justify-content:space-between;padding:11px 14px;background:rgba(255,255,255,.05);
+.res-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:rgba(255,255,255,.05);
   border-radius:13px;margin-bottom:9px;color:#c8d8ea;font-size:14px}
-.res-row b{color:#fff;font-weight:800}
+.res-row b{color:#fff;font-weight:800;display:flex;align-items:center;gap:5px}
+.res-row b svg{width:15px;height:15px;color:#ffd54a}
 </style>
 </head>
 <body>
@@ -99,34 +116,34 @@ canvas{position:absolute;inset:0;display:block}
 <div id="hud" class="hide">
   <div class="hud-top">
     <div class="hud-item fuel">
-      <span class="ico">⛽</span>
+      <span class="ico" id="icoFuel"></span>
       <div class="bar"><i id="fuelFill"></i></div>
     </div>
-    <div class="hud-item"><span class="ico">🪙</span><b id="coinNum">0</b></div>
-    <div class="hud-item"><span class="ico">📏</span><b id="distNum">0</b><small>م</small></div>
+    <div class="hud-item"><span class="ico" id="icoCoin"></span><b id="coinNum">0</b></div>
+    <div class="hud-item"><span class="ico" id="icoDist"></span><b id="distNum">0</b><small>م</small></div>
   </div>
-  <button class="pause-btn" id="btnPause">⏸</button>
-  <button class="pedal brake" id="pedalBrake">◀</button>
-  <button class="pedal gas" id="pedalGas">▶</button>
+  <button class="pause-btn" id="btnPause"></button>
+  <button class="pedal brake" id="pedalBrake"></button>
+  <button class="pedal gas" id="pedalGas"></button>
 </div>
 
 <!-- ======= MENU ======= -->
 <div id="scr-menu" class="screen">
   <div class="panel">
-    <h1>🏔️ سباق التلال</h1>
+    <h1>سباق التلال</h1>
     <p class="sub">قُد سيارتك فوق التلال، اجمع العملات والوقود،<br>وطوّر مركبتك لتصل إلى أبعد مدى!</p>
-    <div class="coins-big">🪙 <b id="menuCoins">0</b></div>
-    <button class="big-btn" id="btnPlay">▶ ابدأ اللعب</button>
-    <button class="big-btn alt" id="btnGarage">🔧 الجراج</button>
-    <button class="big-btn alt" id="btnStages">🗺️ المراحل</button>
+    <div class="coins-big"><span id="menuCoinIcon"></span><b id="menuCoins">0</b></div>
+    <button class="big-btn" id="btnPlay"></button>
+    <button class="big-btn alt" id="btnGarage"></button>
+    <button class="big-btn alt" id="btnStages"></button>
   </div>
 </div>
 
 <!-- ======= GARAGE ======= -->
 <div id="scr-garage" class="screen hide">
   <div class="panel">
-    <h2>🔧 الجراج</h2>
-    <div class="coins-big" style="margin:4px 0 16px">🪙 <b id="garageCoins">0</b></div>
+    <h2><span id="garageTitleIcon"></span>الجراج</h2>
+    <div class="coins-big"><span id="garageCoinIcon"></span><b id="garageCoins">0</b></div>
     <div id="upgList"></div>
     <button class="back-btn" data-back="menu">رجوع</button>
   </div>
@@ -135,8 +152,8 @@ canvas{position:absolute;inset:0;display:block}
 <!-- ======= STAGES ======= -->
 <div id="scr-stages" class="screen hide">
   <div class="panel">
-    <h2>🗺️ المراحل</h2>
-    <div class="coins-big" style="margin:4px 0 16px">🪙 <b id="stageCoins">0</b></div>
+    <h2><span id="stageTitleIcon"></span>المراحل</h2>
+    <div class="coins-big"><span id="stageCoinIcon"></span><b id="stageCoins">0</b></div>
     <div id="stageList"></div>
     <button class="back-btn" data-back="menu">رجوع</button>
   </div>
@@ -145,26 +162,54 @@ canvas{position:absolute;inset:0;display:block}
 <!-- ======= PAUSE ======= -->
 <div id="scr-pause" class="screen hide">
   <div class="panel">
-    <h2>⏸ إيقاف مؤقت</h2>
-    <button class="big-btn" id="btnResume">▶ متابعة</button>
-    <button class="big-btn alt" id="btnQuit">↩ إنهاء الجولة</button>
+    <h2><span id="pauseTitleIcon"></span>إيقاف مؤقت</h2>
+    <button class="big-btn" id="btnResume"></button>
+    <button class="big-btn alt" id="btnQuit"></button>
   </div>
 </div>
 
 <!-- ======= GAME OVER ======= -->
 <div id="scr-over" class="screen hide">
   <div class="panel">
-    <h2 id="overTitle">انتهت الجولة</h2>
+    <h2><span id="overIcon"></span><span id="overTitle">انتهت الجولة</span></h2>
     <div class="res-row"><span>المسافة</span><b id="overDist">0 م</b></div>
-    <div class="res-row"><span>العملات</span><b id="overCoins">0 🪙</b></div>
+    <div class="res-row"><span>العملات</span><b id="overCoins">0 <span id="overCoinIco"></span></b></div>
     <div class="res-row"><span>أفضل مسافة</span><b id="overBest">0 م</b></div>
-    <button class="big-btn" id="btnRetry">🔄 حاول مجدداً</button>
-    <button class="big-btn alt" id="btnHome">🏠 القائمة</button>
+    <button class="big-btn" id="btnRetry"></button>
+    <button class="big-btn alt" id="btnHome"></button>
   </div>
 </div>
 
 <script>
 "use strict";
+
+/* ============================================================
+   SVG Icons (بديل عن الإيموجيات)
+============================================================ */
+const ICON = {
+  fuel: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v16"/><path d="M3 21h12"/><path d="M12 9h3a2 2 0 0 1 2 2v6a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-3l-2-2"/><path d="M6 8h4"/></svg>`,
+  coin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 10h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4" stroke-linecap="round"/></svg>`,
+  ruler: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="8" rx="1.5"/><path d="M7 8v3M11 8v3M15 8v3M19 8v3"/></svg>`,
+  pause: `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>`,
+  play: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>`,
+  wrench: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.6 5.6L3 18l3 3 6.1-6.1a4 4 0 0 0 5.6-5.6l-2.8 2.8-2.2-2.2 2-2.6z"/></svg>`,
+  map: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg>`,
+  engine: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M12 19v3M5 12H2M22 12h-3"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>`,
+  tire: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/></svg>`,
+  suspension: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="4" rx="1"/><rect x="9" y="18" width="6" height="4" rx="1"/><path d="M12 6v12"/><path d="M9 10h6M9 14h6"/></svg>`,
+  tank: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M7 7V5h10v2"/><path d="M7 12h10"/><path d="M7 16h6"/></svg>`,
+  desert: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="6" r="2.5"/><path d="M3 21h18"/><path d="M7 21V10l2-2 2 2v11"/><path d="M15 21V14l2-2 2 2v7"/></svg>`,
+  mountain: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20l7-12 5 8 3-4 5 8H2z"/></svg>`,
+  snow: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M4 7l16 10M4 17L20 7"/><path d="M9 4l3 3 3-3M9 20l3-3 3 3"/></svg>`,
+  crash: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 22h20L12 2z"/><path d="M12 9v6M12 18v.5"/></svg>`,
+  home: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 9v12h5v-7h4v7h5V9"/></svg>`,
+  retry: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>`,
+  left: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>`,
+  right: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>`,
+  lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`,
+  star: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.2 4.6 1.4 6.8L12 17l-6 3.5 1.4-6.8L2.2 9.1l6.9-.8z"/></svg>`
+};
+
 /* ============================================================
    أدوات مساعدة
 ============================================================ */
@@ -175,7 +220,7 @@ const rnd   = (a,b)=> a+Math.random()*(b-a);
 /* ============================================================
    الحفظ
 ============================================================ */
-const SAVE_KEY = 'hillclimb_save_v2';
+const SAVE_KEY = 'hillclimb_save_v3';
 const save = {
   coins: 0,
   upg: { engine:1, tires:1, susp:1, tank:1 },
@@ -205,13 +250,13 @@ loadSave();
    المراحل
 ============================================================ */
 const STAGES = [
-  { name:'الصحراء', emoji:'🏜️', seed:7, baseY:420, hill:1.00, rough:1.00, mu:1.05, unlockCost:0,
+  { name:'الصحراء', icon:'desert', seed:7, baseY:420, hill:1.00, rough:1.00, mu:1.05, unlockCost:0,
     sky1:'#ffe9a8', sky2:'#ff9147', far1:'#f2bb72', far2:'#dd9a4e',
     ground1:'#efcc94', ground2:'#b8894f', edge:'#a5763f', cloud:'#fff3d0' },
-  { name:'الجبال', emoji:'🏔️', seed:23, baseY:420, hill:1.35, rough:1.45, mu:1.00, unlockCost:400,
+  { name:'الجبال', icon:'mountain', seed:23, baseY:420, hill:1.35, rough:1.45, mu:1.00, unlockCost:400,
     sky1:'#cbe9ff', sky2:'#4f92cf', far1:'#84ab6d', far2:'#4d7743',
     ground1:'#7ea85d', ground2:'#3d5a30', edge:'#2f4a25', cloud:'#ffffff' },
-  { name:'الثلوج', emoji:'❄️', seed:51, baseY:420, hill:1.20, rough:1.15, mu:0.40, unlockCost:1200,
+  { name:'الثلوج', icon:'snow', seed:51, baseY:420, hill:1.20, rough:1.15, mu:0.40, unlockCost:1200,
     sky1:'#eef8ff', sky2:'#89bce4', far1:'#c6dcee', far2:'#9dbdd8',
     ground1:'#ffffff', ground2:'#bdd4e6', edge:'#a3c0d6', cloud:'#ffffff' }
 ];
@@ -263,7 +308,7 @@ function carParams(){
   const u = save.upg;
   const st = STAGES[save.stage];
   return {
-    enginePower : 5200 + (u.engine-1)*1250,
+    enginePower : 4800 + (u.engine-1)*1150,
     maxSpeed    : 560  + (u.engine-1)*22,
     mu          : st.mu * (1 + (u.tires-1)*0.075),
     suspK       : 2600 + (u.susp-1)*230,
@@ -280,8 +325,8 @@ function makeCar(){
     mass:12, inertia:9500,
     fuel:P.fuelMax, params:P,
     wheels:[
-      { lx:-30, ly:16, r:15, drive:0.62, wx:0, wy:0, spin:0, grounded:false },
-      { lx: 32, ly:16, r:15, drive:0.38, wx:0, wy:0, spin:0, grounded:false }
+      { lx:-30, ly:16, r:15, drive:0.55, wx:0, wy:0, spin:0, grounded:false },
+      { lx: 32, ly:16, r:15, drive:0.45, wx:0, wy:0, spin:0, grounded:false }
     ]
   };
 }
@@ -292,9 +337,8 @@ function physicsStep(c, dt, inp){
 
   let fx = 0, fy = c.mass * GRAVITY, torque = 0;
 
-  // مقاومة الهواء
-  fx -= c.vx * 0.35;
-  fy -= c.vy * 0.35;
+  fx -= c.vx * 0.32;
+  fy -= c.vy * 0.32;
 
   let anyGround = false;
   const hasFuel = c.fuel > 0;
@@ -307,15 +351,16 @@ function physicsStep(c, dt, inp){
     const gy = terrainY(wx);
     const s  = terrainSlope(wx);
     const nl = Math.sqrt(1 + s*s);
-    const nx = -s/nl, ny = 1/nl;        // العمودي (للأعلى)
-    const tx =  1/nl, ty = s/nl;        // المماسي (للأمام)
+    const nx = -s/nl, ny = 1/nl;
+    const tx =  1/nl, ty = s/nl;
 
     const perpDist = (gy - wy) / nl;
-    const pen = w.r - perpDist;
+    let pen = w.r - perpDist;
     w.grounded = pen > 0;
 
     if(pen > 0){
       anyGround = true;
+      pen = Math.min(pen, w.r*0.85);
 
       const rx = wx - c.x, ry = wy - c.y;
       const cvx = c.vx - c.angVel*ry;
@@ -346,12 +391,10 @@ function physicsStep(c, dt, inp){
       fx += Fx; fy += Fy;
       torque += rx*Fy - ry*Fx;
 
-      // دوران العجلة (بصري فقط)
       w.spin += (vt / w.r) * dt;
     }
   }
 
-  // تحكم هوائي أثناء القفز
   if(!anyGround && hasFuel){
     if(inp.gas)   torque -= 44000;
     if(inp.brake) torque += 44000;
@@ -370,7 +413,6 @@ function physicsStep(c, dt, inp){
   c.y += c.vy * dt;
   c.angle += c.angVel * dt;
 
-  // جدار وهمي خلف نقطة البداية
   if(c.x < 40){ c.x = 40; if(c.vx < 0) c.vx *= -0.3; }
 }
 
@@ -385,7 +427,7 @@ function generateItems(untilX){
     items.push({ type:'coin', x:genX, y, taken:false });
 
     if(genX > nextFuelX){
-      nextFuelX = genX + rnd(1500, 2300);
+      nextFuelX = genX + rnd(1200, 1800);
       const fx = genX + 55;
       items.push({ type:'fuel', x:fx, y: terrainY(fx) - 48, taken:false });
     }
@@ -399,7 +441,6 @@ function updateGame(dt){
   if(!car) return;
   const P = car.params;
 
-  // استهلاك الوقود
   if(car.fuel > 0){
     const drain = 2.2 + (input.gas ? 1.9 : 0);
     car.fuel = Math.max(0, car.fuel - drain*dt);
@@ -407,7 +448,6 @@ function updateGame(dt){
 
   if(car.x > playStats.maxX) playStats.maxX = car.x;
 
-  // جمع العناصر
   generateItems(car.x + 2600);
   for(const it of items){
     if(it.taken) continue;
@@ -415,47 +455,51 @@ function updateGame(dt){
     if(dx*dx + dy*dy < 44*44){
       it.taken = true;
       if(it.type === 'coin') playStats.coins++;
-      else car.fuel = Math.min(P.fuelMax, car.fuel + P.fuelMax*0.42);
+      else car.fuel = Math.min(P.fuelMax, car.fuel + P.fuelMax*0.45);
     }
   }
 
-  // تنظيف العناصر القديمة
   if(frameCount % 90 === 0){
     items = items.filter(it => !it.taken && it.x > car.x - 1600);
   }
 
-  // كشف الانقلاب
+  // سقوط في الهاوية
+  if(car.y > 4000){ endGame('سقطت في الهاوية!', 'crash'); return; }
+
+  // انقلاب
   const norm = Math.atan2(Math.sin(car.angle), Math.cos(car.angle));
-  if(Math.abs(norm) > 2.0){
+  if(Math.abs(norm) > 2.2){
     flipTimer += dt;
-    if(flipTimer > 0.85){ endGame('💥 تحطمت السيارة!'); return; }
+    if(flipTimer > 0.85){ endGame('تحطمت السيارة!', 'crash'); return; }
   } else flipTimer = 0;
 
   // نفاد الوقود
   if(car.fuel <= 0){
     fuelOutTimer += dt;
-    if(fuelOutTimer > 3 && Math.abs(car.vx) < 45){ endGame('⛽ نفد الوقود!'); return; }
-    if(fuelOutTimer > 14){ endGame('⛽ نفد الوقود!'); return; }
+    if(fuelOutTimer > 3 && Math.abs(car.vx) < 45){ endGame('نفد الوقود!', 'fuel'); return; }
+    if(fuelOutTimer > 8){ endGame('نفد الوقود!', 'fuel'); return; }
   } else fuelOutTimer = 0;
 }
 
 function updateCamera(dt){
   if(!car) return;
-  const k = 1 - Math.pow(0.0015, dt);
-  camX = lerp(camX, car.x - W*0.32, k*0.85);
-  camY = lerp(camY, car.y - H*0.56, k*0.85);
+  const kx = 1 - Math.exp(-12 * dt);
+  const ky = 1 - Math.exp(-8 * dt);
+  camX = lerp(camX, car.x - W*0.32, kx);
+  camY = lerp(camY, car.y - H*0.56, ky);
 }
 
 /* ============================================================
    بدء / إنهاء اللعبة
 ============================================================ */
 function startGame(idx){
+  if(idx < 0 || idx >= STAGES.length) idx = 0;
   const st = STAGES[idx];
   T = { seed:st.seed, baseY:st.baseY, hill:st.hill, rough:st.rough };
   save.stage = idx;
 
   car = makeCar();
-  items = []; genX = 0; nextFuelX = 900;
+  items = []; genX = 0; nextFuelX = 700;
   playStats = { coins:0, maxX:0 };
   flipTimer = 0; fuelOutTimer = 0;
   acc = 0;
@@ -469,7 +513,7 @@ function startGame(idx){
   persist();
 }
 
-function endGame(reason){
+function endGame(reasonText, iconName){
   if(gameState !== 'play') return;
   gameState = 'over';
   input.gas = false; input.brake = false;
@@ -479,9 +523,12 @@ function endGame(reason){
   if(dist > save.best[save.stage]) save.best[save.stage] = dist;
   persist();
 
-  document.getElementById('overTitle').textContent = reason;
+  const icoEl = document.getElementById('overIcon');
+  if(icoEl) icoEl.innerHTML = ICON[iconName] || ICON.crash;
+
+  document.getElementById('overTitle').textContent = reasonText;
   document.getElementById('overDist').textContent  = dist + ' م';
-  document.getElementById('overCoins').textContent = playStats.coins + ' 🪙';
+  document.getElementById('overCoins').innerHTML   = playStats.coins + ' ' + ICON.coin;
   document.getElementById('overBest').textContent  = save.best[save.stage] + ' م';
 
   refreshCoins();
@@ -538,7 +585,6 @@ function drawParallax(st){
     ctx.fillStyle = layer===0 ? st.far1 : st.far2;
     ctx.fill();
   }
-  // غيوم
   ctx.fillStyle = st.cloud;
   ctx.globalAlpha = 0.55;
   for(let i=0;i<5;i++){
@@ -561,7 +607,6 @@ function drawTerrain(st){
     terrainCache.push(x, terrainY(x));
   }
 
-  // الجسم
   ctx.beginPath();
   ctx.moveTo(x0, camY + H + 400);
   for(let i=0;i<terrainCache.length;i+=2){
@@ -575,7 +620,6 @@ function drawTerrain(st){
   ctx.fillStyle = g;
   ctx.fill();
 
-  // الحافة
   ctx.beginPath();
   for(let i=0;i<terrainCache.length;i+=2){
     const x = terrainCache[i], y = terrainCache[i+1];
@@ -607,14 +651,16 @@ function drawItems(){
     } else {
       ctx.save();
       ctx.translate(it.x, it.y + Math.sin(t*2.4)*4);
-      // علبة وقود
       roundRect(-12,-15,24,30,5);
       ctx.fillStyle = '#e63946'; ctx.fill();
       ctx.lineWidth = 2.5; ctx.strokeStyle = '#7d1622'; ctx.stroke();
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 15px sans-serif';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('⛽', 0, 1);
+      // رسم خطوط الوقود داخل العلبة
+      ctx.beginPath();
+      ctx.moveTo(-6,-6); ctx.lineTo(-6,6);
+      ctx.moveTo(0,-6);  ctx.lineTo(0,6);
+      ctx.moveTo(6,-6);  ctx.lineTo(6,6);
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
+      ctx.stroke();
       ctx.restore();
     }
   }
@@ -626,22 +672,18 @@ function drawCar(){
   ctx.translate(c.x, c.y);
   ctx.rotate(c.angle);
 
-  // ظل
   ctx.globalAlpha = 0.18;
   ctx.beginPath();
   ctx.ellipse(0, 26, 50, 9, 0, 0, Math.PI*2);
   ctx.fillStyle = '#000'; ctx.fill();
   ctx.globalAlpha = 1;
 
-  // العجلات
   for(const w of c.wheels){
     ctx.save();
     ctx.translate(w.lx, w.ly);
-    // الإطار
     ctx.beginPath(); ctx.arc(0,0,w.r,0,Math.PI*2);
     ctx.fillStyle = '#1c1f24'; ctx.fill();
     ctx.lineWidth = 3; ctx.strokeStyle = '#0c0e11'; ctx.stroke();
-    // الجنط
     ctx.save();
     ctx.rotate(w.spin);
     ctx.beginPath(); ctx.arc(0,0,w.r*0.56,0,Math.PI*2);
@@ -660,7 +702,6 @@ function drawCar(){
     ctx.restore();
   }
 
-  // الهيكل
   const bodyG = ctx.createLinearGradient(0,-20,0,16);
   bodyG.addColorStop(0,'#ff5a6a');
   bodyG.addColorStop(1,'#c22333');
@@ -668,7 +709,6 @@ function drawCar(){
   ctx.fillStyle = bodyG; ctx.fill();
   ctx.lineWidth = 2; ctx.strokeStyle = '#7d1622'; ctx.stroke();
 
-  // الكابينة
   ctx.beginPath();
   ctx.moveTo(-24,-15);
   ctx.lineTo(-14,-40);
@@ -678,7 +718,6 @@ function drawCar(){
   ctx.fillStyle = '#d63242'; ctx.fill();
   ctx.strokeStyle = '#7d1622'; ctx.lineWidth = 2; ctx.stroke();
 
-  // الزجاج
   ctx.beginPath();
   ctx.moveTo(-19,-19);
   ctx.lineTo(-11,-35);
@@ -688,17 +727,14 @@ function drawCar(){
   ctx.fillStyle = '#8fd3ff'; ctx.fill();
   ctx.strokeStyle = '#4a90b8'; ctx.lineWidth = 1.6; ctx.stroke();
 
-  // السائق
   ctx.beginPath(); ctx.arc(0,-27,6.5,0,Math.PI*2);
   ctx.fillStyle = '#ffd7a8'; ctx.fill();
   ctx.beginPath(); ctx.arc(0,-30,6.5,Math.PI,Math.PI*2);
   ctx.fillStyle = '#2b6fd6'; ctx.fill();
 
-  // مصباح أمامي
   ctx.beginPath(); ctx.arc(41,-2,5,0,Math.PI*2);
   ctx.fillStyle = '#fff3a8'; ctx.fill();
 
-  // عادم
   roundRect(-50,-6,7,10,3);
   ctx.fillStyle = '#5b6470'; ctx.fill();
 
@@ -709,7 +745,6 @@ function draw(){
   ctx.setTransform(DPR,0,0,DPR,0,0);
   const st = STAGES[save.stage];
 
-  // السماء
   const sky = ctx.createLinearGradient(0,0,0,H);
   sky.addColorStop(0, st.sky1);
   sky.addColorStop(1, st.sky2);
@@ -765,7 +800,7 @@ function loop(now){
   if(gameState === 'play' && car){
     acc += dt;
     let guard = 0;
-    while(acc >= FIXED_DT && guard < 40){
+    while(acc >= FIXED_DT && guard < 40 && gameState === 'play'){
       physicsStep(car, FIXED_DT, input);
       acc -= FIXED_DT;
       guard++;
@@ -805,10 +840,10 @@ function refreshCoins(){
 
 /* ---------- التطويرات ---------- */
 const UPG_DEFS = [
-  { key:'engine', name:'المحرك',      icon:'⚙️' },
-  { key:'tires',  name:'الإطارات',    icon:'🛞' },
-  { key:'susp',   name:'نظام التعليق', icon:'🪛' },
-  { key:'tank',   name:'خزان الوقود', icon:'⛽' }
+  { key:'engine', name:'المحرك',       icon:'engine' },
+  { key:'tires',  name:'الإطارات',     icon:'tire' },
+  { key:'susp',   name:'نظام التعليق', icon:'suspension' },
+  { key:'tank',   name:'خزان الوقود',  icon:'tank' }
 ];
 const MAX_LVL = 10;
 function upgCost(level){ return Math.floor(120 * Math.pow(1.55, level-1)); }
@@ -828,12 +863,12 @@ function renderGarage(){
     for(let i=1;i<=MAX_LVL;i++) bars += `<span class="${i<=lvl?'on':''}"></span>`;
 
     row.innerHTML = `
-      <div class="upg-icon">${d.icon}</div>
+      <div class="upg-icon">${ICON[d.icon]}</div>
       <div class="upg-info">
         <div class="upg-name"><span>${d.name}</span><span class="lvl">مستوى ${lvl}</span></div>
         <div class="bars">${bars}</div>
       </div>
-      <button class="buy">${maxed ? 'مكتمل' : cost + ' 🪙'}</button>
+      <button class="buy">${maxed ? 'مكتمل' : cost + ' ' + ICON.coin}</button>
     `;
     const btn = row.querySelector('.buy');
     if(maxed || save.coins < cost) btn.disabled = true;
@@ -864,12 +899,12 @@ function renderStages(){
     const best = save.best[i] || 0;
 
     let tag;
-    if(!unlocked) tag = `<span class="tag cost">${st.unlockCost} 🪙</span>`;
+    if(!unlocked) tag = `<span class="tag cost">${ICON.lock}${st.unlockCost}</span>`;
     else if(save.stage === i) tag = `<span class="tag free">مختارة</span>`;
     else tag = `<span class="tag lock">متاحة</span>`;
 
     card.innerHTML = `
-      <div class="stage-emoji">${st.emoji}</div>
+      <div class="stage-icon">${ICON[st.icon]}</div>
       <div class="stage-info">
         <div class="stage-name">${st.name}</div>
         <div class="stage-best">أفضل مسافة: ${best} م</div>
@@ -958,13 +993,78 @@ window.addEventListener('keyup', e=>{
   }
 });
 
-/* ---------- تهيئة أولية ---------- */
+/* ============================================================
+   إعداد الأيقونات
+============================================================ */
+function setIcons(){
+  // HUD
+  const icoFuel = document.getElementById('icoFuel');
+  if(icoFuel) icoFuel.innerHTML = ICON.fuel;
+  const icoCoin = document.getElementById('icoCoin');
+  if(icoCoin) icoCoin.innerHTML = ICON.coin;
+  const icoDist = document.getElementById('icoDist');
+  if(icoDist) icoDist.innerHTML = ICON.ruler;
+
+  // Pause btn
+  document.getElementById('btnPause').innerHTML = ICON.pause;
+
+  // Pedals
+  document.getElementById('pedalBrake').innerHTML = ICON.left + '<span>فرامل</span>';
+  document.getElementById('pedalGas').innerHTML   = ICON.right + '<span>بنزين</span>';
+
+  // Coins badges
+  document.getElementById('menuCoinIcon').innerHTML   = ICON.coin;
+  document.getElementById('garageCoinIcon').innerHTML = ICON.coin;
+  document.getElementById('stageCoinIcon').innerHTML  = ICON.coin;
+
+  // Menu buttons
+  document.getElementById('btnPlay').innerHTML =
+    ICON.play + '<span>ابدأ اللعب</span>';
+  document.getElementById('btnGarage').innerHTML =
+    ICON.wrench + '<span>الجراج</span>';
+  document.getElementById('btnStages').innerHTML =
+    ICON.map + '<span>المراحل</span>';
+
+  // Pause screen
+  document.getElementById('pauseTitleIcon').innerHTML = ICON.pause;
+  document.getElementById('btnResume').innerHTML =
+    ICON.play + '<span>متابعة</span>';
+  document.getElementById('btnQuit').innerHTML =
+    ICON.home + '<span>إنهاء الجولة</span>';
+
+  // Garage title
+  document.getElementById('garageTitleIcon').innerHTML = ICON.wrench;
+
+  // Stages title
+  document.getElementById('stageTitleIcon').innerHTML = ICON.map;
+
+  // Over screen buttons
+  document.getElementById('btnRetry').innerHTML =
+    ICON.retry + '<span>حاول مجدداً</span>';
+  document.getElementById('btnHome').innerHTML =
+    ICON.home + '<span>القائمة</span>';
+
+  // Over screen coin icon placeholder (will be filled in endGame)
+  document.getElementById('overCoinIco').innerHTML = '';
+}
+
+/* ============================================================
+   تهيئة أولية
+============================================================ */
 (function init(){
+  setIcons();
+
+  // ضبط سلامة بيانات الحفظ
+  if(save.stage >= STAGES.length || save.stage < 0) save.stage = 0;
+  while(save.unlocked.length < STAGES.length) save.unlocked.push(false);
+  while(save.best.length < STAGES.length) save.best.push(0);
+  if(!save.unlocked[0]) save.unlocked[0] = true;
+
   const st = STAGES[save.stage] || STAGES[0];
   T = { seed:st.seed, baseY:st.baseY, hill:st.hill, rough:st.rough };
   camX = 120;
   camY = st.baseY - H*0.56;
-  genX = 0; nextFuelX = 900;
+  genX = 0; nextFuelX = 700;
   refreshCoins();
   showScreen('menu');
 })();
