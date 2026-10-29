@@ -168,7 +168,7 @@ async function deployCommands() {
   const guildId = process.env.GUILD_ID;
 
   if (!token || !clientId) {
-    console.error('MTQ5NzQxNTYzNzg1NTYzNzYxNQ.GharUa.of1YKC4R_RGrbXLLktcUO9v2-RDiZTqAAT7GGg');
+    console.error('❌ تأكد من DISCORD_TOKEN و CLIENT_ID');
     return;
   }
 
@@ -221,7 +221,7 @@ client.on(Events.InteractionCreate, async interaction => {
 (async () => {
   const token = process.env.DISCORD_TOKEN;
   if (!token) {
-    console.error('MTQ5NzQxNTYzNzg1NTYzNzYxNQ.GharUa.of1YKC4R_RGrbXLLktcUO9v2-RDiZTqAAT7GGg');
+    console.error('❌ لم يتم العثور على DISCORD_TOKEN');
     process.exit(1);
   }
   await deployCommands();
