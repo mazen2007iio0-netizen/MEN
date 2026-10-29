@@ -1,3 +1,4 @@
+const express = require('express');
 const {
   Client,
   GatewayIntentBits,
@@ -8,6 +9,28 @@ const {
   SlashCommandBuilder,
   EmbedBuilder
 } = require('discord.js');
+
+// ============================
+// 0) Keep-Alive Server (لمنع النوم على Koyeb/Render)
+// ============================
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.status(200).send('Bot is alive!');
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    uptime: Math.floor(process.uptime()),
+    bot: client && client.user ? client.user.tag : 'starting'
+  });
+});
+
+app.listen(port, () => {
+  console.log(`✅ Keep-alive server listening on port ${port}`);
+});
 
 // ============================
 // 1) تعريف الأوامر
