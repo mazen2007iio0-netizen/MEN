@@ -16,7 +16,7 @@
   },
   "ads": [
     {
-      "img": "https://www.socialcreator.com/srv/imgs/ti_imgs/201887_332160.png",
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSXHbzBX9JjoUKkxDJuVBu3QzNgzLVDUHaC6NUxy_TTcUdojuVasyCpX0&s=10",
       "title": "عروض الـPass",
       "desc": "MEN Pass"
     }
@@ -257,6 +257,28 @@
       "popular": false
     }, 
     {
+      "id": 14,
+      "name": "Call of Duty: Modern Warfare 4",
+      "price": "119",
+      "originalPrice": "290",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRskGK16hnyEGqGV24XQIRLlyraqOwLFNDn6_7mShQM0Q&s=10",
+      "images": [
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRskGK16hnyEGqGV24XQIRLlyraqOwLFNDn6_7mShQM0Q&s=10",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPs2eSfYSNc-ZCBGuIGmg1c3fZCweWdnSO5ZkPHx14eQ&s=10",
+        "https://v.wpimg.pl/NjNiYzVjYQsvCy9JeRFsHmxTexM_SGJIO0tjWHlbfFp-EW9NY0UoAyIMKx8mBWAdPgU4DjAFPAdgBDwePwthCz4AdgxnRSoDPRk1Gy9FKwcsDD1VNwwvD35QP017XX1bL0RtTGcLYwt5W2FXZ155XHhaOxljCShfbBQ",
+        "https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/Rex_Reveal_Blog-Item.webp"
+      ],
+      "category": "لعبة",
+      "rating": 4.8,
+      "features": ["سعر مناسب", "شحن فوري"],
+      "cons": ["لا يمكن استخدامه في حسابات غير سعودية"],
+      "description": "لعبة كول أوف ديوتي: مودرن وورفير 4 - Call of Duty: Modern Warfare 4 - سوني 5",
+      "tags": ["ألعاب", "هدية", "رقمي"],
+      "usage": "لعبة كول أوف ديوتي: مودرن وورفير 4 - Call of Duty: Modern Warfare 4 - سوني 5 ",
+      "warranty": "ضمان الاستبدال في حال عدم صلاحية الحساب",
+      "popular": false
+    },
+    {
       "id": 13,
       "name": "Assassins creed MIRAGE",
       "price": "69",
@@ -315,7 +337,7 @@
       "popular": false
     },
     {
-      "id": 14,
+      "id": 15,
       "name": "روبلوكس 20 ريال",
       "price": "19.90",
       "image": "https://likecard-space.fra1.cdn.digitaloceanspaces.com/products/6a13fe3646362_1779695158.webp",
