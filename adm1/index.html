@@ -161,6 +161,36 @@ img{max-width:100%;height:auto;display:block}
 .ma-status-select option{background:#0a0e1a;color:#fff}
 .ma-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:.7rem;font-weight:800;white-space:nowrap}
 
+/* ═══════════ ORDERS — STATUS TABS ═══════════ */
+.ma-status-tabs{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin;scrollbar-color:rgba(74,122,255,.3) transparent;-webkit-overflow-scrolling:touch}
+.ma-status-tabs::-webkit-scrollbar{height:4px}
+.ma-status-tabs::-webkit-scrollbar-thumb{background:rgba(74,122,255,.3);border-radius:4px}
+.ma-status-tab{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;min-height:40px;border-radius:12px;background:rgba(74,122,255,.06);border:1.5px solid rgba(74,122,255,.15);color:#a8b0cc;font-weight:800;font-size:.82rem;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;font-family:inherit;touch-action:manipulation}
+.ma-status-tab:hover{background:rgba(74,122,255,.14);border-color:rgba(74,122,255,.3);color:#fff}
+.ma-status-tab.active{background:linear-gradient(135deg,#021ca4,#4a7aff);border-color:transparent;color:#fff;box-shadow:0 6px 18px -6px rgba(74,122,255,.7)}
+.ma-status-tab i{font-size:.78rem;opacity:.85}
+.ma-tab-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0;box-shadow:0 0 6px rgba(0,0,0,.3)}
+.ma-tab-count{background:rgba(255,255,255,.15);padding:1px 8px;border-radius:10px;font-size:.72rem;font-weight:900;min-width:22px;text-align:center;line-height:1.4}
+.ma-status-tab.active .ma-tab-count{background:rgba(255,255,255,.28)}
+
+/* ═══════════ ORDERS — CLEAR TABLE ═══════════ */
+.ma-orders-table thead th{padding:13px 14px}
+.ma-orders-table tbody td{padding:14px;vertical-align:middle}
+.ma-order-cell{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ma-order-id{font-family:'Courier New',monospace;direction:ltr;font-weight:900;font-size:.9rem;color:#6a9aff;letter-spacing:-.3px;text-align:right}
+.ma-order-name{font-weight:800;font-size:.9rem;color:#fff;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ma-order-sub{font-size:.72rem;color:#8a92b0;font-weight:600;line-height:1.4;display:inline-flex;align-items:center;gap:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.ma-order-sub i{font-size:.62rem;opacity:.7;flex-shrink:0}
+.ma-order-amount{font-family:'Courier New',monospace;direction:ltr;font-size:1rem;font-weight:900;color:#6a9aff;letter-spacing:-.3px;text-align:right;white-space:nowrap}
+.ma-order-amount .cur{font-size:.7rem;font-weight:700;color:#8a92b0;margin-right:2px;direction:rtl;font-family:'Cairo',sans-serif}
+.ma-order-details{font-size:.68rem;color:#8a92b0;font-weight:700;margin-top:2px;display:flex;gap:8px;flex-wrap:wrap;direction:rtl}
+.ma-order-details span{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.ma-order-details i{font-size:.6rem;opacity:.7}
+.ma-order-cb-pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:8px;background:rgba(245,179,66,.15);color:#f5b342;font-size:.66rem;font-weight:800;margin-top:4px;width:fit-content;direction:rtl;border:1px solid rgba(245,179,66,.25)}
+.ma-order-cb-pill i{font-size:.6rem}
+.ma-order-status-cell{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.ma-orders-table .ma-status-select{margin-top:0;width:100%;max-width:140px}
+
 /* ═══════════ CHARTS ═══════════ */
 .ma-chart-bar{display:flex;align-items:center;gap:10px;margin-bottom:9px}
 .ma-chart-label{min-width:80px;font-size:.78rem;color:#a8b0cc;font-weight:700;text-align:right}
@@ -418,6 +448,13 @@ img{max-width:100%;height:auto;display:block}
   .ma-table tbody td[data-label="إجراءات"] .actions-cell{justify-content:flex-end;width:100%;flex-wrap:wrap}
   .ma-status-select{height:36px;font-size:.78rem}
 
+  .ma-orders-table tbody td{align-items:flex-start}
+  .ma-orders-table tbody td[data-label="إجراءات"]{align-items:stretch}
+  .ma-order-cell{flex:1;text-align:right}
+  .ma-order-id,.ma-order-amount{text-align:right}
+  .ma-order-status-cell{flex:1;align-items:flex-end}
+  .ma-orders-table .ma-status-select{max-width:100%;height:34px}
+
   .ma-modal-back{padding:0;align-items:flex-end}
   .ma-modal{max-width:100%;padding:22px;border-radius:20px 20px 0 0;max-height:92vh;max-height:92dvh}
   .ma-modal.ma-modal-xl,.ma-modal.ma-modal-lg{max-width:100%;width:100%;max-height:100vh;max-height:100dvh;height:100vh;height:100dvh;border-radius:0}
@@ -468,6 +505,8 @@ img{max-width:100%;height:auto;display:block}
   .ma-gate-icon{width:64px;height:64px;font-size:1.6rem}
   .ma-gate-card h1{font-size:1.25rem}
   .ma-btn{font-size:.8rem;padding:0 12px;height:42px}
+  .ma-status-tab{padding:8px 11px;font-size:.76rem;min-height:36px}
+  .ma-tab-count{font-size:.66rem;padding:1px 6px}
 }
 
 @media (max-width:380px){
@@ -492,10 +531,8 @@ img{max-width:100%;height:auto;display:block}
 
 /* ═══════════════════════════════════════════════
    ★ DESKTOP SIDEBAR LAYOUT (≥ 821px) ★
-   الشريط الجانبي الثابت على اليمين
 ═══════════════════════════════════════════════ */
 @media (min-width: 821px){
-  /* دفع المحتوى لليسار لترك مساحة للشريط الجانبي */
   .ma-app { padding-right: var(--sidebar-w); }
 
   .ma-nav {
@@ -530,7 +567,6 @@ img{max-width:100%;height:auto;display:block}
 
   .ma-nav-toggle { display: none !important; }
 
-  /* شعار أعلى الشريط */
   .ma-nav-brand {
     margin-left: 0;
     padding: 0 4px 14px;
@@ -542,7 +578,6 @@ img{max-width:100%;height:auto;display:block}
   .ma-nav-brand .name { font-size: .9rem; }
   .ma-nav-brand .sub { font-size: .6rem; letter-spacing: .8px; display: block; }
 
-  /* قائمة الروابط رأسياً */
   .ma-nav-menu {
     flex-direction: column;
     align-items: stretch;
@@ -597,7 +632,6 @@ img{max-width:100%;height:auto;display:block}
   }
   .ma-nav-item.open .ma-nav-link .caret { transform: rotate(180deg); }
 
-  /* القوائم الفرعية داخل الشريط */
   .ma-nav-dropdown {
     position: static;
     display: none;
@@ -621,7 +655,6 @@ img{max-width:100%;height:auto;display:block}
   }
   .ma-nav-dropdown a i { width: 16px; font-size: .75rem; }
 
-  /* منطقة المستخدم أسفل الشريط */
   .ma-nav-user {
     flex-direction: column;
     align-items: stretch;
@@ -661,11 +694,9 @@ img{max-width:100%;height:auto;display:block}
     padding: 8px 14px;
   }
 
-  /* الخلفية المعتمة غير مطلوبة على الديسكتوب */
   .ma-nav-backdrop { display: none !important; }
   body.nav-open { overflow: auto; }
 
-  /* توسيط المحتوى داخل المساحة المتبقية */
   .ma-content { max-width: 1600px; margin: 0 auto; }
 }
 
@@ -954,6 +985,8 @@ let sb = null, currentUser = null, currentAdmin = null;
 let allAdmins = [];
 let allOrders = [], allUsers = [], allCashbackLog = [], allAuditLog = [];
 let currentView = 'reports';
+let currentStatusFilter = '';
+let currentOrderSearch = '';
 let currentDetailOrder = null, selectedOrderForCashback = null, selectedOrderForDelete = null, selectedOrderForShipping = null;
 let selectedUserForNote = null, selectedUserForChat = null, cbMode = 'add';
 let editingAdminEmail = null, deletingAdminEmail = null;
@@ -961,7 +994,7 @@ let lastRefresh = null, dataVersion = 0, dataLoaded = false, loadingPromise = nu
 let gateMode = 'login';
 
 /* ═══════════════════════════════════════════════
-   COMPLETE SETTINGS (all user-configurable)
+   COMPLETE SETTINGS
 ═══════════════════════════════════════════════ */
 const DEFAULT_SETTINGS = {
   cashback_rate: 0.02,
@@ -1364,6 +1397,7 @@ async function handleLogout(silent){
   currentUser = null; currentAdmin = null;
   dataLoaded = false; dataVersion = 0; lastRefresh = null; auditLogLoaded = false;
   allOrders = []; allUsers = []; allCashbackLog = []; allAuditLog = [];
+  currentStatusFilter = ''; currentOrderSearch = '';
   $('maApp').classList.remove('active');
   $('maGate').style.display = 'flex';
   $('maGateEmail').value = ''; $('maGatePass').value = '';
@@ -1634,93 +1668,162 @@ function renderReportsCashback(el){
 }
 
 /* ═══════════════════════════════════════════════
-   ORDERS
+   ORDERS — CLEAR VIEW
 ═══════════════════════════════════════════════ */
 function renderOrdersView(el){
+  const counts = { all: allOrders.length };
+  for(const k of Object.keys(ORDER_STATUS)) counts[k] = 0;
+  for(const o of allOrders) if(counts[o.status] !== undefined) counts[o.status]++;
+
   el.innerHTML = `
-    <div class="ma-page-head"><div><div class="ma-page-title"><i class="fas fa-box"></i> سجل الطلبات</div><div class="ma-page-sub">${allOrders.length} طلب</div></div></div>
-    <div class="ma-toolbar">
-      <div class="ma-search"><input type="text" id="ordSearch" placeholder="ابحث..." autocomplete="off"><i class="fas fa-search"></i></div>
-      <select id="ordStatus"><option value="">كل الحالات</option>${Object.entries(ORDER_STATUS).map(([k,v]) => `<option value="${k}">${v.label}</option>`).join('')}</select>
+    <div class="ma-page-head">
+      <div>
+        <div class="ma-page-title"><i class="fas fa-box"></i> سجل الطلبات</div>
+        <div class="ma-page-sub">إدارة وتتبع جميع الطلبات • ${allOrders.length} طلب</div>
+      </div>
       <button class="ma-btn ma-btn-primary" id="ordRefresh" type="button"><i class="fas fa-rotate"></i> تحديث</button>
     </div>
+
+    <div class="ma-status-tabs" id="ordStatusTabs">
+      <button class="ma-status-tab ${!currentStatusFilter?'active':''}" data-status-filter="" type="button"><i class="fas fa-layer-group"></i> الكل <span class="ma-tab-count">${counts.all}</span></button>
+      ${Object.entries(ORDER_STATUS).map(([k,v]) => `<button class="ma-status-tab ${currentStatusFilter===k?'active':''}" data-status-filter="${k}" type="button"><span class="ma-tab-dot" style="background:${v.bg}"></span>${v.label} <span class="ma-tab-count">${counts[k]}</span></button>`).join('')}
+    </div>
+
+    <div class="ma-toolbar">
+      <div class="ma-search">
+        <input type="text" id="ordSearch" placeholder="ابحث برقم الطلب، اسم العميل، البريد، الجوال..." autocomplete="off" value="${esc(currentOrderSearch)}">
+        <i class="fas fa-search"></i>
+      </div>
+    </div>
+
     <div id="ordTableContainer"></div>`;
-  const container = $('ordTableContainer');
-  if(!container.dataset.bound){
-    container.dataset.bound = '1';
-    container.addEventListener('click', e => {
-      const btn = e.target.closest('[data-detail-order], [data-add-cashback], [data-delete-order], [data-edit-shipping]');
-      if(!btn) return;
-      if(btn.dataset.detailOrder) openDetailModal(btn.dataset.detailOrder);
-      else if(btn.dataset.addCashback) openCbModal(btn.dataset.addCashback, 'add');
-      else if(btn.dataset.deleteOrder) openDelModal(btn.dataset.deleteOrder);
-      else if(btn.dataset.editShipping) openShippingModal(btn.dataset.editShipping);
+
+  el.querySelectorAll('[data-status-filter]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      currentStatusFilter = tab.dataset.statusFilter;
+      el.querySelectorAll('[data-status-filter]').forEach(t => t.classList.toggle('active', t.dataset.statusFilter === currentStatusFilter));
+      renderOrdersTable();
     });
-    container.addEventListener('change', async e => {
-      const sel = e.target.closest('[data-status-order]');
-      if(!sel) return;
-      const newStatus = sel.value;
-      if(!newStatus) return;
-      sel.value = '';
-      await applyStatus(sel.dataset.statusOrder, newStatus);
-    });
-  }
-  renderOrdersTable();
-  $('ordSearch').addEventListener('input', debounce(renderOrdersTable, 150));
-  $('ordStatus').addEventListener('change', renderOrdersTable);
-  $('ordRefresh').addEventListener('click', async () => {
-    showLoading(true); await loadAllData(true); showLoading(false);
-    renderOrdersTable(); toast('تم التحديث','info');
   });
+
+  const debouncedRender = debounce(renderOrdersTable, 150);
+  $('ordSearch').addEventListener('input', e => {
+    currentOrderSearch = e.target.value;
+    debouncedRender();
+  });
+
+  $('ordRefresh').addEventListener('click', async () => {
+    showLoading(true);
+    await loadAllData(true);
+    showLoading(false);
+    renderOrdersView(el);
+    toast('تم التحديث','info');
+  });
+
+  const container = $('ordTableContainer');
+  container.addEventListener('click', e => {
+    const btn = e.target.closest('[data-detail-order], [data-add-cashback], [data-delete-order], [data-edit-shipping]');
+    if(!btn) return;
+    if(btn.dataset.detailOrder) openDetailModal(btn.dataset.detailOrder);
+    else if(btn.dataset.addCashback) openCbModal(btn.dataset.addCashback, 'add');
+    else if(btn.dataset.deleteOrder) openDelModal(btn.dataset.deleteOrder);
+    else if(btn.dataset.editShipping) openShippingModal(btn.dataset.editShipping);
+  });
+  container.addEventListener('change', async e => {
+    const sel = e.target.closest('[data-status-order]');
+    if(!sel) return;
+    const newStatus = sel.value;
+    if(!newStatus) return;
+    sel.value = '';
+    await applyStatus(sel.dataset.statusOrder, newStatus);
+  });
+
+  renderOrdersTable();
 }
+
 function renderOrdersTable(){
   const c = $('ordTableContainer');
   if(!c) return;
-  const q = ($('ordSearch').value || '').trim().toLowerCase();
-  const sf = $('ordStatus').value;
+  const q = (currentOrderSearch || '').trim().toLowerCase();
+
   const filtered = allOrders.filter(o => {
-    if(sf && o.status !== sf) return false;
-    if(q){ const hay = `${o.id} ${o.user_name||''} ${o.user_email||''} ${o.user_phone||''}`.toLowerCase(); if(!hay.includes(q)) return false; }
+    if(currentStatusFilter && o.status !== currentStatusFilter) return false;
+    if(q){
+      const hay = `${o.id} ${o.user_name||''} ${o.user_email||''} ${o.user_phone||''}`.toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
     return true;
   });
-  if(!filtered.length){ c.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-inbox"></i><h3>لا توجد طلبات</h3></div></div>`; return; }
+
+  if(!filtered.length){
+    const hasFilter = q || currentStatusFilter;
+    c.innerHTML = `<div class="ma-card"><div class="ma-empty"><i class="fas fa-${hasFilter?'search':'inbox'}"></i><h3>${hasFilter?'لا توجد نتائج':'لا توجد طلبات'}</h3><p>${hasFilter?'جرّب تعديل البحث أو الفلتر':'لم يتم إنشاء أي طلبات بعد'}</p></div></div>`;
+    return;
+  }
 
   const canConfirm = can('confirm_orders');
   const canCb = can('add_cashback');
   const canDel = can('delete_orders');
   const canShip = can('edit_shipping');
 
-  c.innerHTML = `<div class="ma-table-wrap"><table class="ma-table">
-    <thead><tr><th>رقم</th><th>العميل</th><th>الجوال</th><th>المبلغ</th><th>الشحن</th><th>الكاش باك</th><th>الحالة</th>${canConfirm?'<th>تغيير</th>':''}<th>التاريخ</th><th>إجراءات</th></tr></thead>
+  c.innerHTML = `<div class="ma-table-wrap"><table class="ma-table ma-orders-table">
+    <thead><tr>
+      <th>رقم الطلب</th>
+      <th>العميل</th>
+      <th>المبلغ</th>
+      <th>الحالة</th>
+      <th>التاريخ</th>
+      <th>إجراءات</th>
+    </tr></thead>
     <tbody>${filtered.map(o => {
       const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
       const bd = calcOrderBreakdown(o);
-      let cb = '';
-      if(o.status === 'delivered' && o.cashback_applied){
-        cb = `<span style="color:${o.cashback_paid?'#4caf50':'#f5b342'};font-weight:900">${fmtNum(o.cashback)} ${o.cashback_paid?'✓':'⏳'}</span>`;
-      } else if(['delivered','cancelled'].includes(o.status)) cb = `<span style="color:#8a92b0">—</span>`;
-      else cb = `<span style="color:#4a7aff">${fmtNum(calcEarnedCashback(bd.subtotal))} متوقع</span>`;
-
-      const statusOptions = Object.entries(ORDER_STATUS).map(([k,v]) =>
-        `<option value="${k}" ${o.status===k?'disabled selected':''}>${o.status===k?'✓ ':''}${v.label}</option>`
-      ).join('');
+      const shortId = '#' + String(o.id).slice(-8).toUpperCase();
+      const statusOptions = canConfirm ? Object.entries(ORDER_STATUS).map(([k,v]) =>
+        `<option value="${k}" ${o.status===k?'disabled':''}>${o.status===k?'✓ ':''}${v.label}</option>`
+      ).join('') : '';
 
       return `<tr>
-        <td class="mono" data-label="رقم">#${String(o.id).slice(-8).toUpperCase()}</td>
-        <td data-label="العميل" style="font-weight:800">${esc(o.user_name||'—')}</td>
-        <td data-label="الجوال" style="font-size:.8rem;color:#8a92b0" dir="ltr">${esc(o.user_phone||'—')}</td>
-        <td class="price" data-label="المبلغ">${fmtNum(o.total)} ر.س</td>
-        <td data-label="الشحن" style="font-size:.8rem;color:#6a9aff;font-weight:800">${fmtNum(bd.shipping)}</td>
-        <td data-label="الكاش باك" style="font-size:.82rem">${cb}</td>
-        <td data-label="الحالة"><span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span></td>
-        ${canConfirm?`<td data-label="تغيير"><select class="ma-status-select" data-status-order="${o.id}"><option value="">تغيير ▾</option>${statusOptions}</select></td>`:''}
-        <td data-label="التاريخ" style="font-size:.76rem;color:#8a92b0">${fmtDate(o.created_at)}</td>
-        <td data-label="إجراءات"><div class="actions-cell">
-          <button class="ma-mini-btn ma-mini-detail" data-detail-order="${o.id}" type="button"><i class="fas fa-receipt"></i> تفاصيل</button>
-          ${canCb?`<button class="ma-mini-btn ma-mini-cb" data-add-cashback="${o.id}" title="كاش باك" type="button"><i class="fas fa-gift"></i></button>`:''}
-          ${canShip?`<button class="ma-mini-btn ma-mini-ship" data-edit-shipping="${o.id}" title="تعديل الشحن" type="button"><i class="fas fa-truck"></i></button>`:''}
-          ${canDel?`<button class="ma-mini-btn ma-mini-delete" data-delete-order="${o.id}" title="حذف" type="button"><i class="fas fa-trash"></i></button>`:''}
-        </div></td>
+        <td data-label="رقم الطلب">
+          <div class="ma-order-cell">
+            <div class="ma-order-id">${shortId}</div>
+            ${o.cashback_applied && Number(o.cashback)>0 ? `<div class="ma-order-cb-pill"><i class="fas fa-gift"></i> ${fmtNum(o.cashback)} ${o.cashback_paid?'✓':'⏳'}</div>` : ''}
+          </div>
+        </td>
+        <td data-label="العميل">
+          <div class="ma-order-cell">
+            <div class="ma-order-name">${esc(o.user_name||'بدون اسم')}</div>
+            <div class="ma-order-sub"><i class="fas fa-phone"></i> <span dir="ltr">${esc(o.user_phone||o.user_email||'—')}</span></div>
+          </div>
+        </td>
+        <td data-label="المبلغ">
+          <div class="ma-order-cell">
+            <div class="ma-order-amount">${fmtNum(o.total)}<span class="cur">${esc(settings.currency)}</span></div>
+            <div class="ma-order-details">
+              <span><i class="fas fa-truck"></i> ${fmtNum(bd.shipping)}</span>
+              ${settings.vat_enabled?`<span><i class="fas fa-percent"></i> ${fmtNum(bd.vat)}</span>`:''}
+            </div>
+          </div>
+        </td>
+        <td data-label="الحالة">
+          <div class="ma-order-status-cell">
+            <span class="ma-badge" style="background:${st.bg};color:${st.text}"><i class="fas ${st.icon}"></i> ${st.label}</span>
+            ${canConfirm?`<select class="ma-status-select" data-status-order="${o.id}"><option value="">تغيير ▾</option>${statusOptions}</select>`:''}
+          </div>
+        </td>
+        <td data-label="التاريخ">
+          <div class="ma-order-cell">
+            <div class="ma-order-sub" style="font-size:.78rem;color:#a8b0cc"><i class="fas fa-clock"></i> ${fmtDate(o.created_at)}</div>
+          </div>
+        </td>
+        <td data-label="إجراءات">
+          <div class="actions-cell">
+            <button class="ma-mini-btn ma-mini-detail" data-detail-order="${o.id}" type="button"><i class="fas fa-receipt"></i> تفاصيل</button>
+            ${canCb?`<button class="ma-mini-btn ma-mini-cb" data-add-cashback="${o.id}" title="كاش باك" type="button"><i class="fas fa-gift"></i></button>`:''}
+            ${canShip?`<button class="ma-mini-btn ma-mini-ship" data-edit-shipping="${o.id}" title="تعديل الشحن" type="button"><i class="fas fa-truck"></i></button>`:''}
+            ${canDel?`<button class="ma-mini-btn ma-mini-delete" data-delete-order="${o.id}" title="حذف" type="button"><i class="fas fa-trash"></i></button>`:''}
+          </div>
+        </td>
       </tr>`;
     }).join('')}</tbody></table></div>`;
 }
