@@ -2055,7 +2055,7 @@ function renderSettingsView(el){
       store_email: $('setStoreEmail').value.trim(),
       store_address: $('setStoreAddress').value.trim(),
       support_whatsapp: $('setSupportWa').value.trim(),
-      invoice_footer: $('setInvoiceFooter').value.trim() || 'شكراً لتسوقكم معنا 🌟'
+      invoice_footer: $('setInvoiceFooter').value.trim() || 'الإدارة العامة'
     };
     showLoading(true);
     for(const [k,v] of Object.entries(fields)) await saveSetting(k, v);
