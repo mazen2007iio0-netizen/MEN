@@ -1,6 +1,6 @@
 /* ============================================================
-   ✨ MEN Store — Auth v12
-   (Deep Blue Theme + Orders + Users + Customer Chat + Cashback)
+   ✨ MEN Store — Auth v13
+   (Deep Blue + Orders + Users + Transactions + Cashback + PDF)
    ============================================================ */
 (function () {
   'use strict';
@@ -27,21 +27,14 @@
   });
   window.MEN_SUPABASE = sb;
 
-  console.log('%c✨ MEN AUTH v12 · Deep Blue', 'background:linear-gradient(135deg,#0a1a5c,#2563eb);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
+  console.log('%c✨ MEN AUTH v13 · Deep Blue', 'background:linear-gradient(135deg,#0a1a5c,#2563eb);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
   const CASHBACK_RATE = 0.02;
-  const PHONE_DOMAIN  = 'men-store.local';
   const ADMIN_EMAILS  = ['mkmkmkl24666606@gmail.com'];
-  const SUPPORT_NAME  = 'فريق الدعم';   // ← اسم ثابت بدل اسم المشرف
-  const SUPPORT_INITIAL = 'M';         // ← أول حرف للأفاتار
 
   let currentUser = null;
   let authMode = 'login';
   let rememberMe = true;
-  let chatPollTimer = null;
-  let chatLastCount = 0;
-  let chatLastId = null;
-  let chatUnreadLocal = 0;
   const $ = id => document.getElementById(id);
   const isAdmin = () => !!currentUser && ADMIN_EMAILS.includes((currentUser.email || '').toLowerCase());
 
@@ -55,42 +48,10 @@
     if (/^\d{8,15}$/.test(digits)) return digits;
     return null;
   }
-
-  function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim().toLowerCase());
-  }
-
+  function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim().toLowerCase()); }
   function escapeHtml(s) {
-    return String(s == null ? '' : s)
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
-
-  function fmtChatTime(d) {
-    if (!d) return '—';
-    try {
-      const date = new Date(d);
-      const now = new Date();
-      const diffMs = now - date;
-      const diffMin = Math.floor(diffMs / 60000);
-      const diffHr = Math.floor(diffMs / 3600000);
-      const diffDay = Math.floor(diffMs / 86400000);
-
-      if (diffMin < 1) return 'الآن';
-      if (diffMin < 60) return `قبل ${diffMin} د`;
-      if (diffHr < 24) return `قبل ${diffHr} س`;
-      if (diffDay < 7) return `قبل ${diffDay} ي`;
-      return date.toLocaleDateString('ar-SA', { day: 'numeric', month: 'short' });
-    } catch { return '—'; }
-  }
-
-  function fmtMsgTime(d) {
-    if (!d) return '';
-    try {
-      return new Date(d).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
-    } catch { return ''; }
-  }
-
   function makeInitialsAvatar(name, size = 200) {
     const clean = String(name || '').trim();
     const parts = clean.split(/\s+/).filter(Boolean);
@@ -99,29 +60,8 @@
     else if (parts.length === 1) initials = parts[0].substring(0, 2);
     else initials = (parts[0][0] || '') + (parts[parts.length - 1][0] || '');
     initials = initials.toUpperCase();
-
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0a1a5c"/><stop offset="100%" stop-color="#2563eb"/></linearGradient></defs><rect width="${size}" height="${size}" fill="url(#g)"/><text x="50%" y="52%" text-anchor="middle" dominant-baseline="central" font-family="Cairo,Tajawal,Arial,sans-serif" font-size="${Math.round(size * 0.44)}" font-weight="900" fill="#ffffff">${initials}</text></svg>`;
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-  }
-
-  // ═══ Sound notification (Web Audio API) ═══
-  function playPing() {
-    try {
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      if (!Ctx) return;
-      const ctx = new Ctx();
-      const o = ctx.createOscillator();
-      const g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.frequency.value = 880;
-      o.type = 'sine';
-      g.gain.setValueAtTime(0, ctx.currentTime);
-      g.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-      o.start(ctx.currentTime);
-      o.stop(ctx.currentTime + 0.4);
-      setTimeout(() => ctx.close(), 600);
-    } catch (e) { /* ignore */ }
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -136,16 +76,8 @@
       .men-screen{position:fixed;inset:0;z-index:9999;display:none;font-family:'Cairo','Outfit',sans-serif;background:#04060f;overflow-y:auto;overflow-x:hidden}
       .men-screen.active{display:block;animation:menFadeIn .35s ease}
       @keyframes menFadeIn{from{opacity:0}to{opacity:1}}
-      .men-screen-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:
-        radial-gradient(ellipse 60% 50% at 15% 15%,rgba(10,26,92,.4) 0%,transparent 60%),
-        radial-gradient(ellipse 55% 45% at 85% 85%,rgba(30,64,175,.2) 0%,transparent 55%),
-        radial-gradient(ellipse at 50% 50%,#04060f 0%,#020408 100%)}
-      .men-screen-bg::after{content:'';position:absolute;inset:0;background-image:
-        linear-gradient(rgba(37,99,235,.03) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(37,99,235,.03) 1px,transparent 1px);
-        background-size:64px 64px;
-        mask-image:radial-gradient(ellipse at center,black 15%,transparent 70%);
-        -webkit-mask-image:radial-gradient(ellipse at center,black 15%,transparent 70%)}
+      .men-screen-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 15% 15%,rgba(10,26,92,.4) 0%,transparent 60%),radial-gradient(ellipse 55% 45% at 85% 85%,rgba(30,64,175,.2) 0%,transparent 55%),radial-gradient(ellipse at 50% 50%,#04060f 0%,#020408 100%)}
+      .men-screen-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(37,99,235,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.03) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at center,black 15%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,black 15%,transparent 70%)}
       .men-orb{position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:1;opacity:.5}
       .men-orb.o1{width:500px;height:500px;background:radial-gradient(circle,#1e3a8a,transparent 70%);top:-150px;left:-150px;animation:menOrb1 15s ease-in-out infinite}
       .men-orb.o2{width:450px;height:450px;background:radial-gradient(circle,#2563eb,transparent 70%);bottom:-150px;right:-150px;animation:menOrb2 18s ease-in-out infinite}
@@ -281,8 +213,6 @@
       .men-acc-tabs::-webkit-scrollbar{display:none}
       .men-acc-tab{flex:1;min-width:120px;padding:13px 18px;border-radius:60px;background:transparent;border:none;color:#8a92b0;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;position:relative;transition:all .3s}
       .men-acc-tab.active{background:linear-gradient(135deg,#0a1a5c,#1e40af);color:#fff;box-shadow:0 8px 24px -6px rgba(30,58,138,.7);border:1px solid rgba(59,130,246,.15)}
-      .men-acc-tab .men-chat-badge{position:absolute;top:2px;right:8px;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;font-size:.66rem;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(4,6,15,.9);animation:menPulseBadge 2s ease-in-out infinite}
-      @keyframes menPulseBadge{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
       .men-acc-panel{display:none}
       .men-acc-panel.active{display:block;animation:menPanelIn .5s}
       @keyframes menPanelIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
@@ -314,6 +244,10 @@
       .men-acc-order-total{font-size:1.3rem;font-weight:900;color:#ffffff;display:inline-flex;align-items:center;gap:4px}
       .men-acc-order-badge{position:absolute;top:12px;left:12px;color:#fff;font-size:.62rem;font-weight:800;padding:4px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px}
       .men-acc-order-cb{display:inline-flex;align-items:center;gap:6px;background:rgba(212,165,72,.12);border:1px solid rgba(212,165,72,.3);color:#d4a548;font-size:.72rem;font-weight:800;padding:5px 12px;border-radius:20px;margin-top:8px}
+      .men-acc-order-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;padding-top:14px;border-top:1px dashed rgba(37,99,235,.15)}
+      .men-acc-order-pdf{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:60px;border:1.5px solid rgba(37,99,235,.3);background:rgba(37,99,235,.08);color:#60a5fa;font-family:'Cairo',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;transition:all .3s}
+      .men-acc-order-pdf:hover{background:linear-gradient(135deg,#0a1a5c,#1e40af);border-color:transparent;color:#fff;transform:translateY(-2px);box-shadow:0 8px 24px -8px rgba(37,99,235,.7)}
+      .men-acc-order-pdf:disabled{opacity:.6;cursor:wait}
       .men-acc-empty{text-align:center;padding:60px 24px;background:rgba(37,99,235,.04);border:1.5px dashed rgba(37,99,235,.2);border-radius:24px}
       .men-acc-empty-icon{width:90px;height:90px;margin:0 auto 20px;border-radius:50%;background:rgba(37,99,235,.1);display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:#2563eb}
       .men-acc-empty h3{color:#fff;font-size:1.2rem;margin-bottom:8px;font-weight:800}
@@ -332,78 +266,28 @@
       .men-acc-danger h4{color:#f87171;font-size:1rem;margin-bottom:8px;font-weight:800;display:flex;align-items:center;gap:10px}
       .men-acc-danger p{color:#d0a8a8;font-size:.85rem;margin-bottom:14px;line-height:1.7}
 
-      /* ═══ CHAT (Deep Blue + Admin Name Hidden) ═══ */
-      .men-acc-chat-wrap{background:linear-gradient(160deg,rgba(12,18,38,.85),rgba(6,10,24,.95));border:1px solid rgba(37,99,235,.18);border-radius:26px;overflow:hidden;height:min(640px,75vh);display:flex;flex-direction:column;box-shadow:0 20px 60px -20px rgba(0,0,0,.7)}
-      .men-acc-chat-head{padding:18px 22px;border-bottom:1px solid rgba(37,99,235,.15);display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(30,64,175,.15),transparent);position:relative}
-      .men-acc-chat-head::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(59,130,246,.3),transparent)}
-      .men-acc-chat-head .avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#0a1a5c,#2563eb);display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:1rem;flex-shrink:0;box-shadow:0 6px 18px -6px rgba(37,99,235,.8);border:1.5px solid rgba(59,130,246,.25);position:relative}
-      .men-acc-chat-head .avatar::after{content:'';position:absolute;bottom:2px;right:2px;width:12px;height:12px;border-radius:50%;background:#4ade80;border:2px solid #0a0f24;box-shadow:0 0 8px rgba(74,222,128,.6)}
-      .men-acc-chat-head .info{flex:1;min-width:0}
-      .men-acc-chat-head .name{font-weight:900;color:#fff;font-size:1rem;line-height:1.2;display:flex;align-items:center;gap:8px}
-      .men-acc-chat-head .name .verified-badge{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;font-size:.55rem;flex-shrink:0}
-      .men-acc-chat-head .status{font-size:.72rem;color:#4ade80;font-weight:700;display:flex;align-items:center;gap:5px;margin-top:3px}
-      .men-acc-chat-head .status i{font-size:.5rem;animation:menPulse 1.8s ease-in-out infinite}
-      @keyframes menPulse{0%,100%{opacity:1}50%{opacity:.35}}
-      .men-acc-chat-head .refresh{width:40px;height:40px;border-radius:12px;background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);color:#60a5fa;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;font-size:.9rem}
-      .men-acc-chat-head .refresh:hover{background:rgba(37,99,235,.2);transform:rotate(180deg)}
-      .men-acc-chat-body{flex:1;overflow-y:auto;padding:22px 20px;display:flex;flex-direction:column;gap:14px;background:
-        radial-gradient(circle at 20% 10%,rgba(30,64,175,.08),transparent 40%),
-        radial-gradient(circle at 80% 90%,rgba(37,99,235,.06),transparent 40%),
-        rgba(4,6,15,.3)}
-      .men-acc-chat-body::-webkit-scrollbar{width:6px}
-      .men-acc-chat-body::-webkit-scrollbar-thumb{background:rgba(37,99,235,.3);border-radius:6px}
-      .men-acc-chat-body::-webkit-scrollbar-track{background:transparent}
-
-      .men-chat-day-sep{text-align:center;margin:8px 0;position:relative}
-      .men-chat-day-sep span{display:inline-block;background:rgba(10,26,92,.6);border:1px solid rgba(37,99,235,.2);color:#60a5fa;font-size:.7rem;font-weight:700;padding:5px 14px;border-radius:20px;position:relative;z-index:1}
-
-      .men-acc-msg{max-width:78%;padding:12px 16px;border-radius:18px;font-size:.9rem;line-height:1.7;word-wrap:break-word;animation:menMsgIn .3s cubic-bezier(.4,0,.2,1);position:relative}
-      @keyframes menMsgIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-      .men-acc-msg .meta{font-size:.62rem;font-weight:800;opacity:.85;margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase}
-      .men-acc-msg .time{font-size:.6rem;font-weight:700;opacity:.7;margin-top:6px;text-align:left;direction:ltr;display:flex;align-items:center;gap:4px}
-      .men-acc-msg .time i{font-size:.55rem}
-
-      /* رسالة العميل — يمين، أزرق غامق */
-      .men-acc-msg.customer{align-self:flex-end;background:linear-gradient(135deg,#0a1a5c,#1e40af);color:#fff;border-bottom-left-radius:6px;border:1px solid rgba(59,130,246,.2);box-shadow:0 8px 22px -12px rgba(10,26,92,.7)}
-      .men-acc-msg.customer .meta{color:#93c5fd}
-      .men-acc-msg.customer .time{color:#93c5fd}
-
-      /* رسالة الدعم — يسار، رمادي شفاف + اسم مخفي */
-      .men-acc-msg.admin{align-self:flex-start;background:linear-gradient(135deg,rgba(16,22,44,.9),rgba(10,14,30,.95));border:1px solid rgba(37,99,235,.15);color:#e0e6f4;border-bottom-right-radius:6px}
-      .men-acc-msg.admin .meta{color:#60a5fa;display:flex;align-items:center;gap:6px}
-      .men-acc-msg.admin .meta::before{content:'\\f4ce';font-family:'Font Awesome 6 Free';font-weight:900;font-size:.62rem;color:#3b82f6}
-      .men-acc-msg.admin .time{color:#8a92b0}
-
-      /* ملاحظة إدارية — بالوسط، بنفسجي */
-      .men-acc-msg.note{align-self:center;background:linear-gradient(135deg,rgba(147,51,234,.18),rgba(107,33,168,.18));border:1.5px dashed rgba(147,51,234,.5);color:#e9d5ff;max-width:88%;text-align:center}
-      .men-acc-msg.note .meta{color:#c084fc;justify-content:center;display:flex}
-      .men-acc-msg.note .time{color:#c084fc;justify-content:center;display:flex}
-
-      /* مؤشر الكتابة */
-      .men-typing-indicator{display:flex;align-items:center;gap:6px;padding:12px 16px;background:rgba(16,22,44,.9);border:1px solid rgba(37,99,235,.15);border-radius:18px;border-bottom-right-radius:6px;align-self:flex-start;max-width:fit-content;margin-top:4px}
-      .men-typing-indicator .dot{width:6px;height:6px;border-radius:50%;background:#60a5fa;animation:menTypingBounce 1.4s infinite ease-in-out}
-      .men-typing-indicator .dot:nth-child(2){animation-delay:.2s}
-      .men-typing-indicator .dot:nth-child(3){animation-delay:.4s}
-      @keyframes menTypingBounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-6px);opacity:1}}
-
-      /* حالة فارغة */
-      .men-acc-chat-empty{text-align:center;padding:50px 20px;color:#8a92b0;font-weight:700;font-size:.88rem;margin:auto}
-      .men-acc-chat-empty i{font-size:2.8rem;color:#2563eb;opacity:.5;display:block;margin-bottom:16px}
-      .men-acc-chat-empty h4{color:#e0e6f4;font-size:1rem;font-weight:800;margin-bottom:6px}
-      .men-acc-chat-empty p{font-size:.78rem;font-weight:500;color:#6a7290;margin-bottom:16px}
-      .men-acc-chat-empty .quick-ask{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:400px;margin:0 auto}
-      .men-acc-chat-empty .quick-ask button{padding:8px 16px;border-radius:20px;border:1px solid rgba(37,99,235,.25);background:rgba(37,99,235,.08);color:#60a5fa;font-family:'Cairo',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;transition:all .25s}
-      .men-acc-chat-empty .quick-ask button:hover{background:linear-gradient(135deg,#0a1a5c,#1e40af);border-color:transparent;color:#fff;transform:translateY(-2px)}
-
-      /* صندوق الإدخال */
-      .men-acc-chat-foot{padding:14px 18px;border-top:1px solid rgba(37,99,235,.15);background:rgba(4,6,15,.5);display:flex;gap:10px;align-items:flex-end}
-      .men-acc-chat-foot textarea{flex:1;padding:13px 18px;border-radius:16px;background:rgba(4,6,15,.6);border:1.5px solid rgba(37,99,235,.2);color:#fff;font-family:'Cairo',sans-serif;font-weight:600;font-size:.9rem;outline:none;transition:all .3s;resize:none;min-height:46px;max-height:120px;line-height:1.5}
-      .men-acc-chat-foot textarea::placeholder{color:#5a607a}
-      .men-acc-chat-foot textarea:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.12);background:rgba(4,6,15,.8)}
-      .men-acc-chat-send{width:46px;height:46px;border-radius:14px;border:none;background:linear-gradient(135deg,#0a1a5c,#1e40af);color:#fff;cursor:pointer;font-size:1rem;transition:all .3s;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 22px -8px rgba(30,58,138,.9);border:1px solid rgba(59,130,246,.2)}
-      .men-acc-chat-send:hover:not(:disabled){transform:translateY(-2px) scale(1.03);box-shadow:0 10px 28px -8px rgba(37,99,235,1)}
-      .men-acc-chat-send:active:not(:disabled){transform:translateY(0) scale(.98)}
-      .men-acc-chat-send:disabled{opacity:.5;cursor:not-allowed;transform:none}
+      /* ═══ TRANSACTIONS ═══ */
+      .men-acc-txn-summary{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+      .men-acc-txn-summary .item{flex:1;min-width:180px;padding:18px 22px;border-radius:18px;background:linear-gradient(160deg,rgba(12,18,38,.7),rgba(6,10,24,.85));border:1px solid rgba(37,99,235,.15)}
+      .men-acc-txn-summary .item .lbl{font-size:.75rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+      .men-acc-txn-summary .item .val{font-size:1.6rem;font-weight:900;color:#fff;display:flex;align-items:baseline;gap:6px}
+      .men-acc-txn-summary .item .val small{font-size:.85rem;color:#8a92b0;font-weight:700}
+      .men-acc-txn-summary .item.plus .val{color:#4ade80}
+      .men-acc-txn-summary .item.minus .val{color:#f87171}
+      .men-acc-txn-list{display:flex;flex-direction:column;gap:10px}
+      .men-acc-txn{display:flex;align-items:center;gap:14px;padding:16px 20px;background:linear-gradient(160deg,rgba(12,18,38,.55),rgba(6,10,24,.75));border:1px solid rgba(37,99,235,.12);border-radius:18px;transition:all .25s}
+      .men-acc-txn:hover{border-color:rgba(37,99,235,.3);background:linear-gradient(160deg,rgba(20,30,60,.65),rgba(10,14,30,.85))}
+      .men-acc-txn-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+      .men-acc-txn-icon.plus{background:rgba(76,175,80,.12);color:#4caf50;border:1px solid rgba(76,175,80,.25)}
+      .men-acc-txn-icon.minus{background:rgba(220,38,38,.12);color:#f87171;border:1px solid rgba(220,38,38,.25)}
+      .men-acc-txn-icon.order{background:rgba(212,165,72,.12);color:#d4a548;border:1px solid rgba(212,165,72,.25)}
+      .men-acc-txn-info{flex:1;min-width:0}
+      .men-acc-txn-reason{color:#fff;font-weight:800;font-size:.9rem;margin-bottom:4px;line-height:1.4}
+      .men-acc-txn-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:.72rem;color:#8a92b0;font-weight:600}
+      .men-acc-txn-meta .type{display:inline-flex;align-items:center;gap:4px;background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);color:#60a5fa;padding:2px 8px;border-radius:10px;font-weight:800;font-size:.66rem}
+      .men-acc-txn-amount{font-weight:900;font-size:1.05rem;white-space:nowrap;direction:ltr}
+      .men-acc-txn-amount.plus{color:#4ade80}
+      .men-acc-txn-amount.minus{color:#f87171}
 
       @media (max-width:992px){.men-acc-stats{grid-template-columns:repeat(2,1fr)}.men-acc-overview{grid-template-columns:1fr}.men-acc-settings-grid{grid-template-columns:1fr}}
       @media (max-width:768px){
@@ -415,11 +299,11 @@
         .men-acc-card{padding:22px 20px}
         .men-acc-cashback{padding:26px 22px}
         .men-acc-stat{padding:18px 16px}
-        .men-acc-chat-wrap{height:min(560px,72vh)}
-        .men-acc-msg{max-width:85%}
+        .men-acc-txn{padding:14px 16px;gap:12px}
+        .men-acc-txn-amount{font-size:.95rem}
       }
 
-      /* ═══ Cashback Box (Deep Blue) ═══ */
+      /* ═══ Cashback Box ═══ */
       .men-cb-box{margin:14px 0;background:linear-gradient(160deg,rgba(10,26,92,.3),rgba(30,58,138,.15));border:1px solid rgba(59,130,246,.25);border-radius:20px;padding:18px 20px;font-family:'Cairo',sans-serif;color:#fff;box-shadow:0 12px 40px -14px rgba(10,26,92,.6)}
       .men-cb-head{display:flex;align-items:center;gap:14px}
       .men-cb-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#1e40af,#2563eb);display:flex;align-items:center;justify-content:center;font-size:1.15rem;color:#fff;box-shadow:0 8px 22px -8px rgba(37,99,235,.8);flex-shrink:0;border:1px solid rgba(147,197,253,.2)}
@@ -486,7 +370,6 @@
         <div class="men-orb o1"></div>
         <div class="men-orb o2"></div>
         <div class="men-orb o3"></div>
-
         <div class="men-layout">
           <div class="men-showcase">
             <div class="men-showcase-top">
@@ -513,25 +396,21 @@
               <div>© 2020 MEN Store — جميع الحقوق محفوظة</div>
             </div>
           </div>
-
           <div class="men-form-panel">
             <div class="men-panel-top">
               <div></div>
               <button class="men-close" data-close type="button"><i class="fas fa-times"></i></button>
             </div>
-
             <div class="men-form-inner">
               <div class="men-welcome">
                 <h2 id="menHeadTitle">أهلاً بعودتك 👋</h2>
                 <p id="menHeadSub">سجّل دخولك للمتابعة والاستمتاع بالعروض الحصرية</p>
               </div>
-
               <div class="men-tabs" id="menTabs" data-mode="login">
                 <div class="men-tabs-indicator"></div>
                 <button class="men-tab active" data-tab="login" type="button"><i class="fas fa-right-to-bracket"></i> دخول</button>
                 <button class="men-tab" data-tab="signup" type="button"><i class="fas fa-user-plus"></i> حساب جديد</button>
               </div>
-
               <form class="men-form" id="menForm" onsubmit="return false;">
                 <div class="men-field" id="menNameField" style="display:none">
                   <label class="men-label" for="menAuthName">الاسم الكامل</label>
@@ -540,7 +419,6 @@
                     <i class="fas fa-user men-icon"></i>
                   </div>
                 </div>
-
                 <div class="men-field" id="menEmailField" style="display:none">
                   <label class="men-label" for="menAuthEmail">البريد الإلكتروني</label>
                   <div class="men-input-wrap">
@@ -548,7 +426,6 @@
                     <i class="fas fa-envelope men-icon"></i>
                   </div>
                 </div>
-
                 <div class="men-field" id="menPhoneField" style="display:none">
                   <label class="men-label" for="menAuthPhone">رقم الجوال</label>
                   <div class="men-input-wrap">
@@ -556,7 +433,6 @@
                     <i class="fas fa-phone men-icon"></i>
                   </div>
                 </div>
-
                 <div class="men-field" id="menIdentifierField">
                   <label class="men-label" for="menAuthIdentifier">رقم الجوال أو البريد الإلكتروني</label>
                   <div class="men-input-wrap">
@@ -565,7 +441,6 @@
                   </div>
                   <div class="men-hint"><i class="fas fa-circle-info"></i> يمكنك الدخول بالجوال أو بالبريد الإلكتروني</div>
                 </div>
-
                 <div class="men-field">
                   <label class="men-label" for="menAuthPassword">كلمة المرور</label>
                   <div class="men-input-wrap">
@@ -585,7 +460,6 @@
                     </div>
                   </div>
                 </div>
-
                 <div class="men-opts" id="menOptsRow">
                   <label class="men-remember">
                     <input type="checkbox" id="menRemember" checked>
@@ -594,16 +468,13 @@
                   </label>
                   <a class="men-forgot" id="menForgotBtn">نسيت كلمة المرور؟</a>
                 </div>
-
                 <div class="men-terms" id="menTermsText" style="display:none">
                   بإنشاء حساب، أنت توافق على <a>الشروط والأحكام</a> و <a>سياسة الخصوصية</a>
                 </div>
-
                 <div class="men-error" id="menError">
                   <i class="fas fa-circle-exclamation"></i>
                   <span id="menErrorText"></span>
                 </div>
-
                 <button class="men-submit" id="menSubmit" type="button">
                   <i class="fas fa-arrow-left men-btn-icon"></i>
                   <span class="men-spinner"></span>
@@ -613,7 +484,6 @@
             </div>
           </div>
         </div>
-
         <div class="men-success-overlay" id="menSuccessOverlay">
           <div class="men-check-circle"><i class="fas fa-check"></i></div>
           <p id="menSuccessText">تم بنجاح!</p>
@@ -762,7 +632,6 @@
               id: data.user.id, email, name, phone, cashback: 0,
               updated_at: new Date().toISOString()
             }, { onConflict: 'id' });
-            console.log(' User saved in men_users');
           } catch (e) { console.warn('save user failed:', e); }
         }
 
@@ -844,18 +713,16 @@
               </div>
             </div>
           </div>
-
           <div class="men-acc-stats">
             <div class="men-acc-stat" style="--accent:#3b82f6;--icon-bg:rgba(37,99,235,.12)"><div class="men-acc-stat-icon"><i class="fas fa-box"></i></div><div class="men-acc-stat-val" id="menAccStatOrders">0</div><div class="men-acc-stat-lbl">الطلبات</div></div>
             <div class="men-acc-stat" style="--accent:#4caf50;--icon-bg:rgba(76,175,80,.12)"><div class="men-acc-stat-icon"><i class="fas fa-wallet"></i></div><div class="men-acc-stat-val"><span id="menAccStatCashback">0</span> <small style="font-size:.9rem;color:#8a92b0">ر.س</small></div><div class="men-acc-stat-lbl">الكاش باك</div></div>
             <div class="men-acc-stat" style="--accent:#d4a548;--icon-bg:rgba(212,165,72,.12)"><div class="men-acc-stat-icon"><i class="fas fa-coins"></i></div><div class="men-acc-stat-val"><span id="menAccStatSpent">0</span> <small style="font-size:.9rem;color:#8a92b0">ر.س</small></div><div class="men-acc-stat-lbl">إجمالي المشتريات</div></div>
             <div class="men-acc-stat" style="--accent:#60a5fa;--icon-bg:rgba(96,165,250,.12)"><div class="men-acc-stat-icon"><i class="fas fa-calendar"></i></div><div class="men-acc-stat-val" id="menAccStatSince" style="font-size:1.05rem">—</div><div class="men-acc-stat-lbl">عضو منذ</div></div>
           </div>
-
           <div class="men-acc-tabs">
             <button class="men-acc-tab active" data-macc-tab="overview" type="button"><i class="fas fa-house"></i> <span>نظرة عامة</span></button>
             <button class="men-acc-tab" data-macc-tab="orders" type="button"><i class="fas fa-box"></i> <span>طلباتي</span></button>
-            <button class="men-acc-tab" data-macc-tab="chat" type="button" id="menAccChatTab"><i class="fas fa-comments"></i> <span>المحادثة</span><span class="men-chat-badge" id="menChatBadge" style="display:none">0</span></button>
+            <button class="men-acc-tab" data-macc-tab="transactions" type="button"><i class="fas fa-arrow-right-arrow-left"></i> <span>العمليات</span></button>
             <button class="men-acc-tab" data-macc-tab="settings" type="button"><i class="fas fa-gear"></i> <span>الإعدادات</span></button>
           </div>
 
@@ -886,26 +753,15 @@
             </div>
           </div>
 
-          <div class="men-acc-panel" data-macc-panel="chat">
-            <div class="men-acc-chat-wrap">
-              <div class="men-acc-chat-head">
-                <div class="avatar"><i class="fas fa-headset"></i></div>
-                <div class="info">
-                  <div class="name">
-                    <span>${SUPPORT_NAME}</span>
-                    <span class="verified-badge" title="موثّق"><i class="fas fa-check"></i></span>
-                  </div>
-                  <div class="status"><i class="fas fa-circle"></i> متصل الآن · عادةً يرد خلال دقائق</div>
-                </div>
-                <button class="refresh" id="menChatRefresh" type="button" title="تحديث"><i class="fas fa-rotate"></i></button>
+          <div class="men-acc-panel" data-macc-panel="transactions">
+            <div class="men-acc-card">
+              <div class="men-acc-card-title"><span class="icn"><i class="fas fa-arrow-right-arrow-left"></i></span> سجل العمليات</div>
+              <div class="men-acc-txn-summary">
+                <div class="item"><div class="lbl"><i class="fas fa-wallet" style="color:#60a5fa"></i> الرصيد الحالي</div><div class="val"><span id="menTxnBalance">0.00</span> <small>ر.س</small></div></div>
+                <div class="item plus"><div class="lbl"><i class="fas fa-plus-circle"></i> إجمالي المكتسب</div><div class="val"><span id="menTxnEarned">0.00</span> <small>ر.س</small></div></div>
+                <div class="item minus"><div class="lbl"><i class="fas fa-minus-circle"></i> إجمالي المستخدم</div><div class="val"><span id="menTxnUsed">0.00</span> <small>ر.س</small></div></div>
               </div>
-              <div class="men-acc-chat-body" id="menChatBody">
-                <div class="men-acc-chat-empty"><i class="fas fa-comments"></i> جاري تحميل المحادثة...</div>
-              </div>
-              <div class="men-acc-chat-foot">
-                <textarea id="menChatInput" placeholder="اكتب رسالتك لفريق الدعم..." rows="1"></textarea>
-                <button class="men-acc-chat-send" id="menChatSend" type="button"><i class="fas fa-paper-plane"></i></button>
-              </div>
+              <div class="men-acc-txn-list" id="menAccTxnList"></div>
             </div>
           </div>
 
@@ -941,271 +797,266 @@
     $('menAccLogoutBtn').addEventListener('click', logout);
     $('menAccDeleteBtn').addEventListener('click', deleteAccount);
     $('menAccShareBtn').addEventListener('click', shareAccount);
-
-    $('menChatSend').addEventListener('click', sendCustomerChat);
-    $('menChatRefresh').addEventListener('click', () => loadCustomerChat(true));
-    const chatInp = $('menChatInput');
-    chatInp.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendCustomerChat(); }
-    });
-    chatInp.addEventListener('input', () => {
-      chatInp.style.height = 'auto';
-      chatInp.style.height = Math.min(chatInp.scrollHeight, 120) + 'px';
-    });
   }
 
   function switchAccountTab(tab) {
     document.querySelectorAll('[data-macc-tab]').forEach(b => b.classList.toggle('active', b.dataset.maccTab === tab));
     document.querySelectorAll('[data-macc-panel]').forEach(p => p.classList.toggle('active', p.dataset.maccPanel === tab));
 
-    if (tab === 'chat') {
-      loadCustomerChat();
-      startChatPolling();
-      const badge = $('menChatBadge');
-      if (badge) badge.style.display = 'none';
-      chatUnreadLocal = 0;
-    } else {
-      stopChatPolling();
+    if (tab === 'transactions') {
+      loadTransactions();
     }
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 💬 Chat — Enhanced
+  // 💳 Transactions (سجل العمليات)
   // ═══════════════════════════════════════════════════════════
-  const QUICK_ASKS = [
-    'متى يوصل طلبي؟',
-    'طرق الدفع المتاحة؟',
-    'كيف أستخدم الكاش باك؟',
-    'أريد إلغاء طلب'
-  ];
-
-  async function loadCustomerChat(showLoader = false) {
+  async function loadTransactions() {
     if (!currentUser) return;
-    const body = $('menChatBody');
-    if (!body) return;
+    const list = $('menAccTxnList');
+    if (!list) return;
 
-    if (showLoader) {
-      body.innerHTML = '<div class="men-acc-chat-empty"><i class="fas fa-spinner fa-spin"></i> جاري التحديث...</div>';
-    }
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:#8a92b0"><i class="fas fa-spinner fa-spin" style="font-size:1.5rem;margin-bottom:10px;display:block"></i> جاري التحميل...</div>';
 
     try {
-      const { data, error } = await sb.from('men_messages')
+      const { data, error } = await sb.from('men_cashback_log')
         .select('*')
         .eq('user_id', currentUser.id)
-        .order('created_at', { ascending: true })
-        .limit(300);
+        .order('created_at', { ascending: false })
+        .limit(200);
       if (error) throw error;
-      renderCustomerChat(data || []);
+      renderTransactions(data || []);
     } catch (err) {
-      console.error('loadCustomerChat error:', err);
-      body.innerHTML = `<div class="men-acc-chat-empty"><i class="fas fa-triangle-exclamation" style="color:#dc2626"></i> فشل التحميل<br><span style="font-size:.74rem;opacity:.8;margin-top:8px;display:block">${escapeHtml(err.message || '')}</span></div>`;
+      console.error('loadTransactions error:', err);
+      // إذا لم يوجد جدول أو خطأ آخر
+      list.innerHTML = `<div class="men-acc-empty"><div class="men-acc-empty-icon"><i class="fas fa-receipt"></i></div><h3>لا توجد عمليات بعد</h3><p>ستظهر هنا كل عمليات الكاش باك (الإضافة والاستخدام)</p></div>`;
+      // صفر الإحصائيات
+      const bal = $('menTxnBalance'), earned = $('menTxnEarned'), used = $('menTxnUsed');
+      if (bal) bal.textContent = '0.00';
+      if (earned) earned.textContent = '0.00';
+      if (used) used.textContent = '0.00';
     }
   }
 
-  function renderCustomerChat(msgs) {
-    const body = $('menChatBody');
-    if (!body) return;
+  function renderTransactions(txns) {
+    const list = $('menAccTxnList');
+    if (!list) return;
 
-    // هل كان المستخدم في الأسفل؟ (لعرض زر "جديد")
-    const wasAtBottom = body.scrollHeight - body.scrollTop - body.clientHeight < 80;
-
-    if (!msgs.length) {
-      body.innerHTML = `
-        <div class="men-acc-chat-empty">
-          <i class="fas fa-headset"></i>
-          <h4>كيف نقدر نساعدك اليوم؟</h4>
-          <p>فريق الدعم جاهز للإجابة على استفساراتك</p>
-          <div class="quick-ask">
-            ${QUICK_ASKS.map(q => `<button type="button" data-quick="${escapeHtml(q)}">${escapeHtml(q)}</button>`).join('')}
-          </div>
-        </div>`;
-      chatLastCount = 0;
-      chatLastId = null;
-
-      // ربط الأزرار السريعة
-      body.querySelectorAll('[data-quick]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const inp = $('menChatInput');
-          if (inp) { inp.value = btn.dataset.quick; inp.focus(); sendCustomerChat(); }
-        });
-      });
-      return;
-    }
-
-    // لا تُعِد الرسم لو ما تغير شي
-    const lastMsg = msgs[msgs.length - 1];
-    if (msgs.length === chatLastCount && lastMsg.id === chatLastId && body.querySelector('.men-acc-msg')) {
-      return;
-    }
-
-    // كشف رسالة جديدة من الدعم
-    const hasNewFromSupport = chatLastId && lastMsg.id !== chatLastId && lastMsg.sender === 'admin';
-
-    chatLastCount = msgs.length;
-    chatLastId = lastMsg.id;
-
-    // تجميع حسب اليوم
-    let currentDay = null;
-    let html = '';
-    msgs.forEach((m, idx) => {
-      const date = new Date(m.created_at);
-      const dayKey = date.toDateString();
-      if (dayKey !== currentDay) {
-        currentDay = dayKey;
-        const today = new Date();
-        const yesterday = new Date(); yesterday.setDate(today.getDate() - 1);
-        let dayLabel;
-        if (dayKey === today.toDateString()) dayLabel = 'اليوم';
-        else if (dayKey === yesterday.toDateString()) dayLabel = 'أمس';
-        else dayLabel = date.toLocaleDateString('ar-SA', { day: 'numeric', month: 'long' });
-        html += `<div class="men-chat-day-sep"><span>${dayLabel}</span></div>`;
-      }
-
-      const msgTime = fmtMsgTime(m.created_at);
-
-      if (m.type === 'note') {
-        html += `<div class="men-acc-msg note">
-          <div class="meta"><i class="fas fa-comment-dots"></i> ملاحظة من الإدارة</div>
-          <div>${escapeHtml(m.message)}</div>
-          <div class="time"><i class="fas fa-clock"></i> ${msgTime}</div>
-        </div>`;
-      } else {
-        const isCustomer = m.sender === 'customer';
-        const cls = isCustomer ? 'customer' : 'admin';
-        // ⭐ لا نظهر اسم المشرف أبداً — دائماً "الدعم"
-        const label = isCustomer ? 'أنت' : 'الدعم';
-
-        const readIcon = isCustomer
-          ? (m.is_read ? '<i class="fas fa-check-double" style="color:#60a5fa"></i>' : '<i class="fas fa-check"></i>')
-          : '';
-
-        html += `<div class="men-acc-msg ${cls}">
-          <div class="meta">${escapeHtml(label)}</div>
-          <div>${escapeHtml(m.message)}</div>
-          <div class="time">${readIcon}<span>${msgTime}</span></div>
-        </div>`;
-      }
+    // حساب الإحصائيات
+    let totalEarned = 0, totalUsed = 0;
+    txns.forEach(t => {
+      const amt = Number(t.amount || 0);
+      if (amt > 0) totalEarned += amt;
+      else totalUsed += Math.abs(amt);
     });
 
-    body.innerHTML = html;
+    $('menTxnBalance').textContent = (totalEarned - totalUsed).toFixed(2);
+    $('menTxnEarned').textContent = totalEarned.toFixed(2);
+    $('menTxnUsed').textContent = totalUsed.toFixed(2);
 
-    // تمرير للأسفل
-    if (wasAtBottom || showLoader !== undefined) {
-      body.scrollTop = body.scrollHeight;
+    if (!txns.length) {
+      list.innerHTML = `
+        <div class="men-acc-empty">
+          <div class="men-acc-empty-icon"><i class="fas fa-receipt"></i></div>
+          <h3>لا توجد عمليات بعد</h3>
+          <p>ستظهر هنا كل عمليات الكاش باك (الإضافة والاستخدام)</p>
+        </div>`;
+      return;
     }
 
-    // صوت لو في رسالة جديدة من الدعم
-    if (hasNewFromSupport) {
-      playPing();
-      // وميض خفيف
-      body.classList.add('has-new');
-      setTimeout(() => body.classList.remove('has-new'), 800);
-    }
-
-    // تحديث شارة التبويب
-    const unreadFromSupport = msgs.filter(m => m.sender === 'admin' && !m.is_read).length;
-    updateChatBadge(unreadFromSupport);
-  }
-
-  function updateChatBadge(count) {
-    const badge = $('menChatBadge');
-    if (!badge) return;
-    const isChatActive = document.querySelector('[data-macc-panel="chat"]')?.classList.contains('active');
-    if (count > 0 && !isChatActive) {
-      badge.textContent = count > 9 ? '9+' : count;
-      badge.style.display = 'flex';
-    } else if (count === 0) {
-      badge.style.display = 'none';
-    }
-  }
-
-  async function sendCustomerChat() {
-    if (!currentUser) return;
-    const input = $('menChatInput');
-    const btn = $('menChatSend');
-    const text = input?.value?.trim();
-    if (!text) return;
-
-    // إرسال متفائل (Optimistic UI)
-    const tempMsg = {
-      id: 'temp-' + Date.now(),
-      sender: 'customer',
-      message: text,
-      type: 'chat',
-      created_at: new Date().toISOString(),
-      is_read: false
+    const TYPE_LABELS = {
+      used_on_order: { label: 'استخدام على طلب', icon: 'fa-shopping-bag' },
+      manual: { label: 'تعديل يدوي', icon: 'fa-user-pen' },
+      earned: { label: 'كاش باك مكتسب', icon: 'fa-gift' },
+      refund: { label: 'استرجاع', icon: 'fa-rotate-left' }
     };
 
-    const body = $('menChatBody');
-    if (body && body.querySelector('.men-acc-chat-empty')) {
-      body.innerHTML = '';
-    }
-    if (body) {
-      const el = document.createElement('div');
-      el.className = 'men-acc-msg customer';
-      el.innerHTML = `
-        <div class="meta">أنت</div>
-        <div>${escapeHtml(text)}</div>
-        <div class="time"><i class="fas fa-check"></i><span>${fmtMsgTime(tempMsg.created_at)}</span></div>`;
-      body.appendChild(el);
-      body.scrollTop = body.scrollHeight;
-    }
+    list.innerHTML = txns.map(t => {
+      const amt = Number(t.amount || 0);
+      const isPlus = amt >= 0;
+      const info = TYPE_LABELS[t.type] || { label: 'عملية', icon: 'fa-circle-info' };
+      const date = t.created_at ? new Date(t.created_at).toLocaleString('ar-SA', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—';
 
-    input.value = '';
-    input.style.height = 'auto';
-    btn.disabled = true;
+      // لون الأيقونة: أخضر للكسب، أحمر للاستخدام، ذهبي إن كان مرتبط بطلب
+      let iconClass = isPlus ? 'plus' : 'minus';
+      if (t.type === 'used_on_order') iconClass = 'order';
+      const iconFa = t.type === 'used_on_order' ? 'fa-shopping-bag' : (isPlus ? 'fa-plus' : 'fa-minus');
 
+      const reason = t.reason || info.label;
+      const orderRef = t.order_id ? ` · طلب #${String(t.order_id).slice(-6).toUpperCase()}` : '';
+
+      return `
+        <div class="men-acc-txn">
+          <div class="men-acc-txn-icon ${iconClass}"><i class="fas ${iconFa}"></i></div>
+          <div class="men-acc-txn-info">
+            <div class="men-acc-txn-reason">${escapeHtml(reason)}</div>
+            <div class="men-acc-txn-meta">
+              <span class="type"><i class="fas ${info.icon}"></i> ${info.label}</span>
+              <span><i class="fas fa-clock"></i> ${date}${orderRef}</span>
+            </div>
+          </div>
+          <div class="men-acc-txn-amount ${isPlus ? 'plus' : 'minus'}">${isPlus ? '+' : '−'} ${Math.abs(amt).toFixed(2)} <span style="font-size:.7rem;opacity:.7">ر.س</span></div>
+        </div>`;
+    }).join('');
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // 📄 PDF Generator for Orders
+  // ═══════════════════════════════════════════════════════════
+  function loadHtml2Pdf() {
+    if (window.html2pdf) return Promise.resolve(window.html2pdf);
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+      s.onload = () => resolve(window.html2pdf);
+      s.onerror = () => reject(new Error('فشل تحميل مكتبة PDF'));
+      document.head.appendChild(s);
+    });
+  }
+
+  async function downloadOrderPDF(order, btnEl) {
+    if (btnEl) { btnEl.disabled = true; btnEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التوليد...'; }
     try {
-      const { error } = await sb.from('men_messages').insert({
-        user_id: currentUser.id,
-        user_email: currentUser.email,
-        sender: 'customer',
-        sender_name: currentUser.user_metadata?.name || 'العميل',
-        sender_email: currentUser.email,
-        message: text,
-        type: 'chat',
-        is_read: false
-      });
-      if (error) throw error;
-      chatLastCount = 0;
-      chatLastId = null;
-      await loadCustomerChat();
+      await loadHtml2Pdf();
+
+      const meta = currentUser?.user_metadata || {};
+      const items = Array.isArray(order.items) ? order.items : [];
+      const statusLabels = {
+        pending:   { label: 'قيد الانتظار', color: '#d4a548' },
+        preparing: { label: 'جاري التجهيز', color: '#2563eb' },
+        review:    { label: 'تحت المراجعة', color: '#3b82f6' },
+        delivered: { label: 'تم الاستلام',  color: '#16a34a' },
+        cancelled: { label: 'ملغي',         color: '#dc2626' }
+      };
+      const st = statusLabels[order.status] || statusLabels.pending;
+
+      const cbUsed = Number(order.cashback_used || 0);
+      const finalTotal = Number(order.total || 0);
+      const originalTotal = finalTotal + cbUsed;
+      const date = order.created_at
+        ? new Date(order.created_at).toLocaleString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : '—';
+
+      const itemsRows = items.length ? items.map((it, i) => {
+        const price = Number(it.price || 0);
+        const qty = Number(it.qty || 1);
+        return `
+          <tr>
+            <td style="padding:10px 8px;border-bottom:1px solid #e5e7eb;text-align:center;color:#6b7280">${i + 1}</td>
+            <td style="padding:10px 8px;border-bottom:1px solid #e5e7eb;text-align:right;font-weight:600">${escapeHtml(it.name || 'منتج')}</td>
+            <td style="padding:10px 8px;border-bottom:1px solid #e5e7eb;text-align:center">${qty}</td>
+            <td style="padding:10px 8px;border-bottom:1px solid #e5e7eb;text-align:left;direction:ltr">${price.toFixed(2)} ر.س</td>
+            <td style="padding:10px 8px;border-bottom:1px solid #e5e7eb;text-align:left;direction:ltr;font-weight:700">${(price * qty).toFixed(2)} ر.س</td>
+          </tr>`;
+      }).join('') : `<tr><td colspan="5" style="padding:24px;text-align:center;color:#9ca3af">لا توجد عناصر مسجلة</td></tr>`;
+
+      const container = document.createElement('div');
+      container.style.cssText = 'font-family:Cairo,Tajawal,Arial,sans-serif;direction:rtl;padding:40px 35px;background:#ffffff;color:#111827;width:760px;box-sizing:border-box';
+      container.innerHTML = `
+        <!-- Header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:22px;border-bottom:3px solid #0a1a5c;margin-bottom:24px">
+          <div>
+            <div style="font-size:28px;font-weight:900;color:#0a1a5c;letter-spacing:-1px">MEN Store</div>
+            <div style="font-size:11px;color:#6b7280;margin-top:3px;font-weight:600">متجرك الأول للألعاب</div>
+          </div>
+          <div style="text-align:left">
+            <div style="font-size:18px;font-weight:900;color:#0a1a5c">فاتورة طلب</div>
+            <div style="font-size:11px;color:#6b7280;margin-top:3px">INVOICE</div>
+          </div>
+        </div>
+
+        <!-- Order info -->
+        <div style="display:flex;gap:12px;margin-bottom:22px">
+          <div style="flex:1;padding:12px 14px;background:#f3f4f6;border-radius:10px;border-right:3px solid #2563eb">
+            <div style="font-size:10px;color:#6b7280;font-weight:800;text-transform:uppercase;margin-bottom:4px;letter-spacing:1px">رقم الطلب</div>
+            <div style="font-size:15px;font-weight:900;color:#0a1a5c;direction:ltr;text-align:right">#${String(order.id || '').toUpperCase()}</div>
+          </div>
+          <div style="flex:1.4;padding:12px 14px;background:#f3f4f6;border-radius:10px;border-right:3px solid #d4a548">
+            <div style="font-size:10px;color:#6b7280;font-weight:800;text-transform:uppercase;margin-bottom:4px;letter-spacing:1px">التاريخ</div>
+            <div style="font-size:12px;font-weight:700;color:#111827">${date}</div>
+          </div>
+          <div style="flex:1;padding:12px 14px;background:#f3f4f6;border-radius:10px;border-right:3px solid ${st.color}">
+            <div style="font-size:10px;color:#6b7280;font-weight:800;text-transform:uppercase;margin-bottom:4px;letter-spacing:1px">الحالة</div>
+            <div style="font-size:13px;font-weight:900;color:${st.color}">${st.label}</div>
+          </div>
+        </div>
+
+        <!-- Customer -->
+        <div style="margin-bottom:22px;padding:16px 18px;background:#f9fafb;border-radius:12px;border:1px solid #e5e7eb">
+          <div style="font-size:12px;font-weight:900;color:#0a1a5c;margin-bottom:10px">بيانات العميل</div>
+          <table style="width:100%;font-size:12px;border-collapse:collapse">
+            <tr><td style="padding:4px 0;color:#6b7280;width:90px">الاسم:</td><td style="padding:4px 0;font-weight:700">${escapeHtml(meta.name || order.user_name || '—')}</td></tr>
+            <tr><td style="padding:4px 0;color:#6b7280">البريد:</td><td style="padding:4px 0;font-weight:700;direction:ltr;text-align:right">${escapeHtml(meta.email || order.user_email || '—')}</td></tr>
+            <tr><td style="padding:4px 0;color:#6b7280">الجوال:</td><td style="padding:4px 0;font-weight:700;direction:ltr;text-align:right">${escapeHtml(meta.phone || order.user_phone || '—')}</td></tr>
+          </table>
+        </div>
+
+        <!-- Items table -->
+        <div style="font-size:12px;font-weight:900;color:#0a1a5c;margin-bottom:10px">تفاصيل الطلب</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px">
+          <thead>
+            <tr style="background:#0a1a5c;color:#ffffff">
+              <th style="padding:11px 8px;text-align:center;font-size:11px">#</th>
+              <th style="padding:11px 8px;text-align:right;font-size:11px">المنتج</th>
+              <th style="padding:11px 8px;text-align:center;font-size:11px">الكمية</th>
+              <th style="padding:11px 8px;text-align:left;font-size:11px">السعر</th>
+              <th style="padding:11px 8px;text-align:left;font-size:11px">الإجمالي</th>
+            </tr>
+          </thead>
+          <tbody>${itemsRows}</tbody>
+        </table>
+
+        <!-- Totals -->
+        <div style="display:flex;justify-content:flex-start;margin-bottom:24px">
+          <div style="width:280px;padding:14px 16px;background:#f9fafb;border-radius:12px;border:1px solid #e5e7eb">
+            <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;color:#4b5563">
+              <span>الإجمالي الأصلي</span><b style="color:#111827;direction:ltr">${originalTotal.toFixed(2)} ر.س</b>
+            </div>
+            ${cbUsed > 0 ? `
+            <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;color:#4b5563">
+              <span>كاش باك مستخدم</span><b style="color:#16a34a;direction:ltr">− ${cbUsed.toFixed(2)} ر.س</b>
+            </div>` : ''}
+            <div style="display:flex;justify-content:space-between;padding:10px 0 4px;margin-top:6px;border-top:2px solid #0a1a5c;font-size:14px">
+              <span style="font-weight:900;color:#0a1a5c">المطلوب</span>
+              <b style="color:#0a1a5c;font-weight:900;direction:ltr">${finalTotal.toFixed(2)} ر.س</b>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align:center;padding-top:18px;border-top:1px solid #e5e7eb;color:#9ca3af;font-size:10px;line-height:1.7">
+          <div style="font-weight:800;color:#0a1a5c;margin-bottom:4px">شكراً لتسوقك من MEN Store</div>
+          <div>clan.men.ts@gmail.com · www.men-store.com</div>
+          <div style="margin-top:4px">© ${new Date().getFullYear()} MEN Store · جميع الحقوق محفوظة</div>
+        </div>
+      `;
+
+      // إضافة الـ container للـ DOM بشكل مخفي (ضروري لـ html2canvas)
+      container.style.position = 'fixed';
+      container.style.left = '-9999px';
+      container.style.top = '0';
+      document.body.appendChild(container);
+
+      await window.html2pdf().set({
+        margin: [8, 8, 8, 8],
+        filename: `MEN-Order-${order.id}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }).from(container).save();
+
+      container.remove();
+
+      if (window.showToast) window.showToast('تم تحميل الفاتورة بنجاح', 'success');
     } catch (err) {
-      console.error('sendCustomerChat error:', err);
-      if (window.showToast) window.showToast('فشل الإرسال: ' + err.message, 'error');
-      // أزل الرسالة المؤقتة
-      if (body) body.removeChild(body.lastElementChild);
-      input.value = text;
+      console.error('downloadOrderPDF error:', err);
+      if (window.showToast) window.showToast('فشل إنشاء PDF: ' + (err.message || 'خطأ'), 'error');
     } finally {
-      btn.disabled = false;
-      input.focus();
+      if (btnEl) {
+        btnEl.disabled = false;
+        btnEl.innerHTML = '<i class="fas fa-file-pdf"></i> تحميل PDF';
+      }
     }
-  }
-
-  function startChatPolling() {
-    stopChatPolling();
-    chatPollTimer = setInterval(() => {
-      if (!currentUser) return;
-      if (!document.querySelector('[data-macc-panel="chat"]')?.classList.contains('active')) return;
-      loadCustomerChat();
-    }, 4000);
-  }
-
-  function stopChatPolling() {
-    if (chatPollTimer) { clearInterval(chatPollTimer); chatPollTimer = null; }
-  }
-
-  async function checkUnreadMessages() {
-    if (!currentUser) return;
-    try {
-      const { count, error } = await sb.from('men_messages')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', currentUser.id)
-        .eq('is_read', false)
-        .eq('sender', 'admin');
-      if (error) return;
-      updateChatBadge(count || 0);
-    } catch (e) { /* ignore */ }
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -1256,7 +1107,6 @@
     $('menAccSetEmail').value = meta.email || user.email || '';
 
     renderOrders(orders);
-    checkUnreadMessages();
   }
 
   function renderOrders(orders) {
@@ -1286,7 +1136,7 @@
         ? `<div class="men-acc-order-cb"><i class="fas fa-wallet"></i> استخدمت ${usedCb.toFixed(2)} ر.س كاش باك</div>`
         : '';
       return `
-        <div class="men-acc-order">
+        <div class="men-acc-order" data-order-id="${escapeHtml(o.id)}">
           <div class="men-acc-order-badge" style="background:${st.bg};color:#fff">
             <i class="fas ${st.icon}"></i> ${st.label}
           </div>
@@ -1298,8 +1148,22 @@
             <div class="men-acc-order-items">${itemsTxt || 'تفاصيل الطلب'}${cbLine}</div>
             <div class="men-acc-order-total">${Number(o.total || 0).toFixed(2)} <span style="font-size:.85rem;opacity:.8">ر.س</span></div>
           </div>
+          <div class="men-acc-order-actions">
+            <button class="men-acc-order-pdf" data-order-pdf="${escapeHtml(o.id)}" type="button">
+              <i class="fas fa-file-pdf"></i> تحميل PDF
+            </button>
+          </div>
         </div>`;
     }).join('');
+
+    // ربط أزرار PDF
+    list.querySelectorAll('[data-order-pdf]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const orderId = btn.dataset.orderPdf;
+        const order = orders.find(x => String(x.id) === String(orderId));
+        if (order) downloadOrderPDF(order, btn);
+      });
+    });
   }
 
   async function saveProfile() {
@@ -1316,7 +1180,7 @@
       await sb.from('men_users').update({ name, phone, updated_at: new Date().toISOString() }).eq('id', data.user.id);
       await fillAccountPage(data.user);
       syncUI(data.user);
-      if (window.showToast) window.showToast(' تم حفظ التغييرات', 'success');
+      if (window.showToast) window.showToast('تم حفظ التغييرات', 'success');
     } catch (err) {
       if (window.showToast) window.showToast('فشل الحفظ: ' + err.message, 'error');
     } finally {
@@ -1326,15 +1190,15 @@
   }
 
   function deleteAccount() {
-    if (!confirm(' هل أنت متأكد من حذف حسابك نهائياً؟')) return;
+    if (!confirm('هل أنت متأكد من حذف حسابك نهائياً؟')) return;
     if (window.showToast) window.showToast('تواصل مع الدعم: clan.men.ts@gmail.com', 'info');
   }
 
   function shareAccount() {
     if (!currentUser) return;
-    const text = ` أنا عضو في MEN Store!\nانضم إلينا واحصل على كاش باك 2%\n${location.origin}`;
+    const text = `أنا عضو في MEN Store!\nانضم إلينا واحصل على كاش باك 2%\n${location.origin}`;
     if (navigator.share) navigator.share({ title: 'MEN Store', text, url: location.origin }).catch(() => {});
-    else navigator.clipboard.writeText(text).then(() => window.showToast?.(' تم نسخ الرابط', 'success'));
+    else navigator.clipboard.writeText(text).then(() => window.showToast?.('تم نسخ الرابط', 'success'));
   }
 
   async function openAccount() {
@@ -1350,7 +1214,6 @@
   }
 
   function closeAccount() {
-    stopChatPolling();
     hideAllPages();
     const store = $('storePage');
     if (store) store.classList.add('active');
@@ -1361,7 +1224,6 @@
   function hideAllPages() { document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active')); }
 
   async function logout() {
-    stopChatPolling();
     await sb.auth.signOut();
     closeAccount();
     if (window.showToast) window.showToast('تم تسجيل الخروج', 'info');
@@ -1378,7 +1240,6 @@
         avatar.src = user.user_metadata?.avatar_url || makeInitialsAvatar(name, 100);
         avatar.style.display = 'block';
       }
-      setTimeout(checkUnreadMessages, 800);
       setTimeout(() => window.MEN_CASHBACK?.refresh?.(), 600);
     } else {
       if (loginBtn) loginBtn.style.display = 'inline-flex';
@@ -1579,6 +1440,7 @@
     CASHBACK_RATE, open, openAccount, logout,
     getCurrentUser: () => currentUser,
     isAdmin, makeInitialsAvatar,
+    downloadOrderPDF,
 
     getCashbackBalance: async () => {
       if (!currentUser) return 0;
@@ -1647,7 +1509,7 @@
           updated_at: new Date().toISOString()
         }, { onConflict: 'id' });
 
-        console.log(' Order created:', orderId, '| Used CB:', useCb, '| Final:', finalTotal);
+        console.log('Order created:', orderId, '| Used CB:', useCb, '| Final:', finalTotal);
         refreshCbUI();
 
         return { orderId, cashbackUsed: useCb, finalTotal };
@@ -1657,11 +1519,11 @@
       }
     },
 
-    addCashback: async (a) => {
+    addCashback: async (a, reason) => {
       if (!currentUser || a <= 0) return;
       await sb.from('men_cashback_log').insert({
         user_id: currentUser.id, user_email: currentUser.email, amount: Number(a),
-        reason: 'كاش باك يدوي', type: 'manual', created_by: currentUser.email
+        reason: reason || 'كاش باك يدوي', type: 'manual', created_by: currentUser.email
       });
       const { data } = await sb.from('men_users').select('cashback').eq('id', currentUser.id).maybeSingle();
       const newCb = Math.round((Number(data?.cashback || 0) + Number(a)) * 100) / 100;
@@ -1669,11 +1531,11 @@
       refreshCbUI();
     },
 
-    deductCashback: async (a) => {
+    deductCashback: async (a, reason) => {
       if (!currentUser || a <= 0) return;
       await sb.from('men_cashback_log').insert({
         user_id: currentUser.id, user_email: currentUser.email, amount: -Number(a),
-        reason: 'خصم', type: 'manual', created_by: currentUser.email
+        reason: reason || 'خصم', type: 'manual', created_by: currentUser.email
       });
       const { data } = await sb.from('men_users').select('cashback').eq('id', currentUser.id).maybeSingle();
       const newCb = Math.max(0, Math.round((Number(data?.cashback || 0) - Number(a)) * 100) / 100);
@@ -1714,7 +1576,6 @@
     if (location.hash === '#account') {
       setTimeout(() => { if (currentUser) openAccount(); }, 500);
     }
-    setInterval(checkUnreadMessages, 60000);
     watchCartOpen();
   }
 
