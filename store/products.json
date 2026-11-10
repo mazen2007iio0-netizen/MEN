@@ -79,12 +79,12 @@
     {
       "id": 2,
       "name": "Grand Theft Auto VI",
-      "price": "329",
+      "price": "260",
       "originalPrice": "380",
       "discount": 30,
       "image": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1818/9f51f0ccdb65bd29c36a0907a738c2902a712f03e2fd6470.png",
       "images": [
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2cMvVHH44RxIcxjYaJPuPFfV4bwESEPswT7SuwbULDw&s=10",
+        "https://image.api.playstation.com/vulcan/ap/rnd/202606/1818/9f51f0ccdb65bd29c36a0907a738c2902a712f03e2fd6470.png",
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJGKFHJjs8AQZLFVACUvF8zS10Z6a8LRJyzHNE_qhAIQ&s=10",
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNQGdHnIdpREkIpH4fgfaPFmDnwYT_AVbsP0i2kIQ3zw&s=10",
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBdrSal-DvhfgV5wcQUJkVYbvQ1jsQQxReybe9zTvRpw&s=10"
@@ -355,6 +355,27 @@
       "tags": ["ألعاب", "هدية", "رقمي"],
       "usage": "أدخل الكود في موقع روبلوكس.",
       "warranty": "ضمان الاستبدال في حال عدم صلاحية الكود",
+      "popular": false
+    },
+    {
+      "id": 16,
+      "name": "Forza Horizon 6",
+      "price": "9.99",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzj4GbuvGrtIGE0oUZiezvKe-rKUY3dvG5M0exDc8lUA&s=10",
+      "images": [
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzj4GbuvGrtIGE0oUZiezvKe-rKUY3dvG5M0exDc8lUA&s=10",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeLAZt0J-hl_CpZtRZK9PgzlXbRIRe0_fu0bHF7tGe4A&s=10",
+        "https://www.lotkeys.com/uploads/blog/lotkeys-blog-forza6-d5Tc.jpg.webp",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsSo4R6atIY8fb7KgRIU4K00yJ2XPGiglGuo5uUbycbw&s=10"
+      ],
+      "category": "لعبة",
+      "rating": 4.6,
+      "features": ["سعر مناسب", "شحن فوري"],
+      "cons": ["PC يمكن استخدامه في "],
+      "description": " فورزا هورايزن 6 | Forza Horizon 6 — نسخة الـ PC | أوفلاين",
+      "tags": ["ألعاب", "هدية", "رقمي"],
+      "usage": "حساب ستيم ( Steam ) أصلي 100% : كل حسابات متجر MEN رسمية ومضمونة ومملوكة لنا, العب وانت مرتاح.",
+      "warranty": "ضمان الاستبدال في حال عدم صلاحية الحساب",
       "popular": false
     },
     {
