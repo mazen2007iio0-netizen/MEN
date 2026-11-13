@@ -1,6 +1,6 @@
 /* ============================================================
-   ✨ MEN Store — Auth v13
-   (Deep Blue + Orders + Users + Transactions + Cashback + PDF)
+   ✨ MEN Store — Auth v14
+   Fast Login (Google OAuth) + Avatar Upload + Animated Cashback
    ============================================================ */
 (function () {
   'use strict';
@@ -15,8 +15,8 @@
                   && SUPABASE_ANON_KEY.length > 100;
 
   if (!credsReady) {
-    console.error(' ضع مفاتيح Supabase');
-    window.MEN_AUTH = { CASHBACK_RATE: 0.02, open: () => alert(' أضف المفاتيح'), openAccount: () => {}, logout: () => {}, getCurrentUser: () => null, getCashbackBalance: async () => 0, addOrder: async () => null };
+    console.error('❌ ضع مفاتيح Supabase');
+    window.MEN_AUTH = { CASHBACK_RATE: 0.02, open: () => alert('❌ أضف المفاتيح'), openAccount: () => {}, logout: () => {}, getCurrentUser: () => null, getCashbackBalance: async () => 0, addOrder: async () => null };
     return;
   }
 
@@ -27,10 +27,11 @@
   });
   window.MEN_SUPABASE = sb;
 
-  console.log('%c✨ MEN AUTH v13 · Deep Blue', 'background:linear-gradient(135deg,#0a1a5c,#2563eb);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
+  console.log('%c✨ MEN AUTH v14 · Fast + Animated', 'background:linear-gradient(135deg,#0a1a5c,#2563eb);color:#fff;padding:6px 14px;border-radius:8px;font-weight:900;font-size:13px;letter-spacing:1px');
 
   const CASHBACK_RATE = 0.02;
   const ADMIN_EMAILS  = ['mkmkmkl24666606@gmail.com'];
+  const AVATAR_BUCKET = 'men_avatars';
 
   let currentUser = null;
   let authMode = 'login';
@@ -64,8 +65,24 @@
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   }
 
+  // عدّاد رقمي متحرك
+  function animateNumber(el, target, duration = 1400, decimals = 2) {
+    if (!el) return;
+    const start = parseFloat(String(el.textContent).replace(/[^\d.-]/g, '')) || 0;
+    const t0 = performance.now();
+    function tick(now) {
+      const t = Math.min(1, (now - t0) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const v = start + (target - start) * eased;
+      el.textContent = v.toFixed(decimals);
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = target.toFixed(decimals);
+    }
+    requestAnimationFrame(tick);
+  }
+
   // ═══════════════════════════════════════════════════════════
-  // 🎨 CSS — Deep Blue Theme
+  // 🎨 CSS
   // ═══════════════════════════════════════════════════════════
   function injectCSS() {
     if ($('menAuthStyles')) return;
@@ -111,6 +128,21 @@
       .men-welcome{margin-bottom:32px;text-align:right}
       .men-welcome h2{font-size:1.9rem;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:8px}
       .men-welcome p{color:#8a92b0;font-size:.92rem;font-weight:600;line-height:1.7}
+
+      /* ═══ Google Fast Login ═══ */
+      .men-quick-login{display:flex;flex-direction:column;gap:12px;margin-bottom:22px}
+      .men-google-btn{position:relative;width:100%;height:56px;border-radius:14px;background:#ffffff;border:1.5px solid #e5e7eb;color:#1f2937;font-family:'Cairo',sans-serif;font-weight:800;font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .35s;overflow:hidden}
+      .men-google-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 0%,rgba(66,133,244,.08) 50%,transparent 100%);transform:translateX(-100%);transition:transform .6s}
+      .men-google-btn:hover{border-color:#4285f4;box-shadow:0 10px 30px -10px rgba(66,133,244,.4);transform:translateY(-2px)}
+      .men-google-btn:hover::before{transform:translateX(100%)}
+      .men-google-btn:active{transform:translateY(0)}
+      .men-google-btn svg{width:22px;height:22px;flex-shrink:0}
+      .men-google-btn.loading{pointer-events:none;opacity:.85}
+      .men-google-btn.loading svg{animation:menSpinG .8s linear infinite}
+      @keyframes menSpinG{to{transform:rotate(360deg)}}
+      .men-divider{display:flex;align-items:center;gap:12px;color:#4a5070;font-size:.8rem;font-weight:700;margin:4px 0 8px}
+      .men-divider::before,.men-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(37,99,235,.25),transparent)}
+
       .men-tabs{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:4px;background:rgba(0,0,0,.35);border:1px solid rgba(37,99,235,.12);border-radius:16px;padding:4px;margin-bottom:26px}
       .men-tab{position:relative;padding:13px 16px;border-radius:12px;background:transparent;border:none;color:#8a92b0;font-family:'Cairo',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;transition:all .3s;z-index:2;display:flex;align-items:center;justify-content:center;gap:8px}
       .men-tab.active{color:#fff}
@@ -168,7 +200,7 @@
       .men-confetti-piece{position:absolute;width:10px;height:10px;border-radius:2px;animation:menConfettiFall 3s linear forwards}
       @keyframes menConfettiFall{0%{transform:translateY(-100vh) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
       @media (max-width:992px){.men-layout{grid-template-columns:1fr}.men-showcase{display:none}.men-form-panel{padding:30px 24px;min-height:100vh}}
-      @media (max-width:480px){.men-form-panel{padding:24px 18px}.men-welcome h2{font-size:1.5rem}.men-input-wrap input{height:52px}.men-submit{height:54px}.men-tab{font-size:.84rem;padding:12px}}
+      @media (max-width:480px){.men-form-panel{padding:24px 18px}.men-welcome h2{font-size:1.5rem}.men-input-wrap input{height:52px}.men-submit{height:54px}.men-tab{font-size:.84rem;padding:12px}.men-google-btn{height:52px;font-size:.88rem}}
 
       /* ═══ ACCOUNT PAGE ═══ */
       #menAccountPage{display:none}
@@ -189,6 +221,10 @@
       .men-acc-avatar-ring{position:absolute;inset:-8px;border-radius:50%;background:conic-gradient(from 0deg,#3b82f6,#d4a548,#4caf50,#3b82f6);animation:menRingSpin 6s linear infinite;z-index:1;filter:blur(1px);opacity:.7}
       @keyframes menRingSpin{to{transform:rotate(360deg)}}
       .men-acc-verified{position:absolute;bottom:6px;left:6px;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#3b82f6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem;border:3px solid #0a0e1a;z-index:3}
+      .men-acc-avatar-upload{position:absolute;bottom:6px;right:6px;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0a1a5c,#1e40af);color:#fff;border:3px solid #0a0e1a;cursor:pointer;z-index:4;display:flex;align-items:center;justify-content:center;font-size:.82rem;transition:all .35s;box-shadow:0 8px 20px -4px rgba(37,99,235,.7)}
+      .men-acc-avatar-upload:hover{transform:scale(1.12) rotate(8deg);box-shadow:0 12px 28px -4px rgba(37,99,235,.9)}
+      .men-acc-avatar-upload.loading{pointer-events:none;opacity:.7}
+      .men-acc-avatar-upload.loading i{animation:menSpin .8s linear infinite}
       .men-acc-cover-info{flex:1;min-width:240px}
       .men-acc-cover-name{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:8px}
       .men-acc-cover-email{color:#cdd6ea;font-size:.95rem;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
@@ -209,6 +245,40 @@
       .men-acc-stat-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;margin-bottom:14px;background:var(--icon-bg);color:var(--accent)}
       .men-acc-stat-val{font-size:1.75rem;font-weight:900;color:#fff;margin-bottom:4px}
       .men-acc-stat-lbl{font-size:.78rem;color:#8a92b0;font-weight:700}
+
+      /* ═══ ACCOUNT CASHBACK — Fancy ═══ */
+      .men-acc-overview{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+      .men-acc-card{background:linear-gradient(160deg,rgba(12,18,38,.7),rgba(6,10,24,.85));border:1px solid rgba(37,99,235,.12);border-radius:26px;padding:26px 28px;backdrop-filter:blur(12px)}
+      .men-acc-card-title{font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+      .men-acc-card-title .icn{width:38px;height:38px;border-radius:12px;background:rgba(37,99,235,.12);color:#60a5fa;border:1px solid rgba(37,99,235,.2);display:flex;align-items:center;justify-content:center;font-size:.95rem}
+
+      .men-acc-cashback{position:relative;background:linear-gradient(135deg,#0a1a5c 0%,#132a7a 30%,#1e40af 55%,#132a7a 80%,#0a1a5c 100%);background-size:300% 300%;animation:menCbBg 10s ease infinite;border-radius:26px;padding:32px 30px;color:#fff;overflow:hidden;box-shadow:0 30px 70px -20px rgba(10,26,92,.9);border:1px solid rgba(37,99,235,.35)}
+      @keyframes menCbBg{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+      .men-acc-cashback::before{content:'';position:absolute;top:-80px;right:-80px;width:260px;height:260px;background:radial-gradient(circle,rgba(96,165,250,.5),transparent 70%);border-radius:50%;animation:menCbGlow 6s ease-in-out infinite}
+      @keyframes menCbGlow{0%,100%{transform:translate(0,0) scale(1);opacity:.6}50%{transform:translate(-20px,20px) scale(1.15);opacity:.9}}
+      .men-acc-cashback::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.12) 50%,transparent 60%);transform:translateX(-100%);animation:menCbShine 4s ease-in-out infinite;pointer-events:none;z-index:2}
+      @keyframes menCbShine{0%,70%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+      .men-acc-cashback .cc-chip{position:relative;z-index:3;width:52px;height:40px;border-radius:8px;background:linear-gradient(135deg,#d4a548,#b8860b);margin-bottom:22px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:rgba(0,0,0,.4);box-shadow:0 6px 20px rgba(212,165,72,.4)}
+      .men-acc-cashback .cc-label{position:relative;z-index:3;font-size:.82rem;opacity:.95;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-weight:800}
+      .men-acc-cashback .cc-amount{position:relative;z-index:3;font-size:clamp(2.2rem,5vw,3rem);font-weight:900;letter-spacing:-2px;line-height:1;display:flex;align-items:baseline;gap:12px}
+      .men-acc-cashback .cc-amount small{font-size:1.1rem;font-weight:700;opacity:.9}
+      .men-acc-cashback .cc-note{position:relative;z-index:3;margin-top:18px;display:inline-flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);padding:8px 16px;border-radius:20px;font-size:.78rem;font-weight:700;border:1px solid rgba(96,165,250,.35);backdrop-filter:blur(8px)}
+      .men-acc-cashback .cc-coin{position:absolute;color:#fbbf24;font-size:1.1rem;opacity:.9;text-shadow:0 4px 12px rgba(251,191,36,.6);pointer-events:none;z-index:1}
+      .men-acc-cashback .cc-coin.c1{top:20%;left:15%;animation:menCoinFloat 5s ease-in-out infinite}
+      .men-acc-cashback .cc-coin.c2{top:60%;left:8%;animation:menCoinFloat 6s ease-in-out infinite .8s;font-size:.9rem;opacity:.7}
+      .men-acc-cashback .cc-coin.c3{top:35%;right:15%;animation:menCoinFloat 7s ease-in-out infinite 1.5s;font-size:1.3rem;opacity:.85}
+      .men-acc-cashback .cc-coin.c4{bottom:20%;right:25%;animation:menCoinFloat 5.5s ease-in-out infinite .4s;font-size:.85rem;opacity:.6}
+      @keyframes menCoinFloat{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-12px) rotate(15deg)}50%{transform:translateY(-6px) rotate(-10deg)}75%{transform:translateY(-16px) rotate(8deg)}}
+      .men-acc-cashback .cc-badge{position:absolute;top:16px;left:16px;background:rgba(0,0,0,.4);backdrop-filter:blur(8px);border:1px solid rgba(96,165,250,.35);color:#60a5fa;font-size:.65rem;font-weight:800;padding:5px 12px;border-radius:20px;z-index:3;display:flex;align-items:center;gap:6px}
+
+      .men-acc-info-list{display:flex;flex-direction:column;gap:12px}
+      .men-acc-info-row{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.1);border-radius:16px;transition:all .25s}
+      .men-acc-info-row:hover{border-color:rgba(37,99,235,.25);background:rgba(37,99,235,.08)}
+      .men-acc-info-row .ic{width:38px;height:38px;border-radius:12px;background:rgba(37,99,235,.12);color:#60a5fa;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+      .men-acc-info-row .txt{flex:1;min-width:0}
+      .men-acc-info-row .lbl{font-size:.7rem;color:#8a92b0;text-transform:uppercase;letter-spacing:1px;font-weight:800;margin-bottom:2px}
+      .men-acc-info-row .val{color:#fff;font-weight:700;font-size:.92rem;word-break:break-all}
+
       .men-acc-tabs{display:flex;gap:6px;background:rgba(6,10,24,.7);border:1px solid rgba(37,99,235,.12);border-radius:60px;padding:6px;margin-bottom:24px;overflow-x:auto;backdrop-filter:blur(12px);scrollbar-width:none}
       .men-acc-tabs::-webkit-scrollbar{display:none}
       .men-acc-tab{flex:1;min-width:120px;padding:13px 18px;border-radius:60px;background:transparent;border:none;color:#8a92b0;font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;position:relative;transition:all .3s}
@@ -216,23 +286,7 @@
       .men-acc-panel{display:none}
       .men-acc-panel.active{display:block;animation:menPanelIn .5s}
       @keyframes menPanelIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
-      .men-acc-overview{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
-      .men-acc-card{background:linear-gradient(160deg,rgba(12,18,38,.7),rgba(6,10,24,.85));border:1px solid rgba(37,99,235,.12);border-radius:26px;padding:26px 28px;backdrop-filter:blur(12px)}
-      .men-acc-card-title{font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:12px}
-      .men-acc-card-title .icn{width:38px;height:38px;border-radius:12px;background:rgba(37,99,235,.12);color:#60a5fa;border:1px solid rgba(37,99,235,.2);display:flex;align-items:center;justify-content:center;font-size:.95rem}
-      .men-acc-cashback{position:relative;background:linear-gradient(135deg,#0a1a5c 0%,#132a7a 55%,#0a1a5c 100%);border-radius:26px;padding:32px 30px;color:#fff;overflow:hidden;box-shadow:0 30px 70px -20px rgba(10,26,92,.9);border:1px solid rgba(37,99,235,.35)}
-      .men-acc-cashback::before{content:'';position:absolute;top:-80px;right:-80px;width:260px;height:260px;background:radial-gradient(circle,rgba(37,99,235,.5),transparent 70%);border-radius:50%}
-      .men-acc-cashback .cc-chip{position:relative;z-index:2;width:52px;height:40px;border-radius:8px;background:linear-gradient(135deg,#d4a548,#b8860b);margin-bottom:22px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:rgba(0,0,0,.4)}
-      .men-acc-cashback .cc-label{position:relative;z-index:2;font-size:.82rem;opacity:.92;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-weight:800}
-      .men-acc-cashback .cc-amount{position:relative;z-index:2;font-size:clamp(2.2rem,5vw,3rem);font-weight:900;letter-spacing:-2px;line-height:1;display:flex;align-items:baseline;gap:12px}
-      .men-acc-cashback .cc-amount small{font-size:1.1rem;font-weight:700;opacity:.9}
-      .men-acc-cashback .cc-note{position:relative;z-index:2;margin-top:18px;display:inline-flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);padding:8px 16px;border-radius:20px;font-size:.78rem;font-weight:700;border:1px solid rgba(37,99,235,.3)}
-      .men-acc-info-list{display:flex;flex-direction:column;gap:12px}
-      .men-acc-info-row{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.1);border-radius:16px}
-      .men-acc-info-row .ic{width:38px;height:38px;border-radius:12px;background:rgba(37,99,235,.12);color:#60a5fa;display:flex;align-items:center;justify-content:center;font-size:.9rem}
-      .men-acc-info-row .txt{flex:1;min-width:0}
-      .men-acc-info-row .lbl{font-size:.7rem;color:#8a92b0;text-transform:uppercase;letter-spacing:1px;font-weight:800;margin-bottom:2px}
-      .men-acc-info-row .val{color:#fff;font-weight:700;font-size:.92rem;word-break:break-all}
+
       .men-acc-orders-list{display:flex;flex-direction:column;gap:14px}
       .men-acc-order{background:linear-gradient(160deg,rgba(12,18,38,.6),rgba(6,10,24,.8));border:1px solid rgba(37,99,235,.12);border-radius:20px;padding:20px 22px;position:relative;overflow:hidden}
       .men-acc-order-header{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap}
@@ -303,45 +357,58 @@
         .men-acc-txn-amount{font-size:.95rem}
       }
 
-      /* ═══ Cashback Box ═══ */
-      .men-cb-box{margin:14px 0;background:linear-gradient(160deg,rgba(10,26,92,.3),rgba(30,58,138,.15));border:1px solid rgba(59,130,246,.25);border-radius:20px;padding:18px 20px;font-family:'Cairo',sans-serif;color:#fff;box-shadow:0 12px 40px -14px rgba(10,26,92,.6)}
-      .men-cb-head{display:flex;align-items:center;gap:14px}
-      .men-cb-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#1e40af,#2563eb);display:flex;align-items:center;justify-content:center;font-size:1.15rem;color:#fff;box-shadow:0 8px 22px -8px rgba(37,99,235,.8);flex-shrink:0;border:1px solid rgba(147,197,253,.2)}
+      /* ═══ CART CASHBACK — Fancy ═══ */
+      .men-cb-box{margin:14px 0;background:linear-gradient(135deg,#0a1a5c 0%,#132a7a 30%,#1e40af 55%,#132a7a 80%,#0a1a5c 100%);background-size:300% 300%;animation:menCbBg 10s ease infinite;border:1px solid rgba(96,165,250,.3);border-radius:22px;padding:20px 22px;font-family:'Cairo',sans-serif;color:#fff;box-shadow:0 20px 50px -18px rgba(10,26,92,.9),inset 0 1px 0 rgba(255,255,255,.15);position:relative;overflow:hidden}
+      .men-cb-box::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(96,165,250,.4),transparent 70%);border-radius:50%;animation:menCbGlow 6s ease-in-out infinite;pointer-events:none}
+      .men-cb-box::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.12) 50%,transparent 60%);transform:translateX(-100%);animation:menCbShine 4s ease-in-out infinite;pointer-events:none}
+      .men-cb-head{position:relative;z-index:2;display:flex;align-items:center;gap:14px}
+      .men-cb-icon{width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,#1e40af,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:1.25rem;color:#fff;box-shadow:0 10px 25px -8px rgba(59,130,246,.9),inset 0 1px 0 rgba(255,255,255,.25);flex-shrink:0;border:1px solid rgba(147,197,253,.3);position:relative;animation:menCbIconPulse 2.4s ease-in-out infinite}
+      @keyframes menCbIconPulse{0%,100%{box-shadow:0 10px 25px -8px rgba(59,130,246,.9),0 0 0 0 rgba(59,130,246,.4),inset 0 1px 0 rgba(255,255,255,.25)}50%{box-shadow:0 10px 25px -8px rgba(59,130,246,.9),0 0 0 12px rgba(59,130,246,0),inset 0 1px 0 rgba(255,255,255,.25)}}
       .men-cb-info{flex:1;min-width:0}
-      .men-cb-title{font-weight:800;font-size:.95rem;color:#fff}
-      .men-cb-bal{font-size:.78rem;color:#8a92b0;font-weight:700;margin-top:3px}
-      .men-cb-bal b{color:#60a5fa;font-weight:900}
+      .men-cb-title{font-weight:800;font-size:.95rem;color:#fff;display:flex;align-items:center;gap:8px}
+      .men-cb-title .badge{background:rgba(212,165,72,.2);border:1px solid rgba(212,165,72,.4);color:#fbbf24;font-size:.6rem;padding:2px 8px;border-radius:10px;font-weight:800;letter-spacing:.5px}
+      .men-cb-bal{font-size:.8rem;color:#c4d4f0;font-weight:700;margin-top:4px}
+      .men-cb-bal b{color:#fbbf24;font-weight:900;font-size:.92rem;text-shadow:0 2px 6px rgba(251,191,36,.4)}
       .men-cb-switch-wrap{cursor:pointer;display:inline-flex;flex-shrink:0}
       .men-cb-switch-wrap input{display:none}
-      .men-cb-switch{width:52px;height:28px;border-radius:60px;background:rgba(255,255,255,.06);border:1.5px solid rgba(59,130,246,.3);position:relative;transition:all .3s}
-      .men-cb-switch::after{content:'';position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#6a7290;transition:all .3s}
-      .men-cb-switch-wrap input:checked ~ .men-cb-switch{background:linear-gradient(135deg,#1e40af,#2563eb);border-color:transparent;box-shadow:0 0 22px -6px rgba(37,99,235,.9)}
-      .men-cb-switch-wrap input:checked ~ .men-cb-switch::after{right:calc(100% - 23px);background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.3)}
-      .men-cb-body{margin-top:18px;padding-top:18px;border-top:1px dashed rgba(59,130,246,.25);animation:menCbIn .35s ease}
+      .men-cb-switch{width:54px;height:30px;border-radius:60px;background:rgba(0,0,0,.35);border:1.5px solid rgba(96,165,250,.4);position:relative;transition:all .35s}
+      .men-cb-switch::after{content:'';position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#6a7290;transition:all .35s cubic-bezier(.34,1.4,.64,1)}
+      .men-cb-switch-wrap input:checked ~ .men-cb-switch{background:linear-gradient(135deg,#fbbf24,#f59e0b);border-color:transparent;box-shadow:0 0 22px -6px rgba(251,191,36,.9)}
+      .men-cb-switch-wrap input:checked ~ .men-cb-switch::after{right:calc(100% - 25px);background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+      .men-cb-body{position:relative;z-index:2;margin-top:18px;padding-top:18px;border-top:1px dashed rgba(96,165,250,.3);animation:menCbIn .35s ease}
       @keyframes menCbIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
       .men-cb-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px;flex-wrap:wrap}
-      .men-cb-row label{font-size:.78rem;color:#8a92b0;font-weight:800;text-transform:uppercase;letter-spacing:1px}
-      .men-cb-input{position:relative;display:flex;align-items:center;background:rgba(4,6,15,.5);border:1.5px solid rgba(59,130,246,.2);border-radius:12px;padding:0 14px;height:46px;min-width:180px;transition:all .3s}
-      .men-cb-input:focus-within{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.15)}
-      .men-cb-input input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Cairo',sans-serif;font-weight:800;font-size:1.05rem;text-align:right;direction:ltr;padding:0 6px}
+      .men-cb-row label{font-size:.78rem;color:#c4d4f0;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+      .men-cb-input{position:relative;display:flex;align-items:center;background:rgba(4,6,15,.45);border:1.5px solid rgba(96,165,250,.35);border-radius:12px;padding:0 14px;height:48px;min-width:180px;transition:all .3s;backdrop-filter:blur(6px)}
+      .men-cb-input:focus-within{border-color:#fbbf24;box-shadow:0 0 0 4px rgba(251,191,36,.2)}
+      .men-cb-input input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Cairo',sans-serif;font-weight:900;font-size:1.1rem;text-align:right;direction:ltr;padding:0 6px}
       .men-cb-input input::-webkit-outer-spin-button,.men-cb-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
       .men-cb-input input[type=number]{-moz-appearance:textfield}
-      .men-cb-input span{color:#60a5fa;font-weight:800;font-size:.8rem;flex-shrink:0}
+      .men-cb-input span{color:#fbbf24;font-weight:800;font-size:.8rem;flex-shrink:0}
       .men-cb-quick{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-      .men-cb-quick button{flex:1;min-width:70px;padding:9px 12px;border-radius:10px;border:1.5px solid rgba(59,130,246,.25);background:rgba(37,99,235,.08);color:#60a5fa;font-family:'Cairo',sans-serif;font-weight:800;font-size:.78rem;cursor:pointer;transition:all .25s}
-      .men-cb-quick button:hover{background:linear-gradient(135deg,#0a1a5c,#1e40af);border-color:transparent;color:#fff;transform:translateY(-2px);box-shadow:0 6px 16px -6px rgba(37,99,235,.6)}
-      .men-cb-summary{background:rgba(4,6,15,.35);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;border:1px solid rgba(59,130,246,.1)}
-      .men-cb-summary > div{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;font-weight:700;color:#a8b0cc}
+      .men-cb-quick button{flex:1;min-width:70px;padding:10px 12px;border-radius:11px;border:1.5px solid rgba(96,165,250,.4);background:rgba(96,165,250,.12);color:#93c5fd;font-family:'Cairo',sans-serif;font-weight:800;font-size:.78rem;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+      .men-cb-quick button::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-100%);transition:transform .5s}
+      .men-cb-quick button:hover{background:linear-gradient(135deg,#fbbf24,#f59e0b);border-color:transparent;color:#0a1a5c;transform:translateY(-2px);box-shadow:0 8px 20px -6px rgba(251,191,36,.7)}
+      .men-cb-quick button:hover::before{transform:translateX(100%)}
+      .men-cb-summary{background:rgba(0,0,0,.35);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;border:1px solid rgba(96,165,250,.15);backdrop-filter:blur(8px)}
+      .men-cb-summary > div{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;font-weight:700;color:#c4d4f0}
       .men-cb-summary > div b{color:#fff;font-weight:900;direction:ltr}
       .men-cb-summary .discount b{color:#4ade80}
-      .men-cb-summary .total{padding-top:10px;border-top:1px dashed rgba(59,130,246,.25);font-size:.95rem}
-      .men-cb-summary .total b{font-size:1.15rem;color:#ffffff}
+      .men-cb-summary .total{padding-top:10px;border-top:1px dashed rgba(96,165,250,.3);font-size:.95rem}
+      .men-cb-summary .total b{font-size:1.2rem;color:#fbbf24;text-shadow:0 2px 8px rgba(251,191,36,.4)}
+      .men-cb-coins{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden;border-radius:22px}
+      .men-cb-coins i{position:absolute;color:#fbbf24;opacity:0;text-shadow:0 2px 8px rgba(251,191,36,.6)}
+      .men-cb-coins i:nth-child(1){left:8%;bottom:-20px;font-size:1rem;animation:menCoinRise 4s ease-out infinite}
+      .men-cb-coins i:nth-child(2){left:30%;bottom:-20px;font-size:.8rem;animation:menCoinRise 5s ease-out infinite 1.2s}
+      .men-cb-coins i:nth-child(3){right:15%;bottom:-20px;font-size:1.1rem;animation:menCoinRise 4.5s ease-out infinite .6s}
+      .men-cb-coins i:nth-child(4){right:35%;bottom:-20px;font-size:.75rem;animation:menCoinRise 5.5s ease-out infinite 2s}
+      @keyframes menCoinRise{0%{opacity:0;transform:translateY(0) rotate(0)}15%{opacity:.9}80%{opacity:.6}100%{opacity:0;transform:translateY(-160px) rotate(360deg)}}
     `;
     document.head.appendChild(s);
   }
 
   function launchConfetti() {
-    const colors = ['#2563eb','#3b82f6','#60a5fa','#4caf50','#fff','#0a1a5c'];
+    const colors = ['#2563eb','#3b82f6','#60a5fa','#4caf50','#fff','#0a1a5c','#fbbf24'];
     const c = document.createElement('div');
     c.className = 'men-confetti';
     for (let i = 0; i < 60; i++) {
@@ -359,7 +426,7 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 🖼️ Auth Screen
+  // 🖼️ Auth Screen (with Google Quick Login)
   // ═══════════════════════════════════════════════════════════
   function injectModals() {
     if ($('menAuthScreen')) return;
@@ -378,7 +445,7 @@
               </div>
             </div>
             <div class="men-showcase-center">
-              <div class="men-showcase-badge"><i class=""></i> متجرك الأول للألعاب</div>
+              <div class="men-showcase-badge"><i class="fas fa-bolt"></i> متجرك الأول للألعاب</div>
               <h1 class="men-showcase-title">كل ما تحتاجه<br>في <span>عالم الجيمنق</span></h1>
               <p class="men-showcase-desc">انضم إلى أكثر من 5000 لاعب يستمتعون بأفضل الأسعار، التسليم الفوري، والكاش باك على كل طلب.</p>
               <div class="men-features">
@@ -404,8 +471,23 @@
             <div class="men-form-inner">
               <div class="men-welcome">
                 <h2 id="menHeadTitle">أهلاً بعودتك 👋</h2>
-                <p id="menHeadSub">سجّل دخولك للمتابعة والاستمتاع بالعروض الحصرية</p>
+                <p id="menHeadSub">سجّل دخولك بضغطة واحدة عبر Google</p>
               </div>
+
+              <!-- ═══ Quick Login (Google) ═══ -->
+              <div class="men-quick-login">
+                <button class="men-google-btn" id="menGoogleBtn" type="button">
+                  <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
+                    <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/>
+                    <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/>
+                    <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/>
+                  </svg>
+                  <span>المتابعة بـ Google</span>
+                </button>
+                <div class="men-divider">أو بالمعلومات</div>
+              </div>
+
               <div class="men-tabs" id="menTabs" data-mode="login">
                 <div class="men-tabs-indicator"></div>
                 <button class="men-tab active" data-tab="login" type="button"><i class="fas fa-right-to-bracket"></i> دخول</button>
@@ -497,6 +579,7 @@
       btn.addEventListener('click', (e) => { e.preventDefault(); switchMode(btn.dataset.tab); });
     });
 
+    $('menGoogleBtn').addEventListener('click', loginWithGoogle);
     $('menTogglePass').addEventListener('click', togglePassword);
     $('menAuthPassword').addEventListener('input', updateStrength);
     $('menAuthPassword').addEventListener('keydown', e => { if (e.key === 'Enter') handleSubmit(); });
@@ -509,6 +592,25 @@
     $('menForgotBtn').addEventListener('click', handleForgot);
   }
 
+  async function loginWithGoogle() {
+    const btn = $('menGoogleBtn');
+    btn.classList.add('loading');
+    try {
+      const { error } = await sb.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: location.origin + location.pathname,
+          queryParams: { access_type: 'offline', prompt: 'consent' }
+        }
+      });
+      if (error) throw error;
+    } catch (err) {
+      console.error('[Google Login]', err);
+      showError(err.message || 'فشل تسجيل الدخول بـ Google. تأكد من تفعيله في Supabase');
+      btn.classList.remove('loading');
+    }
+  }
+
   function switchMode(mode) {
     authMode = mode === 'signup' ? 'signup' : 'login';
     renderMode();
@@ -519,7 +621,7 @@
     $('menTabs').dataset.mode = authMode;
     document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === authMode));
     $('menHeadTitle').textContent = login ? 'أهلاً بعودتك 👋' : 'انضم إلينا';
-    $('menHeadSub').textContent = login ? 'سجّل دخولك بالجوال أو البريد الإلكتروني' : 'أنشئ حسابك في ثوانٍ — البريد والجوال مطلوبان';
+    $('menHeadSub').textContent = login ? 'سجّل دخولك بضغطة واحدة عبر Google أو بالمعلومات' : 'أنشئ حسابك في ثوانٍ — البريد والجوال مطلوبان';
     $('menNameField').style.display       = login ? 'none' : 'block';
     $('menEmailField').style.display      = login ? 'none' : 'block';
     $('menPhoneField').style.display      = login ? 'none' : 'block';
@@ -603,7 +705,7 @@
 
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        console.log(' دخول:', data.user?.email);
+        console.log('✅ دخول:', data.user?.email);
         await showSuccess('مرحباً بك!');
         launchConfetti();
       } else {
@@ -635,8 +737,8 @@
           } catch (e) { console.warn('save user failed:', e); }
         }
 
-        if (!data.session) { showError(' تم إنشاء حسابك! يمكنك الآن تسجيل الدخول.'); return; }
-        console.log(' حساب جديد:', data.user?.email);
+        if (!data.session) { showError('✅ تم إنشاء حسابك! يمكنك الآن تسجيل الدخول.'); return; }
+        console.log('✅ حساب جديد:', data.user?.email);
         await showSuccess('تم إنشاء حسابك');
         launchConfetti();
       }
@@ -678,7 +780,7 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 👤 Account Page
+  // 👤 Account Page (with Avatar Upload)
   // ═══════════════════════════════════════════════════════════
   function injectAccountPage() {
     if ($('menAccountPage')) return;
@@ -697,6 +799,8 @@
                 <div class="men-acc-avatar-ring"></div>
                 <img class="men-acc-cover-avatar" id="menAccCoverAvatar" src="" alt="">
                 <div class="men-acc-verified"><i class="fas fa-check"></i></div>
+                <button class="men-acc-avatar-upload" id="menAccAvatarUpload" type="button" title="تغيير الصورة"><i class="fas fa-camera"></i></button>
+                <input type="file" id="menAvatarFile" accept="image/*" style="display:none">
               </div>
               <div class="men-acc-cover-info">
                 <h1 class="men-acc-cover-name" id="menAccCoverName">—</h1>
@@ -729,6 +833,11 @@
           <div class="men-acc-panel active" data-macc-panel="overview">
             <div class="men-acc-overview">
               <div class="men-acc-cashback">
+                <div class="cc-badge"><i class="fas fa-sparkles"></i> CASHBACK</div>
+                <i class="fas fa-coins cc-coin c1"></i>
+                <i class="fas fa-coins cc-coin c2"></i>
+                <i class="fas fa-coins cc-coin c3"></i>
+                <i class="fas fa-coins cc-coin c4"></i>
                 <div class="cc-chip"><i class="fas fa-microchip"></i></div>
                 <div class="cc-label"><i class="fas fa-wallet"></i> رصيد الكاش باك</div>
                 <div class="cc-amount"><span id="menAccCashbackBig">0.00</span> <small>ر.س</small></div>
@@ -797,19 +906,99 @@
     $('menAccLogoutBtn').addEventListener('click', logout);
     $('menAccDeleteBtn').addEventListener('click', deleteAccount);
     $('menAccShareBtn').addEventListener('click', shareAccount);
+
+    // 🖼️ Avatar Upload
+    $('menAccAvatarUpload').addEventListener('click', () => $('menAvatarFile').click());
+    $('menAvatarFile').addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (file) await uploadAvatar(file);
+      e.target.value = '';
+    });
   }
 
   function switchAccountTab(tab) {
     document.querySelectorAll('[data-macc-tab]').forEach(b => b.classList.toggle('active', b.dataset.maccTab === tab));
     document.querySelectorAll('[data-macc-panel]').forEach(p => p.classList.toggle('active', p.dataset.maccPanel === tab));
+    if (tab === 'transactions') loadTransactions();
+  }
 
-    if (tab === 'transactions') {
-      loadTransactions();
+  // 🖼️ Upload Avatar
+  async function uploadAvatar(file) {
+    if (!currentUser) return;
+    if (!file.type.startsWith('image/')) {
+      if (window.showToast) window.showToast('اختر صورة صحيحة', 'error');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      if (window.showToast) window.showToast('حجم الصورة أكبر من 5MB', 'error');
+      return;
+    }
+
+    const btn = $('menAccAvatarUpload');
+    btn.classList.add('loading');
+
+    try {
+      // 1) حاول الرفع إلى Supabase Storage
+      let avatarUrl = null;
+      try {
+        const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+        const path = `${currentUser.id}/avatar_${Date.now()}.${ext}`;
+        const { error: upErr } = await sb.storage.from(AVATAR_BUCKET).upload(path, file, { upsert: true, contentType: file.type });
+        if (!upErr) {
+          const { data: pub } = sb.storage.from(AVATAR_BUCKET).getPublicUrl(path);
+          avatarUrl = pub?.publicUrl || null;
+        } else {
+          console.warn('[avatar upload] storage failed, fallback to base64:', upErr);
+        }
+      } catch (e) { console.warn('[avatar upload] fallback:', e); }
+
+      // 2) Fallback: base64 مصغّر
+      if (!avatarUrl) {
+        avatarUrl = await resizeToBase64(file, 320);
+      }
+
+      // 3) تحديث user_metadata
+      const { data, error } = await sb.auth.updateUser({ data: { avatar_url: avatarUrl } });
+      if (error) throw error;
+
+      currentUser = data.user;
+      $('menAccCoverAvatar').src = avatarUrl;
+      const headerAvatar = $('menHeaderAvatar');
+      if (headerAvatar) headerAvatar.src = avatarUrl;
+      if (window.showToast) window.showToast('تم تحديث الصورة ✨', 'success');
+    } catch (err) {
+      console.error('[avatar upload]', err);
+      if (window.showToast) window.showToast('فشل رفع الصورة: ' + (err.message || ''), 'error');
+    } finally {
+      btn.classList.remove('loading');
     }
   }
 
+  function resizeToBase64(file, maxSize) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const ratio = Math.min(maxSize / img.width, maxSize / img.height, 1);
+          const w = Math.round(img.width * ratio);
+          const h = Math.round(img.height * ratio);
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.82));
+        };
+        img.onerror = () => reject(new Error('فشل قراءة الصورة'));
+        img.src = reader.result;
+      };
+      reader.onerror = () => reject(new Error('فشل قراءة الملف'));
+      reader.readAsDataURL(file);
+    });
+  }
+
   // ═══════════════════════════════════════════════════════════
-  // 💳 Transactions (سجل العمليات)
+  // 💳 Transactions
   // ═══════════════════════════════════════════════════════════
   async function loadTransactions() {
     if (!currentUser) return;
@@ -828,9 +1017,7 @@
       renderTransactions(data || []);
     } catch (err) {
       console.error('loadTransactions error:', err);
-      // إذا لم يوجد جدول أو خطأ آخر
       list.innerHTML = `<div class="men-acc-empty"><div class="men-acc-empty-icon"><i class="fas fa-receipt"></i></div><h3>لا توجد عمليات بعد</h3><p>ستظهر هنا كل عمليات الكاش باك (الإضافة والاستخدام)</p></div>`;
-      // صفر الإحصائيات
       const bal = $('menTxnBalance'), earned = $('menTxnEarned'), used = $('menTxnUsed');
       if (bal) bal.textContent = '0.00';
       if (earned) earned.textContent = '0.00';
@@ -842,7 +1029,6 @@
     const list = $('menAccTxnList');
     if (!list) return;
 
-    // حساب الإحصائيات
     let totalEarned = 0, totalUsed = 0;
     txns.forEach(t => {
       const amt = Number(t.amount || 0);
@@ -850,9 +1036,9 @@
       else totalUsed += Math.abs(amt);
     });
 
-    $('menTxnBalance').textContent = (totalEarned - totalUsed).toFixed(2);
-    $('menTxnEarned').textContent = totalEarned.toFixed(2);
-    $('menTxnUsed').textContent = totalUsed.toFixed(2);
+    animateNumber($('menTxnBalance'), totalEarned - totalUsed, 900);
+    animateNumber($('menTxnEarned'), totalEarned, 900);
+    animateNumber($('menTxnUsed'), totalUsed, 900);
 
     if (!txns.length) {
       list.innerHTML = `
@@ -876,12 +1062,9 @@
       const isPlus = amt >= 0;
       const info = TYPE_LABELS[t.type] || { label: 'عملية', icon: 'fa-circle-info' };
       const date = t.created_at ? new Date(t.created_at).toLocaleString('ar-SA', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—';
-
-      // لون الأيقونة: أخضر للكسب، أحمر للاستخدام، ذهبي إن كان مرتبط بطلب
       let iconClass = isPlus ? 'plus' : 'minus';
       if (t.type === 'used_on_order') iconClass = 'order';
       const iconFa = t.type === 'used_on_order' ? 'fa-shopping-bag' : (isPlus ? 'fa-plus' : 'fa-minus');
-
       const reason = t.reason || info.label;
       const orderRef = t.order_id ? ` · طلب #${String(t.order_id).slice(-6).toUpperCase()}` : '';
 
@@ -901,7 +1084,7 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 📄 PDF Generator for Orders
+  // 📄 PDF Generator
   // ═══════════════════════════════════════════════════════════
   function loadHtml2Pdf() {
     if (window.html2pdf) return Promise.resolve(window.html2pdf);
@@ -953,7 +1136,6 @@
       const container = document.createElement('div');
       container.style.cssText = 'font-family:Cairo,Tajawal,Arial,sans-serif;direction:rtl;padding:40px 35px;background:#ffffff;color:#111827;width:760px;box-sizing:border-box';
       container.innerHTML = `
-        <!-- Header -->
         <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:22px;border-bottom:3px solid #0a1a5c;margin-bottom:24px">
           <div>
             <div style="font-size:28px;font-weight:900;color:#0a1a5c;letter-spacing:-1px">MEN Store</div>
@@ -964,8 +1146,6 @@
             <div style="font-size:11px;color:#6b7280;margin-top:3px">INVOICE</div>
           </div>
         </div>
-
-        <!-- Order info -->
         <div style="display:flex;gap:12px;margin-bottom:22px">
           <div style="flex:1;padding:12px 14px;background:#f3f4f6;border-radius:10px;border-right:3px solid #2563eb">
             <div style="font-size:10px;color:#6b7280;font-weight:800;text-transform:uppercase;margin-bottom:4px;letter-spacing:1px">رقم الطلب</div>
@@ -980,8 +1160,6 @@
             <div style="font-size:13px;font-weight:900;color:${st.color}">${st.label}</div>
           </div>
         </div>
-
-        <!-- Customer -->
         <div style="margin-bottom:22px;padding:16px 18px;background:#f9fafb;border-radius:12px;border:1px solid #e5e7eb">
           <div style="font-size:12px;font-weight:900;color:#0a1a5c;margin-bottom:10px">بيانات العميل</div>
           <table style="width:100%;font-size:12px;border-collapse:collapse">
@@ -990,8 +1168,6 @@
             <tr><td style="padding:4px 0;color:#6b7280">الجوال:</td><td style="padding:4px 0;font-weight:700;direction:ltr;text-align:right">${escapeHtml(meta.phone || order.user_phone || '—')}</td></tr>
           </table>
         </div>
-
-        <!-- Items table -->
         <div style="font-size:12px;font-weight:900;color:#0a1a5c;margin-bottom:10px">تفاصيل الطلب</div>
         <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px">
           <thead>
@@ -1005,8 +1181,6 @@
           </thead>
           <tbody>${itemsRows}</tbody>
         </table>
-
-        <!-- Totals -->
         <div style="display:flex;justify-content:flex-start;margin-bottom:24px">
           <div style="width:280px;padding:14px 16px;background:#f9fafb;border-radius:12px;border:1px solid #e5e7eb">
             <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;color:#4b5563">
@@ -1022,8 +1196,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Footer -->
         <div style="text-align:center;padding-top:18px;border-top:1px solid #e5e7eb;color:#9ca3af;font-size:10px;line-height:1.7">
           <div style="font-weight:800;color:#0a1a5c;margin-bottom:4px">شكراً لتسوقك من MEN Store</div>
           <div>clan.men.ts@gmail.com · www.men-store.com</div>
@@ -1031,7 +1203,6 @@
         </div>
       `;
 
-      // إضافة الـ container للـ DOM بشكل مخفي (ضروري لـ html2canvas)
       container.style.position = 'fixed';
       container.style.left = '-9999px';
       container.style.top = '0';
@@ -1046,7 +1217,6 @@
       }).from(container).save();
 
       container.remove();
-
       if (window.showToast) window.showToast('تم تحميل الفاتورة بنجاح', 'success');
     } catch (err) {
       console.error('downloadOrderPDF error:', err);
@@ -1091,12 +1261,13 @@
     else if (orders.length >= 5 || totalSpent >= 300) level = 'فضي';
     $('menAccMemberLevel').textContent = level;
 
-    $('menAccStatOrders').textContent = orders.length;
-    $('menAccStatCashback').textContent = cashback.toFixed(2);
-    $('menAccStatSpent').textContent = totalSpent.toFixed(2);
+    // عدّادات متحركة
+    animateNumber($('menAccStatOrders'), orders.length, 900, 0);
+    animateNumber($('menAccStatCashback'), cashback, 1200);
+    animateNumber($('menAccStatSpent'), totalSpent, 1200);
     $('menAccStatSince').textContent = since;
 
-    $('menAccCashbackBig').textContent = cashback.toFixed(2);
+    animateNumber($('menAccCashbackBig'), cashback, 1400);
     $('menAccInfoName').textContent = name;
     $('menAccInfoEmail').textContent = meta.email || user.email || '—';
     $('menAccInfoPhone').textContent = meta.phone || '—';
@@ -1156,7 +1327,6 @@
         </div>`;
     }).join('');
 
-    // ربط أزرار PDF
     list.querySelectorAll('[data-order-pdf]').forEach(btn => {
       btn.addEventListener('click', () => {
         const orderId = btn.dataset.orderPdf;
@@ -1255,14 +1425,20 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 💰 Cashback on Cart
+  // 💰 Cashback on Cart — Animated
   // ═══════════════════════════════════════════════════════════
   const CASHBACK_UI_HTML = `
     <div class="men-cb-box" id="menCbBox" style="display:none">
+      <div class="men-cb-coins">
+        <i class="fas fa-coins"></i>
+        <i class="fas fa-coins"></i>
+        <i class="fas fa-coins"></i>
+        <i class="fas fa-coins"></i>
+      </div>
       <div class="men-cb-head">
         <div class="men-cb-icon"><i class="fas fa-wallet"></i></div>
         <div class="men-cb-info">
-          <div class="men-cb-title">استخدم رصيد الكاش باك</div>
+          <div class="men-cb-title">استخدم رصيد الكاش باك <span class="badge">2%</span></div>
           <div class="men-cb-bal">رصيدك المتاح: <b id="menCbBalance">0.00</b> ر.س</div>
         </div>
         <label class="men-cb-switch-wrap">
@@ -1322,14 +1498,12 @@
     const useToggle = $('menCbToggle').checked;
     const input = $('menCbInput');
     let useCb = 0;
-
     if (useToggle && input.value) {
       useCb = Math.max(0, Number(input.value) || 0);
       useCb = Math.min(useCb, cbBalance, cbTotal);
       useCb = Math.round(useCb * 100) / 100;
       input.value = useCb ? useCb.toFixed(2) : '';
     }
-
     $('menCbOrig').textContent = cbTotal.toFixed(2);
     $('menCbDiscount').textContent = '− ' + useCb.toFixed(2);
     $('menCbFinal').textContent = Math.max(0, cbTotal - useCb).toFixed(2) + ' ر.س';
@@ -1345,13 +1519,22 @@
       cbBalance = Number(data?.cashback || 0);
     } catch { cbBalance = 0; }
 
-    $('menCbBalance').textContent = cbBalance.toFixed(2);
-
-    if (cbBalance <= 0) {
-      box.style.display = 'none';
-      return;
+    const balEl = $('menCbBalance');
+    if (balEl) {
+      // عدّاد متحرك للرصيد
+      const from = parseFloat(balEl.textContent) || 0;
+      const t0 = performance.now();
+      const dur = 900;
+      (function tick(now) {
+        const t = Math.min(1, (now - t0) / dur);
+        const eased = 1 - Math.pow(1 - t, 3);
+        balEl.textContent = (from + (cbBalance - from) * eased).toFixed(2);
+        if (t < 1) requestAnimationFrame(tick);
+        else balEl.textContent = cbBalance.toFixed(2);
+      })(t0);
     }
 
+    if (cbBalance <= 0) { box.style.display = 'none'; return; }
     box.style.display = 'block';
     cbTotal = findCartTotal();
     updateCbSummary();
@@ -1548,7 +1731,11 @@
       return Number($('menCbInput')?.value) || 0;
     },
     hideCashbackBox: hideCbUI,
-    refreshCashbackBox: refreshCbUI
+    refreshCashbackBox: refreshCbUI,
+
+    // إضافات جديدة
+    uploadAvatar: async (file) => uploadAvatar(file),
+    animateNumber
   };
 
   window.MEN_CASHBACK = {
